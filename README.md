@@ -71,32 +71,32 @@ Tabular data with each row describing a unique trip from an origin (assumed home
  This is based on the [LTDS](https://www.clocs.org.uk/wp-content/uploads/2014/05/london-travel-demand-survey-2011.pdf)
  
  #### Required fields:
-`pid` - person ID
-`hid` - household ID
-`tid` - trip id
-`tseqno` - trip sequence number
-`hzone` - household zone, Lower Super Output Area (LSOA)
-`dpurp` - trip purpose
-`mdname` - trip mode
-`tstime` - trip start time (clock)
-`tetime` - trip end time (clock)
-or `tstimei` - trip end time (minutes)
-or `tetimei` - trip end time (minutes)
-`freq` - weighting for representative population
+- `pid` - person ID
+- `hid` - household ID
+- `tid` - trip id
+- `tseqno` - trip sequence number
+- `hzone` - household zone, Lower Super Output Area (LSOA)
+- `dpurp` - trip purpose
+- `mdname` - trip mode
+- `tstime` - trip start time (clock)
+- `tetime` - trip end time (clock)
+- or `tstimei` - trip end time (minutes)
+- or `tetimei` - trip end time (minutes)
+- `freq` - weighting for representative population
 
 ### Persons
 
 Tabular data describing socio-economic characteristics for each person.
 
  #### Required fields:
-`pid` - person ID
-`hsize` - household size
-`car` - number of cars owned by household
-`inc` - income group
-`hstr` - household structure
-`gender` - male/female only?
-`age` - age group
-`race` - ethnicity
-`license` - yes/no/unknown
-`job` - full-time/part-time/education/retired/unknown
-`occ` - occupation group
+- `pid` - person ID
+- `hsize` - household size
+- `car` - number of cars owned by household
+- `inc` - income group
+- `hstr` - household structure
+- `gender` - male/female only?
+- `age` - age group
+- `race` - ethnicity
+- `license` - yes/no/unknown
+- `job` - full-time/part-time/education/retired/unknown
+- `occ` - occupation group
