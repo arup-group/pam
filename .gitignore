@@ -3,3 +3,4 @@
 .ipynb_checkpoints/
 data/
 prelim-data-validation.ipynb
+__pycache__

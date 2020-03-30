@@ -75,13 +75,13 @@ Tabular data with each row describing a unique trip from an origin (assumed home
 - `hid` - household ID
 - `tid` - trip id
 - `tseqno` - trip sequence number
-- `hzone` - household zone, Lower Super Output Area (LSOA)
+- `hzone` - household zone
+- `ozone` - trip origin zone
+- `dzone` - trip destination zone
 - `dpurp` - trip purpose
 - `mdname` - trip mode
-- `tstime` - trip start time (clock)
-- `tetime` - trip end time (clock)
-- or `tstimei` - trip end time (minutes)
-- or `tetimei` - trip end time (minutes)
+- `tstimei` - trip end time (minutes)
+- `tetimei` - trip end time (minutes)
 - `freq` - weighting for representative population
 
 ### Persons
