@@ -1,0 +1,5 @@
+﻿pid,hsize,car,inc,hstr,gender,age,race,license,job,occ
+0,3,car1,inc56,unknown,male,10,unknown,pdlcar,ft,occ1
+1,3,car1,inc56,unknown,female,20,unknown,pdlcar,ft,occ2
+2,3,car1,inc56,unknown,male,<10,unknown,pdlcar,ft,occ3
+3,1,car0,inc34,1,unknown,30,unknown,other,pt,unknown

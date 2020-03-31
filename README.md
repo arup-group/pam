@@ -73,7 +73,6 @@ Tabular data with each row describing a unique trip from an origin (assumed home
  #### Required fields:
 - `pid` - person ID
 - `hid` - household ID
-- `tid` - trip id
 - `tseqno` - trip sequence number
 - `hzone` - household zone
 - `ozone` - trip origin zone

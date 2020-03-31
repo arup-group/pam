@@ -1,0 +1,15 @@
+﻿pid,hid,tseqno,hzone,ozone,dzone,dpurp,mdname,tstimei,tetimei,freq
+0,0,1,a,a,b,work,car,500,530,10
+0,0,2,a,b,a,work,car,1000,1030,10
+1,0,1,a,a,b,work,car,500,530,10
+1,0,2,a,b,a,work,car,800,830,10
+1,0,3,a,a,c,other,car,1000,1030,10
+1,0,4,a,c,a,other,car,1200,1230,10
+2,0,1,a,a,b,work,car,500,530,10
+2,0,2,a,b,a,work,car,800,830,10
+2,0,3,a,a,c,work,car,1000,1030,10
+2,0,4,a,c,a,work,car,1200,1230,10
+3,1,1,b,b,c,work,bus,500,530,5
+3,1,2,b,c,d,shop,walk,800,830,5
+3,1,3,b,d,c,shop,walk,1000,1030,5
+3,1,4,b,c,b,work,bus,1200,1230,5

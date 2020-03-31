@@ -4,3 +4,6 @@
 data/
 prelim-data-validation.ipynb
 __pycache__
+.cache/
+
+*.ipynb
