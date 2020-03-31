@@ -1,7 +1,7 @@
-# Policy Activity Modeller
+# Pandemic Activity Modeller
 
-Modify an existing population activity plan to reflect government policy scenarios around social 
-distancing.
+Modify an existing population activity plan to reflect social and government policy scenarios 
+responding to a pandemic.
 
 This work is to aid quick transport demand generation (traditional OD 
 matrices and activity based) given new and potential government pandemic related scenarios. It may 
