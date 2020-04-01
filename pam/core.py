@@ -3,18 +3,24 @@ import pandas as pd
 
 
 class Population:
-    def __init__(self, trips_df, attributes_df):
+    def __init__(self):
         self.households = {}
+
+    def add(self, household):
+        assert isinstance(household, HouseHold)
+        self.households[household.hid] = household
+
+    def load(self, trips_df, attributes_df):
 
         if isinstance(trips_df, pd.DataFrame) and isinstance(attributes_df, pd.DataFrame):
             self.load_from_df(trips_df, attributes_df)
         else:
             raise UserWarning("Unrecognised input for population")
 
-    def add(self, household):
-        self.households[household.hid] = household
-
     def load_from_df(self, trips_df, attributes_df):
+
+        # todo deal with attributes_df
+
         """
         Turn tabular data inputs (population trips and attributes) into core population format.
         :param trips_df: DataDFrame
@@ -27,6 +33,9 @@ class Population:
             household = HouseHold(int(hid))
 
             for pid, person_data in household_data.groupby('pid'):
+
+                # todo deal with agents not starting from home
+                # tests/test_load.py::test_agent_pid_5_not_start_from_home
 
                 trips = person_data.sort_values('tseqno')
                 home_area = trips.hzone.iloc[0]
@@ -41,6 +50,8 @@ class Population:
                     trip = trips.iloc[n]
 
                     destination_activity = trip.dpurp
+
+                    # todo deal with times here - ie datetime format?
 
                     person.add(
                         Leg(
@@ -74,9 +85,11 @@ class HouseHold:
     def __init__(self, hid):
         self.hid = hid
         self.people = {}
+        self.area = None
 
     def add(self, person):
         self.people[person.pid] = person
+        self.area = person.home
 
 
 class Person:
@@ -84,20 +97,32 @@ class Person:
         self.pid = pid
         self.freq = freq
         self.attributes = attributes
-        self.activities = {}
-        self.legs = {}
+        self.plan = []
+
+    @property
+    def home(self):
+        if self.plan:
+            for p in self.plan:
+                if p.act == 'home':
+                    return p.area
+
+    def clear_plan(self):
+        self.plan = []
 
     def add(self, p):
         if isinstance(p, Activity):
-            self.activities[p.seq] = p
+            assert not self.plan or isinstance(self.plan[-1], Leg)  # enforce act-leg-act seq
+            self.plan.append(p)
         elif isinstance(p, Leg):
-            self.legs[p.seq] = p
+            assert isinstance(self.plan[-1], Activity)  # enforce act-leg-act seq
+            self.plan.append(p)
         else:
             raise UserWarning
 
 
 class Activity:
     def __init__(self, seq, act, area, start_time=None, end_time=None):
+        # todo deal with times
         self.seq = seq
         self.act = act
         self.area = area
@@ -113,6 +138,9 @@ class Activity:
 
 
 class Leg:
+
+    act = 'travel'
+
     def __init__(
             self,
             seq,
@@ -122,6 +150,8 @@ class Leg:
             start_time=None,
             end_time=None,
     ):
+        # todo deal with times
+
         self.seq = seq
         self.mode = mode
         self.start_loc = start_loc

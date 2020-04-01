@@ -2,4 +2,7 @@
 0,3,car1,inc56,unknown,male,10,unknown,pdlcar,ft,occ1
 1,3,car1,inc56,unknown,female,20,unknown,pdlcar,ft,occ2
 2,3,car1,inc56,unknown,male,<10,unknown,pdlcar,ft,occ3
-3,1,car0,inc34,1,unknown,30,unknown,other,pt,unknown
+3,2,car0,inc34,2,unknown,30,unknown,other,pt,unknown
+4,2,car0,inc34,2,female,30,white,other,ft,occ4
+5,1,car1,inc23,1,female,50,white,pdlcar,ft,occ4
+6,1,car1,inc23,1,female,50,white,pdlcar,ft,occ4
