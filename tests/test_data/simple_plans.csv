@@ -1,4 +1,4 @@
-﻿pid,hid,tseqno,hzone,ozone,dzone,dpurp,mdname,tstimei,tetimei,freq
+﻿pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 0,0,1,a,a,b,work,car,500,530,10
 0,0,2,a,b,a,work,car,1000,1030,10
 1,0,1,a,a,b,work,car,500,530,10

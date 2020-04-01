@@ -73,29 +73,29 @@ Tabular data with each row describing a unique trip from an origin (assumed home
  #### Required fields:
 - `pid` - person ID
 - `hid` - household ID
-- `tseqno` - trip sequence number
+- `seq` - trip sequence number
 - `hzone` - household zone
 - `ozone` - trip origin zone
 - `dzone` - trip destination zone
-- `dpurp` - trip purpose
-- `mdname` - trip mode
-- `tstimei` - trip end time (minutes)
-- `tetimei` - trip end time (minutes)
+- `purp` - trip purpose
+- `mode` - trip mode
+- `tst` - trip start time (minutes)
+- `tet` - trip end time (minutes)
 - `freq` - weighting for representative population
 
 ### Persons
 
 Tabular data describing socio-economic characteristics for each person.
 
- #### Required fields:
+ #### Recommended fields:
 - `pid` - person ID
 - `hsize` - household size
 - `car` - number of cars owned by household
 - `inc` - income group
 - `hstr` - household structure
-- `gender` - male/female only?
+- `gender` - eg male/female/unknown
 - `age` - age group
 - `race` - ethnicity
-- `license` - yes/no/unknown
-- `job` - full-time/part-time/education/retired/unknown
+- `license` - eg yes/no/unknown
+- `job` - eg full-time/part-time/education/retired/unknown
 - `occ` - occupation group

@@ -37,7 +37,7 @@ class Population:
                 # todo deal with agents not starting from home
                 # tests/test_load.py::test_agent_pid_5_not_start_from_home
 
-                trips = person_data.sort_values('tseqno')
+                trips = person_data.sort_values('seq')
                 home_area = trips.hzone.iloc[0]
                 current_activity = 'home'
                 activity_map = {home_area: 'home'}
@@ -49,18 +49,18 @@ class Population:
                 for n in range(len(trips)):
                     trip = trips.iloc[n]
 
-                    destination_activity = trip.dpurp
+                    destination_activity = trip.purp
 
                     # todo deal with times here - ie datetime format?
 
                     person.add(
                         Leg(
                             seq=n + 1,
-                            mode=trip.mdname,
+                            mode=trip.mode,
                             start_loc=trip.ozone,
                             end_loc=trip.dzone,
-                            start_time=trip.tstimei,
-                            end_time=trip.tetimei
+                            start_time=trip.tst,
+                            end_time=trip.tet
                         )
                     )
 
@@ -69,11 +69,11 @@ class Population:
                         person.add(Activity(n + 2, activity_map[trip.dzone], trip.dzone))
 
                     else:
-                        person.add(Activity(n + 2, trip.dpurp, trip.dzone))
+                        person.add(Activity(n + 2, trip.purp, trip.dzone))
 
                         if not trip.dzone in activity_map:  # update history
                             activity_map[
-                                trip.dzone] = trip.dpurp  # only keeping first activity at each location to ensure returns home
+                                trip.dzone] = trip.purp  # only keeping first activity at each location to ensure returns home
                         activities.append(destination_activity)
 
                 household.add(person)
