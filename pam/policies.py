@@ -60,17 +60,62 @@ class RemoveEducationActivity(Policy):
 
     def apply_to(self, household):
         for pid, person in household.people.items():
-            new_plan = person.plan
-            for seq, p in enumerate(person.plan):
+
+            seq = 0
+            while seq < len(person.plan):
+                p = person.plan[seq]
                 is_education = p.act.lower() in ['education', 'education_escort']
                 selected = random.random() < self.probability
                 if is_education and selected:
-
-                    # todo change plan
-                    pass
-
+                    person.plan = remove_activity(person.plan, seq)
+                    seq -= 1
                 else:
-                    new_plan.append(p)
+                    seq += 1
+
+
+def remove_activity(plan, seq):
+    """
+    Remove an activity from a given plan at a given seq.
+
+    Case 1: First activity
+        Ignore for now - this should be a home activity
+
+    Case 2: Last activity:
+        Ignore for now - this should be a home activity
+
+    Case 3: Middle activity:
+
+    Remove activity and flanking legs
+
+    3a: flanked by same activities at same location:
+        shuffle subsequent activities
+        combine flanking activities
+
+    3b: flanked by either different activities or locations:
+        synthesis new leg
+        shuffle
+
+    Extend final activity (assumes flanked by home activities)
+
+    :param plan: list
+    :param seq: int
+    """
+    assert len(plan) > 4  # minimum 3 activities
+    assert 0 < seq < len(plan) - 1  # cannot be first or last
+    assert isinstance(plan[seq], Activity)
+
+    if plan[seq-2].act == plan[seq+2].act and plan[seq-2].area == plan[seq+2].area:
+        new_plan = plan[:seq-1] + plan[seq+2:]
+        new_plan[seq-2].end_time = plan[seq+2].end_time
+        del new_plan[seq-1]
+
+    else:  # need new leg
+        leg_duration = 0
+        mode = 0
+        # todo
+        raise NotImplementedError
+
+    return new_plan
 
 
 def apply_policies(population: Population, policies: list):

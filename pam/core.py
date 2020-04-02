@@ -1,4 +1,4 @@
-from datetime import datetime as dt
+from datetime import datetime
 import pandas as pd
 
 
@@ -39,41 +39,60 @@ class Population:
 
                 trips = person_data.sort_values('seq')
                 home_area = trips.hzone.iloc[0]
-                current_activity = 'home'
                 activity_map = {home_area: 'home'}
                 activities = ['home']
 
                 person = Person(int(pid), freq=person_data.freq.iloc[0])
-                person.add(Activity(1, 'home', home_area))
+                person.add(
+                    Activity(
+                        seq=0,
+                        act='home',
+                        area=home_area,
+                        start_time=minutes_to_datetime(0),
+                    )
+                )
 
                 for n in range(len(trips)):
                     trip = trips.iloc[n]
 
                     destination_activity = trip.purp
 
-                    # todo deal with times here - ie datetime format?
-
                     person.add(
                         Leg(
-                            seq=n + 1,
+                            seq=n,
                             mode=trip.mode,
                             start_loc=trip.ozone,
                             end_loc=trip.dzone,
-                            start_time=trip.tst,
-                            end_time=trip.tet
+                            start_time=minutes_to_datetime(trip.tst),
+                            end_time=minutes_to_datetime(trip.tet)
                         )
                     )
 
                     if destination_activity in activities and activity_map.get(
                             trip.dzone):  # assume return trip to this activity
-                        person.add(Activity(n + 2, activity_map[trip.dzone], trip.dzone))
+                        person.add(
+                            Activity(
+                                seq=n + 1,
+                                act=activity_map[trip.dzone],
+                                area=trip.dzone,
+                                start_time=minutes_to_datetime(trip.tet),
+                            )
+                        )
 
                     else:
-                        person.add(Activity(n + 2, trip.purp, trip.dzone))
+                        person.add(
+                            Activity(
+                                seq=n + 1,
+                                act=trip.purp,
+                                area=trip.dzone,
+                                start_time=minutes_to_datetime(trip.tet),
+                            )
+                        )
 
                         if not trip.dzone in activity_map:  # update history
                             activity_map[
                                 trip.dzone] = trip.purp  # only keeping first activity at each location to ensure returns home
+
                         activities.append(destination_activity)
 
                 household.add(person)
@@ -88,6 +107,7 @@ class HouseHold:
         self.area = None
 
     def add(self, person):
+        person.finalise()
         self.people[person.pid] = person
         self.area = person.home
 
@@ -106,6 +126,18 @@ class Person:
                 if p.act == 'home':
                     return p.area
 
+    @property
+    def activities(self):
+        for p in self.plan:
+            if isinstance(p, Activity):
+                yield p
+
+    @property
+    def legs(self):
+        for p in self.plan:
+            if isinstance(p, Leg):
+                yield p
+
     def clear_plan(self):
         self.plan = []
 
@@ -118,6 +150,22 @@ class Person:
             self.plan.append(p)
         else:
             raise UserWarning
+
+    def finalise(self):
+        """
+        Add activity end times based on start time of next activity
+        """
+        if len(self.plan) > 1:
+            for seq in range(0, len(self.plan)-1, 2):  # activities excluding last one
+                self.plan[seq].end_time = self.plan[seq+1].start_time
+        self.plan[-1].end_time = minutes_to_datetime(24 * 60 - 1)
+
+    def validate(self):
+        """
+        validate the sequence of the plan and correctly ordered datetimes.
+        """
+        # todo
+        assert isinstance(self.plan[-1], Activity)
 
 
 class Activity:
@@ -166,4 +214,17 @@ class Leg:
         # self.dist = dist
         # if self.duration < 0:
         #     self.duration = (24 * 60) + self.duration
+
+
+def minutes_to_datetime(minutes):
+    """
+    Convert minutes to datetime
+    :param minutes: int
+    :return: datetime
+    """
+    assert minutes < 24 * 60
+    hours = minutes // 60
+    minutes = minutes % 60
+    return datetime(2020, 4, 2, hours, minutes)
+
 
