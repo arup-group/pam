@@ -67,15 +67,55 @@ def test_agent_pid_9_not_start_and_return_home_night_worker_complex_chain_type2(
     assert acts == ['work', 'shop', 'home', 'work']
 
 
-def test_agent_pid_10_not_start_from_home_impossible_chain_type1(simple_plans, simple_attributes):
+def test_agent_pid_10_not_start_from_home_impossible_chain_type1(
+        simple_plans, simple_attributes
+):
     population = Population()
     population.load(simple_plans, simple_attributes)
     acts = [a.act for a in population.households[7].people[10].activities]
     assert acts == ['work', 'shop', 'home']
 
 
-def test_agent_pid_11_not_start_from_home_impossible_chain_type2(simple_plans, simple_attributes):
+def test_agent_pid_11_not_start_from_home_impossible_chain_type2(
+        simple_plans, simple_attributes
+):
     population = Population()
     population.load(simple_plans, simple_attributes)
     acts = [a.act for a in population.households[8].people[11].activities]
+    assert acts == ['work', 'shop', 'home']
+
+
+def test_agent_pid_12_not_start_and_return_home_night_worker_complex_chain_type1_intra_trip(
+        simple_plans, simple_attributes
+):
+    population = Population()
+    population.load(simple_plans, simple_attributes)
+    acts = [a.act for a in population.households[9].people[12].activities]
+    assert acts == ['work', 'shop', 'home', 'work']
+
+
+def test_agent_pid_13_not_start_and_return_home_night_worker_complex_chain_type2_intra_trip(
+        simple_plans, simple_attributes
+):
+    population = Population()
+    population.load(simple_plans, simple_attributes)
+    acts = [a.act for a in population.households[10].people[13].activities]
+    assert acts == ['work', 'shop', 'home', 'work']
+
+
+def test_agent_pid_14_not_start_from_home_impossible_chain_type1_intra_trip(
+        simple_plans, simple_attributes
+):
+    population = Population()
+    population.load(simple_plans, simple_attributes)
+    acts = [a.act for a in population.households[11].people[14].activities]
+    assert acts == ['work', 'shop', 'home']
+
+
+def test_agent_pid_15_not_start_from_home_impossible_chain_type2_intra_trip(
+        simple_plans, simple_attributes
+):
+    population = Population()
+    population.load(simple_plans, simple_attributes)
+    acts = [a.act for a in population.households[12].people[15].activities]
     assert acts == ['work', 'shop', 'home']

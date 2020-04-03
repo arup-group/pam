@@ -180,12 +180,37 @@ Plan takes these legs and infers the activity types between. Example activity ty
 Activity Plan chains can be pretty complex, consider for example a business person attending 
 meetings in many different locations. But we always require the plan to last 24 hours and start 
 and stop with an activity. We like these start and stop activities to both be the same and ideally 
-`home`. We think of this as 'looping', but they don't have to be. Consider for example people 
-with night shifts.
+`home`. We think of this as 'looping', but they don't have to. Night shift workers, for example, 
+do not start or end the day at `home`.
 
 When we try to infer activity purpose from trip purpose, we expect a return trip to have the 
-same purpose as the outbound trip. As a consequence, we never observe a 
-trip purpose as `home`. This can cause problems for more complex chains.
+same purpose as the outbound trip. But this logic is hard to follow for more complex chains. The test 
+cases in `test_2_core_challenge` capture some of the edge cases observed so far.
+
+It is important to note that as a consequence of encoding outbound and return purpose as an 
+activity, we never observe a trip purpose as `home`. Luckily we do know the home area from the 
+travel diary data (`hzone`). But have to be careful with our logic as travel between different 
+activities locations can be intra-zonal.
+
+Activity Plans are represented in this project as regular python `lists()`, containing ordered
+`core.Actvities` and `core.Legs`. Plans belong to `core.People` which belong to 
+`core.Households`
+ which belong to a `core.Population`. For example:
+
+```
+population = Population()
+household = HouseHold(1)
+person = Person(1)
+
+person.add(Activity(1, 'home', 'a'))
+person.add(Leg(1, 'car', 'a', 'b'))
+person.add(Activity(2, 'work', 'b'))
+person.add(Leg(2, 'car', 'b', 'a'))
+person.add(Activity(3, 'home', 'a'))
+
+household.add(person)
+population.add(household)
+```
 
 ### Installation
 
