@@ -28,6 +28,19 @@ def simple_attributes():
     return df
 
 
+testdata = [
+    (0, datetime(2020, 4, 2, 0, 0)),
+    (30, datetime(2020, 4, 2, 0, 30)),
+    (300, datetime(2020, 4, 2, 5, 0)),
+    (330, datetime(2020, 4, 2, 5, 30)),
+]
+
+
+@pytest.mark.parametrize("m,expected", testdata)
+def test_minutes_to_dt(m, expected):
+    assert minutes_to_datetime(m) == expected
+
+
 def test_load(simple_plans, simple_attributes):
     population = Population()
     population.load(simple_plans, simple_attributes)
@@ -67,31 +80,3 @@ def test_agent_pid_4_complex_tour(simple_plans, simple_attributes):
     population.load(simple_plans, simple_attributes)
     acts = [a.act for a in population.households[1].people[4].activities]
     assert acts == ['home', 'work', 'work', 'work', 'work', 'home']
-
-
-def test_agent_pid_5_not_start_from_home(simple_plans, simple_attributes):
-    population = Population()
-    population.load(simple_plans, simple_attributes)
-    acts = [a.act for a in population.households[2].people[5].activities]
-    assert acts == ['work', 'home']
-
-
-def test_agent_pid_6_not_return_home(simple_plans, simple_attributes):
-    population = Population()
-    population.load(simple_plans, simple_attributes)
-    acts = [a.act for a in population.households[3].people[6].activities]
-    assert acts == ['home', 'work']
-
-
-testdata = [
-    (0, datetime(2020, 4, 2, 0, 0)),
-    (30, datetime(2020, 4, 2, 0, 30)),
-    (300, datetime(2020, 4, 2, 5, 0)),
-    (330, datetime(2020, 4, 2, 5, 30)),
-]
-
-
-@pytest.mark.parametrize("m,expected", testdata)
-def test_minutes_to_dt(m, expected):
-    assert minutes_to_datetime(m) == expected
-
