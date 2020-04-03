@@ -7,10 +7,10 @@ from pam.core import Population, Activity, minutes_to_datetime
 
 
 simple_plans_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_plans.csv")
+    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
 )
 simple_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_attributes.csv")
+    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
 )
 
 

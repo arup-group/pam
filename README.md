@@ -10,7 +10,7 @@ such as for utility demand.
 
 ## Process
 
-1. Build activity plans from trip data (core module)
+1. Build Activity Plans from Travel Diary data (core module)
 2. Alter Activity Plans based on Policies regarding (policies module):
     1. activity from persons ill and/or self isolating
     2. education activities
@@ -18,7 +18,7 @@ such as for utility demand.
     4. shopping activities
     5. discretionary activities
 3. Review changes to population activities (ie check summary statistics)
-4. Rebuild trip data format from altered activity plans
+4. Rebuild Travel Diary format from altered activity plans
 5. Convert to O-D matrices if required
 
 ## Policy Mechanisms:
@@ -60,9 +60,19 @@ another tour (such as work tour)is likely to change to a simple home based tour.
 Current guidance is to remove discretionary activities, although it is not clear if or how 
 exercise can be considered.
 
+## Validation
+
+Generally we are assuming that PAM will be useful when (i) existing disaggregated travel surveys 
+are suddenly inaccurate - for example after a sharp change in behaviour, or (ii) where rapid 
+activity modelling is required.
+
+For case (i) it will still be possible to carry out some validation - most likely through 
+benchmarking against aggregate statistics such as 
+[change in mobility](https://www.google.com/covid19/mobility/).
+
 ## Inputs
 
-### Activity Plans
+### Travel Diary
 
 Tabular data with each row describing a unique trip from an origin (assumed home at start of day)
  to destination. trips are uniquely identified by person ids and ordered by sequence number. 
@@ -82,7 +92,7 @@ Tabular data with each row describing a unique trip from an origin (assumed home
 - `tet` - trip end time (minutes)
 - `freq` - weighting for representative population
 
-### Persons
+### Persons Data
 
 Tabular data describing socio-economic characteristics for each person. For example:
 
@@ -99,21 +109,21 @@ Tabular data describing socio-economic characteristics for each person. For exam
 - `job` - eg full-time/part-time/education/retired/unknown
 - `occ` - occupation group
 
-
 ## Challenge
 
-The `pam.core` module loads up travel plans to create activity plans. At the moment loading up 
+The `pam.core` module loads up Travel Diaries to create Activity Plans. At the moment loading up 
 simple plans (ie those that start and end at home is easy). But for non standard plans, such as 
 those belonging to night workers, that don't start and end from home, the logic can break.
 
-Dummy travel plans data can be found in `pam/tests/test_data/simple_plans.csv`. The challenge for
+Dummy Travel Plans data can be found in `pam/tests/test_data/simple_travel_diaries.csv`. The 
+challenge for
  creating activity plans is to **infer** the type of activities between trips (ie home, shopping,
   work). All activity plans are restricted to one day and must start and end with an activity.
 
 ### Criteria
 
 There are tests -> the more you can get running as `PASSED` the better you are doing. Run tests 
-using pytest, ie
+using pytest, ie:
 
 ```
 $ pytest -v
@@ -160,6 +170,22 @@ Please work within the `pam.core` module only.
 
 The method that needs modifying is `pam.core.Population.load_from_df()`.
 
+## Quick intro to Travel Diaries and how they relate to Activity Plans
+
+A key component of this project is the conversion of Travel Diaries to Activity Plans. We define 
+a Travel Diary as a sequence of travel legs from zone to zone for a given purpose. The Activity 
+Plan takes these legs and infers the activity types between. Example activity types are `home`, 
+`work`, `education` and so on.
+
+Activity Plan chains can be pretty complex, consider for example a business person attending 
+meetings in many different locations. But we always require the plan to last 24 hours and start 
+and stop with an activity. We like these start and stop activities to both be the same and ideally 
+`home`. We think of this as 'looping', but they don't have to be. Consider for example people 
+with night shifts.
+
+When we try to infer activity purpose from trip purpose, we expect a return trip to have the 
+same purpose as the outbound trip. As a consequence, we never observe a 
+trip purpose as `home`. This can cause problems for more complex chains.
 
 ### Installation
 
