@@ -98,3 +98,74 @@ Tabular data describing socio-economic characteristics for each person. For exam
 - `license` - eg yes/no/unknown
 - `job` - eg full-time/part-time/education/retired/unknown
 - `occ` - occupation group
+
+
+## Challenge
+
+The `pam.core` module loads up travel plans to create activity plans. At the moment loading up 
+simple plans (ie those that start and end at home is easy). But for non standard plans, such as 
+those belonging to night workers, that don't start and end from home, the logic can break.
+
+Dummy travel plans data can be found in `pam/tests/test_data/simple_plans.csv`. The challenge for
+ creating activity plans is to **infer** the type of activities between trips (ie home, shopping,
+  work). All activity plans are restricted to one day and must start and end with an activity.
+
+### Criteria
+
+There are tests -> the more you can get running as `PASSED` the better you are doing. Run tests 
+using pytest, ie
+
+```
+$ pytest -v
+========================================================= test session starts =========================================================
+platform darwin -- Python 3.7.3, pytest-3.1.2, py-1.8.0, pluggy-0.4.0 -- /Users/fred.shone/.pyenv/versions/3.7.3/bin/python3.7
+cachedir: .cache
+rootdir: /Users/fred.shone/Projects/pam, inifile:
+plugins: mock-1.12.1, cov-2.5.1
+collected 23 items
+
+tests/test_1_core.py::test_minutes_to_dt[0-expected0] PASSED
+tests/test_1_core.py::test_minutes_to_dt[30-expected1] PASSED
+tests/test_1_core.py::test_minutes_to_dt[300-expected2] PASSED
+tests/test_1_core.py::test_minutes_to_dt[330-expected3] PASSED
+tests/test_1_core.py::test_load PASSED
+tests/test_1_core.py::test_agent_pid_0_simple_tour PASSED
+tests/test_1_core.py::test_agent_pid_1_simple_tour PASSED
+tests/test_1_core.py::test_agent_pid_2_simple_tour PASSED
+tests/test_1_core.py::test_agent_pid_3_tour PASSED
+tests/test_1_core.py::test_agent_pid_4_complex_tour PASSED
+tests/test_2_core_challenge.py::test_agent_pid_5_not_start_from_home FAILED
+tests/test_2_core_challenge.py::test_agent_pid_6_not_return_home PASSED
+tests/test_2_core_challenge.py::test_agent_pid_7_not_start_and_return_home_night_worker FAILED
+tests/test_2_core_challenge.py::test_agent_pid_8_not_start_and_return_home_night_worker_complex_chain_type1 FAILED
+tests/test_2_core_challenge.py::test_agent_pid_9_not_start_and_return_home_night_worker_complex_chain_type2 FAILED
+tests/test_2_core_challenge.py::test_agent_pid_10_not_start_from_home_impossible_chain_type1 FAILED
+tests/test_2_core_challenge.py::test_agent_pid_11_not_start_from_home_impossible_chain_type2 FAILED
+tests/test_3_household_policies.py::test_apply_full_hh_quarantine PASSED
+tests/test_3_household_policies.py::test_apply_full_person_stay_at_home PASSED
+tests/test_3_household_policies.py::test_apply_two_policies PASSED
+tests/test_4_activity_policies.py::test_home_education_home_removal_of_education_act PASSED
+tests/test_4_activity_policies.py::test_home_education_home_education_home_removal_of_education_act PASSED
+tests/test_4_activity_policies.py::test_home_work_home_education_home_removal_of_education_act PASSED
+```
+
+As you can see the `tests/test_2_core_challenge.py` tests are failing - the challenge is to get 
+as many as these passing without breaking ANY other tests.
+
+### Rules
+
+Clone project and work in your own branch. 
+
+Please work within the `pam.core` module only.
+
+The method that needs modifying is `pam.core.Population.load_from_df()`.
+
+
+### Installation
+
+WIP
+
+assuming python ~3.7
+git clone this repo
+`cd pam`
+`pip install -r requirements.txt` (or just get pandas and pytest working)

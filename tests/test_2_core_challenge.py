@@ -14,6 +14,20 @@ simple_attributes_path = os.path.abspath(
 )
 
 
+@pytest.fixture
+def simple_plans():
+    df = pd.read_csv(simple_plans_path)
+    assert not df.empty
+    return df
+
+
+@pytest.fixture
+def simple_attributes():
+    df = pd.read_csv(simple_attributes_path)
+    assert not df.empty
+    return df
+
+
 def test_agent_pid_5_not_start_from_home(simple_plans, simple_attributes):
     population = Population()
     population.load(simple_plans, simple_attributes)
