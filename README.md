@@ -10,8 +10,8 @@ such as for utility demand.
 
 ## Process
 
-1. Build activity plans from trip data (mimi can do this)
-2. Alter Activity Plans based on Policies regarding:
+1. Build activity plans from trip data (core module)
+2. Alter Activity Plans based on Policies regarding (policies module):
     1. activity from persons ill and/or self isolating
     2. education activities
     3. work activities
@@ -65,11 +65,10 @@ exercise can be considered.
 ### Activity Plans
 
 Tabular data with each row describing a unique trip from an origin (assumed home at start of day)
- to destination. trips are uniquelly identified by person ids and ordered by sequence number. 
- Trips are labelled with purpose, 
- 
- This is based on the [LTDS](https://www.clocs.org.uk/wp-content/uploads/2014/05/london-travel-demand-survey-2011.pdf)
- 
+ to destination. trips are uniquely identified by person ids and ordered by sequence number. 
+ Trips are labelled with home, origin, and destination zones, purpose, mode, start time, end 
+ time and some form of weighting:
+  
  #### Required fields:
 - `pid` - person ID
 - `hid` - household ID
@@ -85,7 +84,7 @@ Tabular data with each row describing a unique trip from an origin (assumed home
 
 ### Persons
 
-Tabular data describing socio-economic characteristics for each person.
+Tabular data describing socio-economic characteristics for each person. For example:
 
  #### Recommended fields:
 - `pid` - person ID
