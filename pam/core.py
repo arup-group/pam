@@ -34,20 +34,22 @@ class Population:
 
             for pid, person_data in household_data.groupby('pid'):
 
-                # todo deal with agents not starting from home
+                # TODO deal with agents not starting from home
                 # tests/test_load.py::test_agent_pid_5_not_start_from_home
 
                 trips = person_data.sort_values('seq')
                 home_area = trips.hzone.iloc[0]
+                origin_area = trips.ozone.iloc[0]
                 activity_map = {home_area: 'home'}
-                activities = ['home']
+                activities = ['home', 'work']
 
                 person = Person(int(pid), freq=person_data.freq.iloc[0])
+
                 person.add(
                     Activity(
                         seq=0,
-                        act='home',
-                        area=home_area,
+                        act='home' if home_area == origin_area else 'work',
+                        area=origin_area,
                         start_time=minutes_to_datetime(0),
                     )
                 )
