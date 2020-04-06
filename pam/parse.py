@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .core import Population, HouseHold, Person, Activity, Leg, minutes_to_datetime
+from .core import Population, Household, Person, Activity, Leg, minutes_to_datetime
 
 
 def load_from_dfs(trips_df, attributes_df):
@@ -24,7 +24,7 @@ def load_from_dfs(trips_df, attributes_df):
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        household = HouseHold(int(hid))
+        household = Household(int(hid))
 
         for pid, person_data in household_data.groupby('pid'):
 

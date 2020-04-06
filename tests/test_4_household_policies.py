@@ -1,4 +1,4 @@
-from pam.core import Population, HouseHold, Person, Activity, Leg
+from pam.core import Population, Household, Person, Activity, Leg
 from pam import policies
 
 import pytest
@@ -9,7 +9,7 @@ def population():
 
     population = Population()
     for hid in range(1, 11):
-        household = HouseHold(hid)
+        household = Household(hid)
         for pid in range(2):
             pid = f"{hid}-{pid}"
             person = Person(pid)
@@ -24,7 +24,7 @@ def population():
         population.add(household)
 
     for hid in range(10, 21):
-        household = HouseHold(hid)
+        household = Household(hid)
         for pid in range(2):
             pid = f"{hid}-{pid}"
             person = Person(pid)

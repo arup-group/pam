@@ -6,11 +6,11 @@ class Population:
         self.households = {}
 
     def add(self, household):
-        assert isinstance(household, HouseHold)
+        assert isinstance(household, Household)
         self.households[household.hid] = household
 
 
-class HouseHold:
+class Household:
     def __init__(self, hid):
         self.hid = hid
         self.people = {}
@@ -48,34 +48,72 @@ class Person:
             if isinstance(p, Leg):
                 yield p
 
-    def clear_plan(self):
-        self.plan = []
+    @property
+    def valid_plan(self):
+        """
+        Check sequence of Activities and Legs.
+        :return: True
+        """
+        for i, component in enumerate(self.plan):
+            if i % 2:  # uneven
+                if not isinstance(component, Leg):
+                    raise TypeError(f"Person {self.pid} incorrect plan sequence")
+            else:
+                if not isinstance(component, Activity):
+                    raise TypeError(f"Person {self.pid} incorrect plan sequence")
+
+        if not isinstance(self.plan[-1], Activity):
+            raise TypeError(f"Person {self.pid} plan does not end with Activity")
+        return True
+
+    @property
+    def closed_plan(self):
+        """
+        Check if plan starts and stops at the same facility (based on activity and location)
+        :return: Bool
+        """
+        if (self.plan[0].act, self.plan[0].area) == (self.plan[-1].act, self.plan[-1].area):
+            return True
+        return False
+
+    @property
+    def first_activity(self):
+        return self.plan[0].act
+
+    @property
+    def home_based(self):
+        return self.first_activity.lower() == 'home'
 
     def add(self, p):
+        """
+        Safely add a new component to the plan.
+        :param p:
+        :return:
+        """
         if isinstance(p, Activity):
-            assert not self.plan or isinstance(self.plan[-1], Leg)  # enforce act-leg-act seq
+            if self.plan and not isinstance(self.plan[-1], Leg):  # enforce act-leg-act seq
+                raise UserWarning(f"Cannot add Activity to plan sequence.")
             self.plan.append(p)
         elif isinstance(p, Leg):
-            assert isinstance(self.plan[-1], Activity)  # enforce act-leg-act seq
+            if not self.plan:
+                raise UserWarning(f"Cannot add Leg as first component to plan sequence.")
+            if not isinstance(self.plan[-1], Activity):  # enforce act-leg-act seq
+                raise UserWarning(f"Cannot add Leg to plan sequence.")
             self.plan.append(p)
         else:
-            raise UserWarning
+            raise UserWarning(f"Cannot add type: {type(p)} to plan.")
 
     def finalise(self):
         """
-        Add activity end times based on start time of next activity
+        Add activity end times based on start time of next activity.
         """
         if len(self.plan) > 1:
             for seq in range(0, len(self.plan)-1, 2):  # activities excluding last one
                 self.plan[seq].end_time = self.plan[seq+1].start_time
         self.plan[-1].end_time = minutes_to_datetime(24 * 60 - 1)
 
-    def validate(self):
-        """
-        validate the sequence of the plan and correctly ordered datetimes.
-        """
-        # todo
-        assert isinstance(self.plan[-1], Activity)
+    def clear_plan(self):
+        self.plan = []
 
 
 class Activity:

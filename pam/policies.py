@@ -1,4 +1,4 @@
-from .core import Population, HouseHold, Person, Activity, Leg
+from .core import Population, Household, Person, Activity, Leg
 import random
 
 

@@ -1,4 +1,4 @@
-from pam.core import Population, HouseHold, Person, Activity, Leg, minutes_to_datetime
+from pam.core import Population, Household, Person, Activity, Leg, minutes_to_datetime
 from pam import policies
 
 import pytest
@@ -68,7 +68,7 @@ def home_education_shop_home():
 
 def test_home_education_home_removal_of_education_act():
 
-    household = HouseHold(1)
+    household = Household(1)
     person = Person(1)
     person.add(
         Activity(
@@ -128,7 +128,7 @@ def test_home_education_home_removal_of_education_act():
 
 def test_home_education_home_education_home_removal_of_education_act():
 
-    household = HouseHold(1)
+    household = Household(1)
     person = Person(1)
     person.add(
         Activity(
@@ -226,7 +226,7 @@ def test_home_education_home_education_home_removal_of_education_act():
 
 def test_home_work_home_education_home_removal_of_education_act():
 
-    household = HouseHold(1)
+    household = Household(1)
     person = Person(1)
     person.add(
         Activity(
