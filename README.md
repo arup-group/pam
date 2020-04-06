@@ -10,8 +10,8 @@ such as for utility demand.
 
 ## Process
 
-1. Build Activity Plans from Travel Diary data (core module)
-2. Alter Activity Plans based on Policies regarding (policies module):
+1. Build Activity Plans from Travel Diary data
+2. Alter Activity Plans based on Policies regarding:
     1. activity from persons ill and/or self isolating
     2. education activities
     3. work activities
@@ -70,7 +70,14 @@ For case (i) it will still be possible to carry out some validation - most likel
 benchmarking against aggregate statistics such as 
 [change in mobility](https://www.google.com/covid19/mobility/).
 
-## Inputs
+## Project Structure
+
+1. The `core` module holds activity plan classes (`Population`, `Household`, `Person`, `Activity`
+ and `Leg`) and general methods.
+2. The `parse` module is responsible for building activity plans from travel diary data.
+3. The `modify` module is responsible for applying activity modifications.
+
+## Input Data Formats
 
 ### Travel Diary
 
@@ -116,9 +123,9 @@ simple plans (ie those that start and end at home is easy). But for non standard
 those belonging to night workers, that don't start and end from home, the logic can break.
 
 Dummy Travel Plans data can be found in `pam/tests/test_data/simple_travel_diaries.csv`. The 
-challenge for
- creating activity plans is to **infer** the type of activities between trips (ie home, shopping,
-  work). All activity plans are restricted to one day and must start and end with an activity.
+challenge for creating activity plans is to **infer** the type of activities between trips (ie 
+home, shopping, work). All activity plans are restricted to one day and must start and end with 
+an activity.
 
 ### Criteria
 
@@ -127,55 +134,25 @@ using pytest, ie:
 
 ```
 $ pytest -v
-========================================================= test session starts =========================================================
-platform darwin -- Python 3.7.3, pytest-3.1.2, py-1.8.0, pluggy-0.4.0 -- /Users/fred.shone/.pyenv/versions/3.7.3/bin/python3.7
-cachedir: .cache
-rootdir: /Users/fred.shone/Projects/pam, inifile:
-plugins: mock-1.12.1, cov-2.5.1
-collected 23 items
-
-tests/test_1_core.py::test_minutes_to_dt[0-expected0] PASSED
-tests/test_1_core.py::test_minutes_to_dt[30-expected1] PASSED
-tests/test_1_core.py::test_minutes_to_dt[300-expected2] PASSED
-tests/test_1_core.py::test_minutes_to_dt[330-expected3] PASSED
-tests/test_1_core.py::test_load PASSED
-tests/test_1_core.py::test_agent_pid_0_simple_tour PASSED
-tests/test_1_core.py::test_agent_pid_1_simple_tour PASSED
-tests/test_1_core.py::test_agent_pid_2_simple_tour PASSED
-tests/test_1_core.py::test_agent_pid_3_tour PASSED
-tests/test_1_core.py::test_agent_pid_4_complex_tour PASSED
-tests/test_2_core_challenge.py::test_agent_pid_5_not_start_from_home FAILED
-tests/test_2_core_challenge.py::test_agent_pid_6_not_return_home PASSED
-tests/test_2_core_challenge.py::test_agent_pid_7_not_start_and_return_home_night_worker FAILED
-tests/test_2_core_challenge.py::test_agent_pid_8_not_start_and_return_home_night_worker_complex_chain_type1 FAILED
-tests/test_2_core_challenge.py::test_agent_pid_9_not_start_and_return_home_night_worker_complex_chain_type2 FAILED
-tests/test_2_core_challenge.py::test_agent_pid_10_not_start_from_home_impossible_chain_type1 FAILED
-tests/test_2_core_challenge.py::test_agent_pid_11_not_start_from_home_impossible_chain_type2 FAILED
-tests/test_3_household_policies.py::test_apply_full_hh_quarantine PASSED
-tests/test_3_household_policies.py::test_apply_full_person_stay_at_home PASSED
-tests/test_3_household_policies.py::test_apply_two_policies PASSED
-tests/test_4_activity_policies.py::test_home_education_home_removal_of_education_act PASSED
-tests/test_4_activity_policies.py::test_home_education_home_education_home_removal_of_education_act PASSED
-tests/test_4_activity_policies.py::test_home_work_home_education_home_removal_of_education_act PASSED
 ```
 
-As you can see the `tests/test_2_core_challenge.py` tests are failing - the challenge is to get 
-as many as these passing without breaking ANY other tests.
+You should find some tests in `tests/test_3_parse_challenge.py` are failing. This challenge set of 
+tests represents edge cases for the standard travel diary parser: `pam.parse.load_from_dfs()` - the 
+challenge is to adjust `pam.parse.load_from_dfs()` to get as many tests passing without breaking
+ ANY test modules.
 
 ### Rules
 
 Clone project and work in your own branch. 
 
-Please work within the `pam.core` module only.
-
-The method that needs modifying is `pam.core.Population.load_from_df()`.
+Please work within the `pam.parse` module only.
 
 ## Quick intro to Travel Diaries and how they relate to Activity Plans
 
 A key component of this project is the conversion of Travel Diaries to Activity Plans. We define 
-a Travel Diary as a sequence of travel legs from zone to zone for a given purpose. The Activity 
-Plan takes these legs and infers the activity types between. Example activity types are `home`, 
-`work`, `education` and so on.
+a Travel Diary as a sequence of travel legs from zone to zone for a given purpose over a single 
+day. The Activity Plan takes these legs and infers the activity types between. Example activity 
+types are `home`, `work`, `education` and so on.
 
 Activity Plan chains can be pretty complex, consider for example a business person attending 
 meetings in many different locations. But we always require the plan to last 24 hours and start 
@@ -185,7 +162,7 @@ do not start or end the day at `home`.
 
 When we try to infer activity purpose from trip purpose, we expect a return trip to have the 
 same purpose as the outbound trip. But this logic is hard to follow for more complex chains. The test 
-cases in `test_2_core_challenge` capture some of the edge cases observed so far.
+cases in `test_3_parse_challenge` capture some of the difficult and edge cases observed so far.
 
 It is important to note that as a consequence of encoding outbound and return purpose as an 
 activity, we never observe a trip purpose as `home`. Luckily we do know the home area from the 
@@ -193,17 +170,16 @@ travel diary data (`hzone`). But have to be careful with our logic as travel bet
 activities locations can be intra-zonal.
 
 Activity Plans are represented in this project as regular python `lists()`, containing ordered
-`core.Actvities` and `core.Legs`. Plans belong to `core.People` which belong to 
-`core.Households`
- which belong to a `core.Population`. For example:
+`core.Actvity` and `core.Leg` objects. Plans belong to `core.People` which belong to 
+`core.Households` which belong to a `core.Population`. For example:
 
 ```
 population = Population()
-household = HouseHold(1)
-person = Person(1)
+household = HouseHold(hid=1)  # hid is household id
+person = Person(pid=1)  # pid is person id
 
-person.add(Activity(1, 'home', 'a'))
-person.add(Leg(1, 'car', 'a', 'b'))
+person.add(Activity(seq=1, act='home', area='a'))
+person.add(Leg(seq=1, mode='car', start_area='a', 'b'))
 person.add(Activity(2, 'work', 'b'))
 person.add(Leg(2, 'car', 'b', 'a'))
 person.add(Activity(3, 'home', 'a'))
@@ -217,6 +193,9 @@ population.add(household)
 WIP
 
 assuming python ~3.7
+
 git clone this repo
+
 `cd pam`
+
 `pip install -r requirements.txt` (or just get pandas and pytest working)

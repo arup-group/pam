@@ -83,8 +83,8 @@ def test_home_education_home_removal_of_education_act():
         Leg(
             seq=1,
             mode='car',
-            start_loc='a',
-            end_loc='b',
+            start_area='a',
+            end_area='b',
             start_time=minutes_to_datetime(60),
             end_time=minutes_to_datetime(90)
         )
@@ -102,8 +102,8 @@ def test_home_education_home_removal_of_education_act():
         Leg(
             seq=2,
             mode='car',
-            start_loc='b',
-            end_loc='a',
+            start_area='b',
+            end_area='a',
             start_time=minutes_to_datetime(120),
             end_time=minutes_to_datetime(180)
         )
@@ -143,8 +143,8 @@ def test_home_education_home_education_home_removal_of_education_act():
         Leg(
             seq=1,
             mode='car',
-            start_loc='a',
-            end_loc='b',
+            start_area='a',
+            end_area='b',
             start_time=minutes_to_datetime(60),
             end_time=minutes_to_datetime(90)
         )
@@ -162,8 +162,8 @@ def test_home_education_home_education_home_removal_of_education_act():
         Leg(
             seq=2,
             mode='car',
-            start_loc='b',
-            end_loc='a',
+            start_area='b',
+            end_area='a',
             start_time=minutes_to_datetime(120),
             end_time=minutes_to_datetime(180)
         )
@@ -181,8 +181,8 @@ def test_home_education_home_education_home_removal_of_education_act():
         Leg(
             seq=3,
             mode='car',
-            start_loc='a',
-            end_loc='b',
+            start_area='a',
+            end_area='b',
             start_time=minutes_to_datetime(300),
             end_time=minutes_to_datetime(390)
         )
@@ -200,8 +200,8 @@ def test_home_education_home_education_home_removal_of_education_act():
         Leg(
             seq=2,
             mode='car',
-            start_loc='b',
-            end_loc='a',
+            start_area='b',
+            end_area='a',
             start_time=minutes_to_datetime(520),
             end_time=minutes_to_datetime(580)
         )
@@ -241,8 +241,8 @@ def test_home_work_home_education_home_removal_of_education_act():
         Leg(
             seq=1,
             mode='car',
-            start_loc='a',
-            end_loc='b',
+            start_area='a',
+            end_area='b',
             start_time=minutes_to_datetime(60),
             end_time=minutes_to_datetime(90)
         )
@@ -260,8 +260,8 @@ def test_home_work_home_education_home_removal_of_education_act():
         Leg(
             seq=2,
             mode='car',
-            start_loc='b',
-            end_loc='a',
+            start_area='b',
+            end_area='a',
             start_time=minutes_to_datetime(120),
             end_time=minutes_to_datetime(180)
         )
@@ -279,8 +279,8 @@ def test_home_work_home_education_home_removal_of_education_act():
         Leg(
             seq=3,
             mode='car',
-            start_loc='a',
-            end_loc='b',
+            start_area='a',
+            end_area='b',
             start_time=minutes_to_datetime(300),
             end_time=minutes_to_datetime(390)
         )
@@ -298,8 +298,8 @@ def test_home_work_home_education_home_removal_of_education_act():
         Leg(
             seq=2,
             mode='car',
-            start_loc='b',
-            end_loc='a',
+            start_area='b',
+            end_area='a',
             start_time=minutes_to_datetime(520),
             end_time=minutes_to_datetime(580)
         )

@@ -1,5 +1,4 @@
 from datetime import datetime
-import pandas as pd
 
 
 class Population:
@@ -9,97 +8,6 @@ class Population:
     def add(self, household):
         assert isinstance(household, HouseHold)
         self.households[household.hid] = household
-
-    def load(self, trips_df, attributes_df):
-
-        if isinstance(trips_df, pd.DataFrame) and isinstance(attributes_df, pd.DataFrame):
-            self.load_from_df(trips_df, attributes_df)
-        else:
-            raise UserWarning("Unrecognised input for population")
-
-    def load_from_df(self, trips_df, attributes_df):
-
-        # todo deal with attributes_df
-
-        """
-        Turn tabular data inputs (population trips and attributes) into core population format.
-        :param trips_df: DataDFrame
-        :param attributes_df: DataDFrame
-        :return: core.Population
-        """
-
-        for hid, household_data in trips_df.groupby('hid'):
-
-            household = HouseHold(int(hid))
-
-            for pid, person_data in household_data.groupby('pid'):
-
-                # TODO deal with agents not starting from home
-                # tests/test_load.py::test_agent_pid_5_not_start_from_home
-
-                trips = person_data.sort_values('seq')
-                home_area = trips.hzone.iloc[0]
-                origin_area = trips.ozone.iloc[0]
-                activity_map = {home_area: 'home'}
-                activities = ['home', 'work']
-
-                person = Person(int(pid), freq=person_data.freq.iloc[0])
-
-                person.add(
-                    Activity(
-                        seq=0,
-                        act='home' if home_area == origin_area else 'work',
-                        area=origin_area,
-                        start_time=minutes_to_datetime(0),
-                    )
-                )
-
-                for n in range(len(trips)):
-                    trip = trips.iloc[n]
-
-                    destination_activity = trip.purp
-
-                    person.add(
-                        Leg(
-                            seq=n,
-                            mode=trip.mode,
-                            start_loc=trip.ozone,
-                            end_loc=trip.dzone,
-                            start_time=minutes_to_datetime(trip.tst),
-                            end_time=minutes_to_datetime(trip.tet)
-                        )
-                    )
-
-                    if destination_activity in activities and activity_map.get(
-                            trip.dzone):  # assume return trip to this activity
-                        person.add(
-                            Activity(
-                                seq=n + 1,
-                                act=activity_map[trip.dzone],
-                                area=trip.dzone,
-                                start_time=minutes_to_datetime(trip.tet),
-                            )
-                        )
-
-                    else:
-                        person.add(
-                            Activity(
-                                seq=n + 1,
-                                act=trip.purp,
-                                area=trip.dzone,
-                                start_time=minutes_to_datetime(trip.tet),
-                            )
-                        )
-
-                        if not trip.dzone in activity_map:  # update history
-                            activity_map[
-                                trip.dzone] = trip.purp  # only keeping first activity at each location to ensure returns home
-
-                        activities.append(destination_activity)
-
-                household.add(person)
-
-            self.add(household)
 
 
 class HouseHold:
@@ -195,8 +103,8 @@ class Leg:
             self,
             seq,
             mode,
-            start_loc=None,
-            end_loc=None,
+            start_area=None,
+            end_area=None,
             start_time=None,
             end_time=None,
     ):
@@ -204,8 +112,8 @@ class Leg:
 
         self.seq = seq
         self.mode = mode
-        self.start_loc = start_loc
-        self.end_loc = end_loc
+        self.start_area = start_area
+        self.end_area = end_area
         self.start_time = start_time
         self.end_time = end_time
         # self.start_time_dt = dt.strptime(start_time, '%H:%M:%S')
@@ -218,7 +126,7 @@ class Leg:
         #     self.duration = (24 * 60) + self.duration
 
 
-def minutes_to_datetime(minutes):
+def minutes_to_datetime(minutes: int):
     """
     Convert minutes to datetime
     :param minutes: int
@@ -228,5 +136,3 @@ def minutes_to_datetime(minutes):
     hours = minutes // 60
     minutes = minutes % 60
     return datetime(2020, 4, 2, hours, minutes)
-
-
