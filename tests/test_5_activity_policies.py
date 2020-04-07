@@ -5,14 +5,56 @@ import pytest
 
 
 @pytest.fixture
-def home_education_home():
+def person_home_education_home():
 
     person = Person(1)
-    person.add(Activity(1, 'home', 'a'))
-    person.add(Leg(1, 'car', 'a', 'b'))
-    person.add(Activity(2, 'education', 'b'))
-    person.add(Leg(2, 'car', 'b', 'a'))
-    person.add(Activity(3, 'home', 'a'))
+    person.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(0),
+            end_time=minutes_to_datetime(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=minutes_to_datetime(60),
+            end_time=minutes_to_datetime(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='education',
+            area='b',
+            start_time=minutes_to_datetime(90),
+            end_time=minutes_to_datetime(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=minutes_to_datetime(120),
+            end_time=minutes_to_datetime(180)
+        )
+    )
+    person.add(
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(180),
+            end_time=minutes_to_datetime(24 * 60 - 1)
+        )
+    )
 
     return person
 
@@ -66,57 +108,11 @@ def home_education_shop_home():
     return person
 
 
-def test_home_education_home_removal_of_education_act():
+def test_home_education_home_removal_of_education_act(person_home_education_home):
 
     household = Household(1)
-    person = Person(1)
-    person.add(
-        Activity(
-            seq=1,
-            act='home',
-            area='a',
-            start_time=minutes_to_datetime(0),
-            end_time=minutes_to_datetime(60)
-        )
-    )
-    person.add(
-        Leg(
-            seq=1,
-            mode='car',
-            start_area='a',
-            end_area='b',
-            start_time=minutes_to_datetime(60),
-            end_time=minutes_to_datetime(90)
-        )
-    )
-    person.add(
-        Activity(
-            seq=2,
-            act='education',
-            area='b',
-            start_time=minutes_to_datetime(90),
-            end_time=minutes_to_datetime(120)
-        )
-    )
-    person.add(
-        Leg(
-            seq=2,
-            mode='car',
-            start_area='b',
-            end_area='a',
-            start_time=minutes_to_datetime(120),
-            end_time=minutes_to_datetime(180)
-        )
-    )
-    person.add(
-        Activity(
-            seq=3,
-            act='home',
-            area='a',
-            start_time=minutes_to_datetime(180),
-            end_time=minutes_to_datetime(24 * 60 - 1)
-        )
-    )
+    person = person_home_education_home
+
     household.add(person)
 
     policy = policies.RemoveEducationActivity(1)

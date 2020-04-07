@@ -123,3 +123,213 @@ def test_person_not_closed_plan_different_areas():
     person.add(Leg(2, 'car', start_area=2, end_area=3))
     person.add(Activity(3, 'work', 3))
     assert not person.closed_plan
+
+
+@pytest.fixture
+def person_home_education_home():
+
+    person = Person(1)
+    person.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(0),
+            end_time=minutes_to_datetime(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=minutes_to_datetime(60),
+            end_time=minutes_to_datetime(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='education',
+            area='b',
+            start_time=minutes_to_datetime(90),
+            end_time=minutes_to_datetime(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=minutes_to_datetime(120),
+            end_time=minutes_to_datetime(180)
+        )
+    )
+    person.add(
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(180),
+            end_time=minutes_to_datetime(24 * 60 - 1)
+        )
+    )
+
+    return person
+
+
+@pytest.fixture
+def person_work_home_work_closed():
+
+    person = Person(1)
+    person.add(
+        Activity(
+            seq=1,
+            act='work',
+            area='a',
+            start_time=minutes_to_datetime(0),
+            end_time=minutes_to_datetime(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=minutes_to_datetime(60),
+            end_time=minutes_to_datetime(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='home',
+            area='b',
+            start_time=minutes_to_datetime(90),
+            end_time=minutes_to_datetime(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=minutes_to_datetime(120),
+            end_time=minutes_to_datetime(180)
+        )
+    )
+    person.add(
+        Activity(
+            seq=3,
+            act='work',
+            area='a',
+            start_time=minutes_to_datetime(180),
+            end_time=minutes_to_datetime(24 * 60 - 1)
+        )
+    )
+
+    return person
+
+
+@pytest.fixture
+def person_work_home_work_not_closed():
+
+    person = Person(1)
+    person.add(
+        Activity(
+            seq=1,
+            act='work',
+            area='a',
+            start_time=minutes_to_datetime(0),
+            end_time=minutes_to_datetime(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=minutes_to_datetime(60),
+            end_time=minutes_to_datetime(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='home',
+            area='b',
+            start_time=minutes_to_datetime(90),
+            end_time=minutes_to_datetime(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='c',
+            start_time=minutes_to_datetime(120),
+            end_time=minutes_to_datetime(180)
+        )
+    )
+    person.add(
+        Activity(
+            seq=3,
+            act='work',
+            area='c',
+            start_time=minutes_to_datetime(180),
+            end_time=minutes_to_datetime(24 * 60 - 1)
+        )
+    )
+
+    return person
+
+
+def test_home_education_home_remove_activity_education(person_home_education_home):
+
+    person = person_home_education_home
+    p_idx, s_idx = person.remove_activity(2)
+    assert p_idx == 0
+    assert s_idx == 3
+    assert [p.act for p in person.activities] == ['home', 'home']
+
+
+def test_work_home_work_remove_first_activity_closed(person_work_home_work_closed):
+
+    person = person_work_home_work_closed
+    p_idx, s_idx = person.remove_activity(0)
+    assert p_idx == 1
+    assert s_idx == 1
+    assert [p.act for p in person.activities] == ['home']
+
+
+def test_work_home_work_remove_last_activity_closed(person_work_home_work_closed):
+
+    person = person_work_home_work_closed
+    p_idx, s_idx = person.remove_activity(4)
+    assert p_idx == 1
+    assert s_idx == 1
+    assert [p.act for p in person.activities] == ['home']
+
+
+def test_work_home_work_remove_first_activity_not_closed(person_work_home_work_closed):
+
+    person = person_work_home_work_closed
+    p_idx, s_idx = person.remove_activity(0)
+    assert p_idx is None
+    assert s_idx == 1
+    assert [p.act for p in person.activities] == ['home', 'work']
+
+
+def test_work_home_work_remove_last_activity_not_closed(person_work_home_work_closed):
+
+    person = person_work_home_work_closed
+    p_idx, s_idx = person.remove_activity(0)
+    assert p_idx == 2
+    assert s_idx is None
+    assert [p.act for p in person.activities] == ['work', 'home']

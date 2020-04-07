@@ -49,6 +49,10 @@ class Person:
                 yield p
 
     @property
+    def length(self):
+        return len(self.plan)
+
+    @property
     def valid_plan(self):
         """
         Check sequence of Activities and Legs.
@@ -114,6 +118,41 @@ class Person:
 
     def clear_plan(self):
         self.plan = []
+
+    def remove_activity(self, seq):
+        """
+        Remove an activity from plan at given seq.
+        Check for wrapped removal.
+        Return (adjusted) idx of previous and subsequent activities as a tuple
+        :param seq:
+        :return: tuple
+        """
+        assert isinstance(self.plan[seq], Activity)
+
+        if (seq == 0 or seq == self.length - 1) and self.closed_plan:  # remove pair
+                self.plan.pop(0)
+                self.plan.pop(self.length - 1)
+                return self.length-2, 1
+
+        elif seq == 0:  # remove first act
+            self.plan.pop(seq)
+            return None, 1
+
+        elif seq == self.length - 1:  # remove last act
+            self.plan.pop(seq)
+            return self.length-2, None
+
+        else:  # remove act is somewhere in middle of plan
+            self.plan.pop(seq)
+            return seq-2, seq+1
+
+    def fill_activity(self, p_idx, s_idx, default='home'):
+
+        # if not self.closed_plan:  # can ignore looping activity
+        #     if self.home_based:  # extend last home based activity
+        #     previous_act
+
+        raise NotImplementedError
 
 
 class Activity:
