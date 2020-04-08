@@ -33,7 +33,7 @@ class Person:
     def home(self):
         if self.plan:
             for p in self.plan:
-                if p.act == 'home':
+                if p.act.lower() == 'home':
                     return p.area
 
     @property

@@ -3,7 +3,7 @@ import pandas as pd
 from .core import Population, Household, Person, Activity, Leg, minutes_to_datetime
 
 
-def load_from_dfs(trips_df, attributes_df):
+def load_travel_diary(trips_df, attributes_df):
     # todo deal with attributes_df
 
     """
@@ -13,6 +13,7 @@ def load_from_dfs(trips_df, attributes_df):
     :param attributes_df: DataFrame
     :return: core.Population
     """
+
     # TODO check for required col headers and give useful error?
     if not isinstance(trips_df, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
@@ -24,7 +25,9 @@ def load_from_dfs(trips_df, attributes_df):
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        household = Household(int(hid))
+        print(hid)
+
+        household = Household(hid)
 
         for pid, person_data in household_data.groupby('pid'):
 
@@ -37,7 +40,7 @@ def load_from_dfs(trips_df, attributes_df):
             activity_map = {home_area: 'home'}
             activities = ['home', 'work']
 
-            person = Person(int(pid), freq=person_data.freq.iloc[0])
+            person = Person(pid, freq=person_data.freq.iloc[0])
 
             person.add(
                 Activity(
@@ -85,9 +88,9 @@ def load_from_dfs(trips_df, attributes_df):
                         )
                     )
 
-                    if not trip.dzone in activity_map:  # update history
-                        activity_map[
-                            trip.dzone] = trip.purp  # only keeping first activity at each location to ensure returns home
+                    if trip.dzone not in activity_map:  # update history
+                        # only keeping first activity at each location to ensure returns home
+                        activity_map[trip.dzone] = trip.purp
 
                     activities.append(destination_activity)
 
@@ -96,3 +99,49 @@ def load_from_dfs(trips_df, attributes_df):
         population.add(household)
 
     return population
+
+
+def write_travel_plan(population):
+    """
+    Write a core population object to the standard population tabular formats.
+    :param population: core.Population
+    :return: None
+    """
+    # todo
+    raise NotImplementedError
+
+
+def load_matsim(plans, attributes=None):
+    """
+    Load a MATSim format population into core population format.
+    :param plans: path to matsim format xml
+    :param attributes: path to matsim format xml
+    :return: Population
+    """
+    # todo
+    raise NotImplementedError
+
+
+def write_matsim(population):
+    """
+    Write a core population object to matsim xml formats.
+    :param population: core.Population
+    :return: None
+    """
+    # todo
+    raise NotImplementedError
+
+
+def write_od_matrices(population, type_seg=None, mode_seg=None, time_seg=None):
+    """
+    Write a core population object to tabular O-D weighted matrices.
+    Optionally segment matrices by type of journey (most likelly based on occupation),
+    mode and/or time (ie peaks).
+    :param population: core.Population
+    :param type_seg: segmentation option tbc
+    :param mode_seg: segmentation option tbc
+    :param time_seg: segmentation option tbc
+    :return: None
+    """
+    # todo
+    raise NotImplementedError

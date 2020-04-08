@@ -1,14 +1,31 @@
 # Pandemic Activity Modeller
 
-Modify an existing population activity plan to reflect social and government policy scenarios 
-responding to a pandemic.
+(i) Convert a standard population **travel diary** survey to **activity plans**, (ii) Modify the 
+activity plans to reflect social and government policy scenarios, (iii) Output
+ the adjusted plans to useful formats for activity based models or regular transport models.
 
 This work is to aid quick transport demand generation (traditional OD 
 matrices and activity based) given new and potential government pandemic related scenarios. It may 
 also be useful for other activity based demand modelling 
-such as for utility demand.
+such as for goods supply or utility demand.
 
-## Process
+## Get Involved
+
+We would like to develop this project as quickly as possible to assist with pandemic and 
+post-pandemic decision making. This project has two primary goals:
+
+- Feature Quality: Broadly useful and extendable features with good documentation and testing.
+- Theoretical Quality: Expert driven features with research and open case studies.
+
+Less abstractly, there are a good number of technical and non-technical of tasks to chip in with:
+1. Early feedback - read through this document, let us know what you think, share.
+2. Test - install our project, run the tests, try the code/notebooks, let us know if it breaks.
+3. Literature Review - we need validation of the overall approach.
+4. Use Cases - thought of a good use case? Let us know.
+4. Research - 
+
+
+## Process Overview
 
 1. Build Activity Plans from Travel Diary data
 2. Alter Activity Plans based on Policies regarding:
@@ -21,7 +38,7 @@ such as for utility demand.
 4. Rebuild Travel Diary format from altered activity plans
 5. Convert to O-D matrices if required
 
-## Policy Mechanisms:
+## Policy Mechanisms:   
 
 Once we have a representation of activity plans for the population, we can seek to adjust these 
 plans based on pandemic based policies. This will use statistical rules dependant on agent 
