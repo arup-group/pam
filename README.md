@@ -47,30 +47,30 @@ Our goals:
 Less abstractly, there are a good number of **coding** and **non-coding** tasks to chip in 
 with:
 
-##### Give Early Feedback
+#### Give Early Feedback
 Read through this document, let us know what you think, share. Feedback gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can email fred.shone@arup.com.
     
-##### Literature Review
+#### Literature Review
 We still need validation of the overall approach. Much of the methodology (detailed in this 
 document) is based on what can pragmatically be done, not what theoretically should be done. We'd
  appreciate links to relevant papers. Or even better we'd love a lit review - we'll add it to 
  this document.
  
-##### Research
+#### Research
 
 We need help with designing useful features, applying them to real problems. As part of this we 
 need:
 
-###### Evidence and Data for Validation
+##### Evidence and Data for Validation
 We know, for example, that many people have removed certain 
 activities from their daily plans, such as to school or university. But we don't know how many. We'd 
 like help finding and eventually applying **validation data** such as recent [change in 
 mobility](https://www.google.com/covid19/mobility/). 
 
-###### Evidence for New Features
+##### Evidence for New Features
 
 We currently support the following activity plan modifications:
 
@@ -87,14 +87,14 @@ But we'd like help to **find evidence** for other modifications that we think ar
 - household shared activities/no longer shared activities, such as leisure
 - defining key workers
 
-###### Evidence for Technical Methodology
+##### Evidence for Technical Methodology
     
 Modifying a plan to remove an activity can cascade into other changes. In the case of 
 people with complex chains of activities, the removal of a single activity requires adjustments 
 to the remainder. Do people leave later of earlier if they have more time for example? The 
 methods for this logic is in `pam.core.People`.
 
-##### Hack/Challenge
+#### Hack/Challenge
 
 We are maintaining an ongoing hack for people who want to dip in:
 
@@ -109,7 +109,7 @@ Dummy Travel Plans data with challenge edge cases can be found in
 home, shopping, work). All activity plans are restricted to one day and must start and end with 
 an activity.
 
-###### Challenge Criteria
+##### Challenge Criteria
 
 There are tests -> the more you can get running as `PASSED` the better you are doing. Run tests 
 using pytest, ie:
@@ -123,7 +123,7 @@ tests represents edge cases for the standard travel diary parser: `pam.parse.loa
  - the challenge is to adjust `pam.parse.load_travel_diary()` to get as many tests passing without 
  breaking ANY tests that were previously working.
 
-###### Rules
+##### Rules
 
 Clone project and work in your own branch.
 
@@ -131,16 +131,16 @@ Please work within the `pam.parse` module only.
 
 New edge case tests are expected to be added over time.
 
-##### The Code
+#### The Code
 
 For a quick start at the code, checkout the 
 [getting started notebook/s](https://github.com/arup-group/pam/tree/master/notebooks).
 
-###### Test
+##### Test
 If you've come this far - please consider cloning this repo, follow the installation instructions
  run the tests and maybe try out any example notebooks.
  
-###### Dev
+##### Dev
 We are maintaining a number of failing tests **#todo** and `NotImplementedErrors` throughout, eg:
 
 - `pam.parse.load_matsim()`: functions required for loading alternative formats to `core.Population`
@@ -163,7 +163,7 @@ Please branch as you wish but please get in touch first ([issue](https://github.
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA))
 .
 
-##### Use Cases
+#### Use Cases
 We will share open and dummy data where available, we would love people to do some experiments 
 and develop some viz and validation pipelines. Any example notebooks can be added to the example
 [notebooks](https://github.com/arup-group/pam/tree/master/notebooks).
