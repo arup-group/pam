@@ -133,6 +133,9 @@ New edge case tests are expected to be added over time.
 
 ##### The Code
 
+For a quick start at the code, checkout the 
+[getting started notebook/s](https://github.com/arup-group/pam/tree/master/notebooks).
+
 ###### Test
 If you've come this far - please consider cloning this repo, follow the installation instructions
  run the tests and maybe try out any example notebooks.
@@ -162,7 +165,8 @@ Please branch as you wish but please get in touch first ([issue](https://github.
 
 ##### Use Cases
 We will share open and dummy data where available, we would love people to do some experiments 
-and develop some viz and validation pipelines.
+and develop some viz and validation pipelines. Any example notebooks can be added to the example
+[notebooks](https://github.com/arup-group/pam/tree/master/notebooks).
 
 Help gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
