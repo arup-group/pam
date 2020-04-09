@@ -15,7 +15,7 @@ representations, already derived from exiting models or survey data:
 (i) **Parse** input data (eg travel diary) to household and person Activity Plans
 
 (ii) **Modify** the Activity Plans for new social and government policy scenarios (eg 
-remove education activities for non key workers households)
+remove education activities for non key worker households)
 
 (iii) **Output** to useful formats for activity based models or regular transport models
  
@@ -85,6 +85,7 @@ But we'd like help to **find evidence** for other modifications that we think ar
 - changing travel choice, ie mode
 - moving home location (ie national and local emigration)
 - household shared activities/no longer shared activities, such as leisure
+- defining key workers
 
 ###### Evidence for Technical Methodology
     
