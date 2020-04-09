@@ -1,4 +1,5 @@
-from .core import Population, Household, Person, Activity, Leg
+from .core import Population, Household, Person, Activity, Leg, minutes_to_datetime
+
 import random
 
 
@@ -26,7 +27,15 @@ class HouseholdQuarantined(Policy):
         if random.random() < self.probability:
             for pid, person in household.people.items():
                 person.plan = []
-                person.add(Activity(1, 'home', household.area, start_time=None, end_time=None))
+                person.add(
+                    Activity(
+                        1,
+                        'home',
+                        household.area,
+                        start_time=minutes_to_datetime(0),
+                        end_time=minutes_to_datetime(24*60-1)
+                    )
+                )
 
 
 class PersonStayAtHome(Policy):
@@ -44,17 +53,26 @@ class PersonStayAtHome(Policy):
         for pid, person in household.people.items():
             if random.random() < self.probability:
                 person.plan = []
-                person.add(Activity(1, 'home', household.area, start_time=None, end_time=None))
+                person.add(
+                    Activity(
+                        1,
+                        'home',
+                        household.area,
+                        start_time=minutes_to_datetime(0),
+                        end_time=minutes_to_datetime(24 * 60 - 1)
+                    )
+                )
 
 
-class RemoveEducationActivity(Policy):
+class RemoveActivity(Policy):
     """
     Probabilistic remove activities
     """
 
-    def __init__(self, probability):
+    def __init__(self, activities: str, probability):
         super().__init__()
 
+        self.activities = activities
         assert 0 < probability <= 1
         self.probability = probability
 
@@ -64,29 +82,13 @@ class RemoveEducationActivity(Policy):
             seq = 0
             while seq < len(person.plan):
                 p = person.plan[seq]
-                is_education = p.act.lower() in ['education', 'education_escort']
+                is_education = p.act.lower() in self.activities
                 selected = random.random() < self.probability
                 if is_education and selected:
-                    person.remove_activity(seq)
-                    seq -= 1
+                    previous_idx, subsequent_idx = person.remove_activity(seq)
+                    person.fill_plan(previous_idx, subsequent_idx, default='home')
                 else:
                     seq += 1
-
-
-
-
-    # if plan[seq-2].act == plan[seq+2].act and plan[seq-2].area == plan[seq+2].area:
-    #     new_plan = plan[:seq-1] + plan[seq+2:]
-    #     new_plan[seq-2].end_time = plan[seq+2].end_time
-    #     del new_plan[seq-1]
-    #
-    # else:  # need new leg
-    #     leg_duration = 0
-    #     mode = 0
-    #     # todo
-    #     raise NotImplementedError
-    #
-    # return new_plan
 
 
 def apply_policies(population: Population, policies: list):

@@ -33,8 +33,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 31,census_15,census_15,1,Waltham Forest,Redbridge,Waltham Forest,work,pt,1051,1056,1000
 32,census_16,census_16,0,Ealing,Ealing,Brent,education,pt,517,526,1000
 33,census_16,census_16,1,Ealing,Brent,Ealing,education,pt,1030,1039,1000
-34,census_17,census_17,0,Lambeth,,Lambeth,work,pt,421,450,1000
-35,census_17,census_17,1,Lambeth,Lambeth,,work,pt,925,954,1000
+34,census_17,census_17,0,Redbridge,Redbridge,Lambeth,work,pt,421,450,1000
+35,census_17,census_17,1,Redbridge,Lambeth,Redbridge,work,pt,925,954,1000
 36,census_18,census_18,0,Haringey,Haringey,"Westminster,City of London",work,pt,428,443,1000
 37,census_18,census_18,1,Haringey,"Westminster,City of London",Haringey,work,pt,902,917,1000
 38,census_19,census_19,0,Barking and Dagenham,Barking and Dagenham,Camden,work,pt,427,464,1000
@@ -47,8 +47,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 45,census_22,census_22,1,Hammersmith and Fulham,Tower Hamlets,Hammersmith and Fulham,work,pt,913,940,1000
 46,census_23,census_23,0,Lambeth,Lambeth,Islington,work,car,571,586,1000
 47,census_23,census_23,1,Lambeth,Islington,Lambeth,work,car,1076,1091,1000
-48,census_24,census_24,0,Merton,Merton,Sutton,work,pt,495,504,1000
-49,census_24,census_24,1,Merton,Sutton,Merton,work,pt,1036,1045,1000
+48,census_24,census_24,0,Merton,Merton,Merton,work,pt,495,504,1000
+49,census_24,census_24,1,Merton,Merton,Merton,work,pt,1036,1045,1000
 50,census_25,census_25,0,Lambeth,Lambeth,Ealing,work,pt,528,551,1000
 51,census_25,census_25,1,Lambeth,Ealing,Lambeth,work,pt,1042,1065,1000
 52,census_26,census_26,0,Harrow,Harrow,Harrow,work,pt,556,565,1000
@@ -65,8 +65,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 63,census_31,census_31,1,Lambeth,Islington,Lambeth,work,pt,1105,1116,1000
 64,census_32,census_32,0,Kensington and Chelsea,Kensington and Chelsea,Hammersmith and Fulham,education,pt,523,528,1000
 65,census_32,census_32,1,Kensington and Chelsea,Hammersmith and Fulham,Kensington and Chelsea,education,pt,996,1001,1000
-66,census_33,census_33,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,438,439,1000
-67,census_33,census_33,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,902,903,1000
+66,census_33,census_33,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,car,438,439,1000
+67,census_33,census_33,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,car,902,903,1000
 68,census_34,census_34,0,Harrow,Harrow,Brent,work,car,453,470,1000
 69,census_34,census_34,1,Harrow,Brent,Harrow,work,car,916,933,1000
 70,census_35,census_35,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,car,523,546,1000
@@ -103,8 +103,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 101,census_50,census_50,1,Barnet,Camden,Barnet,education,pt,1014,1035,1000
 102,census_51,census_51,0,Ealing,Ealing,"Westminster,City of London",work,pt,412,443,1000
 103,census_51,census_51,1,Ealing,"Westminster,City of London",Ealing,work,pt,911,942,1000
-104,census_52,census_52,0,Newham,Newham,Barking and Dagenham,work,pt,530,539,1000
-105,census_52,census_52,1,Newham,Barking and Dagenham,Newham,work,pt,989,998,1000
+104,census_52,census_52,0,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,530,539,1000
+105,census_52,census_52,1,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,989,998,1000
 106,census_53,census_53,0,Ealing,Ealing,Ealing,work,pt,488,489,1000
 107,census_53,census_53,1,Ealing,Ealing,Ealing,work,pt,978,979,1000
 108,census_54,census_54,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,pt,475,486,1000
@@ -143,8 +143,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 141,census_70,census_70,1,Redbridge,Newham,Redbridge,work,pt,939,952,1000
 142,census_71,census_71,0,Enfield,Enfield,Camden,work,pt,455,476,1000
 143,census_71,census_71,1,Enfield,Camden,Enfield,work,pt,945,966,1000
-144,census_72,census_72,0,Lewisham,Lewisham,Tower Hamlets,work,car,428,449,1000
-145,census_72,census_72,1,Lewisham,Tower Hamlets,Lewisham,work,car,1013,1034,1000
+144,census_72,census_72,0,Bromley,Bromley,Tower Hamlets,work,car,428,449,1000
+145,census_72,census_72,1,Bromley,Tower Hamlets,Bromley,work,car,1013,1034,1000
 146,census_73,census_73,0,Lewisham,Lewisham,Bromley,work,pt,545,560,1000
 147,census_73,census_73,1,Lewisham,Bromley,Lewisham,work,pt,1047,1062,1000
 148,census_74,census_74,0,Bexley,Bexley,"Westminster,City of London",work,car,445,484,1000
@@ -153,8 +153,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 151,census_75,census_75,1,Lewisham,Tower Hamlets,Lewisham,work,pt,1137,1146,1000
 152,census_76,census_76,0,Waltham Forest,Waltham Forest,Enfield,work,pt,471,482,1000
 153,census_76,census_76,1,Waltham Forest,Enfield,Waltham Forest,work,pt,1022,1033,1000
-154,census_77,census_77,0,Bromley,Bromley,Lewisham,work,pt,476,497,1000
-155,census_77,census_77,1,Bromley,Lewisham,Bromley,work,pt,1049,1070,1000
+154,census_77,census_77,0,Bromley,Bromley,Bromley,work,pt,476,497,1000
+155,census_77,census_77,1,Bromley,Bromley,Bromley,work,pt,1049,1070,1000
 156,census_78,census_78,0,Croydon,Croydon,Lewisham,work,pt,517,546,1000
 157,census_78,census_78,1,Croydon,Lewisham,Croydon,work,pt,1008,1037,1000
 158,census_79,census_79,0,Islington,Islington,Islington,work,pt,497,500,1000
@@ -193,8 +193,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 191,census_95,census_95,1,"Westminster,City of London",Camden,"Westminster,City of London",work,pt,1134,1145,1000
 192,census_96,census_96,0,Greenwich,Greenwich,Kensington and Chelsea,education,pt,473,512,1000
 193,census_96,census_96,1,Greenwich,Kensington and Chelsea,Greenwich,education,pt,1004,1043,1000
-194,census_97,census_97,0,Waltham Forest,Waltham Forest,Barnet,work,pt,613,634,1000
-195,census_97,census_97,1,Waltham Forest,Barnet,Waltham Forest,work,pt,1205,1226,1000
+194,census_97,census_97,0,Waltham Forest,Waltham Forest,Enfield,work,pt,613,634,1000
+195,census_97,census_97,1,Waltham Forest,Enfield,Waltham Forest,work,pt,1205,1226,1000
 196,census_98,census_98,0,Ealing,Ealing,Hillingdon,work,pt,513,540,1000
 197,census_98,census_98,1,Ealing,Hillingdon,Ealing,work,pt,1062,1089,1000
 198,census_99,census_99,0,Croydon,Croydon,"Westminster,City of London",work,pt,412,443,1000
@@ -213,8 +213,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 211,census_105,census_105,1,Wandsworth,Hammersmith and Fulham,Wandsworth,education,pt,981,994,1000
 212,census_106,census_106,0,Merton,Merton,Kingston upon Thames,work,pt,485,500,1000
 213,census_106,census_106,1,Merton,Kingston upon Thames,Merton,work,pt,1014,1029,1000
-214,census_107,census_107,0,Enfield,Enfield,"Westminster,City of London",work,car,526,547,1000
-215,census_107,census_107,1,Enfield,"Westminster,City of London",Enfield,work,car,953,974,1000
+214,census_107,census_107,0,Haringey,Haringey,"Westminster,City of London",work,car,526,547,1000
+215,census_107,census_107,1,Haringey,"Westminster,City of London",Haringey,work,car,953,974,1000
 216,census_108,census_108,0,Ealing,Ealing,"Westminster,City of London",education,pt,448,477,1000
 217,census_108,census_108,1,Ealing,"Westminster,City of London",Ealing,education,pt,935,964,1000
 218,census_109,census_109,0,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,514,517,1000
@@ -249,8 +249,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 247,census_123,census_123,1,Hillingdon,Ealing,Hillingdon,work,pt,1018,1043,1000
 248,census_124,census_124,0,Wandsworth,Wandsworth,Camden,education,pt,484,507,1000
 249,census_124,census_124,1,Wandsworth,Camden,Wandsworth,education,pt,1100,1123,1000
-250,census_125,census_125,0,"Westminster,City of London","Westminster,City of London",Hammersmith and Fulham,education,car,528,539,1000
-251,census_125,census_125,1,"Westminster,City of London",Hammersmith and Fulham,"Westminster,City of London",education,car,1004,1015,1000
+250,census_125,census_125,0,Brent,Brent,Hammersmith and Fulham,education,car,528,539,1000
+251,census_125,census_125,1,Brent,Hammersmith and Fulham,Brent,education,car,1004,1015,1000
 252,census_126,census_126,0,Bromley,Bromley,"Westminster,City of London",work,pt,438,463,1000
 253,census_126,census_126,1,Bromley,"Westminster,City of London",Bromley,work,pt,967,992,1000
 254,census_127,census_127,0,Hounslow,Hounslow,Richmond upon Thames,work,pt,427,440,1000
@@ -279,8 +279,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 277,census_138,census_138,1,Newham,Tower Hamlets,Newham,work,pt,1012,1017,1000
 278,census_139,census_139,0,Brent,Brent,Brent,work,pt,469,474,1000
 279,census_139,census_139,1,Brent,Brent,Brent,work,pt,907,912,1000
-280,census_140,census_140,0,Hackney,Hackney,Camden,work,pt,486,493,1000
-281,census_140,census_140,1,Hackney,Camden,Hackney,work,pt,1067,1074,1000
+280,census_140,census_140,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,pt,486,493,1000
+281,census_140,census_140,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,pt,1067,1074,1000
 282,census_141,census_141,0,Croydon,Croydon,"Westminster,City of London",work,car,430,459,1000
 283,census_141,census_141,1,Croydon,"Westminster,City of London",Croydon,work,car,954,983,1000
 284,census_142,census_142,0,Southwark,Southwark,Southwark,education,pt,414,425,1000
@@ -307,8 +307,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 305,census_152,census_152,1,Newham,Southwark,Newham,work,pt,962,977,1000
 306,census_153,census_153,0,Enfield,Enfield,Enfield,work,car,563,570,1000
 307,census_153,census_153,1,Enfield,Enfield,Enfield,work,car,1020,1027,1000
-308,census_154,census_154,0,Tower Hamlets,Tower Hamlets,Ealing,work,pt,466,505,1000
-309,census_154,census_154,1,Tower Hamlets,Ealing,Tower Hamlets,work,pt,1107,1146,1000
+308,census_154,census_154,0,Tower Hamlets,Tower Hamlets,Brent,work,pt,466,505,1000
+309,census_154,census_154,1,Tower Hamlets,Brent,Tower Hamlets,work,pt,1107,1146,1000
 310,census_155,census_155,0,Kensington and Chelsea,Kensington and Chelsea,Ealing,work,pt,453,478,1000
 311,census_155,census_155,1,Kensington and Chelsea,Ealing,Kensington and Chelsea,work,pt,996,1021,1000
 312,census_156,census_156,0,Southwark,Southwark,"Westminster,City of London",work,pt,462,473,1000
@@ -321,8 +321,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 319,census_159,census_159,1,Sutton,Croydon,Sutton,education,car,935,950,1000
 320,census_160,census_160,0,Hammersmith and Fulham,Hammersmith and Fulham,Bromley,work,pt,503,546,1000
 321,census_160,census_160,1,Hammersmith and Fulham,Bromley,Hammersmith and Fulham,work,pt,940,983,1000
-322,census_161,census_161,0,Lambeth,Lambeth,Tower Hamlets,education,pt,501,512,1000
-323,census_161,census_161,1,Lambeth,Tower Hamlets,Lambeth,education,pt,1058,1069,1000
+322,census_161,census_161,0,Southwark,Southwark,Tower Hamlets,education,pt,501,512,1000
+323,census_161,census_161,1,Southwark,Tower Hamlets,Southwark,education,pt,1058,1069,1000
 324,census_162,census_162,0,Croydon,Croydon,Croydon,work,car,511,526,1000
 325,census_162,census_162,1,Croydon,Croydon,Croydon,work,car,972,987,1000
 326,census_163,census_163,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,527,540,1000
@@ -349,8 +349,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 347,census_173,census_173,1,Brent,Harrow,Brent,work,pt,894,913,1000
 348,census_174,census_174,0,Hounslow,Hounslow,Hounslow,education,pt,451,454,1000
 349,census_174,census_174,1,Hounslow,Hounslow,Hounslow,education,pt,976,979,1000
-350,census_175,census_175,0,Greenwich,Greenwich,,work,pt,556,565,1000
-351,census_175,census_175,1,Greenwich,,Greenwich,work,pt,1110,1119,1000
+350,census_175,census_175,0,Greenwich,Greenwich,Greenwich,work,pt,556,565,1000
+351,census_175,census_175,1,Greenwich,Greenwich,Greenwich,work,pt,1110,1119,1000
 352,census_176,census_176,0,Havering,Havering,Havering,work,car,592,597,1000
 353,census_176,census_176,1,Havering,Havering,Havering,work,car,1104,1109,1000
 354,census_177,census_177,0,Islington,Islington,Enfield,work,car,516,539,1000
@@ -375,8 +375,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 373,census_186,census_186,1,Waltham Forest,"Westminster,City of London",Waltham Forest,work,pt,1038,1055,1000
 374,census_187,census_187,0,Islington,Islington,"Westminster,City of London",work,pt,473,484,1000
 375,census_187,census_187,1,Islington,"Westminster,City of London",Islington,work,pt,897,908,1000
-376,census_188,census_188,0,Hackney,Hackney,Kensington and Chelsea,education,pt,510,529,1000
-377,census_188,census_188,1,Hackney,Kensington and Chelsea,Hackney,education,pt,1008,1027,1000
+376,census_188,census_188,0,Hackney,Hackney,"Westminster,City of London",education,pt,510,529,1000
+377,census_188,census_188,1,Hackney,"Westminster,City of London",Hackney,education,pt,1008,1027,1000
 378,census_189,census_189,0,Newham,Newham,Lambeth,work,pt,460,481,1000
 379,census_189,census_189,1,Newham,Lambeth,Newham,work,pt,994,1015,1000
 380,census_190,census_190,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,482,489,1000
@@ -451,8 +451,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 449,census_224,census_224,1,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,pt,1026,1035,1000
 450,census_225,census_225,0,Hounslow,Hounslow,Richmond upon Thames,work,pt,499,506,1000
 451,census_225,census_225,1,Hounslow,Richmond upon Thames,Hounslow,work,pt,1097,1104,1000
-452,census_226,census_226,0,Hammersmith and Fulham,Hammersmith and Fulham,Haringey,work,car,488,509,1000
-453,census_226,census_226,1,Hammersmith and Fulham,Haringey,Hammersmith and Fulham,work,car,1047,1068,1000
+452,census_226,census_226,0,Kensington and Chelsea,Kensington and Chelsea,Haringey,work,car,488,509,1000
+453,census_226,census_226,1,Kensington and Chelsea,Haringey,Kensington and Chelsea,work,car,1047,1068,1000
 454,census_227,census_227,0,Southwark,Southwark,Barnet,work,pt,480,509,1000
 455,census_227,census_227,1,Southwark,Barnet,Southwark,work,pt,1026,1055,1000
 456,census_228,census_228,0,Greenwich,Greenwich,Redbridge,work,pt,449,482,1000
@@ -497,8 +497,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 495,census_247,census_247,1,Southwark,"Westminster,City of London",Southwark,work,pt,947,956,1000
 496,census_248,census_248,0,Waltham Forest,Waltham Forest,Tower Hamlets,education,pt,479,492,1000
 497,census_248,census_248,1,Waltham Forest,Tower Hamlets,Waltham Forest,education,pt,1014,1027,1000
-498,census_249,census_249,0,Camden,Camden,"Westminster,City of London",work,car,511,522,1000
-499,census_249,census_249,1,Camden,"Westminster,City of London",Camden,work,car,1018,1029,1000
+498,census_249,census_249,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,511,522,1000
+499,census_249,census_249,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,1018,1029,1000
 500,census_250,census_250,0,Sutton,Sutton,Wandsworth,work,car,464,489,1000
 501,census_250,census_250,1,Sutton,Wandsworth,Sutton,work,car,973,998,1000
 502,census_251,census_251,0,Havering,Havering,Redbridge,work,pt,409,434,1000
@@ -541,8 +541,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 539,census_269,census_269,1,Havering,Havering,Havering,work,pt,1044,1051,1000
 540,census_270,census_270,0,Brent,Brent,Barnet,education,pt,483,496,1000
 541,census_270,census_270,1,Brent,Barnet,Brent,education,pt,962,975,1000
-542,census_271,census_271,0,Croydon,Croydon,Sutton,work,pt,497,500,1000
-543,census_271,census_271,1,Croydon,Sutton,Croydon,work,pt,1123,1126,1000
+542,census_271,census_271,0,Croydon,Croydon,Croydon,work,pt,497,500,1000
+543,census_271,census_271,1,Croydon,Croydon,Croydon,work,pt,1123,1126,1000
 544,census_272,census_272,0,"Westminster,City of London","Westminster,City of London",Tower Hamlets,work,pt,506,521,1000
 545,census_272,census_272,1,"Westminster,City of London",Tower Hamlets,"Westminster,City of London",work,pt,1063,1078,1000
 546,census_273,census_273,0,Lewisham,Lewisham,Bromley,work,pt,416,427,1000
@@ -553,8 +553,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 551,census_275,census_275,1,Southwark,Kensington and Chelsea,Southwark,work,car,968,981,1000
 552,census_276,census_276,0,Croydon,Croydon,"Westminster,City of London",work,pt,529,554,1000
 553,census_276,census_276,1,Croydon,"Westminster,City of London",Croydon,work,pt,1012,1037,1000
-554,census_277,census_277,0,Brent,Brent,Harrow,work,pt,492,501,1000
-555,census_277,census_277,1,Brent,Harrow,Brent,work,pt,1073,1082,1000
+554,census_277,census_277,0,Brent,Brent,Brent,work,pt,492,501,1000
+555,census_277,census_277,1,Brent,Brent,Brent,work,pt,1073,1082,1000
 556,census_278,census_278,0,Merton,Merton,"Westminster,City of London",work,pt,641,666,1000
 557,census_278,census_278,1,Merton,"Westminster,City of London",Merton,work,pt,1201,1226,1000
 558,census_279,census_279,0,Croydon,Croydon,Croydon,work,pt,450,465,1000
@@ -585,12 +585,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 583,census_291,census_291,1,Havering,"Westminster,City of London",Havering,work,pt,942,985,1000
 584,census_292,census_292,0,Merton,Merton,Brent,work,pt,483,510,1000
 585,census_292,census_292,1,Merton,Brent,Merton,work,pt,1017,1044,1000
-586,census_293,census_293,0,Camden,,Camden,work,pt,558,595,1000
-587,census_293,census_293,1,Camden,Camden,,work,pt,1058,1095,1000
+586,census_293,census_293,0,Enfield,Enfield,Camden,work,pt,558,595,1000
+587,census_293,census_293,1,Enfield,Camden,Enfield,work,pt,1058,1095,1000
 588,census_294,census_294,0,Harrow,Harrow,Tower Hamlets,work,pt,450,497,1000
 589,census_294,census_294,1,Harrow,Tower Hamlets,Harrow,work,pt,991,1038,1000
-590,census_295,census_295,0,Barnet,Barnet,Hounslow,work,pt,555,578,1000
-591,census_295,census_295,1,Barnet,Hounslow,Barnet,work,pt,1109,1132,1000
+590,census_295,census_295,0,Barnet,Barnet,Ealing,work,pt,555,578,1000
+591,census_295,census_295,1,Barnet,Ealing,Barnet,work,pt,1109,1132,1000
 592,census_296,census_296,0,Bromley,Bromley,Bromley,work,pt,420,437,1000
 593,census_296,census_296,1,Bromley,Bromley,Bromley,work,pt,954,971,1000
 594,census_297,census_297,0,Brent,Brent,Brent,work,car,532,541,1000
@@ -733,8 +733,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 731,census_365,census_365,1,Hackney,Tower Hamlets,Hackney,education,pt,1053,1058,1000
 732,census_366,census_366,0,Harrow,Harrow,"Westminster,City of London",work,pt,526,553,1000
 733,census_366,census_366,1,Harrow,"Westminster,City of London",Harrow,work,pt,1134,1161,1000
-734,census_367,census_367,0,Hillingdon,Hillingdon,,work,pt,518,533,1000
-735,census_367,census_367,1,Hillingdon,,Hillingdon,work,pt,1042,1057,1000
+734,census_367,census_367,0,Hillingdon,Hillingdon,Hillingdon,work,pt,518,533,1000
+735,census_367,census_367,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1042,1057,1000
 736,census_368,census_368,0,Enfield,Enfield,Enfield,education,pt,494,495,1000
 737,census_368,census_368,1,Enfield,Enfield,Enfield,education,pt,1118,1119,1000
 738,census_369,census_369,0,Bexley,Bexley,Bexley,education,pt,532,545,1000
@@ -795,8 +795,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 793,census_396,census_396,1,Newham,Enfield,Newham,work,car,1007,1028,1000
 794,census_397,census_397,0,Lambeth,Lambeth,"Westminster,City of London",work,car,437,438,1000
 795,census_397,census_397,1,Lambeth,"Westminster,City of London",Lambeth,work,car,899,900,1000
-796,census_398,census_398,0,Wandsworth,Wandsworth,Islington,work,pt,504,523,1000
-797,census_398,census_398,1,Wandsworth,Islington,Wandsworth,work,pt,1066,1085,1000
+796,census_398,census_398,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,504,523,1000
+797,census_398,census_398,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1066,1085,1000
 798,census_399,census_399,0,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,548,553,1000
 799,census_399,census_399,1,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,1165,1170,1000
 800,census_400,census_400,0,Hackney,Hackney,Hackney,education,pt,573,580,1000
@@ -855,8 +855,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 853,census_426,census_426,1,Tower Hamlets,Newham,Tower Hamlets,work,pt,1185,1194,1000
 854,census_427,census_427,0,Havering,Havering,Tower Hamlets,work,car,404,435,1000
 855,census_427,census_427,1,Havering,Tower Hamlets,Havering,work,car,932,963,1000
-856,census_428,census_428,0,Hillingdon,Hillingdon,Kensington and Chelsea,education,pt,581,616,1000
-857,census_428,census_428,1,Hillingdon,Kensington and Chelsea,Hillingdon,education,pt,1078,1113,1000
+856,census_428,census_428,0,Hillingdon,Hillingdon,"Westminster,City of London",education,pt,581,616,1000
+857,census_428,census_428,1,Hillingdon,"Westminster,City of London",Hillingdon,education,pt,1078,1113,1000
 858,census_429,census_429,0,Waltham Forest,Waltham Forest,Barnet,education,pt,470,507,1000
 859,census_429,census_429,1,Waltham Forest,Barnet,Waltham Forest,education,pt,1077,1114,1000
 860,census_430,census_430,0,Redbridge,Redbridge,"Westminster,City of London",work,car,458,493,1000
@@ -877,8 +877,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 875,census_437,census_437,1,Sutton,Sutton,Sutton,education,pt,1045,1048,1000
 876,census_438,census_438,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,422,441,1000
 877,census_438,census_438,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1014,1033,1000
-878,census_439,census_439,0,Richmond upon Thames,,Richmond upon Thames,work,pt,448,469,1000
-879,census_439,census_439,1,Richmond upon Thames,Richmond upon Thames,,work,pt,994,1015,1000
+878,census_439,census_439,0,Lambeth,Lambeth,Wandsworth,work,pt,448,469,1000
+879,census_439,census_439,1,Lambeth,Wandsworth,Lambeth,work,pt,994,1015,1000
 880,census_440,census_440,0,Newham,Newham,"Westminster,City of London",work,car,449,470,1000
 881,census_440,census_440,1,Newham,"Westminster,City of London",Newham,work,car,917,938,1000
 882,census_441,census_441,0,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,pt,465,474,1000
@@ -973,14 +973,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 971,census_485,census_485,1,Tower Hamlets,Kensington and Chelsea,Tower Hamlets,work,pt,1104,1127,1000
 972,census_486,census_486,0,Enfield,Enfield,Barnet,work,pt,446,467,1000
 973,census_486,census_486,1,Enfield,Barnet,Enfield,work,pt,932,953,1000
-974,census_487,census_487,0,Merton,Merton,Wandsworth,work,pt,491,500,1000
-975,census_487,census_487,1,Merton,Wandsworth,Merton,work,pt,985,994,1000
+974,census_487,census_487,0,Wandsworth,Wandsworth,Wandsworth,work,pt,491,500,1000
+975,census_487,census_487,1,Wandsworth,Wandsworth,Wandsworth,work,pt,985,994,1000
 976,census_488,census_488,0,Wandsworth,Wandsworth,Richmond upon Thames,work,pt,638,645,1000
 977,census_488,census_488,1,Wandsworth,Richmond upon Thames,Wandsworth,work,pt,1225,1232,1000
 978,census_489,census_489,0,Camden,Camden,Camden,education,pt,526,529,1000
 979,census_489,census_489,1,Camden,Camden,Camden,education,pt,994,997,1000
-980,census_490,census_490,0,Wandsworth,Wandsworth,Kensington and Chelsea,education,pt,502,517,1000
-981,census_490,census_490,1,Wandsworth,Kensington and Chelsea,Wandsworth,education,pt,1088,1103,1000
+980,census_490,census_490,0,Wandsworth,Wandsworth,"Westminster,City of London",education,pt,502,517,1000
+981,census_490,census_490,1,Wandsworth,"Westminster,City of London",Wandsworth,education,pt,1088,1103,1000
 982,census_491,census_491,0,Barnet,Barnet,Barnet,education,car,428,443,1000
 983,census_491,census_491,1,Barnet,Barnet,Barnet,education,car,995,1010,1000
 984,census_492,census_492,0,Hillingdon,Hillingdon,Brent,work,car,490,513,1000
@@ -1005,22 +1005,22 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1003,census_501,census_501,1,Southwark,Harrow,Southwark,work,pt,949,994,1000
 1004,census_502,census_502,0,Sutton,Sutton,Sutton,education,pt,452,455,1000
 1005,census_502,census_502,1,Sutton,Sutton,Sutton,education,pt,999,1002,1000
-1006,census_503,census_503,0,Camden,Camden,"Westminster,City of London",work,car,449,454,1000
-1007,census_503,census_503,1,Camden,"Westminster,City of London",Camden,work,car,923,928,1000
+1006,census_503,census_503,0,Islington,Islington,"Westminster,City of London",work,car,449,454,1000
+1007,census_503,census_503,1,Islington,"Westminster,City of London",Islington,work,car,923,928,1000
 1008,census_504,census_504,0,Ealing,Ealing,Brent,work,pt,522,539,1000
 1009,census_504,census_504,1,Ealing,Brent,Ealing,work,pt,1114,1131,1000
 1010,census_505,census_505,0,Lewisham,Lewisham,Lewisham,work,pt,508,509,1000
 1011,census_505,census_505,1,Lewisham,Lewisham,Lewisham,work,pt,1040,1041,1000
 1012,census_506,census_506,0,Haringey,Haringey,Barnet,work,pt,432,445,1000
 1013,census_506,census_506,1,Haringey,Barnet,Haringey,work,pt,1004,1017,1000
-1014,census_507,census_507,0,Hillingdon,Hillingdon,Kensington and Chelsea,work,pt,512,545,1000
-1015,census_507,census_507,1,Hillingdon,Kensington and Chelsea,Hillingdon,work,pt,1025,1058,1000
+1014,census_507,census_507,0,Hillingdon,Hillingdon,"Westminster,City of London",work,pt,512,545,1000
+1015,census_507,census_507,1,Hillingdon,"Westminster,City of London",Hillingdon,work,pt,1025,1058,1000
 1016,census_508,census_508,0,Croydon,Croydon,Merton,work,pt,417,436,1000
 1017,census_508,census_508,1,Croydon,Merton,Croydon,work,pt,1017,1036,1000
 1018,census_509,census_509,0,Brent,Brent,Tower Hamlets,work,pt,443,480,1000
 1019,census_509,census_509,1,Brent,Tower Hamlets,Brent,work,pt,965,1002,1000
-1020,census_510,census_510,0,Greenwich,Greenwich,,work,pt,440,459,1000
-1021,census_510,census_510,1,Greenwich,,Greenwich,work,pt,999,1018,1000
+1020,census_510,census_510,0,Greenwich,Greenwich,Bexley,work,pt,440,459,1000
+1021,census_510,census_510,1,Greenwich,Bexley,Greenwich,work,pt,999,1018,1000
 1022,census_511,census_511,0,Brent,Brent,Haringey,work,pt,505,530,1000
 1023,census_511,census_511,1,Brent,Haringey,Brent,work,pt,1010,1035,1000
 1024,census_512,census_512,0,Richmond upon Thames,Richmond upon Thames,"Westminster,City of London",work,car,450,481,1000
@@ -1035,8 +1035,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1033,census_516,census_516,1,Croydon,Wandsworth,Croydon,work,pt,1088,1105,1000
 1034,census_517,census_517,0,Enfield,Enfield,Enfield,work,pt,420,427,1000
 1035,census_517,census_517,1,Enfield,Enfield,Enfield,work,pt,979,986,1000
-1036,census_518,census_518,0,Islington,Islington,"Westminster,City of London",work,pt,560,567,1000
-1037,census_518,census_518,1,Islington,"Westminster,City of London",Islington,work,pt,1047,1054,1000
+1036,census_518,census_518,0,Islington,Islington,Islington,work,pt,560,567,1000
+1037,census_518,census_518,1,Islington,Islington,Islington,work,pt,1047,1054,1000
 1038,census_519,census_519,0,Ealing,Ealing,Wandsworth,work,car,489,510,1000
 1039,census_519,census_519,1,Ealing,Wandsworth,Ealing,work,car,1063,1084,1000
 1040,census_520,census_520,0,Greenwich,Greenwich,Newham,work,pt,505,528,1000
@@ -1063,8 +1063,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1061,census_530,census_530,1,Barnet,Harrow,Barnet,work,pt,1024,1047,1000
 1062,census_531,census_531,0,Bromley,Bromley,Bromley,work,pt,547,568,1000
 1063,census_531,census_531,1,Bromley,Bromley,Bromley,work,pt,1012,1033,1000
-1064,census_532,census_532,0,Brent,Brent,Barnet,work,pt,423,432,1000
-1065,census_532,census_532,1,Brent,Barnet,Brent,work,pt,1012,1021,1000
+1064,census_532,census_532,0,Barnet,Barnet,Barnet,work,pt,423,432,1000
+1065,census_532,census_532,1,Barnet,Barnet,Barnet,work,pt,1012,1021,1000
 1066,census_533,census_533,0,Barnet,Barnet,Brent,work,pt,502,515,1000
 1067,census_533,census_533,1,Barnet,Brent,Barnet,work,pt,1111,1124,1000
 1068,census_534,census_534,0,Hillingdon,Hillingdon,Hillingdon,work,pt,451,462,1000
@@ -1075,12 +1075,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1073,census_536,census_536,1,Barking and Dagenham,Havering,Barking and Dagenham,work,pt,994,1015,1000
 1074,census_537,census_537,0,Islington,Islington,"Westminster,City of London",work,pt,459,466,1000
 1075,census_537,census_537,1,Islington,"Westminster,City of London",Islington,work,pt,909,916,1000
-1076,census_538,census_538,0,Enfield,Enfield,Brent,work,pt,570,595,1000
-1077,census_538,census_538,1,Enfield,Brent,Enfield,work,pt,1090,1115,1000
+1076,census_538,census_538,0,Enfield,Enfield,Barnet,work,pt,570,595,1000
+1077,census_538,census_538,1,Enfield,Barnet,Enfield,work,pt,1090,1115,1000
 1078,census_539,census_539,0,Southwark,Southwark,"Westminster,City of London",work,pt,480,497,1000
 1079,census_539,census_539,1,Southwark,"Westminster,City of London",Southwark,work,pt,991,1008,1000
-1080,census_540,census_540,0,"Westminster,City of London",,"Westminster,City of London",work,car,426,437,1000
-1081,census_540,census_540,1,"Westminster,City of London","Westminster,City of London",,work,car,980,991,1000
+1080,census_540,census_540,0,Wandsworth,Wandsworth,"Westminster,City of London",work,car,426,437,1000
+1081,census_540,census_540,1,Wandsworth,"Westminster,City of London",Wandsworth,work,car,980,991,1000
 1082,census_541,census_541,0,Redbridge,Redbridge,Waltham Forest,work,car,499,518,1000
 1083,census_541,census_541,1,Redbridge,Waltham Forest,Redbridge,work,car,951,970,1000
 1084,census_542,census_542,0,Merton,Merton,Wandsworth,work,pt,454,463,1000
@@ -1209,8 +1209,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1207,census_603,census_603,1,Lambeth,Southwark,Lambeth,work,car,1091,1102,1000
 1208,census_604,census_604,0,Croydon,Croydon,Croydon,work,pt,476,487,1000
 1209,census_604,census_604,1,Croydon,Croydon,Croydon,work,pt,1009,1020,1000
-1210,census_605,census_605,0,Bromley,Bromley,"Westminster,City of London",education,pt,457,492,1000
-1211,census_605,census_605,1,Bromley,"Westminster,City of London",Bromley,education,pt,887,922,1000
+1210,census_605,census_605,0,Bromley,Bromley,Tower Hamlets,education,pt,457,492,1000
+1211,census_605,census_605,1,Bromley,Tower Hamlets,Bromley,education,pt,887,922,1000
 1212,census_606,census_606,0,Bromley,Bromley,Bromley,work,pt,441,442,1000
 1213,census_606,census_606,1,Bromley,Bromley,Bromley,work,pt,973,974,1000
 1214,census_607,census_607,0,Southwark,Southwark,"Westminster,City of London",education,car,422,431,1000
@@ -1245,8 +1245,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1243,census_621,census_621,1,Redbridge,Waltham Forest,Redbridge,education,pt,942,957,1000
 1244,census_622,census_622,0,Southwark,Southwark,Merton,work,car,438,459,1000
 1245,census_622,census_622,1,Southwark,Merton,Southwark,work,car,1040,1061,1000
-1246,census_623,census_623,0,"Westminster,City of London","Westminster,City of London",Newham,work,pt,446,455,1000
-1247,census_623,census_623,1,"Westminster,City of London",Newham,"Westminster,City of London",work,pt,919,928,1000
+1246,census_623,census_623,0,Tower Hamlets,Tower Hamlets,Newham,work,pt,446,455,1000
+1247,census_623,census_623,1,Tower Hamlets,Newham,Tower Hamlets,work,pt,919,928,1000
 1248,census_624,census_624,0,Croydon,Croydon,"Westminster,City of London",work,pt,427,464,1000
 1249,census_624,census_624,1,Croydon,"Westminster,City of London",Croydon,work,pt,887,924,1000
 1250,census_625,census_625,0,Bexley,Bexley,Ealing,work,pt,455,522,1000
@@ -1297,8 +1297,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1295,census_647,census_647,1,Sutton,Croydon,Sutton,work,car,1133,1140,1000
 1296,census_648,census_648,0,Wandsworth,Wandsworth,Barnet,work,pt,425,458,1000
 1297,census_648,census_648,1,Wandsworth,Barnet,Wandsworth,work,pt,887,920,1000
-1298,census_649,census_649,0,Brent,Brent,Lambeth,work,pt,495,524,1000
-1299,census_649,census_649,1,Brent,Lambeth,Brent,work,pt,1037,1066,1000
+1298,census_649,census_649,0,Barnet,Barnet,Lambeth,work,pt,495,524,1000
+1299,census_649,census_649,1,Barnet,Lambeth,Barnet,work,pt,1037,1066,1000
 1300,census_650,census_650,0,Redbridge,Redbridge,Tower Hamlets,work,pt,543,576,1000
 1301,census_650,census_650,1,Redbridge,Tower Hamlets,Redbridge,work,pt,1105,1138,1000
 1302,census_651,census_651,0,Richmond upon Thames,Richmond upon Thames,"Westminster,City of London",work,pt,486,521,1000
@@ -1309,8 +1309,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1307,census_653,census_653,1,Havering,Havering,Havering,work,pt,1035,1046,1000
 1308,census_654,census_654,0,Enfield,Enfield,Enfield,work,pt,490,495,1000
 1309,census_654,census_654,1,Enfield,Enfield,Enfield,work,pt,1032,1037,1000
-1310,census_655,census_655,0,Merton,Merton,Lambeth,work,pt,515,528,1000
-1311,census_655,census_655,1,Merton,Lambeth,Merton,work,pt,987,1000,1000
+1310,census_655,census_655,0,Wandsworth,Wandsworth,Lambeth,work,pt,515,528,1000
+1311,census_655,census_655,1,Wandsworth,Lambeth,Wandsworth,work,pt,987,1000,1000
 1312,census_656,census_656,0,Havering,Havering,Camden,education,pt,463,512,1000
 1313,census_656,census_656,1,Havering,Camden,Havering,education,pt,1040,1089,1000
 1314,census_657,census_657,0,Bromley,Bromley,Greenwich,work,pt,418,431,1000
@@ -1401,8 +1401,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1399,census_699,census_699,1,Camden,Camden,Camden,education,pt,911,912,1000
 1400,census_700,census_700,0,Croydon,Croydon,"Westminster,City of London",work,pt,405,434,1000
 1401,census_700,census_700,1,Croydon,"Westminster,City of London",Croydon,work,pt,886,915,1000
-1402,census_701,census_701,0,Bexley,Bexley,Lambeth,work,pt,562,599,1000
-1403,census_701,census_701,1,Bexley,Lambeth,Bexley,work,pt,1113,1150,1000
+1402,census_701,census_701,0,Bexley,Bexley,Southwark,work,pt,562,599,1000
+1403,census_701,census_701,1,Bexley,Southwark,Bexley,work,pt,1113,1150,1000
 1404,census_702,census_702,0,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,education,pt,447,456,1000
 1405,census_702,census_702,1,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,education,pt,914,923,1000
 1406,census_703,census_703,0,"Westminster,City of London","Westminster,City of London",Ealing,work,pt,423,444,1000
@@ -1495,8 +1495,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1493,census_746,census_746,1,Haringey,Hillingdon,Haringey,work,pt,880,935,1000
 1494,census_747,census_747,0,Harrow,Harrow,Hammersmith and Fulham,work,pt,509,534,1000
 1495,census_747,census_747,1,Harrow,Hammersmith and Fulham,Harrow,work,pt,1025,1050,1000
-1496,census_748,census_748,0,Lewisham,Lewisham,Lambeth,education,pt,462,479,1000
-1497,census_748,census_748,1,Lewisham,Lambeth,Lewisham,education,pt,1016,1033,1000
+1496,census_748,census_748,0,Lewisham,Lewisham,Southwark,education,pt,462,479,1000
+1497,census_748,census_748,1,Lewisham,Southwark,Lewisham,education,pt,1016,1033,1000
 1498,census_749,census_749,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,479,492,1000
 1499,census_749,census_749,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1010,1023,1000
 1500,census_750,census_750,0,Brent,Brent,"Westminster,City of London",work,pt,506,515,1000
@@ -1529,8 +1529,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1527,census_763,census_763,1,Greenwich,Greenwich,Greenwich,work,pt,988,999,1000
 1528,census_764,census_764,0,Merton,Merton,Lambeth,education,pt,534,557,1000
 1529,census_764,census_764,1,Merton,Lambeth,Merton,education,pt,1177,1200,1000
-1530,census_765,census_765,0,Brent,Brent,Camden,work,pt,505,520,1000
-1531,census_765,census_765,1,Brent,Camden,Brent,work,pt,1041,1056,1000
+1530,census_765,census_765,0,Brent,Brent,Islington,work,pt,505,520,1000
+1531,census_765,census_765,1,Brent,Islington,Brent,work,pt,1041,1056,1000
 1532,census_766,census_766,0,Lewisham,Lewisham,Southwark,work,pt,578,585,1000
 1533,census_766,census_766,1,Lewisham,Southwark,Lewisham,work,pt,1191,1198,1000
 1534,census_767,census_767,0,Havering,Havering,Havering,work,pt,485,490,1000
@@ -1541,8 +1541,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1539,census_769,census_769,1,Bexley,"Westminster,City of London",Bexley,work,pt,948,979,1000
 1540,census_770,census_770,0,"Westminster,City of London","Westminster,City of London",Wandsworth,work,pt,489,502,1000
 1541,census_770,census_770,1,"Westminster,City of London",Wandsworth,"Westminster,City of London",work,pt,977,990,1000
-1542,census_771,census_771,0,Tower Hamlets,Tower Hamlets,,work,pt,591,592,1000
-1543,census_771,census_771,1,Tower Hamlets,,Tower Hamlets,work,pt,1108,1109,1000
+1542,census_771,census_771,0,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,591,592,1000
+1543,census_771,census_771,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,1108,1109,1000
 1544,census_772,census_772,0,Newham,Newham,Redbridge,work,pt,439,446,1000
 1545,census_772,census_772,1,Newham,Redbridge,Newham,work,pt,907,914,1000
 1546,census_773,census_773,0,Croydon,Croydon,Croydon,work,pt,595,596,1000
@@ -1615,8 +1615,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1613,census_806,census_806,1,Wandsworth,Camden,Wandsworth,work,pt,1220,1239,1000
 1614,census_807,census_807,0,Lambeth,Lambeth,Richmond upon Thames,work,pt,428,463,1000
 1615,census_807,census_807,1,Lambeth,Richmond upon Thames,Lambeth,work,pt,932,967,1000
-1616,census_808,census_808,0,Camden,Camden,Tower Hamlets,work,pt,435,450,1000
-1617,census_808,census_808,1,Camden,Tower Hamlets,Camden,work,pt,1030,1045,1000
+1616,census_808,census_808,0,"Westminster,City of London","Westminster,City of London",Tower Hamlets,work,pt,435,450,1000
+1617,census_808,census_808,1,"Westminster,City of London",Tower Hamlets,"Westminster,City of London",work,pt,1030,1045,1000
 1618,census_809,census_809,0,Kingston upon Thames,Kingston upon Thames,Merton,education,pt,538,547,1000
 1619,census_809,census_809,1,Kingston upon Thames,Merton,Kingston upon Thames,education,pt,1092,1101,1000
 1620,census_810,census_810,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,482,487,1000
@@ -1679,8 +1679,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1677,census_838,census_838,1,Enfield,"Westminster,City of London",Enfield,work,pt,1004,1025,1000
 1678,census_839,census_839,0,Barnet,Barnet,Barnet,work,pt,478,487,1000
 1679,census_839,census_839,1,Barnet,Barnet,Barnet,work,pt,1033,1042,1000
-1680,census_840,census_840,0,"Westminster,City of London","Westminster,City of London",Camden,work,car,465,470,1000
-1681,census_840,census_840,1,"Westminster,City of London",Camden,"Westminster,City of London",work,car,949,954,1000
+1680,census_840,census_840,0,Camden,Camden,Camden,work,car,465,470,1000
+1681,census_840,census_840,1,Camden,Camden,Camden,work,car,949,954,1000
 1682,census_841,census_841,0,Haringey,Haringey,Barnet,work,pt,517,532,1000
 1683,census_841,census_841,1,Haringey,Barnet,Haringey,work,pt,1056,1071,1000
 1684,census_842,census_842,0,Lambeth,Lambeth,Croydon,work,pt,415,434,1000
@@ -1727,8 +1727,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1725,census_862,census_862,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,car,1105,1116,1000
 1726,census_863,census_863,0,Harrow,Harrow,Hillingdon,work,pt,645,662,1000
 1727,census_863,census_863,1,Harrow,Hillingdon,Harrow,work,pt,1198,1215,1000
-1728,census_864,census_864,0,Sutton,Sutton,,work,pt,437,464,1000
-1729,census_864,census_864,1,Sutton,,Sutton,work,pt,1002,1029,1000
+1728,census_864,census_864,0,Sutton,Sutton,Wandsworth,work,pt,437,464,1000
+1729,census_864,census_864,1,Sutton,Wandsworth,Sutton,work,pt,1002,1029,1000
 1730,census_865,census_865,0,Islington,Islington,Islington,work,pt,446,451,1000
 1731,census_865,census_865,1,Islington,Islington,Islington,work,pt,990,995,1000
 1732,census_866,census_866,0,Hounslow,Hounslow,Hounslow,work,pt,451,462,1000
@@ -1739,8 +1739,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1737,census_868,census_868,1,Hounslow,Hounslow,Hounslow,education,pt,1121,1136,1000
 1738,census_869,census_869,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,education,car,497,498,1000
 1739,census_869,census_869,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,education,car,1064,1065,1000
-1740,census_870,census_870,0,Camden,Camden,Camden,work,pt,433,442,1000
-1741,census_870,census_870,1,Camden,Camden,Camden,work,pt,946,955,1000
+1740,census_870,census_870,0,Islington,Islington,Camden,work,pt,433,442,1000
+1741,census_870,census_870,1,Islington,Camden,Islington,work,pt,946,955,1000
 1742,census_871,census_871,0,Southwark,Southwark,"Westminster,City of London",education,car,490,497,1000
 1743,census_871,census_871,1,Southwark,"Westminster,City of London",Southwark,education,car,1102,1109,1000
 1744,census_872,census_872,0,Waltham Forest,Waltham Forest,Camden,education,pt,515,538,1000
@@ -1749,8 +1749,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1747,census_873,census_873,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,1021,1022,1000
 1748,census_874,census_874,0,Croydon,Croydon,Croydon,education,car,440,447,1000
 1749,census_874,census_874,1,Croydon,Croydon,Croydon,education,car,1073,1080,1000
-1750,census_875,census_875,0,Lambeth,Lambeth,Hackney,work,pt,497,510,1000
-1751,census_875,census_875,1,Lambeth,Hackney,Lambeth,work,pt,1044,1057,1000
+1750,census_875,census_875,0,Lambeth,Lambeth,Tower Hamlets,work,pt,497,510,1000
+1751,census_875,census_875,1,Lambeth,Tower Hamlets,Lambeth,work,pt,1044,1057,1000
 1752,census_876,census_876,0,Hammersmith and Fulham,Hammersmith and Fulham,Hillingdon,work,pt,400,439,1000
 1753,census_876,census_876,1,Hammersmith and Fulham,Hillingdon,Hammersmith and Fulham,work,pt,892,931,1000
 1754,census_877,census_877,0,Sutton,Sutton,Sutton,education,pt,439,448,1000
@@ -1771,8 +1771,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1769,census_884,census_884,1,Tower Hamlets,Hammersmith and Fulham,Tower Hamlets,education,pt,1061,1086,1000
 1770,census_885,census_885,0,Southwark,Southwark,"Westminster,City of London",work,pt,493,498,1000
 1771,census_885,census_885,1,Southwark,"Westminster,City of London",Southwark,work,pt,971,976,1000
-1772,census_886,census_886,0,Haringey,Haringey,"Westminster,City of London",work,pt,468,481,1000
-1773,census_886,census_886,1,Haringey,"Westminster,City of London",Haringey,work,pt,909,922,1000
+1772,census_886,census_886,0,Hackney,Hackney,"Westminster,City of London",work,pt,468,481,1000
+1773,census_886,census_886,1,Hackney,"Westminster,City of London",Hackney,work,pt,909,922,1000
 1774,census_887,census_887,0,Newham,Newham,Tower Hamlets,work,pt,420,429,1000
 1775,census_887,census_887,1,Newham,Tower Hamlets,Newham,work,pt,963,972,1000
 1776,census_888,census_888,0,Islington,Islington,"Westminster,City of London",work,pt,420,431,1000
@@ -1789,8 +1789,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1787,census_893,census_893,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,985,988,1000
 1788,census_894,census_894,0,Brent,Brent,Barnet,education,pt,454,465,1000
 1789,census_894,census_894,1,Brent,Barnet,Brent,education,pt,1002,1013,1000
-1790,census_895,census_895,0,Tower Hamlets,Tower Hamlets,Wandsworth,work,car,428,447,1000
-1791,census_895,census_895,1,Tower Hamlets,Wandsworth,Tower Hamlets,work,car,1041,1060,1000
+1790,census_895,census_895,0,Tower Hamlets,Tower Hamlets,Lambeth,work,car,428,447,1000
+1791,census_895,census_895,1,Tower Hamlets,Lambeth,Tower Hamlets,work,car,1041,1060,1000
 1792,census_896,census_896,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,482,483,1000
 1793,census_896,census_896,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,1023,1024,1000
 1794,census_897,census_897,0,Camden,Camden,"Westminster,City of London",work,pt,474,483,1000
@@ -1807,8 +1807,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1805,census_902,census_902,1,"Westminster,City of London",Southwark,"Westminster,City of London",work,pt,1074,1081,1000
 1806,census_903,census_903,0,Croydon,Croydon,Brent,work,pt,444,487,1000
 1807,census_903,census_903,1,Croydon,Brent,Croydon,work,pt,882,925,1000
-1808,census_904,census_904,0,Enfield,Enfield,Enfield,work,pt,475,488,1000
-1809,census_904,census_904,1,Enfield,Enfield,Enfield,work,pt,977,990,1000
+1808,census_904,census_904,0,Haringey,Haringey,Enfield,work,pt,475,488,1000
+1809,census_904,census_904,1,Haringey,Enfield,Haringey,work,pt,977,990,1000
 1810,census_905,census_905,0,Waltham Forest,Waltham Forest,Waltham Forest,work,car,605,606,1000
 1811,census_905,census_905,1,Waltham Forest,Waltham Forest,Waltham Forest,work,car,1115,1116,1000
 1812,census_906,census_906,0,Southwark,Southwark,"Westminster,City of London",work,pt,440,447,1000
@@ -1857,8 +1857,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1855,census_927,census_927,1,Hammersmith and Fulham,Tower Hamlets,Hammersmith and Fulham,education,pt,1021,1044,1000
 1856,census_928,census_928,0,Bexley,Bexley,Bexley,work,car,446,459,1000
 1857,census_928,census_928,1,Bexley,Bexley,Bexley,work,car,960,973,1000
-1858,census_929,census_929,0,Ealing,Ealing,Southwark,work,car,499,524,1000
-1859,census_929,census_929,1,Ealing,Southwark,Ealing,work,car,993,1018,1000
+1858,census_929,census_929,0,Hounslow,Hounslow,Southwark,work,car,499,524,1000
+1859,census_929,census_929,1,Hounslow,Southwark,Hounslow,work,car,993,1018,1000
 1860,census_930,census_930,0,Barking and Dagenham,Barking and Dagenham,Newham,work,pt,535,544,1000
 1861,census_930,census_930,1,Barking and Dagenham,Newham,Barking and Dagenham,work,pt,1028,1037,1000
 1862,census_931,census_931,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",education,pt,415,426,1000
@@ -1913,8 +1913,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1911,census_955,census_955,1,Ealing,"Westminster,City of London",Ealing,education,pt,1059,1088,1000
 1912,census_956,census_956,0,Barnet,Barnet,Barnet,education,car,432,433,1000
 1913,census_956,census_956,1,Barnet,Barnet,Barnet,education,car,1059,1060,1000
-1914,census_957,census_957,0,Hillingdon,Hillingdon,,work,pt,557,558,1000
-1915,census_957,census_957,1,Hillingdon,,Hillingdon,work,pt,1121,1122,1000
+1914,census_957,census_957,0,Hillingdon,Hillingdon,Hillingdon,work,pt,557,558,1000
+1915,census_957,census_957,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1121,1122,1000
 1916,census_958,census_958,0,Haringey,Haringey,"Westminster,City of London",work,pt,456,467,1000
 1917,census_958,census_958,1,Haringey,"Westminster,City of London",Haringey,work,pt,903,914,1000
 1918,census_959,census_959,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",education,pt,528,529,1000
@@ -1985,8 +1985,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1983,census_991,census_991,1,Harrow,"Westminster,City of London",Harrow,work,pt,969,1000,1000
 1984,census_992,census_992,0,Hillingdon,Hillingdon,Hillingdon,work,car,529,540,1000
 1985,census_992,census_992,1,Hillingdon,Hillingdon,Hillingdon,work,car,1006,1017,1000
-1986,census_993,census_993,0,Harrow,Harrow,Lambeth,work,pt,435,468,1000
-1987,census_993,census_993,1,Harrow,Lambeth,Harrow,work,pt,1051,1084,1000
+1986,census_993,census_993,0,Harrow,Harrow,Southwark,work,pt,435,468,1000
+1987,census_993,census_993,1,Harrow,Southwark,Harrow,work,pt,1051,1084,1000
 1988,census_994,census_994,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,423,434,1000
 1989,census_994,census_994,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,1040,1051,1000
 1990,census_995,census_995,0,Ealing,Ealing,"Westminster,City of London",education,pt,436,457,1000
@@ -1999,34 +1999,34 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 1997,census_998,census_998,1,Harrow,Ealing,Harrow,work,car,1059,1074,1000
 1998,census_999,census_999,0,Enfield,Enfield,Enfield,work,car,515,522,1000
 1999,census_999,census_999,1,Enfield,Enfield,Enfield,work,car,1099,1106,1000
-2000,census_1000,census_1000,0,Lewisham,Lewisham,Southwark,education,pt,582,589,1000
-2001,census_1000,census_1000,1,Lewisham,Southwark,Lewisham,education,pt,1119,1126,1000
+2000,census_1000,census_1000,0,Lewisham,Lewisham,Lewisham,education,pt,582,589,1000
+2001,census_1000,census_1000,1,Lewisham,Lewisham,Lewisham,education,pt,1119,1126,1000
 2002,census_1001,census_1001,0,Sutton,Sutton,Merton,education,pt,516,523,1000
 2003,census_1001,census_1001,1,Sutton,Merton,Sutton,education,pt,1066,1073,1000
 2004,census_1002,census_1002,0,Havering,Havering,"Westminster,City of London",work,pt,415,472,1000
 2005,census_1002,census_1002,1,Havering,"Westminster,City of London",Havering,work,pt,961,1018,1000
-2006,census_1003,census_1003,0,"Westminster,City of London",,"Westminster,City of London",work,car,447,464,1000
-2007,census_1003,census_1003,1,"Westminster,City of London","Westminster,City of London",,work,car,1004,1021,1000
+2006,census_1003,census_1003,0,Greenwich,Greenwich,"Westminster,City of London",work,car,447,464,1000
+2007,census_1003,census_1003,1,Greenwich,"Westminster,City of London",Greenwich,work,car,1004,1021,1000
 2008,census_1004,census_1004,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,425,430,1000
 2009,census_1004,census_1004,1,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,946,951,1000
 2010,census_1005,census_1005,0,Wandsworth,Wandsworth,Hammersmith and Fulham,work,car,507,514,1000
 2011,census_1005,census_1005,1,Wandsworth,Hammersmith and Fulham,Wandsworth,work,car,997,1004,1000
 2012,census_1006,census_1006,0,Greenwich,Greenwich,Tower Hamlets,work,pt,498,509,1000
 2013,census_1006,census_1006,1,Greenwich,Tower Hamlets,Greenwich,work,pt,1057,1068,1000
-2014,census_1007,census_1007,0,Waltham Forest,Waltham Forest,Redbridge,work,pt,499,502,1000
-2015,census_1007,census_1007,1,Waltham Forest,Redbridge,Waltham Forest,work,pt,1012,1015,1000
-2016,census_1008,census_1008,0,Barnet,Barnet,Harrow,work,pt,464,473,1000
-2017,census_1008,census_1008,1,Barnet,Harrow,Barnet,work,pt,931,940,1000
+2014,census_1007,census_1007,0,Redbridge,Redbridge,Redbridge,work,pt,499,502,1000
+2015,census_1007,census_1007,1,Redbridge,Redbridge,Redbridge,work,pt,1012,1015,1000
+2016,census_1008,census_1008,0,Barnet,Barnet,Brent,work,pt,464,473,1000
+2017,census_1008,census_1008,1,Barnet,Brent,Barnet,work,pt,931,940,1000
 2018,census_1009,census_1009,0,Croydon,Croydon,Croydon,education,pt,423,426,1000
 2019,census_1009,census_1009,1,Croydon,Croydon,Croydon,education,pt,969,972,1000
-2020,census_1010,census_1010,0,Southwark,Southwark,Lambeth,work,pt,511,520,1000
-2021,census_1010,census_1010,1,Southwark,Lambeth,Southwark,work,pt,1063,1072,1000
-2022,census_1011,census_1011,0,Bexley,Bexley,Islington,work,pt,573,610,1000
-2023,census_1011,census_1011,1,Bexley,Islington,Bexley,work,pt,1040,1077,1000
+2020,census_1010,census_1010,0,Southwark,Southwark,Southwark,work,pt,511,520,1000
+2021,census_1010,census_1010,1,Southwark,Southwark,Southwark,work,pt,1063,1072,1000
+2022,census_1011,census_1011,0,Bexley,Bexley,"Westminster,City of London",work,pt,573,610,1000
+2023,census_1011,census_1011,1,Bexley,"Westminster,City of London",Bexley,work,pt,1040,1077,1000
 2024,census_1012,census_1012,0,Hackney,Hackney,Haringey,work,car,429,438,1000
 2025,census_1012,census_1012,1,Hackney,Haringey,Hackney,work,car,1066,1075,1000
-2026,census_1013,census_1013,0,Bromley,Bromley,Croydon,work,pt,522,533,1000
-2027,census_1013,census_1013,1,Bromley,Croydon,Bromley,work,pt,1065,1076,1000
+2026,census_1013,census_1013,0,Bromley,Bromley,Bromley,work,pt,522,533,1000
+2027,census_1013,census_1013,1,Bromley,Bromley,Bromley,work,pt,1065,1076,1000
 2028,census_1014,census_1014,0,Havering,Havering,Havering,work,pt,461,474,1000
 2029,census_1014,census_1014,1,Havering,Havering,Havering,work,pt,994,1007,1000
 2030,census_1015,census_1015,0,Haringey,Haringey,"Westminster,City of London",work,car,490,505,1000
@@ -2045,10 +2045,10 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2043,census_1021,census_1021,1,Newham,Redbridge,Newham,work,car,1093,1112,1000
 2044,census_1022,census_1022,0,Lewisham,Lewisham,Wandsworth,work,pt,523,544,1000
 2045,census_1022,census_1022,1,Lewisham,Wandsworth,Lewisham,work,pt,1019,1040,1000
-2046,census_1023,census_1023,0,Southwark,,Southwark,work,car,446,449,1000
-2047,census_1023,census_1023,1,Southwark,Southwark,,work,car,939,942,1000
-2048,census_1024,census_1024,0,Lambeth,,Lambeth,work,pt,491,508,1000
-2049,census_1024,census_1024,1,Lambeth,Lambeth,,work,pt,1028,1045,1000
+2046,census_1023,census_1023,0,Lambeth,Lambeth,Southwark,work,car,446,449,1000
+2047,census_1023,census_1023,1,Lambeth,Southwark,Lambeth,work,car,939,942,1000
+2048,census_1024,census_1024,0,Lambeth,Lambeth,Lambeth,work,pt,491,508,1000
+2049,census_1024,census_1024,1,Lambeth,Lambeth,Lambeth,work,pt,1028,1045,1000
 2050,census_1025,census_1025,0,Merton,Merton,Wandsworth,education,pt,489,500,1000
 2051,census_1025,census_1025,1,Merton,Wandsworth,Merton,education,pt,968,979,1000
 2052,census_1026,census_1026,0,Enfield,Enfield,Haringey,work,pt,558,569,1000
@@ -2061,8 +2061,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2059,census_1029,census_1029,1,Tower Hamlets,Enfield,Tower Hamlets,work,pt,960,983,1000
 2060,census_1030,census_1030,0,Merton,Merton,Richmond upon Thames,work,pt,416,437,1000
 2061,census_1030,census_1030,1,Merton,Richmond upon Thames,Merton,work,pt,915,936,1000
-2062,census_1031,census_1031,0,Barnet,Barnet,"Westminster,City of London",work,pt,531,544,1000
-2063,census_1031,census_1031,1,Barnet,"Westminster,City of London",Barnet,work,pt,1006,1019,1000
+2062,census_1031,census_1031,0,Barnet,Barnet,Camden,work,pt,531,544,1000
+2063,census_1031,census_1031,1,Barnet,Camden,Barnet,work,pt,1006,1019,1000
 2064,census_1032,census_1032,0,Wandsworth,Wandsworth,Wandsworth,work,pt,460,461,1000
 2065,census_1032,census_1032,1,Wandsworth,Wandsworth,Wandsworth,work,pt,1050,1051,1000
 2066,census_1033,census_1033,0,Hounslow,Hounslow,Richmond upon Thames,work,pt,580,593,1000
@@ -2093,10 +2093,10 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2091,census_1045,census_1045,1,Bexley,Bexley,Bexley,work,pt,939,946,1000
 2092,census_1046,census_1046,0,Southwark,Southwark,"Westminster,City of London",work,pt,413,426,1000
 2093,census_1046,census_1046,1,Southwark,"Westminster,City of London",Southwark,work,pt,930,943,1000
-2094,census_1047,census_1047,0,Bexley,Bexley,Camden,work,pt,550,595,1000
-2095,census_1047,census_1047,1,Bexley,Camden,Bexley,work,pt,1033,1078,1000
-2096,census_1048,census_1048,0,"Westminster,City of London",,"Westminster,City of London",work,pt,481,534,1000
-2097,census_1048,census_1048,1,"Westminster,City of London","Westminster,City of London",,work,pt,1076,1129,1000
+2094,census_1047,census_1047,0,Bromley,Bromley,Camden,work,pt,550,595,1000
+2095,census_1047,census_1047,1,Bromley,Camden,Bromley,work,pt,1033,1078,1000
+2096,census_1048,census_1048,0,Bromley,Bromley,"Westminster,City of London",work,pt,481,534,1000
+2097,census_1048,census_1048,1,Bromley,"Westminster,City of London",Bromley,work,pt,1076,1129,1000
 2098,census_1049,census_1049,0,Waltham Forest,Waltham Forest,Enfield,work,pt,522,535,1000
 2099,census_1049,census_1049,1,Waltham Forest,Enfield,Waltham Forest,work,pt,1034,1047,1000
 2100,census_1050,census_1050,0,Croydon,Croydon,Bromley,work,pt,410,433,1000
@@ -2105,8 +2105,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2103,census_1051,census_1051,1,Hackney,Camden,Hackney,work,pt,942,953,1000
 2104,census_1052,census_1052,0,Camden,Camden,"Westminster,City of London",work,pt,562,569,1000
 2105,census_1052,census_1052,1,Camden,"Westminster,City of London",Camden,work,pt,1174,1181,1000
-2106,census_1053,census_1053,0,Sutton,Sutton,Hackney,work,pt,583,622,1000
-2107,census_1053,census_1053,1,Sutton,Hackney,Sutton,work,pt,1060,1099,1000
+2106,census_1053,census_1053,0,Sutton,Sutton,Tower Hamlets,work,pt,583,622,1000
+2107,census_1053,census_1053,1,Sutton,Tower Hamlets,Sutton,work,pt,1060,1099,1000
 2108,census_1054,census_1054,0,Croydon,Croydon,Sutton,work,pt,508,513,1000
 2109,census_1054,census_1054,1,Croydon,Sutton,Croydon,work,pt,1033,1038,1000
 2110,census_1055,census_1055,0,Barnet,Barnet,Camden,education,pt,518,535,1000
@@ -2117,8 +2117,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2115,census_1057,census_1057,1,Bexley,Bexley,Bexley,work,pt,960,967,1000
 2116,census_1058,census_1058,0,Ealing,Ealing,"Westminster,City of London",work,pt,449,466,1000
 2117,census_1058,census_1058,1,Ealing,"Westminster,City of London",Ealing,work,pt,965,982,1000
-2118,census_1059,census_1059,0,Harrow,Harrow,Camden,education,pt,428,453,1000
-2119,census_1059,census_1059,1,Harrow,Camden,Harrow,education,pt,1034,1059,1000
+2118,census_1059,census_1059,0,Barnet,Barnet,Camden,education,pt,428,453,1000
+2119,census_1059,census_1059,1,Barnet,Camden,Barnet,education,pt,1034,1059,1000
 2120,census_1060,census_1060,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,education,pt,494,501,1000
 2121,census_1060,census_1060,1,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,education,pt,1060,1067,1000
 2122,census_1061,census_1061,0,Wandsworth,Wandsworth,Kensington and Chelsea,education,pt,510,527,1000
@@ -2135,12 +2135,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2133,census_1066,census_1066,1,Greenwich,Tower Hamlets,Greenwich,work,pt,1003,1006,1000
 2134,census_1067,census_1067,0,Haringey,Haringey,"Westminster,City of London",work,pt,478,491,1000
 2135,census_1067,census_1067,1,Haringey,"Westminster,City of London",Haringey,work,pt,992,1005,1000
-2136,census_1068,census_1068,0,Newham,Newham,Islington,education,pt,462,479,1000
-2137,census_1068,census_1068,1,Newham,Islington,Newham,education,pt,912,929,1000
+2136,census_1068,census_1068,0,Newham,Newham,Hackney,education,pt,462,479,1000
+2137,census_1068,census_1068,1,Newham,Hackney,Newham,education,pt,912,929,1000
 2138,census_1069,census_1069,0,Redbridge,Redbridge,Redbridge,work,pt,477,486,1000
 2139,census_1069,census_1069,1,Redbridge,Redbridge,Redbridge,work,pt,957,966,1000
-2140,census_1070,census_1070,0,Camden,Camden,Islington,work,pt,486,489,1000
-2141,census_1070,census_1070,1,Camden,Islington,Camden,work,pt,963,966,1000
+2140,census_1070,census_1070,0,Camden,Camden,"Westminster,City of London",work,pt,486,489,1000
+2141,census_1070,census_1070,1,Camden,"Westminster,City of London",Camden,work,pt,963,966,1000
 2142,census_1071,census_1071,0,Kingston upon Thames,Kingston upon Thames,Hillingdon,work,pt,507,542,1000
 2143,census_1071,census_1071,1,Kingston upon Thames,Hillingdon,Kingston upon Thames,work,pt,1055,1090,1000
 2144,census_1072,census_1072,0,Hackney,Hackney,Hackney,work,pt,499,504,1000
@@ -2155,14 +2155,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2153,census_1076,census_1076,1,Brent,"Westminster,City of London",Brent,work,pt,997,1024,1000
 2154,census_1077,census_1077,0,Tower Hamlets,Tower Hamlets,Islington,work,pt,515,530,1000
 2155,census_1077,census_1077,1,Tower Hamlets,Islington,Tower Hamlets,work,pt,1060,1075,1000
-2156,census_1078,census_1078,0,Camden,Camden,"Westminster,City of London",work,pt,424,429,1000
-2157,census_1078,census_1078,1,Camden,"Westminster,City of London",Camden,work,pt,932,937,1000
-2158,census_1079,census_1079,0,Wandsworth,Wandsworth,Lambeth,work,pt,536,539,1000
-2159,census_1079,census_1079,1,Wandsworth,Lambeth,Wandsworth,work,pt,1096,1099,1000
+2156,census_1078,census_1078,0,Islington,Islington,"Westminster,City of London",work,pt,424,429,1000
+2157,census_1078,census_1078,1,Islington,"Westminster,City of London",Islington,work,pt,932,937,1000
+2158,census_1079,census_1079,0,Lambeth,Lambeth,Lambeth,work,pt,536,539,1000
+2159,census_1079,census_1079,1,Lambeth,Lambeth,Lambeth,work,pt,1096,1099,1000
 2160,census_1080,census_1080,0,Lambeth,Lambeth,Southwark,work,pt,505,512,1000
 2161,census_1080,census_1080,1,Lambeth,Southwark,Lambeth,work,pt,1024,1031,1000
-2162,census_1081,census_1081,0,Islington,Islington,Camden,work,pt,450,457,1000
-2163,census_1081,census_1081,1,Islington,Camden,Islington,work,pt,1057,1064,1000
+2162,census_1081,census_1081,0,Islington,Islington,"Westminster,City of London",work,pt,450,457,1000
+2163,census_1081,census_1081,1,Islington,"Westminster,City of London",Islington,work,pt,1057,1064,1000
 2164,census_1082,census_1082,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,438,459,1000
 2165,census_1082,census_1082,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,1063,1084,1000
 2166,census_1083,census_1083,0,Lambeth,Lambeth,Wandsworth,work,pt,519,522,1000
@@ -2177,12 +2177,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2175,census_1087,census_1087,1,Islington,Islington,Islington,education,pt,1069,1070,1000
 2176,census_1088,census_1088,0,Hounslow,Hounslow,Hammersmith and Fulham,work,pt,581,586,1000
 2177,census_1088,census_1088,1,Hounslow,Hammersmith and Fulham,Hounslow,work,pt,1034,1039,1000
-2178,census_1089,census_1089,0,Southwark,Southwark,Southwark,work,car,440,447,1000
-2179,census_1089,census_1089,1,Southwark,Southwark,Southwark,work,car,921,928,1000
+2178,census_1089,census_1089,0,Lambeth,Lambeth,Southwark,work,car,440,447,1000
+2179,census_1089,census_1089,1,Lambeth,Southwark,Lambeth,work,car,921,928,1000
 2180,census_1090,census_1090,0,Newham,Newham,Newham,education,pt,489,494,1000
 2181,census_1090,census_1090,1,Newham,Newham,Newham,education,pt,1046,1051,1000
-2182,census_1091,census_1091,0,Wandsworth,,Wandsworth,work,pt,433,436,1000
-2183,census_1091,census_1091,1,Wandsworth,Wandsworth,,work,pt,913,916,1000
+2182,census_1091,census_1091,0,Wandsworth,Wandsworth,Wandsworth,work,pt,433,436,1000
+2183,census_1091,census_1091,1,Wandsworth,Wandsworth,Wandsworth,work,pt,913,916,1000
 2184,census_1092,census_1092,0,Ealing,Ealing,"Westminster,City of London",work,car,455,484,1000
 2185,census_1092,census_1092,1,Ealing,"Westminster,City of London",Ealing,work,car,926,955,1000
 2186,census_1093,census_1093,0,Sutton,Sutton,Hounslow,education,car,506,547,1000
@@ -2223,8 +2223,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2221,census_1110,census_1110,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,pt,1050,1061,1000
 2222,census_1111,census_1111,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,pt,607,624,1000
 2223,census_1111,census_1111,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,pt,1122,1139,1000
-2224,census_1112,census_1112,0,Southwark,Southwark,Lambeth,work,pt,555,564,1000
-2225,census_1112,census_1112,1,Southwark,Lambeth,Southwark,work,pt,1036,1045,1000
+2224,census_1112,census_1112,0,Lewisham,Lewisham,Lambeth,work,pt,555,564,1000
+2225,census_1112,census_1112,1,Lewisham,Lambeth,Lewisham,work,pt,1036,1045,1000
 2226,census_1113,census_1113,0,Redbridge,Redbridge,Southwark,work,pt,529,560,1000
 2227,census_1113,census_1113,1,Redbridge,Southwark,Redbridge,work,pt,1048,1079,1000
 2228,census_1114,census_1114,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,education,pt,441,444,1000
@@ -2255,8 +2255,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2253,census_1126,census_1126,1,Wandsworth,Southwark,Wandsworth,education,pt,949,970,1000
 2254,census_1127,census_1127,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,481,484,1000
 2255,census_1127,census_1127,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,1103,1106,1000
-2256,census_1128,census_1128,0,Sutton,Sutton,Tower Hamlets,work,pt,640,675,1000
-2257,census_1128,census_1128,1,Sutton,Tower Hamlets,Sutton,work,pt,1161,1196,1000
+2256,census_1128,census_1128,0,Croydon,Croydon,Tower Hamlets,work,pt,640,675,1000
+2257,census_1128,census_1128,1,Croydon,Tower Hamlets,Croydon,work,pt,1161,1196,1000
 2258,census_1129,census_1129,0,Wandsworth,Wandsworth,Hammersmith and Fulham,education,car,559,570,1000
 2259,census_1129,census_1129,1,Wandsworth,Hammersmith and Fulham,Wandsworth,education,car,1135,1146,1000
 2260,census_1130,census_1130,0,Tower Hamlets,Tower Hamlets,Haringey,work,pt,492,507,1000
@@ -2275,8 +2275,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2273,census_1136,census_1136,1,Enfield,"Westminster,City of London",Enfield,work,pt,980,1011,1000
 2274,census_1137,census_1137,0,Camden,Camden,Enfield,work,car,473,500,1000
 2275,census_1137,census_1137,1,Camden,Enfield,Camden,work,car,1056,1083,1000
-2276,census_1138,census_1138,0,Hounslow,Hounslow,Richmond upon Thames,education,pt,540,557,1000
-2277,census_1138,census_1138,1,Hounslow,Richmond upon Thames,Hounslow,education,pt,1127,1144,1000
+2276,census_1138,census_1138,0,Hounslow,Hounslow,Kingston upon Thames,education,pt,540,557,1000
+2277,census_1138,census_1138,1,Hounslow,Kingston upon Thames,Hounslow,education,pt,1127,1144,1000
 2278,census_1139,census_1139,0,Lambeth,Lambeth,Croydon,work,pt,499,508,1000
 2279,census_1139,census_1139,1,Lambeth,Croydon,Lambeth,work,pt,980,989,1000
 2280,census_1140,census_1140,0,Newham,Newham,"Westminster,City of London",work,pt,490,521,1000
@@ -2299,12 +2299,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2297,census_1148,census_1148,1,Waltham Forest,Havering,Waltham Forest,education,pt,1169,1194,1000
 2298,census_1149,census_1149,0,Wandsworth,Wandsworth,Camden,work,pt,524,539,1000
 2299,census_1149,census_1149,1,Wandsworth,Camden,Wandsworth,work,pt,1037,1052,1000
-2300,census_1150,census_1150,0,Harrow,Harrow,Ealing,work,pt,536,549,1000
-2301,census_1150,census_1150,1,Harrow,Ealing,Harrow,work,pt,1146,1159,1000
+2300,census_1150,census_1150,0,Harrow,Harrow,Brent,work,pt,536,549,1000
+2301,census_1150,census_1150,1,Harrow,Brent,Harrow,work,pt,1146,1159,1000
 2302,census_1151,census_1151,0,Hackney,Hackney,"Westminster,City of London",work,pt,520,535,1000
 2303,census_1151,census_1151,1,Hackney,"Westminster,City of London",Hackney,work,pt,1009,1024,1000
-2304,census_1152,census_1152,0,Hackney,Hackney,Camden,education,pt,544,555,1000
-2305,census_1152,census_1152,1,Hackney,Camden,Hackney,education,pt,1048,1059,1000
+2304,census_1152,census_1152,0,Hackney,Hackney,"Westminster,City of London",education,pt,544,555,1000
+2305,census_1152,census_1152,1,Hackney,"Westminster,City of London",Hackney,education,pt,1048,1059,1000
 2306,census_1153,census_1153,0,Kingston upon Thames,Kingston upon Thames,"Westminster,City of London",work,pt,438,477,1000
 2307,census_1153,census_1153,1,Kingston upon Thames,"Westminster,City of London",Kingston upon Thames,work,pt,913,952,1000
 2308,census_1154,census_1154,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,524,541,1000
@@ -2317,8 +2317,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2315,census_1157,census_1157,1,Merton,Southwark,Merton,work,pt,1127,1146,1000
 2316,census_1158,census_1158,0,Kingston upon Thames,Kingston upon Thames,Wandsworth,work,pt,546,565,1000
 2317,census_1158,census_1158,1,Kingston upon Thames,Wandsworth,Kingston upon Thames,work,pt,1151,1170,1000
-2318,census_1159,census_1159,0,Harrow,,Harrow,work,car,488,509,1000
-2319,census_1159,census_1159,1,Harrow,Harrow,,work,car,1017,1038,1000
+2318,census_1159,census_1159,0,Hillingdon,Hillingdon,Harrow,work,car,488,509,1000
+2319,census_1159,census_1159,1,Hillingdon,Harrow,Hillingdon,work,car,1017,1038,1000
 2320,census_1160,census_1160,0,Harrow,Harrow,Brent,work,pt,516,529,1000
 2321,census_1160,census_1160,1,Harrow,Brent,Harrow,work,pt,1030,1043,1000
 2322,census_1161,census_1161,0,Haringey,Haringey,"Westminster,City of London",work,pt,505,524,1000
@@ -2347,8 +2347,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2345,census_1172,census_1172,1,Croydon,"Westminster,City of London",Croydon,work,pt,1008,1039,1000
 2346,census_1173,census_1173,0,Enfield,Enfield,Barnet,work,pt,434,451,1000
 2347,census_1173,census_1173,1,Enfield,Barnet,Enfield,work,pt,919,936,1000
-2348,census_1174,census_1174,0,Islington,Islington,Waltham Forest,work,pt,544,561,1000
-2349,census_1174,census_1174,1,Islington,Waltham Forest,Islington,work,pt,1034,1051,1000
+2348,census_1174,census_1174,0,Hackney,Hackney,Waltham Forest,work,pt,544,561,1000
+2349,census_1174,census_1174,1,Hackney,Waltham Forest,Hackney,work,pt,1034,1051,1000
 2350,census_1175,census_1175,0,Hounslow,Hounslow,Hounslow,work,pt,561,580,1000
 2351,census_1175,census_1175,1,Hounslow,Hounslow,Hounslow,work,pt,1088,1107,1000
 2352,census_1176,census_1176,0,Croydon,Croydon,Croydon,education,car,491,500,1000
@@ -2435,8 +2435,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2433,census_1216,census_1216,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,929,938,1000
 2434,census_1217,census_1217,0,Brent,Brent,Hammersmith and Fulham,work,pt,479,496,1000
 2435,census_1217,census_1217,1,Brent,Hammersmith and Fulham,Brent,work,pt,961,978,1000
-2436,census_1218,census_1218,0,Islington,Islington,Tower Hamlets,education,car,466,471,1000
-2437,census_1218,census_1218,1,Islington,Tower Hamlets,Islington,education,car,979,984,1000
+2436,census_1218,census_1218,0,Hackney,Hackney,Tower Hamlets,education,car,466,471,1000
+2437,census_1218,census_1218,1,Hackney,Tower Hamlets,Hackney,education,car,979,984,1000
 2438,census_1219,census_1219,0,Hounslow,Hounslow,Ealing,work,pt,513,534,1000
 2439,census_1219,census_1219,1,Hounslow,Ealing,Hounslow,work,pt,950,971,1000
 2440,census_1220,census_1220,0,Haringey,Haringey,Hackney,education,pt,442,451,1000
@@ -2485,8 +2485,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2483,census_1241,census_1241,1,Ealing,Harrow,Ealing,work,pt,985,998,1000
 2484,census_1242,census_1242,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,car,443,446,1000
 2485,census_1242,census_1242,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,car,952,955,1000
-2486,census_1243,census_1243,0,Hackney,Hackney,Tower Hamlets,work,pt,579,590,1000
-2487,census_1243,census_1243,1,Hackney,Tower Hamlets,Hackney,work,pt,1071,1082,1000
+2486,census_1243,census_1243,0,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,579,590,1000
+2487,census_1243,census_1243,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,1071,1082,1000
 2488,census_1244,census_1244,0,Croydon,Croydon,Croydon,education,pt,413,430,1000
 2489,census_1244,census_1244,1,Croydon,Croydon,Croydon,education,pt,913,930,1000
 2490,census_1245,census_1245,0,Barnet,Barnet,Barnet,work,pt,455,464,1000
@@ -2531,8 +2531,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2529,census_1264,census_1264,1,Southwark,Hammersmith and Fulham,Southwark,work,pt,1016,1031,1000
 2530,census_1265,census_1265,0,Lewisham,Lewisham,Lewisham,work,pt,496,505,1000
 2531,census_1265,census_1265,1,Lewisham,Lewisham,Lewisham,work,pt,965,974,1000
-2532,census_1266,census_1266,0,Wandsworth,Wandsworth,,education,pt,580,583,1000
-2533,census_1266,census_1266,1,Wandsworth,,Wandsworth,education,pt,1094,1097,1000
+2532,census_1266,census_1266,0,Wandsworth,Wandsworth,Wandsworth,education,pt,580,583,1000
+2533,census_1266,census_1266,1,Wandsworth,Wandsworth,Wandsworth,education,pt,1094,1097,1000
 2534,census_1267,census_1267,0,Camden,Camden,Camden,work,pt,541,542,1000
 2535,census_1267,census_1267,1,Camden,Camden,Camden,work,pt,1106,1107,1000
 2536,census_1268,census_1268,0,Bromley,Bromley,Southwark,work,pt,575,590,1000
@@ -2543,8 +2543,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2541,census_1270,census_1270,1,Croydon,Croydon,Croydon,work,pt,917,918,1000
 2542,census_1271,census_1271,0,Lewisham,Lewisham,Southwark,work,car,430,437,1000
 2543,census_1271,census_1271,1,Lewisham,Southwark,Lewisham,work,car,1008,1015,1000
-2544,census_1272,census_1272,0,Barking and Dagenham,Barking and Dagenham,,work,pt,481,486,1000
-2545,census_1272,census_1272,1,Barking and Dagenham,,Barking and Dagenham,work,pt,964,969,1000
+2544,census_1272,census_1272,0,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,481,486,1000
+2545,census_1272,census_1272,1,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,964,969,1000
 2546,census_1273,census_1273,0,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,car,542,545,1000
 2547,census_1273,census_1273,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,car,1056,1059,1000
 2548,census_1274,census_1274,0,Croydon,Croydon,Tower Hamlets,work,pt,488,515,1000
@@ -2561,8 +2561,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2559,census_1279,census_1279,1,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,1018,1027,1000
 2560,census_1280,census_1280,0,Bexley,Bexley,Havering,education,pt,436,445,1000
 2561,census_1280,census_1280,1,Bexley,Havering,Bexley,education,pt,944,953,1000
-2562,census_1281,census_1281,0,Barking and Dagenham,Barking and Dagenham,Lewisham,education,pt,517,536,1000
-2563,census_1281,census_1281,1,Barking and Dagenham,Lewisham,Barking and Dagenham,education,pt,1025,1044,1000
+2562,census_1281,census_1281,0,Barking and Dagenham,Barking and Dagenham,Greenwich,education,pt,517,536,1000
+2563,census_1281,census_1281,1,Barking and Dagenham,Greenwich,Barking and Dagenham,education,pt,1025,1044,1000
 2564,census_1282,census_1282,0,Waltham Forest,Waltham Forest,Kensington and Chelsea,work,pt,571,596,1000
 2565,census_1282,census_1282,1,Waltham Forest,Kensington and Chelsea,Waltham Forest,work,pt,1112,1137,1000
 2566,census_1283,census_1283,0,Bromley,Bromley,Bromley,work,pt,489,502,1000
@@ -2601,8 +2601,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2599,census_1299,census_1299,1,Southwark,Lambeth,Southwark,education,car,1074,1083,1000
 2600,census_1300,census_1300,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,437,450,1000
 2601,census_1300,census_1300,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,999,1012,1000
-2602,census_1301,census_1301,0,Lewisham,Lewisham,Lewisham,work,pt,569,580,1000
-2603,census_1301,census_1301,1,Lewisham,Lewisham,Lewisham,work,pt,1092,1103,1000
+2602,census_1301,census_1301,0,Bromley,Bromley,Lewisham,work,pt,569,580,1000
+2603,census_1301,census_1301,1,Bromley,Lewisham,Bromley,work,pt,1092,1103,1000
 2604,census_1302,census_1302,0,Newham,Newham,Tower Hamlets,work,car,550,561,1000
 2605,census_1302,census_1302,1,Newham,Tower Hamlets,Newham,work,car,1167,1178,1000
 2606,census_1303,census_1303,0,Newham,Newham,"Westminster,City of London",work,car,495,526,1000
@@ -2617,8 +2617,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2615,census_1307,census_1307,1,Richmond upon Thames,Hillingdon,Richmond upon Thames,work,pt,1032,1059,1000
 2616,census_1308,census_1308,0,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,592,601,1000
 2617,census_1308,census_1308,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,1045,1054,1000
-2618,census_1309,census_1309,0,Lewisham,Lewisham,Bromley,work,pt,583,604,1000
-2619,census_1309,census_1309,1,Lewisham,Bromley,Lewisham,work,pt,1156,1177,1000
+2618,census_1309,census_1309,0,Bromley,Bromley,Bromley,work,pt,583,604,1000
+2619,census_1309,census_1309,1,Bromley,Bromley,Bromley,work,pt,1156,1177,1000
 2620,census_1310,census_1310,0,Wandsworth,Wandsworth,Wandsworth,work,pt,431,434,1000
 2621,census_1310,census_1310,1,Wandsworth,Wandsworth,Wandsworth,work,pt,1008,1011,1000
 2622,census_1311,census_1311,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,454,463,1000
@@ -2637,8 +2637,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2635,census_1317,census_1317,1,Hillingdon,Hillingdon,Hillingdon,work,pt,940,959,1000
 2636,census_1318,census_1318,0,Brent,Brent,Hackney,education,pt,445,464,1000
 2637,census_1318,census_1318,1,Brent,Hackney,Brent,education,pt,1010,1029,1000
-2638,census_1319,census_1319,0,"Westminster,City of London","Westminster,City of London",Camden,work,car,450,459,1000
-2639,census_1319,census_1319,1,"Westminster,City of London",Camden,"Westminster,City of London",work,car,1021,1030,1000
+2638,census_1319,census_1319,0,Camden,Camden,Camden,work,car,450,459,1000
+2639,census_1319,census_1319,1,Camden,Camden,Camden,work,car,1021,1030,1000
 2640,census_1320,census_1320,0,Ealing,Ealing,Hammersmith and Fulham,work,pt,455,472,1000
 2641,census_1320,census_1320,1,Ealing,Hammersmith and Fulham,Ealing,work,pt,933,950,1000
 2642,census_1321,census_1321,0,Tower Hamlets,Tower Hamlets,Newham,work,pt,423,428,1000
@@ -2653,8 +2653,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2651,census_1325,census_1325,1,Southwark,"Westminster,City of London",Southwark,work,pt,1004,1009,1000
 2652,census_1326,census_1326,0,Brent,Brent,Tower Hamlets,work,car,569,606,1000
 2653,census_1326,census_1326,1,Brent,Tower Hamlets,Brent,work,car,1089,1126,1000
-2654,census_1327,census_1327,0,Haringey,Haringey,Hammersmith and Fulham,work,pt,575,600,1000
-2655,census_1327,census_1327,1,Haringey,Hammersmith and Fulham,Haringey,work,pt,1042,1067,1000
+2654,census_1327,census_1327,0,Hackney,Hackney,Hammersmith and Fulham,work,pt,575,600,1000
+2655,census_1327,census_1327,1,Hackney,Hammersmith and Fulham,Hackney,work,pt,1042,1067,1000
 2656,census_1328,census_1328,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,471,488,1000
 2657,census_1328,census_1328,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,960,977,1000
 2658,census_1329,census_1329,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",education,pt,436,445,1000
@@ -2665,18 +2665,18 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2663,census_1331,census_1331,1,Lewisham,Camden,Lewisham,work,pt,974,999,1000
 2664,census_1332,census_1332,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,475,482,1000
 2665,census_1332,census_1332,1,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,948,955,1000
-2666,census_1333,census_1333,0,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,484,485,1000
-2667,census_1333,census_1333,1,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,1125,1126,1000
+2666,census_1333,census_1333,0,Waltham Forest,Waltham Forest,Redbridge,work,pt,484,485,1000
+2667,census_1333,census_1333,1,Waltham Forest,Redbridge,Waltham Forest,work,pt,1125,1126,1000
 2668,census_1334,census_1334,0,Ealing,Ealing,"Westminster,City of London",work,pt,427,454,1000
 2669,census_1334,census_1334,1,Ealing,"Westminster,City of London",Ealing,work,pt,889,916,1000
-2670,census_1335,census_1335,0,Kingston upon Thames,Kingston upon Thames,Richmond upon Thames,work,pt,460,475,1000
-2671,census_1335,census_1335,1,Kingston upon Thames,Richmond upon Thames,Kingston upon Thames,work,pt,940,955,1000
+2670,census_1335,census_1335,0,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,pt,460,475,1000
+2671,census_1335,census_1335,1,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,pt,940,955,1000
 2672,census_1336,census_1336,0,Hackney,Hackney,Islington,education,pt,525,536,1000
 2673,census_1336,census_1336,1,Hackney,Islington,Hackney,education,pt,1029,1040,1000
-2674,census_1337,census_1337,0,Enfield,Enfield,Ealing,work,pt,469,514,1000
-2675,census_1337,census_1337,1,Enfield,Ealing,Enfield,work,pt,969,1014,1000
-2676,census_1338,census_1338,0,Wandsworth,Wandsworth,Ealing,education,pt,440,473,1000
-2677,census_1338,census_1338,1,Wandsworth,Ealing,Wandsworth,education,pt,1013,1046,1000
+2674,census_1337,census_1337,0,Waltham Forest,Waltham Forest,Ealing,work,pt,469,514,1000
+2675,census_1337,census_1337,1,Waltham Forest,Ealing,Waltham Forest,work,pt,969,1014,1000
+2676,census_1338,census_1338,0,Lambeth,Lambeth,Ealing,education,pt,440,473,1000
+2677,census_1338,census_1338,1,Lambeth,Ealing,Lambeth,education,pt,1013,1046,1000
 2678,census_1339,census_1339,0,Lewisham,Lewisham,Croydon,work,pt,417,440,1000
 2679,census_1339,census_1339,1,Lewisham,Croydon,Lewisham,work,pt,915,938,1000
 2680,census_1340,census_1340,0,Wandsworth,Wandsworth,Croydon,education,pt,569,586,1000
@@ -2709,8 +2709,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2707,census_1353,census_1353,1,Islington,"Westminster,City of London",Islington,work,pt,1042,1047,1000
 2708,census_1354,census_1354,0,Greenwich,Greenwich,Kingston upon Thames,work,pt,417,466,1000
 2709,census_1354,census_1354,1,Greenwich,Kingston upon Thames,Greenwich,work,pt,978,1027,1000
-2710,census_1355,census_1355,0,Enfield,Enfield,"Westminster,City of London",work,pt,482,507,1000
-2711,census_1355,census_1355,1,Enfield,"Westminster,City of London",Enfield,work,pt,947,972,1000
+2710,census_1355,census_1355,0,Haringey,Haringey,"Westminster,City of London",work,pt,482,507,1000
+2711,census_1355,census_1355,1,Haringey,"Westminster,City of London",Haringey,work,pt,947,972,1000
 2712,census_1356,census_1356,0,Hammersmith and Fulham,Hammersmith and Fulham,Camden,work,pt,438,445,1000
 2713,census_1356,census_1356,1,Hammersmith and Fulham,Camden,Hammersmith and Fulham,work,pt,966,973,1000
 2714,census_1357,census_1357,0,Bromley,Bromley,Bromley,work,pt,543,566,1000
@@ -2757,8 +2757,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2755,census_1377,census_1377,1,Islington,Camden,Islington,education,pt,1120,1123,1000
 2756,census_1378,census_1378,0,Newham,Newham,Tower Hamlets,work,pt,523,540,1000
 2757,census_1378,census_1378,1,Newham,Tower Hamlets,Newham,work,pt,1120,1137,1000
-2758,census_1379,census_1379,0,Lambeth,Lambeth,Lambeth,work,pt,525,544,1000
-2759,census_1379,census_1379,1,Lambeth,Lambeth,Lambeth,work,pt,957,976,1000
+2758,census_1379,census_1379,0,Southwark,Southwark,Lambeth,work,pt,525,544,1000
+2759,census_1379,census_1379,1,Southwark,Lambeth,Southwark,work,pt,957,976,1000
 2760,census_1380,census_1380,0,Haringey,Haringey,Enfield,education,pt,577,594,1000
 2761,census_1380,census_1380,1,Haringey,Enfield,Haringey,education,pt,1069,1086,1000
 2762,census_1381,census_1381,0,Bromley,Bromley,"Westminster,City of London",education,pt,526,565,1000
@@ -2773,8 +2773,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2771,census_1385,census_1385,1,Lambeth,Islington,Lambeth,work,car,1090,1103,1000
 2772,census_1386,census_1386,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,416,435,1000
 2773,census_1386,census_1386,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,1006,1025,1000
-2774,census_1387,census_1387,0,Lewisham,Lewisham,Islington,work,pt,410,431,1000
-2775,census_1387,census_1387,1,Lewisham,Islington,Lewisham,work,pt,962,983,1000
+2774,census_1387,census_1387,0,Bromley,Bromley,"Westminster,City of London",work,pt,410,431,1000
+2775,census_1387,census_1387,1,Bromley,"Westminster,City of London",Bromley,work,pt,962,983,1000
 2776,census_1388,census_1388,0,Camden,Camden,Lambeth,work,car,507,524,1000
 2777,census_1388,census_1388,1,Camden,Lambeth,Camden,work,car,1023,1040,1000
 2778,census_1389,census_1389,0,Croydon,Croydon,Croydon,work,pt,440,453,1000
@@ -2785,8 +2785,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2783,census_1391,census_1391,1,Camden,Brent,Camden,work,pt,1112,1121,1000
 2784,census_1392,census_1392,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,418,425,1000
 2785,census_1392,census_1392,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,1060,1067,1000
-2786,census_1393,census_1393,0,Redbridge,Redbridge,Haringey,work,pt,553,582,1000
-2787,census_1393,census_1393,1,Redbridge,Haringey,Redbridge,work,pt,1137,1166,1000
+2786,census_1393,census_1393,0,Redbridge,Redbridge,Hackney,work,pt,553,582,1000
+2787,census_1393,census_1393,1,Redbridge,Hackney,Redbridge,work,pt,1137,1166,1000
 2788,census_1394,census_1394,0,Lewisham,Lewisham,Southwark,work,car,493,500,1000
 2789,census_1394,census_1394,1,Lewisham,Southwark,Lewisham,work,car,1069,1076,1000
 2790,census_1395,census_1395,0,Lambeth,Lambeth,"Westminster,City of London",education,pt,641,650,1000
@@ -2829,8 +2829,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2827,census_1413,census_1413,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1039,1042,1000
 2828,census_1414,census_1414,0,Bexley,Bexley,Bexley,work,car,623,630,1000
 2829,census_1414,census_1414,1,Bexley,Bexley,Bexley,work,car,1096,1103,1000
-2830,census_1415,census_1415,0,Camden,Camden,Camden,education,pt,471,484,1000
-2831,census_1415,census_1415,1,Camden,Camden,Camden,education,pt,1006,1019,1000
+2830,census_1415,census_1415,0,Camden,Camden,"Westminster,City of London",education,pt,471,484,1000
+2831,census_1415,census_1415,1,Camden,"Westminster,City of London",Camden,education,pt,1006,1019,1000
 2832,census_1416,census_1416,0,Lewisham,Lewisham,Bromley,work,pt,466,479,1000
 2833,census_1416,census_1416,1,Lewisham,Bromley,Lewisham,work,pt,996,1009,1000
 2834,census_1417,census_1417,0,Southwark,Southwark,Islington,work,pt,430,443,1000
@@ -2849,8 +2849,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2847,census_1423,census_1423,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,car,1106,1117,1000
 2848,census_1424,census_1424,0,Enfield,Enfield,Hackney,work,pt,472,491,1000
 2849,census_1424,census_1424,1,Enfield,Hackney,Enfield,work,pt,954,973,1000
-2850,census_1425,census_1425,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,457,462,1000
-2851,census_1425,census_1425,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,1054,1059,1000
+2850,census_1425,census_1425,0,Richmond upon Thames,Richmond upon Thames,Wandsworth,work,pt,457,462,1000
+2851,census_1425,census_1425,1,Richmond upon Thames,Wandsworth,Richmond upon Thames,work,pt,1054,1059,1000
 2852,census_1426,census_1426,0,Hillingdon,Hillingdon,Hillingdon,education,pt,581,590,1000
 2853,census_1426,census_1426,1,Hillingdon,Hillingdon,Hillingdon,education,pt,1064,1073,1000
 2854,census_1427,census_1427,0,"Westminster,City of London","Westminster,City of London",Camden,work,pt,562,565,1000
@@ -2865,8 +2865,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2863,census_1431,census_1431,1,Hammersmith and Fulham,Brent,Hammersmith and Fulham,work,pt,921,930,1000
 2864,census_1432,census_1432,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,509,526,1000
 2865,census_1432,census_1432,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,1051,1068,1000
-2866,census_1433,census_1433,0,Islington,Islington,Tower Hamlets,work,pt,493,498,1000
-2867,census_1433,census_1433,1,Islington,Tower Hamlets,Islington,work,pt,1069,1074,1000
+2866,census_1433,census_1433,0,Hackney,Hackney,Tower Hamlets,work,pt,493,498,1000
+2867,census_1433,census_1433,1,Hackney,Tower Hamlets,Hackney,work,pt,1069,1074,1000
 2868,census_1434,census_1434,0,Ealing,Ealing,Ealing,work,car,527,528,1000
 2869,census_1434,census_1434,1,Ealing,Ealing,Ealing,work,car,1086,1087,1000
 2870,census_1435,census_1435,0,Lewisham,Lewisham,"Westminster,City of London",education,pt,498,517,1000
@@ -2893,8 +2893,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2891,census_1445,census_1445,1,Enfield,Barnet,Enfield,education,car,1021,1038,1000
 2892,census_1446,census_1446,0,Southwark,Southwark,Southwark,education,pt,484,489,1000
 2893,census_1446,census_1446,1,Southwark,Southwark,Southwark,education,pt,1012,1017,1000
-2894,census_1447,census_1447,0,Wandsworth,Wandsworth,Kensington and Chelsea,education,car,492,503,1000
-2895,census_1447,census_1447,1,Wandsworth,Kensington and Chelsea,Wandsworth,education,car,1024,1035,1000
+2894,census_1447,census_1447,0,Wandsworth,Wandsworth,"Westminster,City of London",education,car,492,503,1000
+2895,census_1447,census_1447,1,Wandsworth,"Westminster,City of London",Wandsworth,education,car,1024,1035,1000
 2896,census_1448,census_1448,0,Ealing,Ealing,Hammersmith and Fulham,work,pt,564,579,1000
 2897,census_1448,census_1448,1,Ealing,Hammersmith and Fulham,Ealing,work,pt,1133,1148,1000
 2898,census_1449,census_1449,0,Lewisham,Lewisham,Tower Hamlets,work,pt,424,439,1000
@@ -2935,8 +2935,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2933,census_1466,census_1466,1,Hillingdon,Hillingdon,Hillingdon,work,pt,966,973,1000
 2934,census_1467,census_1467,0,Kingston upon Thames,Kingston upon Thames,Richmond upon Thames,work,pt,469,478,1000
 2935,census_1467,census_1467,1,Kingston upon Thames,Richmond upon Thames,Kingston upon Thames,work,pt,966,975,1000
-2936,census_1468,census_1468,0,Lambeth,Lambeth,Hackney,work,car,466,475,1000
-2937,census_1468,census_1468,1,Lambeth,Hackney,Lambeth,work,car,1060,1069,1000
+2936,census_1468,census_1468,0,Lambeth,Lambeth,"Westminster,City of London",work,car,466,475,1000
+2937,census_1468,census_1468,1,Lambeth,"Westminster,City of London",Lambeth,work,car,1060,1069,1000
 2938,census_1469,census_1469,0,Hillingdon,Hillingdon,Tower Hamlets,education,pt,414,467,1000
 2939,census_1469,census_1469,1,Hillingdon,Tower Hamlets,Hillingdon,education,pt,966,1019,1000
 2940,census_1470,census_1470,0,Kensington and Chelsea,Kensington and Chelsea,Camden,education,pt,459,468,1000
@@ -2989,8 +2989,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 2987,census_1493,census_1493,1,Waltham Forest,Redbridge,Waltham Forest,education,pt,1140,1153,1000
 2988,census_1494,census_1494,0,Havering,Havering,Havering,education,pt,431,440,1000
 2989,census_1494,census_1494,1,Havering,Havering,Havering,education,pt,972,981,1000
-2990,census_1495,census_1495,0,Hammersmith and Fulham,Hammersmith and Fulham,Tower Hamlets,education,pt,457,484,1000
-2991,census_1495,census_1495,1,Hammersmith and Fulham,Tower Hamlets,Hammersmith and Fulham,education,pt,889,916,1000
+2990,census_1495,census_1495,0,Kensington and Chelsea,Kensington and Chelsea,Tower Hamlets,education,pt,457,484,1000
+2991,census_1495,census_1495,1,Kensington and Chelsea,Tower Hamlets,Kensington and Chelsea,education,pt,889,916,1000
 2992,census_1496,census_1496,0,Hillingdon,Hillingdon,Hillingdon,work,pt,534,541,1000
 2993,census_1496,census_1496,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1131,1138,1000
 2994,census_1497,census_1497,0,Havering,Havering,Havering,work,pt,493,494,1000
@@ -3051,8 +3051,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3049,census_1524,census_1524,1,Enfield,Enfield,Enfield,work,pt,996,1007,1000
 3050,census_1525,census_1525,0,Lambeth,Lambeth,"Westminster,City of London",education,pt,483,496,1000
 3051,census_1525,census_1525,1,Lambeth,"Westminster,City of London",Lambeth,education,pt,964,977,1000
-3052,census_1526,census_1526,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,493,500,1000
-3053,census_1526,census_1526,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1109,1116,1000
+3052,census_1526,census_1526,0,Southwark,Southwark,"Westminster,City of London",work,pt,493,500,1000
+3053,census_1526,census_1526,1,Southwark,"Westminster,City of London",Southwark,work,pt,1109,1116,1000
 3054,census_1527,census_1527,0,Barnet,Barnet,Islington,work,pt,464,493,1000
 3055,census_1527,census_1527,1,Barnet,Islington,Barnet,work,pt,1031,1060,1000
 3056,census_1528,census_1528,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",education,pt,478,483,1000
@@ -3073,8 +3073,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3071,census_1535,census_1535,1,Barnet,Camden,Barnet,education,pt,1033,1052,1000
 3072,census_1536,census_1536,0,Barking and Dagenham,Barking and Dagenham,Redbridge,work,pt,472,489,1000
 3073,census_1536,census_1536,1,Barking and Dagenham,Redbridge,Barking and Dagenham,work,pt,1058,1075,1000
-3074,census_1537,census_1537,0,Merton,Merton,Brent,education,pt,415,438,1000
-3075,census_1537,census_1537,1,Merton,Brent,Merton,education,pt,914,937,1000
+3074,census_1537,census_1537,0,Merton,Merton,"Westminster,City of London",education,pt,415,438,1000
+3075,census_1537,census_1537,1,Merton,"Westminster,City of London",Merton,education,pt,914,937,1000
 3076,census_1538,census_1538,0,Wandsworth,Wandsworth,Hammersmith and Fulham,work,pt,479,494,1000
 3077,census_1538,census_1538,1,Wandsworth,Hammersmith and Fulham,Wandsworth,work,pt,1091,1106,1000
 3078,census_1539,census_1539,0,Sutton,Sutton,"Westminster,City of London",work,pt,499,532,1000
@@ -3093,8 +3093,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3091,census_1545,census_1545,1,Harrow,Harrow,Harrow,education,pt,902,909,1000
 3092,census_1546,census_1546,0,Sutton,Sutton,Sutton,work,pt,514,523,1000
 3093,census_1546,census_1546,1,Sutton,Sutton,Sutton,work,pt,955,964,1000
-3094,census_1547,census_1547,0,Brent,Brent,Barnet,work,pt,423,430,1000
-3095,census_1547,census_1547,1,Brent,Barnet,Brent,work,pt,975,982,1000
+3094,census_1547,census_1547,0,Barnet,Barnet,Barnet,work,pt,423,430,1000
+3095,census_1547,census_1547,1,Barnet,Barnet,Barnet,work,pt,975,982,1000
 3096,census_1548,census_1548,0,Richmond upon Thames,Richmond upon Thames,Kensington and Chelsea,work,pt,539,566,1000
 3097,census_1548,census_1548,1,Richmond upon Thames,Kensington and Chelsea,Richmond upon Thames,work,pt,1173,1200,1000
 3098,census_1549,census_1549,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,524,533,1000
@@ -3135,8 +3135,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3133,census_1566,census_1566,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,925,930,1000
 3134,census_1567,census_1567,0,Waltham Forest,Waltham Forest,Redbridge,work,pt,431,446,1000
 3135,census_1567,census_1567,1,Waltham Forest,Redbridge,Waltham Forest,work,pt,928,943,1000
-3136,census_1568,census_1568,0,Greenwich,Greenwich,Bexley,education,pt,468,479,1000
-3137,census_1568,census_1568,1,Greenwich,Bexley,Greenwich,education,pt,982,993,1000
+3136,census_1568,census_1568,0,Bexley,Bexley,Bexley,education,pt,468,479,1000
+3137,census_1568,census_1568,1,Bexley,Bexley,Bexley,education,pt,982,993,1000
 3138,census_1569,census_1569,0,Bromley,Bromley,"Westminster,City of London",work,pt,436,475,1000
 3139,census_1569,census_1569,1,Bromley,"Westminster,City of London",Bromley,work,pt,1052,1091,1000
 3140,census_1570,census_1570,0,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,pt,643,652,1000
@@ -3151,8 +3151,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3149,census_1574,census_1574,1,Lambeth,Hammersmith and Fulham,Lambeth,work,pt,953,968,1000
 3150,census_1575,census_1575,0,Tower Hamlets,Tower Hamlets,Newham,work,pt,515,524,1000
 3151,census_1575,census_1575,1,Tower Hamlets,Newham,Tower Hamlets,work,pt,1130,1139,1000
-3152,census_1576,census_1576,0,Bexley,Bexley,Haringey,work,pt,437,482,1000
-3153,census_1576,census_1576,1,Bexley,Haringey,Bexley,work,pt,957,1002,1000
+3152,census_1576,census_1576,0,Bexley,Bexley,Camden,work,pt,437,482,1000
+3153,census_1576,census_1576,1,Bexley,Camden,Bexley,work,pt,957,1002,1000
 3154,census_1577,census_1577,0,Redbridge,Redbridge,Redbridge,work,car,537,550,1000
 3155,census_1577,census_1577,1,Redbridge,Redbridge,Redbridge,work,car,1030,1043,1000
 3156,census_1578,census_1578,0,Lambeth,Lambeth,"Westminster,City of London",education,pt,569,582,1000
@@ -3169,8 +3169,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3167,census_1583,census_1583,1,Richmond upon Thames,"Westminster,City of London",Richmond upon Thames,work,pt,1001,1030,1000
 3168,census_1584,census_1584,0,Barnet,Barnet,Barnet,work,pt,570,585,1000
 3169,census_1584,census_1584,1,Barnet,Barnet,Barnet,work,pt,1081,1096,1000
-3170,census_1585,census_1585,0,Southwark,Southwark,Southwark,education,car,463,466,1000
-3171,census_1585,census_1585,1,Southwark,Southwark,Southwark,education,car,1017,1020,1000
+3170,census_1585,census_1585,0,Lambeth,Lambeth,Southwark,education,car,463,466,1000
+3171,census_1585,census_1585,1,Lambeth,Southwark,Lambeth,education,car,1017,1020,1000
 3172,census_1586,census_1586,0,Newham,Newham,"Westminster,City of London",work,pt,546,559,1000
 3173,census_1586,census_1586,1,Newham,"Westminster,City of London",Newham,work,pt,1145,1158,1000
 3174,census_1587,census_1587,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,464,471,1000
@@ -3179,8 +3179,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3177,census_1588,census_1588,1,Haringey,Barnet,Haringey,education,pt,1129,1148,1000
 3178,census_1589,census_1589,0,Harrow,Harrow,"Westminster,City of London",education,pt,521,548,1000
 3179,census_1589,census_1589,1,Harrow,"Westminster,City of London",Harrow,education,pt,1055,1082,1000
-3180,census_1590,census_1590,0,Ealing,Ealing,Islington,work,pt,430,449,1000
-3181,census_1590,census_1590,1,Ealing,Islington,Ealing,work,pt,907,926,1000
+3180,census_1590,census_1590,0,Hammersmith and Fulham,Hammersmith and Fulham,Islington,work,pt,430,449,1000
+3181,census_1590,census_1590,1,Hammersmith and Fulham,Islington,Hammersmith and Fulham,work,pt,907,926,1000
 3182,census_1591,census_1591,0,Kingston upon Thames,Kingston upon Thames,Richmond upon Thames,education,pt,489,500,1000
 3183,census_1591,census_1591,1,Kingston upon Thames,Richmond upon Thames,Kingston upon Thames,education,pt,1018,1029,1000
 3184,census_1592,census_1592,0,Lambeth,Lambeth,Hammersmith and Fulham,work,car,417,432,1000
@@ -3207,8 +3207,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3205,census_1602,census_1602,1,Wandsworth,Wandsworth,Wandsworth,work,pt,1019,1026,1000
 3206,census_1603,census_1603,0,Bexley,Bexley,Bromley,education,pt,458,475,1000
 3207,census_1603,census_1603,1,Bexley,Bromley,Bexley,education,pt,926,943,1000
-3208,census_1604,census_1604,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,pt,559,574,1000
-3209,census_1604,census_1604,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,pt,1039,1054,1000
+3208,census_1604,census_1604,0,Newham,Newham,"Westminster,City of London",work,pt,559,574,1000
+3209,census_1604,census_1604,1,Newham,"Westminster,City of London",Newham,work,pt,1039,1054,1000
 3210,census_1605,census_1605,0,Camden,Camden,"Westminster,City of London",work,pt,431,436,1000
 3211,census_1605,census_1605,1,Camden,"Westminster,City of London",Camden,work,pt,1033,1038,1000
 3212,census_1606,census_1606,0,Enfield,Enfield,Enfield,work,car,459,466,1000
@@ -3257,8 +3257,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3255,census_1627,census_1627,1,Islington,"Westminster,City of London",Islington,education,pt,1009,1014,1000
 3256,census_1628,census_1628,0,Camden,Camden,"Westminster,City of London",work,pt,423,434,1000
 3257,census_1628,census_1628,1,Camden,"Westminster,City of London",Camden,work,pt,992,1003,1000
-3258,census_1629,census_1629,0,Ealing,Ealing,Brent,work,pt,439,442,1000
-3259,census_1629,census_1629,1,Ealing,Brent,Ealing,work,pt,945,948,1000
+3258,census_1629,census_1629,0,Brent,Brent,Brent,work,pt,439,442,1000
+3259,census_1629,census_1629,1,Brent,Brent,Brent,work,pt,945,948,1000
 3260,census_1630,census_1630,0,Croydon,Croydon,"Westminster,City of London",education,pt,440,469,1000
 3261,census_1630,census_1630,1,Croydon,"Westminster,City of London",Croydon,education,pt,889,918,1000
 3262,census_1631,census_1631,0,Newham,Newham,Redbridge,work,pt,500,507,1000
@@ -3279,8 +3279,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3277,census_1638,census_1638,1,Hackney,"Westminster,City of London",Hackney,work,pt,1099,1106,1000
 3278,census_1639,census_1639,0,Southwark,Southwark,Lambeth,work,pt,515,524,1000
 3279,census_1639,census_1639,1,Southwark,Lambeth,Southwark,work,pt,1088,1097,1000
-3280,census_1640,census_1640,0,Southwark,Southwark,"Westminster,City of London",education,pt,532,551,1000
-3281,census_1640,census_1640,1,Southwark,"Westminster,City of London",Southwark,education,pt,1102,1121,1000
+3280,census_1640,census_1640,0,Lewisham,Lewisham,"Westminster,City of London",education,pt,532,551,1000
+3281,census_1640,census_1640,1,Lewisham,"Westminster,City of London",Lewisham,education,pt,1102,1121,1000
 3282,census_1641,census_1641,0,Croydon,Croydon,Southwark,education,pt,452,485,1000
 3283,census_1641,census_1641,1,Croydon,Southwark,Croydon,education,pt,917,950,1000
 3284,census_1642,census_1642,0,Bromley,Bromley,Tower Hamlets,work,pt,528,555,1000
@@ -3313,8 +3313,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3311,census_1655,census_1655,1,Lewisham,Lewisham,Lewisham,work,car,996,1001,1000
 3312,census_1656,census_1656,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,516,521,1000
 3313,census_1656,census_1656,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,1048,1053,1000
-3314,census_1657,census_1657,0,Islington,Islington,Greenwich,work,pt,405,442,1000
-3315,census_1657,census_1657,1,Islington,Greenwich,Islington,work,pt,978,1015,1000
+3314,census_1657,census_1657,0,Haringey,Haringey,Greenwich,work,pt,405,442,1000
+3315,census_1657,census_1657,1,Haringey,Greenwich,Haringey,work,pt,978,1015,1000
 3316,census_1658,census_1658,0,Newham,Newham,Newham,work,pt,499,504,1000
 3317,census_1658,census_1658,1,Newham,Newham,Newham,work,pt,959,964,1000
 3318,census_1659,census_1659,0,Hillingdon,Hillingdon,Ealing,work,pt,450,475,1000
@@ -3369,8 +3369,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3367,census_1683,census_1683,1,Waltham Forest,Islington,Waltham Forest,work,pt,1054,1071,1000
 3368,census_1684,census_1684,0,"Westminster,City of London","Westminster,City of London",Newham,work,pt,490,515,1000
 3369,census_1684,census_1684,1,"Westminster,City of London",Newham,"Westminster,City of London",work,pt,1021,1046,1000
-3370,census_1685,census_1685,0,Lambeth,Lambeth,Islington,work,pt,542,553,1000
-3371,census_1685,census_1685,1,Lambeth,Islington,Lambeth,work,pt,1075,1086,1000
+3370,census_1685,census_1685,0,Lambeth,Lambeth,Hackney,work,pt,542,553,1000
+3371,census_1685,census_1685,1,Lambeth,Hackney,Lambeth,work,pt,1075,1086,1000
 3372,census_1686,census_1686,0,Richmond upon Thames,Richmond upon Thames,Southwark,education,pt,420,455,1000
 3373,census_1686,census_1686,1,Richmond upon Thames,Southwark,Richmond upon Thames,education,pt,944,979,1000
 3374,census_1687,census_1687,0,Havering,Havering,Hammersmith and Fulham,work,pt,491,542,1000
@@ -3383,8 +3383,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3381,census_1690,census_1690,1,Barking and Dagenham,Islington,Barking and Dagenham,work,pt,1009,1038,1000
 3382,census_1691,census_1691,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",education,pt,487,498,1000
 3383,census_1691,census_1691,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,education,pt,1102,1113,1000
-3384,census_1692,census_1692,0,Harrow,Harrow,Camden,education,car,416,441,1000
-3385,census_1692,census_1692,1,Harrow,Camden,Harrow,education,car,996,1021,1000
+3384,census_1692,census_1692,0,Barnet,Barnet,Camden,education,car,416,441,1000
+3385,census_1692,census_1692,1,Barnet,Camden,Barnet,education,car,996,1021,1000
 3386,census_1693,census_1693,0,Ealing,Ealing,Southwark,work,car,492,525,1000
 3387,census_1693,census_1693,1,Ealing,Southwark,Ealing,work,car,1036,1069,1000
 3388,census_1694,census_1694,0,Barnet,Barnet,Brent,education,pt,441,454,1000
@@ -3401,16 +3401,16 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3399,census_1699,census_1699,1,Havering,Havering,Havering,work,pt,1065,1074,1000
 3400,census_1700,census_1700,0,Lambeth,Lambeth,Lambeth,work,pt,492,497,1000
 3401,census_1700,census_1700,1,Lambeth,Lambeth,Lambeth,work,pt,1037,1042,1000
-3402,census_1701,census_1701,0,"Westminster,City of London",,"Westminster,City of London",work,pt,534,537,1000
-3403,census_1701,census_1701,1,"Westminster,City of London","Westminster,City of London",,work,pt,1032,1035,1000
+3402,census_1701,census_1701,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,534,537,1000
+3403,census_1701,census_1701,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1032,1035,1000
 3404,census_1702,census_1702,0,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,535,540,1000
 3405,census_1702,census_1702,1,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,1065,1070,1000
 3406,census_1703,census_1703,0,Hounslow,Hounslow,Ealing,work,pt,571,590,1000
 3407,census_1703,census_1703,1,Hounslow,Ealing,Hounslow,work,pt,1061,1080,1000
 3408,census_1704,census_1704,0,Camden,Camden,"Westminster,City of London",work,pt,461,470,1000
 3409,census_1704,census_1704,1,Camden,"Westminster,City of London",Camden,work,pt,946,955,1000
-3410,census_1705,census_1705,0,Camden,Camden,"Westminster,City of London",work,pt,519,526,1000
-3411,census_1705,census_1705,1,Camden,"Westminster,City of London",Camden,work,pt,1025,1032,1000
+3410,census_1705,census_1705,0,Camden,Camden,Tower Hamlets,work,pt,519,526,1000
+3411,census_1705,census_1705,1,Camden,Tower Hamlets,Camden,work,pt,1025,1032,1000
 3412,census_1706,census_1706,0,Hounslow,Hounslow,Hounslow,work,pt,575,580,1000
 3413,census_1706,census_1706,1,Hounslow,Hounslow,Hounslow,work,pt,1096,1101,1000
 3414,census_1707,census_1707,0,Barking and Dagenham,Barking and Dagenham,Havering,work,car,426,437,1000
@@ -3445,8 +3445,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3443,census_1721,census_1721,1,Haringey,"Westminster,City of London",Haringey,work,pt,1026,1045,1000
 3444,census_1722,census_1722,0,Hackney,Hackney,Islington,work,pt,445,450,1000
 3445,census_1722,census_1722,1,Hackney,Islington,Hackney,work,pt,1020,1025,1000
-3446,census_1723,census_1723,0,Islington,,Islington,work,pt,547,568,1000
-3447,census_1723,census_1723,1,Islington,Islington,,work,pt,1035,1056,1000
+3446,census_1723,census_1723,0,Greenwich,Greenwich,Islington,work,pt,547,568,1000
+3447,census_1723,census_1723,1,Greenwich,Islington,Greenwich,work,pt,1035,1056,1000
 3448,census_1724,census_1724,0,Sutton,Sutton,Hammersmith and Fulham,work,car,471,498,1000
 3449,census_1724,census_1724,1,Sutton,Hammersmith and Fulham,Sutton,work,car,1010,1037,1000
 3450,census_1725,census_1725,0,Bromley,Bromley,Bromley,work,car,469,476,1000
@@ -3479,12 +3479,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3477,census_1738,census_1738,1,Hillingdon,Hillingdon,Hillingdon,education,pt,1033,1034,1000
 3478,census_1739,census_1739,0,Waltham Forest,Waltham Forest,Tower Hamlets,education,pt,486,497,1000
 3479,census_1739,census_1739,1,Waltham Forest,Tower Hamlets,Waltham Forest,education,pt,961,972,1000
-3480,census_1740,census_1740,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,car,428,433,1000
-3481,census_1740,census_1740,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,car,942,947,1000
+3480,census_1740,census_1740,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,428,433,1000
+3481,census_1740,census_1740,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,942,947,1000
 3482,census_1741,census_1741,0,Croydon,Croydon,Kensington and Chelsea,work,car,408,435,1000
 3483,census_1741,census_1741,1,Croydon,Kensington and Chelsea,Croydon,work,car,921,948,1000
-3484,census_1742,census_1742,0,Southwark,Southwark,Lambeth,work,pt,519,522,1000
-3485,census_1742,census_1742,1,Southwark,Lambeth,Southwark,work,pt,1040,1043,1000
+3484,census_1742,census_1742,0,Lambeth,Lambeth,Lambeth,work,pt,519,522,1000
+3485,census_1742,census_1742,1,Lambeth,Lambeth,Lambeth,work,pt,1040,1043,1000
 3486,census_1743,census_1743,0,Barnet,Barnet,Camden,work,pt,570,591,1000
 3487,census_1743,census_1743,1,Barnet,Camden,Barnet,work,pt,1069,1090,1000
 3488,census_1744,census_1744,0,Haringey,Haringey,Barnet,work,pt,419,446,1000
@@ -3495,8 +3495,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3493,census_1746,census_1746,1,Southwark,"Westminster,City of London",Southwark,education,pt,935,948,1000
 3494,census_1747,census_1747,0,Tower Hamlets,Tower Hamlets,Hackney,education,pt,490,503,1000
 3495,census_1747,census_1747,1,Tower Hamlets,Hackney,Tower Hamlets,education,pt,959,972,1000
-3496,census_1748,census_1748,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,pt,412,431,1000
-3497,census_1748,census_1748,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,pt,963,982,1000
+3496,census_1748,census_1748,0,Kensington and Chelsea,Kensington and Chelsea,Tower Hamlets,work,pt,412,431,1000
+3497,census_1748,census_1748,1,Kensington and Chelsea,Tower Hamlets,Kensington and Chelsea,work,pt,963,982,1000
 3498,census_1749,census_1749,0,Havering,Havering,Tower Hamlets,education,pt,485,516,1000
 3499,census_1749,census_1749,1,Havering,Tower Hamlets,Havering,education,pt,1038,1069,1000
 3500,census_1750,census_1750,0,Enfield,Enfield,Enfield,work,car,472,475,1000
@@ -3527,8 +3527,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3525,census_1762,census_1762,1,Camden,Camden,Camden,work,car,1138,1139,1000
 3526,census_1763,census_1763,0,Brent,Brent,"Westminster,City of London",work,car,466,491,1000
 3527,census_1763,census_1763,1,Brent,"Westminster,City of London",Brent,work,car,1005,1030,1000
-3528,census_1764,census_1764,0,Southwark,Southwark,Camden,work,pt,482,485,1000
-3529,census_1764,census_1764,1,Southwark,Camden,Southwark,work,pt,1103,1106,1000
+3528,census_1764,census_1764,0,Southwark,Southwark,"Westminster,City of London",work,pt,482,485,1000
+3529,census_1764,census_1764,1,Southwark,"Westminster,City of London",Southwark,work,pt,1103,1106,1000
 3530,census_1765,census_1765,0,Sutton,Sutton,"Westminster,City of London",work,car,502,535,1000
 3531,census_1765,census_1765,1,Sutton,"Westminster,City of London",Sutton,work,car,1095,1128,1000
 3532,census_1766,census_1766,0,Greenwich,Greenwich,Southwark,work,pt,475,494,1000
@@ -3537,10 +3537,10 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3535,census_1767,census_1767,1,Ealing,Ealing,Ealing,work,pt,1043,1052,1000
 3536,census_1768,census_1768,0,Sutton,Sutton,"Westminster,City of London",education,car,425,458,1000
 3537,census_1768,census_1768,1,Sutton,"Westminster,City of London",Sutton,education,car,1057,1090,1000
-3538,census_1769,census_1769,0,Bromley,Bromley,Bexley,work,car,418,423,1000
-3539,census_1769,census_1769,1,Bromley,Bexley,Bromley,work,car,1032,1037,1000
-3540,census_1770,census_1770,0,Waltham Forest,Waltham Forest,,work,pt,479,502,1000
-3541,census_1770,census_1770,1,Waltham Forest,,Waltham Forest,work,pt,973,996,1000
+3538,census_1769,census_1769,0,Bromley,Bromley,Bromley,work,car,418,423,1000
+3539,census_1769,census_1769,1,Bromley,Bromley,Bromley,work,car,1032,1037,1000
+3540,census_1770,census_1770,0,Waltham Forest,Waltham Forest,Tower Hamlets,work,pt,479,502,1000
+3541,census_1770,census_1770,1,Waltham Forest,Tower Hamlets,Waltham Forest,work,pt,973,996,1000
 3542,census_1771,census_1771,0,Enfield,Enfield,Enfield,work,pt,514,521,1000
 3543,census_1771,census_1771,1,Enfield,Enfield,Enfield,work,pt,1113,1120,1000
 3544,census_1772,census_1772,0,Southwark,Southwark,"Westminster,City of London",work,pt,510,523,1000
@@ -3563,16 +3563,16 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3561,census_1780,census_1780,1,Ealing,Hounslow,Ealing,education,pt,1000,1011,1000
 3562,census_1781,census_1781,0,Camden,Camden,Islington,work,pt,519,528,1000
 3563,census_1781,census_1781,1,Camden,Islington,Camden,work,pt,1031,1040,1000
-3564,census_1782,census_1782,0,Islington,Islington,Hackney,work,pt,489,496,1000
-3565,census_1782,census_1782,1,Islington,Hackney,Islington,work,pt,989,996,1000
+3564,census_1782,census_1782,0,Hackney,Hackney,Hackney,work,pt,489,496,1000
+3565,census_1782,census_1782,1,Hackney,Hackney,Hackney,work,pt,989,996,1000
 3566,census_1783,census_1783,0,Newham,Newham,Newham,work,pt,457,468,1000
 3567,census_1783,census_1783,1,Newham,Newham,Newham,work,pt,977,988,1000
 3568,census_1784,census_1784,0,Hammersmith and Fulham,Hammersmith and Fulham,Brent,work,car,493,500,1000
 3569,census_1784,census_1784,1,Hammersmith and Fulham,Brent,Hammersmith and Fulham,work,car,1108,1115,1000
 3570,census_1785,census_1785,0,Richmond upon Thames,Richmond upon Thames,Tower Hamlets,work,pt,411,450,1000
 3571,census_1785,census_1785,1,Richmond upon Thames,Tower Hamlets,Richmond upon Thames,work,pt,1022,1061,1000
-3572,census_1786,census_1786,0,Bromley,Bromley,Wandsworth,education,pt,435,472,1000
-3573,census_1786,census_1786,1,Bromley,Wandsworth,Bromley,education,pt,980,1017,1000
+3572,census_1786,census_1786,0,Bromley,Bromley,Lambeth,education,pt,435,472,1000
+3573,census_1786,census_1786,1,Bromley,Lambeth,Bromley,education,pt,980,1017,1000
 3574,census_1787,census_1787,0,Lewisham,Lewisham,Camden,work,pt,456,473,1000
 3575,census_1787,census_1787,1,Lewisham,Camden,Lewisham,work,pt,999,1016,1000
 3576,census_1788,census_1788,0,Greenwich,Greenwich,Camden,work,pt,451,490,1000
@@ -3597,14 +3597,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3595,census_1797,census_1797,1,Havering,Kensington and Chelsea,Havering,education,pt,992,1047,1000
 3596,census_1798,census_1798,0,Brent,Brent,Camden,work,pt,566,589,1000
 3597,census_1798,census_1798,1,Brent,Camden,Brent,work,pt,1136,1159,1000
-3598,census_1799,census_1799,0,Hackney,Hackney,Kensington and Chelsea,work,pt,468,483,1000
-3599,census_1799,census_1799,1,Hackney,Kensington and Chelsea,Hackney,work,pt,1063,1078,1000
+3598,census_1799,census_1799,0,Hackney,Hackney,"Westminster,City of London",work,pt,468,483,1000
+3599,census_1799,census_1799,1,Hackney,"Westminster,City of London",Hackney,work,pt,1063,1078,1000
 3600,census_1800,census_1800,0,Croydon,Croydon,"Westminster,City of London",work,pt,585,624,1000
 3601,census_1800,census_1800,1,Croydon,"Westminster,City of London",Croydon,work,pt,1213,1252,1000
 3602,census_1801,census_1801,0,Brent,Brent,Brent,education,pt,431,440,1000
 3603,census_1801,census_1801,1,Brent,Brent,Brent,education,pt,925,934,1000
-3604,census_1802,census_1802,0,Merton,Merton,Richmond upon Thames,work,pt,474,485,1000
-3605,census_1802,census_1802,1,Merton,Richmond upon Thames,Merton,work,pt,1031,1042,1000
+3604,census_1802,census_1802,0,Wandsworth,Wandsworth,Richmond upon Thames,work,pt,474,485,1000
+3605,census_1802,census_1802,1,Wandsworth,Richmond upon Thames,Wandsworth,work,pt,1031,1042,1000
 3606,census_1803,census_1803,0,Harrow,Harrow,"Westminster,City of London",work,car,502,537,1000
 3607,census_1803,census_1803,1,Harrow,"Westminster,City of London",Harrow,work,car,1046,1081,1000
 3608,census_1804,census_1804,0,Hammersmith and Fulham,Hammersmith and Fulham,Hounslow,work,pt,524,549,1000
@@ -3613,8 +3613,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3611,census_1805,census_1805,1,Hackney,Kingston upon Thames,Hackney,work,pt,999,1042,1000
 3612,census_1806,census_1806,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,pt,483,486,1000
 3613,census_1806,census_1806,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,pt,1040,1043,1000
-3614,census_1807,census_1807,0,Croydon,Croydon,Sutton,work,pt,455,460,1000
-3615,census_1807,census_1807,1,Croydon,Sutton,Croydon,work,pt,1031,1036,1000
+3614,census_1807,census_1807,0,Croydon,Croydon,Croydon,work,pt,455,460,1000
+3615,census_1807,census_1807,1,Croydon,Croydon,Croydon,work,pt,1031,1036,1000
 3616,census_1808,census_1808,0,Brent,Brent,Barnet,work,pt,576,599,1000
 3617,census_1808,census_1808,1,Brent,Barnet,Brent,work,pt,1088,1111,1000
 3618,census_1809,census_1809,0,Merton,Merton,Camden,work,pt,449,478,1000
@@ -3623,8 +3623,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3621,census_1810,census_1810,1,Wandsworth,Kensington and Chelsea,Wandsworth,work,pt,1058,1061,1000
 3622,census_1811,census_1811,0,Merton,Merton,"Westminster,City of London",work,car,505,528,1000
 3623,census_1811,census_1811,1,Merton,"Westminster,City of London",Merton,work,car,1063,1086,1000
-3624,census_1812,census_1812,0,"Westminster,City of London","Westminster,City of London",Camden,work,pt,468,473,1000
-3625,census_1812,census_1812,1,"Westminster,City of London",Camden,"Westminster,City of London",work,pt,963,968,1000
+3624,census_1812,census_1812,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,468,473,1000
+3625,census_1812,census_1812,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,963,968,1000
 3626,census_1813,census_1813,0,Sutton,Sutton,Merton,work,pt,464,475,1000
 3627,census_1813,census_1813,1,Sutton,Merton,Sutton,work,pt,910,921,1000
 3628,census_1814,census_1814,0,Islington,Islington,"Westminster,City of London",work,car,424,429,1000
@@ -3643,14 +3643,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3641,census_1820,census_1820,1,Hammersmith and Fulham,Islington,Hammersmith and Fulham,education,pt,1069,1086,1000
 3642,census_1821,census_1821,0,Croydon,Croydon,Croydon,education,pt,483,494,1000
 3643,census_1821,census_1821,1,Croydon,Croydon,Croydon,education,pt,999,1010,1000
-3644,census_1822,census_1822,0,Merton,Merton,Tower Hamlets,work,pt,503,530,1000
-3645,census_1822,census_1822,1,Merton,Tower Hamlets,Merton,work,pt,1119,1146,1000
+3644,census_1822,census_1822,0,Wandsworth,Wandsworth,Tower Hamlets,work,pt,503,530,1000
+3645,census_1822,census_1822,1,Wandsworth,Tower Hamlets,Wandsworth,work,pt,1119,1146,1000
 3646,census_1823,census_1823,0,Hillingdon,Hillingdon,"Westminster,City of London",education,pt,414,457,1000
 3647,census_1823,census_1823,1,Hillingdon,"Westminster,City of London",Hillingdon,education,pt,979,1022,1000
 3648,census_1824,census_1824,0,Wandsworth,Wandsworth,"Westminster,City of London",education,car,482,495,1000
 3649,census_1824,census_1824,1,Wandsworth,"Westminster,City of London",Wandsworth,education,car,1055,1068,1000
-3650,census_1825,census_1825,0,Merton,Merton,Wandsworth,work,pt,588,597,1000
-3651,census_1825,census_1825,1,Merton,Wandsworth,Merton,work,pt,1053,1062,1000
+3650,census_1825,census_1825,0,Wandsworth,Wandsworth,Wandsworth,work,pt,588,597,1000
+3651,census_1825,census_1825,1,Wandsworth,Wandsworth,Wandsworth,work,pt,1053,1062,1000
 3652,census_1826,census_1826,0,Camden,Camden,Hammersmith and Fulham,work,car,447,458,1000
 3653,census_1826,census_1826,1,Camden,Hammersmith and Fulham,Camden,work,car,1037,1048,1000
 3654,census_1827,census_1827,0,"Westminster,City of London","Westminster,City of London",Islington,work,pt,549,558,1000
@@ -3659,8 +3659,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3657,census_1828,census_1828,1,Lewisham,Lewisham,Lewisham,work,car,1120,1129,1000
 3658,census_1829,census_1829,0,Islington,Islington,Southwark,education,pt,442,455,1000
 3659,census_1829,census_1829,1,Islington,Southwark,Islington,education,pt,1002,1015,1000
-3660,census_1830,census_1830,0,Waltham Forest,Waltham Forest,Camden,work,pt,517,542,1000
-3661,census_1830,census_1830,1,Waltham Forest,Camden,Waltham Forest,work,pt,986,1011,1000
+3660,census_1830,census_1830,0,Waltham Forest,Waltham Forest,Islington,work,pt,517,542,1000
+3661,census_1830,census_1830,1,Waltham Forest,Islington,Waltham Forest,work,pt,986,1011,1000
 3662,census_1831,census_1831,0,Haringey,Haringey,"Westminster,City of London",education,pt,426,443,1000
 3663,census_1831,census_1831,1,Haringey,"Westminster,City of London",Haringey,education,pt,944,961,1000
 3664,census_1832,census_1832,0,Hackney,Hackney,Waltham Forest,work,pt,487,496,1000
@@ -3673,18 +3673,18 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3671,census_1835,census_1835,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,work,pt,1055,1060,1000
 3672,census_1836,census_1836,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,486,499,1000
 3673,census_1836,census_1836,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,994,1007,1000
-3674,census_1837,census_1837,0,Tower Hamlets,Tower Hamlets,Islington,work,pt,430,441,1000
-3675,census_1837,census_1837,1,Tower Hamlets,Islington,Tower Hamlets,work,pt,996,1007,1000
+3674,census_1837,census_1837,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",work,pt,430,441,1000
+3675,census_1837,census_1837,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,work,pt,996,1007,1000
 3676,census_1838,census_1838,0,Southwark,Southwark,"Westminster,City of London",work,car,468,475,1000
 3677,census_1838,census_1838,1,Southwark,"Westminster,City of London",Southwark,work,car,940,947,1000
-3678,census_1839,census_1839,0,"Westminster,City of London",,"Westminster,City of London",work,pt,528,539,1000
-3679,census_1839,census_1839,1,"Westminster,City of London","Westminster,City of London",,work,pt,1064,1075,1000
+3678,census_1839,census_1839,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,528,539,1000
+3679,census_1839,census_1839,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1064,1075,1000
 3680,census_1840,census_1840,0,Southwark,Southwark,"Westminster,City of London",work,car,429,440,1000
 3681,census_1840,census_1840,1,Southwark,"Westminster,City of London",Southwark,work,car,1051,1062,1000
 3682,census_1841,census_1841,0,Lewisham,Lewisham,Croydon,work,car,508,525,1000
 3683,census_1841,census_1841,1,Lewisham,Croydon,Lewisham,work,car,1023,1040,1000
-3684,census_1842,census_1842,0,Hackney,Hackney,"Westminster,City of London",work,pt,485,500,1000
-3685,census_1842,census_1842,1,Hackney,"Westminster,City of London",Hackney,work,pt,960,975,1000
+3684,census_1842,census_1842,0,Hackney,Hackney,Camden,work,pt,485,500,1000
+3685,census_1842,census_1842,1,Hackney,Camden,Hackney,work,pt,960,975,1000
 3686,census_1843,census_1843,0,Hackney,Hackney,Hackney,work,pt,514,523,1000
 3687,census_1843,census_1843,1,Hackney,Hackney,Hackney,work,pt,1025,1034,1000
 3688,census_1844,census_1844,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,education,pt,490,491,1000
@@ -3695,12 +3695,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3693,census_1846,census_1846,1,Hounslow,Kingston upon Thames,Hounslow,work,pt,1104,1119,1000
 3694,census_1847,census_1847,0,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,car,548,557,1000
 3695,census_1847,census_1847,1,Kingston upon Thames,Kingston upon Thames,Kingston upon Thames,work,car,1162,1171,1000
-3696,census_1848,census_1848,0,Ealing,Ealing,Camden,work,pt,490,511,1000
-3697,census_1848,census_1848,1,Ealing,Camden,Ealing,work,pt,1053,1074,1000
+3696,census_1848,census_1848,0,Ealing,Ealing,"Westminster,City of London",work,pt,490,511,1000
+3697,census_1848,census_1848,1,Ealing,"Westminster,City of London",Ealing,work,pt,1053,1074,1000
 3698,census_1849,census_1849,0,Hackney,Hackney,Southwark,work,pt,448,463,1000
 3699,census_1849,census_1849,1,Hackney,Southwark,Hackney,work,pt,918,933,1000
-3700,census_1850,census_1850,0,Merton,Merton,"Westminster,City of London",work,pt,565,588,1000
-3701,census_1850,census_1850,1,Merton,"Westminster,City of London",Merton,work,pt,1046,1069,1000
+3700,census_1850,census_1850,0,Merton,Merton,Kensington and Chelsea,work,pt,565,588,1000
+3701,census_1850,census_1850,1,Merton,Kensington and Chelsea,Merton,work,pt,1046,1069,1000
 3702,census_1851,census_1851,0,Barnet,Barnet,Barnet,work,pt,540,547,1000
 3703,census_1851,census_1851,1,Barnet,Barnet,Barnet,work,pt,1088,1095,1000
 3704,census_1852,census_1852,0,Hackney,Hackney,Islington,work,car,565,570,1000
@@ -3725,8 +3725,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3723,census_1861,census_1861,1,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,951,956,1000
 3724,census_1862,census_1862,0,Harrow,Harrow,Barnet,work,pt,439,462,1000
 3725,census_1862,census_1862,1,Harrow,Barnet,Harrow,work,pt,915,938,1000
-3726,census_1863,census_1863,0,Hillingdon,Hillingdon,Brent,education,pt,485,514,1000
-3727,census_1863,census_1863,1,Hillingdon,Brent,Hillingdon,education,pt,1061,1090,1000
+3726,census_1863,census_1863,0,Hillingdon,Hillingdon,"Westminster,City of London",education,pt,485,514,1000
+3727,census_1863,census_1863,1,Hillingdon,"Westminster,City of London",Hillingdon,education,pt,1061,1090,1000
 3728,census_1864,census_1864,0,Havering,Havering,Barking and Dagenham,work,pt,462,467,1000
 3729,census_1864,census_1864,1,Havering,Barking and Dagenham,Havering,work,pt,931,936,1000
 3730,census_1865,census_1865,0,Waltham Forest,Waltham Forest,"Westminster,City of London",work,pt,480,507,1000
@@ -3741,14 +3741,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3739,census_1869,census_1869,1,Brent,Barnet,Brent,work,pt,1031,1046,1000
 3740,census_1870,census_1870,0,Lewisham,Lewisham,Tower Hamlets,work,pt,545,554,1000
 3741,census_1870,census_1870,1,Lewisham,Tower Hamlets,Lewisham,work,pt,1164,1173,1000
-3742,census_1871,census_1871,0,Ealing,Ealing,Kensington and Chelsea,work,car,567,578,1000
-3743,census_1871,census_1871,1,Ealing,Kensington and Chelsea,Ealing,work,car,1028,1039,1000
+3742,census_1871,census_1871,0,Hammersmith and Fulham,Hammersmith and Fulham,Kensington and Chelsea,work,car,567,578,1000
+3743,census_1871,census_1871,1,Hammersmith and Fulham,Kensington and Chelsea,Hammersmith and Fulham,work,car,1028,1039,1000
 3744,census_1872,census_1872,0,Havering,Havering,Havering,work,pt,564,573,1000
 3745,census_1872,census_1872,1,Havering,Havering,Havering,work,pt,1044,1053,1000
 3746,census_1873,census_1873,0,Redbridge,Redbridge,Barking and Dagenham,work,pt,512,521,1000
 3747,census_1873,census_1873,1,Redbridge,Barking and Dagenham,Redbridge,work,pt,1050,1059,1000
-3748,census_1874,census_1874,0,Greenwich,Greenwich,"Westminster,City of London",work,pt,501,524,1000
-3749,census_1874,census_1874,1,Greenwich,"Westminster,City of London",Greenwich,work,pt,1021,1044,1000
+3748,census_1874,census_1874,0,Greenwich,Greenwich,Tower Hamlets,work,pt,501,524,1000
+3749,census_1874,census_1874,1,Greenwich,Tower Hamlets,Greenwich,work,pt,1021,1044,1000
 3750,census_1875,census_1875,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,education,pt,535,542,1000
 3751,census_1875,census_1875,1,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,education,pt,1064,1071,1000
 3752,census_1876,census_1876,0,Harrow,Harrow,Harrow,work,pt,537,540,1000
@@ -3789,8 +3789,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3787,census_1893,census_1893,1,Harrow,Kensington and Chelsea,Harrow,work,pt,995,1018,1000
 3788,census_1894,census_1894,0,Lambeth,Lambeth,"Westminster,City of London",education,pt,465,478,1000
 3789,census_1894,census_1894,1,Lambeth,"Westminster,City of London",Lambeth,education,pt,938,951,1000
-3790,census_1895,census_1895,0,Camden,Camden,Brent,work,pt,470,477,1000
-3791,census_1895,census_1895,1,Camden,Brent,Camden,work,pt,1066,1073,1000
+3790,census_1895,census_1895,0,Camden,Camden,Camden,work,pt,470,477,1000
+3791,census_1895,census_1895,1,Camden,Camden,Camden,work,pt,1066,1073,1000
 3792,census_1896,census_1896,0,Croydon,Croydon,Bromley,work,pt,501,524,1000
 3793,census_1896,census_1896,1,Croydon,Bromley,Croydon,work,pt,1077,1100,1000
 3794,census_1897,census_1897,0,Croydon,Croydon,Croydon,work,pt,642,643,1000
@@ -3829,8 +3829,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3827,census_1913,census_1913,1,Bexley,Haringey,Bexley,work,pt,1034,1077,1000
 3828,census_1914,census_1914,0,Greenwich,Greenwich,Greenwich,work,pt,437,446,1000
 3829,census_1914,census_1914,1,Greenwich,Greenwich,Greenwich,work,pt,1002,1011,1000
-3830,census_1915,census_1915,0,Islington,Islington,"Westminster,City of London",work,pt,513,518,1000
-3831,census_1915,census_1915,1,Islington,"Westminster,City of London",Islington,work,pt,1021,1026,1000
+3830,census_1915,census_1915,0,Hackney,Hackney,"Westminster,City of London",work,pt,513,518,1000
+3831,census_1915,census_1915,1,Hackney,"Westminster,City of London",Hackney,work,pt,1021,1026,1000
 3832,census_1916,census_1916,0,Merton,Merton,Merton,work,pt,526,533,1000
 3833,census_1916,census_1916,1,Merton,Merton,Merton,work,pt,1008,1015,1000
 3834,census_1917,census_1917,0,Lewisham,Lewisham,Hackney,work,car,551,566,1000
@@ -3859,8 +3859,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3857,census_1928,census_1928,1,Wandsworth,Ealing,Wandsworth,education,car,974,1003,1000
 3858,census_1929,census_1929,0,Sutton,Sutton,Sutton,work,pt,576,581,1000
 3859,census_1929,census_1929,1,Sutton,Sutton,Sutton,work,pt,1150,1155,1000
-3860,census_1930,census_1930,0,Southwark,Southwark,Camden,work,pt,499,520,1000
-3861,census_1930,census_1930,1,Southwark,Camden,Southwark,work,pt,1007,1028,1000
+3860,census_1930,census_1930,0,Lewisham,Lewisham,Camden,work,pt,499,520,1000
+3861,census_1930,census_1930,1,Lewisham,Camden,Lewisham,work,pt,1007,1028,1000
 3862,census_1931,census_1931,0,Bromley,Bromley,Hackney,work,pt,422,451,1000
 3863,census_1931,census_1931,1,Bromley,Hackney,Bromley,work,pt,963,992,1000
 3864,census_1932,census_1932,0,Waltham Forest,Waltham Forest,Enfield,work,car,507,524,1000
@@ -3917,8 +3917,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3915,census_1957,census_1957,1,Hammersmith and Fulham,Hillingdon,Hammersmith and Fulham,work,car,993,1018,1000
 3916,census_1958,census_1958,0,Ealing,Ealing,Ealing,work,pt,495,506,1000
 3917,census_1958,census_1958,1,Ealing,Ealing,Ealing,work,pt,1089,1100,1000
-3918,census_1959,census_1959,0,Brent,Brent,Ealing,work,pt,425,434,1000
-3919,census_1959,census_1959,1,Brent,Ealing,Brent,work,pt,927,936,1000
+3918,census_1959,census_1959,0,Brent,Brent,Brent,work,pt,425,434,1000
+3919,census_1959,census_1959,1,Brent,Brent,Brent,work,pt,927,936,1000
 3920,census_1960,census_1960,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,491,510,1000
 3921,census_1960,census_1960,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,1067,1086,1000
 3922,census_1961,census_1961,0,Hounslow,Hounslow,Richmond upon Thames,education,pt,544,549,1000
@@ -3985,22 +3985,22 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 3983,census_1991,census_1991,1,Lambeth,Camden,Lambeth,education,pt,1028,1035,1000
 3984,census_1992,census_1992,0,Hackney,Hackney,"Westminster,City of London",work,pt,509,522,1000
 3985,census_1992,census_1992,1,Hackney,"Westminster,City of London",Hackney,work,pt,1012,1025,1000
-3986,census_1993,census_1993,0,"Westminster,City of London","Westminster,City of London",Kensington and Chelsea,work,pt,572,575,1000
-3987,census_1993,census_1993,1,"Westminster,City of London",Kensington and Chelsea,"Westminster,City of London",work,pt,1082,1085,1000
+3986,census_1993,census_1993,0,Brent,Brent,Kensington and Chelsea,work,pt,572,575,1000
+3987,census_1993,census_1993,1,Brent,Kensington and Chelsea,Brent,work,pt,1082,1085,1000
 3988,census_1994,census_1994,0,Newham,Newham,Lewisham,work,car,461,488,1000
 3989,census_1994,census_1994,1,Newham,Lewisham,Newham,work,car,1049,1076,1000
 3990,census_1995,census_1995,0,Enfield,Enfield,Enfield,work,car,475,488,1000
 3991,census_1995,census_1995,1,Enfield,Enfield,Enfield,work,car,976,989,1000
-3992,census_1996,census_1996,0,Southwark,Southwark,,work,pt,591,608,1000
-3993,census_1996,census_1996,1,Southwark,,Southwark,work,pt,1108,1125,1000
-3994,census_1997,census_1997,0,Merton,Merton,Sutton,work,car,452,463,1000
-3995,census_1997,census_1997,1,Merton,Sutton,Merton,work,car,963,974,1000
+3992,census_1996,census_1996,0,Southwark,Southwark,Wandsworth,work,pt,591,608,1000
+3993,census_1996,census_1996,1,Southwark,Wandsworth,Southwark,work,pt,1108,1125,1000
+3994,census_1997,census_1997,0,Merton,Merton,Croydon,work,car,452,463,1000
+3995,census_1997,census_1997,1,Merton,Croydon,Merton,work,car,963,974,1000
 3996,census_1998,census_1998,0,Greenwich,Greenwich,Lewisham,education,pt,565,568,1000
 3997,census_1998,census_1998,1,Greenwich,Lewisham,Greenwich,education,pt,1120,1123,1000
 3998,census_1999,census_1999,0,Bexley,Bexley,Greenwich,work,pt,450,463,1000
 3999,census_1999,census_1999,1,Bexley,Greenwich,Bexley,work,pt,943,956,1000
-4000,census_2000,census_2000,0,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,589,596,1000
-4001,census_2000,census_2000,1,Hammersmith and Fulham,Hammersmith and Fulham,Hammersmith and Fulham,work,pt,1042,1049,1000
+4000,census_2000,census_2000,0,Kensington and Chelsea,Kensington and Chelsea,Hammersmith and Fulham,work,pt,589,596,1000
+4001,census_2000,census_2000,1,Kensington and Chelsea,Hammersmith and Fulham,Kensington and Chelsea,work,pt,1042,1049,1000
 4002,census_2001,census_2001,0,Wandsworth,Wandsworth,Sutton,work,pt,524,541,1000
 4003,census_2001,census_2001,1,Wandsworth,Sutton,Wandsworth,work,pt,1020,1037,1000
 4004,census_2002,census_2002,0,Lewisham,Lewisham,Bromley,work,pt,550,567,1000
@@ -4015,12 +4015,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4013,census_2006,census_2006,1,Croydon,Croydon,Croydon,work,pt,1096,1099,1000
 4014,census_2007,census_2007,0,Harrow,Harrow,Brent,work,pt,424,437,1000
 4015,census_2007,census_2007,1,Harrow,Brent,Harrow,work,pt,978,991,1000
-4016,census_2008,census_2008,0,Wandsworth,Wandsworth,,work,pt,450,455,1000
-4017,census_2008,census_2008,1,Wandsworth,,Wandsworth,work,pt,919,924,1000
+4016,census_2008,census_2008,0,Wandsworth,Wandsworth,Wandsworth,work,pt,450,455,1000
+4017,census_2008,census_2008,1,Wandsworth,Wandsworth,Wandsworth,work,pt,919,924,1000
 4018,census_2009,census_2009,0,Harrow,Harrow,Hillingdon,education,pt,447,470,1000
 4019,census_2009,census_2009,1,Harrow,Hillingdon,Harrow,education,pt,955,978,1000
-4020,census_2010,census_2010,0,Camden,Camden,Hammersmith and Fulham,work,pt,421,434,1000
-4021,census_2010,census_2010,1,Camden,Hammersmith and Fulham,Camden,work,pt,921,934,1000
+4020,census_2010,census_2010,0,Camden,Camden,Kensington and Chelsea,work,pt,421,434,1000
+4021,census_2010,census_2010,1,Camden,Kensington and Chelsea,Camden,work,pt,921,934,1000
 4022,census_2011,census_2011,0,Havering,Havering,Havering,work,pt,535,538,1000
 4023,census_2011,census_2011,1,Havering,Havering,Havering,work,pt,997,1000,1000
 4024,census_2012,census_2012,0,Havering,Havering,Havering,work,car,458,467,1000
@@ -4159,8 +4159,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4157,census_2078,census_2078,1,Hounslow,Hounslow,Hounslow,work,pt,1030,1031,1000
 4158,census_2079,census_2079,0,Waltham Forest,Waltham Forest,Hackney,work,car,442,453,1000
 4159,census_2079,census_2079,1,Waltham Forest,Hackney,Waltham Forest,work,car,913,924,1000
-4160,census_2080,census_2080,0,Hammersmith and Fulham,Hammersmith and Fulham,Kensington and Chelsea,work,pt,557,562,1000
-4161,census_2080,census_2080,1,Hammersmith and Fulham,Kensington and Chelsea,Hammersmith and Fulham,work,pt,1096,1101,1000
+4160,census_2080,census_2080,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,557,562,1000
+4161,census_2080,census_2080,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,1096,1101,1000
 4162,census_2081,census_2081,0,Havering,Havering,Havering,work,pt,513,514,1000
 4163,census_2081,census_2081,1,Havering,Havering,Havering,work,pt,1075,1076,1000
 4164,census_2082,census_2082,0,Bexley,Bexley,"Westminster,City of London",work,pt,491,524,1000
@@ -4181,20 +4181,20 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4179,census_2089,census_2089,1,Wandsworth,Hammersmith and Fulham,Wandsworth,work,pt,1063,1070,1000
 4180,census_2090,census_2090,0,Bromley,Bromley,Southwark,work,pt,553,578,1000
 4181,census_2090,census_2090,1,Bromley,Southwark,Bromley,work,pt,1145,1170,1000
-4182,census_2091,census_2091,0,"Westminster,City of London",,"Westminster,City of London",work,pt,501,514,1000
-4183,census_2091,census_2091,1,"Westminster,City of London","Westminster,City of London",,work,pt,1026,1039,1000
+4182,census_2091,census_2091,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,501,514,1000
+4183,census_2091,census_2091,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1026,1039,1000
 4184,census_2092,census_2092,0,Enfield,Enfield,Haringey,work,car,441,444,1000
 4185,census_2092,census_2092,1,Enfield,Haringey,Enfield,work,car,906,909,1000
-4186,census_2093,census_2093,0,Richmond upon Thames,Richmond upon Thames,Camden,work,car,453,476,1000
-4187,census_2093,census_2093,1,Richmond upon Thames,Camden,Richmond upon Thames,work,car,906,929,1000
+4186,census_2093,census_2093,0,Richmond upon Thames,Richmond upon Thames,"Westminster,City of London",work,car,453,476,1000
+4187,census_2093,census_2093,1,Richmond upon Thames,"Westminster,City of London",Richmond upon Thames,work,car,906,929,1000
 4188,census_2094,census_2094,0,Richmond upon Thames,Richmond upon Thames,"Westminster,City of London",work,pt,409,432,1000
 4189,census_2094,census_2094,1,Richmond upon Thames,"Westminster,City of London",Richmond upon Thames,work,pt,1053,1076,1000
 4190,census_2095,census_2095,0,Brent,Brent,"Westminster,City of London",work,pt,415,438,1000
 4191,census_2095,census_2095,1,Brent,"Westminster,City of London",Brent,work,pt,963,986,1000
 4192,census_2096,census_2096,0,Greenwich,Greenwich,Southwark,work,car,495,520,1000
 4193,census_2096,census_2096,1,Greenwich,Southwark,Greenwich,work,car,971,996,1000
-4194,census_2097,census_2097,0,Tower Hamlets,Tower Hamlets,Camden,work,pt,437,448,1000
-4195,census_2097,census_2097,1,Tower Hamlets,Camden,Tower Hamlets,work,pt,1063,1074,1000
+4194,census_2097,census_2097,0,Tower Hamlets,Tower Hamlets,Islington,work,pt,437,448,1000
+4195,census_2097,census_2097,1,Tower Hamlets,Islington,Tower Hamlets,work,pt,1063,1074,1000
 4196,census_2098,census_2098,0,Camden,Camden,"Westminster,City of London",work,pt,458,461,1000
 4197,census_2098,census_2098,1,Camden,"Westminster,City of London",Camden,work,pt,923,926,1000
 4198,census_2099,census_2099,0,Barnet,Barnet,Islington,work,pt,629,650,1000
@@ -4215,8 +4215,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4213,census_2106,census_2106,1,Lewisham,Tower Hamlets,Lewisham,education,car,1088,1099,1000
 4214,census_2107,census_2107,0,Lewisham,Lewisham,Hammersmith and Fulham,work,pt,510,535,1000
 4215,census_2107,census_2107,1,Lewisham,Hammersmith and Fulham,Lewisham,work,pt,1011,1036,1000
-4216,census_2108,census_2108,0,Camden,Camden,Ealing,work,car,575,598,1000
-4217,census_2108,census_2108,1,Camden,Ealing,Camden,work,car,1062,1085,1000
+4216,census_2108,census_2108,0,Camden,Camden,Brent,work,car,575,598,1000
+4217,census_2108,census_2108,1,Camden,Brent,Camden,work,car,1062,1085,1000
 4218,census_2109,census_2109,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,433,446,1000
 4219,census_2109,census_2109,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,1004,1017,1000
 4220,census_2110,census_2110,0,Bexley,Bexley,Bexley,work,pt,466,475,1000
@@ -4231,8 +4231,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4229,census_2114,census_2114,1,Lambeth,Lambeth,Lambeth,work,pt,928,939,1000
 4230,census_2115,census_2115,0,Greenwich,Greenwich,Lewisham,work,pt,549,572,1000
 4231,census_2115,census_2115,1,Greenwich,Lewisham,Greenwich,work,pt,1099,1122,1000
-4232,census_2116,census_2116,0,Hounslow,Hounslow,Lambeth,work,pt,462,503,1000
-4233,census_2116,census_2116,1,Hounslow,Lambeth,Hounslow,work,pt,1085,1126,1000
+4232,census_2116,census_2116,0,Hounslow,Hounslow,Southwark,work,pt,462,503,1000
+4233,census_2116,census_2116,1,Hounslow,Southwark,Hounslow,work,pt,1085,1126,1000
 4234,census_2117,census_2117,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,424,429,1000
 4235,census_2117,census_2117,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,car,965,970,1000
 4236,census_2118,census_2118,0,Redbridge,Redbridge,Newham,work,pt,430,451,1000
@@ -4251,12 +4251,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4249,census_2124,census_2124,1,Greenwich,Greenwich,Greenwich,education,pt,922,933,1000
 4250,census_2125,census_2125,0,Islington,Islington,Camden,work,pt,487,496,1000
 4251,census_2125,census_2125,1,Islington,Camden,Islington,work,pt,977,986,1000
-4252,census_2126,census_2126,0,Southwark,,Southwark,work,pt,506,515,1000
-4253,census_2126,census_2126,1,Southwark,Southwark,,work,pt,1011,1020,1000
+4252,census_2126,census_2126,0,Greenwich,Greenwich,Southwark,work,pt,506,515,1000
+4253,census_2126,census_2126,1,Greenwich,Southwark,Greenwich,work,pt,1011,1020,1000
 4254,census_2127,census_2127,0,Haringey,Haringey,Lambeth,education,pt,414,433,1000
 4255,census_2127,census_2127,1,Haringey,Lambeth,Haringey,education,pt,904,923,1000
-4256,census_2128,census_2128,0,Southwark,Southwark,Camden,work,pt,595,598,1000
-4257,census_2128,census_2128,1,Southwark,Camden,Southwark,work,pt,1085,1088,1000
+4256,census_2128,census_2128,0,Southwark,Southwark,"Westminster,City of London",work,pt,595,598,1000
+4257,census_2128,census_2128,1,Southwark,"Westminster,City of London",Southwark,work,pt,1085,1088,1000
 4258,census_2129,census_2129,0,Wandsworth,Wandsworth,"Westminster,City of London",education,pt,493,512,1000
 4259,census_2129,census_2129,1,Wandsworth,"Westminster,City of London",Wandsworth,education,pt,952,971,1000
 4260,census_2130,census_2130,0,Barnet,Barnet,Barnet,education,pt,458,467,1000
@@ -4277,8 +4277,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4275,census_2137,census_2137,1,Lambeth,Southwark,Lambeth,work,pt,1024,1039,1000
 4276,census_2138,census_2138,0,Kensington and Chelsea,Kensington and Chelsea,Hammersmith and Fulham,work,pt,531,540,1000
 4277,census_2138,census_2138,1,Kensington and Chelsea,Hammersmith and Fulham,Kensington and Chelsea,work,pt,963,972,1000
-4278,census_2139,census_2139,0,Brent,Brent,Richmond upon Thames,work,pt,579,604,1000
-4279,census_2139,census_2139,1,Brent,Richmond upon Thames,Brent,work,pt,1140,1165,1000
+4278,census_2139,census_2139,0,Brent,Brent,Hounslow,work,pt,579,604,1000
+4279,census_2139,census_2139,1,Brent,Hounslow,Brent,work,pt,1140,1165,1000
 4280,census_2140,census_2140,0,"Westminster,City of London","Westminster,City of London",Ealing,work,pt,451,476,1000
 4281,census_2140,census_2140,1,"Westminster,City of London",Ealing,"Westminster,City of London",work,pt,1039,1064,1000
 4282,census_2141,census_2141,0,Merton,Merton,Sutton,work,pt,519,532,1000
@@ -4307,20 +4307,20 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4305,census_2152,census_2152,1,Camden,"Westminster,City of London",Camden,work,car,1096,1103,1000
 4306,census_2153,census_2153,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,438,443,1000
 4307,census_2153,census_2153,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,973,978,1000
-4308,census_2154,census_2154,0,Lewisham,Lewisham,Merton,work,pt,551,576,1000
-4309,census_2154,census_2154,1,Lewisham,Merton,Lewisham,work,pt,1094,1119,1000
+4308,census_2154,census_2154,0,Bromley,Bromley,Merton,work,pt,551,576,1000
+4309,census_2154,census_2154,1,Bromley,Merton,Bromley,work,pt,1094,1119,1000
 4310,census_2155,census_2155,0,Bexley,Bexley,Bexley,work,pt,508,513,1000
 4311,census_2155,census_2155,1,Bexley,Bexley,Bexley,work,pt,962,967,1000
 4312,census_2156,census_2156,0,Enfield,Enfield,Islington,work,pt,499,518,1000
 4313,census_2156,census_2156,1,Enfield,Islington,Enfield,work,pt,1038,1057,1000
 4314,census_2157,census_2157,0,Hounslow,Hounslow,Hillingdon,education,pt,499,520,1000
 4315,census_2157,census_2157,1,Hounslow,Hillingdon,Hounslow,education,pt,990,1011,1000
-4316,census_2158,census_2158,0,Tower Hamlets,Tower Hamlets,Camden,education,pt,439,448,1000
-4317,census_2158,census_2158,1,Tower Hamlets,Camden,Tower Hamlets,education,pt,975,984,1000
+4316,census_2158,census_2158,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",education,pt,439,448,1000
+4317,census_2158,census_2158,1,Tower Hamlets,"Westminster,City of London",Tower Hamlets,education,pt,975,984,1000
 4318,census_2159,census_2159,0,Waltham Forest,Waltham Forest,Camden,work,pt,425,454,1000
 4319,census_2159,census_2159,1,Waltham Forest,Camden,Waltham Forest,work,pt,910,939,1000
-4320,census_2160,census_2160,0,Waltham Forest,Waltham Forest,Newham,work,pt,435,452,1000
-4321,census_2160,census_2160,1,Waltham Forest,Newham,Waltham Forest,work,pt,1055,1072,1000
+4320,census_2160,census_2160,0,Redbridge,Redbridge,Newham,work,pt,435,452,1000
+4321,census_2160,census_2160,1,Redbridge,Newham,Redbridge,work,pt,1055,1072,1000
 4322,census_2161,census_2161,0,Bromley,Bromley,Bromley,work,pt,489,492,1000
 4323,census_2161,census_2161,1,Bromley,Bromley,Bromley,work,pt,1051,1054,1000
 4324,census_2162,census_2162,0,Bromley,Bromley,Lambeth,education,pt,508,545,1000
@@ -4363,8 +4363,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4361,census_2180,census_2180,1,Waltham Forest,Waltham Forest,Waltham Forest,work,pt,1191,1196,1000
 4362,census_2181,census_2181,0,Hounslow,Hounslow,Hounslow,education,pt,472,477,1000
 4363,census_2181,census_2181,1,Hounslow,Hounslow,Hounslow,education,pt,938,943,1000
-4364,census_2182,census_2182,0,Sutton,Sutton,Croydon,work,pt,456,463,1000
-4365,census_2182,census_2182,1,Sutton,Croydon,Sutton,work,pt,973,980,1000
+4364,census_2182,census_2182,0,Sutton,Sutton,Sutton,work,pt,456,463,1000
+4365,census_2182,census_2182,1,Sutton,Sutton,Sutton,work,pt,973,980,1000
 4366,census_2183,census_2183,0,Lewisham,Lewisham,Lewisham,work,pt,498,501,1000
 4367,census_2183,census_2183,1,Lewisham,Lewisham,Lewisham,work,pt,1127,1130,1000
 4368,census_2184,census_2184,0,Southwark,Southwark,Lambeth,education,pt,563,566,1000
@@ -4403,8 +4403,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4401,census_2200,census_2200,1,Ealing,Hackney,Ealing,work,pt,946,985,1000
 4402,census_2201,census_2201,0,Greenwich,Greenwich,Bexley,work,car,520,543,1000
 4403,census_2201,census_2201,1,Greenwich,Bexley,Greenwich,work,car,1063,1086,1000
-4404,census_2202,census_2202,0,Hounslow,Hounslow,Brent,work,pt,568,597,1000
-4405,census_2202,census_2202,1,Hounslow,Brent,Hounslow,work,pt,1074,1103,1000
+4404,census_2202,census_2202,0,Hounslow,Hounslow,Ealing,work,pt,568,597,1000
+4405,census_2202,census_2202,1,Hounslow,Ealing,Hounslow,work,pt,1074,1103,1000
 4406,census_2203,census_2203,0,Barnet,Barnet,Barnet,work,pt,524,533,1000
 4407,census_2203,census_2203,1,Barnet,Barnet,Barnet,work,pt,1005,1014,1000
 4408,census_2204,census_2204,0,Hackney,Hackney,"Westminster,City of London",work,pt,415,424,1000
@@ -4437,8 +4437,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4435,census_2217,census_2217,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,education,pt,994,1005,1000
 4436,census_2218,census_2218,0,Ealing,Ealing,Ealing,work,pt,469,474,1000
 4437,census_2218,census_2218,1,Ealing,Ealing,Ealing,work,pt,914,919,1000
-4438,census_2219,census_2219,0,Croydon,Croydon,"Westminster,City of London",work,pt,496,523,1000
-4439,census_2219,census_2219,1,Croydon,"Westminster,City of London",Croydon,work,pt,970,997,1000
+4438,census_2219,census_2219,0,Bromley,Bromley,"Westminster,City of London",work,pt,496,523,1000
+4439,census_2219,census_2219,1,Bromley,"Westminster,City of London",Bromley,work,pt,970,997,1000
 4440,census_2220,census_2220,0,"Westminster,City of London","Westminster,City of London",Kensington and Chelsea,work,car,479,486,1000
 4441,census_2220,census_2220,1,"Westminster,City of London",Kensington and Chelsea,"Westminster,City of London",work,car,1051,1058,1000
 4442,census_2221,census_2221,0,Lambeth,Lambeth,Islington,work,pt,462,489,1000
@@ -4455,8 +4455,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4453,census_2226,census_2226,1,"Westminster,City of London",Islington,"Westminster,City of London",work,pt,1043,1050,1000
 4454,census_2227,census_2227,0,Redbridge,Redbridge,Newham,education,pt,489,498,1000
 4455,census_2227,census_2227,1,Redbridge,Newham,Redbridge,education,pt,960,969,1000
-4456,census_2228,census_2228,0,Sutton,Sutton,Croydon,work,car,538,553,1000
-4457,census_2228,census_2228,1,Sutton,Croydon,Sutton,work,car,1025,1040,1000
+4456,census_2228,census_2228,0,Sutton,Sutton,Bromley,work,car,538,553,1000
+4457,census_2228,census_2228,1,Sutton,Bromley,Sutton,work,car,1025,1040,1000
 4458,census_2229,census_2229,0,Harrow,Harrow,Camden,work,pt,455,484,1000
 4459,census_2229,census_2229,1,Harrow,Camden,Harrow,work,pt,965,994,1000
 4460,census_2230,census_2230,0,Hillingdon,Hillingdon,Hillingdon,education,pt,473,474,1000
@@ -4487,8 +4487,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4485,census_2242,census_2242,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1009,1038,1000
 4486,census_2243,census_2243,0,Southwark,Southwark,"Westminster,City of London",work,pt,494,499,1000
 4487,census_2243,census_2243,1,Southwark,"Westminster,City of London",Southwark,work,pt,1040,1045,1000
-4488,census_2244,census_2244,0,Ealing,Ealing,,work,pt,497,516,1000
-4489,census_2244,census_2244,1,Ealing,,Ealing,work,pt,1106,1125,1000
+4488,census_2244,census_2244,0,Ealing,Ealing,Lambeth,work,pt,497,516,1000
+4489,census_2244,census_2244,1,Ealing,Lambeth,Ealing,work,pt,1106,1125,1000
 4490,census_2245,census_2245,0,Greenwich,Greenwich,Lambeth,work,pt,460,481,1000
 4491,census_2245,census_2245,1,Greenwich,Lambeth,Greenwich,work,pt,1045,1066,1000
 4492,census_2246,census_2246,0,Redbridge,Redbridge,"Westminster,City of London",work,pt,440,471,1000
@@ -4515,8 +4515,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4513,census_2256,census_2256,1,Islington,Hounslow,Islington,work,pt,1064,1105,1000
 4514,census_2257,census_2257,0,Camden,Camden,Tower Hamlets,work,pt,441,448,1000
 4515,census_2257,census_2257,1,Camden,Tower Hamlets,Camden,work,pt,917,924,1000
-4516,census_2258,census_2258,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,445,460,1000
-4517,census_2258,census_2258,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,913,928,1000
+4516,census_2258,census_2258,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,445,460,1000
+4517,census_2258,census_2258,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,913,928,1000
 4518,census_2259,census_2259,0,Lambeth,Lambeth,Southwark,work,pt,433,442,1000
 4519,census_2259,census_2259,1,Lambeth,Southwark,Lambeth,work,pt,1022,1031,1000
 4520,census_2260,census_2260,0,Hackney,Hackney,Kensington and Chelsea,work,pt,408,431,1000
@@ -4583,16 +4583,16 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4581,census_2290,census_2290,1,Hounslow,Richmond upon Thames,Hounslow,work,pt,948,953,1000
 4582,census_2291,census_2291,0,Hounslow,Hounslow,Kensington and Chelsea,work,pt,484,509,1000
 4583,census_2291,census_2291,1,Hounslow,Kensington and Chelsea,Hounslow,work,pt,998,1023,1000
-4584,census_2292,census_2292,0,"Westminster,City of London","Westminster,City of London",Wandsworth,work,pt,461,480,1000
-4585,census_2292,census_2292,1,"Westminster,City of London",Wandsworth,"Westminster,City of London",work,pt,994,1013,1000
+4584,census_2292,census_2292,0,Tower Hamlets,Tower Hamlets,Wandsworth,work,pt,461,480,1000
+4585,census_2292,census_2292,1,Tower Hamlets,Wandsworth,Tower Hamlets,work,pt,994,1013,1000
 4586,census_2293,census_2293,0,Havering,Havering,Havering,work,pt,471,474,1000
 4587,census_2293,census_2293,1,Havering,Havering,Havering,work,pt,960,963,1000
 4588,census_2294,census_2294,0,Barnet,Barnet,Harrow,work,car,450,473,1000
 4589,census_2294,census_2294,1,Barnet,Harrow,Barnet,work,car,1055,1078,1000
 4590,census_2295,census_2295,0,Haringey,Haringey,Newham,work,pt,414,429,1000
 4591,census_2295,census_2295,1,Haringey,Newham,Haringey,work,pt,921,936,1000
-4592,census_2296,census_2296,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,425,430,1000
-4593,census_2296,census_2296,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1016,1021,1000
+4592,census_2296,census_2296,0,Southwark,Southwark,Tower Hamlets,work,pt,425,430,1000
+4593,census_2296,census_2296,1,Southwark,Tower Hamlets,Southwark,work,pt,1016,1021,1000
 4594,census_2297,census_2297,0,Brent,Brent,Brent,work,pt,462,463,1000
 4595,census_2297,census_2297,1,Brent,Brent,Brent,work,pt,1054,1055,1000
 4596,census_2298,census_2298,0,Ealing,Ealing,Ealing,work,pt,467,472,1000
@@ -4603,12 +4603,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4601,census_2300,census_2300,1,Hackney,"Westminster,City of London",Hackney,education,pt,1027,1048,1000
 4602,census_2301,census_2301,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,576,585,1000
 4603,census_2301,census_2301,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,car,1079,1088,1000
-4604,census_2302,census_2302,0,Islington,Islington,"Westminster,City of London",work,pt,475,486,1000
-4605,census_2302,census_2302,1,Islington,"Westminster,City of London",Islington,work,pt,969,980,1000
+4604,census_2302,census_2302,0,Haringey,Haringey,Tower Hamlets,work,pt,475,486,1000
+4605,census_2302,census_2302,1,Haringey,Tower Hamlets,Haringey,work,pt,969,980,1000
 4606,census_2303,census_2303,0,Islington,Islington,Camden,work,pt,519,526,1000
 4607,census_2303,census_2303,1,Islington,Camden,Islington,work,pt,1067,1074,1000
-4608,census_2304,census_2304,0,Hounslow,Hounslow,,work,pt,552,569,1000
-4609,census_2304,census_2304,1,Hounslow,,Hounslow,work,pt,1149,1166,1000
+4608,census_2304,census_2304,0,Hounslow,Hounslow,Richmond upon Thames,work,pt,552,569,1000
+4609,census_2304,census_2304,1,Hounslow,Richmond upon Thames,Hounslow,work,pt,1149,1166,1000
 4610,census_2305,census_2305,0,Wandsworth,Wandsworth,Camden,education,car,486,503,1000
 4611,census_2305,census_2305,1,Wandsworth,Camden,Wandsworth,education,car,1083,1100,1000
 4612,census_2306,census_2306,0,Ealing,Ealing,Hammersmith and Fulham,work,pt,439,456,1000
@@ -4623,14 +4623,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4621,census_2310,census_2310,1,Barnet,Hackney,Barnet,work,pt,1015,1040,1000
 4622,census_2311,census_2311,0,Greenwich,Greenwich,Newham,work,pt,567,578,1000
 4623,census_2311,census_2311,1,Greenwich,Newham,Greenwich,work,pt,1180,1191,1000
-4624,census_2312,census_2312,0,Hammersmith and Fulham,Hammersmith and Fulham,Kensington and Chelsea,work,pt,509,516,1000
-4625,census_2312,census_2312,1,Hammersmith and Fulham,Kensington and Chelsea,Hammersmith and Fulham,work,pt,1051,1058,1000
+4624,census_2312,census_2312,0,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,509,516,1000
+4625,census_2312,census_2312,1,Kensington and Chelsea,Kensington and Chelsea,Kensington and Chelsea,work,pt,1051,1058,1000
 4626,census_2313,census_2313,0,Redbridge,Redbridge,Redbridge,work,pt,515,528,1000
 4627,census_2313,census_2313,1,Redbridge,Redbridge,Redbridge,work,pt,960,973,1000
 4628,census_2314,census_2314,0,Bexley,Bexley,Bexley,work,pt,490,503,1000
 4629,census_2314,census_2314,1,Bexley,Bexley,Bexley,work,pt,998,1011,1000
-4630,census_2315,census_2315,0,Ealing,Ealing,Wandsworth,education,pt,433,446,1000
-4631,census_2315,census_2315,1,Ealing,Wandsworth,Ealing,education,pt,936,949,1000
+4630,census_2315,census_2315,0,Hounslow,Hounslow,Wandsworth,education,pt,433,446,1000
+4631,census_2315,census_2315,1,Hounslow,Wandsworth,Hounslow,education,pt,936,949,1000
 4632,census_2316,census_2316,0,Barnet,Barnet,Barnet,work,pt,451,458,1000
 4633,census_2316,census_2316,1,Barnet,Barnet,Barnet,work,pt,1009,1016,1000
 4634,census_2317,census_2317,0,Ealing,Ealing,"Westminster,City of London",work,pt,575,604,1000
@@ -4639,8 +4639,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4637,census_2318,census_2318,1,Redbridge,Waltham Forest,Redbridge,work,car,940,947,1000
 4638,census_2319,census_2319,0,Haringey,Haringey,"Westminster,City of London",education,pt,513,532,1000
 4639,census_2319,census_2319,1,Haringey,"Westminster,City of London",Haringey,education,pt,955,974,1000
-4640,census_2320,census_2320,0,Richmond upon Thames,,Richmond upon Thames,work,car,544,565,1000
-4641,census_2320,census_2320,1,Richmond upon Thames,Richmond upon Thames,,work,car,1121,1142,1000
+4640,census_2320,census_2320,0,Wandsworth,Wandsworth,Richmond upon Thames,work,car,544,565,1000
+4641,census_2320,census_2320,1,Wandsworth,Richmond upon Thames,Wandsworth,work,car,1121,1142,1000
 4642,census_2321,census_2321,0,Lambeth,Lambeth,Croydon,work,car,441,458,1000
 4643,census_2321,census_2321,1,Lambeth,Croydon,Lambeth,work,car,1033,1050,1000
 4644,census_2322,census_2322,0,Kensington and Chelsea,Kensington and Chelsea,Islington,work,pt,444,459,1000
@@ -4659,8 +4659,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4657,census_2328,census_2328,1,Sutton,Sutton,Sutton,work,pt,1058,1059,1000
 4658,census_2329,census_2329,0,Croydon,Croydon,"Westminster,City of London",work,pt,493,514,1000
 4659,census_2329,census_2329,1,Croydon,"Westminster,City of London",Croydon,work,pt,1082,1103,1000
-4660,census_2330,census_2330,0,Enfield,Enfield,Islington,work,pt,515,532,1000
-4661,census_2330,census_2330,1,Enfield,Islington,Enfield,work,pt,965,982,1000
+4660,census_2330,census_2330,0,Haringey,Haringey,Islington,work,pt,515,532,1000
+4661,census_2330,census_2330,1,Haringey,Islington,Haringey,work,pt,965,982,1000
 4662,census_2331,census_2331,0,Newham,Newham,Tower Hamlets,work,car,466,469,1000
 4663,census_2331,census_2331,1,Newham,Tower Hamlets,Newham,work,car,903,906,1000
 4664,census_2332,census_2332,0,Bexley,Bexley,Bromley,education,pt,562,579,1000
@@ -4715,8 +4715,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4713,census_2356,census_2356,1,Newham,Camden,Newham,education,car,943,962,1000
 4714,census_2357,census_2357,0,Croydon,Croydon,"Westminster,City of London",work,pt,433,460,1000
 4715,census_2357,census_2357,1,Croydon,"Westminster,City of London",Croydon,work,pt,945,972,1000
-4716,census_2358,census_2358,0,Bexley,Bexley,"Westminster,City of London",work,pt,443,488,1000
-4717,census_2358,census_2358,1,Bexley,"Westminster,City of London",Bexley,work,pt,918,963,1000
+4716,census_2358,census_2358,0,Bexley,Bexley,Camden,work,pt,443,488,1000
+4717,census_2358,census_2358,1,Bexley,Camden,Bexley,work,pt,918,963,1000
 4718,census_2359,census_2359,0,Merton,Merton,Ealing,education,pt,526,561,1000
 4719,census_2359,census_2359,1,Merton,Ealing,Merton,education,pt,1163,1198,1000
 4720,census_2360,census_2360,0,Wandsworth,Wandsworth,Wandsworth,work,car,494,497,1000
@@ -4753,12 +4753,12 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4751,census_2375,census_2375,1,Lambeth,Wandsworth,Lambeth,work,pt,956,977,1000
 4752,census_2376,census_2376,0,Lewisham,Lewisham,"Westminster,City of London",work,pt,564,581,1000
 4753,census_2376,census_2376,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,1041,1058,1000
-4754,census_2377,census_2377,0,Bexley,Bexley,Kensington and Chelsea,education,pt,421,464,1000
-4755,census_2377,census_2377,1,Bexley,Kensington and Chelsea,Bexley,education,pt,943,986,1000
+4754,census_2377,census_2377,0,Bexley,Bexley,"Westminster,City of London",education,pt,421,464,1000
+4755,census_2377,census_2377,1,Bexley,"Westminster,City of London",Bexley,education,pt,943,986,1000
 4756,census_2378,census_2378,0,Tower Hamlets,Tower Hamlets,Tower Hamlets,education,pt,482,487,1000
 4757,census_2378,census_2378,1,Tower Hamlets,Tower Hamlets,Tower Hamlets,education,pt,1109,1114,1000
-4758,census_2379,census_2379,0,Hillingdon,Hillingdon,,work,pt,487,496,1000
-4759,census_2379,census_2379,1,Hillingdon,,Hillingdon,work,pt,970,979,1000
+4758,census_2379,census_2379,0,Hillingdon,Hillingdon,Hillingdon,work,pt,487,496,1000
+4759,census_2379,census_2379,1,Hillingdon,Hillingdon,Hillingdon,work,pt,970,979,1000
 4760,census_2380,census_2380,0,Redbridge,Redbridge,"Westminster,City of London",work,pt,442,483,1000
 4761,census_2380,census_2380,1,Redbridge,"Westminster,City of London",Redbridge,work,pt,967,1008,1000
 4762,census_2381,census_2381,0,Kingston upon Thames,Kingston upon Thames,Hounslow,education,pt,546,569,1000
@@ -4809,8 +4809,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4807,census_2403,census_2403,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1155,1172,1000
 4808,census_2404,census_2404,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,529,530,1000
 4809,census_2404,census_2404,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,1072,1073,1000
-4810,census_2405,census_2405,0,Southwark,Southwark,,work,pt,546,555,1000
-4811,census_2405,census_2405,1,Southwark,,Southwark,work,pt,1137,1146,1000
+4810,census_2405,census_2405,0,Southwark,Southwark,Southwark,work,pt,546,555,1000
+4811,census_2405,census_2405,1,Southwark,Southwark,Southwark,work,pt,1137,1146,1000
 4812,census_2406,census_2406,0,Southwark,Southwark,Tower Hamlets,work,pt,430,435,1000
 4813,census_2406,census_2406,1,Southwark,Tower Hamlets,Southwark,work,pt,1028,1033,1000
 4814,census_2407,census_2407,0,Croydon,Croydon,Croydon,work,car,456,471,1000
@@ -4833,8 +4833,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4831,census_2415,census_2415,1,Ealing,Hammersmith and Fulham,Ealing,work,pt,1131,1156,1000
 4832,census_2416,census_2416,0,Hammersmith and Fulham,Hammersmith and Fulham,Hillingdon,work,pt,457,496,1000
 4833,census_2416,census_2416,1,Hammersmith and Fulham,Hillingdon,Hammersmith and Fulham,work,pt,988,1027,1000
-4834,census_2417,census_2417,0,Sutton,Sutton,Camden,work,pt,411,438,1000
-4835,census_2417,census_2417,1,Sutton,Camden,Sutton,work,pt,953,980,1000
+4834,census_2417,census_2417,0,Sutton,Sutton,"Westminster,City of London",work,pt,411,438,1000
+4835,census_2417,census_2417,1,Sutton,"Westminster,City of London",Sutton,work,pt,953,980,1000
 4836,census_2418,census_2418,0,Richmond upon Thames,Richmond upon Thames,"Westminster,City of London",work,pt,492,511,1000
 4837,census_2418,census_2418,1,Richmond upon Thames,"Westminster,City of London",Richmond upon Thames,work,pt,954,973,1000
 4838,census_2419,census_2419,0,Lambeth,Lambeth,"Westminster,City of London",education,pt,502,513,1000
@@ -4853,14 +4853,14 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4851,census_2425,census_2425,1,Islington,Redbridge,Islington,work,pt,1051,1074,1000
 4852,census_2426,census_2426,0,Islington,Islington,Islington,work,car,511,516,1000
 4853,census_2426,census_2426,1,Islington,Islington,Islington,work,car,1065,1070,1000
-4854,census_2427,census_2427,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",education,pt,594,597,1000
-4855,census_2427,census_2427,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",education,pt,1154,1157,1000
+4854,census_2427,census_2427,0,Camden,Camden,"Westminster,City of London",education,pt,594,597,1000
+4855,census_2427,census_2427,1,Camden,"Westminster,City of London",Camden,education,pt,1154,1157,1000
 4856,census_2428,census_2428,0,Redbridge,Redbridge,Redbridge,work,pt,470,473,1000
 4857,census_2428,census_2428,1,Redbridge,Redbridge,Redbridge,work,pt,999,1002,1000
 4858,census_2429,census_2429,0,Ealing,Ealing,Hounslow,work,pt,518,537,1000
 4859,census_2429,census_2429,1,Ealing,Hounslow,Ealing,work,pt,1013,1032,1000
-4860,census_2430,census_2430,0,Merton,Merton,Croydon,education,car,446,449,1000
-4861,census_2430,census_2430,1,Merton,Croydon,Merton,education,car,1015,1018,1000
+4860,census_2430,census_2430,0,Croydon,Croydon,Croydon,education,car,446,449,1000
+4861,census_2430,census_2430,1,Croydon,Croydon,Croydon,education,car,1015,1018,1000
 4862,census_2431,census_2431,0,Newham,Newham,Newham,work,pt,528,537,1000
 4863,census_2431,census_2431,1,Newham,Newham,Newham,work,pt,986,995,1000
 4864,census_2432,census_2432,0,Haringey,Haringey,Lambeth,work,pt,546,565,1000
@@ -4887,8 +4887,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4885,census_2442,census_2442,1,Wandsworth,Richmond upon Thames,Wandsworth,education,pt,1037,1050,1000
 4886,census_2443,census_2443,0,Enfield,Enfield,Camden,work,pt,407,438,1000
 4887,census_2443,census_2443,1,Enfield,Camden,Enfield,work,pt,936,967,1000
-4888,census_2444,census_2444,0,Hounslow,Hounslow,Ealing,work,car,523,538,1000
-4889,census_2444,census_2444,1,Hounslow,Ealing,Hounslow,work,car,994,1009,1000
+4888,census_2444,census_2444,0,Hounslow,Hounslow,Hounslow,work,car,523,538,1000
+4889,census_2444,census_2444,1,Hounslow,Hounslow,Hounslow,work,car,994,1009,1000
 4890,census_2445,census_2445,0,Brent,Brent,Brent,education,pt,480,483,1000
 4891,census_2445,census_2445,1,Brent,Brent,Brent,education,pt,1019,1022,1000
 4892,census_2446,census_2446,0,Redbridge,Redbridge,Redbridge,education,pt,452,459,1000
@@ -4945,8 +4945,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4943,census_2471,census_2471,1,Haringey,"Westminster,City of London",Haringey,education,pt,1127,1144,1000
 4944,census_2472,census_2472,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,457,472,1000
 4945,census_2472,census_2472,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,970,985,1000
-4946,census_2473,census_2473,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,420,427,1000
-4947,census_2473,census_2473,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,982,989,1000
+4946,census_2473,census_2473,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,pt,420,427,1000
+4947,census_2473,census_2473,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,pt,982,989,1000
 4948,census_2474,census_2474,0,Croydon,Croydon,Croydon,work,pt,640,647,1000
 4949,census_2474,census_2474,1,Croydon,Croydon,Croydon,work,pt,1172,1179,1000
 4950,census_2475,census_2475,0,Tower Hamlets,Tower Hamlets,"Westminster,City of London",education,pt,488,499,1000
@@ -4965,18 +4965,18 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 4963,census_2481,census_2481,1,Islington,Camden,Islington,education,pt,1071,1080,1000
 4964,census_2482,census_2482,0,Barnet,Barnet,"Westminster,City of London",work,pt,511,540,1000
 4965,census_2482,census_2482,1,Barnet,"Westminster,City of London",Barnet,work,pt,967,996,1000
-4966,census_2483,census_2483,0,Lambeth,Lambeth,Southwark,work,pt,442,447,1000
-4967,census_2483,census_2483,1,Lambeth,Southwark,Lambeth,work,pt,1003,1008,1000
+4966,census_2483,census_2483,0,Southwark,Southwark,Southwark,work,pt,442,447,1000
+4967,census_2483,census_2483,1,Southwark,Southwark,Southwark,work,pt,1003,1008,1000
 4968,census_2484,census_2484,0,Wandsworth,Wandsworth,Islington,work,pt,545,562,1000
 4969,census_2484,census_2484,1,Wandsworth,Islington,Wandsworth,work,pt,1152,1169,1000
 4970,census_2485,census_2485,0,Lambeth,Lambeth,Southwark,education,pt,519,526,1000
 4971,census_2485,census_2485,1,Lambeth,Southwark,Lambeth,education,pt,1071,1078,1000
-4972,census_2486,census_2486,0,Barnet,Barnet,Haringey,work,pt,516,521,1000
-4973,census_2486,census_2486,1,Barnet,Haringey,Barnet,work,pt,1090,1095,1000
+4972,census_2486,census_2486,0,Haringey,Haringey,Haringey,work,pt,516,521,1000
+4973,census_2486,census_2486,1,Haringey,Haringey,Haringey,work,pt,1090,1095,1000
 4974,census_2487,census_2487,0,Redbridge,Redbridge,Redbridge,work,pt,477,478,1000
 4975,census_2487,census_2487,1,Redbridge,Redbridge,Redbridge,work,pt,1006,1007,1000
-4976,census_2488,census_2488,0,Greenwich,Greenwich,Bexley,education,pt,447,454,1000
-4977,census_2488,census_2488,1,Greenwich,Bexley,Greenwich,education,pt,1019,1026,1000
+4976,census_2488,census_2488,0,Bexley,Bexley,Bexley,education,pt,447,454,1000
+4977,census_2488,census_2488,1,Bexley,Bexley,Bexley,education,pt,1019,1026,1000
 4978,census_2489,census_2489,0,Croydon,Croydon,"Westminster,City of London",work,pt,542,569,1000
 4979,census_2489,census_2489,1,Croydon,"Westminster,City of London",Croydon,work,pt,1085,1112,1000
 4980,census_2490,census_2490,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,education,pt,578,581,1000
@@ -5015,8 +5015,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5013,census_2506,census_2506,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1071,1082,1000
 5014,census_2507,census_2507,0,Tower Hamlets,Tower Hamlets,Lewisham,work,pt,582,599,1000
 5015,census_2507,census_2507,1,Tower Hamlets,Lewisham,Tower Hamlets,work,pt,1132,1149,1000
-5016,census_2508,census_2508,0,Lambeth,Lambeth,,work,pt,467,476,1000
-5017,census_2508,census_2508,1,Lambeth,,Lambeth,work,pt,1034,1043,1000
+5016,census_2508,census_2508,0,Lambeth,Lambeth,Lambeth,work,pt,467,476,1000
+5017,census_2508,census_2508,1,Lambeth,Lambeth,Lambeth,work,pt,1034,1043,1000
 5018,census_2509,census_2509,0,Richmond upon Thames,Richmond upon Thames,Camden,work,pt,481,510,1000
 5019,census_2509,census_2509,1,Richmond upon Thames,Camden,Richmond upon Thames,work,pt,1101,1130,1000
 5020,census_2510,census_2510,0,Barnet,Barnet,Islington,work,pt,548,573,1000
@@ -5033,8 +5033,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5031,census_2515,census_2515,1,Hammersmith and Fulham,Kensington and Chelsea,Hammersmith and Fulham,work,car,901,906,1000
 5032,census_2516,census_2516,0,Brent,Brent,Ealing,education,pt,434,445,1000
 5033,census_2516,census_2516,1,Brent,Ealing,Brent,education,pt,957,968,1000
-5034,census_2517,census_2517,0,Wandsworth,,Wandsworth,work,car,546,547,1000
-5035,census_2517,census_2517,1,Wandsworth,Wandsworth,,work,car,1045,1046,1000
+5034,census_2517,census_2517,0,Wandsworth,Wandsworth,Wandsworth,work,car,546,547,1000
+5035,census_2517,census_2517,1,Wandsworth,Wandsworth,Wandsworth,work,car,1045,1046,1000
 5036,census_2518,census_2518,0,Enfield,Enfield,Lambeth,work,car,514,555,1000
 5037,census_2518,census_2518,1,Enfield,Lambeth,Enfield,work,car,1012,1053,1000
 5038,census_2519,census_2519,0,Barking and Dagenham,Barking and Dagenham,"Westminster,City of London",work,pt,482,515,1000
@@ -5071,8 +5071,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5069,census_2534,census_2534,1,"Westminster,City of London",Camden,"Westminster,City of London",work,pt,921,926,1000
 5070,census_2535,census_2535,0,Tower Hamlets,Tower Hamlets,Southwark,work,pt,440,447,1000
 5071,census_2535,census_2535,1,Tower Hamlets,Southwark,Tower Hamlets,work,pt,1053,1060,1000
-5072,census_2536,census_2536,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,475,480,1000
-5073,census_2536,census_2536,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,912,917,1000
+5072,census_2536,census_2536,0,Camden,Camden,"Westminster,City of London",work,pt,475,480,1000
+5073,census_2536,census_2536,1,Camden,"Westminster,City of London",Camden,work,pt,912,917,1000
 5074,census_2537,census_2537,0,Southwark,Southwark,Southwark,work,pt,493,496,1000
 5075,census_2537,census_2537,1,Southwark,Southwark,Southwark,work,pt,980,983,1000
 5076,census_2538,census_2538,0,Richmond upon Thames,Richmond upon Thames,Newham,work,car,462,513,1000
@@ -5093,18 +5093,18 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5091,census_2545,census_2545,1,Lewisham,Camden,Lewisham,work,pt,969,990,1000
 5092,census_2546,census_2546,0,Redbridge,Redbridge,Tower Hamlets,work,pt,554,583,1000
 5093,census_2546,census_2546,1,Redbridge,Tower Hamlets,Redbridge,work,pt,1025,1054,1000
-5094,census_2547,census_2547,0,Kingston upon Thames,Kingston upon Thames,Camden,work,pt,402,441,1000
-5095,census_2547,census_2547,1,Kingston upon Thames,Camden,Kingston upon Thames,work,pt,1018,1057,1000
+5094,census_2547,census_2547,0,Kingston upon Thames,Kingston upon Thames,"Westminster,City of London",work,pt,402,441,1000
+5095,census_2547,census_2547,1,Kingston upon Thames,"Westminster,City of London",Kingston upon Thames,work,pt,1018,1057,1000
 5096,census_2548,census_2548,0,Hackney,Hackney,Islington,work,pt,573,576,1000
 5097,census_2548,census_2548,1,Hackney,Islington,Hackney,work,pt,1112,1115,1000
-5098,census_2549,census_2549,0,Hounslow,,Hounslow,education,pt,418,431,1000
-5099,census_2549,census_2549,1,Hounslow,Hounslow,,education,pt,973,986,1000
+5098,census_2549,census_2549,0,Wandsworth,Wandsworth,Hounslow,education,pt,418,431,1000
+5099,census_2549,census_2549,1,Wandsworth,Hounslow,Wandsworth,education,pt,973,986,1000
 5100,census_2550,census_2550,0,Enfield,Enfield,Tower Hamlets,work,car,438,469,1000
 5101,census_2550,census_2550,1,Enfield,Tower Hamlets,Enfield,work,car,946,977,1000
 5102,census_2551,census_2551,0,Hounslow,Hounslow,Richmond upon Thames,work,pt,442,455,1000
 5103,census_2551,census_2551,1,Hounslow,Richmond upon Thames,Hounslow,work,pt,1043,1056,1000
-5104,census_2552,census_2552,0,Croydon,Croydon,Sutton,work,pt,608,611,1000
-5105,census_2552,census_2552,1,Croydon,Sutton,Croydon,work,pt,1132,1135,1000
+5104,census_2552,census_2552,0,Croydon,Croydon,Croydon,work,pt,608,611,1000
+5105,census_2552,census_2552,1,Croydon,Croydon,Croydon,work,pt,1132,1135,1000
 5106,census_2553,census_2553,0,Haringey,Haringey,Haringey,work,car,562,569,1000
 5107,census_2553,census_2553,1,Haringey,Haringey,Haringey,work,car,1157,1164,1000
 5108,census_2554,census_2554,0,Enfield,Enfield,Enfield,work,pt,436,439,1000
@@ -5133,8 +5133,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5131,census_2565,census_2565,1,Croydon,Hammersmith and Fulham,Croydon,work,pt,976,1009,1000
 5132,census_2566,census_2566,0,Camden,Camden,Camden,education,pt,483,488,1000
 5133,census_2566,census_2566,1,Camden,Camden,Camden,education,pt,1044,1049,1000
-5134,census_2567,census_2567,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,493,494,1000
-5135,census_2567,census_2567,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,1018,1019,1000
+5134,census_2567,census_2567,0,Camden,Camden,"Westminster,City of London",work,pt,493,494,1000
+5135,census_2567,census_2567,1,Camden,"Westminster,City of London",Camden,work,pt,1018,1019,1000
 5136,census_2568,census_2568,0,Islington,Islington,Camden,work,car,463,466,1000
 5137,census_2568,census_2568,1,Islington,Camden,Islington,work,car,976,979,1000
 5138,census_2569,census_2569,0,Southwark,Southwark,Southwark,work,pt,470,475,1000
@@ -5145,8 +5145,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5143,census_2571,census_2571,1,Bexley,Bromley,Bexley,work,car,961,992,1000
 5144,census_2572,census_2572,0,Merton,Merton,Southwark,work,pt,522,549,1000
 5145,census_2572,census_2572,1,Merton,Southwark,Merton,work,pt,1100,1127,1000
-5146,census_2573,census_2573,0,"Westminster,City of London","Westminster,City of London",Ealing,work,pt,468,483,1000
-5147,census_2573,census_2573,1,"Westminster,City of London",Ealing,"Westminster,City of London",work,pt,1023,1038,1000
+5146,census_2573,census_2573,0,Brent,Brent,Brent,work,pt,468,483,1000
+5147,census_2573,census_2573,1,Brent,Brent,Brent,work,pt,1023,1038,1000
 5148,census_2574,census_2574,0,Wandsworth,Wandsworth,Wandsworth,work,pt,467,470,1000
 5149,census_2574,census_2574,1,Wandsworth,Wandsworth,Wandsworth,work,pt,956,959,1000
 5150,census_2575,census_2575,0,Greenwich,Greenwich,Brent,work,pt,504,541,1000
@@ -5179,8 +5179,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5177,census_2588,census_2588,1,Brent,Brent,Brent,work,pt,1061,1066,1000
 5178,census_2589,census_2589,0,Newham,Newham,"Westminster,City of London",work,pt,539,558,1000
 5179,census_2589,census_2589,1,Newham,"Westminster,City of London",Newham,work,pt,1147,1166,1000
-5180,census_2590,census_2590,0,Hillingdon,,Hillingdon,work,pt,441,452,1000
-5181,census_2590,census_2590,1,Hillingdon,Hillingdon,,work,pt,1026,1037,1000
+5180,census_2590,census_2590,0,Hillingdon,Hillingdon,Hillingdon,work,pt,441,452,1000
+5181,census_2590,census_2590,1,Hillingdon,Hillingdon,Hillingdon,work,pt,1026,1037,1000
 5182,census_2591,census_2591,0,Redbridge,Redbridge,Barking and Dagenham,work,pt,426,433,1000
 5183,census_2591,census_2591,1,Redbridge,Barking and Dagenham,Redbridge,work,pt,897,904,1000
 5184,census_2592,census_2592,0,Redbridge,Redbridge,"Westminster,City of London",work,car,434,459,1000
@@ -5195,8 +5195,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5193,census_2596,census_2596,1,Southwark,"Westminster,City of London",Southwark,work,pt,1108,1111,1000
 5194,census_2597,census_2597,0,Merton,Merton,Islington,work,car,415,452,1000
 5195,census_2597,census_2597,1,Merton,Islington,Merton,work,car,973,1010,1000
-5196,census_2598,census_2598,0,Newham,Newham,Ealing,work,car,466,497,1000
-5197,census_2598,census_2598,1,Newham,Ealing,Newham,work,car,993,1024,1000
+5196,census_2598,census_2598,0,Newham,Newham,Hammersmith and Fulham,work,car,466,497,1000
+5197,census_2598,census_2598,1,Newham,Hammersmith and Fulham,Newham,work,car,993,1024,1000
 5198,census_2599,census_2599,0,Croydon,Croydon,Croydon,work,pt,426,429,1000
 5199,census_2599,census_2599,1,Croydon,Croydon,Croydon,work,pt,993,996,1000
 5200,census_2600,census_2600,0,Waltham Forest,Waltham Forest,Barnet,work,pt,548,577,1000
@@ -5267,8 +5267,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5265,census_2632,census_2632,1,Lewisham,Lambeth,Lewisham,work,pt,993,1006,1000
 5266,census_2633,census_2633,0,Newham,Newham,Newham,work,pt,533,542,1000
 5267,census_2633,census_2633,1,Newham,Newham,Newham,work,pt,1035,1044,1000
-5268,census_2634,census_2634,0,Wandsworth,Wandsworth,,work,pt,448,453,1000
-5269,census_2634,census_2634,1,Wandsworth,,Wandsworth,work,pt,1066,1071,1000
+5268,census_2634,census_2634,0,Wandsworth,Wandsworth,Wandsworth,work,pt,448,453,1000
+5269,census_2634,census_2634,1,Wandsworth,Wandsworth,Wandsworth,work,pt,1066,1071,1000
 5270,census_2635,census_2635,0,Islington,Islington,"Westminster,City of London",education,pt,442,453,1000
 5271,census_2635,census_2635,1,Islington,"Westminster,City of London",Islington,education,pt,915,926,1000
 5272,census_2636,census_2636,0,Hackney,Hackney,Haringey,work,pt,496,509,1000
@@ -5289,20 +5289,20 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5287,census_2643,census_2643,1,Southwark,Tower Hamlets,Southwark,education,pt,1022,1035,1000
 5288,census_2644,census_2644,0,Croydon,Croydon,Wandsworth,work,pt,484,505,1000
 5289,census_2644,census_2644,1,Croydon,Wandsworth,Croydon,work,pt,1003,1024,1000
-5290,census_2645,census_2645,0,Brent,Brent,Kensington and Chelsea,work,car,418,429,1000
-5291,census_2645,census_2645,1,Brent,Kensington and Chelsea,Brent,work,car,948,959,1000
+5290,census_2645,census_2645,0,Ealing,Ealing,Kensington and Chelsea,work,car,418,429,1000
+5291,census_2645,census_2645,1,Ealing,Kensington and Chelsea,Ealing,work,car,948,959,1000
 5292,census_2646,census_2646,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,508,515,1000
 5293,census_2646,census_2646,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1025,1032,1000
-5294,census_2647,census_2647,0,Bromley,Bromley,Lewisham,work,pt,449,452,1000
-5295,census_2647,census_2647,1,Bromley,Lewisham,Bromley,work,pt,929,932,1000
+5294,census_2647,census_2647,0,Bromley,Bromley,Bromley,work,pt,449,452,1000
+5295,census_2647,census_2647,1,Bromley,Bromley,Bromley,work,pt,929,932,1000
 5296,census_2648,census_2648,0,Barnet,Barnet,Barnet,work,pt,431,440,1000
 5297,census_2648,census_2648,1,Barnet,Barnet,Barnet,work,pt,933,942,1000
 5298,census_2649,census_2649,0,Kensington and Chelsea,Kensington and Chelsea,"Westminster,City of London",work,car,510,523,1000
 5299,census_2649,census_2649,1,Kensington and Chelsea,"Westminster,City of London",Kensington and Chelsea,work,car,1059,1072,1000
 5300,census_2650,census_2650,0,Merton,Merton,Kingston upon Thames,education,pt,582,595,1000
 5301,census_2650,census_2650,1,Merton,Kingston upon Thames,Merton,education,pt,1094,1107,1000
-5302,census_2651,census_2651,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,451,468,1000
-5303,census_2651,census_2651,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,958,975,1000
+5302,census_2651,census_2651,0,Wandsworth,Wandsworth,Camden,work,pt,451,468,1000
+5303,census_2651,census_2651,1,Wandsworth,Camden,Wandsworth,work,pt,958,975,1000
 5304,census_2652,census_2652,0,Islington,Islington,"Westminster,City of London",work,pt,510,521,1000
 5305,census_2652,census_2652,1,Islington,"Westminster,City of London",Islington,work,pt,978,989,1000
 5306,census_2653,census_2653,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",education,pt,513,522,1000
@@ -5327,8 +5327,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5325,census_2662,census_2662,1,Islington,Islington,Islington,work,pt,965,966,1000
 5326,census_2663,census_2663,0,Bexley,Bexley,"Westminster,City of London",work,car,500,547,1000
 5327,census_2663,census_2663,1,Bexley,"Westminster,City of London",Bexley,work,car,988,1035,1000
-5328,census_2664,census_2664,0,Redbridge,Redbridge,Barking and Dagenham,work,pt,473,480,1000
-5329,census_2664,census_2664,1,Redbridge,Barking and Dagenham,Redbridge,work,pt,972,979,1000
+5328,census_2664,census_2664,0,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,473,480,1000
+5329,census_2664,census_2664,1,Barking and Dagenham,Barking and Dagenham,Barking and Dagenham,work,pt,972,979,1000
 5330,census_2665,census_2665,0,Greenwich,Greenwich,"Westminster,City of London",work,pt,464,487,1000
 5331,census_2665,census_2665,1,Greenwich,"Westminster,City of London",Greenwich,work,pt,980,1003,1000
 5332,census_2666,census_2666,0,Bexley,Bexley,Bromley,work,pt,585,602,1000
@@ -5353,18 +5353,18 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5351,census_2675,census_2675,1,Hammersmith and Fulham,Lambeth,Hammersmith and Fulham,work,pt,1031,1046,1000
 5352,census_2676,census_2676,0,Wandsworth,Wandsworth,Kensington and Chelsea,work,pt,476,487,1000
 5353,census_2676,census_2676,1,Wandsworth,Kensington and Chelsea,Wandsworth,work,pt,980,991,1000
-5354,census_2677,census_2677,0,Hillingdon,Hillingdon,Hounslow,education,pt,598,611,1000
-5355,census_2677,census_2677,1,Hillingdon,Hounslow,Hillingdon,education,pt,1106,1119,1000
-5356,census_2678,census_2678,0,Hammersmith and Fulham,,Hammersmith and Fulham,work,pt,440,443,1000
-5357,census_2678,census_2678,1,Hammersmith and Fulham,Hammersmith and Fulham,,work,pt,1060,1063,1000
-5358,census_2679,census_2679,0,Croydon,Croydon,Bromley,work,pt,433,440,1000
-5359,census_2679,census_2679,1,Croydon,Bromley,Croydon,work,pt,916,923,1000
+5354,census_2677,census_2677,0,Ealing,Ealing,Hounslow,education,pt,598,611,1000
+5355,census_2677,census_2677,1,Ealing,Hounslow,Ealing,education,pt,1106,1119,1000
+5356,census_2678,census_2678,0,Wandsworth,Wandsworth,Hammersmith and Fulham,work,pt,440,443,1000
+5357,census_2678,census_2678,1,Wandsworth,Hammersmith and Fulham,Wandsworth,work,pt,1060,1063,1000
+5358,census_2679,census_2679,0,Bromley,Bromley,Bromley,work,pt,433,440,1000
+5359,census_2679,census_2679,1,Bromley,Bromley,Bromley,work,pt,916,923,1000
 5360,census_2680,census_2680,0,Lambeth,Lambeth,Lambeth,work,pt,502,503,1000
 5361,census_2680,census_2680,1,Lambeth,Lambeth,Lambeth,work,pt,1049,1050,1000
-5362,census_2681,census_2681,0,Harrow,Harrow,Hammersmith and Fulham,education,pt,465,484,1000
-5363,census_2681,census_2681,1,Harrow,Hammersmith and Fulham,Harrow,education,pt,946,965,1000
-5364,census_2682,census_2682,0,Greenwich,,Greenwich,work,pt,437,442,1000
-5365,census_2682,census_2682,1,Greenwich,Greenwich,,work,pt,1066,1071,1000
+5362,census_2681,census_2681,0,Brent,Brent,Hammersmith and Fulham,education,pt,465,484,1000
+5363,census_2681,census_2681,1,Brent,Hammersmith and Fulham,Brent,education,pt,946,965,1000
+5364,census_2682,census_2682,0,Greenwich,Greenwich,Greenwich,work,pt,437,442,1000
+5365,census_2682,census_2682,1,Greenwich,Greenwich,Greenwich,work,pt,1066,1071,1000
 5366,census_2683,census_2683,0,Bromley,Bromley,Bromley,work,pt,421,436,1000
 5367,census_2683,census_2683,1,Bromley,Bromley,Bromley,work,pt,1031,1046,1000
 5368,census_2684,census_2684,0,Newham,Newham,Newham,work,pt,448,459,1000
@@ -5391,8 +5391,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5389,census_2694,census_2694,1,Brent,Haringey,Brent,work,pt,1019,1040,1000
 5390,census_2695,census_2695,0,Sutton,Sutton,"Westminster,City of London",work,car,441,472,1000
 5391,census_2695,census_2695,1,Sutton,"Westminster,City of London",Sutton,work,car,937,968,1000
-5392,census_2696,census_2696,0,Richmond upon Thames,,Richmond upon Thames,work,pt,454,475,1000
-5393,census_2696,census_2696,1,Richmond upon Thames,Richmond upon Thames,,work,pt,918,939,1000
+5392,census_2696,census_2696,0,Wandsworth,Wandsworth,Richmond upon Thames,work,pt,454,475,1000
+5393,census_2696,census_2696,1,Wandsworth,Richmond upon Thames,Wandsworth,work,pt,918,939,1000
 5394,census_2697,census_2697,0,Newham,Newham,Lambeth,work,pt,493,520,1000
 5395,census_2697,census_2697,1,Newham,Lambeth,Newham,work,pt,947,974,1000
 5396,census_2698,census_2698,0,Barnet,Barnet,"Westminster,City of London",work,pt,539,558,1000
@@ -5427,8 +5427,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5425,census_2712,census_2712,1,Richmond upon Thames,Southwark,Richmond upon Thames,work,pt,1105,1140,1000
 5426,census_2713,census_2713,0,Hackney,Hackney,Hackney,work,pt,483,486,1000
 5427,census_2713,census_2713,1,Hackney,Hackney,Hackney,work,pt,990,993,1000
-5428,census_2714,census_2714,0,Sutton,Sutton,Croydon,work,car,490,499,1000
-5429,census_2714,census_2714,1,Sutton,Croydon,Sutton,work,car,992,1001,1000
+5428,census_2714,census_2714,0,Sutton,Sutton,Sutton,work,car,490,499,1000
+5429,census_2714,census_2714,1,Sutton,Sutton,Sutton,work,car,992,1001,1000
 5430,census_2715,census_2715,0,Lewisham,Lewisham,Tower Hamlets,work,car,565,574,1000
 5431,census_2715,census_2715,1,Lewisham,Tower Hamlets,Lewisham,work,car,1120,1129,1000
 5432,census_2716,census_2716,0,Newham,Newham,Brent,work,pt,568,605,1000
@@ -5469,8 +5469,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5467,census_2733,census_2733,1,Lewisham,"Westminster,City of London",Lewisham,work,pt,1039,1052,1000
 5468,census_2734,census_2734,0,Redbridge,Redbridge,Newham,work,pt,511,524,1000
 5469,census_2734,census_2734,1,Redbridge,Newham,Redbridge,work,pt,1010,1023,1000
-5470,census_2735,census_2735,0,"Westminster,City of London","Westminster,City of London",Ealing,education,pt,462,477,1000
-5471,census_2735,census_2735,1,"Westminster,City of London",Ealing,"Westminster,City of London",education,pt,959,974,1000
+5470,census_2735,census_2735,0,Brent,Brent,Ealing,education,pt,462,477,1000
+5471,census_2735,census_2735,1,Brent,Ealing,Brent,education,pt,959,974,1000
 5472,census_2736,census_2736,0,Barnet,Barnet,Barnet,work,pt,444,461,1000
 5473,census_2736,census_2736,1,Barnet,Barnet,Barnet,work,pt,926,943,1000
 5474,census_2737,census_2737,0,Harrow,Harrow,Tower Hamlets,education,pt,410,449,1000
@@ -5505,8 +5505,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5503,census_2751,census_2751,1,Harrow,Lambeth,Harrow,work,car,960,1007,1000
 5504,census_2752,census_2752,0,Barnet,Barnet,Harrow,education,pt,529,544,1000
 5505,census_2752,census_2752,1,Barnet,Harrow,Barnet,education,pt,1088,1103,1000
-5506,census_2753,census_2753,0,Lambeth,Lambeth,Lewisham,work,pt,430,437,1000
-5507,census_2753,census_2753,1,Lambeth,Lewisham,Lambeth,work,pt,918,925,1000
+5506,census_2753,census_2753,0,Southwark,Southwark,Lewisham,work,pt,430,437,1000
+5507,census_2753,census_2753,1,Southwark,Lewisham,Southwark,work,pt,918,925,1000
 5508,census_2754,census_2754,0,Wandsworth,Wandsworth,Southwark,work,car,439,452,1000
 5509,census_2754,census_2754,1,Wandsworth,Southwark,Wandsworth,work,car,894,907,1000
 5510,census_2755,census_2755,0,Haringey,Haringey,Greenwich,education,pt,434,465,1000
@@ -5569,8 +5569,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5567,census_2783,census_2783,1,Southwark,Camden,Southwark,work,pt,935,938,1000
 5568,census_2784,census_2784,0,Haringey,Haringey,Haringey,work,pt,531,536,1000
 5569,census_2784,census_2784,1,Haringey,Haringey,Haringey,work,pt,992,997,1000
-5570,census_2785,census_2785,0,Hillingdon,Hillingdon,Camden,work,pt,400,439,1000
-5571,census_2785,census_2785,1,Hillingdon,Camden,Hillingdon,work,pt,965,1004,1000
+5570,census_2785,census_2785,0,Hillingdon,Hillingdon,Islington,work,pt,400,439,1000
+5571,census_2785,census_2785,1,Hillingdon,Islington,Hillingdon,work,pt,965,1004,1000
 5572,census_2786,census_2786,0,Newham,Newham,"Westminster,City of London",work,pt,567,598,1000
 5573,census_2786,census_2786,1,Newham,"Westminster,City of London",Newham,work,pt,1102,1133,1000
 5574,census_2787,census_2787,0,Southwark,Southwark,Camden,work,pt,517,540,1000
@@ -5613,8 +5613,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5611,census_2805,census_2805,1,Southwark,"Westminster,City of London",Southwark,work,car,1131,1140,1000
 5612,census_2806,census_2806,0,Southwark,Southwark,Lambeth,work,pt,465,474,1000
 5613,census_2806,census_2806,1,Southwark,Lambeth,Southwark,work,pt,975,984,1000
-5614,census_2807,census_2807,0,Richmond upon Thames,Richmond upon Thames,Hounslow,work,pt,509,514,1000
-5615,census_2807,census_2807,1,Richmond upon Thames,Hounslow,Richmond upon Thames,work,pt,982,987,1000
+5614,census_2807,census_2807,0,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,509,514,1000
+5615,census_2807,census_2807,1,Richmond upon Thames,Richmond upon Thames,Richmond upon Thames,work,pt,982,987,1000
 5616,census_2808,census_2808,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,472,481,1000
 5617,census_2808,census_2808,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,1064,1073,1000
 5618,census_2809,census_2809,0,Newham,Newham,Camden,work,pt,482,501,1000
@@ -5631,8 +5631,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5629,census_2814,census_2814,1,Barnet,Havering,Barnet,work,pt,978,1043,1000
 5630,census_2815,census_2815,0,Barnet,Barnet,Richmond upon Thames,work,pt,509,560,1000
 5631,census_2815,census_2815,1,Barnet,Richmond upon Thames,Barnet,work,pt,941,992,1000
-5632,census_2816,census_2816,0,Hammersmith and Fulham,Hammersmith and Fulham,Camden,work,pt,496,507,1000
-5633,census_2816,census_2816,1,Hammersmith and Fulham,Camden,Hammersmith and Fulham,work,pt,978,989,1000
+5632,census_2816,census_2816,0,Hammersmith and Fulham,Hammersmith and Fulham,"Westminster,City of London",work,pt,496,507,1000
+5633,census_2816,census_2816,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,978,989,1000
 5634,census_2817,census_2817,0,Bromley,Bromley,"Westminster,City of London",work,pt,465,490,1000
 5635,census_2817,census_2817,1,Bromley,"Westminster,City of London",Bromley,work,pt,1044,1069,1000
 5636,census_2818,census_2818,0,Newham,Newham,Southwark,work,pt,575,590,1000
@@ -5647,8 +5647,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5645,census_2822,census_2822,1,"Westminster,City of London",Southwark,"Westminster,City of London",work,pt,996,1005,1000
 5646,census_2823,census_2823,0,Haringey,Haringey,Haringey,work,car,577,580,1000
 5647,census_2823,census_2823,1,Haringey,Haringey,Haringey,work,car,1079,1082,1000
-5648,census_2824,census_2824,0,Islington,Islington,Camden,work,car,436,443,1000
-5649,census_2824,census_2824,1,Islington,Camden,Islington,work,car,999,1006,1000
+5648,census_2824,census_2824,0,Hackney,Hackney,Camden,work,car,436,443,1000
+5649,census_2824,census_2824,1,Hackney,Camden,Hackney,work,car,999,1006,1000
 5650,census_2825,census_2825,0,Kensington and Chelsea,Kensington and Chelsea,Islington,education,pt,529,544,1000
 5651,census_2825,census_2825,1,Kensington and Chelsea,Islington,Kensington and Chelsea,education,pt,1094,1109,1000
 5652,census_2826,census_2826,0,Camden,Camden,Hammersmith and Fulham,work,pt,578,591,1000
@@ -5719,8 +5719,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5717,census_2858,census_2858,1,Islington,"Westminster,City of London",Islington,education,pt,1013,1026,1000
 5718,census_2859,census_2859,0,Sutton,Sutton,Bromley,work,car,491,502,1000
 5719,census_2859,census_2859,1,Sutton,Bromley,Sutton,work,car,957,968,1000
-5720,census_2860,census_2860,0,Barking and Dagenham,Barking and Dagenham,"Westminster,City of London",work,pt,511,534,1000
-5721,census_2860,census_2860,1,Barking and Dagenham,"Westminster,City of London",Barking and Dagenham,work,pt,1016,1039,1000
+5720,census_2860,census_2860,0,Barking and Dagenham,Barking and Dagenham,Tower Hamlets,work,pt,511,534,1000
+5721,census_2860,census_2860,1,Barking and Dagenham,Tower Hamlets,Barking and Dagenham,work,pt,1016,1039,1000
 5722,census_2861,census_2861,0,Croydon,Croydon,Bromley,work,pt,577,590,1000
 5723,census_2861,census_2861,1,Croydon,Bromley,Croydon,work,pt,1119,1132,1000
 5724,census_2862,census_2862,0,Hillingdon,Hillingdon,Ealing,work,car,409,434,1000
@@ -5743,8 +5743,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5741,census_2870,census_2870,1,Waltham Forest,"Westminster,City of London",Waltham Forest,work,pt,1041,1064,1000
 5742,census_2871,census_2871,0,Southwark,Southwark,Camden,work,pt,473,486,1000
 5743,census_2871,census_2871,1,Southwark,Camden,Southwark,work,pt,1092,1105,1000
-5744,census_2872,census_2872,0,Haringey,Haringey,Camden,work,pt,444,461,1000
-5745,census_2872,census_2872,1,Haringey,Camden,Haringey,work,pt,1001,1018,1000
+5744,census_2872,census_2872,0,Haringey,Haringey,Islington,work,pt,444,461,1000
+5745,census_2872,census_2872,1,Haringey,Islington,Haringey,work,pt,1001,1018,1000
 5746,census_2873,census_2873,0,Bexley,Bexley,Bexley,work,pt,477,482,1000
 5747,census_2873,census_2873,1,Bexley,Bexley,Bexley,work,pt,1036,1041,1000
 5748,census_2874,census_2874,0,Bexley,Bexley,Tower Hamlets,work,car,426,453,1000
@@ -5791,8 +5791,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5789,census_2894,census_2894,1,Redbridge,Newham,Redbridge,work,pt,953,974,1000
 5790,census_2895,census_2895,0,Greenwich,Greenwich,"Westminster,City of London",education,car,492,509,1000
 5791,census_2895,census_2895,1,Greenwich,"Westminster,City of London",Greenwich,education,car,982,999,1000
-5792,census_2896,census_2896,0,Haringey,Haringey,Islington,education,car,436,455,1000
-5793,census_2896,census_2896,1,Haringey,Islington,Haringey,education,car,1045,1064,1000
+5792,census_2896,census_2896,0,Haringey,Haringey,"Westminster,City of London",education,car,436,455,1000
+5793,census_2896,census_2896,1,Haringey,"Westminster,City of London",Haringey,education,car,1045,1064,1000
 5794,census_2897,census_2897,0,Barnet,Barnet,Barnet,work,pt,477,492,1000
 5795,census_2897,census_2897,1,Barnet,Barnet,Barnet,work,pt,1010,1025,1000
 5796,census_2898,census_2898,0,Redbridge,Redbridge,Havering,work,pt,465,484,1000
@@ -5803,8 +5803,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5801,census_2900,census_2900,1,Hammersmith and Fulham,"Westminster,City of London",Hammersmith and Fulham,work,pt,1176,1183,1000
 5802,census_2901,census_2901,0,Southwark,Southwark,"Westminster,City of London",work,pt,486,499,1000
 5803,census_2901,census_2901,1,Southwark,"Westminster,City of London",Southwark,work,pt,954,967,1000
-5804,census_2902,census_2902,0,"Westminster,City of London",,"Westminster,City of London",work,pt,451,460,1000
-5805,census_2902,census_2902,1,"Westminster,City of London","Westminster,City of London",,work,pt,1037,1046,1000
+5804,census_2902,census_2902,0,Lambeth,Lambeth,"Westminster,City of London",work,pt,451,460,1000
+5805,census_2902,census_2902,1,Lambeth,"Westminster,City of London",Lambeth,work,pt,1037,1046,1000
 5806,census_2903,census_2903,0,Hounslow,Hounslow,Hounslow,work,car,460,469,1000
 5807,census_2903,census_2903,1,Hounslow,Hounslow,Hounslow,work,car,1000,1009,1000
 5808,census_2904,census_2904,0,Richmond upon Thames,Richmond upon Thames,Lambeth,work,pt,421,446,1000
@@ -5817,8 +5817,8 @@ uid,pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 5815,census_2907,census_2907,1,Barnet,Ealing,Barnet,work,car,1010,1035,1000
 5816,census_2908,census_2908,0,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,448,453,1000
 5817,census_2908,census_2908,1,"Westminster,City of London","Westminster,City of London","Westminster,City of London",work,pt,1001,1006,1000
-5818,census_2909,census_2909,0,Camden,Camden,Hackney,work,pt,432,437,1000
-5819,census_2909,census_2909,1,Camden,Hackney,Camden,work,pt,942,947,1000
+5818,census_2909,census_2909,0,Islington,Islington,Hackney,work,pt,432,437,1000
+5819,census_2909,census_2909,1,Islington,Hackney,Islington,work,pt,942,947,1000
 5820,census_2910,census_2910,0,Wandsworth,Wandsworth,"Westminster,City of London",work,pt,497,506,1000
 5821,census_2910,census_2910,1,Wandsworth,"Westminster,City of London",Wandsworth,work,pt,1030,1039,1000
 5822,census_2911,census_2911,0,Southwark,Southwark,Southwark,work,pt,557,558,1000

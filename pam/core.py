@@ -238,7 +238,9 @@ class Person:
         # press plans away from pivoting activity
         pivot_idx = self.position_of(act='home')
         if pivot_idx is None:
-            raise NotImplementedError("Cannot fill plan without existing home activity")
+            raise NotImplementedError(
+                f"Cannot fill plan without existing home activity @ {self.pid}"
+            )
 
         self.expand(pivot_idx)
 
@@ -314,7 +316,7 @@ class Activity(PlanComponent):
         self.end_time = end_time
 
     def __str__(self):
-        return f"Activity\t(seq:{self.seq}, act:{self.act}, area:{self.area}, " \
+        return f"Activity(act:{self.act}, area:{self.area}, " \
                f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
 
@@ -345,7 +347,7 @@ class Leg(PlanComponent):
         self.end_time = end_time
 
     def __str__(self):
-        return f"Leg\t(seq:{self.seq}, mode:{self.mode}, area:{self.start_area} --> " \
+        return f"Leg(mode:{self.mode}, area:{self.start_area} --> " \
                f"{self.end_area}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
 

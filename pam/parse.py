@@ -4,6 +4,7 @@ from .core import Population, Household, Person, Activity, Leg, minutes_to_datet
 
 
 def load_travel_diary(trips_df, attributes_df):
+
     # todo deal with attributes_df
 
     """
@@ -25,14 +26,9 @@ def load_travel_diary(trips_df, attributes_df):
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        print(hid)
-
         household = Household(hid)
 
         for pid, person_data in household_data.groupby('pid'):
-
-            # TODO deal with agents not starting from home
-            # tests/test_load.py::test_agent_pid_5_not_start_from_home
 
             trips = person_data.sort_values('seq')
             home_area = trips.hzone.iloc[0]
@@ -40,7 +36,10 @@ def load_travel_diary(trips_df, attributes_df):
             activity_map = {home_area: 'home'}
             activities = ['home', 'work']
 
-            person = Person(pid, freq=person_data.freq.iloc[0])
+            person = Person(
+                pid,
+                freq=person_data.freq.iloc[0],
+                attributes=attributes_df.loc[pid].to_dict())
 
             person.add(
                 Activity(
@@ -59,7 +58,7 @@ def load_travel_diary(trips_df, attributes_df):
                 person.add(
                     Leg(
                         seq=n,
-                        mode=trip.mode,
+                        mode=trip['mode'],
                         start_area=trip.ozone,
                         end_area=trip.dzone,
                         start_time=minutes_to_datetime(trip.tst),
