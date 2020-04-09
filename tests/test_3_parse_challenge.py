@@ -107,3 +107,47 @@ def test_agent_pid_15_not_start_from_home_impossible_chain_type2_intra_trip(
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[12].people[15].activities]
     assert acts == ['work', 'shop', 'home']
+
+
+# Tests made to mess with Rory
+
+def test_agent_pid_16_not_start_and_return_home_night_worker_complex_chain_type1_not_work(
+        test_trips, test_attributes
+):
+    population = load_travel_diary(test_trips, test_attributes)
+    acts = [a.act for a in population.households[13].people[16].activities]
+    assert acts == ['work', 'shop', 'home', 'work']
+
+
+def test_agent_pid_17_not_start_and_return_home_night_worker_complex_chain_type2_not_work(
+        test_trips, test_attributes
+):
+    population = load_travel_diary(test_trips, test_attributes)
+    acts = [a.act for a in population.households[14].people[17].activities]
+    assert acts == ['other', 'shop', 'home', 'other']
+
+
+def test_agent_pid_18_not_start_from_home_impossible_chain_type1_not_work(
+        test_trips, test_attributes
+):
+    population = load_travel_diary(test_trips, test_attributes)
+    acts = [a.act for a in population.households[15].people[18].activities]
+    assert acts == ['other', 'shop', 'home']
+
+
+def test_agent_pid_19_not_start_and_return_home_night_worker_complex_chain_type1_intra_trip_not_work(
+        test_trips, test_attributes
+):
+    population = load_travel_diary(test_trips, test_attributes)
+    acts = [a.act for a in population.households[16].people[19].activities]
+    assert acts == ['escort', 'shop', 'home', 'escort']
+
+
+def test_agent_pid_20_not_start_and_return_home_night_worker_complex_chain_type2_intra_trip_not_work(
+        test_trips, test_attributes
+):
+    population = load_travel_diary(test_trips, test_attributes)
+    acts = [a.act for a in population.households[17].people[20].activities]
+    assert acts == ['escort', 'shop', 'home', 'escort']
+
+
