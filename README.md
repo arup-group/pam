@@ -6,20 +6,24 @@ scenarios (for transport systems and other sectors) - existing models need to be
 
 This project utilises an 
 [activity based](https://en.wikipedia.org/wiki/Transportation_forecasting#Activity-based_models)
-representation of a population, to make sensible rules based adjustments to travel and activities
-. But it also supports traditional - non activity - based inputs and outputs.
+representation of a population. It makes rules based modifications to individual's travel and 
+activities.
 
 This project is not a new activity model. Instead it to seeks to adjust existing activity 
 representations, already derived from exiting models or survey data:
 
-(i) **Parse** input data (eg travel diary) to Activity Plans, (ii) **Modify** the 
-Activity Plans for new social and government policy scenarios, (iii) **Output** to useful formats
- for activity based models or regular transport models. (iv) Facilitate preliminary **Analysis**
-  of changes.
+(i) **Parse** input data (eg travel diary) to household and person Activity Plans
 
-This work is primarily intended for transport modellers, to make quick transport demand scenarios
-. But it may also be useful for other activity based demand modelling such as for goods supply or
- utility demand.
+(ii) **Modify** the Activity Plans for new social and government policy scenarios (eg 
+remove education activities for non key workers households)
+
+(iii) **Output** to useful formats for activity based models or regular transport models
+ 
+(iv) Facilitate preliminary **Analysis** of changes
+
+This work is primarily intended for transport modellers, to make quick transport demand
+scenarios. But it may also be useful for other activity based demand modelling such as for goods 
+supply or utility demand.
  
 ## Contents
 
@@ -43,30 +47,30 @@ Our goals:
 Less abstractly, there are a good number of **coding** and **non-coding** tasks to chip in 
 with:
 
-#### 1. Give Early Feedback
+##### Give Early Feedback
 Read through this document, let us know what you think, share. Feedback gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can [email](fred.shone@arup.com).
 
-#### 2. Literature Review
+##### Literature Review
 We still need validation of the overall approach. Much of the methodology (detailed in this 
 document) is based on what can pragmatically be done, not what theoretically should be done. We'd
  appreciate links to relevant papers. Or even better we'd love a lit review - we'll add it to 
  this document.
  
-#### 3. Research
+##### Research
 
 We need help with designing useful features, applying them to real problems. As part of this we 
 need:
 
-##### 3.1. Evidence and Data for Validation
+###### Evidence and Data for Validation
 We know, for example, that many people have removed certain 
 activities from their daily plans, such as to school or university. But we don't know how many. We'd 
 like help finding and eventually applying **validation data** such as recent [change in 
 mobility](https://www.google.com/covid19/mobility/). 
 
-##### 3.2. Evidence for New Features
+###### Evidence for New Features
 
 We currently support the following activity plan modifications:
 
@@ -82,14 +86,14 @@ But we'd like help to **find evidence** for other modifications that we think ar
 - moving home location (ie national and local emigration)
 - household shared activities/no longer shared activities, such as leisure
 
-##### 3.3. Evidence for Technical Methodology
+###### Evidence for Technical Methodology
     
 Modifying a plan to remove an activity can cascade into other changes. In the case of 
 people with complex chains of activities, the removal of a single activity requires adjustments 
 to the remainder. Do people leave later of earlier if they have more time for example? The 
 methods for this logic is in `pam.core.People`.
 
-#### 4. Hack/Challenge
+##### Hack/Challenge
 
 We are maintaining an ongoing hack for people who want to dip in:
 
@@ -104,7 +108,7 @@ Dummy Travel Plans data with challenge edge cases can be found in
 home, shopping, work). All activity plans are restricted to one day and must start and end with 
 an activity.
 
-##### 4.1. Challenge Criteria
+###### Challenge Criteria
 
 There are tests -> the more you can get running as `PASSED` the better you are doing. Run tests 
 using pytest, ie:
@@ -118,7 +122,7 @@ tests represents edge cases for the standard travel diary parser: `pam.parse.loa
  - the challenge is to adjust `pam.parse.load_travel_diary()` to get as many tests passing without 
  breaking ANY tests that were previously working.
 
-##### 4.2. Rules
+###### Rules
 
 Clone project and work in your own branch.
 
@@ -126,13 +130,13 @@ Please work within the `pam.parse` module only.
 
 New edge case tests are expected to be added over time.
 
-#### 5. The Code
+##### The Code
 
-##### 5.1 Test
+###### Test
 If you've come this far - please consider cloning this repo, follow the installation instructions
  run the tests and maybe try out any example notebooks.
  
-##### 5.2 Dev
+###### Dev
 We are maintaining a number of failing tests **#todo** and `NotImplementedErrors` throughout, eg:
 
 - `pam.parse.load_matsim()`: functions required for loading alternative formats to `core.Population`
@@ -155,7 +159,7 @@ Please branch as you wish but please get in touch first ([issue](https://github.
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA))
 .
 
-#### 6. Use Cases
+##### Use Cases
 We will share open and dummy data where available, we would love people to do some experiments 
 and develop some viz and validation pipelines.
 
