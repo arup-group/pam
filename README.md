@@ -51,8 +51,8 @@ with:
 Read through this document, let us know what you think, share. Feedback gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
- or you can [email](fred.shone@arup.com).
-
+ or you can email fred.shone@arup.com.
+    
 ##### Literature Review
 We still need validation of the overall approach. Much of the methodology (detailed in this 
 document) is based on what can pragmatically be done, not what theoretically should be done. We'd
@@ -171,7 +171,7 @@ and develop some viz and validation pipelines. Any example notebooks can be adde
 Help gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
- or you can [email](fred.shone@arup.com).
+ or you can email fred.shone@arup.com.
  
 ## Installation
 
