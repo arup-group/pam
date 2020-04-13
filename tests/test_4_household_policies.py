@@ -1,5 +1,6 @@
-from pam.core import Population, Household, Person, Activity, Leg
-from pam import policies
+from pam.core import Population, Household, Person
+from pam.activity import Plan, Activity, Leg
+from pam import modify
 
 import pytest
 
@@ -41,32 +42,32 @@ def population():
 
 
 def test_apply_full_hh_quarantine(population):
-    policy = policies.HouseholdQuarantined(1)
-    policies.apply_policies(population, [policy])
+    policy = modify.HouseholdQuarantined(1)
+    modify.apply_policies(population, [policy])
     assert len(population.households) == 20
     for hid, household in population.households.items():
         assert len(household.people) == 2
         for pid, person in household.people.items():
             assert len(person.plan) == 1
-            assert isinstance(person.plan[0], Activity)
+            assert isinstance(person.plan.day[0], Activity)
 
 
 def test_apply_full_person_stay_at_home(population):
-    policy = policies.PersonStayAtHome(1)
-    policies.apply_policies(population, [policy])
+    policy = modify.PersonStayAtHome(1)
+    modify.apply_policies(population, [policy])
     assert len(population.households) == 20
     for hid, household in population.households.items():
         assert len(household.people) == 2
         for pid, person in household.people.items():
             assert len(person.plan) == 1
-            assert isinstance(person.plan[0], Activity)
+            assert isinstance(person.plan.day[0], Activity)
 
 
 def test_apply_two_policies(population):
-    policy1 = policies.HouseholdQuarantined(.1)
-    policy2 = policies.PersonStayAtHome(.4)
+    policy1 = modify.HouseholdQuarantined(.1)
+    policy2 = modify.PersonStayAtHome(.4)
     counter = 0
-    policies.apply_policies(population, [policy1, policy2])
+    modify.apply_policies(population, [policy1, policy2])
     assert len(population.households) == 20
     for hid, household in population.households.items():
         assert len(household.people) == 2

@@ -1,6 +1,8 @@
 import pandas as pd
 
-from .core import Population, Household, Person, Activity, Leg, minutes_to_datetime
+from .core import Population, Household, Person
+from .activity import Plan, Activity, Leg
+from .utils import minutes_to_datetime as mtdt
 
 
 def load_travel_diary(trips_df, attributes_df):
@@ -46,7 +48,7 @@ def load_travel_diary(trips_df, attributes_df):
                     seq=0,
                     act='home' if home_area == origin_area else 'work',
                     area=origin_area,
-                    start_time=minutes_to_datetime(0),
+                    start_time=mtdt(0),
                 )
             )
 
@@ -61,8 +63,8 @@ def load_travel_diary(trips_df, attributes_df):
                         mode=trip['mode'],
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=minutes_to_datetime(trip.tst),
-                        end_time=minutes_to_datetime(trip.tet)
+                        start_time=mtdt(trip.tst),
+                        end_time=mtdt(trip.tet)
                     )
                 )
 
@@ -73,7 +75,7 @@ def load_travel_diary(trips_df, attributes_df):
                             seq=n + 1,
                             act=activity_map[trip.dzone],
                             area=trip.dzone,
-                            start_time=minutes_to_datetime(trip.tet),
+                            start_time=mtdt(trip.tet),
                         )
                     )
 
@@ -83,7 +85,7 @@ def load_travel_diary(trips_df, attributes_df):
                             seq=n + 1,
                             act=trip.purp,
                             area=trip.dzone,
-                            start_time=minutes_to_datetime(trip.tet),
+                            start_time=mtdt(trip.tet),
                         )
                     )
 

@@ -12,7 +12,7 @@ activities.
 This project is not a new activity model. Instead it to seeks to adjust existing activity 
 representations, already derived from exiting models or survey data:
 
-(i) **Parse** input data (eg travel diary) to household and person Activity Plans
+(i) **Read/Load** input data (eg travel diary) to household and person Activity Plans
 
 (ii) **Modify** the Activity Plans for new social and government policy scenarios (eg 
 remove education activities for non key worker households)
@@ -149,11 +149,11 @@ We are maintaining a number of failing tests **#todo** and `NotImplementedErrors
 back to output formats
 - `pam.parse.write_od_matrices()`: function required to convert `core.Population` to OD travel 
 matrices
-- `pam.core.Person.remove_activity()`: we need more methods like this for making sensible plan 
+- `pam.activity.Plan.remove_activity()`: we need more methods like this for making sensible plan 
 modifications
-- `pam.core.Person.fill_plan()`: existing methods also need review and better testing
+- `pam.activity.Plan.fill_plan()`: existing methods also need review and better testing
 
-We hold peoples plans as a list; `pam.core.Person.plan`, but this **data structure** (detailed 
+We hold peoples plans as a list; `pam.activity.Plan.day`, but this **data structure** (detailed 
 further below) seems clunky. We think maybe we should use a graph representation?
 
 We need help to **go faster**. We expect to deal with populations in the tens of millions. We would 
@@ -214,10 +214,10 @@ The project methodology is as follows:
 
 ## Project Structure
 
-1. The `core` module holds activity plan classes (`Population`, `Household`, `Person`, `Activity`
- and `Leg`) and general methods.
-2. The `parse` module is responsible for building activity plans from input data.   
-3. The `modify` module is responsible for applying activity modifications.
+1. The `core` module holds population classes (`Population`, `Household`, `Person`)
+2. The `activity` module holds plan classes (`Plan`, `Activity`, `Leg`)
+3. The `parse` module is responsible for building activity plans from input data.   
+4. The `modify` module is responsible for applying activity modifying policies.
 
 ## Example Activity Plan Modifiers/Policy Mechanisms:   
 
@@ -338,13 +338,16 @@ activities locations can be intra-zonal, eg:
 *activity1(home, zoneA) + activity2(shop, zoneA) + activity2(shop, zoneA)*
 
 Activity Plans are represented in this project as regular python `lists()`, containing **ordered**
-`core.Activity` and `core.Leg` objects. Plans must start and end with a `core.Activity`. Two `core
-.Actvity` objects must be seperated by a `core.LEg`.
+`activity.Activity` and `activity.Leg` objects. Plans must start and end with a 
+`activity.Activity`. Two `activity.Actvity` objects must be seperated by a `core.Leg`.
 
 Plans belong to `core.People` which belong to 
 `core.Households` which belong to a `core.Population`. For example:
 
 ```
+from pam.core import Population, Household, Person
+from pam.activity import Activity, Leg
+
 population = Population()  # init
 household = HouseHold(hid=1)  # hid is household id
 person = Person(pid=1)  # pid is person id
@@ -377,4 +380,4 @@ This need not be a `home` activity, for example in the case of night workers.
 We have encountered many variations of sequences for plans, including wrapping and wrapping. 
 Although they are generally edge cases, they exists and generally represent real people. We are 
 therefore endeavoring to support all these cases in our plan modifiers. This is resulting some 
-difficult to follow logic (eg `pam.core.Person.fill_plan()`).
+difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).

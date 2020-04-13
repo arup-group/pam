@@ -1,4 +1,6 @@
-from .core import Population, Household, Person, Activity, Leg, minutes_to_datetime
+from .core import Population, Household, Person
+from .activity import Plan, Activity, Leg
+from .utils import minutes_to_datetime as mtdt
 
 import random
 
@@ -26,16 +28,7 @@ class HouseholdQuarantined(Policy):
     def apply_to(self, household):
         if random.random() < self.probability:
             for pid, person in household.people.items():
-                person.plan = []
-                person.add(
-                    Activity(
-                        1,
-                        'home',
-                        household.area,
-                        start_time=minutes_to_datetime(0),
-                        end_time=minutes_to_datetime(24*60-1)
-                    )
-                )
+                person.stay_at_home()
 
 
 class PersonStayAtHome(Policy):
@@ -52,16 +45,7 @@ class PersonStayAtHome(Policy):
     def apply_to(self, household):
         for pid, person in household.people.items():
             if random.random() < self.probability:
-                person.plan = []
-                person.add(
-                    Activity(
-                        1,
-                        'home',
-                        household.area,
-                        start_time=minutes_to_datetime(0),
-                        end_time=minutes_to_datetime(24 * 60 - 1)
-                    )
-                )
+                person.stay_at_home()
 
 
 class RemoveActivity(Policy):
@@ -69,7 +53,7 @@ class RemoveActivity(Policy):
     Probabilistic remove activities
     """
 
-    def __init__(self, activities: str, probability):
+    def __init__(self, activities: list, probability):
         super().__init__()
 
         self.activities = activities
