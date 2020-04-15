@@ -2,7 +2,9 @@
 
 Peoples day to day activities have been rapidly shifted by recent policies and behavioural 
 changes related to the COVID-19 pandemic. If we want to better plan existing and near-term 
-scenarios (for transport systems and other sectors) - existing models need to be quickly updated. 
+scenarios (for transport systems and other sectors) - existing models need to be quickly updated.
+
+ ![PAM](resources/pam-logo.png) 
 
 This project utilises an 
 [activity based](https://en.wikipedia.org/wiki/Transportation_forecasting#Activity-based_models)
@@ -94,43 +96,6 @@ people with complex chains of activities, the removal of a single activity requi
 to the remainder. Do people leave later of earlier if they have more time for example? The 
 methods for this logic is in `pam.core.People`.
 
-### Hack/Challenge
-
-We are maintaining an ongoing hack for people who want to dip in:
-
-The `pam.parse.load_travel_diary()` function loads Travel Diaries to create Activity Plans. At the 
-moment loading up simple plans (ie those that start and end at home is easy). But for non 
-standard plans, such as those belonging to night workers, that don't start and end from home,
- the logic can break.
-
-Dummy Travel Plans data with challenge edge cases can be found in 
-`pam/tests/test_data/simple_travel_diaries.csv`. The challenge for creating activity plans is to 
-**infer** the type of activities between trips (ie 
-home, shopping, work). All activity plans are restricted to one day and must start and end with 
-an activity.
-
-#### Challenge Criteria
-
-There are tests -> the more you can get running as `PASSED` the better you are doing. Run tests 
-using pytest, ie:
-
-```
-$ pytest -v
-```
-
-You should find some tests in `tests/test_3_parse_challenge.py` are failing. This challenge set of 
-tests represents edge cases for the standard travel diary parser: `pam.parse.load_travel_diary()`
- - the challenge is to adjust `pam.parse.load_travel_diary()` to get as many tests passing without 
- breaking ANY tests that were previously working.
-
-#### Rules
-
-Clone project and work in your own branch.
-
-Please work within the `pam.parse` module only.
-
-New edge case tests are expected to be added over time.
-
 ### The Code
 
 For a quick start at the code, checkout the 
@@ -173,6 +138,44 @@ Help gladly received as an
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can email fred.shone@arup.com.
  
+### Hack/Challenge
+
+We are maintaining an ongoing hack for people who want to dip in:
+
+The `pam.parse.load_travel_diary()` function loads Travel Diaries to create Activity Plans. At the 
+moment loading up simple plans (ie those that start and end at home is easy). But for non 
+standard plans, such as those belonging to night workers, that don't start and end from home,
+ the logic can break.
+
+Dummy Travel Plans data with challenge edge cases can be found in 
+`pam/tests/test_data/simple_travel_diaries.csv`. The challenge for creating activity plans is to 
+**infer** the type of activities between trips (ie 
+home, shopping, work). All activity plans are restricted to one day and must start and end with 
+an activity.
+
+#### Challenge Criteria
+
+There are tests -> the more you can get running as `xpassed` the better you are doing. Run tests 
+using pytest, ie:
+
+```
+$ pytest -v
+```
+
+You should find some tests in `tests/test_3_parse_challenge.py` are failing or `xfailing` (aka 
+expected to fail). This challenge set of 
+tests represents edge cases for the standard travel diary parser: `pam.parse.load_travel_diary()`
+ - the challenge is to adjust `pam.parse.load_travel_diary()` to get as many tests passing without 
+ breaking ANY tests that were previously working.
+
+#### Rules
+
+Clone project and work in your own branch.
+
+Please work within the `pam.parse` module only.
+
+New edge case tests are expected to be added over time as they are encountered.
+ 
 ## Installation
 
 assuming python ~3.7 and using git:
@@ -184,7 +187,11 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+We known that requirements are already available in a up to date Anaconda installation.
+
 ## Why Activity Plans?
+
+ ![example-activity-plans](resources/example-activity-plans.png) 
 
 1. They are the ideal mechanism for applying changes, allowing for example, 
 consideration of joint dis-aggregate features, such as activity time + activity type + 
@@ -211,6 +218,8 @@ The project methodology is as follows:
 3. Rebuild Travel Diary format from altered activity plans
 4. Review changes to population activities (ie check summary statistics)
 5. Convert to other formats such as O-D matrices if required
+
+ ![pam-structure](resources/pam-structure.png) 
 
 ## Project Structure
 
