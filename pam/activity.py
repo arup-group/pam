@@ -90,6 +90,13 @@ class Plan:
         return True
 
     def position_of(self, target='home', search='last'):
+        """
+        Return position of target activity type (either first or last depending on search).
+        Return None if not found.
+        :param target: str
+        :param search: str {'first', 'last'}
+        :return: {int, None}
+        """
 
         if search not in ['last', 'first']:
             raise UserWarning("Method only supports search types 'first' or 'last'.")
@@ -145,95 +152,136 @@ class Plan:
 
     def remove_activity(self, seq):
         """
-        Remove an activity from plan at given seq.
-        Check for wrapped removal.
-        Return (adjusted) idx of previous and subsequent activities as a tuple
-        :param seq:
+        Remove an activity from plan at given seq. Does not remove adjacent legs
+        Will also check if an activity is wrapped and remove accordingly. Returns (adjusted) idx
+        of previous (p_idx) and subsequent (s_idx) activities as a tuple. If there is no previous
+        or subsequent activity, ie a removed activity is at the start or end of an open plan,
+        then None can be returned. If all activities are removed then None, None is returned.
+        :param seq: int
         :return: tuple
         """
         assert isinstance(self.day[seq], Activity)
 
-        if (seq == 0 or seq == self.length - 1) and self.closed:  # remove pair
+        if seq == 0 and seq == self.length - 1:  # remove activity that is entire plan
+            self.day.pop(0)
+            return None, None
+
+        if (seq == 0 or seq == self.length - 1) and self.closed:  # remove activity that wraps
             self.day.pop(0)
             self.day.pop(self.length - 1)
             return self.length-2, 1
 
-        elif seq == 0:  # remove first act
+        if seq == 0:  # remove first activity
             self.day.pop(seq)
             return None, 1
 
-        elif seq == self.length - 1:  # remove last act
+        if seq == self.length - 1:  # remove last activity
             self.day.pop(seq)
             return self.length-2, None
 
-        else:  # remove act is somewhere in middle of plan
+        else:  # remove activity somewhere in middle of plan
             self.day.pop(seq)
             return seq-2, seq+1
 
-    def fill_plan(self, p_idx, s_idx, default='home'):
+    def fill_plan(self, idx_start, idx_end, default='home'):
         """
-        Fill a plan after Activity has been removed.
-        :param p_idx: location of previous Activity
-        :param s_idx: location of subsequent Activity
-        :param default:
+        Fill a plan after Activity has been removed. Plan is filled between given remaining
+        activity locations (idx_start and idx_end). Note that the plan will also have legs that
+        need to be removed.
+        :param idx_start: location of previous Activity
+        :param idx_end: location of subsequent Activity
+        :param default: Not Used
         :return: True
         """
-
-        if p_idx is not None and s_idx is not None:  # regular middle of plan activity
-
-            if self.day[p_idx] == self.day[s_idx]:  # combine activities
-
-                if p_idx == s_idx:  # this is a single remaining activity -> stay at home
-
-                    if self.position_of(target='home') is None:
-                        raise ValueError(
-                            "Require home activity"
-                        )
-                    self.stay_at_home()
-                    return True
-
-                if s_idx < p_idx:  # this is a wrapped activity --> close it
-                    # todo probably don't need to pass the idx - know that it must be first and last
-                    self.combine_wrapped_activities(p_idx, s_idx)
-                    return True
-
-                # this is a regular non wrapped mid plan activity -> combine acts
-                self.combine_matching_activities(p_idx, s_idx)
-                return True
-
-            # this plan cannot be closed - the proceeding and subs acts are not the same
-
-            if s_idx < p_idx:  # this is a wrapped activity --> close it
-                self.day.pop(0)  # remove start leg
-                self.day.pop(-1)  # remove end leg
-
-                pivot_idx = self.position_of(target='home')
-                if pivot_idx is None:
-                    raise NotImplementedError("Cannot fill plan without existing home activity")
-
-                self.expand(pivot_idx)
-                return True
-
-            # need to change first leg for new destination
-            self.join_activities(p_idx, s_idx)
+        if idx_start is None and idx_end is None:  # Assume stay at home
+            self.stay_at_home()
             return True
 
-        # todo can both p_idx and s_idx be None? ie if a removed act is entire plan?
-
-        if p_idx is None:  # start of day non wrapping
+        if idx_start is None:  # start of day non wrapping
             self.day.pop(0)
-            self.expand(s_idx-1)  # shifted because we popped index 0
+            self.expand(idx_end - 1)  # shifted because we popped index 0
             return True
 
-        if s_idx is None:  # end of day non wrapping
+        if idx_end is None:  # end of day non wrapping
             self.day.pop(-1)
-            self.expand(p_idx)
+            self.expand(idx_start)
             return True
 
-    def join_activities(self, p_idx, s_idx):
-        """Join two Activities with new Leg, expand last home activity"""
-        self.day[p_idx + 1].end_area = self.day[s_idx - 1].end_area
-        self.day.pop(s_idx - 1)  # remove second leg
+        if idx_start == idx_end:  # this is a single remaining activity -> stay at home
+
+            if self.position_of(target='home') is None:
+                raise ValueError(
+                    "Require home activity"
+                )
+            self.stay_at_home()
+            return True
+
+        if self.day[idx_start] == self.day[idx_end]:  # combine activities
+            """
+            These activities are the same (based on type and location), so can be combined, 
+            but there are 2 sub cases:
+            i) idx_start < idx_end -> wrapped combine
+            ii) else -> regular combine can ignore wrapping
+            """
+
+            if idx_end < idx_start:  # this is a wrapped activity --> close it
+                # todo probably don't need to pass the idx - know that it must be first and last
+                self.combine_wrapped_activities(idx_start, idx_end)
+                return True
+
+            # this is a regular non wrapped mid plan activity -> combine acts
+            self.combine_matching_activities(idx_start, idx_end)
+            return True
+
+        """
+        Remaining are plans where the activities are different so fill not be combined, instread 
+        we will use 'expand' to refill the plan. There are 2 sub cases:
+        i) idx_start < idx_end -> wrapped combine
+        ii) else -> regular combine can ignore wrapping
+        """
+
+        if idx_end < idx_start:  # this is a wrapped activity --> close it
+            self.day.pop(0)  # remove start leg
+            self.day.pop(-1)  # remove end leg
+
+            pivot_idx = self.position_of(target='home')
+            if pivot_idx is None:
+                raise NotImplementedError("Cannot fill plan without existing home activity")
+
+            self.expand(pivot_idx)
+            return True
+
+        # need to change first leg for new destination
+        self.join_activities(idx_start, idx_end)
+        return True
+
+    def expand(self, pivot_idx):
+        """
+        Fill plan by expanding a pivot activity.
+        :param pivot_idx: int
+        :return: None
+        """
+        # todo this isn't great - just pushes other activities to edges of day
+
+        new_time = mtdt(0)
+        for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
+            new_time = self.day[seq].shift_start_time(new_time)
+
+        new_time = mtdt(24*60-1)
+        for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
+            new_time = self.day[seq].shift_end_time(new_time)
+
+        self.day[pivot_idx].end_time = new_time  # expand pivot
+
+    def join_activities(self, idx_start, idx_end):
+        """
+        Join together two Activities with new Leg, expand last home activity.
+        :param idx_start:
+        :param idx_end:
+        :return:
+        """
+        self.day[idx_start + 1].end_area = self.day[idx_end - 1].end_area
+        self.day.pop(idx_end - 1)  # remove second leg
 
         # todo add logic to change mode and time of leg
 
@@ -246,35 +294,32 @@ class Plan:
 
         self.expand(pivot_idx)
 
-    def combine_matching_activities(self, p_idx, s_idx):
-        """Combine given Activities, remove surplus Legs"""
-        self.day[p_idx].end_time = self.day[s_idx].end_time  # extend proceeding act
-        self.day.pop(s_idx)  # remove subsequent activity
-        self.day.pop(s_idx - 1)  # remove subsequent leg
-        self.day.pop(p_idx + 1)  # remove proceeding leg
+    def combine_matching_activities(self, idx_start, idx_end):
+        """
+        Combine two given activities into same activity, remove surplus Legs
+        :param idx_start:
+        :param idx_end:
+        :return:
+        """
+        self.day[idx_start].end_time = self.day[idx_end].end_time  # extend proceeding act
+        self.day.pop(idx_end)  # remove subsequent activity
+        self.day.pop(idx_end - 1)  # remove subsequent leg
+        self.day.pop(idx_start + 1)  # remove proceeding leg
 
-    def combine_wrapped_activities(self, p_idx, s_idx):
-        """Combine given Activities, remove surplus Legs"""
+    def combine_wrapped_activities(self, idx_start, idx_end):
+        """
+        Combine two given activities that will wrap around day, remove surplus Legs
+        :param idx_start:
+        :param idx_end:
+        :return:
+        """
         # extend proceeding act to end of day
-        self.day[p_idx].end_time = mtdt(24 * 60 - 1)
+        self.day[idx_start].end_time = mtdt(24 * 60 - 1)
         # extend subsequent act to start of day
-        self.day[s_idx].start_time = mtdt(0)
-        self.day.pop(p_idx + 1)  # remove proceeding leg
-        self.day.pop(s_idx - 1)  # remove subsequent leg
+        self.day[idx_end].start_time = mtdt(0)
+        self.day.pop(idx_start + 1)  # remove proceeding leg
+        self.day.pop(idx_end - 1)  # remove subsequent leg
         return True
-
-    def expand(self, pivot_idx):
-        # todo this isn't great - just pushes other activities to edges of day
-
-        new_time = mtdt(0)
-        for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
-            new_time = self.day[seq].shift_start_time(new_time)
-
-        new_time = mtdt(24*60-1)
-        for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
-            new_time = self.day[seq].shift_end_time(new_time)
-
-        self.day[pivot_idx].end_time = new_time  # expand pivot
 
     def stay_at_home(self):
         self.day = [
@@ -295,12 +340,24 @@ class PlanComponent:
         return self.end_time - self.start_time
 
     def shift_start_time(self, new_start_time):
+        """
+        Given a new start time, set start time, set end time based on previous duration and
+        return new end time.
+        :param new_start_time: datetime
+        :return: datetime
+        """
         duration = self.duration
         self.start_time = new_start_time
         self.end_time = new_start_time + duration
         return self.end_time
 
     def shift_end_time(self, new_end_time):
+        """
+        Given a new end time, set end time, set start time based on previous duration and
+        return new start time.
+        :param new_end_time: datetime
+        :return: datetime
+        """
         duration = self.duration
         self.end_time = new_end_time
         self.start_time = new_end_time - duration

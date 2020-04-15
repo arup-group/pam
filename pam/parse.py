@@ -7,8 +7,6 @@ from .utils import minutes_to_datetime as mtdt
 
 def load_travel_diary(trips_df, attributes_df):
 
-    # todo deal with attributes_df
-
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
     format.
@@ -16,8 +14,8 @@ def load_travel_diary(trips_df, attributes_df):
     :param attributes_df: DataFrame
     :return: core.Population
     """
-
     # TODO check for required col headers and give useful error?
+
     if not isinstance(trips_df, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
