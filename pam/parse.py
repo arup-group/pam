@@ -66,7 +66,7 @@ def load_travel_diary(trips_df, attributes_df):
                         start_time=mtdt(trip.tst),
                         end_time=mtdt(trip.tet)
                     )
-                )
+                ) 
 
                 if n==(len(trips)-1):
                     # the last activity needs to be either home or work
