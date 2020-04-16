@@ -50,10 +50,12 @@ def load_travel_diary(trips_df, attributes_df):
                 )
             )
 
-            for n in range(len(trips)):
+            for n in range(0,len(trips)):
                 trip = trips.iloc[n]
 
                 destination_activity = trip.purp
+                destination_activity_previous = trips.iloc[n-1].purp if n>0 else None # destination activity one leg back
+                destination_activity_next = trips.iloc[n+1].purp if n<len(trips)-1 else None # destination activity one leg forward 
 
                 person.add(
                     Leg(
@@ -66,32 +68,48 @@ def load_travel_diary(trips_df, attributes_df):
                     )
                 )
 
-                if destination_activity in activities and activity_map.get(
-                        trip.dzone):  # assume return trip to this activity
+                if n==(len(trips)-1):
+                    # the last activity needs to be either home or work
                     person.add(
                         Activity(
-                            seq=n + 1,
-                            act=activity_map[trip.dzone],
+                            seq=n,
+                            act='home' if trip.hzone==trip.dzone else 'work',
                             area=trip.dzone,
                             start_time=mtdt(trip.tet),
                         )
                     )
-
+                elif destination_activity == destination_activity_previous:
+                    # a return trip ends in a home or work activity
+                    person.add(
+                        Activity(
+                            seq=n,
+                            act='home' if trip.hzone==trip.dzone else 'work',
+                            area=trip.dzone,
+                            start_time=mtdt(trip.tet),
+                        )
+                    )
+                elif destination_activity == destination_activity_next:
+                    # either in the middle of a return trip or in home
+                    person.add(
+                        Activity(
+                            seq=n,
+                            act='home' if trip.hzone==trip.dzone else trip.purp,
+                            area=trip.dzone,
+                            start_time=mtdt(trip.tet),
+                        )
+                    )
                 else:
                     person.add(
                         Activity(
-                            seq=n + 1,
+                            seq=n,
                             act=trip.purp,
                             area=trip.dzone,
                             start_time=mtdt(trip.tet),
                         )
                     )
 
-                    if trip.dzone not in activity_map:  # update history
-                        # only keeping first activity at each location to ensure returns home
-                        activity_map[trip.dzone] = trip.purp
 
-                    activities.append(destination_activity)
+
 
             household.add(person)
 
