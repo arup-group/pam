@@ -120,6 +120,7 @@ def population_heh():
             end_time=mtdt(24 * 60 - 1)
         )
     )
+    person.plan.autocomplete_matsim()
     household = Household('0')
     household.add(person)
     population = Population()

@@ -75,8 +75,8 @@ def write_matsim_plans(population, location, comment=None):
 				if isinstance(component, Activity):
 					et.SubElement(plan_xml, 'act', {
 						'type': component.act,
-						'x': str(int(component.loc.x)),
-						'y': str(int(component.loc.y)),
+						'x': str(int(component.location.loc.x)),
+						'y': str(int(component.location.loc.y)),
 						'end_time': dttm(component.end_time)
 					}
 				)

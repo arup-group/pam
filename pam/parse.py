@@ -107,7 +107,14 @@ def load_travel_diary(trips_df, attributes_df):
 	return population
 
 
-def read_matsim(plans_path, attributes_path, weight=1000, household_key=None, simplify_pt_trips=False):
+def read_matsim(
+	plans_path,
+	attributes_path,
+	weight=1000,
+	household_key=None,
+	simplify_pt_trips=False,
+	autocomplete=True
+	):
 	"""
 	Load a MATSim format population into core population format.
 	It is possible to maintain the unity of housholds using a household uid in 
@@ -194,6 +201,9 @@ def read_matsim(plans_path, attributes_path, weight=1000, household_key=None, si
 
 		if simplify_pt_trips:
 			person.plan.simplify_pt_trips()
+
+		if autocomplete:
+			person.plan.autocomplete_matsim()
 
 		"""
 		Check if using households, then update population accordingly.
