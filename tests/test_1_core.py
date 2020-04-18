@@ -1,9 +1,10 @@
 import pytest
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
+from pam.utils import timedelta_to_matsim_time as tdtm
 
 
 testdata = [
@@ -19,12 +20,24 @@ def test_minutes_to_dt(m, expected):
     assert mtdt(m) == expected
 
 
+testdata = [
+    (timedelta(seconds=0), "00:00:00"),
+    (timedelta(hours=1), "01:00:00"),
+    (timedelta(hours=11, minutes=1, seconds=3), "11:01:03"),
+]
+
+
+@pytest.mark.parametrize("td,expected", testdata)
+def test_td_to_matsim_string(td, expected):
+    assert tdtm(td) == expected
+
+
 def test_population_add_household():
     population = Population()
     household = Household(1)
     population.add(household)
     assert len(population.households) == 1
-    assert list(population.households) == [1]
+    assert list(population.households) == ['1']
 
 
 def test_household_add_person():
@@ -33,7 +46,7 @@ def test_household_add_person():
     person.add(Activity(1, 'home', 1, start_time=0))
     household.add(person)
     assert len(household.people) == 1
-    assert list(household.people) == [1]
+    assert list(household.people) == ['1']
 
 
 def test_person_add_activity():

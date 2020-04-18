@@ -119,9 +119,9 @@ def test_home_education_home_removal_of_education_act(person_home_education_home
 
     policy = modify.RemoveActivity(activities=['education'], probability=1)
     policy.apply_to(household)
-    assert [p.act for p in household.people[1].activities] == ['home']
-    assert household.people[1].plan[0].start_time == mtdt(0)
-    assert household.people[1].plan[0].end_time == mtdt(24*60-1)
+    assert [p.act for p in household.people['1'].activities] == ['home']
+    assert household.people['1'].plan[0].start_time == mtdt(0)
+    assert household.people['1'].plan[0].end_time == mtdt(24*60-1)
 
 
 def test_home_education_home_education_home_removal_of_education_act():
@@ -217,9 +217,9 @@ def test_home_education_home_education_home_removal_of_education_act():
 
     policy = modify.RemoveActivity(activities=['education'], probability=1)
     policy.apply_to(household)
-    assert [p.act for p in household.people[1].activities] == ['home']
-    assert household.people[1].plan[0].start_time == mtdt(0)
-    assert household.people[1].plan[0].end_time == mtdt(24*60-1)
+    assert [p.act for p in household.people['1'].activities] == ['home']
+    assert household.people['1'].plan[0].start_time == mtdt(0)
+    assert household.people['1'].plan[0].end_time == mtdt(24*60-1)
 
 
 def test_home_work_home_education_home_removal_of_education_act():
@@ -315,6 +315,6 @@ def test_home_work_home_education_home_removal_of_education_act():
 
     policy = modify.RemoveActivity(activities=['education'], probability=1)
     policy.apply_to(household)
-    # assert [p.act for p in household.people[1].activities] == ['home', 'work', 'home']
-    # assert household.people[1].plan[0].start_time == minutes_to_datetime(0)
-    # assert household.people[1].plan[0].end_time == minutes_to_datetime(24*60-1)
+    assert [p.act for p in household.people['1'].activities] == ['home', 'work', 'home']
+    assert household.people['1'].plan[0].start_time == mtdt(0)
+    assert household.people['1'].plan[-1].end_time == mtdt(24*60-1)

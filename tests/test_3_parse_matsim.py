@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from pam.parse import load_attributes_map, load_matsim, write_matsim
+from pam.parse import load_attributes_map, read_matsim
 
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
@@ -26,17 +26,17 @@ def test_load_attributes_map():
         }
 
 def test_parse_simple_matsim():
-   population = load_matsim(test_trips_path, test_attributes_path)
+   population = read_matsim(test_trips_path, test_attributes_path)
    person = population['census_0']['census_0']
    assert person.has_valid_plan
 
 def test_parse_complex_matsim():
-   population = load_matsim(test_trips_path, test_attributes_path)
+   population = read_matsim(test_trips_path, test_attributes_path)
    person = population['census_1']['census_1']
    assert person.has_valid_plan
 
 def test_remove_pt_interactions():
-    population = load_matsim(test_trips_path, test_attributes_path)
+    population = read_matsim(test_trips_path, test_attributes_path)
     person = population['census_1']['census_1']
     person.plan.simplify_pt_trips()
     assert 'pt interaction' not in [a.act for a in person.activities]

@@ -14,3 +14,4 @@ scratch/
 tests/.DS_Store
 tests/__pycache__/
 tests/test_data/.DS_Store
+.vscode/

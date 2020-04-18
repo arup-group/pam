@@ -1,11 +1,15 @@
 import pandas as pd
 from shapely.geometry import Point
 from datetime import datetime, timedelta
+from lxml import etree as et
+import os
+import gzip
 
 from .core import Population, Household, Person
 from .activity import Plan, Activity, Leg
 from .utils import minutes_to_datetime as mtdt
-from .utils import get_elems
+from .utils import datetime_to_matsim_time as dttm
+from .utils import get_elems, write_xml
 
 
 def load_travel_diary(trips_df, attributes_df):
@@ -103,17 +107,7 @@ def load_travel_diary(trips_df, attributes_df):
 	return population
 
 
-def write_travel_plan(population):
-	"""
-	Write a core population object to the standard population tabular formats.
-	:param population: core.Population
-	:return: None
-	"""
-	# todo
-	raise NotImplementedError
-
-
-def load_matsim(plans_path, attributes_path, weight=1000, household_key=None, simplify_pt_trips=False):
+def read_matsim(plans_path, attributes_path, weight=1000, household_key=None, simplify_pt_trips=False):
 	"""
 	Load a MATSim format population into core population format.
 	It is possible to maintain the unity of housholds using a household uid in 
@@ -150,7 +144,7 @@ def load_matsim(plans_path, attributes_path, weight=1000, household_key=None, si
 				loc = None
 				x, y = stage.get('x'), stage.get('y')
 				if x and y:
-					loc = Point(float(x), float(y))
+					loc = Point(int(float(x)), int(float(y)))
 
 				if act_type == 'pt interaction':
 					departure_dt = arrival_dt + timedelta(seconds=0.)  # todo this seems to be the case in matsim for pt interactions
@@ -243,28 +237,3 @@ def selected_plans(plans_path):
 		for plan in person:
 			if plan.get('selected') == 'yes':
 				yield person.get('id'), plan
-
-
-def write_matsim(population):
-	"""
-	Write a core population object to matsim xml formats.
-	:param population: core.Population
-	:return: None
-	"""
-	# todo
-	raise NotImplementedError
-
-
-def write_od_matrices(population, type_seg=None, mode_seg=None, time_seg=None):
-	"""
-	Write a core population object to tabular O-D weighted matrices.
-	Optionally segment matrices by type of journey (most likelly based on occupation),
-	mode and/or time (ie peaks).
-	:param population: core.Population
-	:param type_seg: segmentation option tbc
-	:param mode_seg: segmentation option tbc
-	:param time_seg: segmentation option tbc
-	:return: None
-	"""
-	# todo
-	raise NotImplementedError

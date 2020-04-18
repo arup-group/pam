@@ -68,6 +68,17 @@ class Plan:
     def __getitem__(self, val):
         return self.day[val]
 
+    def __eq__(self, other):
+        """
+        Note that this only checks for equality of location and activity
+        """
+        if not isinstance(other, Plan):
+            raise UserWarning(f"Cannot compare plan to non plan ({type(other)})")
+        for i, j in zip(self, other):
+            if not i == j:
+                return False
+        return True
+
     @property
     def is_valid(self):
         """
@@ -475,3 +486,7 @@ class Leg(PlanComponent):
         return f"Leg({self.seq} mode:{self.mode}, area:{start} --> " \
                f"{end}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
+
+    def __eq__(self, other):
+        return (other.mode, other.duration) == (self.mode, self.duration)
+
