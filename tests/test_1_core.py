@@ -7,10 +7,10 @@ from pam.utils import minutes_to_datetime as mtdt
 
 
 testdata = [
-    (0, datetime(2020, 4, 2, 0, 0)),
-    (30, datetime(2020, 4, 2, 0, 30)),
-    (300, datetime(2020, 4, 2, 5, 0)),
-    (330, datetime(2020, 4, 2, 5, 30)),
+    (0, datetime(1900, 1, 1, 0, 0)),
+    (30, datetime(1900, 1, 1, 0, 30)),
+    (300, datetime(1900, 1, 1, 5, 0)),
+    (330, datetime(1900, 1, 1, 5, 30)),
 ]
 
 

@@ -9,6 +9,11 @@ class Population:
         assert isinstance(household, Household)
         self.households[household.hid] = household
 
+    def get(self, hid, default=None):
+        return self.households.get(hid, default)
+
+    def __getitem__(self, hid):
+        return self.households[hid]
 
 class Household:
     def __init__(self, hid):
@@ -21,6 +26,11 @@ class Household:
         self.people[person.pid] = person
         self.area = person.home
 
+    def get(self, pid, default=None):
+        return self.people.get(pid, default)
+
+    def __getitem__(self, pid):
+        return self.people[pid]
 
 class Person:
     def __init__(self, pid, freq=1, attributes=None):
@@ -61,12 +71,12 @@ class Person:
             yield component
 
     @property
-    def valid_plan(self):
+    def has_valid_plan(self):
         """
         Check sequence of Activities and Legs.
         :return: True
         """
-        return self.plan.validate()
+        return self.plan.is_valid
 
     @property
     def closed_plan(self):
@@ -101,8 +111,12 @@ class Person:
     def clear_plan(self):
         self.plan.clear()
 
-    def print_plan(self):
+    def print(self):
+        print(self)
         self.plan.print()
+
+    def __str__(self):
+        return f"Person: {self.pid}"
 
     def remove_activity(self, seq):
         """

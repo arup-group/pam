@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v5.dtd">
+
+<population>
+
+  <!--Simple-->
+  <person id="census_0">
+    <plan selected="yes">
+      <activity end_time="07:24:52" type="home" x="515226" y="188222"/>
+      <leg mode="pt"/>
+      <activity end_time="14:50:52" type="work" x="529652" y="183897"/>
+      <leg mode="pt"/>
+      <activity type="home" x="515226" y="188222"/>
+    </plan>
+  </person>
+
+  <!--Complex-->
+  <person id="census_1">
+		<plan score="0" selected="yes">
+
+			<activity type="home" link="180642" x="547360.0" y="184166.0" end_time="06:30:00" >
+			</activity>
+
+			<leg mode="transit_walk" trav_time="02:08:15">
+				<route type="generic" start_link="180642" end_link="32548" trav_time="02:08:15" distance="6412.774689633186"></route>
+			</leg>
+
+			<activity type="work" link="32548" x="550873.0" y="187629.0" end_time="20:30:00" >
+			</activity>
+
+			<leg mode="transit_walk" trav_time="00:25:49">
+				<route type="generic" start_link="32548" end_link="25821" trav_time="00:25:49" distance="1290.8518618550518"></route>
+			</leg>
+
+			<activity type="pt interaction" link="25821" x="551390.8391405012" y="188476.2414565296" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="pt" trav_time="00:24:10">
+				<route type="experimentalPt1" start_link="25821" end_link="302438" trav_time="00:24:10" distance="5952.837240642621">PT1===9100ROMFORD.link:25821===25239===VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf===9100UPMNSP6.link:302438</route>
+			</leg>
+
+			<activity type="pt interaction" link="302438" x="556131.9354637784" y="186870.34931866155" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="transit_walk" trav_time="00:00:15">
+				<route type="generic" start_link="302438" end_link="84556" trav_time="00:00:15" distance="13.313249875882622"></route>
+			</leg>
+
+			<activity type="pt interaction" link="84556" x="556131.9038126664" y="186860.10840612976" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="pt" trav_time="00:18:44">
+				<route type="experimentalPt1" start_link="84556" end_link="15983" trav_time="00:18:44" distance="12049.487855026298">PT1===9100UPMNSTR.link:84556===162===VJd0adc2f9ee1d3687b3a36b84ff2a2e4c7b31f621===9100BARKING.link:15983</route>
+			</leg>
+
+			<activity type="pt interaction" link="15983" x="544411.906859402" y="184340.16751740774" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="transit_walk" trav_time="00:00:00">
+				<route type="generic" start_link="15983" end_link="15984" trav_time="00:00:00" distance="0.0"></route>
+			</leg>
+
+			<activity type="pt interaction" link="15984" x="544411.906859402" y="184340.16751740774" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="pt" trav_time="00:05:00">
+				<route type="experimentalPt1" start_link="15984" end_link="280957" trav_time="00:05:00" distance="5731.3164342657765">PT1===9100BARKING.link:15984===723===VJc808d717b38ec29c015695e5d4ff576e79af623f===9100DGNHMDC.link:280957</route>
+			</leg>
+
+			<activity type="pt interaction" link="280957" x="548976.9444115239" y="182980.17501431174" max_dur="00:00:00" >
+			</activity>
+
+			<leg mode="transit_walk" trav_time="00:52:08">
+				<route type="generic" start_link="280957" end_link="180642" trav_time="00:52:08" distance="2606.7156181722307"></route>
+			</leg>
+
+			<activity type="home" link="180642" x="547360.0" y="184166.0" >
+			</activity>
+
+		</plan>
+
+		<plan score="0" selected="no">
+
+			<activity type="home" link="180642" x="547360.0" y="184166.0" end_time="06:30:00" >
+			</activity>
+
+			<leg mode="car" dep_time="06:30:00" trav_time="00:12:28">
+				<route type="links" start_link="180642" end_link="32548" trav_time="00:12:28" distance="7950.6546778227475">180642 106753 106751 106749 106747 124601 124603 124605 124607 124609 124611 124613 124615 246399 246405 154692 154690 154722 154720 154718 154716 154714 154712 154710 154708 154706 154655 178859 154645 154646 154647 154648 154649 154650 127824 302065 302066 302067 302068 144536 144439 166539 166537 166535 166533 166531 166529 166527 166525 166523 166521 166519 166517 166511 166452 151871 166674 151877 176587 125236 125234 125232 10759 69916 223978 236848 151875 152091 152089 152087 63193 63191 63189 63187 63394 63392 63390 63388 63199 63197 46850 155914 270284 155907 155908 155904 167152 167150 167148 32549 32548</route>
+			</leg>
+
+			<activity type="work" link="32548" x="550873.0" y="187629.0" end_time="20:30:00" >
+			</activity>
+
+			<leg mode="car" dep_time="20:30:00" trav_time="00:09:28">
+				<route type="links" start_link="32548" end_link="180642" trav_time="00:09:28" distance="7548.4952963747755">32548 167147 167149 167151 155903 144297 155909 155911 270283 155913 46849 63196 63198 63387 63389 63391 63393 63186 63188 63190 63192 152086 152088 152090 151727 236706 236807 236809 165633 69915 10758 125231 125233 125235 176586 223948 223949 280841 166510 329587 153415 123725 94180 326584 304482 304480 304498 304496 304494 235113 235111 235109 235107 235119 235117 235115 67681 67674 67672 67670 67668 304514 304512 304510 304508 154382 66368 242513 326600 154124 178857 154656 154705 154707 154709 154711 154713 154715 154717 154719 154721 154689 154691 246404 246398 124616 124614 124612 124610 124608 124606 124604 124602 106746 106748 106750 106752 180643 180642</route>
+			</leg>
+
+			<activity type="home" link="180642" x="547360.0" y="184166.0" >
+			</activity>
+
+		</plan>
+
+	</person>
+
+</population>

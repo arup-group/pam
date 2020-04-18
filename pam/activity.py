@@ -31,7 +31,7 @@ class Plan:
         Check if plan starts and stops at the same facility (based on activity and location)
         :return: Bool
         """
-        if (self.day[0].act, self.day[0].area) == (self.day[-1].act, self.day[-1].area):
+        if self.day[0] == self.day[-1]:
             return True
         return False
 
@@ -55,13 +55,21 @@ class Plan:
         for component in self.day:
             yield component
 
+    def reversed(self):
+        """
+        Reverse iterate through plan, yield idx and component.
+        """
+        for i in range(self.length-1, -1, -1):
+            yield i, self[i]
+
     def __len__(self):
         return self.length
 
     def __getitem__(self, val):
         return self.day[val]
 
-    def validate(self):
+    @property
+    def is_valid(self):
         """
         Check sequence of Activities and Legs.
         :return: True
@@ -332,6 +340,32 @@ class Plan:
             )
         ]
 
+    def simplify_pt_trips(self):
+        """
+        Remove pt interaction events (resulting from complex matsim plans), simplify legs
+        to single leg with mode = pt
+        """
+        pt_trip = False
+        for idx, component in list(self.reversed()):
+            if component.act == "pt interaction":  # this is a pt trip
+                if not pt_trip:  # this is a new pt leg
+                    trip_end_time = self[idx+1].end_time
+                    trip_end_loc = self[idx+1].end_loc
+                    trip_end_link = self[idx+1].end_link
+                    trip_end_area = self[idx+1].end_area
+
+                pt_trip = True
+                self.day.pop(idx+1)
+                self.day.pop(idx)
+            else:
+                if pt_trip:  # this is the start of the pt trip - modify the first leg
+                    self[idx].mode = 'pt'
+                    self[idx].end_time = trip_end_time
+                    self[idx].end_loc = trip_end_loc
+                    self[idx].end_link = trip_end_link
+                    self[idx].end_area = trip_end_area
+                pt_trip = False
+
 
 class PlanComponent:
 
@@ -366,20 +400,42 @@ class PlanComponent:
 
 class Activity(PlanComponent):
 
-    def __init__(self, seq=None, act=None, area=None, start_time=None, end_time=None):
+    def __init__(
+            self,
+            seq=None,
+            act=None,
+            loc=None,
+            link=None,
+            area=None,
+            start_time=None,
+            end_time=None
+            ):
         self.seq = seq
         self.act = act
+        self.loc = loc
+        self.link = link
         self.area = area
         self.start_time = start_time
         self.end_time = end_time
 
     def __str__(self):
-        return f"Activity(act:{self.act}, area:{self.area}, " \
+        location = self.loc
+        if self.area:
+            location = self.area
+        return f"Activity({self.seq} act:{self.act}, location:{location}, " \
                f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
 
     def __eq__(self, other):
-        return (other.act, other.area) == (self.act, self.area)
+        if self.loc and other.loc:
+            return (other.act, other.loc) == (self.act, self.loc)
+        if self.link and other.link:
+            return (other.act, other.link) == (self.act, self.link)
+        if self.area and other.area:
+            return (other.act, other.area) == (self.act, self.area)
+        raise UserWarning(
+    "Cannot check for act equality without same loc types (areas/locs/links)."
+    )
 
 
 class Leg(PlanComponent):
@@ -390,21 +446,32 @@ class Leg(PlanComponent):
             self,
             seq=None,
             mode=None,
+            start_loc=None,
+            end_loc=None,
+            start_link=None,
+            end_link=None,
             start_area=None,
             end_area=None,
             start_time=None,
             end_time=None,
     ):
-        # todo deal with times
-
         self.seq = seq
         self.mode = mode
+        self.start_loc=start_loc
+        self.end_loc=end_loc
+        self.start_link=start_link
+        self.end_link=end_link
         self.start_area = start_area
         self.end_area = end_area
         self.start_time = start_time
         self.end_time = end_time
 
     def __str__(self):
-        return f"Leg(mode:{self.mode}, area:{self.start_area} --> " \
-               f"{self.end_area}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
+        start, end = self.start_loc, self.end_loc
+        if self.start_area:
+            start = self.start_area
+        if self.end_area:
+            end = self.end_area
+        return f"Leg({self.seq} mode:{self.mode}, area:{start} --> " \
+               f"{end}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
