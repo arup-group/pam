@@ -36,16 +36,24 @@ def write_od_matrices(population, type_seg=None, mode_seg=None, time_seg=None):
 	raise NotImplementedError
 
 
-def write_matsim(population, location, comment=None):
+def write_matsim(
+	population,
+	plans_path,
+	attributes_path,
+	comment=None,
+	household_key=None
+	):
 	"""
 	Write a core population object to matsim xml formats.
-	Note that this requires activity locs to be set (shapely.geomerty.Point)
+	Note that this requires activity locs to be set (shapely.geomerty.Point).
+	Comment string is optional.
+	Set household_key of you wish to add household id to attributes.
 	:param population: core.Population
 	:return: None
 	"""
 	# note - these are written sequentially to reduce RAM required...
-	write_matsim_plans(population, location, comment)
-	write_matsim_attributes(population, location, comment)
+	write_matsim_plans(population, plans_path, comment)
+	write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
 
 
 def write_matsim_plans(population, location, comment=None):
@@ -81,7 +89,7 @@ def write_matsim_plans(population, location, comment=None):
 	# todo assuming v5?
 
 
-def write_matsim_attributes(population, location, comment=None):
+def write_matsim_attributes(population, location, comment=None, household_key=None):
 	
 	attributes_xml = et.Element('objectAttributes')  # start forming xml
 
@@ -90,12 +98,18 @@ def write_matsim_attributes(population, location, comment=None):
 		attributes_xml.append(et.Comment(comment))
 	attributes_xml.append(et.Comment(f"Created {datetime.today()}"))
 
-	for _, household in population:
+	for hid, household in population:
 		for pid, person in household:
 			person_xml = et.SubElement(attributes_xml, 'object', {'id': str(pid)})
-			for k, v in person.attributes.items():
+
+			attributes = person.attributes
+			if household_key:  # add hid to household_key if using household key
+				attributes[household_key] = hid
+
+			for k, v in attributes.items():
 				attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
 				attribute_xml.text = str(v)
+			
 
 	write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 	# todo assuming v1?

@@ -9,7 +9,7 @@ from pam.utils import minutes_to_datetime as mtdt
 @pytest.fixture
 def person_heh():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -69,7 +69,7 @@ def population_heh():
         'hh_size': 3,
         'inc': "high"
     }
-    person = Person(1, attributes=attributes)
+    person = Person('1', attributes=attributes)
     person.add(
         Activity(
             seq=1,
@@ -120,7 +120,7 @@ def population_heh():
             end_time=mtdt(24 * 60 - 1)
         )
     )
-    household = Household(0)
+    household = Household('0')
     household.add(person)
     population = Population()
     population.add(household)
@@ -130,7 +130,7 @@ def population_heh():
 @pytest.fixture
 def person_heh_open1():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -185,7 +185,7 @@ def person_heh_open1():
 @pytest.fixture
 def person_hew_open2():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -240,7 +240,7 @@ def person_hew_open2():
 @pytest.fixture
 def person_whw():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -295,7 +295,7 @@ def person_whw():
 @pytest.fixture
 def person_whshw():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -388,7 +388,7 @@ def person_whshw():
 @pytest.fixture
 def person_home_education_home():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -443,7 +443,7 @@ def person_home_education_home():
 @pytest.fixture
 def person_work_home_work_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -498,7 +498,7 @@ def person_work_home_work_closed():
 @pytest.fixture
 def person_work_home_shop_home_work_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -591,7 +591,7 @@ def person_work_home_shop_home_work_closed():
 @pytest.fixture
 def person_work_home_shop_home_work_not_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -684,7 +684,7 @@ def person_work_home_shop_home_work_not_closed():
 @pytest.fixture
 def person_work_home_work_not_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,

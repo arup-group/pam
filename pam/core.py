@@ -1,8 +1,11 @@
+import logging
 from .activity import Plan
 
 
 class Population:
+
 	def __init__(self):
+		self.logger = logging.getLogger(__name__)
 		self.households = {}
 
 	def add(self, household):
@@ -46,8 +49,14 @@ class Population:
 
 
 class Household:
+	logger = logging.getLogger(__name__)
+
 	def __init__(self, hid):
-		self.hid = str(hid)
+		
+		if not isinstance(hid, str):
+			hid = str(hid)
+			self.logger.warn(" converting household id to string")
+		self.hid = hid
 		self.people = {}
 		self.area = None
 
@@ -78,7 +87,13 @@ class Household:
 		return f"Household: {self.hid}"
 
 class Person:
+
+	logger = logging.getLogger(__name__)
+
 	def __init__(self, pid, freq=1, attributes=None):
+		if not isinstance(pid, str):
+			pid = str(pid)
+			self.logger.warn(" converting person id to string")
 		self.pid = str(pid)
 		self.freq = freq
 		self.attributes = attributes
