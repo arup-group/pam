@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from lxml import etree as et
 import os
 import gzip
+import pandas as pd
 
 from .core import Population, Household, Person
 from .activity import Plan, Activity, Leg
@@ -11,14 +12,37 @@ from .utils import timedelta_to_matsim_time as tdtm
 from .utils import get_elems, write_xml
 
 
-def write_travel_plan(population):
+def write_travel_diary(population, path, attributes_path=None):
 	"""
 	Write a core population object to the standard population tabular formats.
+	Only write attributes if given attributes_path.
 	:param population: core.Population
 	:return: None
 	"""
-	# todo
-	raise NotImplementedError
+	record = []
+	for hid, pid, person in population.people():
+		for seq, leg in enumerate(person.legs):
+			record.append(
+				{
+					'pid': pid,
+					'hid': hid,
+					'hzone': person.home,
+					'ozone': leg.start_location.area,
+					'dzone': leg.end_location.area,
+					'purp': person.plan[seq+1],  # todo this is not the same as the parse logic!!!
+					'mode': leg.mode,
+					'tst': leg.start_time,  # todo convert to min
+					'tet': leg.end_time,  # todo convert to min
+					'freq': person.freq,
+				}
+			)
+	pd.DataFrame(record).to_csv(path)
+
+	if attributes_path:
+		record = []
+		for hid, pid, person in population.people():
+			record.append(person.attributes)
+		pd.DataFrame(record).to_csv(attributes_path)
 
 
 def write_od_matrices(population, type_seg=None, mode_seg=None, time_seg=None):

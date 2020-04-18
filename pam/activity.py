@@ -11,7 +11,7 @@ class Plan:
 		if self.day:
 			for act in self.activities:
 				if act.act.lower() == 'home':
-					return act.location.min
+					return act.location.area
 
 	@property
 	def activities(self):

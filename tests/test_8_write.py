@@ -2,7 +2,7 @@ import os
 import pytest
 
 from .fixtures import population_heh
-from pam.write import write_matsim, write_matsim_plans, write_matsim_attributes
+from pam.write import write_travel_diary, write_matsim, write_matsim_plans, write_matsim_attributes
 from pam.parse import read_matsim
 
 
@@ -70,4 +70,9 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
 	complex_plan_out = population_out['census_1']['census_1'].plan
 
 	assert complex_plan_in == complex_plan_out
+
+
+def test_write_travel_plans(tmp_path, population_heh):
+	location = str(tmp_path / "test.csv")
+	write_travel_diary(population_heh, path=location)
 	
