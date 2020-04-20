@@ -1,4 +1,5 @@
 pam.egg-info/
+*.pptx
 .DS_Store
 .cache/
 .idea/
