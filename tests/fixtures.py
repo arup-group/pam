@@ -1,6 +1,7 @@
 import pytest
+from shapely.geometry import Point
 
-from pam.core import Person
+from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 
@@ -8,7 +9,7 @@ from pam.utils import minutes_to_datetime as mtdt
 @pytest.fixture
 def person_heh():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -59,11 +60,78 @@ def person_heh():
 
     return person
 
+@pytest.fixture
+def population_heh():
+    home_loc = Point(0,0)
+    education_loc = Point(110,110)
+    attributes = {
+        'hid': 0,
+        'hh_size': 3,
+        'inc': "high"
+    }
+    person = Person('1', attributes=attributes)
+    person.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            loc = home_loc,
+            start_time=mtdt(0),
+            end_time=mtdt(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(60),
+            end_time=mtdt(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='education',
+            area='b',
+            loc=education_loc,
+            start_time=mtdt(90),
+            end_time=mtdt(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=mtdt(120),
+            end_time=mtdt(180)
+        )
+    )
+    person.add(
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            loc=home_loc,
+            start_time=mtdt(180),
+            end_time=mtdt(24 * 60 - 1)
+        )
+    )
+    person.plan.autocomplete_matsim()
+    household = Household('0')
+    household.add(person)
+    population = Population()
+    population.add(household)
+    return population
+
 
 @pytest.fixture
 def person_heh_open1():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -118,7 +186,7 @@ def person_heh_open1():
 @pytest.fixture
 def person_hew_open2():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -173,7 +241,7 @@ def person_hew_open2():
 @pytest.fixture
 def person_whw():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -228,7 +296,7 @@ def person_whw():
 @pytest.fixture
 def person_whshw():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -321,7 +389,7 @@ def person_whshw():
 @pytest.fixture
 def person_home_education_home():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -376,7 +444,7 @@ def person_home_education_home():
 @pytest.fixture
 def person_work_home_work_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -431,7 +499,7 @@ def person_work_home_work_closed():
 @pytest.fixture
 def person_work_home_shop_home_work_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -524,7 +592,7 @@ def person_work_home_shop_home_work_closed():
 @pytest.fixture
 def person_work_home_shop_home_work_not_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,
@@ -617,7 +685,7 @@ def person_work_home_shop_home_work_not_closed():
 @pytest.fixture
 def person_work_home_work_not_closed():
 
-    person = Person(1)
+    person = Person('1')
     person.add(
         Activity(
             seq=1,

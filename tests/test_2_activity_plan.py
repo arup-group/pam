@@ -111,3 +111,16 @@ def test_finalise():
     plan.finalise()
     assert plan.day[0].end_time == mtdt(900)
     assert plan.day[-1].end_time == mtdt(24*60-1)
+
+
+def test_reverse_iter():
+    plan = Plan()
+    act = Activity(1, 'home', 1, start_time=mtdt(0))
+    plan.add(act)
+    leg = Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(900), end_time=mtdt(930))
+    plan.add(leg)
+    act = Activity(2, 'work', 1, start_time=mtdt(930))
+    plan.add(act)
+    idxs = list(i for i, c in plan.reversed())
+    assert idxs == [2,1,0]
+

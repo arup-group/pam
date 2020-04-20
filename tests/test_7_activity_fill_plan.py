@@ -13,7 +13,7 @@ def test_home_education_home_fill_activity(person_home_education_home):
     assert [p.act for p in person.activities] == ['home']
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
-    assert person.valid_plan
+    assert person.has_valid_plan
 
 
 def test_work_home_work_fill_activity_closed(person_work_home_work_closed):
@@ -25,7 +25,7 @@ def test_work_home_work_fill_activity_closed(person_work_home_work_closed):
     assert [p.act for p in person.activities] == ['home']
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
-    assert person.valid_plan
+    assert person.has_valid_plan
 
 
 def test_work_home_shop_work_fill_activity_closed(person_work_home_shop_home_work_closed):
@@ -37,7 +37,7 @@ def test_work_home_shop_work_fill_activity_closed(person_work_home_shop_home_wor
     assert [p.act for p in person.activities] == ['home', 'shop', 'home']
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
-    assert person.valid_plan
+    assert person.has_valid_plan
 
 
 def test_work_home_work_fill_first_activity_not_closed(person_work_home_shop_home_work_not_closed):
@@ -49,7 +49,7 @@ def test_work_home_work_fill_first_activity_not_closed(person_work_home_shop_hom
     assert [p.act for p in person.activities] == ['home', 'shop', 'home']
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
-    assert person.valid_plan
+    assert person.has_valid_plan
 
 
 def test_work_home_work_fill_mid_activity_not_closed(person_work_home_shop_home_work_not_closed):
@@ -63,7 +63,7 @@ def test_work_home_work_fill_mid_activity_not_closed(person_work_home_shop_home_
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
     assert person.plan.day[2].duration > duration  # todo fix bad test
-    assert person.valid_plan
+    assert person.has_valid_plan
 
 
 def test_work_home_work_add_first_activity_not_closed(person_work_home_work_not_closed):
@@ -75,4 +75,4 @@ def test_work_home_work_add_first_activity_not_closed(person_work_home_work_not_
     assert [p.act for p in person.activities] == ['home', 'work']
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[-1].end_time == mtdt(24*60-1)
-    assert person.valid_plan
+    assert person.has_valid_plan

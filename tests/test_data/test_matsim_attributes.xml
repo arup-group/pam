@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE objectAttributes SYSTEM "http://matsim.org/files/dtd/objectattributes_v1.dtd"><objectAttributes>
+  <!--Input Records:-->
+  <object id="census_0">
+    <attribute class="java.lang.String" name="source">census_2016</attribute>
+    <attribute class="java.lang.String" name="subpopulation">default</attribute>
+    <attribute class="java.lang.String" name="gender">female</attribute>
+    <attribute class="java.lang.String" name="activity">work</attribute>
+    <attribute class="java.lang.String" name="mode">pt</attribute>
+    <attribute class="java.lang.String" name="occupation">white</attribute>
+    <attribute class="java.lang.String" name="income">low</attribute>
+  </object>
+  <object id="census_1">
+    <attribute class="java.lang.String" name="source">census_2016</attribute>
+    <attribute class="java.lang.String" name="subpopulation">default</attribute>
+    <attribute class="java.lang.String" name="gender">female</attribute>
+    <attribute class="java.lang.String" name="activity">work</attribute>
+    <attribute class="java.lang.String" name="mode">pt</attribute>
+    <attribute class="java.lang.String" name="occupation">white</attribute>
+    <attribute class="java.lang.String" name="income">low</attribute>
+  </object>
+</objectAttributes>
