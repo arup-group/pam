@@ -52,6 +52,17 @@ def test_apply_full_hh_quarantine(population):
             assert isinstance(person.plan.day[0], Activity)
 
 
+def test_apply_person_based_full_quarantine(population):
+    policy = modify.HouseholdQuarantined(1, person_based=True)
+    modify.apply_policies(population, [policy])
+    assert len(population.households) == 20
+    for hid, household in population.households.items():
+        assert len(household.people) == 2
+        for pid, person in household.people.items():
+            assert len(person.plan) == 1
+            assert isinstance(person.plan.day[0], Activity)
+
+
 def test_apply_full_person_stay_at_home(population):
     policy = modify.PersonStayAtHome(1)
     modify.apply_policies(population, [policy])

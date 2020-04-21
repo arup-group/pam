@@ -36,11 +36,13 @@ class HouseholdQuarantined(Policy):
     def apply_to(self, household):
         if self.person_based:
             n = len(household.people)
+            if random.random() < (1 - (1 - self.probability) ** n):
+                for pid, person in household.people.items():
+                    person.stay_at_home()
         else:
-            n = 1
-        if random.random() < self.probability * n:
-            for pid, person in household.people.items():
-                person.stay_at_home()
+            if random.random() < self.probability:
+                for pid, person in household.people.items():
+                    person.stay_at_home()
 
 
 class PersonStayAtHome(Policy):
