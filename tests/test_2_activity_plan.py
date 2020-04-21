@@ -5,6 +5,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
 
+EOD = datetime(1900,1,1,23,59,59)
 
 def test_plan_init():
     plan = Plan()
@@ -110,7 +111,7 @@ def test_finalise():
     plan.add(act)
     plan.finalise()
     assert plan.day[0].end_time == mtdt(900)
-    assert plan.day[-1].end_time == mtdt(24*60-1)
+    assert plan.day[-1].end_time == EOD
 
 
 def test_reverse_iter():

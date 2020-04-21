@@ -1,4 +1,7 @@
 from .utils import minutes_to_datetime as mtdt
+from datetime import datetime
+
+EOD = datetime(1900, 1, 1, 23, 59, 59)
 
 
 class Plan:
@@ -100,8 +103,8 @@ class Plan:
 			if not self.day[i].end_time == self.day[i+1].start_time:
 				raise TypeError("Miss-match in adjoining activity end and start times")
 
-		if not self.day[-1].end_time == mtdt(24*60-1):
-			raise TypeError("Last activity does not end at 23:59:59")
+		if not self.day[-1].end_time == EOD:
+			raise TypeError(f"Last activity does not end at 23:59:59; ({self.day[-1].end_time})")
 
 		return True
 
@@ -157,7 +160,7 @@ class Plan:
 		if len(self.day) > 1:
 			for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
 				self.day[seq].end_time = self.day[seq+1].start_time
-		self.day[-1].end_time = mtdt(24 * 60 - 1)
+		self.day[-1].end_time = EOD
 		
 	def autocomplete_matsim(self):
 		"""
@@ -292,7 +295,7 @@ class Plan:
 		for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
 			new_time = self.day[seq].shift_start_time(new_time)
 
-		new_time = mtdt(24*60-1)
+		new_time = EOD
 		for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
 			new_time = self.day[seq].shift_end_time(new_time)
 
@@ -339,7 +342,7 @@ class Plan:
 		:return:
 		"""
 		# extend proceeding act to end of day
-		self.day[idx_start].end_time = mtdt(24 * 60 - 1)
+		self.day[idx_start].end_time = EOD
 		# extend subsequent act to start of day
 		self.day[idx_end].start_time = mtdt(0)
 		self.day.pop(idx_start + 1)  # remove proceeding leg
@@ -353,7 +356,7 @@ class Plan:
 				act='home',
 				area=self.home,
 				start_time=mtdt(0),
-				end_time=mtdt(24 * 60 - 1),
+				end_time=EOD,
 			)
 		]
 
@@ -378,6 +381,23 @@ class Plan:
 					self[idx].end_time = trip_end_time
 					self[idx].end_location = trip_end_location
 				pt_trip = False
+
+
+	def crop(self, limit=datetime(1900, 1, 2, 0, 0)):
+		"""
+		crop a plan to some limit (typically a day). Plan components that start after this
+		time are removed. Activities that end after this time are trimmed. If the last component
+		is a Leg, this leg is removed and the previous activity extended.
+		"""
+		for idx, component in list(self.reversed()):
+			if component.start_time >= limit:
+				self.day.pop(idx)
+		# deal with last component
+		if isinstance(self.day[-1], Activity):
+			self.day[-1].end_time = EOD
+		else:
+			self.day.pop(-1)
+			self.day[-1].end_time = EOD
 
 
 class PlanComponent:
