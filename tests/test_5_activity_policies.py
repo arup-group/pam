@@ -110,6 +110,19 @@ def home_education_shop_home():
     return person
 
 
+@pytest.fixture
+def home_education_home_university_student():
+
+    person = Person(1, attributes={'age': 18, 'job': 'education'})
+    person.add(Activity(1, 'home', 'a'))
+    person.add(Leg(1, 'bike', 'a', 'b'))
+    person.add(Activity(2, 'education', 'b'))
+    person.add(Leg(2, 'bike', 'b', 'b'))
+    person.add(Activity(3, 'home', 'a'))
+
+    yield person
+
+
 def test_home_education_home_removal_of_education_act(person_home_education_home):
 
     household = Household(1)
@@ -318,3 +331,108 @@ def test_home_work_home_education_home_removal_of_education_act():
     assert [p.act for p in household.people['1'].activities] == ['home', 'work', 'home']
     assert household.people['1'].plan[0].start_time == mtdt(0)
     assert household.people['1'].plan[-1].end_time == mtdt(24*60-1)
+
+
+def test_home_education_home_attribute_based_activity_removal_strict_satisfies_conditions(
+        home_education_home_university_student):
+    household = Household(1)
+    person = home_education_home_university_student
+    household.add(person)
+
+    def age_condition_over_17(attribute_value):
+        return attribute_value > 17
+
+    def job_condition_education(attribute_value):
+        return attribute_value == 'education'
+
+    policy_remove_higher_education = modify.RemoveActivity(
+        ['education'],
+        probability=1,
+        attribute_conditions={'age': age_condition_over_17, 'job': job_condition_education},
+        strict_conditions=True
+    )
+
+    policy_remove_higher_education.apply_to(household)
+
+    for pid, person in household.people.items():
+        assert len(person.plan) == 1
+        assert isinstance(person.plan.day[0], Activity)
+
+
+def test_home_education_home_attribute_based_activity_removal_strict_doesnt_satisfy_conditions(
+        home_education_home_university_student):
+    household = Household(1)
+    person = home_education_home_university_student
+    household.add(person)
+
+    def age_condition_over_17(attribute_value):
+        return attribute_value > 17
+
+    def job_condition_wasevrrr(attribute_value):
+        return attribute_value == 'wasevrrr'
+
+    policy_remove_higher_education = modify.RemoveActivity(
+        ['education'],
+        probability=1,
+        attribute_conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
+        strict_conditions=True
+    )
+
+    policy_remove_higher_education.apply_to(household)
+
+    for pid, person in household.people.items():
+        assert len(person.plan) == 5
+        assert isinstance(person.plan.day[2], Activity)
+        assert person.plan.day[2].act == 'education'
+
+
+def test_home_education_home_attribute_based_activity_removal_non_strict_satisfies_condition(
+        home_education_home_university_student):
+    household = Household(1)
+    person = home_education_home_university_student
+    household.add(person)
+
+    def age_condition_over_17(attribute_value):
+        return attribute_value > 17
+
+    def job_condition_wasevrrr(attribute_value):
+        return attribute_value == 'wasevrrr'
+
+    policy_remove_higher_education = modify.RemoveActivity(
+        ['education'],
+        probability=1,
+        attribute_conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
+        strict_conditions=False
+    )
+
+    policy_remove_higher_education.apply_to(household)
+
+    for pid, person in household.people.items():
+        assert len(person.plan) == 1
+        assert isinstance(person.plan.day[0], Activity)
+
+def test_home_education_home_attribute_based_activity_removal_non_strict_doesnt_satisfy_conditions(
+        home_education_home_university_student):
+    household = Household(1)
+    person = home_education_home_university_student
+    household.add(person)
+
+    def age_condition_under_0(attribute_value):
+        return attribute_value < 0
+
+    def job_condition_wasevrrr(attribute_value):
+        return attribute_value == 'wasevrrr'
+
+    policy_remove_higher_education = modify.RemoveActivity(
+        ['education'],
+        probability=1,
+        attribute_conditions={'age': age_condition_under_0, 'job': job_condition_wasevrrr},
+        strict_conditions=False
+    )
+
+    policy_remove_higher_education.apply_to(household)
+
+    for pid, person in household.people.items():
+        assert len(person.plan) == 5
+        assert isinstance(person.plan.day[2], Activity)
+        assert person.plan.day[2].act == 'education'
