@@ -17,16 +17,28 @@ class Policy:
 class HouseholdQuarantined(Policy):
     """
     Probabilistic everyone in household stays home
+
+    by default, person_based=False: Probability household-based,
+    i.e. the probability of a household being quarantined
+
+    person_based=True: Probability person-based,
+    i.e. the probability of any person in the household
+    needing to be quarantined
     """
 
-    def __init__(self, probability):
+    def __init__(self, probability, person_based=False):
         super().__init__()
 
         assert 0 < probability <= 1
         self.probability = probability
+        self.person_based = person_based
 
     def apply_to(self, household):
-        if random.random() < self.probability:
+        if self.person_based:
+            n = len(household.people)
+        else:
+            n = 1
+        if random.random() < self.probability * n:
             for pid, person in household.people.items():
                 person.stay_at_home()
 
@@ -66,9 +78,9 @@ class RemoveActivity(Policy):
             seq = 0
             while seq < len(person.plan):
                 p = person.plan[seq]
-                is_education = p.act.lower() in self.activities
+                is_activity_for_removal = p.act.lower() in self.activities
                 selected = random.random() < self.probability
-                if is_education and selected:
+                if is_activity_for_removal and selected:
                     previous_idx, subsequent_idx = person.remove_activity(seq)
                     person.fill_plan(previous_idx, subsequent_idx, default='home')
                 else:
