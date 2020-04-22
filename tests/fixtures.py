@@ -278,7 +278,7 @@ def person_heh_open1():
             seq=2,
             mode='car',
             start_area='b',
-            end_area='a',
+            end_area='b',
             start_time=mtdt(120),
             end_time=mtdt(180)
         )
@@ -287,7 +287,7 @@ def person_heh_open1():
         Activity(
             seq=3,
             act='home',
-            area='a',
+            area='b',
             start_time=mtdt(180),
             end_time=EOD
         )

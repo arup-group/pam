@@ -2,7 +2,7 @@ from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
 
 from .variables import EOD
-from . import PAMSequenceValidationError
+from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 class Plan:
@@ -110,14 +110,14 @@ class Plan:
 			self.validate_sequence()
 
 		if not self.day[0].start_time == mtdt(0):
-			raise TypeError("First activity does not start at zero")
+			raise PAMTimesValidationError("First activity does not start at zero")
 
 		for i in range(self.length - 1):
 			if not self.day[i].end_time == self.day[i+1].start_time:
-				raise TypeError("Miss-match in adjoining activity end and start times")
+				raise PAMTimesValidationError("Miss-match in adjoining activity end and start times")
 
 		if not self.day[-1].end_time == EOD:
-			raise TypeError(f"Last activity does not end at {EOD}; ({self.day[-1].end_time})")
+			raise PAMTimesValidationError(f"Last activity does not end at {EOD}; ({self.day[-1].end_time})")
 
 		return True
 
@@ -134,13 +134,13 @@ class Plan:
 
 			if isinstance(component, Activity):
 				if not component.location == self.day[i-1].end_location:
-					raise UserWarning("Activity location does not match previous leg destination")
+					raise PAMValidationLocationsError("Activity location does not match previous leg destination")
 				# if not component.location == component[i+1].start_location:
 				# 	raise TypeError("Activity location does not match next leg origin")
 			
 			elif isinstance(component, Leg):
 				if not component.start_location == self.day[i-1].location:
-					raise UserWarning("Leg start location does not match previous activity location")
+					raise PAMValidationLocationsError("Leg start location does not match previous activity location")
 
 		return True
 
@@ -189,14 +189,14 @@ class Plan:
 		"""
 		if isinstance(p, Activity):
 			if self.day and not isinstance(self.day[-1], Leg):  # enforce act-leg-act seq
-				raise UserWarning(f"Cannot add Activity to plan sequence.")
+				raise PAMSequenceValidationError(f"Cannot add Activity to plan sequence.")
 			self.day.append(p)
 
 		elif isinstance(p, Leg):
 			if not self.day:
-				raise UserWarning(f"Cannot add Leg as first component to plan sequence.")
+				raise PAMSequenceValidationError(f"Cannot add Leg as first component to plan sequence.")
 			if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-				raise UserWarning(f"Cannot add Leg to plan sequence.")
+				raise PAMSequenceValidationError(f"Cannot add Leg to plan sequence.")
 			self.day.append(p)
 
 		else:

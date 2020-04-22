@@ -5,6 +5,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
 from pam.variables import EOD
+from pam import PAMSequenceValidationError
 
 
 def test_plan_init():
@@ -79,14 +80,14 @@ def test_person_add_activity_activity_raise_error():
     act = Activity(1, 'home', 1)
     plan.add(act)
     act = Activity(2, 'work', 1)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         plan.add(act)
 
 
 def test_person_add_leg_first_raise_error():
     plan = Plan()
     leg = Leg(1, 'car', start_area=1, end_area=2)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         plan.add(leg)
 
 
@@ -97,7 +98,7 @@ def test_person_add_leg_leg_raise_error():
     leg = Leg(1, 'car', start_area=1, end_area=2)
     plan.add(leg)
     leg = Leg(2, 'car', start_area=2, end_area=1)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         plan.add(leg)
 
 

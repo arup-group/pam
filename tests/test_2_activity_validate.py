@@ -6,7 +6,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
 from pam.variables import EOD
-from pam import PAMSequenceValidationError
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 def test_person_heh_valid(person_heh):
@@ -50,16 +50,9 @@ def act_act_sequence():
     ]
     return person
 
-def test_act_act_sequence_not_valid(act_act_sequence):
-    
+def test_act_act_sequence_not_valid(act_act_sequence):   
     with pytest.raises(PAMSequenceValidationError):
         act_act_sequence.plan.validate_sequence()
-
-    with pytest.raises(PAMSequenceValidationError):
-        act_act_sequence.plan.validate_times()
-
-    with pytest.raises(PAMSequenceValidationError):
-        act_act_sequence.plan.validate_locations()
 
 
 @pytest.fixture
@@ -83,6 +76,7 @@ def leg_leg_sequence():
             end_time=mtdt(90)
         )
     ]
+    return person
 
 
 def test_leg_leg_sequence_not_valid(leg_leg_sequence):
@@ -116,7 +110,7 @@ def act_leg_leg_act_plan():
             end_area='a',
             start_time=mtdt(0),
             end_time=mtdt(90)
-        )
+        ),
         Activity(
             seq=3,
             act='home',
@@ -125,5 +119,162 @@ def act_leg_leg_act_plan():
             end_time=EOD
         )
     ]
+    return person
+
+
+def test_act_leg_leg_act_sequence_not_valid(act_leg_leg_act_plan):
     with pytest.raises(PAMSequenceValidationError):
-        person.plan.validate_sequence()
+        act_leg_leg_act_plan.plan.validate_sequence()
+
+
+@pytest.fixture
+def act_leg_act_leg_act_bad_times():
+    person = Person('1')
+    person.plan.day = [
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(180),
+            end_time=mtdt(190)
+        ),
+        Activity(
+            seq=2,
+            act='work',
+            area='b',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=mtdt(190),
+            end_time=mtdt(390)
+        ),
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            start_time=mtdt(280),
+            end_time=EOD
+        )
+    ]
+    return person
+
+
+def test_invalid_times(act_leg_act_leg_act_bad_times):
+    assert act_leg_act_leg_act_bad_times.plan.validate_locations()
+    with pytest.raises(PAMTimesValidationError):
+        act_leg_act_leg_act_bad_times.plan.validate_times()
+
+
+@pytest.fixture
+def act_leg_act_leg_act_bad_locations1():
+    person = Person('1')
+    person.plan.day = [
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(180),
+            end_time=mtdt(190)
+        ),
+        Activity(
+            seq=2,
+            act='work',
+            area='b',
+            start_time=mtdt(190),
+            end_time=mtdt(200)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='a',
+            start_time=mtdt(200),
+            end_time=mtdt(390)
+        ),
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            start_time=mtdt(390),
+            end_time=EOD
+        )
+    ]
+    return person
+
+
+def test_invalid_locations(act_leg_act_leg_act_bad_locations1):
+    assert act_leg_act_leg_act_bad_locations1.plan.validate_times()
+    with pytest.raises(PAMValidationLocationsError):
+        act_leg_act_leg_act_bad_locations1.plan.validate_locations()
+
+
+@pytest.fixture
+def act_leg_act_leg_act_bad_locations2():
+    person = Person('1')
+    person.plan.day = [
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(180),
+            end_time=mtdt(190)
+        ),
+        Activity(
+            seq=2,
+            act='work',
+            area='b',
+            start_time=mtdt(190),
+            end_time=mtdt(200)
+        ),
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=mtdt(200),
+            end_time=mtdt(390)
+        ),
+        Activity(
+            seq=3,
+            act='home',
+            area='b',
+            start_time=mtdt(390),
+            end_time=EOD
+        )
+    ]
+    return person
+
+
+def test_invalid_locations2(act_leg_act_leg_act_bad_locations2):
+    assert act_leg_act_leg_act_bad_locations2.plan.validate_times()
+    with pytest.raises(PAMValidationLocationsError):
+        act_leg_act_leg_act_bad_locations2.plan.validate_locations()

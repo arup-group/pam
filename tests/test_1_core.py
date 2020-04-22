@@ -6,6 +6,8 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
 
+from pam import PAMSequenceValidationError
+
 
 testdata = [
     (0, datetime(1900, 1, 1, 0, 0)),
@@ -70,14 +72,14 @@ def test_person_add_activity_activity_raise_error():
     act = Activity(1, 'home', 1)
     person.add(act)
     act = Activity(2, 'work', 1)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         person.add(act)
 
 
 def test_person_add_leg_first_raise_error():
     person = Person('1')
     leg = Leg(1, 'car', start_area=1, end_area=2)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         person.add(leg)
 
 
@@ -88,7 +90,7 @@ def test_person_add_leg_leg_raise_error():
     leg = Leg(1, 'car', start_area=1, end_area=2)
     person.add(leg)
     leg = Leg(2, 'car', start_area=2, end_area=1)
-    with pytest.raises(UserWarning):
+    with pytest.raises(PAMSequenceValidationError):
         person.add(leg)
 
 
