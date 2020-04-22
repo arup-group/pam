@@ -2,6 +2,7 @@ from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
 
 from .variables import EOD
+from . import PAMSequenceValidationError
 
 
 class Plan:
@@ -79,22 +80,34 @@ class Plan:
 				return False
 		return True
 
-	@property
-	def is_valid(self):
+	def validate_sequence(self):
 		"""
 		Check sequence of Activities and Legs.
 		:return: True
 		"""
+		if not isinstance(self.day[0], Activity):
+			raise PAMSequenceValidationError(f"Plan does not start with Activity")
+
 		for i, component in enumerate(self.day):
 			if i % 2:  # uneven
 				if not isinstance(component, Leg):
-					raise TypeError(f"Incorrect plan sequence")
+					raise PAMSequenceValidationError(f"Incorrect plan sequence, expected Activity at idx:{i}")
 			else:
 				if not isinstance(component, Activity):
-					raise TypeError(f"Incorrect plan sequence")
+					raise PAMSequenceValidationError(f"Incorrect plan sequence, expected Leg at idx:{i}")
 
 		if not isinstance(self.day[-1], Activity):
-			raise TypeError(f"Person plan does not end with Activity")
+			raise PAMSequenceValidationError(f"Plan does not end with Activity")
+
+		return True
+
+	def validate_times(self, sequence_check=True):
+		"""
+		Check that start and end time of Activities and Legs are consistent.
+		:return: True
+		"""
+		if sequence_check:
+			self.validate_sequence()
 
 		if not self.day[0].start_time == mtdt(0):
 			raise TypeError("First activity does not start at zero")
@@ -104,7 +117,43 @@ class Plan:
 				raise TypeError("Miss-match in adjoining activity end and start times")
 
 		if not self.day[-1].end_time == EOD:
-			raise TypeError(f"Last activity does not end at 23:59:59; ({self.day[-1].end_time})")
+			raise TypeError(f"Last activity does not end at {EOD}; ({self.day[-1].end_time})")
+
+		return True
+
+	def validate_locations(self, sequence_check=True):
+		"""
+		Check that locations are consistent across Activities and Legs.
+		:return: True
+		"""
+		if sequence_check:
+			self.validate_sequence()
+
+		for i in range(1, self.length):
+			component = self.day[i]
+
+			if isinstance(component, Activity):
+				if not component.location == self.day[i-1].end_location:
+					raise UserWarning("Activity location does not match previous leg destination")
+				# if not component.location == component[i+1].start_location:
+				# 	raise TypeError("Activity location does not match next leg origin")
+			
+			elif isinstance(component, Leg):
+				if not component.start_location == self.day[i-1].location:
+					raise UserWarning("Leg start location does not match previous activity location")
+
+		return True
+
+	@property
+	def is_valid(self):
+		"""
+		Check for sequence, time and location structure and consistency.
+		Note that this also checks that plan ends at EOD.
+		:return: True
+		"""
+		self.validate_sequence()
+		self.validate_times(sequence_check=False)
+		self.validate_locations(sequence_check=False)
 
 		return True
 

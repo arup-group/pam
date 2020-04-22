@@ -287,7 +287,7 @@ def person_heh_open1():
         Activity(
             seq=3,
             act='home',
-            area='b',
+            area='a',
             start_time=mtdt(180),
             end_time=EOD
         )
