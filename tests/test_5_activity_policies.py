@@ -5,8 +5,7 @@ from pam import modify
 
 import pytest
 from datetime import datetime
-
-EOD = datetime(1900, 1, 1, 23, 59, 59)
+from pam.variables import EOD
 
 
 @pytest.fixture

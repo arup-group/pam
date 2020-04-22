@@ -5,8 +5,7 @@ from datetime import datetime
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
-
-EOD = datetime(1900, 1, 1, 23, 59, 59)
+from pam.variables import EOD
 
 
 @pytest.fixture

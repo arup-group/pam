@@ -1,7 +1,7 @@
 from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
 
-EOD = datetime(1900, 1, 1, 23, 59, 59)
+from .variables import EOD
 
 
 class Plan:

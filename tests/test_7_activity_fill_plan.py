@@ -2,8 +2,7 @@ import pytest
 from datetime import datetime
 
 from .fixtures import *
-
-EOD = datetime(1900, 1, 1, 23, 59, 59)
+from pam.variables import EOD
 
 
 def test_home_education_home_fill_activity(person_home_education_home):

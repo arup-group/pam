@@ -4,8 +4,8 @@ from datetime import datetime
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
+from pam.variables import EOD
 
-EOD = datetime(1900,1,1,23,59,59)
 
 def test_plan_init():
     plan = Plan()
