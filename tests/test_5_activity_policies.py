@@ -367,7 +367,7 @@ def test_home_education_home_attribute_based_activity_removal_strict_satisfies_c
         ['education'],
         probability=1,
         attribute_conditions={'age': age_condition_over_17, 'job': job_condition_education},
-        strict_conditions=True
+        attribute_strict_conditions=True
     )
 
     policy_remove_higher_education.apply_to(household)
@@ -393,7 +393,7 @@ def test_home_education_home_attribute_based_activity_removal_strict_doesnt_sati
         ['education'],
         probability=1,
         attribute_conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
-        strict_conditions=True
+        attribute_strict_conditions=True
     )
 
     policy_remove_higher_education.apply_to(household)
@@ -420,7 +420,7 @@ def test_home_education_home_attribute_based_activity_removal_non_strict_satisfi
         ['education'],
         probability=1,
         attribute_conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
-        strict_conditions=False
+        attribute_strict_conditions=False
     )
 
     policy_remove_higher_education.apply_to(household)
@@ -445,7 +445,7 @@ def test_home_education_home_attribute_based_activity_removal_non_strict_doesnt_
         ['education'],
         probability=1,
         attribute_conditions={'age': age_condition_under_0, 'job': job_condition_wasevrrr},
-        strict_conditions=False
+        attribute_strict_conditions=False
     )
 
     policy_remove_higher_education.apply_to(household)
