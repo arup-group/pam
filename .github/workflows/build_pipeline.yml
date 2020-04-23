@@ -1,0 +1,53 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        export ACCEPT_EULA=Y
+        sudo apt-get update
+        python -m pip install --upgrade pip
+        sudo apt-get install -y python3-pip libgdal-dev locales
+        export CPLUS_INCLUDE_PATH=/usr/include/gdal
+        export C_INCLUDE_PATH=/usr/include/gdal
+        sudo apt-get install ca-certificates
+        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        pip install GDAL==2.2.3
+        pip install -r requirements.txt
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+    - name: Run tests
+      run: |
+        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        ./scripts/code-coverage.sh
+    - name: Push zip to S3
+      run: |
+        echo $BITBUCKET_COMMIT > release
+        zip -r app.zip .
+        repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
+        echo $repo_slug
+        aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
+
