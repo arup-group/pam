@@ -461,7 +461,7 @@ def test_remove_second_education_activity(mocker, home_education_shop_education_
 
     person = home_education_shop_education_home
     policy_remove_education = modify.RemoveActivity(['education'], probability=1)
-    policy_remove_education.remove_activities(person)
+    policy_remove_education.remove_individual_activities(person)
 
     assert len(person.plan) == 7
     for i in range(0, 7, 2):

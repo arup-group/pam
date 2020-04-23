@@ -66,6 +66,7 @@ class RemoveActivity(Policy):
     """
     Probabilistic remove activities
 
+    :param activities: list of activities to be removed from persons plans
     :param probability: value > 0 and <= 1, likelihood of activities
     having to be removed
     :param probability_level: the level at which the probability should
@@ -153,16 +154,16 @@ class RemoveActivity(Policy):
                 if self.attribute_conditions is not None:
                     if self.person_satisfies_attribute_conditions(person):
                         if self.policy_type == 'activity':
-                            self.remove_activities(person)
+                            self.remove_individual_activities(person)
                         else:
                             raise NotImplementedError
                 else:
                     if self.policy_type == 'activity':
-                        self.remove_activities(person)
+                        self.remove_individual_activities(person)
                     else:
                         raise NotImplementedError
 
-    def remove_activities(self, person):
+    def remove_individual_activities(self, person):
         seq = 0
         while seq < len(person.plan):
             p = person.plan[seq]
