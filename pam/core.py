@@ -9,7 +9,8 @@ class Population:
 		self.households = {}
 
 	def add(self, household):
-		assert isinstance(household, Household)
+		if not isinstance(household, Household):
+			raise UserWarning(f"Expected instance of Household, not: {type(household)}")
 		self.households[str(household.hid)] = household
 
 	def get(self, hid, default=None):

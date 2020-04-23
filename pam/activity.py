@@ -270,6 +270,9 @@ class Plan:
 		:param default: Not Used
 		:return: True
 		"""
+		if not (idx_start >= 0 and idx_end >=0 and idx_end < self.length and idx_start < self.length):
+			raise UserWarning(f"ick plan length is {self.length}, indexes are {idx_start} and {idx_end}: {self}")
+
 		if idx_start is None and idx_end is None:  # Assume stay at home
 			self.stay_at_home()
 			return True
@@ -322,8 +325,9 @@ class Plan:
 			self.day.pop(-1)  # remove end leg
 
 			pivot_idx = self.position_of(target='home')
-			if pivot_idx is None:
-				raise NotImplementedError("Cannot fill plan without existing home activity")
+			# if pivot_idx is None:
+			# 	raise NotImplementedError("Cannot fill plan without existing home activity")
+			pivot_idx = self.length - 1  # todo log this
 
 			self.expand(pivot_idx)
 			return True
@@ -365,9 +369,10 @@ class Plan:
 		# press plans away from pivoting activity
 		pivot_idx = self.position_of(target='home')
 		if pivot_idx is None:
-			raise NotImplementedError(
-				f"Cannot fill plan without existing home activity"
-			)
+			# raise NotImplementedError(
+			# 	f"Cannot fill plan without existing home activity"
+			# )
+			pivot_idx = self.length - 1  # todo log this
 
 		self.expand(pivot_idx)
 
