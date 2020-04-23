@@ -124,9 +124,9 @@ class RemoveActivity(Policy):
         self.attribute_strict_conditions = attribute_strict_conditions
 
     def apply_to(self, household):
-        if self.probability_level == 'household':
-            if self.is_selected():
-                if self.policy_type == 'household':
+        if self.policy_type == 'household':
+            if self.probability_level == 'household':
+                if self.is_selected():
                     if self.attribute_conditions is not None:
                         for pid, person in household.people.items():
                             if self.person_satisfies_attribute_conditions(person):
@@ -134,34 +134,31 @@ class RemoveActivity(Policy):
                                 self.remove_household_activities(household)
                     else:
                         self.remove_household_activities(household)
-                else:
-                    raise NotImplementedError
+            else:
+                raise NotImplementedError
 
-        elif self.probability_level == 'person':
-            for pid, person in household.people.items():
-                if self.is_selected():
-                    if self.policy_type == 'person':
+        elif self.policy_type == 'person':
+            if self.probability_level == 'person':
+                for pid, person in household.people.items():
+                    if self.is_selected():
                         if self.attribute_conditions is not None:
                             if self.person_satisfies_attribute_conditions(person):
                                 self.remove_person_activities(person)
                         else:
                             self.remove_person_activities(person)
-                    else:
-                        raise NotImplementedError
+            else:
+                raise NotImplementedError
 
         else:
-            for pid, person in household.people.items():
-                if self.attribute_conditions is not None:
-                    if self.person_satisfies_attribute_conditions(person):
-                        if self.policy_type == 'activity':
+            if self.probability_level == 'activity':
+                for pid, person in household.people.items():
+                    if self.attribute_conditions is not None:
+                        if self.person_satisfies_attribute_conditions(person):
                             self.remove_individual_activities(person)
-                        else:
-                            raise NotImplementedError
-                else:
-                    if self.policy_type == 'activity':
-                        self.remove_individual_activities(person)
                     else:
-                        raise NotImplementedError
+                        self.remove_individual_activities(person)
+            else:
+                raise NotImplementedError
 
     def remove_individual_activities(self, person):
         seq = 0
