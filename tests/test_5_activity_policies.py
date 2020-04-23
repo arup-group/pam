@@ -4,6 +4,7 @@ from pam.utils import minutes_to_datetime as mtdt
 from pam import modify
 
 import pytest
+import random
 
 
 @pytest.fixture
@@ -117,10 +118,27 @@ def home_education_home_university_student():
     person.add(Activity(1, 'home', 'a'))
     person.add(Leg(1, 'bike', 'a', 'b'))
     person.add(Activity(2, 'education', 'b'))
-    person.add(Leg(2, 'bike', 'b', 'b'))
+    person.add(Leg(2, 'bike', 'b', 'a'))
     person.add(Activity(3, 'home', 'a'))
 
-    yield person
+    return person
+
+
+@pytest.fixture
+def home_education_shop_education_home():
+
+    person = Person(1)
+    person.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    person.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(60), end_time=mtdt(70)))
+    person.add(Activity(2, 'education', 'b', start_time=mtdt(70), end_time=mtdt(100)))
+    person.add(Leg(2, 'bike', 'b', 'c', start_time=mtdt(100), end_time=mtdt(120)))
+    person.add(Activity(3, 'shop', 'c', start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(Leg(1, 'bike', 'c', 'b', start_time=mtdt(180), end_time=mtdt(200)))
+    person.add(Activity(2, 'education', 'b', start_time=mtdt(200), end_time=mtdt(300)))
+    person.add(Leg(2, 'car', 'b', 'a', start_time=mtdt(300), end_time=mtdt(310)))
+    person.add(Activity(3, 'home', 'a', start_time=mtdt(310), end_time=mtdt(60)))
+
+    return person
 
 
 def test_home_education_home_removal_of_education_act(person_home_education_home):
@@ -436,3 +454,52 @@ def test_home_education_home_attribute_based_activity_removal_non_strict_doesnt_
         assert len(person.plan) == 5
         assert isinstance(person.plan.day[2], Activity)
         assert person.plan.day[2].act == 'education'
+
+
+def test_remove_second_education_activity(mocker, home_education_shop_education_home):
+    mocker.patch.object(modify.RemoveActivity, 'is_selected', side_effect=[False, True])
+
+    person = home_education_shop_education_home
+    policy_remove_education = modify.RemoveActivity(['education'], probability=1)
+    policy_remove_education.remove_activities(person)
+
+    assert len(person.plan) == 7
+    for i in range(0, 7, 2):
+        assert isinstance(person.plan.day[i], Activity)
+    assert [person.plan.day[i].act for i in range(0, 7, 2)] == ['home', 'education', 'shop', 'home']
+
+
+def test_activity_is_selected_if_probability_1(mocker):
+    mocker.patch.object(random, 'random', side_effect=[0]+[i/10 for i in range(1,10)])
+
+    policy_remove_activity = modify.RemoveActivity(['some_activity'], probability=1)
+    for i in range(10):
+        assert policy_remove_activity.is_selected()
+
+
+def test_activity_is_selected_when_condition_is_satisfied(mocker):
+    mocker.patch.object(random, 'random', return_value=0.5)
+    policy_remove_activity = modify.RemoveActivity(['some_activity'], probability=0.75)
+
+    assert policy_remove_activity.is_selected()
+
+
+def test_activity_is_not_selected_when_condition_is_not_satisfied(mocker):
+    mocker.patch.object(random, 'random', return_value=0.75)
+    policy_remove_activity = modify.RemoveActivity(['some_activity'], probability=0.5)
+
+    assert not policy_remove_activity.is_selected()
+
+
+def test_is_activity_for_removal_activity_matches_RemoveActivity_activities(mocker):
+    activity = Activity(act = 'some_activity')
+    policy_remove_activity = modify.RemoveActivity(['some_activity'], probability=0.5)
+
+    assert policy_remove_activity.is_activity_for_removal(activity)
+
+
+def test_is_activity_for_removal_activity_does_not_match_RemoveActivity_activities(mocker):
+    activity = Activity(act = 'other_activity')
+    policy_remove_activity = modify.RemoveActivity(['some_activity'], probability=0.5)
+
+    assert not policy_remove_activity.is_activity_for_removal(activity)

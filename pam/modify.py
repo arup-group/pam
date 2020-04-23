@@ -118,13 +118,17 @@ class RemoveActivity(Policy):
         seq = 0
         while seq < len(person.plan):
             p = person.plan[seq]
-            is_activity_for_removal = p.act.lower() in self.activities
-            selected = random.random() < self.probability
-            if is_activity_for_removal and selected:
+            if self.is_activity_for_removal(p) and self.is_selected():
                 previous_idx, subsequent_idx = person.remove_activity(seq)
                 person.fill_plan(previous_idx, subsequent_idx, default='home')
             else:
                 seq += 1
+
+    def is_selected(self):
+        return random.random() < self.probability
+
+    def is_activity_for_removal(self, p):
+        return p.act.lower() in self.activities
 
 
 def apply_policies(population: Population, policies: list):
