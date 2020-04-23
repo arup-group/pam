@@ -32,7 +32,7 @@ class Population:
 
 	@property
 	def size(self):
-		return len(list(self.people()))
+		return sum([person.freq for _, _, person in self.people()])
 
 	def count(self, households=False):
 		if households:
