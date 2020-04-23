@@ -1,7 +1,7 @@
 from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
 
-from .variables import EOD
+from .variables import END_OF_DAY
 from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
@@ -116,8 +116,8 @@ class Plan:
 			if not self.day[i].end_time == self.day[i+1].start_time:
 				raise PAMTimesValidationError("Miss-match in adjoining activity end and start times")
 
-		if not self.day[-1].end_time == EOD:
-			raise PAMTimesValidationError(f"Last activity does not end at {EOD}; ({self.day[-1].end_time})")
+		if not self.day[-1].end_time == END_OF_DAY:
+			raise PAMTimesValidationError(f"Last activity does not end at {END_OF_DAY}; ({self.day[-1].end_time})")
 
 		return True
 
@@ -148,7 +148,7 @@ class Plan:
 	def is_valid(self):
 		"""
 		Check for sequence, time and location structure and consistency.
-		Note that this also checks that plan ends at EOD.
+		Note that this also checks that plan ends at END_OF_DAY.
 		:return: True
 		"""
 		self.validate_sequence()
@@ -209,7 +209,7 @@ class Plan:
 		if len(self.day) > 1:
 			for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
 				self.day[seq].end_time = self.day[seq+1].start_time
-		self.day[-1].end_time = EOD
+		self.day[-1].end_time = END_OF_DAY
 		
 	def autocomplete_matsim(self):
 		"""
@@ -344,7 +344,7 @@ class Plan:
 		for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
 			new_time = self.day[seq].shift_start_time(new_time)
 
-		new_time = EOD
+		new_time = END_OF_DAY
 		for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
 			new_time = self.day[seq].shift_end_time(new_time)
 
@@ -391,7 +391,7 @@ class Plan:
 		:return:
 		"""
 		# extend proceeding act to end of day
-		self.day[idx_start].end_time = EOD
+		self.day[idx_start].end_time = END_OF_DAY
 		# extend subsequent act to start of day
 		self.day[idx_end].start_time = mtdt(0)
 		self.day.pop(idx_start + 1)  # remove proceeding leg
@@ -405,7 +405,7 @@ class Plan:
 				act='home',
 				area=self.home,
 				start_time=mtdt(0),
-				end_time=EOD,
+				end_time=END_OF_DAY,
 			)
 		]
 
@@ -434,19 +434,19 @@ class Plan:
 
 	def crop(self):
 		"""
-		Crop a plan to end of day (EOD). Plan components that start after this
+		Crop a plan to end of day (END_OF_DAY). Plan components that start after this
 		time are removed. Activities that end after this time are trimmed. If the last component
 		is a Leg, this leg is removed and the previous activity extended.
 		"""
 		for idx, component in list(self.reversed()):
-			if component.start_time > EOD:
+			if component.start_time > END_OF_DAY:
 				self.day.pop(idx)
 		# deal with last component
 		if isinstance(self.day[-1], Activity):
-			self.day[-1].end_time = EOD
+			self.day[-1].end_time = END_OF_DAY
 		else:
 			self.day.pop(-1)
-			self.day[-1].end_time = EOD
+			self.day[-1].end_time = END_OF_DAY
 
 
 class PlanComponent:

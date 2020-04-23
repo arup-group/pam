@@ -5,7 +5,7 @@ from datetime import datetime
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import EOD
+from pam.variables import END_OF_DAY
 
 
 @pytest.fixture
@@ -56,7 +56,7 @@ def person_heh():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -111,7 +111,7 @@ def person_crop_last_act():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -230,7 +230,7 @@ def population_heh():
             area='a',
             loc=home_loc,
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
     person.plan.autocomplete_matsim()
@@ -289,7 +289,7 @@ def person_heh_open1():
             act='home',
             area='b',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -344,7 +344,7 @@ def person_hew_open2():
             act='work',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -399,7 +399,7 @@ def person_whw():
             act='work',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -492,7 +492,7 @@ def person_whshw():
             act='work',
             area='a',
             start_time=mtdt(380),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -547,7 +547,7 @@ def person_home_education_home():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -602,7 +602,7 @@ def person_work_home_work_closed():
             act='work',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -695,7 +695,7 @@ def person_work_home_shop_home_work_closed():
             act='work',
             area='a',
             start_time=mtdt(380),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -788,7 +788,7 @@ def person_work_home_shop_home_work_not_closed():
             act='work',
             area='a',
             start_time=mtdt(380),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 
@@ -843,7 +843,7 @@ def person_work_home_work_not_closed():
             act='work',
             area='c',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     )
 

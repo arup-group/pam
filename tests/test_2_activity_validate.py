@@ -5,7 +5,7 @@ from pam.core import Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
-from pam.variables import EOD
+from pam.variables import END_OF_DAY
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
@@ -45,7 +45,7 @@ def act_act_sequence():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     ]
     return person
@@ -116,7 +116,7 @@ def act_leg_leg_act_plan():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     ]
     return person
@@ -166,7 +166,7 @@ def act_leg_act_leg_act_bad_times():
             act='home',
             area='a',
             start_time=mtdt(280),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     ]
     return person
@@ -217,7 +217,7 @@ def act_leg_act_leg_act_bad_locations1():
             act='home',
             area='a',
             start_time=mtdt(390),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     ]
     return person
@@ -268,7 +268,7 @@ def act_leg_act_leg_act_bad_locations2():
             act='home',
             area='b',
             start_time=mtdt(390),
-            end_time=EOD
+            end_time=END_OF_DAY
         )
     ]
     return person

@@ -4,7 +4,7 @@ from datetime import datetime
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
-from pam.variables import EOD
+from pam.variables import END_OF_DAY
 from pam import PAMSequenceValidationError
 
 
@@ -112,7 +112,7 @@ def test_finalise():
     plan.add(act)
     plan.finalise()
     assert plan.day[0].end_time == mtdt(900)
-    assert plan.day[-1].end_time == EOD
+    assert plan.day[-1].end_time == END_OF_DAY
 
 
 def test_reverse_iter():
