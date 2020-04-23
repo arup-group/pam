@@ -66,53 +66,83 @@ class RemoveActivity(Policy):
     """
     Probabilistic remove activities
 
-    attribute_conditions = {'attribute_key': attribute_condition},
-    where attribute_condition:
+    :param probability: value > 0 and <= 1, likelihood of activities
+    having to be removed
+    :param probability_level: the level at which the probability should
+    be applied.
+    e.g. if your `probability` value refers to how likely an
+    individual activity is to be removed probability_level = 'activity'
+    e.g. if your `probability` value refers to how likely a
+    person is affected and their activity to be removed as a
+    consequence probability_level = 'person'
+    e.g. if your `probability` value refers to how likely a
+    household is affected and the persons in that household
+    to have activity be removed as a consequence
+    probability_level = 'household'
+    :param policy_type: policy type, the level at which it should be applied
+    policy_type = 'activity'
 
+    policy_type = 'person'
+
+    policy_type = 'household'
+
+    :param attribute_conditions: dictionary of the form {'attribute_key': attribute_condition},
+    where attribute_condition is a function returning a boolean:
     def attribute_condition(attribute_value):
         return boolean
-
     e.g.
     def age_condition_over_17(attribute_value):
         return attribute_value > 17
-
     and
     attribute_conditions = {'age': age_condition_over_17}
 
-    strict_conditions=True: person needs to satisfy
+    :param attribute_strict_conditions how to satisfy the attribute_conditions
+    attribute_strict_conditions = True: person needs to satisfy
     all conditions in attribute_conditions
-    strict_conditions=False: person needs to satisfy
+    attribute_strict_conditions = False: person needs to satisfy
     just one condition in attribute_conditions
     """
 
-    def __init__(self, activities: list, probability, attribute_conditions=None, strict_conditions=True):
+    def __init__(self, activities: list, probability,
+                probability_level='activity', policy_type='activity',
+                 attribute_conditions=None, attribute_strict_conditions=True):
         super().__init__()
 
         self.activities = activities
         assert 0 < probability <= 1
         self.probability = probability
+        assert probability_level in ['activity', 'person', 'household']
+        self.probability_level = probability_level
+        assert policy_type in ['activity', 'person', 'household']
+        self.policy_type = policy_type
+        assert isinstance(attribute_conditions, dict)
         assert attribute_conditions != {}, 'attribute_conditions cannot be empty'
         self.attribute_conditions = attribute_conditions
-        assert isinstance(strict_conditions, bool)
-        self.strict_conditions = strict_conditions
+        assert isinstance(attribute_strict_conditions, bool)
+        self.attribute_strict_conditions = attribute_strict_conditions
 
     def apply_to(self, household):
-        for pid, person in household.people.items():
+        if self.probability_level == 'household':
+            raise NotImplementedError
+        elif self.probability_level == 'person':
+            raise NotImplementedError
+        else:
+            for pid, person in household.people.items():
 
-            if self.attribute_conditions is not None:
-                if self.strict_conditions:
-                    satisfies_attribute_conditions = True
-                    for attribute_key, attribute_condition in self.attribute_conditions.items():
-                        satisfies_attribute_conditions &= attribute_condition(person.attributes[attribute_key])
+                if self.attribute_conditions is not None:
+                    if self.attribute_strict_conditions:
+                        satisfies_attribute_conditions = True
+                        for attribute_key, attribute_condition in self.attribute_conditions.items():
+                            satisfies_attribute_conditions &= attribute_condition(person.attributes[attribute_key])
+                    else:
+                        satisfies_attribute_conditions = False
+                        for attribute_key, attribute_condition in self.attribute_conditions.items():
+                            satisfies_attribute_conditions |= attribute_condition(person.attributes[attribute_key])
+
+                    if satisfies_attribute_conditions:
+                        self.remove_activities(person)
                 else:
-                    satisfies_attribute_conditions = False
-                    for attribute_key, attribute_condition in self.attribute_conditions.items():
-                        satisfies_attribute_conditions |= attribute_condition(person.attributes[attribute_key])
-
-                if satisfies_attribute_conditions:
                     self.remove_activities(person)
-            else:
-                self.remove_activities(person)
 
     def remove_activities(self, person):
         seq = 0
