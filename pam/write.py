@@ -95,7 +95,7 @@ def write_matsim_plans(population, location, comment=None):
 		for pid, person in household:
 			person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
 			plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
-			for component in person:
+			for component in person[:-1]:
 				if isinstance(component, Activity):
 					et.SubElement(plan_xml, 'act', {
 						'type': component.act,
@@ -108,6 +108,14 @@ def write_matsim_plans(population, location, comment=None):
 					et.SubElement(plan_xml, 'leg', {
 						'mode': component.mode,
 						'trav_time': tdtm(component.duration)})
+
+			component = person[-1]  # write the last activity without an end time
+			et.SubElement(plan_xml, 'act', {
+						'type': component.act,
+						'x': str(int(component.location.loc.x)),
+						'y': str(int(component.location.loc.y)),
+					}
+				)
 
 	write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
 	# todo assuming v5?

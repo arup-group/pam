@@ -38,7 +38,7 @@ def test_duration():
     plan.finalise()
     assert plan.day[0].duration == timedelta(minutes=900)
     assert plan.day[1].duration == timedelta(minutes=30)
-    assert plan.day[-1].duration == timedelta(seconds=(24*60-930)*60 - 1)
+    assert plan.day[-1].duration == timedelta(seconds=(24*60-930)*60)
 
 
 def test_shift_start_time():
