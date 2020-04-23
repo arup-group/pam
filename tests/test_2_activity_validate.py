@@ -50,6 +50,7 @@ def act_act_sequence():
     ]
     return person
 
+
 def test_act_act_sequence_not_valid(act_act_sequence):   
     with pytest.raises(PAMSequenceValidationError):
         act_act_sequence.plan.validate_sequence()
