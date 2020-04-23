@@ -432,14 +432,14 @@ class Plan:
 				pt_trip = False
 
 
-	def crop(self, limit=datetime(1900, 1, 2, 0, 0)):
+	def crop(self):
 		"""
-		crop a plan to some limit (typically a day). Plan components that start after this
+		Crop a plan to end of day (EOD). Plan components that start after this
 		time are removed. Activities that end after this time are trimmed. If the last component
 		is a Leg, this leg is removed and the previous activity extended.
 		"""
 		for idx, component in list(self.reversed()):
-			if component.start_time >= limit:
+			if component.start_time > EOD:
 				self.day.pop(idx)
 		# deal with last component
 		if isinstance(self.day[-1], Activity):
