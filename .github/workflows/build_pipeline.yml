@@ -16,7 +16,6 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-
     - name: Install dependencies
       run: |
         export ACCEPT_EULA=Y
@@ -29,13 +28,11 @@ jobs:
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
         pip install GDAL==2.2.3
         pip install -r requirements.txt
-
     - name: Lint with flake8
       run: |
         pip install flake8
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -53,7 +50,6 @@ jobs:
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
         aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
-
     - name: Set build success notification properties
       if: success()
       env:
