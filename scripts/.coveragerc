@@ -1,0 +1,6 @@
+[run]
+branch = True
+omit = venv/*, tests/*
+
+[report]
+fail_under = 83
