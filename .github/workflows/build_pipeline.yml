@@ -50,22 +50,21 @@ jobs:
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
         aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
-    - name: Send build success notification
+    - name: Set build success notification properties
       if: success()
-      uses: rtCamp/action-slack-notify@v2.0.0
       env:
-        SLACK_CHANNEL: pam
-        SLACK_MESSAGE: '$GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has succeeded'
-        SLACK_TITLE: Github Build Success
-        SLACK_USERNAME: Github Actions
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-    - name: Send build failure notification
+        SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
+        SLACK_TITLE: GitHub Build Success
+    - name: Set build failure notification properties
       if: failure()
-      uses: rtCamp/action-slack-notify@v2.0.0
       env:
-        SLACK_CHANNEL: pam
         SLACK_COLOR: '#FF0000'
-        SLACK_MESSAGE: '!!! $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has failed !!!'
-        SLACK_TITLE: Github Build Failure
-        SLACK_USERNAME: Github Actions
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_MESSAGE: !!! ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed !!!
+        SLACK_TITLE: GitHub Build Failure
+    - name: Send build result Slack notification
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_CHANNEL: pam
+          SLACK_USERNAME: GitHub Actions
+          SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
