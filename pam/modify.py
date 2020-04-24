@@ -168,25 +168,23 @@ class RemoveActivity(Policy):
                         if self.is_activity_for_removal(activity) and self.is_selected():
                             self.remove_household_activities(household)
 
-    def remove_individual_activities(self, person):
+    def remove_activities(self, person, p):
         seq = 0
         while seq < len(person.plan):
-            p = person.plan[seq]
-            if self.is_activity_for_removal(p) and self.is_selected():
+            act = person.plan[seq]
+            if self.is_activity_for_removal(act) and p():
                 previous_idx, subsequent_idx = person.remove_activity(seq)
                 person.fill_plan(previous_idx, subsequent_idx, default='home')
             else:
                 seq += 1
 
+    def remove_individual_activities(self, person):
+        self.remove_activities(person, p=self.is_selected)
+
     def remove_person_activities(self, person):
-        seq = 0
-        while seq < len(person.plan):
-            p = person.plan[seq]
-            if self.is_activity_for_removal(p):
-                previous_idx, subsequent_idx = person.remove_activity(seq)
-                person.fill_plan(previous_idx, subsequent_idx, default='home')
-            else:
-                seq += 1
+        def return_true():
+            return True
+        self.remove_activities(person, p=return_true)
 
     def remove_household_activities(self, household):
         for pid, person in household.people.items():
