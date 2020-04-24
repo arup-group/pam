@@ -55,7 +55,7 @@ jobs:
       uses: rtCamp/action-slack-notify@v2.0.0
       env:
         SLACK_CHANNEL: pam
-        SLACK_MESSAGE: 'echo $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has succeeded'
+        SLACK_MESSAGE: '$GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has succeeded'
         SLACK_TITLE: Github Build Success
         SLACK_USERNAME: Github Actions
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -65,7 +65,7 @@ jobs:
       env:
         SLACK_CHANNEL: pam
         SLACK_COLOR: '#FF0000'
-        SLACK_MESSAGE: 'echo !!! $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has failed !!!'
+        SLACK_MESSAGE: '!!! $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has failed !!!'
         SLACK_TITLE: Github Build Failure
         SLACK_USERNAME: Github Actions
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
