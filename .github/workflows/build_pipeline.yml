@@ -58,7 +58,7 @@ jobs:
         SLACK_MESSAGE: 'echo $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has succeeded'
         SLACK_TITLE: Github Build Success
         SLACK_USERNAME: Github Actions
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     - name: Send build failure notification
       if: failure()
       uses: rtCamp/action-slack-notify@v2.0.0
