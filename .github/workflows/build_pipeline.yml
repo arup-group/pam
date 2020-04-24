@@ -33,16 +33,16 @@ jobs:
         pip install flake8
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
+    - name: Run tests
+      run: |
+        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        ./scripts/code-coverage.sh
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
-    - name: Run tests
-      run: |
-        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-coverage.sh
     - name: Push zip to S3
       run: |
         echo $BITBUCKET_COMMIT > release
@@ -52,17 +52,17 @@ jobs:
         aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
     - name: Set build success notification properties
       if: success()
+      run: echo 'Building build success Slack message...'
       env:
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
         SLACK_TITLE: GitHub Build Success
-      run: echo 'Building build success Slack message...'
     - name: Set build failure notification properties
       if: failure()
+      run: echo 'Building build failure Slack message...'
       env:
         SLACK_COLOR: '#FF0000'
         SLACK_MESSAGE: !!! ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed !!!
         SLACK_TITLE: GitHub Build Failure
-      run: echo 'Building build failure Slack message...'
     - name: Send build result Slack notification
       uses: rtCamp/action-slack-notify@v2.0.0
       env:
