@@ -52,16 +52,18 @@ jobs:
         aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
     - name: Set build success notification properties
       if: success()
-      run: echo 'Building build success Slack message...'
+      run: |
+        echo 'Building build success Slack message...'
       env:
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
         SLACK_TITLE: GitHub Build Success
     - name: Set build failure notification properties
       if: failure()
-      run: echo 'Building build failure Slack message...'
+      run: |
+        echo 'Building build failure Slack message...'
       env:
         SLACK_COLOR: '#FF0000'
-        SLACK_MESSAGE: !!! ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed !!!
+        SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed
         SLACK_TITLE: GitHub Build Failure
     - name: Send build result Slack notification
       uses: rtCamp/action-slack-notify@v2.0.0
