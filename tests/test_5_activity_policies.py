@@ -505,37 +505,6 @@ def test_is_activity_for_removal_activity_does_not_match_RemoveActivity_activiti
     assert not policy_remove_activity.is_activity_for_removal(activity)
 
 
-def test_remove_activities_removes_second_activity(home_education_shop_education_home):
-    person = home_education_shop_education_home
-    modify.remove_activities(person, [2], default='home')
-
-    assert len(person.plan) == 7
-    for i in range(0, 7, 2):
-        assert isinstance(person.plan.day[i], Activity)
-    assert [person.plan.day[i].act for i in range(0, 7, 2)] == ['home', 'shop', 'education', 'home']
-
-
-def test_remove_selected_activities_delegates_right_indices_to_remove_activity_when_one_activity_selected(mocker):
-    mocker.patch.object(modify, 'remove_activities')
-    person = home_education_shop_education_home
-
-    activities = [False, False, False, True, False]
-    modify.remove_selected_activities(person, activities, default='home')
-
-    modify.remove_activities.assert_called_once_with(person, [6], 'home')
-
-
-def test_remove_selected_activities_delegates_right_indices_to_remove_activity_when_activities_index_shifts(mocker):
-    mocker.patch.object(modify, 'remove_activities')
-    mocker.patch.object(Person, 'remove_activity')
-    person = home_education_shop_education_home
-
-    activities = [False, False, True, True, False]
-    modify.remove_selected_activities(person, activities, default='home')
-
-    modify.remove_activities.assert_called_once_with(person, [4, 4], 'home')
-
-
 @pytest.fixture()
 def Steve_Smith_Household():
     Steve = Person(1, attributes={'age': 50, 'job': 'work', 'gender': 'male'})
