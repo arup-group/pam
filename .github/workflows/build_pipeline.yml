@@ -50,4 +50,22 @@ jobs:
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
         aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
-
+    - name: Send build success notification
+      if: success()
+      uses: rtCamp/action-slack-notify@v2.0.0
+      env:
+        SLACK_CHANNEL: pam
+        SLACK_MESSAGE: `echo $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has succeeded`
+        SLACK_TITLE: Github Build Success
+        SLACK_USERNAME: Github Actions
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }
+    - name: Send build failure notification
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2.0.0
+      env:
+        SLACK_CHANNEL: pam
+        SLACK_COLOR: '#FF0000'
+        SLACK_MESSAGE: `echo !!! $GITHUB_REPOSITORY build $GITHUB_RUN_NUMBER launched by $GITHUB_ACTOR has failed !!!`
+        SLACK_TITLE: Github Build Failure
+        SLACK_USERNAME: Github Actions
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
