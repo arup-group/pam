@@ -146,9 +146,10 @@ class RemoveActivity(Policy):
                     self.remove_person_activities(person)
         elif self.probability_level == 'activity':
             for pid, person in household.people.items():
-                for activity in person.activities:
-                    if self.is_selected() and self.person_satisfies_attribute_conditions(person):
-                        self.remove_person_activities(person)
+                if self.person_satisfies_attribute_conditions(person):
+                    for activity in person.activities:
+                        if self.is_activity_for_removal(activity) and self.is_selected():
+                            self.remove_person_activities(person)
         else:
             raise NotImplementedError
 
@@ -158,13 +159,14 @@ class RemoveActivity(Policy):
                 self.remove_household_activities(household)
         elif self.probability_level == 'person':
             for pid, person in household.people.items():
-                if self.person_is_selected(person):
-                    self.remove_household_activities(household)
+                if self.person_satisfies_attribute_conditions(person) and self.person_is_selected(person):
+                        self.remove_household_activities(household)
         else:
             for pid, person in household.people.items():
-                for activity in person.activities:
-                    if self.is_selected():
-                        self.remove_household_activities(household)
+                if self.person_satisfies_attribute_conditions(person):
+                    for activity in person.activities:
+                        if self.is_activity_for_removal(activity) and self.is_selected():
+                            self.remove_household_activities(household)
 
     def remove_individual_activities(self, person):
         seq = 0
