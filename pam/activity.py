@@ -286,10 +286,6 @@ class Plan:
 		:return: True
 		"""
 		self.logger.debug(f" fill_plan, {idx_start}->{idx_end}")
-		# if idx_start and not (idx_start >= 0 and idx_start < self.length):
-		# 	raise UserWarning(f"ick plan {self.owner.pid} length is {self.length}, indexes are {idx_start} and {idx_end}: {self}")
-		# if idx_end and not (idx_end >=0 and idx_end < self.length):
-		# 	raise UserWarning(f"ick plan {self.owner.pid} length is {self.length}, indexes are {idx_start} and {idx_end}: {self}")
 
 		if idx_start is None and idx_end is None:  # Assume stay at home
 			self.stay_at_home()
