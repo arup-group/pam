@@ -26,8 +26,8 @@ def load_travel_diary(trips_df, attributes_df):
 	if not isinstance(trips_df, pd.DataFrame):
 		raise UserWarning("Unrecognised input for population travel diaries")
 
-	# if not isinstance(attributes_df, pd.DataFrame):
-	#     raise UserWarning("Unrecognised input for population attributes")
+	if not isinstance(attributes_df, pd.DataFrame):
+	    raise UserWarning("Unrecognised input for population attributes")
 
 	population = Population()
 
@@ -46,7 +46,9 @@ def load_travel_diary(trips_df, attributes_df):
 			person = Person(
 				pid,
 				freq=person_data.freq.iloc[0],
-				attributes=attributes_df.loc[pid].to_dict())
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=home_area
+				)
 
 			person.add(
 				Activity(

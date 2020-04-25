@@ -91,14 +91,15 @@ class Person:
 
 	logger = logging.getLogger(__name__)
 
-	def __init__(self, pid, freq=1, attributes=None):
+	def __init__(self, pid, freq=1, attributes=None, home_area=None):
 		if not isinstance(pid, str):
 			pid = str(pid)
 			self.logger.warning(" converting person id to string")
 		self.pid = str(pid)
 		self.freq = freq
 		self.attributes = attributes
-		self.plan = Plan()
+		self.plan = Plan(home_area=home_area)
+		self.home_area = home_area
 
 	@property
 	def home(self):
