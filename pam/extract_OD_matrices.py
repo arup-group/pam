@@ -1,40 +1,42 @@
 import os
 import pandas as pd
-from pam.activity import Plan
-from pam.core import Population
+from pam.activity import Plan, Activity, Leg
+from pam.core import Population, Household, Person
 
-# 1.Get unique values from ozone and dzone
-# 2.How do i count pid by ozone and dzone? (= count_data)
-# 3.Create dataframe index pd.DataFrame(count_data, columns = dzone, index=ozone )
+# 1.if activity is travel, I'd like to add origin and destination locations into a list respectively
+# 2.create a dataframe which has the first column as ozone and the second column dzone
+# 3.pivot table
 # 4.Write csv (df.to_csv('OD_matrices.csv'))
 
-path_to_repo = r'C:\Users\Iseul.Song\PythonProjects\pam'
-trips = pd.read_csv(os.path.join(path_to_repo, 'example_data\example_travel_diaries.csv'))
-print('done')
+
 def extract_od(population):
-	
-	population = Population()
-	ozone = trips.ozone.unique()
-	dzone = trips.dzone.unique()
+    ozone = []
+    dzone = []
 
-	trips.pivot_table(values='dzone', index='ozone', columns='dzone', fill_value=0, aggfunc=len)
-	
+    for hid, household in population.households.items():
+        for pid, person in household.people.items():
+            for p in person.plan:
+                if p.act == 'travel':
+                    o = p.start_location
+                    d = p.end_location
+                    ozone.append(o)
+                    dzone.append(d)
 
-	
-	# for pid in population.people:
-	# ozone = trips.ozone
-	# dzone = trips.dzone 
-	# pd.DataFrame(count_data, columns = dzone, index=ozone )
+    dataDict = {
+        'ozone': ozone,
+        'dzone': dzone
+    }
+
+    df = pd.DataFrame(data = dataDict).set_index('ozone')
+
+    print(df)
+
+    df.pivot_table(values='dzone', index='ozone', columns='dzone', fill_value=0, aggfunc=len)
+        
+    ## https://stackoverflow.com/questions/60079115/create-origin-destination-matrix-from-a-data-frame-in-python
+    ## https://stackoverflow.com/questions/56520616/is-it-possible-from-dataframe-transform-to-matrix
+    ## https://stackoverflow.com/questions/43298192/valueerror-grouper-for-something-not-1-dimensional/52090527
+    
 
 
-### Do i need to make a class inestead of function?? ###
-# class od_matrix(Population):
-# 	def _init_(self, ozone, dzone):
-# 		super()._init_(self)
-# 		self.ozone = ozone
-# 		self.dzone = dzone
-
-# 	def write(self):
-	
-
-
+extract_od(population)
