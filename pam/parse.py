@@ -12,8 +12,7 @@ from .utils import datetime_to_matsim_time as dttm
 from .utils import get_elems, write_xml
 
 
-def load_travel_diary(trips_df, attributes_df):
-
+def load_travel_diary(trips_df, attributes_df, complex=True):
 	"""
 	Turn standard tabular data inputs (travel survey and attributes) into core population
 	format.
@@ -28,6 +27,12 @@ def load_travel_diary(trips_df, attributes_df):
 
 	if not isinstance(attributes_df, pd.DataFrame):
 	    raise UserWarning("Unrecognised input for population attributes")
+
+	if complex:
+		return complex_travel_diary_read(trips_df, attributes_df)
+	return basic_travel_diary_read(trips_df, attributes_df)
+
+def basic_travel_diary_read(trips_df, attributes_df):
 
 	population = Population()
 
@@ -101,6 +106,72 @@ def load_travel_diary(trips_df, attributes_df):
 						activity_map[trip.dzone] = trip.purp
 
 					activities.append(destination_activity)
+
+			household.add(person)
+
+		population.add(household)
+
+	return population
+
+
+def complex_travel_diary_read(trips_df, attributes_df):
+	
+	population = Population()
+
+	for hid, household_data in trips_df.groupby('hid'):
+
+		household = Household(hid)
+
+		for pid, person_data in household_data.groupby('pid'):
+
+			trips = person_data.sort_values('seq')
+			# home_area = trips.hzone.iloc[0]
+			# origin_area = trips.ozone.iloc[0]
+			# activity_map = {home_area: 'home'}
+			# activities = ['home', 'work']
+
+			person = Person(
+				pid,
+				freq=person_data.freq.iloc[0],
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=trips.hzone.iloc[0]
+				)
+
+			person.add(
+				Activity(
+					seq=0,
+					act=None,
+					area=trips.ozone.iloc[0],
+					start_time=mtdt(0),
+				)
+			)
+
+			for n in range(len(trips)):
+				trip = trips.iloc[n]
+
+				person.add(
+					Leg(
+						seq=n,
+						mode=trip['mode'],
+						start_area=trip.ozone,
+						end_area=trip.dzone,
+						start_time=mtdt(trip.tst),
+						end_time=mtdt(trip.tet),
+						purpose=trip.purp
+					)
+				)
+
+				person.add(
+					Activity(
+						seq=n + 1,
+						act=None,
+						area=trip.dzone,
+						start_time=mtdt(trip.tet),
+					)
+				)
+			
+			person.plan.finalise()
+			person.plan.infer_activities_from_leg_purpose()
 
 			household.add(person)
 

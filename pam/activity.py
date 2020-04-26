@@ -66,6 +66,11 @@ class Plan:
 		for component in self.day:
 			yield component
 
+	def get(self, idx, default=None):
+		if -self.length <= idx < self.length:
+			return self.day[idx]
+		return default
+
 	def reversed(self):
 		"""
 		Reverse iterate through plan, yield idx and component.
@@ -208,6 +213,130 @@ class Plan:
 
 		else:
 			raise UserWarning(f"Cannot add type: {type(p)} to plan.")
+
+	def closed_duration(self, idx):
+		"""
+		Check duration of plan component at idx, if closed plan, combine first and last durations
+		"""
+		if self.closed and (idx == 0 or idx == self.length - 1):
+			return self.day[0].duration + self.day[-1].duration
+		return self.day[idx].duration
+
+	def infer_activity_idxs(self, target, default=True):
+		"""
+		Infer idxs of home activity based on location. First pass looks to exclude other acts at home
+		location, second pass looks adds home idxs.
+		If a leg is found to start and end at the home location then the one with maximum duration
+		is included.
+		"""
+		candidates = set()
+		exclude = set()
+
+		for idx, leg in enumerate(self.legs):
+			prev_act_idx = 2 * idx
+			next_act_idx = prev_act_idx + 2
+			if leg.start_location == leg.end_location == target:  # check for larger duration
+				if self.closed_duration(prev_act_idx) > self.closed_duration(next_act_idx):
+					exclude.add(next_act_idx)
+				else:
+					exclude.add(prev_act_idx)
+
+		for idx, act in enumerate(self.activities):
+			if act.location == target and (idx*2) not in exclude:
+				candidates.add(idx*2)
+
+		if default and not candidates:  # assume first activity (and last if closed)
+			if self.closed:
+				return set([0, self.length-1])
+			return set([0])
+
+		return candidates
+
+	def infer_activities_from_leg_purpose(self):
+		"""
+		Infer and set activity types based on trip purpose. Algorithm works like breadth first search,
+		initiated from inferred home locations. Search takes place in two stages, first pass forward,
+		the backward. The next activity type is set based on the trip purpose. Pass forward is exhausted
+		first, because it's assumed that this is how the diary is originally filled in.
+		"""
+		#find home activities
+		home_idxs = self.infer_activity_idxs(target=self.home)
+		for idx in home_idxs:
+			self.day[idx].act = 'home'
+
+		location_map = {}
+		remaining = set(range(0, self.length, 2)) - set(home_idxs)
+		
+		# forward traverse
+		queue = [idx+2 for idx in home_idxs if idx+2 < self.length]  # add next act idxs to queue\
+		last_act = None
+
+		while queue:  # traverse from home
+			idx = queue.pop()
+
+			if self.day[idx].act is None:
+				act = self.day[idx-1].purpose
+				location = self.day[idx].location.min
+
+				if act == last_act and location in location_map:
+					act = location_map[location]
+
+				self.day[idx].act = act
+				remaining -= {idx}
+				last_act = act
+				location_map[location] = act
+
+				if idx+2 in remaining:
+					queue.append(idx+2)
+
+		queue = []
+		for location, activity in location_map.items():
+			candidates = self.infer_activity_idxs(target=location, default=False)
+			for idx in candidates:
+				if idx in remaining:
+					self.day[idx].act = activity
+					remaining -= {idx}
+					if idx+2 in remaining:
+						queue.append(idx+2)
+		
+		while queue:
+			idx = queue.pop()
+
+			if self.day[idx].act is None:
+				act = self.day[idx-1].purpose
+				location = self.day[idx].location.min
+
+				if act == last_act and location in location_map:
+					act = location_map[location]
+
+				self.day[idx].act = act
+				remaining -= {idx}
+				last_act = act
+				location_map[location] = act
+
+				if idx+2 < self.length:
+					queue.append(idx+2)
+
+		# backward traverse
+		queue = list(remaining)  # add next act idxs to queue
+
+		while queue:  # traverse from home
+			idx = queue.pop()
+
+			if self.day[idx].act is None:
+				act = self.day[idx+1].purpose
+				location = self.day[idx].location.min
+
+				if act == last_act and location in location_map:
+					act = location_map[location]
+
+				self.day[idx].act = act
+				remaining -= {idx}
+				last_act = act
+				location_map[location] = act
+
+				if idx-2 >= 0:
+					queue.append(idx-2)
 
 	def finalise(self):
 		"""
@@ -542,6 +671,7 @@ class Leg(PlanComponent):
 			end_area=None,
 			start_time=None,
 			end_time=None,
+			purpose=None
 	):
 		self.seq = seq
 		self.mode = mode
@@ -549,6 +679,7 @@ class Leg(PlanComponent):
 		self.end_location=Location(loc=end_loc, link=end_link, area=end_area)
 		self.start_time = start_time
 		self.end_time = end_time
+		self.purpose=purpose
 
 	def __str__(self):
 		return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
@@ -596,6 +727,8 @@ class Location:
 		return str(self.min)
 
 	def __eq__(self, other):
+		if isinstance(other, str):
+			return self.area == other
 		if self.loc is not None and other.loc is not None:
 			return self.loc == other.loc
 		if self.link is not None and other.link is not None:
