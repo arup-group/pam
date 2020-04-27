@@ -1,5 +1,6 @@
 from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
+import logging
 
 from .variables import END_OF_DAY
 from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
@@ -7,15 +8,21 @@ from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidation
 
 class Plan:
 	
-	def __init__(self):
+	def __init__(self, home_area=None):
 		self.day = []
+		self.home_location = Location(area=home_area)
+		self.logger = logging.getLogger(__name__)
 
 	@property
 	def home(self):
+		if self.home_location.exists:
+			return self.home_location
 		if self.day:
 			for act in self.activities:
 				if act.act.lower() == 'home':
-					return act.location.area
+					return act.location
+		self.logger.warning( "failed to find home, return area at start of day")
+		return self.day[0].location
 
 	@property
 	def activities(self):
@@ -240,23 +247,31 @@ class Plan:
 		assert isinstance(self.day[seq], Activity)
 
 		if seq == 0 and seq == self.length - 1:  # remove activity that is entire plan
+			self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, plan now empty")
 			self.day.pop(0)
 			return None, None
 
 		if (seq == 0 or seq == self.length - 1) and self.closed:  # remove activity that wraps
+			self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, wraps")
 			self.day.pop(0)
 			self.day.pop(self.length - 1)
+			if self.length == 1:  # all activities have been removed
+				self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, now empty")
+				return None, None
 			return self.length-2, 1
 
 		if seq == 0:  # remove first activity
+			self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, first activity")
 			self.day.pop(seq)
 			return None, 1
 
 		if seq == self.length - 1:  # remove last activity
+			self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, last activity")
 			self.day.pop(seq)
 			return self.length-2, None
 
 		else:  # remove activity somewhere in middle of plan
+			self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}")
 			self.day.pop(seq)
 			return seq-2, seq+1
 
@@ -270,6 +285,8 @@ class Plan:
 		:param default: Not Used
 		:return: True
 		"""
+		self.logger.debug(f" fill_plan, {idx_start}->{idx_end}")
+
 		if idx_start is None and idx_end is None:  # Assume stay at home
 			self.stay_at_home()
 			return True
@@ -323,7 +340,9 @@ class Plan:
 
 			pivot_idx = self.position_of(target='home')
 			if pivot_idx is None:
-				raise NotImplementedError("Cannot fill plan without existing home activity")
+				self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
+				self.stay_at_home()
+				return True
 
 			self.expand(pivot_idx)
 			return True
@@ -365,9 +384,9 @@ class Plan:
 		# press plans away from pivoting activity
 		pivot_idx = self.position_of(target='home')
 		if pivot_idx is None:
-			raise NotImplementedError(
-				f"Cannot fill plan without existing home activity"
-			)
+			self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
+			self.stay_at_home()
+			return None
 
 		self.expand(pivot_idx)
 
@@ -396,9 +415,9 @@ class Plan:
 		self.day[idx_end].start_time = mtdt(0)
 		self.day.pop(idx_start + 1)  # remove proceeding leg
 		self.day.pop(idx_end - 1)  # remove subsequent leg
-		return True
 
 	def stay_at_home(self):
+		self.logger.debug(f" stay_at_home, location:{self.home}")
 		self.day = [
 			Activity(
 				seq=1,
@@ -567,6 +586,11 @@ class Location:
 			return self.link
 		if self.loc is not None:
 			return self.loc
+
+	@property
+	def exists(self):
+		if self.area or self.link or self.loc:
+			return True
 
 	def __str__(self):
 		return str(self.min)

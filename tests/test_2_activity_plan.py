@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
 
-from pam.activity import Plan, Activity, Leg
+from pam.activity import Plan, Activity, Leg, Location
 from pam.utils import minutes_to_datetime as mtdt
 from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
 from pam.variables import END_OF_DAY
@@ -14,7 +14,7 @@ def test_plan_init():
 
 
 def test_home(person_heh):
-    assert person_heh.plan.home == 'a'
+    assert person_heh.plan.home == Location(area='a')
 
 
 def test_activities(person_heh):

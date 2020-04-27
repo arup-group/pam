@@ -27,8 +27,8 @@ def load_travel_diary(trips_df, attributes_df, sample_perc = None):
 	if not isinstance(trips_df, pd.DataFrame):
 		raise UserWarning("Unrecognised input for population travel diaries")
 
-	# if not isinstance(attributes_df, pd.DataFrame):
-	#     raise UserWarning("Unrecognised input for population attributes")
+	if not isinstance(attributes_df, pd.DataFrame):
+	    raise UserWarning("Unrecognised input for population attributes")
 
 	if sample_perc != None:
 		trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
@@ -50,7 +50,9 @@ def load_travel_diary(trips_df, attributes_df, sample_perc = None):
 			person = Person(
 				pid,
 				freq=person_data.freq.iloc[0],
-				attributes=attributes_df.loc[pid].to_dict())
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=home_area
+				)
 
 			person.add(
 				Activity(
