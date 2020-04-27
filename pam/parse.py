@@ -113,7 +113,8 @@ def read_matsim(
 	weight=1000,
 	household_key=None,
 	simplify_pt_trips=False,
-	autocomplete=True
+	autocomplete=True,
+	crop=True
 	):
 	"""
 	Load a MATSim format population into core population format.
@@ -201,6 +202,9 @@ def read_matsim(
 
 		if simplify_pt_trips:
 			person.plan.simplify_pt_trips()
+
+		if crop:
+			person.plan.crop()
 
 		if autocomplete:
 			person.plan.autocomplete_matsim()

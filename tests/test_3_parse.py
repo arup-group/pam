@@ -3,6 +3,7 @@ import pytest
 import pandas as pd
 
 from pam.parse import load_travel_diary
+from .fixtures import person_crop_last_act, person_crop_last_leg
 
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
@@ -59,3 +60,13 @@ def test_agent_pid_4_complex_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households['1'].people['4'].activities]
     assert acts == ['home', 'work', 'work', 'work', 'work', 'home']
+
+
+def test_crop_last_act(person_crop_last_act):
+    person_crop_last_act.plan.crop()
+    assert person_crop_last_act.has_valid_plan
+
+
+def test_crop_last_leg(person_crop_last_leg):
+    person_crop_last_leg.plan.crop()
+    assert person_crop_last_leg.has_valid_plan

@@ -1,10 +1,12 @@
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 from pam import modify
 
 import pytest
 import random
+from datetime import datetime
 
 
 @pytest.fixture
@@ -55,7 +57,7 @@ def person_home_education_home():
             act='home',
             area='a',
             start_time=mtdt(180),
-            end_time=mtdt(24 * 60 - 1)
+            end_time=END_OF_DAY
         )
     )
 
@@ -152,7 +154,7 @@ def test_home_education_home_removal_of_education_act(person_home_education_home
     policy.apply_to(household)
     assert [p.act for p in household.people['1'].activities] == ['home']
     assert household.people['1'].plan[0].start_time == mtdt(0)
-    assert household.people['1'].plan[0].end_time == mtdt(24*60-1)
+    assert household.people['1'].plan[0].end_time == END_OF_DAY
 
 
 def test_home_education_home_education_home_removal_of_education_act():
@@ -241,7 +243,7 @@ def test_home_education_home_education_home_removal_of_education_act():
             act='home',
             area='a',
             start_time=mtdt(680),
-            end_time=mtdt(24 * 60 - 1)
+            end_time=END_OF_DAY
         )
     )
     household.add(person)
@@ -250,7 +252,7 @@ def test_home_education_home_education_home_removal_of_education_act():
     policy.apply_to(household)
     assert [p.act for p in household.people['1'].activities] == ['home']
     assert household.people['1'].plan[0].start_time == mtdt(0)
-    assert household.people['1'].plan[0].end_time == mtdt(24*60-1)
+    assert household.people['1'].plan[0].end_time == END_OF_DAY
 
 
 def test_home_work_home_education_home_removal_of_education_act():
@@ -339,7 +341,7 @@ def test_home_work_home_education_home_removal_of_education_act():
             act='home',
             area='a',
             start_time=mtdt(680),
-            end_time=mtdt(24 * 60 - 1)
+            end_time=END_OF_DAY
         )
     )
     household.add(person)
@@ -348,7 +350,7 @@ def test_home_work_home_education_home_removal_of_education_act():
     policy.apply_to(household)
     assert [p.act for p in household.people['1'].activities] == ['home', 'work', 'home']
     assert household.people['1'].plan[0].start_time == mtdt(0)
-    assert household.people['1'].plan[-1].end_time == mtdt(24*60-1)
+    assert household.people['1'].plan[-1].end_time == END_OF_DAY
 
 
 def test_home_education_home_attribute_based_activity_removal_strict_satisfies_conditions(
@@ -818,4 +820,3 @@ def test_person_policy_with_activity_based_probability_with_a_satisfied_person_a
     steve = household.people['1']
 
     modify.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
-
