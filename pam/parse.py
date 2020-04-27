@@ -12,13 +12,14 @@ from .utils import datetime_to_matsim_time as dttm
 from .utils import get_elems, write_xml
 
 
-def load_travel_diary(trips_df, attributes_df):
+def load_travel_diary(trips_df, attributes_df, sample_perc = None):
 
 	"""
 	Turn standard tabular data inputs (travel survey and attributes) into core population
 	format.
 	:param trips_df: DataFrame
 	:param attributes_df: DataFrame
+	:param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
 	:return: core.Population
 	"""
 	# TODO check for required col headers and give useful error?
@@ -26,8 +27,11 @@ def load_travel_diary(trips_df, attributes_df):
 	if not isinstance(trips_df, pd.DataFrame):
 		raise UserWarning("Unrecognised input for population travel diaries")
 
-	# if not isinstance(attributes_df, pd.DataFrame):
-	#     raise UserWarning("Unrecognised input for population attributes")
+	if not isinstance(attributes_df, pd.DataFrame):
+	    raise UserWarning("Unrecognised input for population attributes")
+
+	if sample_perc != None:
+		trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
 
 	population = Population()
 
@@ -46,7 +50,9 @@ def load_travel_diary(trips_df, attributes_df):
 			person = Person(
 				pid,
 				freq=person_data.freq.iloc[0],
-				attributes=attributes_df.loc[pid].to_dict())
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=home_area
+				)
 
 			person.add(
 				Activity(
@@ -251,3 +257,18 @@ def selected_plans(plans_path):
 		for plan in person:
 			if plan.get('selected') == 'yes':
 				yield person.get('id'), plan
+
+def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
+	"""
+	Return the trips of a random sample of the travel population. 
+	We merge the trips and attribute datasets to enable probability weights based on population demographics. 
+
+	:params DataFrame trips_df: Trips dataset
+	:params DataFrame attributes_df: Population attributes dataset. 
+	:params float sample_perc: Sampling percentage
+	:params string weight_col: The field to use for probability weighting
+
+	:return: Pandas DataFrame, a sampled version of the trips_df dataframe 
+	"""
+	sample_pids = trips_df.groupby('pid')[['freq']].sum().join(attributes_df,how='left').sample(frac=sample_perc,weights=weight_col).index
+	return trips_df[trips_df.pid.isin(sample_pids)]
