@@ -4,7 +4,8 @@ from .activity import Plan
 
 class Population:
 
-	def __init__(self):
+	def __init__(self, name=None):
+		self.name=name
 		self.logger = logging.getLogger(__name__)
 		self.households = {}
 
