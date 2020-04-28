@@ -56,7 +56,7 @@ jobs:
       env:
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
         SLACK_TITLE: Build Success
-        SLACK_CHANNEL: pam
+        SLACK_CHANNEL: pam-feeds
         SLACK_USERNAME: GitHub Build Bot
         SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -67,7 +67,7 @@ jobs:
         SLACK_COLOR: '#FF0000'
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed
         SLACK_TITLE: Build Failure!
-        SLACK_CHANNEL: pam
+        SLACK_CHANNEL: pam-feeds
         SLACK_USERNAME: GitHub Build Bot
         SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
