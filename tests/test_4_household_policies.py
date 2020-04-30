@@ -1,8 +1,19 @@
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam import modify
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 import pytest
+
+
+def assert_single_home_activity(person):
+    assert len(person.plan) == 1
+    assert isinstance(person.plan.day[0], Activity)
+    assert person.plan.day[0].act == 'home'
+    assert person.plan.day[0].location == person.home
+    assert person.plan.day[0].start_time == mtdt(0)
+    assert person.plan.day[0].end_time == END_OF_DAY
 
 
 @pytest.fixture
@@ -41,26 +52,40 @@ def population():
     return population
 
 
-def test_apply_full_hh_quarantine(population):
+def test_apply_full_hh_quarantine_doesnt_create_or_delete_households(population):
     policy = modify.HouseholdQuarantined(1)
     modify.apply_policies(population, [policy])
     assert len(population.households) == 20
+
+
+def test_apply_person_based_full_hh_quarantine_doesnt_create_or_delete_households(population):
+    policy = modify.HouseholdQuarantined(1, person_based=True)
+    modify.apply_policies(population, [policy])
+    assert len(population.households) == 20
+
+
+def test_apply_full_hh_quarantine(population):
+    policy = modify.HouseholdQuarantined(1)
+    modify.apply_policies(population, [policy])
     for hid, household in population.households.items():
-        assert len(household.people) == 2
         for pid, person in household.people.items():
-            assert len(person.plan) == 1
-            assert isinstance(person.plan.day[0], Activity)
+            assert_single_home_activity(person)
+
+
+def test_apply_person_based_full_quarantine(population):
+    policy = modify.HouseholdQuarantined(1, person_based=True)
+    modify.apply_policies(population, [policy])
+    for hid, household in population.households.items():
+        for pid, person in household.people.items():
+            assert_single_home_activity(person)
 
 
 def test_apply_full_person_stay_at_home(population):
     policy = modify.PersonStayAtHome(1)
     modify.apply_policies(population, [policy])
-    assert len(population.households) == 20
     for hid, household in population.households.items():
-        assert len(household.people) == 2
         for pid, person in household.people.items():
-            assert len(person.plan) == 1
-            assert isinstance(person.plan.day[0], Activity)
+            assert_single_home_activity(person)
 
 
 def test_apply_two_policies(population):
@@ -68,7 +93,6 @@ def test_apply_two_policies(population):
     policy2 = modify.PersonStayAtHome(.4)
     counter = 0
     modify.apply_policies(population, [policy1, policy2])
-    assert len(population.households) == 20
     for hid, household in population.households.items():
         assert len(household.people) == 2
         for pid, person in household.people.items():
