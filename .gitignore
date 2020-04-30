@@ -1,4 +1,6 @@
 pam.egg-info/
+*.xls
+*.xlsx
 *.pptx
 .DS_Store
 .cache/
