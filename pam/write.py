@@ -171,22 +171,21 @@ def create_population_export(list_of_populations, export_path):
             })
 
         pathfilename = export_path+str('/populations.csv')
-        populations_df = pd.DataFrame(populations)
         pd.DataFrame(populations).to_csv(pathfilename, index = False)
 
         """
         Create household export
         """
         
-        for hid in population.households:
+        for hid, hh in population.households.items():
             households.append({
                 'Scenario ID': id(population),
                 'Household ID': hid,
-                'Area': household.area,
+                'Area': hh.area,
                 'Scenario_Household_ID': str(id(population)) + str("_") + str(hid)
 
             })
-        households_df = pd.DataFrame(households)
+        
         pathfilename = export_path+str('/households.csv')
         pd.DataFrame(households).to_csv(pathfilename, index = False)
 
@@ -206,7 +205,7 @@ def create_population_export(list_of_populations, export_path):
             people.append({**d_to_append, **person.attributes}) 
 
 
-        people_df = pd.DataFrame(people)
+        
         pathfilename = export_path+str('/people.csv')
         pd.DataFrame(people).to_csv(pathfilename, index = False)
  
@@ -233,7 +232,7 @@ def create_population_export(list_of_populations, export_path):
                  
             })
 
-        legs_df = pd.DataFrame(legs)
+        
         pathfilename = export_path+str('/legs.csv')
         pd.DataFrame(legs).to_csv(pathfilename, index = False)
 
@@ -256,7 +255,6 @@ def create_population_export(list_of_populations, export_path):
                     'Duration': activity.end_time - activity.start_time
             })
 
-        activities_df = pd.DataFrame(activities)
         pathfilename = export_path+str('/activities.csv')
         pd.DataFrame(activities).to_csv(pathfilename, index = False)
         
