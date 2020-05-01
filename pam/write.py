@@ -147,6 +147,11 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 	# todo assuming v1?
 
 def create_population_export(list_of_populations, export_path):
+    
+    """"
+    This function creates csv export files of populations, households, people, legs and actvities. 
+    This export could be used to share data outside of Python or build an interactive dashboard.
+    """
     populations = []
     households = []
     people = []
