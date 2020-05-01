@@ -10,7 +10,7 @@ pam.egg-info/
 data/
 example_data/.DS_Store
 https_github.com_fredshone.egg-info/
-pam/__pycache__/
+__pycache__
 parser.ipynb
 prelim-data-validation.ipynb
 scratch/
