@@ -53,19 +53,19 @@ def cat_joint_distribution():
     return mapping, distribution
 
 
-def test_bin_integer_transformer(michael, bins):
+def test_apply_bin_integer_transformer_to_michael(michael, bins):
     assert attributes.bin_integer_transformer(michael, 'age', bins) == 'younger'
 
 
-def test_bin_integer_transformer_missing(fred, bins):
+def test_apply_bin_integer_transformer_with_missing_bin(fred, bins):
     assert attributes.bin_integer_transformer(fred, 'age', bins) is None
 
 
-def test_discrete_joint_distribution_sampler_michael(michael, cat_joint_distribution):
+def test_apply_discrete_joint_distribution_sampler_to_michael(michael, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist) == False
 
 
-def test_discrete_joint_distribution_sampler_kasia(kasia, cat_joint_distribution):
+def test_applt_discrete_joint_distribution_sampler_to_kasia(kasia, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist) == True

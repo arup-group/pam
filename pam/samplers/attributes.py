@@ -10,7 +10,7 @@ def bin_integer_transformer(features, target, bins, default=None):
     """
     value = features.get(target)
     if value is None:
-            raise KeyError(f"Connot find target key: {target} in sampling features: {features}")
+            raise KeyError(f"Can not find target key: {target} in sampling features: {features}")
     for (lower, upper), new_value in bins.items():
         if lower < int(value) <= upper:
             return new_value
@@ -24,7 +24,7 @@ def discrete_joint_distribution_sampler(features, mapping, distribution):
     Where features are a dictionary structure of features, eg: {'gender':'female'}
 
     Distribution is a nested dict of probabilities based on possible features, eg:
-    {'0-0': {'male': 0, 'female': 0},... , '90-120': {'male': 1, 'female': 1}}
+    {'0-0': {'male': 0, 'female': 0},... , '90-120': {'male': 1, 'female': .5}}
 
     Mapping provides the feature name for each level of the distribution, eg:
     ['age', 'gender']
@@ -33,9 +33,9 @@ def discrete_joint_distribution_sampler(features, mapping, distribution):
     for key in mapping:
         value = features.get(key)
         if value is None:
-            raise KeyError(f"Connot find mapping: {key} in sampling features: {features}")
+            raise KeyError(f"Can not find mapping: {key} in sampling features: {features}")
         p = p.get(value)
         if p is None:
-            raise KeyError(f"Connot find feature for {key}: {value} in distribution: {p}")
+            raise KeyError(f"Can not find feature for {key}: {value} in distribution: {p}")
 
     return random() <= p
