@@ -1,7 +1,10 @@
+import pandas as pd
+import matplotlib as plt
+
 def plot_activities(person):
-'''
-Plot a high level activity plan for a single person
-'''
+    '''
+    Plot a high level activity plan for a single person
+    '''
     
     #Load a df with a persons activty plan
     activities, start_times, end_times, durations = [], [], [], []
