@@ -1,8 +1,7 @@
 import pandas as pd
-from pam.activity import Plan, Activity, Leg
-from pam.core import Population, Household, Person
 
-def extract_od(population, path='OD_matrix.csv'): #notice the default value
+
+def extract_od(population, path):
     ozone = []
     dzone = []
 
@@ -20,7 +19,7 @@ def extract_od(population, path='OD_matrix.csv'): #notice the default value
         'dzone': dzone
     }
 
-    df = pd.DataFrame(data = data_dict).set_index('ozone')
+    df = pd.DataFrame(data=data_dict).set_index('ozone')
     matrix = df.pivot_table(values='dzone', index='ozone', columns='dzone', fill_value=0, aggfunc=len)
 
     matrix.to_csv(path)

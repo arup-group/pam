@@ -145,3 +145,104 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
 	write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 	# todo assuming v1?
+
+def create_population_export(list_of_populations, export_path):
+    
+    """"
+    This function creates csv export files of populations, households, people, legs and actvities. 
+    This export could be used to share data outside of Python or build an interactive dashboard.
+    """
+    populations = []
+    households = []
+    people = []
+    legs = []
+    activities = []
+    locations = []
+    
+    for idx, population in enumerate(list_of_populations):
+
+        #Population csv
+        populations.append(
+            {
+                'Scenario ID': idx,
+                'Scenario name': population.name   
+            })
+
+        pathfilename = os.path.join(export_path, 'populations.csv')
+        pd.DataFrame(populations).to_csv(pathfilename, index = False)
+
+        #Household df
+        
+        for hid, hh in population.households.items():
+            households.append({
+                'Scenario ID': idx,
+                'Household ID': hid,
+                'Area': hh.area,
+                'Scenario_Household_ID': str(idx) + str("_") + str(hid)
+
+            })
+              
+        pathfilename = os.path.join(export_path, 'households.csv')
+        pd.DataFrame(households).to_csv(pathfilename, index = False)
+
+
+        #People csv
+        
+        for hid, pid, person in population.people():
+            d_to_append = {
+                'Scenario_Household_ID': str(idx) + str("_") + str(hid),
+                'Scenario_Person_ID': str(idx) + str("_") + str(pid),
+                'Scenario ID': idx,
+                'Household ID': hid,
+                'Person ID': pid
+            }            
+            people.append({**d_to_append, **person.attributes}) 
+
+        pathfilename = os.path.join(export_path, 'people.csv')
+        pd.DataFrame(people).to_csv(pathfilename, index = False)
+        
+
+        #Leg csv
+        
+        for hid, pid, person in population.people():
+            for seq, leg in enumerate(person.legs):
+                legs.append({
+                    'Scenario_Person_ID': str(idx) + str("_") + str(pid),
+                    'Scenario ID': idx,
+                    'Household ID': hid,
+                    'Person ID': pid,
+                    'Origin': leg.start_location.area,
+                    'Destination': leg.end_location.area,
+                    'Purpose': leg.act,  
+                    'Mode': leg.mode,
+                    'Sequence': leg.seq,
+                    'Start time': leg.start_time,  
+                    'End time': leg.end_time, 
+                    'Duration': leg.duration
+                 
+            })
+
+        pathfilename = os.path.join(export_path, 'legs.csv')
+        pd.DataFrame(legs).to_csv(pathfilename, index = False)
+
+        #Activity csv
+        
+        for hid, pid, person in population.people():
+            for seq, activity in enumerate(person.activities):
+                activities.append({
+                    'Scenario_Person_ID': str(idx) + str("_") + str(pid),
+                    'Scenario ID': idx,
+                    'Household ID': hid,
+                    'Person ID': pid,
+                    'Location': activity.location.area,
+                    'Purpose': activity.act,  
+                    'Sequence': activity.seq,
+                    'Start time': activity.start_time,  
+                    'End time': activity.end_time,  
+                    'Duration': activity.duration
+            })
+
+        pathfilename = os.path.join(export_path, 'activities.csv')
+        pd.DataFrame(activities).to_csv(pathfilename, index = False)
+               
+    return 
