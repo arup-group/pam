@@ -654,6 +654,10 @@ class Activity(PlanComponent):
 	def __eq__(self, other):
 		return (self.location == other.location) and (self.act == other.act)
 
+	def is_exact(self, other):
+		return (self.location == other.location) and (self.act == other.act) \
+               and (self.start_time == other.start_time) and (self.end_time == other.end_time)
+
 
 class Leg(PlanComponent):
 

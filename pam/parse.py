@@ -27,7 +27,7 @@ def load_travel_diary(trips_df, attributes_df, sample_perc = None, complex=True)
 		raise UserWarning("Unrecognised input for population travel diaries")
 
 	if not isinstance(attributes_df, pd.DataFrame):
-	    raise UserWarning("Unrecognised input for population attributes")
+		raise UserWarning("Unrecognised input for population attributes")
 
 	if sample_perc is not None:
 		trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population

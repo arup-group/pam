@@ -59,7 +59,7 @@ def test_apply_full_hh_quarantine_doesnt_create_or_delete_households(population)
 
 
 def test_apply_person_based_full_hh_quarantine_doesnt_create_or_delete_households(population):
-    policy = modify.HouseholdQuarantined(1, person_based=True)
+    policy = modify.HouseholdQuarantined(modify.PersonProbability(1))
     modify.apply_policies(population, [policy])
     assert len(population.households) == 20
 
@@ -73,7 +73,7 @@ def test_apply_full_hh_quarantine(population):
 
 
 def test_apply_person_based_full_quarantine(population):
-    policy = modify.HouseholdQuarantined(1, person_based=True)
+    policy = modify.HouseholdQuarantined(modify.PersonProbability(1))
     modify.apply_policies(population, [policy])
     for hid, household in population.households.items():
         for pid, person in household.people.items():
