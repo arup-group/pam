@@ -17,7 +17,7 @@ def bin_integer_transformer(features, target, bins, default=None):
     return default
 
 
-def discrete_joint_distribution_sampler(features, mapping, distribution):
+def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False):
     """
     Randomly sample from a joint distribution based some discrete features.
 
@@ -28,14 +28,20 @@ def discrete_joint_distribution_sampler(features, mapping, distribution):
 
     Mapping provides the feature name for each level of the distribution, eg:
     ['age', 'gender']
+
+    Missing keys return False, unless careful is set to True, which will raise an error.
     """
     p = distribution
     for key in mapping:
         value = features.get(key)
         if value is None:
             raise KeyError(f"Can not find mapping: {key} in sampling features: {features}")
+
         p = p.get(value)
         if p is None:
-            raise KeyError(f"Can not find feature for {key}: {value} in distribution: {p}")
+            if careful:
+                raise KeyError(f"Can not find feature for {key}: {value} in distribution: {p}")
+            else:
+                return False
 
     return random() <= p
