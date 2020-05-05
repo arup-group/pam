@@ -253,7 +253,7 @@ def load_activity_plan(trips_df, attributes_df, sample_perc = None):
 				person.add(
 						Activity(
 							seq=n + 1,
-							act=trip.activity,
+							act=trip.activity.lower(),
 							area=trip.dzone,
 							start_time=mtdt(trip.tet),
 						)

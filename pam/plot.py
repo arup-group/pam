@@ -26,7 +26,7 @@ def plot_activities(person):
 
     df['color'] = df['act'].map(d_color)
     
-    fig, ax = plt.subplots(figsize=(16,4))
+    fig, ax = plt.subplots(figsize=(16,2))
     
     label_x, label_y = [],[]
 
@@ -42,14 +42,14 @@ def plot_activities(person):
                )
         
         #Populate Labelling Params
-        label_x.append(data['start_time']+data['dur']/2)
+        label_x.append(data['start_time'] + data['dur'] / 2)
         label_y.append(y)
     
     #Labels
     rects = ax.patches
     
     for x, y, rect, activity in zip(label_x, label_y, rects, activities):
-        if rect.get_width()>=3:
+        if rect.get_width() >= 3:
             ax.text(x, y, activity, ha='center',
                     fontdict={'color':'white', 'size':14, 'weight':'bold'})
         
