@@ -229,6 +229,7 @@ class Plan:
 		If a leg is found to start and end at the home location then the one with maximum duration
 		is included.
 		"""
+		# todo untested for more than three possible home activities in a row.
 		candidates = set()
 		exclude = set()
 
@@ -264,7 +265,7 @@ class Plan:
 		for idx in home_idxs:
 			self.day[idx].act = 'home'
 
-		location_map = {}
+		area_map = {}
 		remaining = set(range(0, self.length, 2)) - set(home_idxs)
 		
 		# forward traverse
@@ -275,23 +276,23 @@ class Plan:
 			idx = queue.pop()
 
 			if self.day[idx].act is None:
-				act = self.day[idx-1].purpose
+				act = self.day[idx-1].purpose.lower()
 				location = self.day[idx].location.min
 
-				if act == last_act and location in location_map:
-					act = location_map[location]
+				if act == last_act and location in area_map:
+					act = area_map[location]
 
 				self.day[idx].act = act
 				remaining -= {idx}
 				last_act = act
-				location_map[location] = act
+				area_map[location] = act
 
 				if idx+2 in remaining:
 					queue.append(idx+2)
 
 		queue = []
-		for location, activity in location_map.items():
-			candidates = self.infer_activity_idxs(target=location, default=False)
+		for location, activity in area_map.items():
+			candidates = self.infer_activity_idxs(target=Location(area=location), default=False)
 			for idx in candidates:
 				if idx in remaining:
 					self.day[idx].act = activity
@@ -303,16 +304,16 @@ class Plan:
 			idx = queue.pop()
 
 			if self.day[idx].act is None:
-				act = self.day[idx-1].purpose
+				act = self.day[idx-1].purpose.lower()
 				location = self.day[idx].location.min
 
-				if act == last_act and location in location_map:
-					act = location_map[location]
+				if act == last_act and location in area_map:
+					act = area_map[location]
 
 				self.day[idx].act = act
 				remaining -= {idx}
 				last_act = act
-				location_map[location] = act
+				area_map[location] = act
 
 				if idx+2 < self.length:
 					queue.append(idx+2)
@@ -324,16 +325,16 @@ class Plan:
 			idx = queue.pop()
 
 			if self.day[idx].act is None:
-				act = self.day[idx+1].purpose
+				act = self.day[idx+1].purpose.lower()
 				location = self.day[idx].location.min
 
-				if act == last_act and location in location_map:
-					act = location_map[location]
+				if act == last_act and location in area_map:
+					act = area_map[location]
 
 				self.day[idx].act = act
 				remaining -= {idx}
 				last_act = act
-				location_map[location] = act
+				area_map[location] = act
 
 				if idx-2 >= 0:
 					queue.append(idx-2)

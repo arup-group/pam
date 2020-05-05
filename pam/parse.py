@@ -128,10 +128,6 @@ def complex_travel_diary_read(trips_df, attributes_df):
 		for pid, person_data in household_data.groupby('pid'):
 
 			trips = person_data.sort_values('seq')
-			# home_area = trips.hzone.iloc[0]
-			# origin_area = trips.ozone.iloc[0]
-			# activity_map = {home_area: 'home'}
-			# activities = ['home', 'work']
 
 			person = Person(
 				pid,

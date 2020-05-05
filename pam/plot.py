@@ -1,16 +1,16 @@
 import pandas as pd
-import matplotlib as plt
+from matplotlib import pyplot as plt
+
 
 def plot_activities(person):
     '''
     Plot a high level activity plan for a single person
     '''
-    
     #Load a df with a persons activty plan
     activities, start_times, end_times, durations = [], [], [], []
 
     for component in person.plan.day:
-        activities.append(component.act.title())
+        activities.append(component.act.lower().title())
         start_times.append(component.start_time.hour + component.start_time.minute/60)
         end_times.append(component.end_time.hour + component.end_time.minute/60)
         durations.append(component.duration.total_seconds()/3600)
@@ -22,14 +22,11 @@ def plot_activities(person):
     colors = plt.cm.tab10.colors
     activities_unique = df['act'].unique()
 
-
     d_color = dict(zip(activities_unique,colors))
 
     df['color'] = df['act'].map(d_color)
-
-
-    #Plotting
-    fig,ax = plt.subplots(figsize=(16,4))
+    
+    fig, ax = plt.subplots(figsize=(16,4))
     
     label_x, label_y = [],[]
 
