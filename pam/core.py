@@ -191,6 +191,15 @@ class Person:
 		"""
 		return self.plan.remove_activity(seq)
 
+	def move_activity(self, seq, default='home'):
+		"""
+		Move an activity from plan at given seq to default location
+		:param seq:
+		:param default: 'home' or pam.activity.Location
+		:return: None
+		"""
+		return self.plan.move_activity(seq, default)
+
 	def fill_plan(self, p_idx, s_idx, default='home'):
 		"""
 		Fill a plan after Activity has been removed.

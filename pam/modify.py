@@ -158,16 +158,78 @@ class AddActivity(Policy):
         raise NotImplementedError('Watch this space')
 
 
-class MoveActivity(Policy):
+class MoveActivityTourToHomeLocation(Policy):
     """
-    Probabilistic move activities
+    Probabilistic move chain of activities
     """
-    def __init__(self, activities: list):
+    def __init__(self, activities: list, default='home'):
         super().__init__()
+        # list of activities defines the accepted activity tour,
+        # any combination of activities in activities sandwiched
+        # by home activities will be selected
         self.activities = activities
+        self.default = default
 
     def apply_to(self, household, person=None, activities=None):
-        raise NotImplementedError('Watch this space')
+        if (activities is not None) and (person is not None):
+            self.move_individual_activities(person, activities)
+        elif person is not None:
+            self.move_person_activities(person)
+        elif household is not None and isinstance(household, Household):
+            self.move_household_activities(household)
+        else:
+            raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
+                                      ''.format(type(household), type(person), type(activities), type(Household)))
+
+    def move_activities(self, person, p):
+        tours = self.matching_activity_tours(person.plan, p)
+        if tours:
+            for seq in range(len(person.plan)):
+                if isinstance(person.plan[seq], Activity):
+                    act = person.plan[seq]
+                    if self.is_part_of_tour(act, tours):
+                        person.move_activity(seq, default=self.default)
+
+    def move_individual_activities(self, person, activities):
+        def is_a_selected_activity(act):
+            # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
+            for other_act in activities:
+                if act.is_exact(other_act):
+                    return True
+            return False
+        self.move_activities(person, p=is_a_selected_activity)
+
+    def move_person_activities(self, person):
+        def return_true(act):
+            return True
+        self.move_activities(person, p=return_true)
+
+    def move_household_activities(self, household):
+        for pid, person in household.people.items():
+            self.move_person_activities(person)
+
+    def matching_activity_tours(self, plan, p):
+        tours = plan.activity_tours()
+        matching_tours = []
+        for tour in tours:
+            if self.tour_matches_activities(tour, p):
+                matching_tours.append(tour)
+        return matching_tours
+
+    def tour_matches_activities(self, tour, p):
+        if set([act.act for act in tour]) == set(self.activities):
+            for act in tour:
+                if p(act):
+                    return True
+        return False
+
+    def is_part_of_tour(self, act, tours: list):
+        for tour in tours:
+            # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
+            for other_act in tour:
+                if act.is_exact(other_act):
+                    return True
+        return False
 
 
 class HouseholdPolicy(Policy):
@@ -180,7 +242,7 @@ class HouseholdPolicy(Policy):
     """
     def __init__(self, policy, probability, person_attribute_filter=None):
         super().__init__()
-        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
         self.policy = policy
         self.probability = verify_probability(
             probability,
@@ -216,7 +278,7 @@ class PersonPolicy(Policy):
     """
     def __init__(self, policy, probability, person_attribute_filter=None):
         super().__init__()
-        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
         self.policy = policy
         self.probability = verify_probability(
             probability,
@@ -246,7 +308,7 @@ class ActivityPolicy(Policy):
     """
     def __init__(self, policy, probability, person_attribute_filter=None):
         super().__init__()
-        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
         self.policy = policy
         self.probability = verify_probability(
             probability,
