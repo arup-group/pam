@@ -9,7 +9,7 @@ from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam.write import write_travel_diary, \
     write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices
-from pam.parse import read_matsim
+from pam.read import read_matsim
 
 
 def test_write_plans_xml(tmp_path, population_heh):

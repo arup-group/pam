@@ -2,7 +2,7 @@ import os
 import pytest
 import pandas as pd
 
-from pam.parse import load_travel_diary
+from pam.read import load_travel_diary
 
 
 test_trips_path = os.path.abspath(

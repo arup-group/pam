@@ -146,7 +146,7 @@ def person_heh():
 @pytest.fixture
 def person_crop_last_act():
 
-    person = Person('1')
+    person = Person('1', attributes={'old': True})
     person.add(
         Activity(
             seq=1,
