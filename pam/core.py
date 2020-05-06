@@ -80,6 +80,17 @@ class Household:
 	def size(self):
 		return len(self.people)
 
+	def shared_activities(self):
+		shared_activities = []
+		household_activities = []
+		for pid, person in self.people.items():
+			for activity in person.activities:
+				if activity.in_list_exact(household_activities):
+					shared_activities.append(activity)
+				if not activity.in_list_exact(household_activities):
+					household_activities.append(activity)
+		return shared_activities
+
 	def print(self):
 		print(self)
 		for _, person in self:

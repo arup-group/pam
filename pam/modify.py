@@ -61,9 +61,6 @@ class PersonAttributeFilter(Filter):
             raise NotImplementedError('{} not implemented, use only `all` or `any`'.format(self.how))
 
 
-
-
-
 class Policy:
     def __init__(self):
         self.population = Population
@@ -139,10 +136,7 @@ class RemoveActivity(Policy):
     def remove_individual_activities(self, person, activities):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            for other_act in activities:
-                if act.is_exact(other_act):
-                    return True
-            return False
+            return act.in_list_exact(activities)
         self.remove_activities(person, p=is_a_selected_activity)
 
     def remove_person_activities(self, person):
@@ -168,6 +162,71 @@ class AddActivity(Policy):
 
     def apply_to(self, household, person=None, activities=None):
         raise NotImplementedError('Watch this space')
+
+
+class ReduceSharedActivity(Policy):
+    """
+    Policy that needs to be applied on an individual activity level
+    for activities that are shared  within the  household
+    """
+    def __init__(self, activities: list):
+        super().__init__()
+        self.activities = activities
+
+    def apply_to(self, household, person=None, activities=None):
+        if household is not None and isinstance(household, Household):
+            self.remove_household_activities(household)
+        else:
+            raise NotImplementedError('Types passed incorrectly: {}, {}, {}. This modifier exists only for Households'
+                                      'you need to pass {}.'
+                                      ''.format(type(household), type(person), type(activities), type(Household)))
+
+    def remove_activities(self, person, shared_activities_for_removal):
+        seq = 0
+        while seq < len(person.plan):
+            act = person.plan[seq]
+            # TODO there is a bug here `act in shared_activities_for_removal` should really be
+            # act.in_list_exact(shared_activities_for_removal), but if tthere is more than one
+            # activity in shared_activities_for_removal and  the  activities adjoin the
+            # activities morph and change time, making them not satisfy self.is_exact(other) anymore
+            # in this implementation however, you risk deleting isolated activities that have the
+            # same name and location but aren't shared
+            if isinstance(act, Activity) and act in shared_activities_for_removal:
+                previous_idx, subsequent_idx = person.remove_activity(seq)
+                person.fill_plan(previous_idx, subsequent_idx, default='home')
+            else:
+                seq += 1
+
+    def remove_household_activities(self, household):
+        acts_for_removal = self.shared_activities_for_removal(household)
+        if acts_for_removal:
+            # pick the person that retains activities
+            ppl_sharing_activities = self.people_who_share_activities_for_removal(household)
+            if ppl_sharing_activities:
+                person_retaining_activities = random.choice(self.people_who_share_activities_for_removal(household))
+                for pid, person in household.people.items():
+                    if person != person_retaining_activities:
+                        self.remove_activities(person, acts_for_removal)
+
+    def is_activity_for_removal(self, p):
+        return p.act.lower() in self.activities
+
+    def shared_activities_for_removal(self, household):
+        shared_activities = household.shared_activities()
+        shared_activities_for_removal = []
+        for act in shared_activities:
+            if self.is_activity_for_removal(act):
+                shared_activities_for_removal.append(act)
+        return shared_activities_for_removal
+
+    def people_who_share_activities_for_removal(self, household):
+        shared_activities_for_removal = self.shared_activities_for_removal(household)
+        people_with_shared_acts_for_removal = []
+        for pid, person in household.people.items():
+            for activity in person.activities:
+                if activity.in_list_exact(shared_activities_for_removal):
+                    people_with_shared_acts_for_removal.append(person)
+        return people_with_shared_acts_for_removal
 
 
 class MoveActivityTourToHomeLocation(Policy):
@@ -205,10 +264,7 @@ class MoveActivityTourToHomeLocation(Policy):
     def move_individual_activities(self, person, activities):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            for other_act in activities:
-                if act.is_exact(other_act):
-                    return True
-            return False
+            return act.in_list_exact(activities)
         self.move_activities(person, p=is_a_selected_activity)
 
     def move_person_activities(self, person):
@@ -238,9 +294,8 @@ class MoveActivityTourToHomeLocation(Policy):
     def is_part_of_tour(self, act, tours: list):
         for tour in tours:
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            for other_act in tour:
-                if act.is_exact(other_act):
-                    return True
+            if act.in_list_exact(tour):
+                return True
         return False
 
 
@@ -254,7 +309,7 @@ class HouseholdPolicy(Policy):
     """
     def __init__(self, policy, probability, person_attribute_filter=None):
         super().__init__()
-        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation, ReduceSharedActivity))
         self.policy = policy
         self.probability = verify_probability(
             probability,
@@ -345,43 +400,6 @@ class ActivityPolicy(Policy):
                     elif self.probability.sample(activity):
                         activities_to_purge.append(activity)
                 self.policy.apply_to(household, person, activities_to_purge)
-
-
-class SharedActivityPolicy(Policy):
-    """
-    Policy that needs to be applied on an individual activity level
-    for activities that are shared  within the  household
-    """
-    def __init__(self, policy, probability, person_attribute_filter=None):
-        super().__init__()
-        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
-        self.policy = policy
-        self.probability = verify_probability(
-            probability,
-            (float, list, SimpleProbability, ActivityProbability)
-        )
-        if person_attribute_filter is None:
-            self.person_attribute_filter = PersonAttributeFilter({})
-        else:
-            self.person_attribute_filter = person_attribute_filter
-
-    def apply_to(self, household, person=None, activities=None):
-        for pid, person in household.people.items():
-            if self.person_attribute_filter.satisfies_conditions(person):
-                activities_to_purge = []
-                for activity in person.activities:
-                    if isinstance(self.probability, list):
-                        p = 1
-                        for prob in self.probability:
-                            p *= prob.p(activity)
-                        if random.random() < p:
-                            activities_to_purge.append(activity)
-                    elif self.probability.sample(activity):
-                        activities_to_purge.append(activity)
-                self.policy.apply_to(household, person, activities_to_purge)
-
-    def households_shared_activities(self):
-        pass
 
 
 class SamplingProbability:
