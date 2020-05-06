@@ -139,7 +139,7 @@ def test_remove_individual_activities_delegates_to_remove_activities_for_Bobby(m
     modify.RemoveActivity.remove_activities.assert_called_once()
 
 
-def test_remove_household_activities_delegates_to_remove_person_activities_for_Bobbys_activities(mocker, Bobby):
+def test_remove_person_activities_delegates_to_remove_activities_for_Bobbys_activities(mocker, Bobby):
     mocker.patch.object(modify.RemoveActivity, 'remove_activities')
 
     policy = modify.RemoveActivity([''])
