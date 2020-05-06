@@ -447,7 +447,6 @@ class Plan:
             self.day[seq + 1].start_location = new_location
             self.mode_shift(seq + 1)
 
-
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
         Fill a plan after Activity has been removed. Plan is filled between given remaining
