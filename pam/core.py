@@ -1,7 +1,7 @@
 import logging
 from .activity import Plan
 import random
-from .plot import plot_activities
+from .plot import plot_person, plot_household
 
 
 class Population:
@@ -97,6 +97,9 @@ class Household:
 		for _, person in self:
 			person.print()
 
+	def plot(self):
+		plot_household(self)
+
 	def __str__(self):
 		return f"Household: {self.hid}"
 
@@ -188,10 +191,11 @@ class Person:
 
 	def print(self):
 		print(self)
+		print(self.attributes)
 		self.plan.print()
 
 	def plot(self):
-		plot_activities(self)
+		plot_person(self)
 
 	def __str__(self):
 		return f"Person: {self.pid}"
