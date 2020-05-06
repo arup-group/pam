@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from pam.parse import load_attributes_map, read_matsim
+from pam.read import load_attributes_map, read_matsim
 
 
 test_trips_path = os.path.abspath(

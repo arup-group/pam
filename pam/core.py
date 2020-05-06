@@ -1,6 +1,8 @@
 import logging
-from .activity import Plan
 import random
+import pickle
+
+from .activity import Plan
 from .plot import plot_person, plot_household
 
 
@@ -58,6 +60,10 @@ class Population:
     def __str__(self):
         return f"Population: {self.size} people in {self.count(households=True)} households."
 
+    def pickle(self, path):
+        with open(path, 'wb') as file:
+            pickle.dump(self, file)
+
 
 class Household:
     logger = logging.getLogger(__name__)
@@ -102,6 +108,10 @@ class Household:
 
     def __str__(self):
         return f"Household: {self.hid}"
+
+    def pickle(self, path):
+        with open(path, 'wb') as file:
+            pickle.dump(self, file)
 
 class Person:
 
@@ -222,3 +232,7 @@ class Person:
 
     def stay_at_home(self):
         self.plan.stay_at_home()
+
+    def pickle(self, path):
+        with open(path, 'wb') as file:
+            pickle.dump(self, file)

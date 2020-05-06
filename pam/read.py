@@ -5,6 +5,7 @@ from lxml import etree as et
 import os
 import gzip
 import logging
+import pickle
 
 from .core import Population, Household, Person
 from .activity import Plan, Activity, Leg
@@ -428,6 +429,12 @@ def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
 
     :return: Pandas DataFrame, a sampled version of the trips_df dataframe
     """
-    sample_pids = trips_df.groupby('pid')[['freq']].sum().join(attributes_df, how='left').sample(frac=sample_perc,
-                                                                                                 weights=weight_col).index
+    sample_pids = trips_df.groupby('pid')[['freq']].sum().join(
+        attributes_df, how='left'
+        ).sample(frac=sample_perc, weights=weight_col).index
     return trips_df[trips_df.pid.isin(sample_pids)]
+
+
+def load_pickle(path):
+    with open(path, 'rb') as file:
+        return pickle.load(file)
