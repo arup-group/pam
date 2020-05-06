@@ -134,15 +134,17 @@ def test_writes_households_csv_file_to_expected_location(population_heh, tmpdir)
 
     households_file = "{}/households.csv".format(tmpdir)
     assert os.path.exists(households_file)
+
+    population_id = 0  # fixed at 0 because there is only one population being exported
     with open(households_file) as file:
         households_file_lines = file.readlines()
         assert len(households_file_lines) == population_heh.count(households=True) + 1
         assert households_file_lines[0] == 'Scenario ID,Household ID,Area,Scenario_Household_ID\n'
-        index = 0
+        row_index = 0
         for hid, hh in population_heh.households.items():
-            assert households_file_lines[index + 1] == \
-                   '{},{},{},{}\n'.format(index, hid, hh.area, '{}_{}'.format(index, hid))
-            index += 1
+            assert households_file_lines[row_index + 1] == \
+                   '{},{},{},{}\n'.format(population_id, hid, hh.area, '{}_{}'.format(population_id, hid))
+            row_index += 1
 
 
 def test_writes_people_csv_file_to_expected_location(population_heh, tmpdir):
@@ -150,23 +152,24 @@ def test_writes_people_csv_file_to_expected_location(population_heh, tmpdir):
 
     people_file = "{}/people.csv".format(tmpdir)
     assert os.path.exists(people_file)
-    index = 0
+    expected_person_index = 0
+    population_id = 0 # fixed at 0 because there is only one population being exported
     people_in_pop = list(population_heh.people())
     with open(people_file) as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
-            expected_hid, expected_pid, expected_person = people_in_pop[index]
-            assert row['Scenario ID'] == '{}'.format(index)
+            expected_hid, expected_pid, expected_person = people_in_pop[expected_person_index]
+            assert row['Scenario ID'] == '{}'.format(population_id)
             assert row['Household ID'] == '{}'.format(expected_hid)
             assert row['Person ID'] == '{}'.format(expected_pid)
-            assert row['Scenario_Household_ID'] == '{}_{}'.format(index, expected_hid)
-            assert row['Scenario_Person_ID'] == '{}_{}'.format(index, expected_pid)
+            assert row['Scenario_Household_ID'] == '{}_{}'.format(population_id, expected_hid)
+            assert row['Scenario_Person_ID'] == '{}_{}'.format(population_id, expected_pid)
             for column in get_all_people_attributes(population_heh):
                 if expected_person.attributes and column in expected_person.attributes:
                     assert row[column] == str(expected_person.attributes[column])
                 else:
                     assert row[column] == ''
-            index += 1
+            expected_person_index += 1
 
 
 def test_writes_legs_csv_file_to_expected_location(population_heh, tmpdir):
