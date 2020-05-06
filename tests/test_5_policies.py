@@ -3,26 +3,10 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from pam import modify
-
+from tests.fixtures import *
 import pytest
 import random
 from datetime import datetime
-
-
-def instantiate_household_with(persons: list):
-    household = Household(1)
-    for person in persons:
-        household.add(person)
-    return household
-
-
-def assert_correct_activities(person, ordered_activities_list):
-    assert len(person.plan) % 2 == 1
-    for i in range(0, len(person.plan), 2):
-        assert isinstance(person.plan.day[i], Activity)
-    assert [a.act for a in person.plan.activities] == ordered_activities_list
-    assert person.plan[0].start_time == mtdt(0)
-    assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
 def assert_correct_activities_locations(person, ordered_activities_locations_list):
@@ -412,74 +396,9 @@ def test_remove_activity_policy_only_removes_individual_activities(mocker, home_
     assert_correct_activities(person=person, ordered_activities_list=['home', 'education', 'shop', 'home'])
 
 
-@pytest.fixture()
-def Steve():
-    Steve = Person(1, attributes={'age': 50, 'job': 'work', 'gender': 'male'})
-    Steve.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(5 * 60)))
-    Steve.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(5 * 60), end_time=mtdt(6 * 60)))
-    Steve.add(Activity(2, 'work', 'b', start_time=mtdt(6 * 60), end_time=mtdt(12 * 60)))
-    Steve.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(12 * 60), end_time=mtdt(12 * 60 + 10)))
-    Steve.add(Activity(3, 'leisure', 'c', start_time=mtdt(12 * 60 + 10), end_time=mtdt(13 * 60 - 10)))
-    Steve.add(Leg(3, 'walk', 'c', 'b', start_time=mtdt(13 * 60 - 10), end_time=mtdt(13 * 60)))
-    Steve.add(Activity(4, 'work', 'b', start_time=mtdt(13 * 60), end_time=mtdt(18 * 60)))
-    Steve.add(Leg(4, 'car', 'b', 'a', start_time=mtdt(18 * 60), end_time=mtdt(19 * 60)))
-    Steve.add(Activity(5, 'home', 'a', start_time=mtdt(19 * 60), end_time=END_OF_DAY))
-    return Steve
-
-
-@pytest.fixture()
-def Hilda():
-    Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
-    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
-    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5)))
-    Hilda.add(Activity(2, 'escort', 'b', start_time=mtdt(8 * 60 + 5), end_time=mtdt(8 * 60 + 30)))
-    Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
-    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(14 * 60)))
-    Hilda.add(Leg(2, 'pt', 'b', 'c', start_time=mtdt(14 * 60), end_time=mtdt(14 * 60 + 20)))
-    Hilda.add(Activity(3, 'leisure', 'c', start_time=mtdt(14 * 60 + 20), end_time=mtdt(16 * 60 - 20)))
-    Hilda.add(Leg(3, 'pt', 'c', 'b', start_time=mtdt(16 * 60 - 20), end_time=mtdt(16 * 60)))
-    Hilda.add(Activity(2, 'escort', 'b', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30)))
-    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
-    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
-    return Hilda
-
-
-@pytest.fixture()
-def Timmy():
-    Timmy = Person(3, attributes={'age': 18, 'job': 'education', 'gender': 'male'})
-    Timmy.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(10 * 60)))
-    Timmy.add(Leg(1, 'bike', 'a', 'b', start_time=mtdt(10 * 60), end_time=mtdt(11 * 60)))
-    Timmy.add(Activity(2, 'education', 'b', start_time=mtdt(11 * 60), end_time=mtdt(13 * 60)))
-    Timmy.add(Leg(2, 'bike', 'b', 'c', start_time=mtdt(13 * 60), end_time=mtdt(13 * 60 + 5)))
-    Timmy.add(Activity(3, 'shop', 'c', start_time=mtdt(13 * 60 + 5), end_time=mtdt(13 * 60 + 30)))
-    Timmy.add(Leg(3, 'bike', 'c', 'b', start_time=mtdt(13 * 60 + 30), end_time=mtdt(13 * 60 + 35)))
-    Timmy.add(Activity(4, 'education', 'b', start_time=mtdt(13 * 60 + 35), end_time=mtdt(15 * 60)))
-    Timmy.add(Leg(4, 'bike', 'b', 'd', start_time=mtdt(15 * 60), end_time=mtdt(15 * 60 + 10)))
-    Timmy.add(Activity(5, 'leisure', 'd', start_time=mtdt(15 * 60 + 10), end_time=mtdt(18 * 60)))
-    Timmy.add(Leg(5, 'bike', 'd', 'a', start_time=mtdt(18 * 60), end_time=mtdt(18 * 60 + 20)))
-    Timmy.add(Activity(6, 'home', 'a', start_time=mtdt(18 * 60 + 20), end_time=END_OF_DAY))
-    return Timmy
-
-
-@pytest.fixture()
-def Bobby():
-    Bobby = Person(4, attributes={'age': 6, 'job': 'education', 'gender': 'non-binary'})
-    Bobby.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
-    Bobby.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
-    Bobby.add(Activity(2, 'education', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60)))
-    Bobby.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30)))
-    Bobby.add(Activity(5, 'home', 'a', start_time=mtdt(18 * 60 + 30), end_time=END_OF_DAY))
-    return Bobby
-
-
-@pytest.fixture()
-def Smith_Household(Steve, Hilda, Timmy, Bobby):
-    return instantiate_household_with([Steve, Hilda, Timmy, Bobby])
-
-
-def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(mocker, Smith_Household):
+def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(mocker, SmithHousehold):
     mocker.patch.object(random, 'random', side_effect=[1] + [0] + [1] * 18)
-    household = Smith_Household
+    household = SmithHousehold
     steve = household.people['1']
     hilda = household.people['2']
     timmy = household.people['3']
@@ -503,10 +422,10 @@ def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
 
-def test_household_policy_with_household_based_probability(Smith_Household, mocker):
+def test_household_policy_with_household_based_probability(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. household is affected and affects activities on household level
     policy = modify.HouseholdPolicy(
         modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
@@ -516,10 +435,10 @@ def test_household_policy_with_household_based_probability(Smith_Household, mock
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_household_policy_with_household_based_probability_with_a_satisfied_person_attribute(Smith_Household, mocker):
+def test_household_policy_with_household_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. household is affected and affects activities on household level
     def discrete_sampler(obj, mapping, distribution):
         p = distribution
@@ -551,10 +470,10 @@ def test_household_policy_with_household_based_probability_with_a_satisfied_pers
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_household_policy_with_person_based_probability(Smith_Household, mocker):
+def test_household_policy_with_person_based_probability(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0.06249])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby is affected and affects activities on household level
     policy = modify.HouseholdPolicy(
         modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
@@ -564,10 +483,10 @@ def test_household_policy_with_person_based_probability(Smith_Household, mocker)
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_household_policy_with_person_based_probability_with_a_satisfied_person_attribute(Smith_Household, mocker):
+def test_household_policy_with_person_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby is affected and affects activities on household level
     def discrete_sampler(obj, mapping, distribution):
         p = distribution
@@ -598,10 +517,10 @@ def test_household_policy_with_person_based_probability_with_a_satisfied_person_
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_household_policy_with_activity_based_probability(Smith_Household, mocker):
+def test_household_policy_with_activity_based_probability(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0.000244140624])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby's education activity is affected and affects activities on household level
     policy = modify.HouseholdPolicy(
         modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
@@ -611,10 +530,10 @@ def test_household_policy_with_activity_based_probability(Smith_Household, mocke
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_household_policy_with_activity_based_probability_with_a_satisfied_person_attribute(Smith_Household, mocker):
+def test_household_policy_with_activity_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby's education activity is affected and affects activities on household level
     def discrete_sampler(obj, mapping, distribution):
         p = distribution
@@ -646,10 +565,10 @@ def test_household_policy_with_activity_based_probability_with_a_satisfied_perso
     modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
-def test_person_policy_with_person_based_probability(mocker, Smith_Household):
+def test_person_policy_with_person_based_probability(mocker, SmithHousehold):
     mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[1, 1, 1, 0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby is affected and his activities are the only one affected in household
     policy = modify.PersonPolicy(
         modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
@@ -660,10 +579,10 @@ def test_person_policy_with_person_based_probability(mocker, Smith_Household):
     modify.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
 
 
-def test_person_policy_with_person_based_probability_with_a_satisfied_person_attribute(mocker, Smith_Household):
+def test_person_policy_with_person_based_probability_with_a_satisfied_person_attribute(mocker, SmithHousehold):
     mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[1, 1, 1, 0])
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. Bobby is affected and his activities are the only one affected in household
     def discrete_sampler(obj, mapping, distribution):
         p = distribution
@@ -694,10 +613,10 @@ def test_person_policy_with_person_based_probability_with_a_satisfied_person_att
     modify.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
 
 
-def test_person_policy_with_activity_based_probability(Smith_Household, mocker):
+def test_person_policy_with_activity_based_probability(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[0] + [1] * 11)
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. First of Steve's work activities is affected and affects all listed activities for just Steve
     policy = modify.PersonPolicy(
         modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
@@ -709,10 +628,10 @@ def test_person_policy_with_activity_based_probability(Smith_Household, mocker):
     modify.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
 
 
-def test_person_policy_with_activity_based_probability_with_a_satisfied_person_attribute(Smith_Household, mocker):
+def test_person_policy_with_activity_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
     mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[0] + [1] * 11)
-    household = Smith_Household
+    household = SmithHousehold
     # i.e. First of Steve's work activities is affected and affects all listed activities for just Steve
     def discrete_sampler(obj, mapping, distribution):
         p = distribution
@@ -843,8 +762,8 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_d
     assert Hilda.plan[3].mode == 'walk'
 
 
-def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHousehold):
+    household = SmithHousehold
     Steve = household.people['1']
     Timmy = household.people['3']
     Timmy.plan[4].act = 'shop_1'
@@ -885,8 +804,8 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(Smith_H
     assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -912,8 +831,8 @@ def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(Smith_Ho
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))

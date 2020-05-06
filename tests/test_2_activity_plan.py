@@ -144,7 +144,7 @@ def test_activity_tours_segments_home_to_home_looped_plan(activities_and_tour):
     for i in range(len(activities_and_tour['activities'])-1):
         plan.add(activities_and_tour['activities'][i])
         plan.add(Leg(1))
-    plan.add(activities_and_tour['activities'][len(activities_and_tour['activities'])-1])
+    plan.add(activities_and_tour['activities'][-1])
     assert plan.activity_tours() == activities_and_tour['tours']
 
 
@@ -159,6 +159,21 @@ def test_activity_tours_segments_home_to_other_act_nonlooped_plan(activities_and
     assert plan[0].act != plan[-1].act
 
     assert plan.activity_tours() == activities_and_tour['tours'] + [[other_act]]
+
+
+def test_activity_tours_segments_home_to_other_act_nonhome_looped_plan(activities_and_tour):
+    other_act = Activity(8, 'other', 'e')
+
+    plan = Plan(1)
+    plan.add(other_act)
+    plan.add(Leg(1))
+    for i in range(len(activities_and_tour['activities'])):
+        plan.add(activities_and_tour['activities'][i])
+        plan.add(Leg(1))
+    plan.add(other_act)
+
+    assert plan[0].act == plan[-1].act
+    assert plan.activity_tours() == [[other_act]] + activities_and_tour['tours'] + [[other_act]]
 
 
 def test_move_activity_with_home_default():
@@ -215,3 +230,25 @@ def test_move_activity_with_different_default_updates_legs():
 
     assert plan[1].end_location == new_loc
     assert plan[3].start_location == new_loc
+
+
+def test_move_activity_at_start_of_plan_updates_leg():
+    plan = Plan('a')
+    plan.add(Activity(1, 'shop', 'b'))
+    plan.add(Leg(1))
+    plan.add(Activity(2, 'home', 'a'))
+
+    plan.move_activity(0)
+
+    assert plan[1].start_location == 'a'
+
+
+def test_move_activity_at_end_of_plan_updates_leg():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1))
+    plan.add(Activity(2, 'shop', 'b'))
+
+    plan.move_activity(2)
+
+    assert plan[1].end_location == 'a'

@@ -3,42 +3,10 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from pam import modify
-
+from tests.fixtures import *
 import pytest
 import random
 from datetime import datetime
-
-
-@pytest.fixture()
-def Steve():
-    Steve = Person('Steve', attributes={'age': 50, 'job': 'work', 'gender': 'male'})
-    Steve.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(5 * 60)))
-    Steve.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(5 * 60), end_time=mtdt(6 * 60)))
-    Steve.add(Activity(2, 'work', 'b', start_time=mtdt(6 * 60), end_time=mtdt(12 * 60)))
-    Steve.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(12 * 60), end_time=mtdt(12 * 60 + 10)))
-    Steve.add(Activity(3, 'leisure', 'c', start_time=mtdt(12 * 60 + 10), end_time=mtdt(13 * 60 - 10)))
-    Steve.add(Leg(3, 'walk', 'c', 'b', start_time=mtdt(13 * 60 - 10), end_time=mtdt(13 * 60)))
-    Steve.add(Activity(4, 'work', 'b', start_time=mtdt(13 * 60), end_time=mtdt(18 * 60)))
-    Steve.add(Leg(4, 'car', 'b', 'a', start_time=mtdt(18 * 60), end_time=mtdt(19 * 60)))
-    Steve.add(Activity(5, 'home', 'a', start_time=mtdt(19 * 60), end_time=END_OF_DAY))
-    return Steve
-
-
-@pytest.fixture()
-def Hilda():
-    Hilda = Person('Hilda', attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
-    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
-    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5)))
-    Hilda.add(Activity(2, 'escort', 'b', start_time=mtdt(8 * 60 + 5), end_time=mtdt(8 * 60 + 30)))
-    Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
-    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(14 * 60)))
-    Hilda.add(Leg(2, 'pt', 'b', 'c', start_time=mtdt(14 * 60), end_time=mtdt(14 * 60 + 20)))
-    Hilda.add(Activity(3, 'leisure', 'c', start_time=mtdt(14 * 60 + 20), end_time=mtdt(16 * 60 - 20)))
-    Hilda.add(Leg(3, 'pt', 'c', 'b', start_time=mtdt(16 * 60 - 20), end_time=mtdt(16 * 60)))
-    Hilda.add(Activity(2, 'escort', 'b', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30)))
-    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
-    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
-    return Hilda
 
 
 def instantiate_household_with(persons: list):
@@ -49,7 +17,7 @@ def instantiate_household_with(persons: list):
 
 
 @pytest.fixture()
-def Smith_Household(Steve, Hilda):
+def SmithHousehold_alt(Steve, Hilda):
     return instantiate_household_with([Steve, Hilda])
 
 
@@ -58,6 +26,13 @@ def test_SamplingProbability_samples_when_random_below_prob_val(mocker):
     mocker.patch.object(random, 'random', return_value=0.5)
     prob = modify.SamplingProbability()
     assert prob.sample('')
+
+
+def test_SamplingProbability_samples_when_random_equal_prob_val(mocker):
+    mocker.patch.object(modify.SamplingProbability, 'p', return_value=0.55)
+    mocker.patch.object(random, 'random', return_value=0.55)
+    prob = modify.SamplingProbability()
+    assert not prob.sample('')
 
 
 def test_SamplingProbability_doesnt_sample_when_random_above_prob_val(mocker):
@@ -100,6 +75,7 @@ def test_HouseholdProbability_accepts_functions():
     def custom_sampler(x, kwarg):
         return 0.5
 
+    assert callable(custom_sampler)
     prob = modify.HouseholdProbability(custom_sampler, {'kwarg': 'kwarg'})
     assert prob.kwargs == {'kwarg': 'kwarg'}
 
@@ -188,10 +164,10 @@ def test_PersonProbability_defaults_to_empty_kwargs_with_custom_distros():
 
 
 def test_PersonProbability_p_delegates_to_compute_probability_for_person_for_each_person_in_Household(
-        mocker, Smith_Household):
+        mocker, SmithHousehold_alt):
     mocker.patch.object(modify.PersonProbability, 'compute_probability_for_person', return_value=0.25)
     prob = modify.PersonProbability(0.25)
-    p = prob.p(Smith_Household)
+    p = prob.p(SmithHousehold_alt)
 
     assert modify.PersonProbability.compute_probability_for_person.call_count == 2
     assert p == 0.4375
@@ -266,10 +242,10 @@ def test_ActivityProbability_defaults_to_empty_kwargs_with_custom_distros():
     custom_sampler('', **prob.kwargs)
 
 
-def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_each_activity_for_person_in_Household(mocker, Smith_Household):
+def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_each_activity_for_person_in_Household(mocker, SmithHousehold_alt):
     mocker.patch.object(modify.ActivityProbability, 'compute_probability_for_activity', return_value=0.25)
     prob = modify.ActivityProbability(['work', 'escort'], 0.25)
-    p = prob.p(Smith_Household)
+    p = prob.p(SmithHousehold_alt)
 
     assert modify.ActivityProbability.compute_probability_for_activity.call_count == 4
     assert p == 0.68359375
