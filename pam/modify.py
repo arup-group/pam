@@ -5,39 +5,74 @@ from .utils import minutes_to_datetime as mtdt
 import random
 
 
-class Policy:
+class PersonAttributeFilter:
+    """
+    Helps filtering Person attributes
 
+    how='all' by default, means all conditions for a person need to be met
+    how='any' means at least one condition needs to be met
+    """
+    def __init__(self, conditions, how='all'):
+        self.conditions = conditions
+        self.how = how
+
+    def satisfies_conditions(self, x):
+        if isinstance(x, Household):
+            # household satisfies conditions if one person satisfies conditions according to self.how
+            return self.household_satisfies_conditions(x)
+        elif isinstance(x, Person):
+            return self.person_satisfies_conditions(x)
+        elif isinstance(x, Activity):
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
+
+    def household_satisfies_conditions(self, household):
+        if not self.conditions:
+            return True
+        for pid, person in household.people.items():
+            if self.person_satisfies_conditions(person):
+                return True
+        return False
+
+    def person_satisfies_conditions(self, person):
+        if not self.conditions:
+            return True
+        elif self.how == 'all':
+            satisfies_attribute_conditions = True
+            for attribute_key, attribute_condition in self.conditions.items():
+                satisfies_attribute_conditions &= attribute_condition(person.attributes[attribute_key])
+            return satisfies_attribute_conditions
+        elif self.how == 'any':
+            satisfies_attribute_conditions = False
+            for attribute_key, attribute_condition in self.conditions.items():
+                satisfies_attribute_conditions |= attribute_condition(person.attributes[attribute_key])
+            return satisfies_attribute_conditions
+        else:
+            raise NotImplementedError('{} not implemented, use only `all` or `any`'.format(self.how))
+
+
+class Policy:
     def __init__(self):
         self.population = Population
 
-    def apply_to(self, household):
-        raise NotImplementedError
+    def apply_to(self, household, person=None, activity=None):
+        raise NotImplementedError('{} is a base class'.format(type(Policy)))
 
 
 class HouseholdQuarantined(Policy):
     """
     Probabilistic everyone in household stays home
-
-    by default, person_based=False: Probability household-based,
-    i.e. the probability of a household being quarantined
-
-    person_based=True: Probability person-based,
-    i.e. the probability of any person in the household
-    needing to be quarantined
     """
-
-    def __init__(self, probability, person_based=False):
+    def __init__(self, probability):
         super().__init__()
+        self.probability = verify_probability(
+            probability,
+            (float, list, SimpleProbability, ActivityProbability, PersonProbability, HouseholdProbability)
+        )
 
-        assert 0 < probability <= 1
-        self.probability = probability
-        self.person_based = person_based
-
-    def apply_to(self, household):
-        if self.person_based:
-            p = (1 - (1 - self.probability) ** len(household.people))
-        else:
-            p = self.probability
+    def apply_to(self, household, person=None, activity=None):
+        p = self.probability.p(household)
         if random.random() < p:
             for pid, person in household.people.items():
                 person.stay_at_home()
@@ -54,7 +89,7 @@ class PersonStayAtHome(Policy):
         assert 0 < probability <= 1
         self.probability = probability
 
-    def apply_to(self, household):
+    def apply_to(self, household, person=None, activity=None):
         for pid, person in household.people.items():
             if random.random() < self.probability:
                 person.stay_at_home()
@@ -63,124 +98,43 @@ class PersonStayAtHome(Policy):
 class RemoveActivity(Policy):
     """
     Probabilistic remove activities
-
-    :param activities: list of activities to be removed from persons plans
-    :param probability: value > 0 and <= 1, likelihood of activities
-    having to be removed
-    :param probability_level: the level at which the probability should
-    be applied.
-    e.g. if your `probability` value refers to how likely an
-    individual activity is to be removed probability_level = 'activity'
-    e.g. if your `probability` value refers to how likely a
-    person is affected and their activity to be removed as a
-    consequence probability_level = 'person'
-    e.g. if your `probability` value refers to how likely a
-    household is affected and the persons in that household
-    to have activity be removed as a consequence
-    probability_level = 'household'
-    :param policy_type: policy type, the level at which it should be applied
-    policy_type = 'activity'
-
-    policy_type = 'person'
-
-    policy_type = 'household'
-
-    :param attribute_conditions: dictionary of the form {'attribute_key': attribute_condition},
-    where attribute_condition is a function returning a boolean:
-    def attribute_condition(attribute_value):
-        return boolean
-    e.g.
-    def age_condition_over_17(attribute_value):
-        return attribute_value > 17
-    and
-    attribute_conditions = {'age': age_condition_over_17}
-
-    :param attribute_strict_conditions how to satisfy the attribute_conditions
-    attribute_strict_conditions = True: person needs to satisfy
-    all conditions in attribute_conditions
-    attribute_strict_conditions = False: person needs to satisfy
-    just one condition in attribute_conditions
     """
-
-    def __init__(self, activities: list, probability,
-                probability_level='activity', policy_type='activity',
-                 attribute_conditions=None, attribute_strict_conditions=True):
+    def __init__(self, activities: list):
         super().__init__()
-
         self.activities = activities
-        assert 0 < probability <= 1
-        self.probability = probability
-        assert probability_level in ['activity', 'person', 'household']
-        self.probability_level = probability_level
-        assert policy_type in ['activity', 'person', 'household']
-        self.policy_type = policy_type
-        assert attribute_conditions != {}, 'attribute_conditions cannot be empty'
-        if attribute_conditions is not None:
-            assert isinstance(attribute_conditions, dict)
-        self.attribute_conditions = attribute_conditions
-        assert isinstance(attribute_strict_conditions, bool)
-        self.attribute_strict_conditions = attribute_strict_conditions
 
-    def apply_to(self, household):
-        if self.policy_type == 'household':
-            self.evaluate_household_policy(household)
-        elif self.policy_type == 'person':
-            self.evaluate_person_policy(household)
+    def apply_to(self, household, person=None, activities=None):
+        if (activities is not None) and (person is not None):
+            self.remove_individual_activities(person, activities)
+        elif person is not None:
+            self.remove_person_activities(person)
+        elif household is not None and isinstance(household, Household):
+            self.remove_household_activities(household)
         else:
-            self.evaluate_activity_policy(household)
-
-    def evaluate_activity_policy(self, household):
-        if self.probability_level == 'activity':
-            for pid, person in household.people.items():
-                if self.person_satisfies_attribute_conditions(person):
-                    self.remove_individual_activities(person)
-        else:
-            raise NotImplementedError
-
-    def evaluate_person_policy(self, household):
-        if self.probability_level == 'person':
-            for pid, person in household.people.items():
-                if self.person_is_selected(person):
-                    self.remove_person_activities(person)
-        elif self.probability_level == 'activity':
-            for pid, person in household.people.items():
-                if self.person_satisfies_attribute_conditions(person):
-                    for activity in person.activities:
-                        if self.is_activity_for_removal(activity) and self.is_selected():
-                            self.remove_person_activities(person)
-        else:
-            raise NotImplementedError
-
-    def evaluate_household_policy(self, household):
-        if self.probability_level == 'household':
-            if self.household_is_selected:
-                self.remove_household_activities(household)
-        elif self.probability_level == 'person':
-            for pid, person in household.people.items():
-                if self.person_satisfies_attribute_conditions(person) and self.person_is_selected(person):
-                        self.remove_household_activities(household)
-        else:
-            for pid, person in household.people.items():
-                if self.person_satisfies_attribute_conditions(person):
-                    for activity in person.activities:
-                        if self.is_activity_for_removal(activity) and self.is_selected():
-                            self.remove_household_activities(household)
+            raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
+                                      ''.format(type(household), type(person), type(activities), type(Household)))
 
     def remove_activities(self, person, p):
         seq = 0
         while seq < len(person.plan):
             act = person.plan[seq]
-            if self.is_activity_for_removal(act) and p():
+            if self.is_activity_for_removal(act) and p(act):
                 previous_idx, subsequent_idx = person.remove_activity(seq)
                 person.fill_plan(previous_idx, subsequent_idx, default='home')
             else:
                 seq += 1
 
-    def remove_individual_activities(self, person):
-        self.remove_activities(person, p=self.is_selected)
+    def remove_individual_activities(self, person, activities):
+        def is_a_selected_activity(act):
+            # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
+            for other_act in activities:
+                if act.is_exact(other_act):
+                    return True
+            return False
+        self.remove_activities(person, p=is_a_selected_activity)
 
     def remove_person_activities(self, person):
-        def return_true():
+        def return_true(act):
             return True
         self.remove_activities(person, p=return_true)
 
@@ -188,39 +142,283 @@ class RemoveActivity(Policy):
         for pid, person in household.people.items():
             self.remove_person_activities(person)
 
-    def person_is_selected(self, person):
-        if self.is_selected():
-            if self.person_satisfies_attribute_conditions(person):
-                return True
-        return False
-
-    def household_is_selected(self, household):
-        if self.is_selected():
-            for pid, person in household.people.items():
-                if self.person_satisfies_attribute_conditions(person):
-                    # if just one of the people satisfies the attributes
-                    return True
-        return False
-
-    def is_selected(self):
-        return random.random() < self.probability
-
     def is_activity_for_removal(self, p):
         return p.act.lower() in self.activities
 
-    def person_satisfies_attribute_conditions(self, person):
-        if self.attribute_conditions is not None:
-            if self.attribute_strict_conditions:
-                satisfies_attribute_conditions = True
-                for attribute_key, attribute_condition in self.attribute_conditions.items():
-                    satisfies_attribute_conditions &= attribute_condition(person.attributes[attribute_key])
-            else:
-                satisfies_attribute_conditions = False
-                for attribute_key, attribute_condition in self.attribute_conditions.items():
-                    satisfies_attribute_conditions |= attribute_condition(person.attributes[attribute_key])
-            return satisfies_attribute_conditions
+
+class AddActivity(Policy):
+    """
+    Probabilistic add activities
+    """
+    def __init__(self, activities: list):
+        super().__init__()
+        self.activities = activities
+
+    def apply_to(self, household, person=None, activities=None):
+        raise NotImplementedError('Watch this space')
+
+
+class MoveActivity(Policy):
+    """
+    Probabilistic move activities
+    """
+    def __init__(self, activities: list):
+        super().__init__()
+        self.activities = activities
+
+    def apply_to(self, household, person=None, activities=None):
+        raise NotImplementedError('Watch this space')
+
+
+class HouseholdPolicy(Policy):
+    """
+    Policy that needs to be applied on a household level
+
+    if probability given as float: 0<probability<=1 then the probability
+    level is assumed to be of the same level as the policy
+
+    """
+    def __init__(self, policy, probability, person_attribute_filter=None):
+        super().__init__()
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        self.policy = policy
+        self.probability = verify_probability(
+            probability,
+            (float, list, SimpleProbability, ActivityProbability, PersonProbability, HouseholdProbability)
+        )
+        if person_attribute_filter is None:
+            self.person_attribute_filter = PersonAttributeFilter({})
         else:
-            return True
+            self.person_attribute_filter = person_attribute_filter
+
+    def apply_to(self, household, person=None, activities=None):
+        """
+        uses self.probability to decide if household should be selected
+        :param household:
+        :param person:
+        :param activities:
+        :return:
+        """
+        if self.person_attribute_filter.satisfies_conditions(household):
+            if isinstance(self.probability, list):
+                p = 1
+                for prob in self.probability:
+                    p *= prob.p(household)
+                if random.random() < p:
+                    self.policy.apply_to(household)
+            elif self.probability.sample(household):
+                self.policy.apply_to(household)
+
+
+class PersonPolicy(Policy):
+    """
+    Policy that needs to be applied on a person level
+    """
+    def __init__(self, policy, probability, person_attribute_filter=None):
+        super().__init__()
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        self.policy = policy
+        self.probability = verify_probability(
+            probability,
+            (float, list, SimpleProbability, ActivityProbability, PersonProbability)
+        )
+        if person_attribute_filter is None:
+            self.person_attribute_filter = PersonAttributeFilter({})
+        else:
+            self.person_attribute_filter = person_attribute_filter
+
+    def apply_to(self, household, person=None, activities=None):
+        for pid, person in household.people.items():
+            if self.person_attribute_filter.satisfies_conditions(person):
+                if isinstance(self.probability, list):
+                    p = 1
+                    for prob in self.probability:
+                        p *= prob.p(person)
+                    if random.random() < p:
+                        self.policy.apply_to(household, person)
+                elif self.probability.sample(person):
+                    self.policy.apply_to(household, person)
+
+
+class ActivityPolicy(Policy):
+    """
+    Policy that needs to be applied on an individual activity level
+    """
+    def __init__(self, policy, probability, person_attribute_filter=None):
+        super().__init__()
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivity))
+        self.policy = policy
+        self.probability = verify_probability(
+            probability,
+            (float, list, SimpleProbability, ActivityProbability)
+        )
+        if person_attribute_filter is None:
+            self.person_attribute_filter = PersonAttributeFilter({})
+        else:
+            self.person_attribute_filter = person_attribute_filter
+
+    def apply_to(self, household, person=None, activities=None):
+        for pid, person in household.people.items():
+            if self.person_attribute_filter.satisfies_conditions(person):
+                activities_to_purge = []
+                for activity in person.activities:
+                    if isinstance(self.probability, list):
+                        p = 1
+                        for prob in self.probability:
+                            p *= prob.p(activity)
+                        if random.random() < p:
+                            activities_to_purge.append(activity)
+                    elif self.probability.sample(activity):
+                        activities_to_purge.append(activity)
+                self.policy.apply_to(household, person, activities_to_purge)
+
+
+class SamplingProbability:
+    def __init__(self):
+        pass
+
+    def sample(self, x):
+        return random.random() < self.p(x)
+
+    def p(self, x):
+        raise NotImplementedError('{} is a base class'.format(type(Policy)))
+
+
+class SimpleProbability(SamplingProbability):
+    def __init__(self, probability):
+        super().__init__()
+        assert 0 < probability <= 1
+        self.probability = probability
+
+    def p(self, x):
+        return self.probability
+
+
+class HouseholdProbability(SamplingProbability):
+    def __init__(self, probability, kwargs=None):
+        super().__init__()
+        if isinstance(probability, int):
+            probability = float(probability)
+        assert isinstance(probability, float) or callable(probability)
+        if isinstance(probability, float):
+            assert 0 < probability <= 1
+        self.probability = probability
+        if kwargs is None:
+            self.kwargs = {}
+        else:
+            self.kwargs = kwargs
+
+    def p(self, x):
+        if isinstance(x, Household):
+            return self.compute_probability_for_household(x)
+        elif isinstance(x, Person):
+            raise NotImplementedError
+        elif isinstance(x, Activity):
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
+
+    def compute_probability_for_household(self, household):
+        if isinstance(self.probability, float):
+            return self.probability
+        elif callable(self.probability):
+            return self.probability(household, **self.kwargs)
+
+
+class PersonProbability(SamplingProbability):
+    def __init__(self, probability, kwargs=None):
+        super().__init__()
+        if isinstance(probability, int):
+            probability = float(probability)
+        assert isinstance(probability, float) or callable(probability)
+        if isinstance(probability, float):
+            assert 0 < probability <= 1
+        self.probability = probability
+        if kwargs is None:
+            self.kwargs = {}
+        else:
+            self.kwargs = kwargs
+
+    def p(self, x):
+        if isinstance(x, Household):
+            p = 1
+            for pid, person in x.people.items():
+                p *= 1 - self.compute_probability_for_person(person)
+            return 1 - p
+        elif isinstance(x, Person):
+            return self.compute_probability_for_person(x)
+        elif isinstance(x, Activity):
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
+
+    def compute_probability_for_person(self, person):
+        if isinstance(self.probability, float):
+            return self.probability
+        elif callable(self.probability):
+            return self.probability(person, **self.kwargs)
+
+
+class ActivityProbability(SamplingProbability):
+    def __init__(self, activities : list, probability, kwargs=None):
+        super().__init__()
+        self.activities = activities
+        if isinstance(probability, int):
+            probability = float(probability)
+        assert isinstance(probability, float) or callable(probability)
+        if isinstance(probability, float):
+            assert 0 < probability <= 1
+        self.probability = probability
+        if kwargs is None:
+            self.kwargs = {}
+        else:
+            self.kwargs = kwargs
+
+    def p(self, x):
+        if isinstance(x, Household):
+            p = 1
+            for pid, person in x.people.items():
+                for act in person.activities:
+                    if self.is_relevant_activity(act):
+                        p *= 1 - self.compute_probability_for_activity(act)
+            return 1 - p
+        elif isinstance(x, Person):
+            p = 1
+            for act in x.activities:
+                if self.is_relevant_activity(act):
+                    p *= 1 - self.compute_probability_for_activity(act)
+            return 1 - p
+        elif isinstance(x, Activity):
+            if self.is_relevant_activity(x):
+                return self.compute_probability_for_activity(x)
+            return 0
+        else:
+            raise NotImplementedError
+
+    def compute_probability_for_activity(self, activity):
+        if isinstance(self.probability, float):
+            return self.probability
+        elif callable(self.probability):
+            return self.probability(activity, **self.kwargs)
+
+    def is_relevant_activity(self, act):
+        return act.act.lower() in self.activities
+
+
+def verify_probability(probability, acceptable_types):
+    if isinstance(probability, int):
+        probability = float(probability)
+    assert isinstance(probability, acceptable_types)
+    if isinstance(probability, float):
+        assert 0 < probability <= 1
+        probability = SimpleProbability(probability)
+    elif isinstance(probability, list):
+        for i in range(len(probability)):
+            assert isinstance(
+                probability[i], acceptable_types)
+            if isinstance(probability[i], float):
+                probability[i] = SimpleProbability(probability[i])
+    return probability
 
 
 def apply_policies(population: Population, policies: list):
@@ -231,8 +429,6 @@ def apply_policies(population: Population, policies: list):
     :param policies:
     :return:
     """
-
     for hid, household in population.households.items():
         for policy in policies:
             policy.apply_to(household)
-

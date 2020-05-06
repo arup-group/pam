@@ -48,7 +48,7 @@ class Population:
 	def count(self, households=False):
 		if households:
 			return len(self.households)
-		return len(self.people)
+		return len(list(self.people()))
 
 	def print(self):
 		print(self)

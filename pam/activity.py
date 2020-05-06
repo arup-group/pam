@@ -7,7 +7,7 @@ from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidation
 
 
 class Plan:
-	
+  
 	def __init__(self, home_area=None):
 		self.day = []
 		self.home_location = Location(area=home_area)
@@ -600,142 +600,145 @@ class Plan:
 
 class PlanComponent:
 
-	@property
-	def duration(self):
-		return self.end_time - self.start_time
+    @property
+    def duration(self):
+        return self.end_time - self.start_time
 
-	def shift_start_time(self, new_start_time):
-		"""
-		Given a new start time, set start time, set end time based on previous duration and
-		return new end time.
-		:param new_start_time: datetime
-		:return: datetime
-		"""
-		duration = self.duration
-		self.start_time = new_start_time
-		self.end_time = new_start_time + duration
-		return self.end_time
+    def shift_start_time(self, new_start_time):
+        """
+        Given a new start time, set start time, set end time based on previous duration and
+        return new end time.
+        :param new_start_time: datetime
+        :return: datetime
+        """
+        duration = self.duration
+        self.start_time = new_start_time
+        self.end_time = new_start_time + duration
+        return self.end_time
 
-	def shift_end_time(self, new_end_time):
-		"""
-		Given a new end time, set end time, set start time based on previous duration and
-		return new start time.
-		:param new_end_time: datetime
-		:return: datetime
-		"""
-		duration = self.duration
-		self.end_time = new_end_time
-		self.start_time = new_end_time - duration
-		return self.start_time
+    def shift_end_time(self, new_end_time):
+        """
+        Given a new end time, set end time, set start time based on previous duration and
+        return new start time.
+        :param new_end_time: datetime
+        :return: datetime
+        """
+        duration = self.duration
+        self.end_time = new_end_time
+        self.start_time = new_end_time - duration
+        return self.start_time
 
 
 class Activity(PlanComponent):
 
-	def __init__(
-			self,
-			seq=None,
-			act=None,
-			loc=None,
-			link=None,
-			area=None,
-			start_time=None,
-			end_time=None
-			):
-		self.seq = seq
-		self.act = act
-		self.location = Location(loc=loc, link=link, area=area)
-		self.start_time = start_time
-		self.end_time = end_time
+    def __init__(
+            self,
+            seq=None,
+            act=None,
+            loc=None,
+            link=None,
+            area=None,
+            start_time=None,
+            end_time=None
+    ):
+        self.seq = seq
+        self.act = act
+        self.location = Location(loc=loc, link=link, area=area)
+        self.start_time = start_time
+        self.end_time = end_time
 
-	def __str__(self):
-		return f"Activity({self.seq} act:{self.act}, location:{self.location}, " \
-			   f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
-			   f"duration:{self.duration})"
+    def __str__(self):
+        return f"Activity({self.seq} act:{self.act}, location:{self.location}, " \
+               f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
+               f"duration:{self.duration})"
 
-	def __eq__(self, other):
-		return (self.location == other.location) and (self.act == other.act)
+    def __eq__(self, other):
+        return (self.location == other.location) and (self.act == other.act)
+
+    def is_exact(self, other):
+        return (self.location == other.location) and (self.act == other.act) \
+               and (self.start_time == other.start_time) and (self.end_time == other.end_time)
 
 
 class Leg(PlanComponent):
+    act = 'travel'
 
-	act = 'travel'
+    def __init__(
+            self,
+            seq=None,
+            mode=None,
+            start_loc=None,
+            end_loc=None,
+            start_link=None,
+            end_link=None,
+            start_area=None,
+            end_area=None,
+            start_time=None,
+            end_time=None,
+            purpose=None
+    ):
+        self.seq = seq
+        self.mode = mode
+        self.start_location = Location(loc=start_loc, link=start_link, area=start_area)
+        self.end_location = Location(loc=end_loc, link=end_link, area=end_area)
+        self.start_time = start_time
+        self.end_time = end_time
+        self.purpose = purpose
 
-	def __init__(
-			self,
-			seq=None,
-			mode=None,
-			start_loc=None,
-			end_loc=None,
-			start_link=None,
-			end_link=None,
-			start_area=None,
-			end_area=None,
-			start_time=None,
-			end_time=None,
-			purpose=None
-	):
-		self.seq = seq
-		self.mode = mode
-		self.start_location=Location(loc=start_loc, link=start_link, area=start_area)
-		self.end_location=Location(loc=end_loc, link=end_link, area=end_area)
-		self.start_time = start_time
-		self.end_time = end_time
-		self.purpose=purpose
+    def __str__(self):
+        return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
+               f"{self.end_location}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
+               f"duration:{self.duration})"
 
-	def __str__(self):
-		return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
-			   f"{self.end_location}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
-			   f"duration:{self.duration})"
-
-	def __eq__(self, other):
-		return self.start_location == other.start_location and \
-				self.end_location == other.end_location and \
-				self.mode == other.mode and \
-				self.duration == other.duration
+    def __eq__(self, other):
+        return self.start_location == other.start_location and \
+               self.end_location == other.end_location and \
+               self.mode == other.mode and \
+               self.duration == other.duration
 
 
 class Location:
 
-	def __init__(self, loc=None, link=None, area=None):
-		self.loc = loc
-		self.link = link
-		self.area = area
+    def __init__(self, loc=None, link=None, area=None):
+        self.loc = loc
+        self.link = link
+        self.area = area
 
-	@property
-	def min(self):
-		if self.loc is not None:
-			return self.loc
-		if self.link is not None:
-			return self.link
-		if self.area is not None:
-			return self.area
+    @property
+    def min(self):
+        if self.loc is not None:
+            return self.loc
+        if self.link is not None:
+            return self.link
+        if self.area is not None:
+            return self.area
 
-	@property
-	def max(self):
-		if self.area is not None:
-			return self.area
-		if self.link is not None:
-			return self.link
-		if self.loc is not None:
-			return self.loc
+    @property
+    def max(self):
+        if self.area is not None:
+            return self.area
+        if self.link is not None:
+            return self.link
+        if self.loc is not None:
+            return self.loc
 
-	@property
-	def exists(self):
-		if self.area or self.link or self.loc:
-			return True
+    @property
+    def exists(self):
+        if self.area or self.link or self.loc:
+            return True
 
-	def __str__(self):
-		return str(self.min)
+    def __str__(self):
+        return str(self.min)
 
-	def __eq__(self, other):
-		if isinstance(other, str):
-			return self.area == other
-		if self.loc is not None and other.loc is not None:
-			return self.loc == other.loc
-		if self.link is not None and other.link is not None:
-			return self.link == other.link
-		if self.area is not None and other.area is not None:
-			return self.area == other.area
-		raise UserWarning(
-	"Cannot check for location equality without same loc types (areas/locs/links)."
-	)
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return self.area == other
+        if self.loc is not None and other.loc is not None:
+            return self.loc == other.loc
+        if self.link is not None and other.link is not None:
+            return self.link == other.link
+        if self.area is not None and other.area is not None:
+            return self.area == other.area
+        raise UserWarning(
+            "Cannot check for location equality without same loc types (areas/locs/links)."
+        )

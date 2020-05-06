@@ -28,7 +28,7 @@ def fred():
 
     return {
         'age': -3,
-        'agebin': None,
+        'agebin': '',
         'gender': 1
     }
 
@@ -69,3 +69,14 @@ def test_apply_discrete_joint_distribution_sampler_to_michael(michael, cat_joint
 def test_applt_discrete_joint_distribution_sampler_to_kasia(kasia, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist) == True
+
+
+def test_applt_discrete_joint_distribution_sampler_to_fred_carefully(fred, cat_joint_distribution):
+    mapping, dist = cat_joint_distribution
+    with pytest.raises(KeyError):
+        attributes.discrete_joint_distribution_sampler(fred, mapping, dist, careful=True)
+
+
+def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(fred, cat_joint_distribution):
+    mapping, dist = cat_joint_distribution
+    assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) == False
