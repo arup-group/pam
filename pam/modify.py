@@ -5,7 +5,15 @@ from .utils import minutes_to_datetime as mtdt
 import random
 
 
-class PersonAttributeFilter:
+class Filter:
+    def __init__(self):
+        pass
+
+    def satisfies_conditions(self, x):
+        pass
+
+
+class PersonAttributeFilter(Filter):
     """
     Helps filtering Person attributes
 
@@ -13,6 +21,7 @@ class PersonAttributeFilter:
     how='any' means at least one condition needs to be met
     """
     def __init__(self, conditions, how='all'):
+        super().__init__()
         self.conditions = conditions
         self.how = how
 
@@ -50,6 +59,9 @@ class PersonAttributeFilter:
             return satisfies_attribute_conditions
         else:
             raise NotImplementedError('{} not implemented, use only `all` or `any`'.format(self.how))
+
+
+
 
 
 class Policy:
@@ -333,6 +345,43 @@ class ActivityPolicy(Policy):
                     elif self.probability.sample(activity):
                         activities_to_purge.append(activity)
                 self.policy.apply_to(household, person, activities_to_purge)
+
+
+class SharedActivityPolicy(Policy):
+    """
+    Policy that needs to be applied on an individual activity level
+    for activities that are shared  within the  household
+    """
+    def __init__(self, policy, probability, person_attribute_filter=None):
+        super().__init__()
+        assert isinstance(policy, (RemoveActivity, AddActivity, MoveActivityTourToHomeLocation))
+        self.policy = policy
+        self.probability = verify_probability(
+            probability,
+            (float, list, SimpleProbability, ActivityProbability)
+        )
+        if person_attribute_filter is None:
+            self.person_attribute_filter = PersonAttributeFilter({})
+        else:
+            self.person_attribute_filter = person_attribute_filter
+
+    def apply_to(self, household, person=None, activities=None):
+        for pid, person in household.people.items():
+            if self.person_attribute_filter.satisfies_conditions(person):
+                activities_to_purge = []
+                for activity in person.activities:
+                    if isinstance(self.probability, list):
+                        p = 1
+                        for prob in self.probability:
+                            p *= prob.p(activity)
+                        if random.random() < p:
+                            activities_to_purge.append(activity)
+                    elif self.probability.sample(activity):
+                        activities_to_purge.append(activity)
+                self.policy.apply_to(household, person, activities_to_purge)
+
+    def households_shared_activities(self):
+        pass
 
 
 class SamplingProbability:
