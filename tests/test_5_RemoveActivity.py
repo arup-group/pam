@@ -40,8 +40,8 @@ def Hilda():
     Hilda.add(Activity(3, 'leisure', 'c', start_time=mtdt(14 * 60 + 20), end_time=mtdt(16 * 60 - 20)))
     Hilda.add(Leg(3, 'pt', 'c', 'b', start_time=mtdt(16 * 60 - 20), end_time=mtdt(16 * 60)))
     Hilda.add(Activity(2, 'escort', 'b', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30)))
-    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(16 * 60 + 30), end_time=mtdt(16 * 60 + 5)))
-    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(16 * 60 + 5), end_time=END_OF_DAY))
+    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     return Hilda
 
 
@@ -139,7 +139,7 @@ def test_remove_individual_activities_delegates_to_remove_activities_for_Bobby(m
     modify.RemoveActivity.remove_activities.assert_called_once()
 
 
-def test_remove_household_activities_delegates_to_remove_person_activities_for_Bobbys_activities(mocker, Bobby):
+def test_remove_person_activities_delegates_to_remove_activities_for_Bobbys_activities(mocker, Bobby):
     mocker.patch.object(modify.RemoveActivity, 'remove_activities')
 
     policy = modify.RemoveActivity([''])
