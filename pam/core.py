@@ -1,5 +1,7 @@
 import logging
 from .activity import Plan
+import random
+from .plot import plot_person, plot_household
 
 
 class Population:
@@ -31,6 +33,13 @@ class Population:
 		for hid, household in self.households.items():
 			for pid, person in household.people.items():
 				yield hid, pid, person
+
+	def random_household(self):
+		return self.households[random.choice(list(self.households))]
+	
+	def random_person(self):
+		hh = self.random_household()
+		return hh.random_person()
 
 	@property
 	def size(self):
@@ -70,6 +79,9 @@ class Household:
 	def get(self, pid, default=None):
 		return self.people.get(pid, default)
 
+	def random_person(self):
+		return self.people[random.choice(list(self.people))]
+
 	def __getitem__(self, pid):
 		return self.people[pid]
 
@@ -84,6 +96,9 @@ class Household:
 		print(self)
 		for _, person in self:
 			person.print()
+
+	def plot(self):
+		plot_household(self)
 
 	def __str__(self):
 		return f"Household: {self.hid}"
@@ -176,7 +191,11 @@ class Person:
 
 	def print(self):
 		print(self)
+		print(self.attributes)
 		self.plan.print()
+
+	def plot(self):
+		plot_person(self)
 
 	def __str__(self):
 		return f"Person: {self.pid}"
