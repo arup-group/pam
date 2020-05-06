@@ -3,7 +3,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from pam import modify
-from tests.fixtures import Bobby
+from tests.fixtures import *
 import pytest
 import random
 from datetime import datetime
@@ -18,31 +18,31 @@ def assert_correct_activities(person, ordered_activities_list):
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_individual_activities_when_given_person_and_activities(mocker, Smith_Household):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_individual_activities_when_given_person_and_activities(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_individual_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
-    policy.apply_to(Smith_Household, Smith_Household['Bobby'], [Activity])
+    policy.apply_to(SmithHousehold, SmithHousehold['4'], [Activity])
 
-    modify.MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(Smith_Household['Bobby'], [Activity])
+    modify.MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold['4'], [Activity])
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_person_activities_when_given_person(mocker, Smith_Household):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_person_activities_when_given_person(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_person_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
-    policy.apply_to(Smith_Household, Smith_Household['Bobby'])
+    policy.apply_to(SmithHousehold, SmithHousehold['4'])
 
-    modify.MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(Smith_Household['Bobby'])
+    modify.MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold['4'])
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_household_activities_when_given_household(mocker, Smith_Household):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_household_activities_when_given_household(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_household_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
-    policy.apply_to(Smith_Household)
+    policy.apply_to(SmithHousehold)
 
-    modify.MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(Smith_Household)
+    modify.MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(SmithHousehold)
 
 
 def test_MoveActivityTourToHomeLocation_throws_exception_if_apply_to_given_wrong_input(Bobby):
@@ -76,11 +76,11 @@ def test_move_person_activities_delegates_to_remove_person_activities_for_Bobbys
     modify.MoveActivityTourToHomeLocation.move_activities.assert_called_once()
 
 
-def test_move_household_activities_delegates_to_remove_person_activities_for_persons_in_household(mocker, Smith_Household):
+def test_move_household_activities_delegates_to_remove_person_activities_for_persons_in_household(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_person_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
-    policy.move_household_activities(Smith_Household)
+    policy.move_household_activities(SmithHousehold)
 
     assert modify.MoveActivityTourToHomeLocation.move_person_activities.call_count == 4
 

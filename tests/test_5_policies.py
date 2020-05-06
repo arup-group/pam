@@ -762,8 +762,8 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_d
     assert Hilda.plan[3].mode == 'walk'
 
 
-def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHousehold):
+    household = SmithHousehold
     Steve = household.people['1']
     Timmy = household.people['3']
     Timmy.plan[4].act = 'shop_1'
@@ -804,8 +804,8 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(Smith_H
     assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -831,8 +831,8 @@ def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(Smith_Ho
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(Smith_Household):
-    household = Smith_Household
+def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
