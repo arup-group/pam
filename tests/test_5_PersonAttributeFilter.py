@@ -2,6 +2,7 @@ from pam import modify
 from pam.core import Household, Person
 from pam.activity import Plan, Activity, Leg
 import pytest
+from tests.fixtures import *
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from random import choice
@@ -37,12 +38,12 @@ def test_PersonAttributeFilter_household_satisfies_conditions_when_conditions_em
     assert modify.PersonAttributeFilter({}).satisfies_conditions(Household(1))
 
 
-def test_PersonAttributeFilter_satisfies_conditions_when_one_person_satisfies_conditions(Smith_Household):
+def test_PersonAttributeFilter_satisfies_conditions_when_one_person_satisfies_conditions(SmithHousehold):
     def equals_6(val):
         return val == 6
     conditions = {'age': equals_6}
 
-    household = Smith_Household
+    household = SmithHousehold
 
     people_satisfying_condition = 0
     for pid, person in household.people.items():
@@ -52,12 +53,12 @@ def test_PersonAttributeFilter_satisfies_conditions_when_one_person_satisfies_co
     assert modify.PersonAttributeFilter(conditions).household_satisfies_conditions(household)
 
 
-def test_PersonAttributeFilter_household_does_not_satisfy_conditions_when_no_person_satisfies_conditions(Smith_Household):
+def test_PersonAttributeFilter_household_does_not_satisfy_conditions_when_no_person_satisfies_conditions(SmithHousehold):
     def equals_0(val):
         return val == 0
     conditions = {'age': equals_0}
 
-    household = Smith_Household
+    household = SmithHousehold
 
     people_satisfying_condition = 0
     for pid, person in household.people.items():
