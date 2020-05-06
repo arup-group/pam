@@ -1,9 +1,8 @@
 import pytest
 from shapely.geometry import Point
-from datetime import datetime
 
+from pam.activity import Activity, Leg
 from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
@@ -236,14 +235,13 @@ def population_heh():
     person.plan.autocomplete_matsim()
     household = Household('0')
     household.add(person)
-    population = Population()
+    population = Population('populus')
     population.add(household)
     return population
 
 
 @pytest.fixture
 def person_heh_open1():
-
     person = Person('1')
     person.add(
         Activity(
