@@ -10,7 +10,7 @@ class Filter:
         pass
 
     def satisfies_conditions(self, x):
-        pass
+        raise NotImplementedError('{} is a base class'.format(type(Filter)))
 
 
 class PersonAttributeFilter(Filter):
