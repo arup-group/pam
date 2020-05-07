@@ -5,6 +5,7 @@ from lxml import etree as et
 import os
 import gzip
 import logging
+import pickle
 
 from .core import Population, Household, Person
 from .activity import Plan, Activity, Leg
@@ -122,155 +123,151 @@ def basic_travel_diary_read(trips_df, attributes_df):
 
 
 def complex_travel_diary_read(trips_df, attributes_df):
-    population = Population()
 
-    for hid, household_data in trips_df.groupby('hid'):
+	population = Population()
 
-        household = Household(hid)
+	for hid, household_data in trips_df.groupby('hid'):
 
-        for pid, person_data in household_data.groupby('pid'):
+		household = Household(hid)
 
-            trips = person_data.sort_values('seq')
-            # home_area = trips.hzone.iloc[0]
-            # origin_area = trips.ozone.iloc[0]
-            # activity_map = {home_area: 'home'}
-            # activities = ['home', 'work']
+		for pid, person_data in household_data.groupby('pid'):
 
-            person = Person(
-                pid,
-                freq=person_data.freq.iloc[0],
-                attributes=attributes_df.loc[pid].to_dict(),
-                home_area=trips.hzone.iloc[0]
-            )
+			trips = person_data.sort_values('seq')
 
-            person.add(
-                Activity(
-                    seq=0,
-                    act=None,
-                    area=trips.ozone.iloc[0],
-                    start_time=mtdt(0),
-                )
-            )
+			person = Person(
+				pid,
+				freq=person_data.freq.iloc[0],
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=trips.hzone.iloc[0]
+				)
 
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
+			person.add(
+				Activity(
+					seq=0,
+					act=None,
+					area=trips.ozone.iloc[0],
+					start_time=mtdt(0),
+				)
+			)
 
-                person.add(
-                    Leg(
-                        seq=n,
-                        mode=trip['mode'],
-                        start_area=trip.ozone,
-                        end_area=trip.dzone,
-                        start_time=mtdt(trip.tst),
-                        end_time=mtdt(trip.tet),
-                        purpose=trip.purp
-                    )
-                )
+			for n in range(len(trips)):
+				trip = trips.iloc[n]
 
-                person.add(
-                    Activity(
-                        seq=n + 1,
-                        act=None,
-                        area=trip.dzone,
-                        start_time=mtdt(trip.tet),
-                    )
-                )
+				person.add(
+					Leg(
+						seq=n,
+						mode=trip['mode'],
+						start_area=trip.ozone,
+						end_area=trip.dzone,
+						start_time=mtdt(trip.tst),
+						end_time=mtdt(trip.tet),
+						purpose=trip.purp
+					)
+				)
 
-            person.plan.finalise()
-            person.plan.infer_activities_from_leg_purpose()
+				person.add(
+					Activity(
+						seq=n + 1,
+						act=None,
+						area=trip.dzone,
+						start_time=mtdt(trip.tet),
+					)
+				)
+			
+			person.plan.finalise()
+			person.plan.infer_activities_from_leg_purpose()
 
-            household.add(person)
+			household.add(person)
 
-        population.add(household)
+		population.add(household)
 
-    return population
+	return population
 
 
-def load_activity_plan(trips_df, attributes_df, sample_perc=None):
-    """
-    Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
-    format. This is a variation of the standard load_travel_diary() method because it does not require
-    activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
-    We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-    :param trips_df: DataFrame
-    :param attributes_df: DataFrame
-    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
-    :return: core.Population
-    """
-    # TODO check for required col headers and give useful error?
+def load_activity_plan(trips_df, attributes_df, sample_perc = None):
+	"""
+	Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
+	format. This is a variation of the standard load_travel_diary() method because it does not require
+	activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
+	We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
+	:param trips_df: DataFrame
+	:param attributes_df: DataFrame
+	:param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+	:return: core.Population
+	"""
+	# TODO check for required col headers and give useful error?
 
-    logger = logging.getLogger(__name__)
+	logger = logging.getLogger(__name__)
 
-    if not isinstance(trips_df, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population travel diaries")
+	if not isinstance(trips_df, pd.DataFrame):
+		raise UserWarning("Unrecognised input for population travel diaries")
 
-    if not isinstance(attributes_df, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population attributes")
+	if not isinstance(attributes_df, pd.DataFrame):
+	    raise UserWarning("Unrecognised input for population attributes")
 
-    if sample_perc is not None:
-        trips_df = sample_population(trips_df, attributes_df, sample_perc,
-                                     weight_col='freq')  # sample the travel population
+	if sample_perc is not None:
+		trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
+	
+	population = Population()
+	
+	for hid, household_data in trips_df.groupby('hid'):
 
-    population = Population()
+		household = Household(hid)
 
-    for hid, household_data in trips_df.groupby('hid'):
+		for pid, person_data in household_data.groupby('pid'):
 
-        household = Household(hid)
+			trips = person_data.sort_values('seq')
+			home_area = trips.hzone.iloc[0]
+			origin_area = trips.ozone.iloc[0]
 
-        for pid, person_data in household_data.groupby('pid'):
+			if not origin_area == home_area:
+				logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
 
-            trips = person_data.sort_values('seq')
-            home_area = trips.hzone.iloc[0]
-            origin_area = trips.ozone.iloc[0]
+			person = Person(
+				pid,
+				freq=person_data.freq.iloc[0],
+				attributes=attributes_df.loc[pid].to_dict(),
+				home_area=home_area
+				)
 
-            if not origin_area == home_area:
-                logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
+			person.add(
+				Activity(
+					seq=0,
+					act='home',
+					area=origin_area,
+					start_time=mtdt(0),
+				)
+			)
 
-            person = Person(
-                pid,
-                freq=person_data.freq.iloc[0],
-                attributes=attributes_df.loc[pid].to_dict(),
-                home_area=home_area
-            )
+			for n in range(len(trips)):
+				trip = trips.iloc[n]
 
-            person.add(
-                Activity(
-                    seq=0,
-                    act='home',
-                    area=origin_area,
-                    start_time=mtdt(0),
-                )
-            )
+				person.add(
+					Leg(
+						seq=n,
+						mode=trip['mode'],
+						start_area=trip.ozone,
+						end_area=trip.dzone,
+						start_time=mtdt(trip.tst),
+						end_time=mtdt(trip.tet)
+					)
+				)
 
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
+				person.add(
+						Activity(
+							seq=n + 1,
+							act=trip.activity.lower(),
+							area=trip.dzone,
+							start_time=mtdt(trip.tet),
+						)
+					)
 
-                person.add(
-                    Leg(
-                        seq=n,
-                        mode=trip['mode'],
-                        start_area=trip.ozone,
-                        end_area=trip.dzone,
-                        start_time=mtdt(trip.tst),
-                        end_time=mtdt(trip.tet)
-                    )
-                )
+			person.plan.finalise()
+			household.add(person)
 
-                person.add(
-                    Activity(
-                        seq=n + 1,
-                        act=trip.activity,
-                        area=trip.dzone,
-                        start_time=mtdt(trip.tet),
-                    )
-                )
+		population.add(household)
 
-            person.plan.finalise()
-            household.add(person)
-
-        population.add(household)
-
-    return population
+	return population
 
 
 def read_matsim(
@@ -432,6 +429,12 @@ def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
 
     :return: Pandas DataFrame, a sampled version of the trips_df dataframe
     """
-    sample_pids = trips_df.groupby('pid')[['freq']].sum().join(attributes_df, how='left').sample(frac=sample_perc,
-                                                                                                 weights=weight_col).index
+    sample_pids = trips_df.groupby('pid')[['freq']].sum().join(
+        attributes_df, how='left'
+        ).sample(frac=sample_perc, weights=weight_col).index
     return trips_df[trips_df.pid.isin(sample_pids)]
+
+
+def load_pickle(path):
+    with open(path, 'rb') as file:
+        return pickle.load(file)

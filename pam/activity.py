@@ -7,7 +7,7 @@ from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidation
 
 
 class Plan:
-
+  
     def __init__(self, home_area=None):
         self.day = []
         self.home_location = Location(area=home_area)
@@ -21,7 +21,7 @@ class Plan:
             for act in self.activities:
                 if act.act.lower() == 'home':
                     return act.location
-        self.logger.warning("failed to find home, return area at start of day")
+        self.logger.warning( "failed to find home, return area at start of day")
         return self.day[0].location
 
     @property
@@ -89,7 +89,7 @@ class Plan:
         """
         Reverse iterate through plan, yield idx and component.
         """
-        for i in range(self.length - 1, -1, -1):
+        for i in range(self.length-1, -1, -1):
             yield i, self[i]
 
     def __len__(self):
@@ -139,7 +139,7 @@ class Plan:
             raise PAMTimesValidationError("First activity does not start at zero")
 
         for i in range(self.length - 1):
-            if not self.day[i].end_time == self.day[i + 1].start_time:
+            if not self.day[i].end_time == self.day[i+1].start_time:
                 raise PAMTimesValidationError("Miss-match in adjoining activity end and start times")
 
         if not self.day[-1].end_time == END_OF_DAY:
@@ -159,13 +159,13 @@ class Plan:
             component = self.day[i]
 
             if isinstance(component, Activity):
-                if not component.location == self.day[i - 1].end_location:
+                if not component.location == self.day[i-1].end_location:
                     raise PAMValidationLocationsError("Activity location does not match previous leg destination")
-            # if not component.location == component[i+1].start_location:
-            # 	raise TypeError("Activity location does not match next leg origin")
-
+                # if not component.location == component[i+1].start_location:
+                # 	raise TypeError("Activity location does not match next leg origin")
+            
             elif isinstance(component, Leg):
-                if not component.start_location == self.day[i - 1].location:
+                if not component.start_location == self.day[i-1].location:
                     raise PAMValidationLocationsError("Leg start location does not match previous activity location")
 
         return True
@@ -243,6 +243,7 @@ class Plan:
         If a leg is found to start and end at the home location then the one with maximum duration
         is included.
         """
+        # todo untested for more than three possible home activities in a row.
         candidates = set()
         exclude = set()
 
@@ -256,12 +257,12 @@ class Plan:
                     exclude.add(prev_act_idx)
 
         for idx, act in enumerate(self.activities):
-            if act.location == target and (idx * 2) not in exclude:
-                candidates.add(idx * 2)
+            if act.location == target and (idx*2) not in exclude:
+                candidates.add(idx*2)
 
         if default and not candidates:  # assume first activity (and last if closed)
             if self.closed:
-                return set([0, self.length - 1])
+                return set([0, self.length-1])
             return set([0])
 
         return candidates
@@ -273,63 +274,63 @@ class Plan:
         the backward. The next activity type is set based on the trip purpose. Pass forward is exhausted
         first, because it's assumed that this is how the diary is originally filled in.
         """
-        # find home activities
+        #find home activities
         home_idxs = self.infer_activity_idxs(target=self.home)
         for idx in home_idxs:
             self.day[idx].act = 'home'
 
-        location_map = {}
+        area_map = {}
         remaining = set(range(0, self.length, 2)) - set(home_idxs)
-
+        
         # forward traverse
-        queue = [idx + 2 for idx in home_idxs if idx + 2 < self.length]  # add next act idxs to queue\
+        queue = [idx+2 for idx in home_idxs if idx+2 < self.length]  # add next act idxs to queue\
         last_act = None
 
         while queue:  # traverse from home
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx - 1].purpose
+                act = self.day[idx-1].purpose.lower()
                 location = self.day[idx].location.min
 
-                if act == last_act and location in location_map:
-                    act = location_map[location]
+                if act == last_act and location in area_map:
+                    act = area_map[location]
 
                 self.day[idx].act = act
                 remaining -= {idx}
                 last_act = act
-                location_map[location] = act
+                area_map[location] = act
 
-                if idx + 2 in remaining:
-                    queue.append(idx + 2)
+                if idx+2 in remaining:
+                    queue.append(idx+2)
 
         queue = []
-        for location, activity in location_map.items():
-            candidates = self.infer_activity_idxs(target=location, default=False)
+        for location, activity in area_map.items():
+            candidates = self.infer_activity_idxs(target=Location(area=location), default=False)
             for idx in candidates:
                 if idx in remaining:
                     self.day[idx].act = activity
                     remaining -= {idx}
-                    if idx + 2 in remaining:
-                        queue.append(idx + 2)
-
+                    if idx+2 in remaining:
+                        queue.append(idx+2)
+        
         while queue:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx - 1].purpose
+                act = self.day[idx-1].purpose.lower()
                 location = self.day[idx].location.min
 
-                if act == last_act and location in location_map:
-                    act = location_map[location]
+                if act == last_act and location in area_map:
+                    act = area_map[location]
 
                 self.day[idx].act = act
                 remaining -= {idx}
                 last_act = act
-                location_map[location] = act
+                area_map[location] = act
 
-                if idx + 2 < self.length:
-                    queue.append(idx + 2)
+                if idx+2 < self.length:
+                    queue.append(idx+2)
 
         # backward traverse
         queue = list(remaining)  # add next act idxs to queue
@@ -338,37 +339,37 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx + 1].purpose
+                act = self.day[idx+1].purpose.lower()
                 location = self.day[idx].location.min
 
-                if act == last_act and location in location_map:
-                    act = location_map[location]
+                if act == last_act and location in area_map:
+                    act = area_map[location]
 
                 self.day[idx].act = act
                 remaining -= {idx}
                 last_act = act
-                location_map[location] = act
+                area_map[location] = act
 
-                if idx - 2 >= 0:
-                    queue.append(idx - 2)
+                if idx-2 >= 0:
+                    queue.append(idx-2)
 
     def finalise(self):
         """
         Add activity end times based on start time of next activity.
         """
         if len(self.day) > 1:
-            for seq in range(0, len(self.day) - 1, 2):  # activities excluding last one
-                self.day[seq].end_time = self.day[seq + 1].start_time
+            for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
+                self.day[seq].end_time = self.day[seq+1].start_time
         self.day[-1].end_time = END_OF_DAY
-
+        
     def autocomplete_matsim(self):
         """
         complete leg start and end locations
         """
         for seq, component in enumerate(self):
             if isinstance(component, Leg):
-                self.day[seq].start_location = self.day[seq - 1].location
-                self.day[seq].end_location = self.day[seq + 1].location
+                self.day[seq].start_location = self.day[seq-1].location
+                self.day[seq].end_location = self.day[seq+1].location
 
     def clear(self):
         self.day = []
@@ -401,7 +402,7 @@ class Plan:
             if self.length == 1:  # all activities have been removed
                 self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, now empty")
                 return None, None
-            return self.length - 2, 1
+            return self.length-2, 1
 
         if seq == 0:  # remove first activity
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, first activity")
@@ -411,12 +412,12 @@ class Plan:
         if seq == self.length - 1:  # remove last activity
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, last activity")
             self.day.pop(seq)
-            return self.length - 2, None
+            return self.length-2, None
 
         else:  # remove activity somewhere in middle of plan
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}")
             self.day.pop(seq)
-            return seq - 2, seq + 1
+            return seq-2, seq+1
 
     def move_activity(self, seq, default='home'):
         """
@@ -532,11 +533,11 @@ class Plan:
         # todo this isn't great - just pushes other activities to edges of day
 
         new_time = mtdt(0)
-        for seq in range(pivot_idx + 1):  # push forward pivot and all proceeding components
+        for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
             new_time = self.day[seq].shift_start_time(new_time)
 
         new_time = END_OF_DAY
-        for seq in range(self.length - 1, pivot_idx, -1):  # push back all subsequent components
+        for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
             new_time = self.day[seq].shift_end_time(new_time)
 
         self.day[pivot_idx].end_time = new_time  # expand pivot
@@ -609,11 +610,11 @@ class Plan:
         for idx, component in list(self.reversed()):
             if component.act == "pt interaction":  # this is a pt trip
                 if not pt_trip:  # this is a new pt leg
-                    trip_end_time = self[idx + 1].end_time
-                    trip_end_location = self[idx + 1].end_location
+                    trip_end_time = self[idx+1].end_time
+                    trip_end_location = self[idx+1].end_location
 
                 pt_trip = True
-                self.day.pop(idx + 1)
+                self.day.pop(idx+1)
                 self.day.pop(idx)
             else:
                 if pt_trip:  # this is the start of the pt trip - modify the first leg
