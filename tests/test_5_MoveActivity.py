@@ -18,7 +18,7 @@ def assert_correct_activities(person, ordered_activities_list):
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_individual_activities_when_given_person_and_activities(mocker, SmithHousehold):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_person_and_activities(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_individual_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
@@ -27,7 +27,7 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_individual_
     modify.MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold['4'], [Activity])
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_person_activities_when_given_person(mocker, SmithHousehold):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_given_person(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_person_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
@@ -36,7 +36,7 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_person_acti
     modify.MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold['4'])
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_remove_household_activities_when_given_household(mocker, SmithHousehold):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_household(mocker, SmithHousehold):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_household_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])
@@ -53,21 +53,21 @@ def test_MoveActivityTourToHomeLocation_throws_exception_if_apply_to_given_wrong
            in str(e.value)
 
 
-def test_MoveActivityTourToHomeLocation_move_individual_activities_moves_an_activity_for_Bobby(Bobby):
+def test_MoveActivityTourToHomeLocation_move_individual_activities_moves_an_activity(Bobby):
     policy = modify.MoveActivityTourToHomeLocation(['education'])
     policy.move_individual_activities(Bobby, [Bobby.plan[2]])
 
     assert Bobby.plan[2].location == Bobby.home
 
 
-def test_MoveActivityTourToHomeLocation_doesnt_move_individual_activities_for_Bobbys_empty_selected_activities_list(Bobby):
+def test_MoveActivityTourToHomeLocation_doesnt_move_individual_activities_empty_selected_activities_list(Bobby):
     policy = modify.MoveActivityTourToHomeLocation(['education'])
     policy.move_individual_activities(Bobby, [])
 
     assert Bobby.plan[2].location.loc == 'b'
 
 
-def test_move_person_activities_delegates_to_remove_person_activities_for_Bobbys_activities(mocker, Bobby):
+def test_move_person_activities_delegates_to_remove_person_activities_for_persons_activities(mocker, Bobby):
     mocker.patch.object(modify.MoveActivityTourToHomeLocation, 'move_activities')
 
     policy = modify.MoveActivityTourToHomeLocation([''])

@@ -683,6 +683,7 @@ def test_MoveActivityToHomeLocation_moves_shop_to_home_location():
     policy.apply_to(hhld)
 
     assert Hilda.plan[2].location == Hilda.home
+    assert Hilda.plan[2].is_exact(Activity(2, 'shop', 'a', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
 
 
 def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
