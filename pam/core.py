@@ -114,7 +114,6 @@ class Household:
             pickle.dump(self, file)
 
 class Person:
-
     logger = logging.getLogger(__name__)
 
     def __init__(self, pid, freq=1, attributes=None, home_area=None):
@@ -219,6 +218,15 @@ class Person:
         :return: tuple
         """
         return self.plan.remove_activity(seq)
+
+    def move_activity(self, seq, default='home'):
+        """
+        Move an activity from plan at given seq to default location
+        :param seq:
+        :param default: 'home' or pam.activity.Location
+        :return: None
+        """
+        return self.plan.move_activity(seq, default)
 
     def fill_plan(self, p_idx, s_idx, default='home'):
         """

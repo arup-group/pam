@@ -22,5 +22,4 @@ def test_AddActivity_throws_exception_if_apply_to_given_wrong_input():
     policy = modify.AddActivity([''])
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)
-    assert 'Watch this space' \
-           in str(e.value)
+    assert 'Watch this space' in str(e.value)

@@ -71,6 +71,20 @@ class Plan:
             return self.day[idx]
         return default
 
+    def activity_tours(self):
+        tours = []
+        tour = []
+        for act in self.activities:
+            if act.act == 'home':
+                if tour:
+                    tours.append(tour)
+                tour = []
+            else:
+                tour.append(act)
+        if tour:
+            tours.append(tour)
+        return tours
+
     def reversed(self):
         """
         Reverse iterate through plan, yield idx and component.
@@ -405,6 +419,35 @@ class Plan:
             self.day.pop(seq)
             return seq-2, seq+1
 
+    def move_activity(self, seq, default='home'):
+        """
+        Changes Activity location
+        :param seq:
+		:param default: 'home' or pam.activity.Location
+        :return: None
+        """
+        assert isinstance(self.day[seq], Activity)
+
+        # decide on the new location
+        if default == 'home':
+            new_location = self.home
+        else:
+            assert isinstance(default, Location)
+            new_location = default
+
+        # actually update the location
+        self.day[seq].location = new_location
+        if seq != 0:
+            # if it's not the first activity of plan
+            # update leg that leads to activity at seq
+            self.day[seq - 1].end_location = new_location
+            self.mode_shift(seq - 1)
+        if seq != len(self.day) - 1:
+            # if it's not the last activity of plan
+            # update leg that leads to activity at seq
+            self.day[seq + 1].start_location = new_location
+            self.mode_shift(seq + 1)
+
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
         Fill a plan after Activity has been removed. Plan is filled between given remaining
@@ -580,6 +623,13 @@ class Plan:
                     self[idx].end_location = trip_end_location
                 pt_trip = False
 
+    def mode_shift(self, seq, default='walk'):
+        """
+        Changes mode of Leg
+        :return: None
+        """
+        assert isinstance(self.day[seq], Leg)
+        # TODO Implement mode shift
 
     def crop(self):
         """
@@ -698,7 +748,6 @@ class Leg(PlanComponent):
 
 
 class Location:
-
     def __init__(self, loc=None, link=None, area=None):
         self.loc = loc
         self.link = link

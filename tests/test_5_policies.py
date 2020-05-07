@@ -9,6 +9,15 @@ import random
 from datetime import datetime
 
 
+def assert_correct_activities_locations(person, ordered_activities_locations_list):
+    assert len(person.plan) % 2 == 1
+    for i in range(0, len(person.plan), 2):
+        assert isinstance(person.plan.day[i], Activity)
+    assert [a.location.loc for a in person.plan.activities] == ordered_activities_locations_list
+    assert person.plan[0].start_time == mtdt(0)
+    assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
+
+
 def test_Policy_throws_exception_when_used():
     policy = modify.Policy()
     with pytest.raises(NotImplementedError) as e:
@@ -653,3 +662,200 @@ def test_person_policy_with_activity_based_probability_with_a_satisfied_person_a
     steve = household.people['1']
 
     modify.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
+
+
+##### MoveActivityToHomeLocation
+
+
+def test_MoveActivityToHomeLocation_moves_shop_to_home_location():
+    Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(1, 'car', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    hhld = instantiate_household_with([Hilda])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(hhld)
+
+    assert Hilda.plan[2].location == Hilda.home
+    assert Hilda.plan[2].is_exact(Activity(2, 'shop', 'a', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+
+
+def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
+    Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(1, 'car', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    hhld = instantiate_household_with([Hilda])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(hhld)
+
+    assert Hilda.plan.validate_locations()
+
+
+@pytest.mark.xfail() # to follow mode shift implementation
+def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_trip():
+    Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(1, 'pt', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    hhld = instantiate_household_with([Hilda])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(hhld)
+    assert Hilda.plan[1].mode != 'pt'
+    assert Hilda.plan[3].mode != 'pt'
+
+
+@pytest.mark.xfail() # to follow mode shift implementation
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_car_due_to_driving_licence():
+    Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': True})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(1, 'pt', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    hhld = instantiate_household_with([Hilda])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(hhld)
+
+    assert Hilda.plan[1].mode == 'car'
+    assert Hilda.plan[3].mode == 'car'
+
+
+@pytest.mark.xfail() # to follow mode shift implementation
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_driving_licence():
+    Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': False})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(1, 'pt', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    hhld = instantiate_household_with([Hilda])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(hhld)
+
+    assert Hilda.plan[1].mode == 'walk'
+    assert Hilda.plan[3].mode == 'walk'
+
+
+def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHousehold):
+    household = SmithHousehold
+    Steve = household.people['1']
+    Timmy = household.people['3']
+    Timmy.plan[4].act = 'shop_1'
+    Bobby = household.people['4']
+
+    Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop_1', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(3, 'shop_2', 'c', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(3, 'walk', 'c', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(4, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    household.people['2'] = Hilda
+
+    assert_correct_activities(person=Steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
+    assert_correct_activities_locations(person=Steve, ordered_activities_locations_list=['a', 'b', 'c', 'b', 'a'])
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'shop_2', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'c', 'a'])
+    assert_correct_activities(person=Timmy, ordered_activities_list=['home', 'education', 'shop_1', 'education', 'leisure', 'home'])
+    assert_correct_activities_locations(person=Timmy, ordered_activities_locations_list=['a', 'b', 'c', 'b', 'd', 'a'])
+    assert_correct_activities(person=Bobby, ordered_activities_list=['home', 'education', 'home'])
+    assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(household)
+
+    assert_correct_activities(person=Steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
+    assert_correct_activities_locations(person=Steve, ordered_activities_locations_list=['a', 'b', 'c', 'b', 'a'])
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'shop_2', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'a', 'a', 'a'])
+    assert_correct_activities(person=Timmy, ordered_activities_list=['home', 'education', 'shop_1', 'education', 'leisure', 'home'])
+    assert_correct_activities_locations(person=Timmy, ordered_activities_locations_list=['a', 'b', 'c', 'b', 'd', 'a'])
+    assert_correct_activities(person=Bobby, ordered_activities_list=['home', 'education', 'home'])
+    assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
+
+
+def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
+    Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop_1', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(10 * 60 + 30)))
+    Hilda.add(Leg(2, 'walk', 'a', 'a', start_time=mtdt(10 * 60 + 30), end_time=mtdt(11 * 60)))
+    Hilda.add(Activity(3, 'home', 'a', start_time=mtdt(11 * 60), end_time=mtdt(12 * 60)))
+    Hilda.add(Leg(3, 'walk', 'a', 'c', start_time=mtdt(12 * 60), end_time=mtdt(12 * 60 + 30)))
+    Hilda.add(Activity(4, 'shop_2', 'c', start_time=mtdt(12 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(4, 'walk', 'c', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+    household.people['2'] = Hilda
+
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'home', 'shop_2', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(household)
+
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'home', 'shop_2', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
+
+
+def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHousehold):
+    household = SmithHousehold
+    Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
+    Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Hilda.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(10 * 60 + 30)))
+    Hilda.add(Leg(2, 'walk', 'a', 'a', start_time=mtdt(10 * 60 + 30), end_time=mtdt(11 * 60)))
+    Hilda.add(Activity(3, 'home', 'a', start_time=mtdt(11 * 60), end_time=mtdt(12 * 60)))
+    Hilda.add(Leg(3, 'walk', 'a', 'c', start_time=mtdt(12 * 60), end_time=mtdt(12 * 60 + 30)))
+    Hilda.add(Activity(4, 'shop', 'c', start_time=mtdt(12 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(Leg(4, 'walk', 'a', 'c', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
+    Hilda.add(Activity(5, 'leisure', 'c', start_time=mtdt(17 * 60), end_time=mtdt(17 * 60 + 30)))
+    Hilda.add(Leg(5, 'walk', 'c', 'a', start_time=mtdt(17 * 60 + 30), end_time=mtdt(18 * 60)))
+    Hilda.add(Activity(6, 'home', 'a', start_time=mtdt(18 * 60), end_time=END_OF_DAY))
+    household.people['2'] = Hilda
+
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop', 'home', 'shop', 'leisure', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'c', 'a'])
+
+    policy = modify.PersonPolicy(
+        modify.MoveActivityTourToHomeLocation(['shop']),
+        modify.PersonProbability(1)
+    )
+    policy.apply_to(household)
+
+    assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop', 'home', 'shop', 'leisure', 'home'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'a', 'a', 'c', 'c', 'a'])
