@@ -2,7 +2,7 @@ import os
 import pytest
 import pandas as pd
 
-from pam.parse import load_activity_plan
+from pam.read import load_activity_plan
 
 test_activities_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_activity_plans.csv")
