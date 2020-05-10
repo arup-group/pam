@@ -2,7 +2,7 @@ import argparse
 
 import pandas as pd
 
-from pam import parse
+from pam import read
 
 
 def scale_people(seed_people_df, scale_factor):
@@ -20,7 +20,7 @@ def scale_trips(seed_trips_df, scale_factor):
           .format(num_trips_required, num_seed_trips))
     scaled_df = pd.concat([seed_trips_df] * scale_factor, ignore_index=True)
 
-    # now fix up PIDs and HIDs so that all new trips become unique
+    # fix up PIDs and HIDs so that all new trips become unique
     num_seed_people = len(seed_trips_df.pid.unique())
     num_seed_households = len(seed_trips_df.hid.unique())
     for i, row in scaled_df.iterrows():
@@ -28,14 +28,21 @@ def scale_trips(seed_trips_df, scale_factor):
             continue
         tranche_number, remainder = divmod(i, num_seed_trips)
         old_pid = scaled_df.at[i, 'pid']
-        old_hid = scaled_df.at[i, 'hid']
         new_pid = old_pid + (tranche_number * num_seed_people)
+        old_hid = scaled_df.at[i, 'hid']
         new_hid = old_hid + (tranche_number * num_seed_households)
-        print("Fixing values for row {} in synthesised tranch {} - old pid:{} -> new pid: {}, old hid:{} -> new hid:{}"
+        print("Fixing values for row {} in synthesised tranche {} - old pid:{} -> new pid: {}, old hid:{} -> new hid:{}"
               .format(i, tranche_number, old_pid, new_pid, old_hid, new_hid))
         scaled_df.at[i, 'pid'] = new_pid
         scaled_df.at[i, 'hid'] = new_hid
     return scaled_df
+
+
+def get_scaled_file_path(in_file_path, out_dir_path, scale_factor):
+    tokens = in_file_path.split('.')
+    file_name = tokens[0].split('/')[-1]
+    extension = tokens[1]
+    return '{}/{}-x{}.{}'.format(out_dir_path, file_name, scale_factor, extension)
 
 
 if __name__ == '__main__':
@@ -68,15 +75,19 @@ if __name__ == '__main__':
     seed_trips = pd.read_csv(travel_diary)
     seed_people = pd.read_csv(person_attributes)
     seed_people.set_index('pid', inplace=True)
-    seed_population = parse.load_travel_diary(seed_trips, seed_people)
+    seed_population = read.load_travel_diary(seed_trips, seed_people)
     print("Created seed population from input files: '{}'".format(seed_population))
 
-    people_df = scale_people(seed_people, scale_factor)
-    trips_df = scale_trips(seed_trips, scale_factor)
+    scaled_people_df = scale_people(seed_people, scale_factor)
+    scaled_trips_df = scale_trips(seed_trips, scale_factor)
     print('Finished creating raw synthetic data')
 
-    print('Building population from raw synthetic data')
-    population = parse.load_travel_diary(trips_df, people_df)
-    print("Created synthetic population: '{}'".format(population))
+    print('Validating synthetic data by building a PAM population...')
+    scaled_population = read.load_travel_diary(scaled_trips_df, scaled_people_df)
+    print("Successfully created synthetic population: '{}'".format(scaled_population))
 
-    print('Writing synthetic data out to {}'.format(output_dir))
+    travel_diary_out_file = get_scaled_file_path(travel_diary, output_dir, scale_factor)
+    person_attributes_out_file = get_scaled_file_path(person_attributes, output_dir, scale_factor)
+    scaled_people_df.to_csv(person_attributes_out_file, index_label='pid')
+    scaled_trips_df.to_csv(travel_diary_out_file, index=False)
+    print('Synthetic data written out to {} & {}'.format(travel_diary_out_file, person_attributes_out_file))

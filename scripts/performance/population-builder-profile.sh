@@ -19,18 +19,41 @@ CROSS_SYMBOL='\xE2\x9D\x8C'
 script_name=$0
 function usage() {
     echo ""
-    echo "usage: $script_name [-tah]"
-    echo "  -t    The full path to the travel diary CSV file to load (mandatory)"
+    echo "usage: $script_name [-dabmrh]"
+    echo "  -d    The full path to the travel diary CSV file to load (mandatory)"
     echo "  -a    The full path to the person attributes CSV file to load (mandatory)"
+    echo "  -b    The mprof file to use as a benchmark; optional, no default"
+    echo "  -m    The tolerance over the benchmark memory highpoint in MBs; defaults to 5"
+    echo "  -r    The tolerance over the benchmark runtime in seconds; defaults to 5"
     echo "  -h    Display help"
     exit $1
 }
 
-while getopts ":t:a:h" opt; do
+function get_running_time() {
+    profile_file=$1
+    earliest_ts=`cat $profile_file | awk 'NR > 1 {print}' | head -n 1 | awk '{print $3}'`
+    latest_ts=`cat $profile_file | tail -n 1 | awk '{print $3}'`
+    running_time=`bc <<< "$latest_ts - $earliest_ts"`
+    echo $running_time
+}
+
+function get_max_mem() {
+    profile_file=$1
+    max_mem=`cat $profile_file | awk '{print $2}' | sort -nr | head -n 1`
+    echo $max_mem
+}
+
+while getopts ":d:a:b:m:r:h" opt; do
   case $opt in
-    t) travel_diaries="$OPTARG"
+    d) travel_diaries="$OPTARG"
     ;;
     a) person_attributes="$OPTARG"
+    ;;
+    b) benchmark_file="$OPTARG"
+    ;;
+    m) mem_tolerance="$OPTARG"
+    ;;
+    r) runtime_tolerance="$OPTARG"
     ;;
     h) usage 0
     ;;
@@ -41,8 +64,31 @@ done
 
 if [[ -z "$travel_diaries" ]] || [[ -z "$person_attributes" ]]
 then
-  printf "${FAILURE} !!! You did not supply all the necessary mandatory parameters - exiting !!!${PLAIN}"
-  usage 1
+   printf "${FAILURE} !!! You did not supply all the necessary mandatory parameters - exiting !!!${PLAIN}"
+   usage 1
+fi
+
+if [[ -z "$mem_tolerance" ]]
+then
+    mem_tolerance='5'
+fi
+
+if [[ -z "$runtime_tolerance" ]]
+then
+    runtime_tolerance='5'
+fi
+
+if [[ -z "$benchmark_file" ]]
+then
+   printf "No benchmark file specified\n"
+else
+   printf "Using supplied profile file ${EM}${benchmark_file}${PLAIN} as a benchmark...\n"
+   benchmark_running_time=`get_running_time $benchmark_file`
+   printf "Benchmark run time was ${EM}${benchmark_running_time} seconds${PLAIN}\n"
+   benchmark_max_mem=`get_max_mem $benchmark_file`
+   printf "Benchmark max mem was ${EM}${benchmark_max_mem} MB${PLAIN}\n"
+   printf "Benchmark mem tolerance is ${EM}${mem_tolerance} MB${PLAIN}\n"
+   printf "Benchmark runtime tolerance is ${EM}${runtime_tolerance} seconds${PLAIN}\n"
 fi
 
 pushd "${0%/*}"
@@ -67,11 +113,45 @@ ${CROSS_SYMBOL}\n${PLAIN}"
 fi
 
 profile_file=`ls -talh mprofile_* | head -n 1 | awk '{print $NF}'`
-mem_max=`cat $profile_file | awk '{print $2}' | sort -nr | head -n 1`
-printf "Max memory from new profile file ${EM}%s${PLAIN} is ${EM}%s${PLAIN}\n" "$profile_file" "$mem_max"
-earliest_ts=`cat $profile_file | awk 'NR > 1 {print}' | head -n 1 | awk '{print $3}'`
-latest_ts=`cat $profile_file | tail -n 1 | awk '{print $3}'`
-printf "Earliest timestamp from new profile file ${EM}%s${PLAIN} is ${EM}%s${PLAIN}\n" "$profile_file" "$earliest_ts"
-printf "Latest timestamp from new profile file ${EM}%s${PLAIN} is ${EM}%s${PLAIN}\n" "$profile_file" "$latest_ts"
-running_time=`bc <<< "$latest_ts - $earliest_ts"`
-printf "Run time was ${EM}%s${PLAIN} seconds\n" "$running_time"
+mem_max=`get_max_mem $profile_file`
+printf "Max memory from new profile file ${EM}${profile_file}${PLAIN} is ${EM}${mem_max} MB${PLAIN}\n"
+running_time=`get_running_time $profile_file`
+printf "Run time was ${EM}%s seconds${PLAIN}\n" "$running_time"
+
+plot_file=`echo $profile_file | awk -F"." '{print $1}'`
+printf "\nGenerating plot in ${EM}${plot_file}.png${PLAIN}...\n"
+mprof plot $profile_file -o $plot_file -t "PAM Activity Loader Profile ($profile_file)"
+
+if [[ -n "$benchmark_max_mem" ]]
+then
+    mem_usage_diff=`bc <<< "$mem_max - $benchmark_max_mem"`
+    printf "Used ${EM}${mem_usage_diff}${PLAIN} MB more memory than the benchmark run\n"
+    runtime_diff=`bc <<< "$running_time - $benchmark_running_time"`
+    printf "Took ${EM}${runtime_diff}${PLAIN} seconds longer than the benchmark run\n"
+
+    if (( $(echo "$mem_tolerance > $mem_usage_diff" | bc -l) ))
+    then
+      printf "\n${SUCCESS}${CHECKMARK_SYMBOL}  Memory usage is within ${mem_tolerance} MB tolerance of the benchmark \
+${CHECKMARK_SYMBOL}${PLAIN}"
+    else
+      printf "\n${FAILURE}${CROSS_SYMBOL}  !!! Memory usage outside ${mem_tolerance} MB tolerance of the benchmark \
+!!! ${CROSS_SYMBOL}${PLAIN}"
+      return_value=1
+    fi
+
+    if (( $(echo "$runtime_tolerance > $runtime_diff" | bc -l) ))
+    then
+      printf "\n${SUCCESS}${CHECKMARK_SYMBOL}  Running time is within ${runtime_tolerance} seconds tolerance of the \
+benchmark ${CHECKMARK_SYMBOL}${PLAIN}\n"
+    else
+      printf "\n${FAILURE}${CROSS_SYMBOL}  !!! Running time outside ${runtime_tolerance} seconds tolerance of the \
+benchmark !!! ${CROSS_SYMBOL}${PLAIN}\n"
+      return_value=1
+    fi
+
+    echo ""
+fi
+
+popd
+
+exit $return_value

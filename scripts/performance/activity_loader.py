@@ -2,7 +2,7 @@ import argparse
 
 import pandas as pd
 
-from pam import parse
+from pam import read
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
@@ -24,6 +24,6 @@ if __name__ == '__main__':
     trips = pd.read_csv(travel_diary)
     attributes = pd.read_csv(person_attributes)
     attributes.set_index('pid', inplace=True)
-    population = parse.load_travel_diary(trips, attributes)
+    population = read.load_travel_diary(trips, attributes)
 
     print("Created population '{}'".format(population))
