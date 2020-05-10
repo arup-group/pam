@@ -2,7 +2,7 @@ import os
 import pytest
 import pandas as pd
 
-from pam.parse import load_travel_diary
+from pam.read import load_travel_diary
 
 
 test_trips_path = os.path.abspath(
@@ -31,6 +31,7 @@ def test_attributes():
 def test_agent_pid_5_not_start_from_home(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households['2'].people['5'].activities]
+    print(acts)
     assert acts == ['work', 'home']
 
 
@@ -90,6 +91,7 @@ def test_agent_pid_12_not_start_and_return_home_night_worker_complex_chain_type1
 ):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households['9'].people['12'].activities]
+    print(acts)
     assert acts == ['work', 'shop', 'home', 'work']
 
 

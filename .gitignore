@@ -1,14 +1,17 @@
 pam.egg-info/
+*.xls
+*.xlsx
 *.pptx
 .DS_Store
 .cache/
 .idea/
 .ipynb_checkpoints/
 .pytest_cache/
+__pycache__
 data/
 example_data/.DS_Store
 https_github.com_fredshone.egg-info/
-pam/__pycache__/
+__pycache__
 parser.ipynb
 prelim-data-validation.ipynb
 scratch/
@@ -16,3 +19,6 @@ tests/.DS_Store
 tests/__pycache__/
 tests/test_data/.DS_Store
 .vscode/
+.python-version
+.coverage
+reports/*

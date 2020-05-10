@@ -17,11 +17,13 @@ representations, already derived from exiting models or survey data:
 (i) **Read/Load** input data (eg travel diary) to household and person Activity Plans
 
 (ii) **Modify** the Activity Plans for new social and government policy scenarios (eg 
-remove education activities for non key worker households)
+remove education activities for non key worker households). Crucially PAM facilitates 
+application of detailed policies at the person and household level, while still respecting 
+the logic of arbitrarily complex activity chains.
 
 (iii) **Output** to useful formats for activity based models or regular transport models
  
-(iv) Facilitate preliminary **Analysis** of changes
+(iv) Facilitate preliminary **Analysis** and **Validation** of changes
 
 This work is primarily intended for transport modellers, to make quick transport demand
 scenarios. But it may also be useful for other activity based demand modelling such as for goods 
@@ -37,7 +39,6 @@ supply or utility demand.
 - Example Activity Plan Modifiers/Policy Mechanisms
 - Input/Output Data Formats 
 - Technical Notes
-
 
 ## Get Involved
 
@@ -137,44 +138,6 @@ Help gladly received as an
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can email fred.shone@arup.com.
- 
-### Hack/Challenge
-
-We are maintaining an ongoing hack for people who want to dip in:
-
-The `pam.parse.load_travel_diary()` function loads Travel Diaries to create Activity Plans. At the 
-moment loading up simple plans (ie those that start and end at home is easy). But for non 
-standard plans, such as those belonging to night workers, that don't start and end from home,
- the logic can break.
-
-Dummy Travel Plans data with challenge edge cases can be found in 
-`pam/tests/test_data/simple_travel_diaries.csv`. The challenge for creating activity plans is to 
-**infer** the type of activities between trips (ie 
-home, shopping, work). All activity plans are restricted to one day and must start and end with 
-an activity.
-
-#### Challenge Criteria
-
-There are tests -> the more you can get running as `xpassed` the better you are doing. Run tests 
-using pytest, ie:
-
-```
-$ pytest -v
-```
-
-You should find some tests in `tests/test_3_parse_challenge.py` are failing or `xfailing` (aka 
-expected to fail). This challenge set of 
-tests represents edge cases for the standard travel diary parser: `pam.parse.load_travel_diary()`
- - the challenge is to adjust `pam.parse.load_travel_diary()` to get as many tests passing without 
- breaking ANY tests that were previously working.
-
-#### Rules
-
-Clone project and work in your own branch.
-
-Please work within the `pam.parse` module only.
-
-New edge case tests are expected to be added over time as they are encountered.
  
 ## Installation
 

@@ -11,10 +11,9 @@ def minutes_to_datetime(minutes: int):
 	:param minutes: int
 	:return: datetime
 	"""
-	assert minutes < 24 * 60
-	hours = minutes // 60
-	minutes = minutes % 60
-	return datetime(1900, 1, 1, hours, minutes)
+	days, remainder = divmod(minutes, 24 * 60)
+	hours, minutes = divmod(remainder, 60)
+	return datetime(1900, 1, 1+days, hours, minutes)
 
 
 def datetime_to_matsim_time(dt):
