@@ -290,7 +290,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purpose.lower()
+                act = self.day[idx-1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -318,7 +318,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purpose.lower()
+                act = self.day[idx-1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -339,7 +339,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx+1].purpose.lower()
+                act = self.day[idx+1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -717,7 +717,6 @@ class Leg(PlanComponent):
     def __init__(
             self,
             seq=None,
-            purp=None,
             mode=None,
             start_loc=None,
             end_loc=None,
@@ -727,7 +726,7 @@ class Leg(PlanComponent):
             end_area=None,
             start_time=None,
             end_time=None,
-            purpose=None
+            purp=None,
     ):
         self.seq = seq
         self.purp = purp
@@ -736,7 +735,6 @@ class Leg(PlanComponent):
         self.end_location = Location(loc=end_loc, link=end_link, area=end_area)
         self.start_time = start_time
         self.end_time = end_time
-        self.purpose = purpose
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \

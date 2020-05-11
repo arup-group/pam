@@ -163,7 +163,6 @@ def complex_travel_diary_read(trips_df, attributes_df):
 						end_area=trip.dzone,
 						start_time=mtdt(trip.tst),
 						end_time=mtdt(trip.tet),
-						purpose=trip.purp
 					)
 				)
 
