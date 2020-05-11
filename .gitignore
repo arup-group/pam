@@ -24,3 +24,5 @@ tests/test_data/.DS_Store
 reports/*
 mprofile_*.dat
 mprofile_*.png
+pam-performance-report.html
+sample-perf-report.html
