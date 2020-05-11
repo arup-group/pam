@@ -149,6 +149,20 @@ benchmark !!! ${CROSS_SYMBOL}${PLAIN}\n"
       return_value=1
     fi
 
+    profile_plot_file=`echo $plot_file".png"`
+    benchmark_file_root=`echo $benchmark_file | awk -F"." '{print $1}'`
+    benchmark_plot_file=`echo $benchmark_file_root".png"`
+    echo ""
+
+    python report_builder.py \
+    -t perf-report.html.jinja \
+    -p $profile_file \
+    -ppl $profile_plot_file \
+    -bp $benchmark_file \
+    -bpl $benchmark_plot_file \
+    -mt $mem_tolerance \
+    -rt $runtime_tolerance
+
     echo ""
 fi
 
