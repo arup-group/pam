@@ -60,15 +60,7 @@ if __name__ == '__main__':
                                                                                                benchmark_profile_file,
                                                                                                template_file))
     prof_cmd, running_time, max_mem = parse_mprof_file(profile_file)
-    print("Profile file {} - cmd:'{}', running time:{}, max mem:{}".format(profile_file,
-                                                                           prof_cmd,
-                                                                           running_time,
-                                                                           max_mem))
     benchmark_prof_cmd, benchmark_running_time, benchmark_max_mem = parse_mprof_file(benchmark_profile_file)
-    print("Benchmark file {} - cmd:'{}', running time:{}, max mem:{}".format(benchmark_profile_file,
-                                                                             benchmark_prof_cmd,
-                                                                             benchmark_running_time,
-                                                                             benchmark_max_mem))
 
     env = Environment(loader=FileSystemLoader('.'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template(template_file)

@@ -27,7 +27,7 @@
                 <th scope="row" style="text-align:left;background-color: #e0e0e0;">Running Time (s)</th>
                 <td>{{ running_time }}</td>
                 <td>{{ benchmark_running_time }}</td>
-                <td>{{ "%.2f"|format(runtime_diff) }}</td>
+                <td>{% if runtime_diff > 0 %}↑{% else %}↓{% endif %} ({{ "%.2f"|format(runtime_diff) }})</td>
                 <td>{{ run_time_tolerance }}</td>
                 <td>
                     <strong>{% if runtime_diff <= run_time_tolerance %}PASS{% else %}FAIL{% endif %}</strong>
@@ -37,7 +37,7 @@
                 <th scope="row" style="text-align:left;background-color: #e0e0e0;">Max Memory (MB)</th>
                 <td>{{ max_mem }}</td>
                 <td>{{ benchmark_max_mem }}</td>
-                <td>{{ "%.2f"|format(mem_diff) }}</td>
+                <td>{% if mem_diff > 0 %}↑{% else %}↓{% endif %} ({{ "%.2f"|format(mem_diff) }})</td>
                 <td>{{ mem_tolerance }}</td>
                 <td>
                     <strong>{% if mem_diff <= mem_tolerance %}PASS{% else %}FAIL{% endif %}</strong>
