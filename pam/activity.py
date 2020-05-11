@@ -550,6 +550,7 @@ class Plan:
         :return:
         """
         self.day[idx_start + 1].end_location = self.day[idx_end - 1].end_location
+        self.day[idx_start + 1].purp= self.day[idx_end - 1].purp
         self.day.pop(idx_end - 1)  # remove second leg
 
         # todo add logic to change mode and time of leg
@@ -716,6 +717,7 @@ class Leg(PlanComponent):
     def __init__(
             self,
             seq=None,
+            purp=None,
             mode=None,
             start_loc=None,
             end_loc=None,
@@ -728,6 +730,7 @@ class Leg(PlanComponent):
             purpose=None
     ):
         self.seq = seq
+        self.purp = purp
         self.mode = mode
         self.start_location = Location(loc=start_loc, link=start_link, area=start_area)
         self.end_location = Location(loc=end_loc, link=end_link, area=end_area)

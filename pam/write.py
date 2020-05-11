@@ -27,10 +27,11 @@ def write_travel_diary(population, path, attributes_path=None):
                     'hzone': person.home,
                     'ozone': leg.start_location.area,
                     'dzone': leg.end_location.area,
-                    'purp': person.plan[seq + 1],  # todo this is not the same as the parse logic!!!
+                    'seq': seq,
+                    'purp': leg.purp,
                     'mode': leg.mode,
-                    'tst': leg.start_time,  # todo convert to min
-                    'tet': leg.end_time,  # todo convert to min
+                    'tst': leg.start_time.time(),  # todo convert to min
+                    'tet': leg.end_time.time(),  # todo convert to min
                     'freq': person.freq,
                 }
             )
@@ -39,7 +40,10 @@ def write_travel_diary(population, path, attributes_path=None):
     if attributes_path:
         record = []
         for hid, pid, person in population.people():
-            record.append(person.attributes)
+            line = person.attributes
+            line['hid'] = hid
+            line['pid'] = pid
+            record.append(line)
         pd.DataFrame(record).to_csv(attributes_path)
 
 
