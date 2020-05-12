@@ -43,6 +43,12 @@ class Population:
         hh = self.random_household()
         return hh.random_person()
 
+    def people_count(self):
+        count = 0
+        for hid, household in self.households.items():
+            count += household.size()
+        return count
+
     @property
     def size(self):
         return sum([person.freq for _, _, person in self.people()])
@@ -57,12 +63,12 @@ class Population:
         for _, household in self:
             household.print()
 
-    def __str__(self):
-        return f"Population: {self.size} people in {self.count(households=True)} households."
-
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
+
+    def __str__(self):
+        return f"Population: {self.people_count()} people in {self.count(households=True)} households."
 
 
 class Household:

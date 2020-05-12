@@ -693,6 +693,7 @@ def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
     Hilda.add(Activity(2, 'shop', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
     Hilda.add(Leg(1, 'car', 'b', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
+
     hhld = instantiate_household_with([Hilda])
 
     policy = modify.PersonPolicy(

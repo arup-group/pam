@@ -80,6 +80,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
                     Leg(
                         seq=n,
                         mode=trip['mode'],
+                        purp=trip.purp,
                         start_area=trip.ozone,
                         end_area=trip.dzone,
                         start_time=mtdt(trip.tst),
@@ -156,12 +157,12 @@ def complex_travel_diary_read(trips_df, attributes_df):
 				person.add(
 					Leg(
 						seq=n,
+                        purp=trip.purp,
 						mode=trip['mode'],
 						start_area=trip.ozone,
 						end_area=trip.dzone,
 						start_time=mtdt(trip.tst),
 						end_time=mtdt(trip.tet),
-						purpose=trip.purp
 					)
 				)
 

@@ -290,7 +290,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purpose.lower()
+                act = self.day[idx-1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -318,7 +318,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purpose.lower()
+                act = self.day[idx-1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -339,7 +339,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx+1].purpose.lower()
+                act = self.day[idx+1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -550,6 +550,7 @@ class Plan:
         :return:
         """
         self.day[idx_start + 1].end_location = self.day[idx_end - 1].end_location
+        self.day[idx_start + 1].purp= self.day[idx_end - 1].purp
         self.day.pop(idx_end - 1)  # remove second leg
 
         # todo add logic to change mode and time of leg
@@ -731,15 +732,15 @@ class Leg(PlanComponent):
             end_area=None,
             start_time=None,
             end_time=None,
-            purpose=None
+            purp=None,
     ):
         self.seq = seq
+        self.purp = purp
         self.mode = mode
         self.start_location = Location(loc=start_loc, link=start_link, area=start_area)
         self.end_location = Location(loc=end_loc, link=end_link, area=end_area)
         self.start_time = start_time
         self.end_time = end_time
-        self.purpose = purpose
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
