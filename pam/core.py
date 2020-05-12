@@ -75,11 +75,7 @@ class Household:
     logger = logging.getLogger(__name__)
 
     def __init__(self, hid):
-        
-        if not isinstance(hid, str):
-            hid = str(hid)
-            self.logger.warning(" converting household id to string")
-        self.hid = hid
+        self.hid = str(hid)
         self.people = {}
         self.area = None
 
@@ -123,9 +119,6 @@ class Person:
     logger = logging.getLogger(__name__)
 
     def __init__(self, pid, freq=1, attributes=None, home_area=None):
-        if not isinstance(pid, str):
-            pid = str(pid)
-            self.logger.warning(" converting person id to string")
         self.pid = str(pid)
         self.freq = freq
         self.attributes = attributes
