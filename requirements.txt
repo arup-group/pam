@@ -8,7 +8,7 @@ decorator==4.4.2
 defusedxml==0.6.0
 descartes==1.1.0
 entrypoints==0.3
-#Fiona==1.8.13.post1
+Fiona==1.8.13.post1
 geopandas==0.7.0
 importlib-metadata==1.6.0
 ipykernel==5.2.1
@@ -26,6 +26,7 @@ kiwisolver==1.2.0
 lxml==4.5.0
 MarkupSafe==1.1.1
 matplotlib==3.2.1
+memory-profiler==0.57.0
 mistune==0.8.4
 more-itertools==8.2.0
 munch==2.5.0
