@@ -9,7 +9,7 @@ from .plot import plot_person, plot_household
 class Population:
 
     def __init__(self, name=None):
-        self.name=name
+        self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
 
@@ -38,7 +38,7 @@ class Population:
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]
-    
+
     def random_person(self):
         hh = self.random_household()
         return hh.random_person()
@@ -75,7 +75,7 @@ class Household:
     logger = logging.getLogger(__name__)
 
     def __init__(self, hid):
-        
+
         if not isinstance(hid, str):
             hid = str(hid)
             self.logger.warning(" converting household id to string")
@@ -101,13 +101,24 @@ class Household:
         for pid, person in self.people.items():
             yield pid, person
 
-    def size(self):
-        return len(self.people)
+    def shared_activities(self):
+        shared_activities = []
+        household_activities = []
+        for pid, person in self.people.items():
+            for activity in person.activities:
+                if activity.in_list_exact(household_activities):
+                    shared_activities.append(activity)
+                if not activity.in_list_exact(household_activities):
+                    household_activities.append(activity)
+        return shared_activities
 
     def print(self):
         print(self)
         for _, person in self:
             person.print()
+
+    def size(self):
+        return len(self.people)
 
     def plot(self):
         plot_household(self)
@@ -118,6 +129,7 @@ class Household:
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
+
 
 class Person:
     logger = logging.getLogger(__name__)
