@@ -285,7 +285,7 @@ class MoveActivityTourToHomeLocation(Policy):
         return matching_tours
 
     def tour_matches_activities(self, tour, p):
-        if set([act.act for act in tour]) == set(self.activities):
+        if set([act.act for act in tour]) - set(self.activities) == set():
             for act in tour:
                 if p(act):
                     return True
