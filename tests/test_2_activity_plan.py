@@ -252,3 +252,84 @@ def test_move_activity_at_end_of_plan_updates_leg():
     plan.move_activity(2)
 
     assert plan[1].end_location == 'a'
+
+def test_mode_shift_single_tour():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1, mode='car'))
+    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Leg(2, mode='car'))
+    plan.add(Activity(3, 'home', 'a'))
+
+    plan.mode_shift(1,'pt')
+
+    assert [leg.mode for leg in plan.legs] == ['pt', 'pt']
+
+def test_mode_shift_two_tours_first_leg():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1, mode='car'))
+    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Leg(2, mode='car'))
+    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Leg(3, mode='car'))
+    plan.add(Activity(4, 'work', 'a'))
+    plan.add(Leg(4, mode='car'))
+    plan.add(Activity(5, 'home', 'a'))
+
+    plan.mode_shift(1,'pt')
+
+    assert [leg.mode for leg in plan.legs] == ['pt', 'pt','car','car']
+
+def test_mode_shift_two_tours_second_leg():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1, mode='car'))
+    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Leg(2, mode='car'))
+    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Leg(3, mode='car'))
+    plan.add(Activity(4, 'work', 'a'))
+    plan.add(Leg(4, mode='car'))
+    plan.add(Activity(5, 'home', 'a'))
+
+    plan.mode_shift(3,'pt')
+
+    assert [leg.mode for leg in plan.legs] == ['pt', 'pt','car','car']
+
+def test_mode_shift_two_tours_third_leg():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1, mode='car'))
+    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Leg(2, mode='car'))
+    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Leg(3, mode='car'))
+    plan.add(Activity(4, 'work', 'a'))
+    plan.add(Leg(4, mode='car'))
+    plan.add(Activity(5, 'home', 'a'))
+
+    plan.mode_shift(5,'pt')
+
+    assert [leg.mode for leg in plan.legs] == ['car','car','pt','pt']
+
+
+def test_mode_shift_multiple_tours():
+    plan = Plan('a')
+    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Leg(1, mode='car'))
+    plan.add(Activity(2, 'work', 'b'))
+    plan.add(Leg(2, mode='car'))
+    plan.add(Activity(3, 'shop', 'b'))
+    plan.add(Leg(3, mode='car'))
+    plan.add(Activity(4, 'work', 'b'))
+    plan.add(Leg(4, mode='car'))
+    plan.add(Activity(5, 'home', 'a'))
+    plan.add(Leg(5, mode='walk'))
+    plan.add(Activity(6, 'other', 'a'))
+    plan.add(Leg(6, mode='walk'))
+    plan.add(Activity(7, 'home', 'a'))
+
+    plan.mode_shift(5,'pt')
+
+    assert [leg.mode for leg in plan.legs] == ['pt', 'pt', 'pt', 'pt', 'walk', 'walk']

@@ -624,13 +624,39 @@ class Plan:
                     self[idx].end_location = trip_end_location
                 pt_trip = False
 
-    def mode_shift(self, seq, default='walk'):
+    def mode_shift(self, seq, target_mode='walk'):
         """
-        Changes mode of Leg
+        Changes mode for a leg, along with any legs in the same tour
         :return: None
         """
         assert isinstance(self.day[seq], Leg)
-        # TODO Implement mode shift
+
+        tour = self.get_leg_tour(seq)
+        for seq, plan in enumerate(self.day):
+            if isinstance(plan, Leg):
+                act_from = self.day[seq-1]
+                act_to = self.day[seq+1]
+                for other_act in tour:
+                    #if any of the trip ends belongs in the tour change the mode
+                    if act_from.is_exact(other_act) or act_to.is_exact(other_act):
+                        plan.mode = target_mode
+
+    def get_leg_tour(self, seq):
+        """
+        Get the tour of a leg
+        :params int seq: plan sequence. Must be a leg sequence.
+
+        :return: a list of activities in a tour
+        """
+        assert isinstance(self.day[seq], Leg)
+
+        act_from = self.day[seq-1]
+        act_to = self.day[seq+1]
+
+        for tour in self.activity_tours():
+            for tour_act in tour:
+                if act_from.is_exact(tour_act) or act_to.is_exact(tour_act):
+                    return tour
 
     def crop(self):
         """
