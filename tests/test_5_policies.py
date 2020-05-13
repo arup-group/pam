@@ -806,7 +806,7 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHo
     assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(SmithHousehold):
+def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(SmithHousehold):
     household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
@@ -830,7 +830,7 @@ def test_MoveActivityToHomeLocation_does_not_move_invalid_shopping_tour(SmithHou
     policy.apply_to(household)
 
     assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'home', 'shop_2', 'home'])
-    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
+    assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'a', 'a', 'a', 'a'])
 
 
 def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHousehold):

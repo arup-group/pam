@@ -736,6 +736,12 @@ class Activity(PlanComponent):
         return (self.location == other.location) and (self.act == other.act) \
                and (self.start_time == other.start_time) and (self.end_time == other.end_time)
 
+    def in_list_exact(self, activities: list):
+        for other in activities:
+            if self.is_exact(other):
+                return True
+        return False
+
 
 class Leg(PlanComponent):
     act = 'travel'
