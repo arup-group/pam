@@ -178,11 +178,11 @@ def test_activity_tours_segments_home_to_other_act_nonhome_looped_plan(activitie
 
 def test_move_activity_with_home_default():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Activity(1, 'home', area='a'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Activity(2, 'shop', area='b'))
     plan.add(Leg(2))
-    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Activity(3, 'home', area='a'))
 
     plan.move_activity(2)
 
@@ -191,11 +191,11 @@ def test_move_activity_with_home_default():
 
 def test_move_activity_with_home_default_updates_legs():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Activity(1, 'home', area='a'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Activity(2, 'shop', area='b'))
     plan.add(Leg(2))
-    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Activity(3, 'home', area='a'))
 
     plan.move_activity(2)
 
@@ -205,13 +205,13 @@ def test_move_activity_with_home_default_updates_legs():
 
 def test_move_activity_with_different_default():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Activity(1, 'home', area='a'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Activity(2, 'shop', area='b'))
     plan.add(Leg(2))
-    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Activity(3, 'home', area='a'))
 
-    new_loc = Location('heyooo')
+    new_loc = Location(area='heyooo')
     plan.move_activity(2, default=new_loc)
 
     assert plan[2].location == new_loc
@@ -219,13 +219,13 @@ def test_move_activity_with_different_default():
 
 def test_move_activity_with_different_default_updates_legs():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Activity(1, 'home', area='a'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Activity(2, 'shop', area='b'))
     plan.add(Leg(2))
-    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Activity(3, 'home', area='a'))
 
-    new_loc = Location('heyooo')
+    new_loc = Location(area='heyooo')
     plan.move_activity(2, default=new_loc)
 
     assert plan[1].end_location == new_loc
@@ -234,9 +234,9 @@ def test_move_activity_with_different_default_updates_legs():
 
 def test_move_activity_at_start_of_plan_updates_leg():
     plan = Plan('a')
-    plan.add(Activity(1, 'shop', 'b'))
+    plan.add(Activity(1, 'shop', area='b'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'home', 'a'))
+    plan.add(Activity(2, 'home', area='a'))
 
     plan.move_activity(0)
 
@@ -245,13 +245,14 @@ def test_move_activity_at_start_of_plan_updates_leg():
 
 def test_move_activity_at_end_of_plan_updates_leg():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
+    plan.add(Activity(1, 'home', area='a'))
     plan.add(Leg(1))
-    plan.add(Activity(2, 'shop', 'b'))
+    plan.add(Activity(2, 'shop', area='b'))
 
     plan.move_activity(2)
 
     assert plan[1].end_location == 'a'
+
 
 def test_mode_shift_single_tour():
     plan = Plan('a')
@@ -264,6 +265,7 @@ def test_mode_shift_single_tour():
     plan.mode_shift(1,'pt')
 
     assert [leg.mode for leg in plan.legs] == ['pt', 'pt']
+
 
 def test_mode_shift_two_tours_first_leg():
     plan = Plan('a')
@@ -281,6 +283,7 @@ def test_mode_shift_two_tours_first_leg():
 
     assert [leg.mode for leg in plan.legs] == ['pt', 'pt','car','car']
 
+
 def test_mode_shift_two_tours_second_leg():
     plan = Plan('a')
     plan.add(Activity(1, 'home', 'a'))
@@ -296,6 +299,7 @@ def test_mode_shift_two_tours_second_leg():
     plan.mode_shift(3,'pt')
 
     assert [leg.mode for leg in plan.legs] == ['pt', 'pt','car','car']
+
 
 def test_mode_shift_two_tours_third_leg():
     plan = Plan('a')
