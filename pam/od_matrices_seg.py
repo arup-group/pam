@@ -1,8 +1,11 @@
 import pandas as pd
+from datetime import datetime
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 def od_seg(population, path, type_seg=None, mode_seg=None, time_seg=None, purp_seg=None):    
     ozone = []
-    dzone = []
+    dzone = []   
 
     for hid, household in population.households.items():
         for pid, person in household.people.items():
@@ -18,11 +21,13 @@ def od_seg(population, path, type_seg=None, mode_seg=None, time_seg=None, purp_s
                         d = p.end_location.area
                         ozone.append(o)
                         dzone.append(d)
-                    if p.start_time == time_seg:
-                        o = p.start_location.area
-                        d = p.end_location.area
-                        ozone.append(o)
-                        dzone.append(d)
+                    if time_seg:
+                        time_seg = mtdt(time_seg)
+                        if p.start_time == time_seg:
+                            o = p.start_location.area
+                            d = p.end_location.area
+                            ozone.append(o)
+                            dzone.append(d)
                     if p.purpose == purp_seg:
                         o = p.start_location.area
                         d = p.end_location.area
