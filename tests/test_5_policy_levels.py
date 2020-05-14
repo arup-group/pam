@@ -1,4 +1,3 @@
-from pam.policy import policies
 from pam.policy import modifiers
 from pam.policy import probability_samplers
 from pam.policy import policy_levels
@@ -18,11 +17,7 @@ def test_HouseholdPolicy_verifies_for_appropriate_probabilities(mocker):
     mocker.patch.object(probability_samplers, 'verify_probability')
     policy_levels.HouseholdPolicy(modifiers.RemoveActivity(['']), 0.5)
 
-    probability_samplers.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability, probability_samplers.PersonProbability,
-         probability_samplers.HouseholdProbability)
-    )
+    probability_samplers.verify_probability.assert_called_once_with(0.5)
 
 
 def test_HouseholdPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):
@@ -53,10 +48,7 @@ def test_PersonPolicy_verifies_for_appropriate_probabilities(mocker):
     mocker.patch.object(probability_samplers, 'verify_probability')
     policy_levels.PersonPolicy(modifiers.RemoveActivity(['']), 0.5)
 
-    probability_samplers.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability, probability_samplers.PersonProbability)
-    )
+    probability_samplers.verify_probability.assert_called_once_with(0.5, (probability_samplers.HouseholdProbability))
 
 
 def test_PersonPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):
@@ -88,9 +80,7 @@ def test_ActivityPolicy_verifies_for_appropriate_probabilities(mocker):
     policy_levels.ActivityPolicy(modifiers.RemoveActivity(['']), 0.5)
 
     probability_samplers.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability)
-    )
+        0.5, (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability))
 
 
 def test_ActivityPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):

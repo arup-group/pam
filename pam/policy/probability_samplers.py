@@ -91,7 +91,7 @@ class PersonProbability(SamplingProbability):
 
 
 class ActivityProbability(SamplingProbability):
-    def __init__(self, activities : list, probability, kwargs=None):
+    def __init__(self, activities: list, probability, kwargs=None):
         super().__init__()
         self.activities = activities
         if isinstance(probability, int):
@@ -136,17 +136,26 @@ class ActivityProbability(SamplingProbability):
         return act.act.lower() in self.activities
 
 
-def verify_probability(probability, acceptable_types):
+def verify_probability(probability, unacceptable_types=None):
+    if unacceptable_types is None:
+        unacceptable_types = ()
     if isinstance(probability, int):
         probability = float(probability)
-    assert isinstance(probability, acceptable_types)
+    assert not isinstance(probability, unacceptable_types), \
+        '{} is of type {} which is not accepted. Check your policy\'s application level.'.format(
+            probability, type(probability))
     if isinstance(probability, float):
         assert 0 < probability <= 1
         probability = SimpleProbability(probability)
     elif isinstance(probability, list):
         for i in range(len(probability)):
-            assert isinstance(
-                probability[i], acceptable_types)
+            assert not isinstance(probability[i], unacceptable_types), \
+                '{} is of type {} which is not accepted. Check your policy\'s application level'.format(
+                    probability[i], type(probability[i]))
             if isinstance(probability[i], float):
                 probability[i] = SimpleProbability(probability[i])
+    else:
+        assert isinstance(probability, SamplingProbability), \
+            'Probability passed to a policy needs to be float, integer or {}, not {}'.format(
+                type(SamplingProbability), type(probability))
     return probability

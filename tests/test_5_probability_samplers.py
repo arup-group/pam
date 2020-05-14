@@ -300,9 +300,7 @@ def test_ActivityProbability_compute_probability_for_activity_delegates_p_to_cus
 def test_verify_probability_check_list_of_probabilities():
     p_list = [probability_samplers.HouseholdProbability(0.5), probability_samplers.ActivityProbability([''], 0.5),
               probability_samplers.SimpleProbability(0.5), 0.2]
-    verified_p_list = probability_samplers.verify_probability(
-        p_list,
-        (float, list, probability_samplers.HouseholdProbability, probability_samplers.ActivityProbability, probability_samplers.SimpleProbability))
+    verified_p_list = probability_samplers.verify_probability(p_list)
 
     assert p_list[:-1] == verified_p_list[:-1]
     assert isinstance(verified_p_list[-1], probability_samplers.SimpleProbability)
@@ -311,20 +309,20 @@ def test_verify_probability_check_list_of_probabilities():
 
 def test_verify_probability_defaults_acceptable_int_to_simple_probability(mocker):
     mocker.patch.object(probability_samplers.SimpleProbability, '__init__', return_value=None)
-    probability_samplers.verify_probability(1, float)
+    probability_samplers.verify_probability(1)
 
     probability_samplers.SimpleProbability.__init__.assert_called_once_with(1.)
 
 
 def test_verify_probability_defaults_float_to_simple_probability(mocker):
     mocker.patch.object(probability_samplers.SimpleProbability, '__init__', return_value=None)
-    probability_samplers.verify_probability(0.5, float)
+    probability_samplers.verify_probability(0.5)
 
     probability_samplers.SimpleProbability.__init__.assert_called_once_with(0.5)
 
 
 def test_verify_probability_defaults_float_in_list_to_simple_probability(mocker):
     mocker.patch.object(probability_samplers.SimpleProbability, '__init__', return_value=None)
-    probability_samplers.verify_probability([0.3, probability_samplers.PersonProbability(0.01)], (float, list, probability_samplers.PersonProbability))
+    probability_samplers.verify_probability([0.3, probability_samplers.PersonProbability(0.01)])
 
     probability_samplers.SimpleProbability.__init__.assert_called_once_with(0.3)

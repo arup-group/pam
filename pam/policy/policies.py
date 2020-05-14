@@ -16,11 +16,7 @@ class HouseholdQuarantined(Policy):
     """
     def __init__(self, probability):
         super().__init__()
-        self.probability = probability_samplers.verify_probability(
-            probability,
-            (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability,
-             probability_samplers.PersonProbability, probability_samplers.HouseholdProbability)
-        )
+        self.probability = probability_samplers.verify_probability(probability)
 
     def apply_to(self, household, person=None, activity=None):
         p = self.probability.p(household)

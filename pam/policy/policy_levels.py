@@ -1,4 +1,5 @@
 import random
+from typing import Union
 import pam.policy.modifiers as modifiers
 import pam.policy.probability_samplers as probability_samplers
 import pam.policy.filters as filters
@@ -6,8 +7,15 @@ import pam.policy.policies as policies
 
 
 class PolicyLevel(policies.Policy):
-    def __init__(self):
+    def __init__(self, policy: modifiers.Modifier, person_attribute_filter: filters.Filter = None):
         super().__init__()
+        assert isinstance(policy, modifiers.Modifier), 'policy needs to be subclass of {}'.format(
+            type(modifiers.Modifier()))
+        self.policy = policy
+        if person_attribute_filter is None:
+            self.person_attribute_filter = filters.PersonAttributeFilter({})
+        else:
+            self.person_attribute_filter = person_attribute_filter
 
     def apply_to(self, household, person=None, activity=None):
         raise NotImplementedError('{} is a base class'.format(type(PolicyLevel)))
@@ -21,20 +29,12 @@ class HouseholdPolicy(PolicyLevel):
     level is assumed to be of the same level as the policy
 
     """
-    def __init__(self, policy, probability, person_attribute_filter=None):
-        super().__init__()
-        assert isinstance(policy, (modifiers.RemoveActivity, modifiers.AddActivity,
-                                   modifiers.MoveActivityTourToHomeLocation, modifiers.ReduceSharedActivity))
-        self.policy = policy
-        self.probability = probability_samplers.verify_probability(
-            probability,
-            (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability,
-             probability_samplers.PersonProbability, probability_samplers.HouseholdProbability)
-        )
-        if person_attribute_filter is None:
-            self.person_attribute_filter = filters.PersonAttributeFilter({})
-        else:
-            self.person_attribute_filter = person_attribute_filter
+    def __init__(self,
+                 policy: modifiers.Modifier,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(policy, person_attribute_filter)
+        self.probability = probability_samplers.verify_probability(probability)
 
     def apply_to(self, household, person=None, activities=None):
         """
@@ -59,19 +59,14 @@ class PersonPolicy(PolicyLevel):
     """
     Policy that needs to be applied on a person level
     """
-    def __init__(self, policy, probability, person_attribute_filter=None):
-        super().__init__()
-        assert isinstance(policy, (modifiers.RemoveActivity, modifiers.AddActivity, modifiers.MoveActivityTourToHomeLocation))
-        self.policy = policy
+    def __init__(self,
+                 policy: modifiers.Modifier,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(policy, person_attribute_filter)
         self.probability = probability_samplers.verify_probability(
             probability,
-            (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability,
-             probability_samplers.PersonProbability)
-        )
-        if person_attribute_filter is None:
-            self.person_attribute_filter = filters.PersonAttributeFilter({})
-        else:
-            self.person_attribute_filter = person_attribute_filter
+            (probability_samplers.HouseholdProbability))
 
     def apply_to(self, household, person=None, activities=None):
         for pid, person in household.people.items():
@@ -90,19 +85,14 @@ class ActivityPolicy(PolicyLevel):
     """
     Policy that needs to be applied on an individual activity level
     """
-    def __init__(self, policy, probability, person_attribute_filter=None):
-        super().__init__()
-        assert isinstance(policy, (modifiers.RemoveActivity, modifiers.AddActivity,
-                                   modifiers.MoveActivityTourToHomeLocation))
-        self.policy = policy
+    def __init__(self,
+                 policy: modifiers.Modifier,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(policy, person_attribute_filter)
         self.probability = probability_samplers.verify_probability(
             probability,
-            (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability)
-        )
-        if person_attribute_filter is None:
-            self.person_attribute_filter = filters.PersonAttributeFilter({})
-        else:
-            self.person_attribute_filter = person_attribute_filter
+            (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability))
 
     def apply_to(self, household, person=None, activities=None):
         for pid, person in household.people.items():
