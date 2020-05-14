@@ -1,10 +1,18 @@
 import pam.core as core
 import pam.activity as activity
-from pam.policies import Policy
+import pam.policy.policies as policies
 import random
 
 
-class RemoveActivity(Policy):
+class Modifier(policies.Policy):
+    def __init__(self):
+        super().__init__()
+
+    def apply_to(self, household, person=None, activity=None):
+        raise NotImplementedError('{} is a base class'.format(type(Modifier)))
+
+
+class RemoveActivity(Modifier):
     """
     Probabilistic remove activities
     """
@@ -52,7 +60,7 @@ class RemoveActivity(Policy):
         return p.act.lower() in self.activities
 
 
-class AddActivity(Policy):
+class AddActivity(Modifier):
     """
     Probabilistic add activities
     """
@@ -64,7 +72,7 @@ class AddActivity(Policy):
         raise NotImplementedError('Watch this space')
 
 
-class ReduceSharedActivity(Policy):
+class ReduceSharedActivity(Modifier):
     """
     Policy that needs to be applied on an individual activity level
     for activities that are shared  within the  household
@@ -129,7 +137,7 @@ class ReduceSharedActivity(Policy):
         return people_with_shared_acts_for_removal
 
 
-class MoveActivityTourToHomeLocation(Policy):
+class MoveActivityTourToHomeLocation(Modifier):
     """
     Probabilistic move chain of activities
     """

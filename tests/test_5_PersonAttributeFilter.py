@@ -5,7 +5,7 @@ from pam.activity import Plan, Activity, Leg
 from tests.fixtures import *
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.policies.filters import PersonAttributeFilter
+from pam.policy.filters import PersonAttributeFilter
 
 
 def test_PersonAttributeFilter_satisfies_conditions_delegates_to_household_satisfies_conditions_when_given_household(mocker):

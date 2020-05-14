@@ -1,4 +1,4 @@
-from pam.policies import modifiers
+from pam.policy import modifiers
 from tests.fixtures import *
 
 

@@ -3,7 +3,7 @@ import random
 import pickle
 import pam.activity as activity
 import pam.plot as plot
-import pam.policies.policies as policies
+import pam.policy.policies as policies
 
 
 class Population:

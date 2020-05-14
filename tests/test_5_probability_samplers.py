@@ -1,5 +1,5 @@
 import random
-from pam.policies import probability_samplers
+from pam.policy import probability_samplers
 from tests.fixtures import *
 
 

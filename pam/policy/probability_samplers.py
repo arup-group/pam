@@ -1,6 +1,6 @@
 import pam.core as core
 import pam.activity as activity
-from pam.policies import Policy
+import pam.policy.policies as policies
 import random
 
 
@@ -12,7 +12,7 @@ class SamplingProbability:
         return random.random() < self.p(x)
 
     def p(self, x):
-        raise NotImplementedError('{} is a base class'.format(type(Policy)))
+        raise NotImplementedError('{} is a base class'.format(type(policies.Policy)))
 
 
 class SimpleProbability(SamplingProbability):

@@ -1,47 +1,19 @@
-import pam.policies.modifiers as modifiers
-import pam.policies.probability_samplers as probability_samplers
-import pam.policies.filters as filters
-from pam.policies import Policy
 import random
+import pam.policy.modifiers as modifiers
+import pam.policy.probability_samplers as probability_samplers
+import pam.policy.filters as filters
+import pam.policy.policies as policies
 
 
-class HouseholdQuarantined(Policy):
-    """
-    Probabilistic everyone in household stays home
-    """
-    def __init__(self, probability):
-        super().__init__()
-        self.probability = probability_samplers.verify_probability(
-            probability,
-            (float, list, probability_samplers.SimpleProbability, probability_samplers.ActivityProbability,
-             probability_samplers.PersonProbability, probability_samplers.HouseholdProbability)
-        )
-
-    def apply_to(self, household, person=None, activity=None):
-        p = self.probability.p(household)
-        if random.random() < p:
-            for pid, person in household.people.items():
-                person.stay_at_home()
-
-
-class PersonStayAtHome(Policy):
-    """
-    Probabilistic person stays home
-    """
-
-    def __init__(self, probability):
+class PolicyLevel(policies.Policy):
+    def __init__(self):
         super().__init__()
 
-        assert 0 < probability <= 1
-        self.probability = probability
-
     def apply_to(self, household, person=None, activity=None):
-        for pid, person in household.people.items():
-            if random.random() < self.probability:
-                person.stay_at_home()
+        raise NotImplementedError('{} is a base class'.format(type(PolicyLevel)))
 
 
-class HouseholdPolicy(Policy):
+class HouseholdPolicy(PolicyLevel):
     """
     Policy that needs to be applied on a household level
 
@@ -83,7 +55,7 @@ class HouseholdPolicy(Policy):
                 self.policy.apply_to(household)
 
 
-class PersonPolicy(Policy):
+class PersonPolicy(PolicyLevel):
     """
     Policy that needs to be applied on a person level
     """
@@ -114,7 +86,7 @@ class PersonPolicy(Policy):
                     self.policy.apply_to(household, person)
 
 
-class ActivityPolicy(Policy):
+class ActivityPolicy(PolicyLevel):
     """
     Policy that needs to be applied on an individual activity level
     """
