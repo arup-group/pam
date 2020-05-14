@@ -1,10 +1,5 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
-from pam import modify
-import pytest
 import random
+from pam.policies import modifiers
 from tests.fixtures import *
 
 
@@ -50,13 +45,13 @@ def Betty():
 
 def test_remove_activities_removes_single_activity(Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
-    modify.ReduceSharedActivity(['shop_1']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12]])
+    modifiers.ReduceSharedActivity(['shop_1']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12]])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_2', 'home'])
 
 
 def test_remove_activities_removes_adjoining_activities(Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
-    modify.ReduceSharedActivity(['shop_1', 'shop_2']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12], Betty.plan[14]])
+    modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12], Betty.plan[14]])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home'])
 
 
@@ -65,7 +60,7 @@ def test_remove_activities_removes_relevant_shared_activities(Betty):
     Betty.plan[6].act = 'shop_1'
     Betty.plan[6].location = Betty.plan[12].location
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'shop_1', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
-    modify.ReduceSharedActivity(['shop_1', 'shop_2']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12], Betty.plan[14]])
+    modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12], Betty.plan[14]])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'shop_1', 'escort', 'home'])
 
 
@@ -80,7 +75,7 @@ def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_a
     assert_correct_activities(person=timmy, ordered_activities_list=['home', 'education', 'shop', 'education', 'leisure', 'home'])
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
-    policy = modify.ReduceSharedActivity([''])
+    policy = modifiers.ReduceSharedActivity([''])
     shared_acts = policy.shared_activities_for_removal(household)
     assert not shared_acts
 
@@ -95,7 +90,7 @@ def test_remove_household_activities_does_nothing_if_one_person_in_hhld(Betty):
     household = instantiate_household_with([Betty])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
 
-    policy = modify.ReduceSharedActivity([''])
+    policy = modifiers.ReduceSharedActivity([''])
     shared_acts = policy.shared_activities_for_removal(household)
     assert not shared_acts
 
@@ -106,7 +101,7 @@ def test_remove_household_activities_does_nothing_if_one_person_in_hhld(Betty):
 def test_remove_household_activities_removes_Bettys_shopping_shared_activities(mocker, Betty, Bobber):
     mocker.patch.object(random, 'choice', return_value=Betty)
     hhld = instantiate_household_with([Betty, Bobber])
-    policy = modify.ReduceSharedActivity(['shop_1', 'shop_2'])
+    policy = modifiers.ReduceSharedActivity(['shop_1', 'shop_2'])
 
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
     assert_correct_activities(person=Bobber, ordered_activities_list=['home', 'education', 'home', 'shop_1', 'shop_2', 'home'])
@@ -122,7 +117,7 @@ def test_shared_activities_for_removal_finds_shared_activities(Betty, Bobber):
     act_1 = Activity(8, 'shop_2', 'b', start_time=mtdt(19 * 60), end_time=mtdt(19 * 60 + 50))
     act_2 = Activity(7, 'shop_1', 'b', start_time=mtdt(18 * 60 + 20), end_time=mtdt(18 * 60 + 50))
 
-    shared_acts = modify.ReduceSharedActivity(['shop_1', 'shop_2']).shared_activities_for_removal(hhld)
+    shared_acts = modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).shared_activities_for_removal(hhld)
 
     assert shared_acts
     assert act_1.in_list_exact(shared_acts)
@@ -132,7 +127,7 @@ def test_shared_activities_for_removal_finds_shared_activities(Betty, Bobber):
 def test_people_who_share_activities_for_removal_identifies_both_people_as_sharing_activities(Betty, Bobber):
     hhld = instantiate_household_with([Betty, Bobber])
 
-    ppl = modify.ReduceSharedActivity(['shop_1', 'shop_2']).people_who_share_activities_for_removal(hhld)
+    ppl = modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).people_who_share_activities_for_removal(hhld)
 
     assert ppl
     assert Betty in ppl
@@ -140,16 +135,16 @@ def test_people_who_share_activities_for_removal_identifies_both_people_as_shari
 
 
 def test_apply_to_delegates_to_remove_activities_when_given_household(mocker, SmithHousehold):
-    mocker.patch.object(modify.ReduceSharedActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.ReduceSharedActivity, 'remove_household_activities')
 
-    policy = modify.ReduceSharedActivity([''])
+    policy = modifiers.ReduceSharedActivity([''])
     policy.apply_to(SmithHousehold)
 
-    modify.ReduceSharedActivity.remove_household_activities.assert_called_once_with(SmithHousehold)
+    modifiers.ReduceSharedActivity.remove_household_activities.assert_called_once_with(SmithHousehold)
 
 
 def test_throws_exception_if_apply_to_given_wrong_input(Bobby):
-    policy = modify.ReduceSharedActivity([''])
+    policy = modifiers.ReduceSharedActivity([''])
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)
     assert 'Types passed incorrectly: <class \'pam.core.Person\'>, <class \'NoneType\'>, <class \'NoneType\'>. ' \
@@ -157,29 +152,29 @@ def test_throws_exception_if_apply_to_given_wrong_input(Bobby):
 
 
 def test_remove_household_activities_delegates_to_several_methods(mocker, SmithHousehold):
-    mocker.patch.object(modify.ReduceSharedActivity, 'shared_activities_for_removal', return_value=[''])
-    mocker.patch.object(modify.ReduceSharedActivity, 'people_who_share_activities_for_removal', return_value=[''])
+    mocker.patch.object(modifiers.ReduceSharedActivity, 'shared_activities_for_removal', return_value=[''])
+    mocker.patch.object(modifiers.ReduceSharedActivity, 'people_who_share_activities_for_removal', return_value=[''])
     mocker.patch.object(random, 'choice')
-    mocker.patch.object(modify.ReduceSharedActivity, 'remove_activities')
+    mocker.patch.object(modifiers.ReduceSharedActivity, 'remove_activities')
 
-    policy = modify.ReduceSharedActivity([''])
+    policy = modifiers.ReduceSharedActivity([''])
     policy.remove_household_activities(SmithHousehold)
 
-    modify.ReduceSharedActivity.shared_activities_for_removal.assert_called_once_with(SmithHousehold)
-    assert modify.ReduceSharedActivity.people_who_share_activities_for_removal.call_count == 2
+    modifiers.ReduceSharedActivity.shared_activities_for_removal.assert_called_once_with(SmithHousehold)
+    assert modifiers.ReduceSharedActivity.people_who_share_activities_for_removal.call_count == 2
     random.choice.assert_called_once_with([''])
-    assert modify.ReduceSharedActivity.remove_activities.call_count == 4
+    assert modifiers.ReduceSharedActivity.remove_activities.call_count == 4
 
 
 def test_is_activity_for_removal_activity_matches_ReduceSharedActivity_activities():
     activity = Activity(act = 'some_activity')
-    policy_remove_activity = modify.ReduceSharedActivity(['some_activity'])
+    policy_remove_activity = modifiers.ReduceSharedActivity(['some_activity'])
 
     assert policy_remove_activity.is_activity_for_removal(activity)
 
 
 def test_is_activity_for_removal_activity_does_not_match_ReduceSharedActivity_activities():
     activity = Activity(act = 'other_activity')
-    policy_remove_activity = modify.ReduceSharedActivity(['some_activity'])
+    policy_remove_activity = modifiers.ReduceSharedActivity(['some_activity'])
 
     assert not policy_remove_activity.is_activity_for_removal(activity)

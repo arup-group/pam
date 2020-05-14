@@ -1,9 +1,9 @@
 import logging
 import random
 import pickle
-
-from .activity import Plan
-from .plot import plot_person, plot_household
+import pam.activity as activity
+import pam.plot as plot
+import pam.policies.policies as policies
 
 
 class Population:
@@ -63,6 +63,20 @@ class Population:
         for _, household in self:
             household.print()
 
+    def apply_policy(self, policy: policies.Policy):
+        for hid, household in self.households.items():
+            policy.apply_to(household)
+
+    def apply_policies(self, policy_list: list):
+        for i in range(len(policy_list)):
+            policy = policy_list[i]
+            assert isinstance(policy, policies.Policy), \
+                'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
+                    type(policies.Policy), type(policy), policy, i)
+        for hid, household in self.households.items():
+            for policy in policy_list:
+                policy.apply_to(household)
+
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
@@ -113,11 +127,23 @@ class Household:
         for _, person in self:
             person.print()
 
+    def apply_policy(self, policy: policies.Policy):
+        policy.apply_to(self)
+
+    def apply_policies(self, policy_list: list):
+        for i in range(len(policy_list)):
+            policy = policy_list[i]
+            assert isinstance(policy, policies.Policy), \
+                'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
+                    type(policies.Policy), type(policy), policy, i)
+        for policy in policy_list:
+            policy.apply_to(self)
+
     def size(self):
         return len(self.people)
 
     def plot(self):
-        plot_household(self)
+        plot.plot_household(self)
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -134,7 +160,7 @@ class Person:
         self.pid = str(pid)
         self.freq = freq
         self.attributes = attributes
-        self.plan = Plan(home_area=home_area)
+        self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
 
     @property
@@ -215,7 +241,7 @@ class Person:
         self.plan.print()
 
     def plot(self):
-        plot_person(self)
+        plot.plot_person(self)
 
     def __str__(self):
         return f"Person: {self.pid}"

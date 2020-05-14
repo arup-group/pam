@@ -1,12 +1,9 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
-from pam import modify
-from tests.fixtures import *
-import pytest
 import random
-from datetime import datetime
+from pam.policies import policies
+from pam.policies import modifiers
+from pam.policies import filters
+from pam.policies import probability_samplers
+from tests.fixtures import *
 
 
 def assert_correct_activities_locations(person, ordered_activities_locations_list):
@@ -19,7 +16,7 @@ def assert_correct_activities_locations(person, ordered_activities_locations_lis
 
 
 def test_Policy_throws_exception_when_used():
-    policy = modify.Policy()
+    policy = policies.Policy()
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)
     assert '<class \'type\'> is a base class' in str(e.value)
@@ -163,7 +160,7 @@ def test_home_education_home_removal_of_education_act(person_home_education_home
     household = instantiate_household_with([person_home_education_home])
     assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
 
-    policy = modify.ActivityPolicy(modify.RemoveActivity(activities=['education']), 1)
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
     assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
 
@@ -183,7 +180,7 @@ def test_home_education_home_education_home_removal_of_education_act():
     assert_correct_activities(person=household.people['1'],
                               ordered_activities_list=['home', 'education', 'home', 'education', 'home'])
 
-    policy = modify.ActivityPolicy(modify.RemoveActivity(activities=['education']), 1)
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
     assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
 
@@ -278,7 +275,7 @@ def test_home_work_home_education_home_removal_of_education_act():
     household = instantiate_household_with([person])
     assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'work', 'home', 'education', 'home'])
 
-    policy = modify.ActivityPolicy(modify.RemoveActivity(activities=['education']), 1)
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
     assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'work', 'home'])
 
@@ -297,10 +294,10 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
     assert age_condition_over_17(household.people['1'].attributes['age'])
     assert job_condition_education(household.people['1'].attributes['job'])
 
-    policy_remove_higher_education = modify.ActivityPolicy(
-        modify.RemoveActivity(['education']),
-        modify.ActivityProbability(['education'], 1),
-        modify.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_education}, how='all')
+    policy_remove_higher_education = policies.ActivityPolicy(
+        modifiers.RemoveActivity(['education']),
+        probability_samplers.ActivityProbability(['education'], 1),
+        filters.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_education}, how='all')
     )
 
     policy_remove_higher_education.apply_to(household)
@@ -321,10 +318,10 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
     assert age_condition_over_17(household.people['1'].attributes['age'])
     assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
 
-    policy_remove_higher_education = modify.ActivityPolicy(
-        modify.RemoveActivity(['education']),
-        modify.ActivityProbability(['education'], 1),
-        modify.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
+    policy_remove_higher_education = policies.ActivityPolicy(
+        modifiers.RemoveActivity(['education']),
+        probability_samplers.ActivityProbability(['education'], 1),
+        filters.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
                                      how='all')
     )
 
@@ -347,10 +344,10 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
     assert age_condition_over_17(household.people['1'].attributes['age'])
     assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
 
-    policy_remove_higher_education = modify.ActivityPolicy(
-        modify.RemoveActivity(['education']),
-        modify.ActivityProbability(['education'], 1),
-        modify.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
+    policy_remove_higher_education = policies.ActivityPolicy(
+        modifiers.RemoveActivity(['education']),
+        probability_samplers.ActivityProbability(['education'], 1),
+        filters.PersonAttributeFilter(conditions={'age': age_condition_over_17, 'job': job_condition_wasevrrr},
                                      how='any')
     )
 
@@ -373,10 +370,10 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
     assert not age_condition_under_0(household.people['1'].attributes['age'])
     assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
 
-    policy_remove_higher_education = modify.ActivityPolicy(
-        modify.RemoveActivity(['education']),
-        modify.ActivityProbability(['education'], 1),
-        modify.PersonAttributeFilter(conditions={'age': age_condition_under_0, 'job': job_condition_wasevrrr},
+    policy_remove_higher_education = policies.ActivityPolicy(
+        modifiers.RemoveActivity(['education']),
+        probability_samplers.ActivityProbability(['education'], 1),
+        filters.PersonAttributeFilter(conditions={'age': age_condition_under_0, 'job': job_condition_wasevrrr},
                                      how='any')
     )
 
@@ -390,7 +387,7 @@ def test_remove_activity_policy_only_removes_individual_activities(mocker, home_
     assert_correct_activities(person=person, ordered_activities_list=['home', 'education', 'shop', 'education', 'home'])
     act_to_remove = list(person.activities)[3]
 
-    policy_remove_education = modify.RemoveActivity(['education'])
+    policy_remove_education = modifiers.RemoveActivity(['education'])
     policy_remove_education.remove_individual_activities(person, [act_to_remove])
 
     assert_correct_activities(person=person, ordered_activities_list=['home', 'education', 'shop', 'home'])
@@ -410,9 +407,9 @@ def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
     # i.e. First of Steve's work activities is affected and only that activity is affected
-    policy = modify.ActivityPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5)
+    policy = policies.ActivityPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5)
     )
     policy.apply_to(household)
 
@@ -423,20 +420,20 @@ def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(
 
 
 def test_household_policy_with_household_based_probability(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
     household = SmithHousehold
     # i.e. household is affected and affects activities on household level
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.HouseholdProbability(0.5))
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.HouseholdProbability(0.5))
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_household_policy_with_household_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
     household = SmithHousehold
     # i.e. household is affected and affects activities on household level
@@ -460,31 +457,31 @@ def test_household_policy_with_household_based_probability_with_a_satisfied_pers
         people_satisfying_age_condition_under_10 += discrete_sampler(person, age_mapping, age_distribution)
     assert people_satisfying_age_condition_under_10 == 1
 
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        [modify.HouseholdProbability(0.5),
-         modify.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        [probability_samplers.HouseholdProbability(0.5),
+         probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
     )
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_household_policy_with_person_based_probability(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0.06249])
     household = SmithHousehold
     # i.e. Bobby is affected and affects activities on household level
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.PersonProbability(0.5))
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.PersonProbability(0.5))
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_household_policy_with_person_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
     household = SmithHousehold
     # i.e. Bobby is affected and affects activities on household level
@@ -508,30 +505,30 @@ def test_household_policy_with_person_based_probability_with_a_satisfied_person_
         people_satisfying_age_condition_under_10 += discrete_sampler(person, age_mapping, age_distribution)
     assert people_satisfying_age_condition_under_10 == 1
 
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})
     )
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_household_policy_with_activity_based_probability(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0.000244140624])
     household = SmithHousehold
     # i.e. Bobby's education activity is affected and affects activities on household level
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5))
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5))
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_household_policy_with_activity_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_household_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_household_activities')
     mocker.patch.object(random, 'random', side_effect=[0])
     household = SmithHousehold
     # i.e. Bobby's education activity is affected and affects activities on household level
@@ -555,32 +552,32 @@ def test_household_policy_with_activity_based_probability_with_a_satisfied_perso
         people_satisfying_age_condition_under_10 += discrete_sampler(person, age_mapping, age_distribution)
     assert people_satisfying_age_condition_under_10 == 1
 
-    policy = modify.HouseholdPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        [modify.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5),
-         modify.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
+    policy = policies.HouseholdPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        [probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5),
+         probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
     )
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_household_activities.assert_called_once_with(household)
+    modifiers.RemoveActivity.remove_household_activities.assert_called_once_with(household)
 
 
 def test_person_policy_with_person_based_probability(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[1, 1, 1, 0])
     household = SmithHousehold
     # i.e. Bobby is affected and his activities are the only one affected in household
-    policy = modify.PersonPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.PersonProbability(0.5))
+    policy = policies.PersonPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.PersonProbability(0.5))
     bobby = household.people['4']
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
+    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
 
 
 def test_person_policy_with_person_based_probability_with_a_satisfied_person_attribute(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[1, 1, 1, 0])
     household = SmithHousehold
     # i.e. Bobby is affected and his activities are the only one affected in household
@@ -604,32 +601,32 @@ def test_person_policy_with_person_based_probability_with_a_satisfied_person_att
         people_satisfying_age_condition_under_10 += discrete_sampler(person, age_mapping, age_distribution)
     assert people_satisfying_age_condition_under_10 == 1
 
-    policy = modify.PersonPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution}))
+    policy = policies.PersonPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution}))
     bobby = household.people['4']
     policy.apply_to(household)
 
-    modify.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
+    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
 
 
 def test_person_policy_with_activity_based_probability(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[0] + [1] * 11)
     household = SmithHousehold
     # i.e. First of Steve's work activities is affected and affects all listed activities for just Steve
-    policy = modify.PersonPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        modify.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5)
+    policy = policies.PersonPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5)
     )
     policy.apply_to(household)
     steve = household.people['1']
 
-    modify.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
+    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
 
 
 def test_person_policy_with_activity_based_probability_with_a_satisfied_person_attribute(SmithHousehold, mocker):
-    mocker.patch.object(modify.RemoveActivity, 'remove_person_activities')
+    mocker.patch.object(modifiers.RemoveActivity, 'remove_person_activities')
     mocker.patch.object(random, 'random', side_effect=[0] + [1] * 11)
     household = SmithHousehold
     # i.e. First of Steve's work activities is affected and affects all listed activities for just Steve
@@ -653,15 +650,15 @@ def test_person_policy_with_activity_based_probability_with_a_satisfied_person_a
         people_satisfying_age_condition_over_20 += discrete_sampler(person, age_mapping, age_distribution)
     assert people_satisfying_age_condition_over_20 == 2
 
-    policy = modify.PersonPolicy(
-        modify.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
-        [modify.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5),
-         modify.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
+    policy = policies.PersonPolicy(
+        modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
+        [probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5),
+         probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
     )
     policy.apply_to(household)
     steve = household.people['1']
 
-    modify.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
+    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
 
 
 ##### MoveActivityToHomeLocation
@@ -676,9 +673,9 @@ def test_MoveActivityToHomeLocation_moves_shop_to_home_location():
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     hhld = instantiate_household_with([Hilda])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
 
@@ -696,9 +693,9 @@ def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
 
     hhld = instantiate_household_with([Hilda])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
 
@@ -715,9 +712,9 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_tr
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     hhld = instantiate_household_with([Hilda])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
     assert Hilda.plan[1].mode != 'pt'
@@ -734,9 +731,9 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_car_due_to_driving_li
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     hhld = instantiate_household_with([Hilda])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
 
@@ -754,9 +751,9 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_d
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     hhld = instantiate_household_with([Hilda])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
 
@@ -790,9 +787,9 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHo
     assert_correct_activities(person=Bobby, ordered_activities_list=['home', 'education', 'home'])
     assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(household)
 
@@ -823,9 +820,9 @@ def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(SmithHouseh
     assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'home', 'shop_2', 'home'])
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop_1', 'shop_2']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(household)
 
@@ -852,9 +849,9 @@ def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHou
     assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop', 'home', 'shop', 'leisure', 'home'])
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'c', 'a'])
 
-    policy = modify.PersonPolicy(
-        modify.MoveActivityTourToHomeLocation(['shop']),
-        modify.PersonProbability(1)
+    policy = policies.PersonPolicy(
+        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        probability_samplers.PersonProbability(1)
     )
     policy.apply_to(household)
 

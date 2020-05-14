@@ -2,7 +2,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
 
-from .activity import Activity, Leg
+import pam.activity as activity
 
 
 def plot_person(person):
@@ -28,7 +28,7 @@ def build_person_df(person):
 
     for component in person.plan.day:
         activities.append(component.act.lower().title())
-        if isinstance(component, Leg):
+        if isinstance(component, activity.Leg):
             modes.append(component.mode.lower().title())
         else:
             modes.append(None)
