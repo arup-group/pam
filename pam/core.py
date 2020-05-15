@@ -3,7 +3,6 @@ import random
 import pickle
 import pam.activity as activity
 import pam.plot as plot
-import pam.policy.policies as policies
 
 
 class Population:
@@ -63,20 +62,6 @@ class Population:
         for _, household in self:
             household.print()
 
-    def apply_policy(self, policy: policies.Policy):
-        for hid, household in self.households.items():
-            policy.apply_to(household)
-
-    def apply_policies(self, policy_list: list):
-        for i in range(len(policy_list)):
-            policy = policy_list[i]
-            assert isinstance(policy, policies.Policy), \
-                'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
-                    type(policies.Policy), type(policy), policy, i)
-        for hid, household in self.households.items():
-            for policy in policy_list:
-                policy.apply_to(household)
-
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
@@ -126,18 +111,6 @@ class Household:
         print(self)
         for _, person in self:
             person.print()
-
-    def apply_policy(self, policy: policies.Policy):
-        policy.apply_to(self)
-
-    def apply_policies(self, policy_list: list):
-        for i in range(len(policy_list)):
-            policy = policy_list[i]
-            assert isinstance(policy, policies.Policy), \
-                'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
-                    type(policies.Policy), type(policy), policy, i)
-        for policy in policy_list:
-            policy.apply_to(self)
 
     def size(self):
         return len(self.people)

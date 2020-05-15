@@ -1,10 +1,11 @@
-import pam.core as core
-import pam.activity as activity
-import pam.policy.policies as policies
+import pam.core
+import pam.activity
+import pam.policy.policies
 import random
+from typing import List
 
 
-class Modifier(policies.Policy):
+class Modifier(pam.policy.policies.Policy):
     def __init__(self):
         super().__init__()
 
@@ -16,7 +17,7 @@ class RemoveActivity(Modifier):
     """
     Probabilistic remove activities
     """
-    def __init__(self, activities: list):
+    def __init__(self, activities: List[str]):
         super().__init__()
         self.activities = activities
 
@@ -25,11 +26,12 @@ class RemoveActivity(Modifier):
             self.remove_individual_activities(person, activities)
         elif person is not None:
             self.remove_person_activities(person)
-        elif household is not None and isinstance(household, core.Household):
+        elif household is not None and isinstance(household, pam.core.Household):
             self.remove_household_activities(household)
         else:
             raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
-                                      ''.format(type(household), type(person), type(activities), type(core.Household)))
+                                      ''.format(type(household), type(person),
+                                                type(activities), type(pam.core.Household)))
 
     def remove_activities(self, person, p):
         seq = 0
@@ -64,7 +66,7 @@ class AddActivity(Modifier):
     """
     Probabilistic add activities
     """
-    def __init__(self, activities: list):
+    def __init__(self, activities: List[str]):
         super().__init__()
         self.activities = activities
 
@@ -77,17 +79,17 @@ class ReduceSharedActivity(Modifier):
     Policy that needs to be applied on an individual activity level
     for activities that are shared  within the  household
     """
-    def __init__(self, activities: list):
+    def __init__(self, activities: List[str]):
         super().__init__()
         self.activities = activities
 
     def apply_to(self, household, person=None, activities=None):
-        if household is not None and isinstance(household, core.Household):
+        if household is not None and isinstance(household, pam.core.Household):
             self.remove_household_activities(household)
         else:
             raise NotImplementedError('Types passed incorrectly: {}, {}, {}. This modifier exists only for Households'
                                       'you need to pass {}.'
-                                      ''.format(type(household), type(person), type(activities), type(core.Household)))
+                                      ''.format(type(household), type(person), type(activities), type(pam.core.Household)))
 
     def remove_activities(self, person, shared_activities_for_removal):
         seq = 0
@@ -99,7 +101,7 @@ class ReduceSharedActivity(Modifier):
             # activities morph and change time, making them not satisfy self.is_exact(other) anymore
             # in this implementation however, you risk deleting isolated activities that have the
             # same name and location but aren't shared
-            if isinstance(act, activity.Activity) and act in shared_activities_for_removal:
+            if isinstance(act, pam.activity.Activity) and act in shared_activities_for_removal:
                 previous_idx, subsequent_idx = person.remove_activity(seq)
                 person.fill_plan(previous_idx, subsequent_idx, default='home')
             else:
@@ -141,7 +143,7 @@ class MoveActivityTourToHomeLocation(Modifier):
     """
     Probabilistic move chain of activities
     """
-    def __init__(self, activities: list, default='home'):
+    def __init__(self, activities: List[str], default: str ='home'):
         super().__init__()
         # list of activities defines the accepted activity tour,
         # any combination of activities in activities sandwiched
@@ -154,17 +156,17 @@ class MoveActivityTourToHomeLocation(Modifier):
             self.move_individual_activities(person, activities)
         elif person is not None:
             self.move_person_activities(person)
-        elif household is not None and isinstance(household, core.Household):
+        elif household is not None and isinstance(household, pam.core.Household):
             self.move_household_activities(household)
         else:
             raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
-                                      ''.format(type(household), type(person), type(activities), type(core.Household)))
+                                      ''.format(type(household), type(person), type(activities), type(pam.core.Household)))
 
     def move_activities(self, person, p):
         tours = self.matching_activity_tours(person.plan, p)
         if tours:
             for seq in range(len(person.plan)):
-                if isinstance(person.plan[seq], activity.Activity):
+                if isinstance(person.plan[seq], pam.activity.Activity):
                     act = person.plan[seq]
                     if self.is_part_of_tour(act, tours):
                         person.move_activity(seq, default=self.default)

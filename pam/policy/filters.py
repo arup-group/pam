@@ -1,5 +1,5 @@
-import pam.core as core
-import pam.activity as activity
+import pam.core
+import pam.activity
 
 
 class Filter:
@@ -23,12 +23,12 @@ class PersonAttributeFilter(Filter):
         self.how = how
 
     def satisfies_conditions(self, x):
-        if isinstance(x, core.Household):
+        if isinstance(x, pam.core.Household):
             # household satisfies conditions if one person satisfies conditions according to self.how
             return self.household_satisfies_conditions(x)
-        elif isinstance(x, core.Person):
+        elif isinstance(x, pam.core.Person):
             return self.person_satisfies_conditions(x)
-        elif isinstance(x, activity.Activity):
+        elif isinstance(x, pam.activity.Activity):
             raise NotImplementedError
         else:
             raise NotImplementedError

@@ -55,19 +55,19 @@ def population():
 
 def test_apply_full_hh_quarantine_doesnt_create_or_delete_households(population):
     policy = policies.HouseholdQuarantined(1)
-    population.apply_policy(policy)
+    policies.apply_policies(population, policy, in_place=True)
     assert len(population.households) == 20
 
 
 def test_apply_person_based_full_hh_quarantine_doesnt_create_or_delete_households(population):
     policy = policies.HouseholdQuarantined(probability_samplers.PersonProbability(1))
-    population.apply_policy(policy)
+    policies.apply_policies(population, policy, in_place=True)
     assert len(population.households) == 20
 
 
 def test_apply_full_hh_quarantine(population):
     policy = policies.HouseholdQuarantined(1)
-    population.apply_policy(policy)
+    policies.apply_policies(population, policy, in_place=True)
     for hid, household in population.households.items():
         for pid, person in household.people.items():
             assert_single_home_activity(person)
@@ -75,7 +75,7 @@ def test_apply_full_hh_quarantine(population):
 
 def test_apply_person_based_full_quarantine(population):
     policy = policies.HouseholdQuarantined(probability_samplers.PersonProbability(1))
-    population.apply_policy(policy)
+    policies.apply_policies(population, policy, in_place=True)
     for hid, household in population.households.items():
         for pid, person in household.people.items():
             assert_single_home_activity(person)
@@ -83,7 +83,7 @@ def test_apply_person_based_full_quarantine(population):
 
 def test_apply_full_person_stay_at_home(population):
     policy = policies.PersonStayAtHome(1)
-    population.apply_policy(policy)
+    policies.apply_policies(population, policy, in_place=True)
     for hid, household in population.households.items():
         for pid, person in household.people.items():
             assert_single_home_activity(person)
@@ -93,7 +93,7 @@ def test_apply_two_policies(population):
     policy1 = policies.HouseholdQuarantined(.1)
     policy2 = policies.PersonStayAtHome(.4)
     counter = 0
-    population.apply_policies([policy1, policy2])
+    policies.apply_policies(population, [policy1, policy2], in_place=True)
     for hid, household in population.households.items():
         assert len(household.people) == 2
         for pid, person in household.people.items():

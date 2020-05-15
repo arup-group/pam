@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 import pandas as pd
 from lxml import etree as et
 

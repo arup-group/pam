@@ -1,5 +1,7 @@
-import pam.policy.probability_samplers as probability_samplers
+import pam.policy.probability_samplers
 import random
+from copy import deepcopy
+from typing import Union
 
 
 class Policy:
@@ -16,7 +18,7 @@ class HouseholdQuarantined(Policy):
     """
     def __init__(self, probability):
         super().__init__()
-        self.probability = probability_samplers.verify_probability(probability)
+        self.probability = pam.policy.probability_samplers.verify_probability(probability)
 
     def apply_to(self, household, person=None, activity=None):
         p = self.probability.p(household)
@@ -40,3 +42,23 @@ class PersonStayAtHome(Policy):
         for pid, person in household.people.items():
             if random.random() < self.probability:
                 person.stay_at_home()
+
+
+def apply_policies(population, policies: Union[list, Policy], in_place=False):
+    if not in_place:
+        pop = deepcopy(population)
+    else:
+        pop = population
+
+    if isinstance(policies, Policy):
+        policies = [policies]
+    for i in range(len(policies)):
+        policy = policies[i]
+        assert isinstance(policy, Policy), \
+            'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
+                type(Policy), type(policy), policy, i)
+    for hid, household in pop.households.items():
+        for policy in policies:
+            policy.apply_to(household)
+    if not in_place:
+        return pop

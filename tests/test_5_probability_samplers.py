@@ -18,26 +18,26 @@ def SmithHousehold_alt(Steve, Hilda):
 def test_SamplingProbability_samples_when_random_below_prob_val(mocker):
     mocker.patch.object(probability_samplers.SamplingProbability, 'p', return_value=0.55)
     mocker.patch.object(random, 'random', return_value=0.5)
-    prob = probability_samplers.SamplingProbability()
+    prob = probability_samplers.SamplingProbability(0.55)
     assert prob.sample('')
 
 
 def test_SamplingProbability_samples_when_random_equal_prob_val(mocker):
     mocker.patch.object(probability_samplers.SamplingProbability, 'p', return_value=0.55)
     mocker.patch.object(random, 'random', return_value=0.55)
-    prob = probability_samplers.SamplingProbability()
+    prob = probability_samplers.SamplingProbability(0.55)
     assert not prob.sample('')
 
 
 def test_SamplingProbability_doesnt_sample_when_random_above_prob_val(mocker):
     mocker.patch.object(probability_samplers.SamplingProbability, 'p', return_value=0.55)
     mocker.patch.object(random, 'random', return_value=0.65)
-    prob = probability_samplers.SamplingProbability()
+    prob = probability_samplers.SamplingProbability(0.55)
     assert not prob.sample('')
 
 
 def test_SamplingProbability_throws_exception_when_used_for_extracting_p():
-    prob = probability_samplers.SamplingProbability()
+    prob = probability_samplers.SamplingProbability(0.55)
     with pytest.raises(NotImplementedError) as e:
         prob.p('')
     assert 'is a base class' \
