@@ -149,6 +149,46 @@ class ActivityPolicy(PolicyLevel):
                 self.policy.apply_to(household, person, activities_to_purge)
 
 
+class RemoveHouseholdActivities(HouseholdPolicy):
+    def __init__(self,
+                 activities: list,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(modifiers.RemoveActivity(activities), probability, person_attribute_filter)
+
+
+class RemovePersonActivities(PersonPolicy):
+    def __init__(self,
+                 activities: list,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(modifiers.RemoveActivity(activities), probability, person_attribute_filter)
+
+
+class RemoveIndividualActivities(ActivityPolicy):
+    def __init__(self,
+                 activities: list,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(modifiers.RemoveActivity(activities), probability, person_attribute_filter)
+
+
+class MovePersonActivitiesToHome(PersonPolicy):
+    def __init__(self,
+                 activities: list,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(modifiers.MoveActivityTourToHomeLocation(activities), probability, person_attribute_filter)
+
+
+class ReduceSharedHouseholdActivities(HouseholdPolicy):
+    def __init__(self,
+                 activities: list,
+                 probability: Union[float, int, probability_samplers.SamplingProbability],
+                 person_attribute_filter: filters.Filter = None):
+        super().__init__(modifiers.ReduceSharedActivity(activities), probability, person_attribute_filter)
+
+
 def apply_policies(population, policies: Union[list, Policy], in_place=False):
     if not in_place:
         pop = deepcopy(population)
