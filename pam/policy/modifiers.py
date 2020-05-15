@@ -1,11 +1,10 @@
 import pam.core
 import pam.activity
-import pam.policy.policies
 import random
 from typing import List
 
 
-class Modifier(pam.policy.policies.Policy):
+class Modifier:
     def __init__(self):
         super().__init__()
 
