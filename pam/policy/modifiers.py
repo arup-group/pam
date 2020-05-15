@@ -11,6 +11,22 @@ class Modifier:
     def apply_to(self, household, person=None, activity=None):
         raise NotImplementedError('{} is a base class'.format(type(Modifier)))
 
+    def __repr__(self):
+        attribs = vars(self)
+        return "<{} instance at {}: {}>".format(
+            self.__class__.__name__,
+            id(self),
+            ', '.join("%r: %r" % item for item in attribs.items()))
+
+    def __str__(self):
+        attribs = vars(self)
+        return "Modifier {} with attributes: {}".format(
+            self.__class__.__name__,
+            ', '.join("%s: %s" % item for item in attribs.items()))
+
+    def print(self):
+        print(self.__str__())
+
 
 class RemoveActivity(Modifier):
     """

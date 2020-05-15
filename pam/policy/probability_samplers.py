@@ -13,6 +13,22 @@ class SamplingProbability:
             assert 0 < probability <= 1
         self.probability = probability
 
+    def __repr__(self):
+        attribs = vars(self)
+        return "<{} instance at {}: {}>".format(
+            self.__class__.__name__,
+            id(self),
+            ', '.join("%r: %r" % item for item in attribs.items()))
+
+    def __str__(self):
+        attribs = vars(self)
+        return "{} with attributes: {}".format(
+            self.__class__.__name__,
+            ', '.join("%s: %s" % item for item in attribs.items()))
+
+    def print(self):
+        print(self.__str__())
+
     def sample(self, x):
         return random.random() < self.p(x)
 
