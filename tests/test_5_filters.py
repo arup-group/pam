@@ -1,11 +1,23 @@
-import pytest
 from random import choice
-from pam.core import Household, Person
-from pam.activity import Plan, Activity, Leg
 from tests.fixtures import *
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
-from pam.policy.filters import PersonAttributeFilter
+from pam.policy.filters import PersonAttributeFilter, Filter
+
+
+def test_Filter_throws_exception_when_used():
+    attrib_filter = Filter()
+    with pytest.raises(NotImplementedError) as e:
+        attrib_filter.satisfies_conditions(Bobby)
+    assert '<class \'type\'> is a base class' in str(e.value)
+
+
+def test_subclass_name_features_in_repr_string():
+    attrib_filter = PersonAttributeFilter({})
+    assert '{}'.format(attrib_filter.__class__.__name__) in attrib_filter.__repr__()
+
+
+def test_subclass_name_features_in_str_string():
+    attrib_filter = PersonAttributeFilter({})
+    assert '{}'.format(attrib_filter.__class__.__name__) in attrib_filter.__str__()
 
 
 def test_PersonAttributeFilter_satisfies_conditions_delegates_to_household_satisfies_conditions_when_given_household(mocker):

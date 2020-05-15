@@ -131,7 +131,8 @@ class ActivityPolicy(PolicyLevel):
                             activities_to_purge.append(activity)
                     elif self.probability.sample(activity):
                         activities_to_purge.append(activity)
-                self.modifier.apply_to(household, person, activities_to_purge)
+                if activities_to_purge:
+                    self.modifier.apply_to(household, person, activities_to_purge)
 
 
 class HouseholdQuarantined(Policy):

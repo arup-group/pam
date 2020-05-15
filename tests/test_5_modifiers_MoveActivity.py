@@ -1,12 +1,7 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
+from pam.activity import Plan
 from pam.policy.modifiers import MoveActivityTourToHomeLocation
 from tests.fixtures import *
 import pytest
-import random
-from datetime import datetime
 
 
 def assert_correct_activities(person, ordered_activities_list):
