@@ -1,15 +1,13 @@
 # Pandemic Activity Modifier (PAM)
 
-Peoples day to day activities have been rapidly shifted by recent policies and behavioural 
+Our day to day activities have been rapidly shifted by recent policies and behavioural 
 changes related to the COVID-19 pandemic. If we want to better plan existing and near-term 
 scenarios (for transport systems and other sectors) - existing models need to be updated and new scenarios generated quickly.
 
-**Who is this for?** PAM is intended for use by any modeller or planner using activity plans.
+**Who is this for?** PAM is intended for use by any modeller or planner using trip diary data or activity plans.
 **What can this do?** PAM provides an API and examples for modifying activity plans based on COVID-19 scenarios.
 
-You can read a quick intro to PAM [here](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e).
-
- ![PAM](resources/PAM-motivation.png)
+You can read about PAM on medium [here](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e).
 
  ## Features
 
@@ -18,14 +16,14 @@ representations, already derived from exiting models or survey data:
 
  ![PAM](resources/PAM-features.png)
 
-(i) **Read/Load** input data (eg travel diary) to household and person Activity Plans
+(i) **Read/Load** input data (eg travel diary) to household and person Activity Plans.
 
 (ii) **Modify** the Activity Plans for new social and government policy scenarios (eg 
 remove education activities for non key worker households). Crucially PAM facilitates 
 application of detailed policies at the person and household level, while still respecting 
 the logic of arbitrarily complex activity chains.
 
-(iii) **Output** to useful formats for activity based models or regular transport models. Facilitate preliminary **Analysis** and **Validation** of changes
+(iii) **Output** to useful formats for activity based models or regular transport models. Facilitate preliminary **Analysis** and **Validation** of changes.
 
 This work is primarily intended for transport modellers, to make quick transport demand
 scenarios. But it may also be useful for other activity based demand modelling such as for goods 
@@ -43,7 +41,7 @@ supply or utility demand.
 
 ## Installation
 
-assuming python ~3.7 and using git:
+Assuming python ~3.7 and using git:
 
 ```
 git clone git@github.com:arup-group/pam.git
@@ -61,15 +59,14 @@ We known that requirements are already available in a up to date Anaconda instal
 1. They are the ideal mechanism for applying changes, allowing for example, 
 consideration of joint dis-aggregate features across an entire day.
 
-2. They can be post processed for many other output formats and for use in many different 
+2. They can be post processed for many other output formats such as origin-destination matrices or activity diaries. These outputs can the be used in many different 
 applications such as transport, utility demand, social impact and so on.
 
 ## Modelling the pandemic
 
 PAM uses **policies** to model change to a population. For example, based on social distancing requirements we might want to reflect that people are expected to make less shared shopping trips or tours. We can do this using the following policy:
 ```
-policy_reduce_shopping_activities = \
-    HouseholdPolicy(
+policy_reduce_shopping_activities = HouseholdPolicy(
         ReduceSharedActivity(['shop', 'shop_food']), 
         ActivityProbability(['shop', 'shop_food'], 1)
 )
@@ -88,7 +85,7 @@ PAM allows multiple of such policies to be combined to build realistic and compl
 - sequences such as tours
 - any combination of the above
 
-A full overview of policies and examples of the policies available are [here](https://github.com/arup-group/pam/blob/master/notebooks/PAM%20Policies%20walk-through.ipynb).
+A full overview of policies and examples of the policies available are [detailed in this notebook](https://github.com/arup-group/pam/blob/master/notebooks/PAM%20Policies%20walk-through.ipynb).
 
 ## Example modifiers/policies:   
 
@@ -239,7 +236,7 @@ For a quick start at the code, checkout the
 If you've come this far - please consider cloning this repo, follow the installation instructions
  run the tests and maybe try out any example notebooks.
  
-### Dev
+#### Dev
 We maintain a backlog of tasks, please in touch if you would like to contribute - or raise your own issue.
 
 We need help to **go faster**. We expect to deal with populations in the tens of millions. We would 
@@ -340,3 +337,5 @@ We have encountered many variations of sequences for plans, including wrapping a
 Although they are generally edge cases, they exists and generally represent real people. We are 
 therefore endeavoring to support all these cases in our plan modifiers. This is resulting some 
 difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
+
+ ![PAM](resources/PAM-motivation.png)
