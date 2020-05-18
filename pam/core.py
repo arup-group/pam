@@ -115,8 +115,8 @@ class Household:
     def size(self):
         return len(self.people)
 
-    def plot(self):
-        plot.plot_household(self)
+    def plot(self, kwargs=None):
+        plot.plot_household(self, kwargs)
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -213,8 +213,8 @@ class Person:
         print(self.attributes)
         self.plan.print()
 
-    def plot(self):
-        plot.plot_person(self)
+    def plot(self, kwargs=None):
+        plot.plot_person(self, kwargs)
 
     def __str__(self):
         return f"Person: {self.pid}"
