@@ -5,6 +5,19 @@ from typing import List
 
 
 class Modifier:
+    """
+    Base class for modifiers - these are classes which change
+    activities in a person's plan.
+
+    In general a modifer should be able to be applied on three levels
+    Household - apply change to all activities in all person's plans in household
+    Person - apply change to all activities in a person's plan
+    Activity - apply change to individual activity in a person's plan
+
+    Not all modifiers will satisfy this of course, e.g. ReduceSharedActivity
+    only works on a household level as the activites for removal need to be
+    shared within a household.
+    """
     def __init__(self):
         super().__init__()
 
@@ -30,7 +43,12 @@ class Modifier:
 
 class RemoveActivity(Modifier):
     """
-    Probabilistic remove activities
+    Removes specified activities.
+
+    Parameters
+    ----------
+    :param activities
+    List of activities to be removed.
     """
     def __init__(self, activities: List[str]):
         super().__init__()
@@ -61,7 +79,7 @@ class RemoveActivity(Modifier):
     def remove_individual_activities(self, person, activities):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            return act.in_list_exact(activities)
+            return act.isin_exact(activities)
         self.remove_activities(person, p=is_a_selected_activity)
 
     def remove_person_activities(self, person):
@@ -79,7 +97,12 @@ class RemoveActivity(Modifier):
 
 class AddActivity(Modifier):
     """
-    Probabilistic add activities
+    Adds specified activities.
+
+    Parameters
+    ----------
+    :param activities
+    List of activities to be added.
     """
     def __init__(self, activities: List[str]):
         super().__init__()
@@ -91,8 +114,19 @@ class AddActivity(Modifier):
 
 class ReduceSharedActivity(Modifier):
     """
-    Policy that needs to be applied on an individual activity level
-    for activities that are shared  within the  household
+    Policy that needs to be applied on a household level. For activities
+    shared within a household (Activity.act (type of activity), start/end
+    times and locations match). Randomly assigns a person whose activities
+    will be retained and deletes the shared activities from other persons
+    in household.
+
+    Parameters
+    ----------
+    :param activities
+    List of activities that should be considered for sharing. Does not
+    require an exact match. E.g. if passed ['shop_food', 'shop_other']
+    if a household has an only 'shop_food' shared activity, that will
+    be reduced.
     """
     def __init__(self, activities: List[str]):
         super().__init__()
@@ -149,22 +183,34 @@ class ReduceSharedActivity(Modifier):
         people_with_shared_acts_for_removal = []
         for pid, person in household.people.items():
             for activity in person.activities:
-                if activity.in_list_exact(shared_activities_for_removal):
+                if activity.isin_exact(shared_activities_for_removal):
                     people_with_shared_acts_for_removal.append(person)
         return people_with_shared_acts_for_removal
 
 
 class MoveActivityTourToHomeLocation(Modifier):
     """
-    Probabilistic move chain of activities
+    Moves a tour of activities to home location. A tour is defined
+    as a list of activities sandwiched between two home activities.
+
+    Parameters
+    ----------
+    :param activities
+    List of activities to be considered in a tour. Does not
+    require an exact match. E.g. if passed ['shop_food', 'shop_other']
+    if a person has a tour of only 'shop_food', the location of that
+    activity will be changed.
+
+    :param location, default 'home'
+    Location to which the tour should be moved.
     """
-    def __init__(self, activities: List[str], default: str ='home'):
+    def __init__(self, activities: List[str], location: str = 'home'):
         super().__init__()
         # list of activities defines the accepted activity tour,
         # any combination of activities in activities sandwiched
         # by home activities will be selected
         self.activities = activities
-        self.default = default
+        self.default = location
 
     def apply_to(self, household, person=None, activities=None):
         if (activities is not None) and (person is not None):
@@ -189,7 +235,7 @@ class MoveActivityTourToHomeLocation(Modifier):
     def move_individual_activities(self, person, activities):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            return act.in_list_exact(activities)
+            return act.isin_exact(activities)
         self.move_activities(person, p=is_a_selected_activity)
 
     def move_person_activities(self, person):
@@ -219,6 +265,6 @@ class MoveActivityTourToHomeLocation(Modifier):
     def is_part_of_tour(self, act, tours: list):
         for tour in tours:
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
-            if act.in_list_exact(tour):
+            if act.isin_exact(tour):
                 return True
         return False

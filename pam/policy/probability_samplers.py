@@ -5,6 +5,9 @@ from typing import Union, Callable
 
 
 class SamplingProbability:
+    """
+    Base class for probabilistic samplers
+    """
     def __init__(self,
                  probability: Union[float, int]):
         if isinstance(probability, int):
@@ -37,6 +40,15 @@ class SamplingProbability:
 
 
 class SimpleProbability(SamplingProbability):
+    """
+    A probabilistic sampler which returns value of probability
+    at the same level as the input (household/person/activity)
+
+    Parameters
+    ----------
+    :param probability
+    A float/int: 0<probability<=1
+    """
     def __init__(self, probability):
         super().__init__(probability)
 
@@ -45,6 +57,17 @@ class SimpleProbability(SamplingProbability):
 
 
 class HouseholdProbability(SamplingProbability):
+    """
+    A probabilistic sampler which evaluates value of probability
+    at household level based on probability for a household.
+
+    Parameters
+    ----------
+    :param probability
+    A float/int: 0<probability<=1 or a function which given input of
+    pam.core.Household returns a float/int: 0<probability<=1
+    corresponding to the likelihood of the household being sampled.
+    """
     def __init__(self,
                  probability: Union[float, int, Callable[[pam.core.Household], float]],
                  kwargs=None):
@@ -73,6 +96,18 @@ class HouseholdProbability(SamplingProbability):
 
 
 class PersonProbability(SamplingProbability):
+    """
+    A probabilistic sampler which evaluates value of probability
+    at household and person level based on probability for a
+    person.
+
+    Parameters
+    ----------
+    :param probability
+    A float/int: 0<probability<=1 or a function which given input of
+    pam.core.Person returns a float/int: 0<probability<=1
+    corresponding to the likelihood of the person being sampled.
+    """
     def __init__(self,
                  probability: Union[float, int, Callable[[pam.core.Person], float]],
                  kwargs=None):
@@ -104,6 +139,18 @@ class PersonProbability(SamplingProbability):
 
 
 class ActivityProbability(SamplingProbability):
+    """
+    A probabilistic sampler which evaluates value of probability
+    at household, person and activity level based on probability
+    for an activity.
+
+    Parameters
+    ----------
+    :param probability
+    A float/int: 0<probability<=1 or a function which given input of
+    pam.core.Activity returns a float/int: 0<probability<=1
+    corresponding to the likelihood of the activity being sampled.
+    """
     def __init__(self,
                  activities: list,
                  probability: Union[float, int, Callable[[pam.activity.Activity], float]],

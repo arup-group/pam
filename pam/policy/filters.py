@@ -1,8 +1,12 @@
 import pam.core
 import pam.activity
+from typing import Dict, Callable
 
 
 class Filter:
+    """
+    Base class for attribute-based filters
+    """
     def __init__(self):
         pass
 
@@ -28,12 +32,22 @@ class Filter:
 
 class PersonAttributeFilter(Filter):
     """
-    Helps filtering Person attributes
+    Helps filtering Person on specified attributes
 
-    how='all' by default, means all conditions for a person need to be met
-    how='any' means at least one condition needs to be met
+    Parameters
+    ----------
+    :param conditions
+    Dictionary of
+    key = person.attribute key
+    value = function that returns a boolean given the value at person.attribute[key]
+
+    :param how : {'all', 'any'}, default 'all'
+    The level of rigour used to match conditions
+
+    * all: means all conditions for a person need to be met
+    * any: means at least one condition needs to be met
     """
-    def __init__(self, conditions, how='all'):
+    def __init__(self, conditions: Dict[str, Callable[[str], bool]], how='all'):
         super().__init__()
         self.conditions = conditions
         self.how = how

@@ -120,8 +120,8 @@ def test_shared_activities_for_removal_finds_shared_activities(Betty, Bobber):
     shared_acts = modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).shared_activities_for_removal(hhld)
 
     assert shared_acts
-    assert act_1.in_list_exact(shared_acts)
-    assert act_2.in_list_exact(shared_acts)
+    assert act_1.isin_exact(shared_acts)
+    assert act_2.isin_exact(shared_acts)
 
 
 def test_people_who_share_activities_for_removal_identifies_both_people_as_sharing_activities(Betty, Bobber):

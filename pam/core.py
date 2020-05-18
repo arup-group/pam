@@ -101,9 +101,9 @@ class Household:
         household_activities = []
         for pid, person in self.people.items():
             for activity in person.activities:
-                if activity.in_list_exact(household_activities):
+                if activity.isin_exact(household_activities):
                     shared_activities.append(activity)
-                if not activity.in_list_exact(household_activities):
+                if not activity.isin_exact(household_activities):
                     household_activities.append(activity)
         return shared_activities
 
