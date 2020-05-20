@@ -3,47 +3,38 @@ from datetime import datetime
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
-def od_seg(population, path, mode_seg=None, type_seg=None, time_seg=None, purp_seg=None):  #time in minutes  
-    ozone = []
-    dzone = []   
+def od_filtered(population, path, leg_filter = None):   
+    """
+    Function to create an od matrix filtered on mode, type, time or purpose.
+    Note that time is in minutes.
+    :param path: directory to locate the written files
+    :param population: core.Population
+    :param leg_filter: select between 'Mode', 'Purpose'
+    :return: None
+    """
 
-    if time_seg:
-        time_seg = mtdt(time_seg)
+    legs = []
 
     for hid, household in population.households.items():
         for pid, person in household.people.items():
-            for p in person.plan:
-                if p.act == 'travel':
-                    if p.mode == mode_seg:
-                        o = p.start_location.area
-                        d = p.end_location.area
-                        ozone.append(o)
-                        dzone.append(d)
-                    if person.attributes['occ'] == type_seg:
-                        o = p.start_location.area
-                        d = p.end_location.area
-                        ozone.append(o)
-                        dzone.append(d)
-                    if p.start_time == time_seg:
-                        o = p.start_location.area
-                        d = p.end_location.area
-                        ozone.append(o)
-                        dzone.append(d)
-                    if p.purpose == purp_seg:
-                        o = p.start_location.area
-                        d = p.end_location.area
-                        ozone.append(o)
-                        dzone.append(d)
-
-    data_dict = {
-        'ozone': ozone,
-        'dzone': dzone
-    }
-
-    df = pd.DataFrame(data=data_dict).set_index('ozone')
-    matrix = df.pivot_table(values='dzone', index='ozone', columns='dzone', fill_value=0, aggfunc=len)
-
-    matrix.to_csv(path)
-
-
+            for leg in person.legs:
+                legs.append({'Household ID': hid,
+                            'Person ID': pid,
+                            'Origin':leg.start_location.area,
+                            'Destination': leg.end_location.area,
+                            'Purpose': leg.purpose,
+                            'Mode': leg.mode,
+                            'Sequence': leg.seq,
+                            'Start time': leg.start_time,
+                            'End time': leg.end_time,
+                            'Duration': str(leg.duration)})
+                
+    data_legs = pd.DataFrame(data=legs)
     
+    if leg_filter:
+        data_legs_grouped=data_legs.groupby(leg_filter)            
+
+        for filter, leg in data_legs_grouped:
+            df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
+            matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
+            matrix.to_csv(os.path.join(path, filter+'_od.csv'))
