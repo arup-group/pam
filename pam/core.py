@@ -53,6 +53,25 @@ class Population:
     def size(self):
         return sum([person.freq for _, _, person in self.people()])
 
+    @property
+    def stats(self):
+        num_households = 0
+        num_people = 0
+        num_activities = 0
+        num_legs = 0
+        for hid, household in self:
+            num_households += 1
+            for pid, person in household:
+                num_people += 1
+                num_activities += person.num_activities
+                num_legs += person.num_legs
+        return {
+            'num_households': num_households,
+            'num_people': num_people,
+            'num_activities': num_activities,
+            'num_legs': num_legs,
+        }
+
     def count(self, households=False):
         if households:
             return len(self.households)
@@ -149,10 +168,22 @@ class Person:
                 yield act
 
     @property
+    def num_activities(self):
+        if self.plan:
+            return len(list(self.activities))
+        return 0
+
+    @property
     def legs(self):
         if self.plan:
             for leg in self.plan.legs:
                 yield leg
+
+    @property
+    def num_legs(self):
+        if self.plan:
+            return len(list(self.legs))
+        return 0
 
     @property
     def length(self):
