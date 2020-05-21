@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from pam.activity import Activity, Leg
 from pam.core import Population, Household, Person
