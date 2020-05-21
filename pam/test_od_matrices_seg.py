@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from pam.activity import Activity, Leg
 from pam.core import Population, Household, Person
-from pam.od_matrices_seg import od_seg 
+from pam.od_matrices_seg import od_filtered 
 from pam.variables import END_OF_DAY
 
 import csv
@@ -62,10 +62,56 @@ def test_writes_od_matrix_seg_to_expected_file(tmpdir):
     household.add(person)  
     population.add(household)
 
-    od_matrix_file = os.path.join(tmpdir, "od_matrix_seg_test.csv")
+    attribute_list = ['white', 'blue']
+    mode_list = ['car', 'cycle','walk']
 
-    od_seg(population, od_matrix_file, mode_seg='car') 
-
-    od_matrix_csv_string = open(od_matrix_file).read()
-
-    assert od_matrix_csv_string =='ozone,Barnet,Ealing,Southwark,"Westminster,City of London"\nBarnet,0,0,1,0\nEaling,0,0,0,1\nSouthwark,1,0,0,0\n"Westminster,City of London",0,1,0,0\n'
+    od_filtered(population, tmpdir, leg_filter = 'Mode', person_filter = None) 
+    
+    for m in mode_list:
+        od_matrix_file = os.path.join(tmpdir, m+"_od.csv")
+        od_matrix_csv_string = open(od_matrix_file).read()
+        
+        if m == 'car':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,0,0,1,0\n' \
+                    'Ealing,0,0,0,1\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,1,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix
+            
+        if m == 'cycle':          
+            expected_od_matrix = \
+                    'Origin,Ealing,"Westminster,City of London"\n' \
+                    'Ealing,2,1\n' \
+                    '"Westminster,City of London",1,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix
+        
+        if m == 'walk':          
+            expected_od_matrix = \
+                    'Origin,Barnet\n' \
+                    'Barnet,2\n'
+            assert od_matrix_csv_string == expected_od_matrix
+            
+            
+    od_filtered(population, tmpdir, leg_filter = None, person_filter = 'occ')
+    
+    for a in attribute_list:
+        od_matrix_file = os.path.join(tmpdir, a+"_od.csv")
+        od_matrix_csv_string = open(od_matrix_file).read()
+        
+        if a == 'white':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,0,0,1,0\n' \
+                    'Ealing,0,0,0,2\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,2,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix
+            
+        if a == 'blue':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing\n' \
+                    'Barnet,2,0\n' \
+                    'Ealing,0,2\n'      
+            assert od_matrix_csv_string == expected_od_matrix
