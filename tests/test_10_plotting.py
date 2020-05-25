@@ -1,9 +1,10 @@
 import pytest
 import pandas as pd
+from matplotlib.figure import Figure
 
 from pam.plot.plans import build_person_df, build_cmap
-from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner
-from .fixtures import person_heh
+from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, plot_leg_times
+from .fixtures import person_heh, Steve, Hilda
 from pam.core import Household, Population
 
 
@@ -61,3 +62,23 @@ def test_time_binner(person_heh):
     assert len(binned) == 96
     for h in ['start', 'end', 'duration']:
         assert binned[h].sum() == 3
+
+
+def test_plot_act_time_bins(Steve, Hilda):
+    population = Population()
+    for i, person in enumerate([Steve, Hilda]):
+        hh = Household(i)
+        hh.add(person)
+        population.add(hh)
+    fig = plot_activity_times(population)
+    assert isinstance(fig, Figure)
+
+
+def test_plot_leg_time_bins(Steve, Hilda):
+    population = Population()
+    for i, person in enumerate([Steve, Hilda]):
+        hh = Household(i)
+        hh.add(person)
+        population.add(hh)
+    fig = plot_leg_times(population)
+    assert isinstance(fig, Figure)
