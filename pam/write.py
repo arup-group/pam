@@ -7,6 +7,7 @@ from lxml import etree as et
 from .activity import Activity, Leg
 from .utils import datetime_to_matsim_time as dttm
 from .utils import timedelta_to_matsim_time as tdtm
+from .utils import minutes_to_datetime as mtdt
 from .utils import write_xml
 
 
