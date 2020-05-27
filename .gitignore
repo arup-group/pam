@@ -22,3 +22,8 @@ tests/test_data/.DS_Store
 .python-version
 .coverage
 reports/*
+mprofile_*.dat
+mprofile_*.png
+pam-performance-report.html
+pam-performance-report*
+sample-perf-report.html
