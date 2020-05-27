@@ -1,6 +1,9 @@
 import pytest
+import pandas as pd
+import geopandas as gp
+from shapely.geometry import Polygon, Point
 
-from pam.samplers import attributes
+from pam.samplers import attributes, basic, facility
 
 
 @pytest.fixture
@@ -80,3 +83,70 @@ def test_applt_discrete_joint_distribution_sampler_to_fred_carefully(fred, cat_j
 def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(fred, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) == False
+
+
+testdata = [
+    (0, 1.5, 0),
+    (10, 1., 10),
+    (0, 0.0, 0),
+    (10, 2., 20),
+    (10, 1.5, 15),
+    (10, .5, 5),
+]
+@pytest.mark.parametrize("freq,sample,result", testdata)
+def test_freq_sampler_determined(freq,sample,result):
+    assert basic.freq_sample(freq, sample) == result
+
+
+testdata = [
+    (1, 1.5, 1, 2),
+    (1, .5, 0, 1),
+    (1, 0.0001, 0, 1),
+    (1, 1.0001, 1, 2),
+]
+@pytest.mark.parametrize("freq,sample,lower,upper", testdata)
+def test_freq_sampler_random_round(freq, sample, lower, upper):
+    assert basic.freq_sample(freq, sample) in [lower, upper]
+
+
+def test_sample_point_from_geoseries():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    assert isinstance(facility.sample_point_from_polygon(gdf.geometry[0]), Point)
+
+
+def test_sample_point_from_geoseries_invalid():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (0,1), (1,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    assert isinstance(facility.sample_point_from_polygon(gdf.geometry[0]), Point)
+
+
+def test_sample_point_from_geoseries_impatient():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (0,0)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    assert facility.sample_point_from_polygon(gdf.geometry[0], patience=0) is None
+
+
+def test_random_point_from_geoseries():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    assert isinstance(facility.random_point(0, gdf.geometry), Point)
+
+
+def test_random_point_from_geodataframe():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    assert isinstance(facility.random_point(0, gdf), Point)
+
+
+def test_random_point_from_geoseries_impatient():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (0,0)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    with pytest.raises(TimeoutError):
+        facility.random_point(0, gdf.geometry, fail=True, patience=0)
