@@ -1,5 +1,6 @@
 import pytest
 from datetime import datetime
+from datetime import timedelta
 
 from pam.activity import Plan, Activity, Leg, Location
 from pam.utils import minutes_to_datetime as mtdt
@@ -256,11 +257,11 @@ def test_move_activity_at_end_of_plan_updates_leg():
 
 def test_mode_shift_single_tour():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
-    plan.add(Leg(1, mode='car'))
-    plan.add(Activity(2, 'shop', 'b'))
-    plan.add(Leg(2, mode='car'))
-    plan.add(Activity(3, 'home', 'a'))
+    plan.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    plan.add(Leg(1, mode='car', start_time=mtdt(60), end_time=mtdt(90)))
+    plan.add(Activity(2, 'shop', 'b', start_time=mtdt(90), end_time=mtdt(500)))
+    plan.add(Leg(2, mode='car', start_time=mtdt(500), end_time=mtdt(400)))
+    plan.add(Activity(3, 'home', 'a', start_time=mtdt(400), end_time=mtdt(24 * 60 - 1)))
 
     plan.mode_shift(1,'pt')
 
@@ -269,15 +270,15 @@ def test_mode_shift_single_tour():
 
 def test_mode_shift_two_tours_first_leg():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
-    plan.add(Leg(1, mode='car'))
-    plan.add(Activity(2, 'shop', 'b'))
-    plan.add(Leg(2, mode='car'))
-    plan.add(Activity(3, 'home', 'a'))
-    plan.add(Leg(3, mode='car'))
-    plan.add(Activity(4, 'work', 'a'))
-    plan.add(Leg(4, mode='car'))
-    plan.add(Activity(5, 'home', 'a'))
+    plan.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    plan.add(Leg(1, mode='car', start_time=mtdt(60), end_time=mtdt(90)))
+    plan.add(Activity(2, 'shop', 'b', start_time=mtdt(90), end_time=mtdt(500)))
+    plan.add(Leg(2, mode='car', start_time=mtdt(500), end_time=mtdt(400)))
+    plan.add(Activity(3, 'home', 'a', start_time=mtdt(400), end_time=mtdt(860)))
+    plan.add(Leg(3, mode='car', start_time=mtdt(860), end_time=mtdt(900)))
+    plan.add(Activity(4, 'work', 'a', start_time=mtdt(920), end_time=mtdt(930)))
+    plan.add(Leg(4, mode='car', start_time=mtdt(930), end_time=mtdt(1000)))
+    plan.add(Activity(5, 'home', 'a', start_time=mtdt(1000), end_time=mtdt(24 * 60 - 1)))
 
     plan.mode_shift(1,'pt')
 
@@ -286,15 +287,15 @@ def test_mode_shift_two_tours_first_leg():
 
 def test_mode_shift_two_tours_second_leg():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
-    plan.add(Leg(1, mode='car'))
-    plan.add(Activity(2, 'shop', 'b'))
-    plan.add(Leg(2, mode='car'))
-    plan.add(Activity(3, 'home', 'a'))
-    plan.add(Leg(3, mode='car'))
-    plan.add(Activity(4, 'work', 'a'))
-    plan.add(Leg(4, mode='car'))
-    plan.add(Activity(5, 'home', 'a'))
+    plan.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    plan.add(Leg(1, mode='car', start_time=mtdt(60), end_time=mtdt(90)))
+    plan.add(Activity(2, 'shop', 'b', start_time=mtdt(90), end_time=mtdt(500)))
+    plan.add(Leg(2, mode='car', start_time=mtdt(500), end_time=mtdt(400)))
+    plan.add(Activity(3, 'home', 'a', start_time=mtdt(400), end_time=mtdt(860)))
+    plan.add(Leg(3, mode='car', start_time=mtdt(860), end_time=mtdt(900)))
+    plan.add(Activity(4, 'work', 'a', start_time=mtdt(920), end_time=mtdt(930)))
+    plan.add(Leg(4, mode='car', start_time=mtdt(930), end_time=mtdt(1000)))
+    plan.add(Activity(5, 'home', 'a', start_time=mtdt(1000), end_time=mtdt(24 * 60 - 1)))
 
     plan.mode_shift(3,'pt')
 
@@ -303,15 +304,15 @@ def test_mode_shift_two_tours_second_leg():
 
 def test_mode_shift_two_tours_third_leg():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
-    plan.add(Leg(1, mode='car'))
-    plan.add(Activity(2, 'shop', 'b'))
-    plan.add(Leg(2, mode='car'))
-    plan.add(Activity(3, 'home', 'a'))
-    plan.add(Leg(3, mode='car'))
-    plan.add(Activity(4, 'work', 'a'))
-    plan.add(Leg(4, mode='car'))
-    plan.add(Activity(5, 'home', 'a'))
+    plan.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    plan.add(Leg(1, mode='car', start_time=mtdt(60), end_time=mtdt(90)))
+    plan.add(Activity(2, 'shop', 'b', start_time=mtdt(90), end_time=mtdt(500)))
+    plan.add(Leg(2, mode='car', start_time=mtdt(500), end_time=mtdt(400)))
+    plan.add(Activity(3, 'home', 'a', start_time=mtdt(400), end_time=mtdt(860)))
+    plan.add(Leg(3, mode='car', start_time=mtdt(860), end_time=mtdt(900)))
+    plan.add(Activity(4, 'work', 'a', start_time=mtdt(920), end_time=mtdt(930)))
+    plan.add(Leg(4, mode='car', start_time=mtdt(930), end_time=mtdt(1000)))
+    plan.add(Activity(5, 'home', 'a', start_time=mtdt(1000), end_time=mtdt(24 * 60 - 1)))
 
     plan.mode_shift(5,'pt')
 
@@ -320,79 +321,79 @@ def test_mode_shift_two_tours_third_leg():
 
 def test_mode_shift_multiple_tours():
     plan = Plan('a')
-    plan.add(Activity(1, 'home', 'a'))
-    plan.add(Leg(1, mode='car'))
-    plan.add(Activity(2, 'work', 'b'))
-    plan.add(Leg(2, mode='car'))
-    plan.add(Activity(3, 'shop', 'b'))
-    plan.add(Leg(3, mode='car'))
-    plan.add(Activity(4, 'work', 'b'))
-    plan.add(Leg(4, mode='car'))
-    plan.add(Activity(5, 'home', 'a'))
-    plan.add(Leg(5, mode='walk'))
-    plan.add(Activity(6, 'other', 'a'))
-    plan.add(Leg(6, mode='walk'))
-    plan.add(Activity(7, 'home', 'a'))
+    plan.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(60)))
+    plan.add(Leg(1, mode='car',  start_time=mtdt(60), end_time=mtdt(90)))
+    plan.add(Activity(2, 'work', 'b', start_time=mtdt(90), end_time=mtdt(500)))
+    plan.add(Leg(2, mode='car', start_time=mtdt(500), end_time=mtdt(400)))
+    plan.add(Activity(3, 'shop', 'b', start_time=mtdt(400), end_time=mtdt(450)))
+    plan.add(Leg(3, mode='car', start_time=mtdt(450), end_time=mtdt(600)))
+    plan.add(Activity(4, 'work', 'b', start_time=mtdt(600), end_time=mtdt(660)))
+    plan.add(Leg(4, mode='car', start_time=mtdt(660), end_time=mtdt(800)))
+    plan.add(Activity(5, 'home', 'a', start_time=mtdt(830), end_time=mtdt(860)))
+    plan.add(Leg(5, mode='walk', start_time=mtdt(860), end_time=mtdt(900)))
+    plan.add(Activity(6, 'other', 'a', start_time=mtdt(900), end_time=mtdt(920)))
+    plan.add(Leg(6, mode='walk', start_time=mtdt(920), end_time=mtdt(950)))
+    plan.add(Activity(7, 'home', 'a', start_time=mtdt(950), end_time=mtdt(24 * 60 - 1)))
 
     plan.mode_shift(5,'pt')
 
     assert [leg.mode for leg in plan.legs] == ['pt', 'pt', 'pt', 'pt', 'walk', 'walk']
 
 def test_leg_duration():
-    person = Person(1)
-    person.add(
+    plan = Plan('a')
+    plan.add(
         Activity(
             seq=1,
             act='home',
             area='a',
-            start_time=minutes_to_datetime(0),
-            end_time=minutes_to_datetime(60)
+            start_time=mtdt(0),
+            end_time=mtdt(60)
         )
     )
-    person.add(
+    plan.add(
         Leg(
             seq=1,
             mode='car',
             start_area='a',
             end_area='b',
-            start_time=minutes_to_datetime(60),
-            end_time=minutes_to_datetime(90)
+            start_time=mtdt(60),
+            end_time=mtdt(90)
         )
     )
-    person.add(
+    plan.add(
         Activity(
             seq=2,
             act='work',
             area='b',
-            start_time=minutes_to_datetime(90),
-            end_time=minutes_to_datetime(120)
+            start_time=mtdt(90),
+            end_time=mtdt(120)
         )
     )
-    person.add(
+    plan.add(
         Leg(
             seq=2,
             mode='car',
             start_area='b',
             end_area='a',
-            start_time=minutes_to_datetime(120),
-            end_time=minutes_to_datetime(180)
+            start_time=mtdt(120),
+            end_time=mtdt(180)
         )
     )
 
-    person.add(
+    plan.add(
         Activity(
             seq=3,
             act='home',
             area='a',
-            start_time=minutes_to_datetime(180),
-            end_time=minutes_to_datetime(24 * 60 - 1)
+            start_time=mtdt(180),
+            end_time=mtdt(24 * 60 - 1)
         )
     )
 
     plan.mode_shift(3,'rail', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37})
 
     #check if total activity/leg time equals 24 hrs
-    total_duration = datetime.timedelta(0)
+    total_duration = timedelta(0)
     for x in plan:
         total_duration+=x.duration
-    assert total_duration == datetime.timedelta(days=1)
+    assert total_duration == timedelta(days=1)
