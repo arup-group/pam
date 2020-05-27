@@ -31,7 +31,7 @@ def timedelta_to_matsim_time(td):
     minutes, seconds = divmod(remainder, 60)
     return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
-
+      
 def dt_to_s(dt):
     """
     Convert datetime to seconds since start of day.
@@ -177,3 +177,15 @@ def xml_content(content, matsim_DOCTYPE, matsim_filename):
     doc_type = f'<!DOCTYPE {matsim_DOCTYPE} SYSTEM "http://matsim.org/files/dtd/{matsim_filename}.dtd">'.encode()
     tree = xml_tree(content)
     return xml_version+doc_type+tree
+
+
+def safe_strptime(s):
+    """
+    safely parse string into datatime, can cope with time strings in format hh:mm:ss
+    if hh > 23 then adds a day
+    """
+    if int(s.split(':')[0]) > 23:
+        days, hours = divmod(int(s.split(':')[0]),24)
+        string = f"{days+1}-{hours:02d}" + s[-6:]
+        return datetime.strptime(string, '%d-%H:%M:%S')
+    return datetime.strptime(s, '%H:%M:%S')

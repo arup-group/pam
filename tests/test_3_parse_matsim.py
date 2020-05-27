@@ -47,3 +47,15 @@ def test_remove_pt_interactions():
     assert 'pt interaction' not in [a.act for a in person.activities]
     assert person.has_valid_plan
 
+
+test_bad_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_plan.xml")
+)
+test_bad_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_attributes.xml")
+)
+
+
+def test_read_plan_with_negative_durations():
+    population = read_matsim(test_bad_trips_path, test_bad_attributes_path)
+    population['test']['test'].print()

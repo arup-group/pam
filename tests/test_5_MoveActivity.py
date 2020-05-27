@@ -64,7 +64,7 @@ def test_MoveActivityTourToHomeLocation_doesnt_move_individual_activities_empty_
     policy = modify.MoveActivityTourToHomeLocation(['education'])
     policy.move_individual_activities(Bobby, [])
 
-    assert Bobby.plan[2].location.loc == 'b'
+    assert Bobby.plan[2].location.area == 'b'
 
 
 def test_move_person_activities_delegates_to_remove_person_activities_for_persons_activities(mocker, Bobby):

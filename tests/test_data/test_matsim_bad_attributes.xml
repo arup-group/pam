@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE objectAttributes SYSTEM "http://matsim.org/files/dtd/objectattributes_v1.dtd"><objectAttributes>
+  <!--Input Records:-->
+  <object id="test">
+    <attribute class="java.lang.String" name="source">test</attribute>
+    <attribute class="java.lang.String" name="subpopulation">test</attribute>
+    <attribute class="java.lang.String" name="gender">test</attribute>
+    <attribute class="java.lang.String" name="activity">test</attribute>
+    <attribute class="java.lang.String" name="mode">test</attribute>
+    <attribute class="java.lang.String" name="occupation">test</attribute>
+    <attribute class="java.lang.String" name="income">test</attribute>
+  </object>
+</objectAttributes>
