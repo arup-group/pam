@@ -337,3 +337,62 @@ def test_mode_shift_multiple_tours():
     plan.mode_shift(5,'pt')
 
     assert [leg.mode for leg in plan.legs] == ['pt', 'pt', 'pt', 'pt', 'walk', 'walk']
+
+def test_leg_duration():
+    person = Person(1)
+    person.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(0),
+            end_time=minutes_to_datetime(60)
+        )
+    )
+    person.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=minutes_to_datetime(60),
+            end_time=minutes_to_datetime(90)
+        )
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act='work',
+            area='b',
+            start_time=minutes_to_datetime(90),
+            end_time=minutes_to_datetime(120)
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=minutes_to_datetime(120),
+            end_time=minutes_to_datetime(180)
+        )
+    )
+
+    person.add(
+        Activity(
+            seq=3,
+            act='home',
+            area='a',
+            start_time=minutes_to_datetime(180),
+            end_time=minutes_to_datetime(24 * 60 - 1)
+        )
+    )
+
+    plan.mode_shift(3,'rail', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37})
+
+    #check if total activity/leg time equals 24 hrs
+    total_duration = datetime.timedelta(0)
+    for x in plan:
+        total_duration+=x.duration
+    assert total_duration == datetime.timedelta(days=1)

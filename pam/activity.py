@@ -442,12 +442,20 @@ class Plan:
             # if it's not the first activity of plan
             # update leg that leads to activity at seq
             self.day[seq - 1].end_location = new_location
-            self.mode_shift(seq - 1)
+            self.mode_shift_activity(seq - 1)
         if seq != len(self.day) - 1:
             # if it's not the last activity of plan
             # update leg that leads to activity at seq
             self.day[seq + 1].start_location = new_location
-            self.mode_shift(seq + 1)
+            self.mode_shift_activity(seq + 1)
+
+    def mode_shift_activity(self, seq, default='walk'):
+        """
+        Changes mode of Leg
+        :return: None
+        """
+        assert isinstance(self.day[seq], Leg)
+        # TODO Implement mode shift
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
