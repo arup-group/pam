@@ -31,6 +31,22 @@ def timedelta_to_matsim_time(td):
     minutes, seconds = divmod(remainder, 60)
     return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
+      
+def dt_to_s(dt):
+    """
+    Convert datetime to seconds since start of day.
+    """
+    return (((dt.hour * 60) + dt.minute) * 60) + dt.second
+
+
+def td_to_s(td):
+    """
+    Convert timedelta to seconds since start of day.
+    """
+    # if not td.seconds and td.days:
+    #     return 24*60*60
+    return td.seconds
+
 
 def get_elems(path, tag):
     """

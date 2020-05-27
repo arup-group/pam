@@ -2,7 +2,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
 
-from .activity import Activity, Leg
+from pam.activity import Activity, Leg
 
 
 def plot_person(person):

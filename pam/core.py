@@ -2,8 +2,8 @@ import logging
 import random
 import pickle
 
-from .activity import Plan
-from .plot import plot_person, plot_household
+from pam.activity import Plan
+from pam.plot import plot_person, plot_household
 
 
 class Population:
