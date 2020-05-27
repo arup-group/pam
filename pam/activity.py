@@ -449,13 +449,22 @@ class Plan:
             self.day[seq + 1].start_location = new_location
             self.mode_shift_move(seq + 1)
 
-    def mode_shift_move(self, seq, default='walk'):
+    def mode_shift_move(self, seq, target_mode='walk'):
         """
         Changes mode of Leg
         :return: None
         """
         assert isinstance(self.day[seq], Leg)
-        # TODO Implement mode shift
+
+        tour = self.get_leg_tour(seq)
+        for seq, plan in enumerate(self.day):
+            if isinstance(plan, Leg):
+                act_from = self.day[seq-1]
+                act_to = self.day[seq+1]
+                for other_act in tour:
+                    #if any of the trip ends belongs in the tour change the mode
+                    if act_from.is_exact(other_act) or act_to.is_exact(other_act):
+                        plan.mode = target_mode
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
