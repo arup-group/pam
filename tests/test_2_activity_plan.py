@@ -390,10 +390,6 @@ def test_leg_duration():
         )
     )
 
-    plan.mode_shift(3,'rail', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37})
+    plan.mode_shift(3,'rail', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration=True)
 
-    #check if total activity/leg time equals 24 hrs
-    total_duration = timedelta(0)
-    for x in plan:
-        total_duration+=x.duration
-    assert total_duration == timedelta(days=1)
+    assert [act.duration for act in plan] == [timedelta(seconds=3603), timedelta(seconds=1800), timedelta(seconds=1800), timedelta(seconds=3600), timedelta(seconds=75597)]

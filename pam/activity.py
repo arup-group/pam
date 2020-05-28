@@ -442,29 +442,12 @@ class Plan:
             # if it's not the first activity of plan
             # update leg that leads to activity at seq
             self.day[seq - 1].end_location = new_location
-            self.mode_shift_move(seq - 1)
+            self.mode_shift(seq - 1)
         if seq != len(self.day) - 1:
             # if it's not the last activity of plan
             # update leg that leads to activity at seq
             self.day[seq + 1].start_location = new_location
-            self.mode_shift_move(seq + 1)
-
-    def mode_shift_move(self, seq, target_mode='walk'):
-        """
-        Changes mode of Leg
-        :return: None
-        """
-        assert isinstance(self.day[seq], Leg)
-
-        tour = self.get_leg_tour(seq)
-        for seq, plan in enumerate(self.day):
-            if isinstance(plan, Leg):
-                act_from = self.day[seq-1]
-                act_to = self.day[seq+1]
-                for other_act in tour:
-                    #if any of the trip ends belongs in the tour change the mode
-                    if act_from.is_exact(other_act) or act_to.is_exact(other_act):
-                        plan.mode = target_mode
+            self.mode_shift(seq + 1, update_duration = True)
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
@@ -654,15 +637,16 @@ class Plan:
         
         return home_duration
 
-    def mode_shift(self, seq, target_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}):
+    def mode_shift(self, seq, target_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
         """
         Changes mode for a leg, along with any legs in the same tour.
         Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
-        Default values are from National Travel Survey data (NTS0303)
+        Default speed values are from National Travel Survey data (NTS0303)
 
         :params int seq: leg index in self.day
         :params string target_mode: default mode shift
         :params dict mode_speed: a dictionary of average mode speeds (kph) 
+        :params bool update_duration: whether to update leg durations based on mode speed
 
         :return: None
         """
@@ -676,23 +660,26 @@ class Plan:
                 for other_act in tour:
                     #if any of the trip ends belongs in the tour change the mode
                     if act_from.is_exact(other_act) or act_to.is_exact(other_act):
-                        shift_duration = ((mode_speed[plan.mode]/mode_speed[target_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
+                        if update_duration:
+                            shift_duration = ((mode_speed[plan.mode]/mode_speed[target_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
                         plan.mode = target_mode #change mode
-                        self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
+                        if update_duration:
+                            self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
         
-        #adjust home activities time in order fit revised legs/activities within a 24hr day
-        home_duration = self.get_home_duration()
-        home_duration_factor = (self.day[-1].end_time - END_OF_DAY)/home_duration #factor to adjust home activity time by
+        if update_duration:
+            #adjust home activities time in order fit revised legs/activities within a 24hr day
+            home_duration = self.get_home_duration()
+            home_duration_factor = (self.day[-1].end_time - END_OF_DAY)/home_duration #factor to adjust home activity time by
 
-        for seq, plan in enumerate(self.day):
-            if plan.act=='home':
-                shift_duration = -home_duration_factor*plan.duration
-                shift_duration = timedelta(seconds=round(shift_duration/timedelta(seconds=1))) #round to second
-                self.change_duration(seq=seq,shift_duration=shift_duration)
+            for seq, plan in enumerate(self.day):
+                if plan.act=='home':
+                    shift_duration = -home_duration_factor*plan.duration
+                    shift_duration = timedelta(seconds=round(shift_duration/timedelta(seconds=1))) #round to second
+                    self.change_duration(seq=seq,shift_duration=shift_duration)
 
-        #make sure the last activity ends in the end of day (ie remove potential rounding errors)
-        if self.day[-1].end_time != END_OF_DAY:
-            self.day[-1].end_time = END_OF_DAY
+            #make sure the last activity ends in the end of day (ie remove potential rounding errors)
+            if self.day[-1].end_time != END_OF_DAY:
+                self.day[-1].end_time = END_OF_DAY
         
 
     def change_duration(self, seq, shift_duration):
