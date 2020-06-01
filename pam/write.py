@@ -82,20 +82,30 @@ def write_od_matrices(
                     legs.append({**data, **person.attributes})
                 else:
                     legs.append(data)         
-                                
+        
+    df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')              
+    matrix = df_total.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
+    matrix.to_csv(os.path.join(path, 'total_od.csv'))
+
     data_legs = pd.DataFrame(data=legs)
     
-    if leg_filter or person_filter:
-        if leg_filter:
-            data_legs_grouped=data_legs.groupby(leg_filter)
-        if person_filter:
-            data_legs_grouped=data_legs.groupby(person_filter)              
+    if leg_filter:
+        data_legs_grouped=data_legs.groupby(leg_filter)
         for filter, leg in data_legs_grouped:
             df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
             matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
             matrix.to_csv(os.path.join(path, filter+'_od.csv'))
+        return None
 
-    if time_minutes_filter:
+    elif person_filter:
+        data_legs_grouped=data_legs.groupby(person_filter)              
+        for filter, leg in data_legs_grouped:
+            df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
+            matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
+            matrix.to_csv(os.path.join(path, filter+'_od.csv'))
+        return None
+        
+    elif time_minutes_filter:
         periods = []
         for time in time_minutes_filter:
             periods.append(time)               
@@ -107,10 +117,7 @@ def write_od_matrices(
             df = pd.DataFrame(data=data_time, columns = ['Origin','Destination']).set_index('Origin')        
             matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
             matrix.to_csv(os.path.join(path, 'time_'+file_name+'_od.csv'))
-        
-    df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')              
-    matrix = df_total.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
-    matrix.to_csv(os.path.join(path, 'total_od.csv'))
+        return None        
 
 
 def write_matsim(
