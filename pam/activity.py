@@ -291,7 +291,7 @@ class Plan:
 
             if self.day[idx].act is None:
                 act = self.day[idx-1].purp.lower()
-                location = self.day[idx].location.min
+                location = str(self.day[idx].location.min)
 
                 if act == last_act and location in area_map:
                     act = area_map[location]

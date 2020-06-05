@@ -2,8 +2,14 @@ import logging
 import random
 import pickle
 
+from pam import utils
 from pam.activity import Plan
 from pam.plot import plot_person, plot_household
+
+from halo import Halo
+from lxml import etree as et
+from shapely.geometry import Point
+import geopandas as gp
 
 
 class Population:
@@ -88,7 +94,6 @@ class Population:
 
     def __str__(self):
         return f"Population: {self.people_count()} people in {self.count(households=True)} households."
-
 
 class Household:
     logger = logging.getLogger(__name__)

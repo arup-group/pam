@@ -14,7 +14,7 @@ from .utils import datetime_to_matsim_time as dttm
 from .utils import get_elems, write_xml, safe_strptime
 
 
-def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True):
+def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True, include_loc=False):
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
     format.
@@ -36,7 +36,7 @@ def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True):
                                      weight_col='freq')  # sample the travel population
 
     if complex:
-        return complex_travel_diary_read(trips_df, attributes_df)
+        return complex_travel_diary_read(trips_df, attributes_df, include_loc)
     return basic_travel_diary_read(trips_df, attributes_df)
 
 
@@ -123,152 +123,165 @@ def basic_travel_diary_read(trips_df, attributes_df):
     return population
 
 
-def complex_travel_diary_read(trips_df, attributes_df):
+def complex_travel_diary_read(trips_df, attributes_df, include_loc):
 
-	population = Population()
+    population = Population()
 
-	for hid, household_data in trips_df.groupby('hid'):
+    for hid, household_data in trips_df.groupby('hid'):
 
-		household = Household(hid)
+        household = Household(hid)
 
-		for pid, person_data in household_data.groupby('pid'):
+        for pid, person_data in household_data.groupby('pid'):
 
-			trips = person_data.sort_values('seq')
+            trips = person_data.sort_values('seq')
 
-			person = Person(
-				pid,
-				freq=person_data.freq.iloc[0],
-				attributes=attributes_df.loc[pid].to_dict(),
-				home_area=trips.hzone.iloc[0]
-				)
+            person = Person(
+                pid,
+                freq=person_data.freq.iloc[0],
+                attributes=attributes_df.loc[pid].to_dict(),
+                home_area=trips.hzone.iloc[0]
+                )
+            loc = None
+            if include_loc:
+                loc = trips.start_loc.iloc[0]
+            person.add(
+                Activity(
+                    seq=0,
+                    act=None,
+                    area=trips.ozone.iloc[0],
+                    loc=loc,
+                    start_time=mtdt(0),
+                )
+            )
 
-			person.add(
-				Activity(
-					seq=0,
-					act=None,
-					area=trips.ozone.iloc[0],
-					start_time=mtdt(0),
-				)
-			)
+            for n in range(len(trips)):
+                trip = trips.iloc[n]
 
-			for n in range(len(trips)):
-				trip = trips.iloc[n]
+                start_loc = None
+                end_loc = None
 
-				person.add(
-					Leg(
-						seq=n,
+                if include_loc:
+                    start_loc = trip.start_loc
+                    end_loc = trip.end_loc
+                person.add(
+                    Leg(
+                        seq=n,
                         purp=trip.purp,
-						mode=trip['mode'],
-						start_area=trip.ozone,
-						end_area=trip.dzone,
-						start_time=mtdt(trip.tst),
-						end_time=mtdt(trip.tet),
-					)
-				)
+                        mode=trip['mode'],
+                        start_area=trip.ozone,
+                        end_area=trip.dzone,
+                        start_loc=start_loc,
+                        end_loc=end_loc,
+                        start_time=mtdt(trip.tst),
+                        end_time=mtdt(trip.tet),
+                    )
+                )
 
-				person.add(
-					Activity(
-						seq=n + 1,
-						act=None,
-						area=trip.dzone,
-						start_time=mtdt(trip.tet),
-					)
-				)
-			
-			person.plan.finalise()
-			person.plan.infer_activities_from_leg_purpose()
+                person.add(
+                    Activity(
+                        seq=n + 1,
+                        act=None,
+                        area=trip.dzone,
+                        loc=end_loc,
+                        start_time=mtdt(trip.tet),
+                    )
+                )
+                previous_dzone = trip.dzone
 
-			household.add(person)
+            person.plan.finalise()
+            person.plan.infer_activities_from_leg_purpose()
 
-		population.add(household)
+            household.add(person)
 
-	return population
+        population.add(household)
+
+    return population
 
 
 def load_activity_plan(trips_df, attributes_df, sample_perc = None):
-	"""
-	Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
-	format. This is a variation of the standard load_travel_diary() method because it does not require
-	activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
-	We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-	:param trips_df: DataFrame
-	:param attributes_df: DataFrame
-	:param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
-	:return: core.Population
-	"""
-	# TODO check for required col headers and give useful error?
+    """
+    Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
+    format. This is a variation of the standard load_travel_diary() method because it does not require
+    activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
+    We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
+    :param trips_df: DataFrame
+    :param attributes_df: DataFrame
+    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :return: core.Population
+    """
+    # TODO check for required col headers and give useful error?
 
-	logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
-	if not isinstance(trips_df, pd.DataFrame):
-		raise UserWarning("Unrecognised input for population travel diaries")
+    if not isinstance(trips_df, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population travel diaries")
 
-	if not isinstance(attributes_df, pd.DataFrame):
-	    raise UserWarning("Unrecognised input for population attributes")
+    if not isinstance(attributes_df, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population attributes")
 
-	if sample_perc is not None:
-		trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
-	
-	population = Population()
-	
-	for hid, household_data in trips_df.groupby('hid'):
+    if sample_perc is not None:
+        trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
 
-		household = Household(hid)
+    population = Population()
 
-		for pid, person_data in household_data.groupby('pid'):
+    for hid, household_data in trips_df.groupby('hid'):
 
-			trips = person_data.sort_values('seq')
-			home_area = trips.hzone.iloc[0]
-			origin_area = trips.ozone.iloc[0]
+        household = Household(hid)
 
-			if not origin_area == home_area:
-				logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
+        for pid, person_data in household_data.groupby('pid'):
 
-			person = Person(
-				pid,
-				freq=person_data.freq.iloc[0],
-				attributes=attributes_df.loc[pid].to_dict(),
-				home_area=home_area
-				)
+            trips = person_data.sort_values('seq')
+            home_area = trips.hzone.iloc[0]
+            origin_area = trips.ozone.iloc[0]
 
-			person.add(
-				Activity(
-					seq=0,
-					act='home',
-					area=origin_area,
-					start_time=mtdt(0),
-				)
-			)
+            if not origin_area == home_area:
+                logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
 
-			for n in range(len(trips)):
-				trip = trips.iloc[n]
+            person = Person(
+                pid,
+                freq=person_data.freq.iloc[0],
+                attributes=attributes_df.loc[pid].to_dict(),
+                home_area=home_area
+                )
 
-				person.add(
-					Leg(
-						seq=n,
-						mode=trip['mode'],
-						start_area=trip.ozone,
-						end_area=trip.dzone,
-						start_time=mtdt(trip.tst),
-						end_time=mtdt(trip.tet)
-					)
-				)
+            person.add(
+                Activity(
+                    seq=0,
+                    act='home',
+                    area=origin_area,
+                    start_time=mtdt(0),
+                )
+            )
 
-				person.add(
-						Activity(
-							seq=n + 1,
-							act=trip.activity.lower(),
-							area=trip.dzone,
-							start_time=mtdt(trip.tet),
-						)
-					)
+            for n in range(len(trips)):
+                trip = trips.iloc[n]
 
-			person.plan.finalise()
-			household.add(person)
+                person.add(
+                    Leg(
+                        seq=n,
+                        mode=trip['mode'],
+                        start_area=trip.ozone,
+                        end_area=trip.dzone,
+                        start_time=mtdt(trip.tst),
+                        end_time=mtdt(trip.tet)
+                    )
+                )
 
-		population.add(household)
+                person.add(
+                        Activity(
+                            seq=n + 1,
+                            act=trip.activity.lower(),
+                            area=trip.dzone,
+                            start_time=mtdt(trip.tet),
+                        )
+                    )
 
-	return population
+            person.plan.finalise()
+            household.add(person)
+
+        population.add(household)
+
+    return population
 
 
 def read_matsim(
