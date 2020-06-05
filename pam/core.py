@@ -1,9 +1,8 @@
 import logging
 import random
 import pickle
-
-from pam.activity import Plan
-from pam.plot import plot_person, plot_household
+import pam.activity as activity
+import pam.plot as plot
 
 
 class Population:
@@ -121,9 +120,9 @@ class Household:
         household_activities = []
         for pid, person in self.people.items():
             for activity in person.activities:
-                if activity.in_list_exact(household_activities):
+                if activity.isin_exact(household_activities):
                     shared_activities.append(activity)
-                if not activity.in_list_exact(household_activities):
+                if not activity.isin_exact(household_activities):
                     household_activities.append(activity)
         return shared_activities
 
@@ -135,8 +134,8 @@ class Household:
     def size(self):
         return len(self.people)
 
-    def plot(self):
-        plot_household(self)
+    def plot(self, kwargs=None):
+        plot.plot_household(self, kwargs)
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -153,7 +152,7 @@ class Person:
         self.pid = str(pid)
         self.freq = freq
         self.attributes = attributes
-        self.plan = Plan(home_area=home_area)
+        self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
 
     @property
@@ -245,8 +244,8 @@ class Person:
         print(self.attributes)
         self.plan.print()
 
-    def plot(self):
-        plot_person(self)
+    def plot(self, kwargs=None):
+        plot.plot_person(self, kwargs)
 
     def __str__(self):
         return f"Person: {self.pid}"

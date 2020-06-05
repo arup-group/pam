@@ -1,13 +1,10 @@
 import os
 from datetime import datetime
-
 import pandas as pd
 from lxml import etree as et
 
-from .activity import Activity, Leg
-from .utils import datetime_to_matsim_time as dttm
-from .utils import timedelta_to_matsim_time as tdtm
-from .utils import write_xml
+import pam.activity as activity
+import pam.utils as utils
 
 
 def write_travel_diary(population, path, attributes_path=None):
@@ -116,18 +113,18 @@ def write_matsim_plans(population, location, comment=None):
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
-                if isinstance(component, Activity):
+                if isinstance(component, activity.Activity):
                     et.SubElement(plan_xml, 'act', {
                         'type': component.act,
                         'x': str(int(component.location.loc.x)),
                         'y': str(int(component.location.loc.y)),
-                        'end_time': dttm(component.end_time)
+                        'end_time': utils.datetime_to_matsim_time(component.end_time)
                     }
                                   )
-                if isinstance(component, Leg):
+                if isinstance(component, activity.Leg):
                     et.SubElement(plan_xml, 'leg', {
                         'mode': component.mode,
-                        'trav_time': tdtm(component.duration)})
+                        'trav_time': utils.timedelta_to_matsim_time(component.duration)})
 
             component = person[-1]  # write the last activity without an end time
             et.SubElement(plan_xml, 'act', {
@@ -137,7 +134,7 @@ def write_matsim_plans(population, location, comment=None):
             }
                           )
 
-    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    utils.write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
 
 
 # todo assuming v5?
@@ -163,7 +160,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
                 attribute_xml.text = str(v)
 
-    write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
+    utils.write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
 
 # todo assuming v1?

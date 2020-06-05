@@ -1,6 +1,5 @@
 import pytest
 from datetime import datetime, timedelta
-
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt

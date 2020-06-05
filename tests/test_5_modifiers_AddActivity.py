@@ -1,12 +1,9 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
+from pam.activity import Activity
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam import modify
+from pam.policy import modifiers
 from tests.fixtures import Bobby
 import pytest
-import random
-from datetime import datetime
 
 
 def assert_correct_activities(person, ordered_activities_list):
@@ -19,7 +16,7 @@ def assert_correct_activities(person, ordered_activities_list):
 
 
 def test_AddActivity_throws_exception_if_apply_to_given_wrong_input():
-    policy = modify.AddActivity([''])
+    policy = modifiers.AddActivity([''])
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)
     assert 'Watch this space' in str(e.value)
