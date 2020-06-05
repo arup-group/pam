@@ -106,7 +106,7 @@ def test_HouseholdProbability_p_throws_exception_when_given_Activity():
 
 def test_HouseholdProbability_p_throws_exception_when_given_whatever():
     prob = probability_samplers.HouseholdProbability(0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(TypeError) as e:
         prob.p(None)
 
 

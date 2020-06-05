@@ -31,7 +31,7 @@ def test_RemoveActivity_apply_to_delegates_to_remove_household_activities_when_g
 
 def test_RemoveActivity_throws_exception_if_apply_to_given_wrong_input(Bobby):
     policy = modifiers.RemoveActivity([''])
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(TypeError) as e:
         policy.apply_to(Bobby)
     assert 'Types passed incorrectly: <class \'pam.core.Person\'>, <class \'NoneType\'>, <class \'NoneType\'>. You need <class \'type\'> at the very least.' \
            in str(e.value)

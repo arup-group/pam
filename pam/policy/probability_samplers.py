@@ -86,7 +86,7 @@ class HouseholdProbability(SamplingProbability):
         elif isinstance(x, pam.activity.Activity):
             raise NotImplementedError
         else:
-            raise NotImplementedError
+            raise TypeError
 
     def compute_probability_for_household(self, household):
         if isinstance(self.probability, float):
