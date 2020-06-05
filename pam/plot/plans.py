@@ -1,7 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
-
 import pam.activity as activity
 
 

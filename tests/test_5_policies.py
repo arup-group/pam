@@ -10,7 +10,7 @@ def assert_correct_activities_locations(person, ordered_activities_locations_lis
     assert len(person.plan) % 2 == 1
     for i in range(0, len(person.plan), 2):
         assert isinstance(person.plan.day[i], Activity)
-    assert [a.location.loc for a in person.plan.activities] == ordered_activities_locations_list
+    assert [a.location.area for a in person.plan.activities] == ordered_activities_locations_list
     assert person.plan[0].start_time == mtdt(0)
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 

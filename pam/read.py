@@ -271,7 +271,7 @@ def load_activity_plan(trips_df, attributes_df, sample_perc=None):
 
 def read_matsim(
         plans_path,
-        attributes_path,
+        attributes_path=None,
         weight=1000,
         household_key=None,
         simplify_pt_trips=False,
@@ -289,12 +289,19 @@ def read_matsim(
     :param household_key: {str, None}
     :return: Population
     """
+    logger = logging.getLogger(__name__)
+
     population = core.Population()
 
-    attributes_map = load_attributes_map(attributes_path)
+    if attributes_path:
+        attributes_map = load_attributes_map(attributes_path)
 
     for person_id, plan in selected_plans(plans_path):
-        attributes = attributes_map[person_id]
+
+        if attributes_path:
+            attributes = attributes_map[person_id]
+        else:
+            attributes = {}
 
         person = core.Person(person_id, attributes=attributes, freq=weight)
 
@@ -321,9 +328,12 @@ def read_matsim(
                         seconds=0.)  # todo this seems to be the case in matsim for pt interactions
 
                 else:
-                    departure_dt = datetime.strptime(
-                        stage.get('end_time', '23:59:59'), '%H:%M:%S'
+                    departure_dt = utils.safe_strptime(
+                        stage.get('end_time', '23:59:59')
                     )
+
+                if departure_dt < arrival_dt:
+                    logger.warning(f"Negative duration activity found at pid={person_id}")
 
                 person.add(
                     activity.Activity(

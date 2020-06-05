@@ -18,7 +18,7 @@ class Plan:
             return self.home_location
         if self.day:
             for act in self.activities:
-                if act.act.lower() == 'home':
+                if act.act.lower()[:4] == 'home':
                     return act.location
         self.logger.warning( "failed to find home, return area at start of day")
         return self.day[0].location
@@ -640,11 +640,14 @@ class Plan:
         """
         for idx, component in list(self.reversed()):
             if component.start_time > pam.variables.END_OF_DAY:
-                self.day.pop(idx)
+                self.logger.warning(f"Cropping plan components")
+                self.day = self.day[:idx]
+                break
         # deal with last component
         if isinstance(self.day[-1], Activity):
             self.day[-1].end_time = pam.variables.END_OF_DAY
         else:
+            self.logger.warning(f"Cropping plan ending in Leg")
             self.day.pop(-1)
             self.day[-1].end_time = pam.variables.END_OF_DAY
 
@@ -686,9 +689,9 @@ class Activity(PlanComponent):
             self,
             seq=None,
             act=None,
-            loc=None,
-            link=None,
             area=None,
+            link=None,
+            loc=None,
             start_time=None,
             end_time=None
     ):
@@ -724,12 +727,12 @@ class Leg(PlanComponent):
             self,
             seq=None,
             mode=None,
-            start_loc=None,
-            end_loc=None,
-            start_link=None,
-            end_link=None,
             start_area=None,
             end_area=None,
+            start_link=None,
+            end_link=None,
+            start_loc=None,
+            end_loc=None,
             start_time=None,
             end_time=None,
             purp=None,
