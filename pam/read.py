@@ -7,11 +7,9 @@ import gzip
 import logging
 import pickle
 
-from .core import Population, Household, Person
-from .activity import Plan, Activity, Leg
-from .utils import minutes_to_datetime as mtdt
-from .utils import datetime_to_matsim_time as dttm
-from .utils import get_elems, write_xml, safe_strptime
+import pam.core as core
+import pam.activity as activity
+import pam.utils as utils
 
 
 def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True, include_loc=False):
@@ -41,11 +39,11 @@ def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True, i
 
 
 def basic_travel_diary_read(trips_df, attributes_df):
-    population = Population()
+    population = core.Population()
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        household = Household(hid)
+        household = core.Household(hid)
 
         for pid, person_data in household_data.groupby('pid'):
 
@@ -55,7 +53,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
             activity_map = {home_area: 'home'}
             activities = ['home', 'work']
 
-            person = Person(
+            person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
                 attributes=attributes_df.loc[pid].to_dict(),
@@ -63,11 +61,11 @@ def basic_travel_diary_read(trips_df, attributes_df):
             )
 
             person.add(
-                Activity(
+                activity.Activity(
                     seq=0,
                     act='home' if home_area == origin_area else 'work',
                     area=origin_area,
-                    start_time=mtdt(0),
+                    start_time=utils.minutes_to_datetime(0),
                 )
             )
 
@@ -77,35 +75,35 @@ def basic_travel_diary_read(trips_df, attributes_df):
                 destination_activity = trip.purp
 
                 person.add(
-                    Leg(
+                    activity.Leg(
                         seq=n,
                         mode=trip['mode'],
                         purp=trip.purp,
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=mtdt(trip.tst),
-                        end_time=mtdt(trip.tet)
+                        start_time=utils.minutes_to_datetime(trip.tst),
+                        end_time=utils.minutes_to_datetime(trip.tet)
                     )
                 )
 
                 if destination_activity in activities and activity_map.get(
                         trip.dzone):  # assume return trip to this activity
                     person.add(
-                        Activity(
+                        activity.Activity(
                             seq=n + 1,
                             act=activity_map[trip.dzone],
                             area=trip.dzone,
-                            start_time=mtdt(trip.tet),
+                            start_time=utils.minutes_to_datetime(trip.tet),
                         )
                     )
 
                 else:
                     person.add(
-                        Activity(
+                        activity.Activity(
                             seq=n + 1,
                             act=trip.purp,
                             area=trip.dzone,
-                            start_time=mtdt(trip.tet),
+                            start_time=utils.minutes_to_datetime(trip.tet),
                         )
                     )
 
@@ -124,18 +122,17 @@ def basic_travel_diary_read(trips_df, attributes_df):
 
 
 def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
-
-    population = Population()
+    population = core.Population()
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        household = Household(hid)
+        household = core.Household(hid)
 
         for pid, person_data in household_data.groupby('pid'):
 
             trips = person_data.sort_values('seq')
 
-            person = Person(
+            person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
                 attributes=attributes_df.loc[pid].to_dict(),
@@ -145,12 +142,12 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
             if include_loc:
                 loc = trips.start_loc.iloc[0]
             person.add(
-                Activity(
+                activity.Activity(
                     seq=0,
                     act=None,
                     area=trips.ozone.iloc[0],
                     loc=loc,
-                    start_time=mtdt(0),
+                    start_time=utils.minutes_to_datetime(0),
                 )
             )
 
@@ -163,8 +160,9 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
                 if include_loc:
                     start_loc = trip.start_loc
                     end_loc = trip.end_loc
+
                 person.add(
-                    Leg(
+                    activity.Leg(
                         seq=n,
                         purp=trip.purp,
                         mode=trip['mode'],
@@ -172,21 +170,20 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
                         end_area=trip.dzone,
                         start_loc=start_loc,
                         end_loc=end_loc,
-                        start_time=mtdt(trip.tst),
-                        end_time=mtdt(trip.tet),
+                        start_time=utils.minutes_to_datetime(trip.tst),
+                        end_time=utils.minutes_to_datetime(trip.tet),
                     )
                 )
 
                 person.add(
-                    Activity(
+                    activity.Activity(
                         seq=n + 1,
                         act=None,
                         area=trip.dzone,
                         loc=end_loc,
-                        start_time=mtdt(trip.tet),
+                        start_time=utils.minutes_to_datetime(trip.tet),
                     )
                 )
-                previous_dzone = trip.dzone
 
             person.plan.finalise()
             person.plan.infer_activities_from_leg_purpose()
@@ -198,7 +195,7 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
     return population
 
 
-def load_activity_plan(trips_df, attributes_df, sample_perc = None):
+def load_activity_plan(trips_df, attributes_df, sample_perc=None):
     """
     Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
     format. This is a variation of the standard load_travel_diary() method because it does not require
@@ -220,13 +217,14 @@ def load_activity_plan(trips_df, attributes_df, sample_perc = None):
         raise UserWarning("Unrecognised input for population attributes")
 
     if sample_perc is not None:
-        trips_df = sample_population(trips_df, attributes_df, sample_perc, weight_col='freq') # sample the travel population
+        trips_df = sample_population(trips_df, attributes_df, sample_perc,
+                                     weight_col='freq')  # sample the travel population
 
-    population = Population()
+    population = core.Population()
 
     for hid, household_data in trips_df.groupby('hid'):
 
-        household = Household(hid)
+        household = core.Household(hid)
 
         for pid, person_data in household_data.groupby('pid'):
 
@@ -237,19 +235,19 @@ def load_activity_plan(trips_df, attributes_df, sample_perc = None):
             if not origin_area == home_area:
                 logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
 
-            person = Person(
+            person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
                 attributes=attributes_df.loc[pid].to_dict(),
                 home_area=home_area
-                )
+            )
 
             person.add(
-                Activity(
+                activity.Activity(
                     seq=0,
                     act='home',
                     area=origin_area,
-                    start_time=mtdt(0),
+                    start_time=utils.minutes_to_datetime(0),
                 )
             )
 
@@ -257,24 +255,24 @@ def load_activity_plan(trips_df, attributes_df, sample_perc = None):
                 trip = trips.iloc[n]
 
                 person.add(
-                    Leg(
+                    activity.Leg(
                         seq=n,
                         mode=trip['mode'],
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=mtdt(trip.tst),
-                        end_time=mtdt(trip.tet)
+                        start_time=utils.minutes_to_datetime(trip.tst),
+                        end_time=utils.minutes_to_datetime(trip.tet)
                     )
                 )
 
                 person.add(
-                        Activity(
-                            seq=n + 1,
-                            act=trip.activity.lower(),
-                            area=trip.dzone,
-                            start_time=mtdt(trip.tet),
-                        )
+                    activity.Activity(
+                        seq=n + 1,
+                        act=trip.activity.lower(),
+                        area=trip.dzone,
+                        start_time=utils.minutes_to_datetime(trip.tet),
                     )
+                )
 
             person.plan.finalise()
             household.add(person)
@@ -306,7 +304,7 @@ def read_matsim(
     """
     logger = logging.getLogger(__name__)
 
-    population = Population()
+    population = core.Population()
 
     if attributes_path:
         attributes_map = load_attributes_map(attributes_path)
@@ -318,7 +316,7 @@ def read_matsim(
         else:
             attributes = {}
 
-        person = Person(person_id, attributes=attributes, freq=weight)
+        person = core.Person(person_id, attributes=attributes, freq=weight)
 
         act_seq = 0
         leg_seq = 0
@@ -343,7 +341,7 @@ def read_matsim(
                         seconds=0.)  # todo this seems to be the case in matsim for pt interactions
 
                 else:
-                    departure_dt = safe_strptime(
+                    departure_dt = utils.safe_strptime(
                         stage.get('end_time', '23:59:59')
                     )
 
@@ -351,7 +349,7 @@ def read_matsim(
                     logger.warning(f"Negative duration activity found at pid={person_id}")
 
                 person.add(
-                    Activity(
+                    activity.Activity(
                         seq=act_seq,
                         act=act_type,
                         loc=loc,
@@ -374,7 +372,7 @@ def read_matsim(
                     arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
 
                 person.add(
-                    Leg(
+                    activity.Leg(
                         seq=leg_seq,
                         mode=stage.get('mode'),
                         start_loc=None,
@@ -405,11 +403,11 @@ def read_matsim(
                 household = population.get(attributes.get(household_key))
                 household.add(person)
             else:  # new household
-                household = Household(attributes.get(household_key))
+                household = core.Household(attributes.get(household_key))
                 household.add(person)
                 population.add(household)
         else:  # not using households, create dummy household
-            household = Household(person_id)
+            household = core.Household(person_id)
             household.add(person)
             population.add(household)
 
@@ -421,7 +419,7 @@ def load_attributes_map(attributes_path):
     Given path to MATSim attributes input, return dictionary of attributes (as dict)
     """
     attributes_map = {}
-    people = get_elems(attributes_path, "object")
+    people = utils.get_elems(attributes_path, "object")
     for person in people:
         att_map = {}
         for attribute in person:
@@ -435,7 +433,7 @@ def selected_plans(plans_path):
     """
     Given path to MATSim plans input, yield person id and plan for all selected plans.
     """
-    for person in get_elems(plans_path, "person"):
+    for person in utils.get_elems(plans_path, "person"):
         for plan in person:
             if plan.get('selected') == 'yes':
                 yield person.get('id'), plan
@@ -455,7 +453,7 @@ def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
     """
     sample_pids = trips_df.groupby('pid')[['freq']].sum().join(
         attributes_df, how='left'
-        ).sample(frac=sample_perc, weights=weight_col).index
+    ).sample(frac=sample_perc, weights=weight_col).index
     return trips_df[trips_df.pid.isin(sample_pids)]
 
 
