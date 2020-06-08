@@ -123,7 +123,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
     return population
 
 
-def complex_travel_diary_read(trips_df, attributes_df, include_loc):
+def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
 
     population = Population()
 
