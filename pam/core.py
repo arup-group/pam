@@ -2,14 +2,8 @@ import logging
 import random
 import pickle
 
-from pam import utils
 from pam.activity import Plan
 from pam.plot import plot_person, plot_household
-
-from halo import Halo
-from lxml import etree as et
-from shapely.geometry import Point
-import geopandas as gp
 
 
 class Population:
