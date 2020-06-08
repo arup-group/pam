@@ -41,4 +41,4 @@ class GeometryRandomSampler:
                 if random_point.within(geom.buffer(0)):
                     return random_point
 
-        raise RuntimeWarning(f'unable to sample point from geometry:{geo_id} with {patience} attempts')
+        raise RuntimeWarning(f'unable to sample point from geometry:{geo_region} with {patience} attempts')
