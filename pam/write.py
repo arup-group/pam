@@ -135,7 +135,7 @@ def write_matsim_plans(population, location, comment=None):
                 'x': str(int(component.location.loc.x)),
                 'y': str(int(component.location.loc.y)),
             }
-                          )
+            )
 
     write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
 
