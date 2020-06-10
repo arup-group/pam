@@ -88,7 +88,6 @@ class Population:
     def __str__(self):
         return f"Population: {self.people_count()} people in {self.count(households=True)} households."
 
-
 class Household:
     logger = logging.getLogger(__name__)
 

@@ -12,7 +12,7 @@ import pam.activity as activity
 import pam.utils as utils
 
 
-def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True):
+def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True, include_loc=False):
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
     format.
@@ -34,7 +34,7 @@ def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True):
                                      weight_col='freq')  # sample the travel population
 
     if complex:
-        return complex_travel_diary_read(trips_df, attributes_df)
+        return complex_travel_diary_read(trips_df, attributes_df, include_loc)
     return basic_travel_diary_read(trips_df, attributes_df)
 
 
@@ -121,7 +121,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
     return population
 
 
-def complex_travel_diary_read(trips_df, attributes_df):
+def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
     population = core.Population()
 
     for hid, household_data in trips_df.groupby('hid'):
@@ -137,19 +137,29 @@ def complex_travel_diary_read(trips_df, attributes_df):
                 freq=person_data.freq.iloc[0],
                 attributes=attributes_df.loc[pid].to_dict(),
                 home_area=trips.hzone.iloc[0]
-            )
-
+                )
+            loc = None
+            if include_loc:
+                loc = trips.start_loc.iloc[0]
             person.add(
                 activity.Activity(
                     seq=0,
                     act=None,
                     area=trips.ozone.iloc[0],
+                    loc=loc,
                     start_time=utils.minutes_to_datetime(0),
                 )
             )
 
             for n in range(len(trips)):
                 trip = trips.iloc[n]
+
+                start_loc = None
+                end_loc = None
+
+                if include_loc:
+                    start_loc = trip.start_loc
+                    end_loc = trip.end_loc
 
                 person.add(
                     activity.Leg(
@@ -158,6 +168,8 @@ def complex_travel_diary_read(trips_df, attributes_df):
                         mode=trip['mode'],
                         start_area=trip.ozone,
                         end_area=trip.dzone,
+                        start_loc=start_loc,
+                        end_loc=end_loc,
                         start_time=utils.minutes_to_datetime(trip.tst),
                         end_time=utils.minutes_to_datetime(trip.tet),
                     )
@@ -168,6 +180,7 @@ def complex_travel_diary_read(trips_df, attributes_df):
                         seq=n + 1,
                         act=None,
                         area=trip.dzone,
+                        loc=end_loc,
                         start_time=utils.minutes_to_datetime(trip.tet),
                     )
                 )
