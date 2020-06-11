@@ -1,9 +1,8 @@
-from .utils import minutes_to_datetime as mtdt
 from datetime import datetime
 import logging
-
-from .variables import END_OF_DAY
-from . import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+import pam.utils
+import pam.variables
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 class Plan:
@@ -19,7 +18,7 @@ class Plan:
             return self.home_location
         if self.day:
             for act in self.activities:
-                if act.act.lower() == 'home':
+                if act.act.lower()[:4] == 'home':
                     return act.location
         self.logger.warning( "failed to find home, return area at start of day")
         return self.day[0].location
@@ -135,15 +134,16 @@ class Plan:
         if sequence_check:
             self.validate_sequence()
 
-        if not self.day[0].start_time == mtdt(0):
+        if not self.day[0].start_time == pam.utils.minutes_to_datetime(0):
             raise PAMTimesValidationError("First activity does not start at zero")
 
         for i in range(self.length - 1):
             if not self.day[i].end_time == self.day[i+1].start_time:
                 raise PAMTimesValidationError("Miss-match in adjoining activity end and start times")
 
-        if not self.day[-1].end_time == END_OF_DAY:
-            raise PAMTimesValidationError(f"Last activity does not end at {END_OF_DAY}; ({self.day[-1].end_time})")
+        if not self.day[-1].end_time == pam.variables.END_OF_DAY:
+            raise PAMTimesValidationError(f"Last activity does not end at {pam.variables.END_OF_DAY}; "
+                                              f"({self.day[-1].end_time})")
 
         return True
 
@@ -291,7 +291,7 @@ class Plan:
 
             if self.day[idx].act is None:
                 act = self.day[idx-1].purp.lower()
-                location = self.day[idx].location.min
+                location = str(self.day[idx].location.min)
 
                 if act == last_act and location in area_map:
                     act = area_map[location]
@@ -360,7 +360,7 @@ class Plan:
         if len(self.day) > 1:
             for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
                 self.day[seq].end_time = self.day[seq+1].start_time
-        self.day[-1].end_time = END_OF_DAY
+        self.day[-1].end_time = pam.variables.END_OF_DAY
         
     def autocomplete_matsim(self):
         """
@@ -532,11 +532,11 @@ class Plan:
         """
         # todo this isn't great - just pushes other activities to edges of day
 
-        new_time = mtdt(0)
+        new_time = pam.utils.minutes_to_datetime(0)
         for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
             new_time = self.day[seq].shift_start_time(new_time)
 
-        new_time = END_OF_DAY
+        new_time = pam.variables.END_OF_DAY
         for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
             new_time = self.day[seq].shift_end_time(new_time)
 
@@ -584,9 +584,9 @@ class Plan:
         :return:
         """
         # extend proceeding act to end of day
-        self.day[idx_start].end_time = END_OF_DAY
+        self.day[idx_start].end_time = pam.variables.END_OF_DAY
         # extend subsequent act to start of day
-        self.day[idx_end].start_time = mtdt(0)
+        self.day[idx_end].start_time = pam.utils.minutes_to_datetime(0)
         self.day.pop(idx_start + 1)  # remove proceeding leg
         self.day.pop(idx_end - 1)  # remove subsequent leg
 
@@ -597,8 +597,8 @@ class Plan:
                 seq=1,
                 act='home',
                 area=self.home,
-                start_time=mtdt(0),
-                end_time=END_OF_DAY,
+                start_time=pam.utils.minutes_to_datetime(0),
+                end_time=pam.variables.END_OF_DAY,
             )
         ]
 
@@ -639,14 +639,17 @@ class Plan:
         is a Leg, this leg is removed and the previous activity extended.
         """
         for idx, component in list(self.reversed()):
-            if component.start_time > END_OF_DAY:
-                self.day.pop(idx)
+            if component.start_time > pam.variables.END_OF_DAY:
+                self.logger.warning(f"Cropping plan components")
+                self.day = self.day[:idx]
+                break
         # deal with last component
         if isinstance(self.day[-1], Activity):
-            self.day[-1].end_time = END_OF_DAY
+            self.day[-1].end_time = pam.variables.END_OF_DAY
         else:
+            self.logger.warning(f"Cropping plan ending in Leg")
             self.day.pop(-1)
-            self.day[-1].end_time = END_OF_DAY
+            self.day[-1].end_time = pam.variables.END_OF_DAY
 
 
 class PlanComponent:
@@ -686,9 +689,9 @@ class Activity(PlanComponent):
             self,
             seq=None,
             act=None,
-            loc=None,
-            link=None,
             area=None,
+            link=None,
+            loc=None,
             start_time=None,
             end_time=None
     ):
@@ -710,7 +713,7 @@ class Activity(PlanComponent):
         return (self.location == other.location) and (self.act == other.act) \
                and (self.start_time == other.start_time) and (self.end_time == other.end_time)
 
-    def in_list_exact(self, activities: list):
+    def isin_exact(self, activities: list):
         for other in activities:
             if self.is_exact(other):
                 return True
@@ -724,12 +727,12 @@ class Leg(PlanComponent):
             self,
             seq=None,
             mode=None,
-            start_loc=None,
-            end_loc=None,
-            start_link=None,
-            end_link=None,
             start_area=None,
             end_area=None,
+            start_link=None,
+            end_link=None,
+            start_loc=None,
+            end_loc=None,
             start_time=None,
             end_time=None,
             purp=None,
