@@ -57,7 +57,7 @@ pytz==2019.3
 pyzmq==19.0.0
 qtconsole==4.7.3
 QtPy==1.9.0
-Rtree
+Rtree==0.9.4
 Send2Trash==1.5.0
 setuptools>=42.0.1
 Shapely==1.7.0
