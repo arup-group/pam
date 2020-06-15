@@ -1,23 +1,31 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
+import pam.activity as activity
 
-from .activity import Activity, Leg
 
-
-def plot_person(person):
+def plot_person(person, kwargs=None):
     df = build_person_df(person)
-    plot_activities(df)
+    if kwargs is not None:
+        plot_activities(df, **kwargs)
+    else:
+        plot_activities(df)
 
 
-def plot_persons(persons):
+def plot_persons(persons, kwargs=None):
     df = pd.concat([build_person_df(person) for person in persons])
-    plot_activities(df)
+    if kwargs is not None:
+        plot_activities(df, **kwargs)
+    else:
+        plot_activities(df)
 
 
-def plot_household(household):
+def plot_household(household, kwargs=None):
     df = pd.concat([build_person_df(person) for person in household.people.values()])
-    plot_activities(df)
+    if kwargs is not None:
+        plot_activities(df, **kwargs)
+    else:
+        plot_activities(df)
 
 
 def build_person_df(person):
@@ -28,7 +36,7 @@ def build_person_df(person):
 
     for component in person.plan.day:
         activities.append(component.act.lower().title())
-        if isinstance(component, Leg):
+        if isinstance(component, activity.Leg):
             modes.append(component.mode.lower().title())
         else:
             modes.append(None)
@@ -52,11 +60,12 @@ def build_cmap(df):
     return d_color
 
 
-def plot_activities(df):
+def plot_activities(df, cmap: dict = None, path: str = ''):
     """
     Plot activity plans from pandas dataframe.
     """
-    cmap = build_cmap(df)
+    if cmap is None:
+        cmap = build_cmap(df)
     df['color'] = df['act'].map(cmap)
     pids = df['pid'].unique()
 
@@ -136,3 +145,6 @@ def plot_activities(df):
         prop={'size':12}, frameon=False,
         bbox_to_anchor=(.5, -.5), loc='upper center', borderaxespad=0.)
     plt.tight_layout()
+
+    if path:
+        plt.savefig(path)

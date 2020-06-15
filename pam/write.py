@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 import pandas as pd
 from lxml import etree as et
 
@@ -28,10 +27,11 @@ def write_travel_diary(population, path, attributes_path=None):
                     'hzone': person.home,
                     'ozone': leg.start_location.area,
                     'dzone': leg.end_location.area,
-                    'purp': person.plan[seq + 1],  # todo this is not the same as the parse logic!!!
+                    'seq': seq,
+                    'purp': leg.purp,
                     'mode': leg.mode,
-                    'tst': leg.start_time,  # todo convert to min
-                    'tet': leg.end_time,  # todo convert to min
+                    'tst': leg.start_time.time(),  # todo convert to min
+                    'tet': leg.end_time.time(),  # todo convert to min
                     'freq': person.freq,
                 }
             )
@@ -40,7 +40,10 @@ def write_travel_diary(population, path, attributes_path=None):
     if attributes_path:
         record = []
         for hid, pid, person in population.people():
-            record.append(person.attributes)
+            line = person.attributes
+            line['hid'] = hid
+            line['pid'] = pid
+            record.append(line)
         pd.DataFrame(record).to_csv(attributes_path)
 
 
@@ -155,28 +158,28 @@ def write_matsim_plans(population, location, comment=None):
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
-                if isinstance(component, Activity):
+                if isinstance(component, activity.Activity):
                     et.SubElement(plan_xml, 'act', {
                         'type': component.act,
-                        'x': str(int(component.location.loc.x)),
-                        'y': str(int(component.location.loc.y)),
-                        'end_time': dttm(component.end_time)
+                        'x': str(float(component.location.loc.x)),
+                        'y': str(float(component.location.loc.y)),
+                        'end_time': utils.datetime_to_matsim_time(component.end_time)
                     }
                                   )
-                if isinstance(component, Leg):
+                if isinstance(component, activity.Leg):
                     et.SubElement(plan_xml, 'leg', {
                         'mode': component.mode,
-                        'trav_time': tdtm(component.duration)})
+                        'trav_time': utils.timedelta_to_matsim_time(component.duration)})
 
             component = person[-1]  # write the last activity without an end time
             et.SubElement(plan_xml, 'act', {
                 'type': component.act,
-                'x': str(int(component.location.loc.x)),
-                'y': str(int(component.location.loc.y)),
+                'x': str(float(component.location.loc.x)),
+                'y': str(float(component.location.loc.y)),
             }
                           )
 
-    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    utils.write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
 
 
 # todo assuming v5?
@@ -202,7 +205,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
                 attribute_xml.text = str(v)
 
-    write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
+    utils.write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
 
 # todo assuming v1?

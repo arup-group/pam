@@ -26,6 +26,7 @@ kiwisolver==1.2.0
 lxml==4.5.0
 MarkupSafe==1.1.1
 matplotlib==3.2.1
+memory-profiler==0.57.0
 mistune==0.8.4
 more-itertools==8.2.0
 munch==2.5.0
@@ -60,6 +61,7 @@ Send2Trash==1.5.0
 setuptools>=42.0.1
 Shapely==1.7.0
 six==1.14.0
+tabulate==0.8.7
 terminado==0.8.3
 testpath==0.4.4
 tornado==6.0.4
@@ -68,3 +70,4 @@ wcwidth==0.1.9
 webencodings==0.5.1
 widgetsnbextension==3.5.1
 zipp==3.1.0
+halo==0.0.29

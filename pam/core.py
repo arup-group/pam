@@ -1,15 +1,14 @@
 import logging
 import random
 import pickle
-
-from .activity import Plan
-from .plot import plot_person, plot_household
+import pam.activity as activity
+import pam.plot as plot
 
 
 class Population:
 
     def __init__(self, name=None):
-        self.name=name
+        self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
 
@@ -38,14 +37,39 @@ class Population:
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]
-    
+
     def random_person(self):
         hh = self.random_household()
         return hh.random_person()
 
+    def people_count(self):
+        count = 0
+        for hid, household in self.households.items():
+            count += household.size()
+        return count
+
     @property
     def size(self):
         return sum([person.freq for _, _, person in self.people()])
+
+    @property
+    def stats(self):
+        num_households = 0
+        num_people = 0
+        num_activities = 0
+        num_legs = 0
+        for hid, household in self:
+            num_households += 1
+            for pid, person in household:
+                num_people += 1
+                num_activities += person.num_activities
+                num_legs += person.num_legs
+        return {
+            'num_households': num_households,
+            'num_people': num_people,
+            'num_activities': num_activities,
+            'num_legs': num_legs,
+        }
 
     def count(self, households=False):
         if households:
@@ -57,23 +81,18 @@ class Population:
         for _, household in self:
             household.print()
 
-    def __str__(self):
-        return f"Population: {self.size} people in {self.count(households=True)} households."
-
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
 
+    def __str__(self):
+        return f"Population: {self.people_count()} people in {self.count(households=True)} households."
 
 class Household:
     logger = logging.getLogger(__name__)
 
     def __init__(self, hid):
-        
-        if not isinstance(hid, str):
-            hid = str(hid)
-            self.logger.warning(" converting household id to string")
-        self.hid = hid
+        self.hid = str(hid)
         self.people = {}
         self.area = None
 
@@ -95,16 +114,27 @@ class Household:
         for pid, person in self.people.items():
             yield pid, person
 
-    def size(self):
-        return len(self.people)
+    def shared_activities(self):
+        shared_activities = []
+        household_activities = []
+        for pid, person in self.people.items():
+            for activity in person.activities:
+                if activity.isin_exact(household_activities):
+                    shared_activities.append(activity)
+                if not activity.isin_exact(household_activities):
+                    household_activities.append(activity)
+        return shared_activities
 
     def print(self):
         print(self)
         for _, person in self:
             person.print()
 
-    def plot(self):
-        plot_household(self)
+    def size(self):
+        return len(self.people)
+
+    def plot(self, kwargs=None):
+        plot.plot_household(self, kwargs)
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -113,17 +143,15 @@ class Household:
         with open(path, 'wb') as file:
             pickle.dump(self, file)
 
+
 class Person:
     logger = logging.getLogger(__name__)
 
     def __init__(self, pid, freq=1, attributes=None, home_area=None):
-        if not isinstance(pid, str):
-            pid = str(pid)
-            self.logger.warning(" converting person id to string")
         self.pid = str(pid)
         self.freq = freq
         self.attributes = attributes
-        self.plan = Plan(home_area=home_area)
+        self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
 
     @property
@@ -138,10 +166,22 @@ class Person:
                 yield act
 
     @property
+    def num_activities(self):
+        if self.plan:
+            return len(list(self.activities))
+        return 0
+
+    @property
     def legs(self):
         if self.plan:
             for leg in self.plan.legs:
                 yield leg
+
+    @property
+    def num_legs(self):
+        if self.plan:
+            return len(list(self.legs))
+        return 0
 
     @property
     def length(self):
@@ -203,8 +243,8 @@ class Person:
         print(self.attributes)
         self.plan.print()
 
-    def plot(self):
-        plot_person(self)
+    def plot(self, kwargs=None):
+        plot.plot_person(self, kwargs)
 
     def __str__(self):
         return f"Person: {self.pid}"

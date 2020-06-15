@@ -1,13 +1,9 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
-from pam import modify
-import builtins
+from pam.policy import modifiers
+from pam.policy import probability_samplers
+from pam.policy import policies
+from pam.policy import filters
 from tests.fixtures import *
-import pytest
 import random
-from datetime import datetime
 
 
 def assert_correct_activities(person, ordered_activities_list):
@@ -19,105 +15,209 @@ def assert_correct_activities(person, ordered_activities_list):
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
-def test_HouseholdPolicy_verifies_for_appropriate_probabilities(mocker):
-    mocker.patch.object(modify, 'verify_probability')
-    modify.HouseholdPolicy(modify.RemoveActivity(['']), 0.5)
+def test_Policy_throws_exception_when_used():
+    policy = policies.PolicyLevel(modifiers.Modifier())
+    with pytest.raises(NotImplementedError) as e:
+        policy.apply_to(Bobby)
+    assert '<class \'type\'> is a base class' in str(e.value)
 
-    modify.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, modify.SimpleProbability, modify.ActivityProbability, modify.PersonProbability,
-         modify.HouseholdProbability)
-    )
+
+def test_HouseholdPolicy_verifies_for_appropriate_probabilities(mocker):
+    mocker.patch.object(probability_samplers, 'verify_probability')
+    policies.HouseholdPolicy(modifiers.RemoveActivity(['']), 0.5)
+
+    probability_samplers.verify_probability.assert_called_once_with(0.5)
 
 
 def test_HouseholdPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'sample', return_value=True)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(probability_samplers.SimpleProbability, 'sample', return_value=True)
 
-    policy = modify.HouseholdPolicy(modify.RemoveActivity(['']), modify.SimpleProbability(1.))
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity(['']), probability_samplers.SimpleProbability(1.))
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    modify.RemoveActivity.apply_to.assert_called_once_with(household)
+    modifiers.RemoveActivity.apply_to.assert_called_once_with(household)
+
+
+def test_HouseholdPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(filters.Filter, 'satisfies_conditions', return_value=False)
+
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity(['']), 0.5, filters.Filter())
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
+
+
+def test_HouseholdPolicy_does_nothing_if_not_selected_for_single_probability(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.7)
+
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity(['']), 0.5)
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
 
 
 def test_HouseholdPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_list_of_probabilities(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'p', return_value=1)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
 
-    policy = modify.HouseholdPolicy(modify.RemoveActivity(['']), [1., modify.SimpleProbability(1.)])
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity(['']), [1., probability_samplers.SimpleProbability(1.)])
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    modify.RemoveActivity.apply_to.assert_called_once_with(household)
+    modifiers.RemoveActivity.apply_to.assert_called_once_with(household)
+
+
+def test_HouseholdPolicy_does_nothing_if_not_selected_for_list_of_probabilities(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.5)
+
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity(['']), [0.5, probability_samplers.SimpleProbability(0.5)])
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
 
 
 def test_PersonPolicy_verifies_for_appropriate_probabilities(mocker):
-    mocker.patch.object(modify, 'verify_probability')
-    modify.PersonPolicy(modify.RemoveActivity(['']), 0.5)
+    mocker.patch.object(probability_samplers, 'verify_probability')
+    policies.PersonPolicy(modifiers.RemoveActivity(['']), 0.5)
 
-    modify.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, modify.SimpleProbability, modify.ActivityProbability, modify.PersonProbability)
-    )
+    probability_samplers.verify_probability.assert_called_once_with(0.5, (probability_samplers.HouseholdProbability))
 
 
 def test_PersonPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'sample', return_value=True)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(probability_samplers.SimpleProbability, 'sample', return_value=True)
 
-    policy = modify.PersonPolicy(modify.RemoveActivity(['']), modify.SimpleProbability(1.))
+    policy = policies.PersonPolicy(modifiers.RemoveActivity(['']), probability_samplers.SimpleProbability(1.))
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    assert modify.RemoveActivity.apply_to.call_count == 4
+    assert modifiers.RemoveActivity.apply_to.call_count == 4
+
+
+def test_PersonPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(filters.Filter, 'satisfies_conditions', return_value=False)
+
+    policy = policies.PersonPolicy(modifiers.RemoveActivity(['']), 0.5, filters.Filter())
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
+
+
+def test_PersonPolicy_does_nothing_if_not_selected_for_single_probability(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.7)
+
+    policy = policies.PersonPolicy(modifiers.RemoveActivity(['']), 0.5)
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
 
 
 def test_PersonPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_list_of_probabilities(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'p', return_value=1)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(probability_samplers.SimpleProbability, 'p', return_value=1)
 
-    policy = modify.PersonPolicy(modify.RemoveActivity(['']), [1., modify.SimpleProbability(1.)])
+    policy = policies.PersonPolicy(modifiers.RemoveActivity(['']), [1., probability_samplers.SimpleProbability(1.)])
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    assert modify.RemoveActivity.apply_to.call_count == 4
+    assert modifiers.RemoveActivity.apply_to.call_count == 4
+
+
+def test_PersonPolicy_does_nothing_if_not_selected_for_list_of_probabilities(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.5)
+
+    policy = policies.PersonPolicy(modifiers.RemoveActivity(['']), [0.5, probability_samplers.SimpleProbability(0.5)])
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
 
 
 def test_ActivityPolicy_verifies_for_appropriate_probabilities(mocker):
-    mocker.patch.object(modify, 'verify_probability')
-    modify.ActivityPolicy(modify.RemoveActivity(['']), 0.5)
+    mocker.patch.object(probability_samplers, 'verify_probability')
+    policies.ActivityPolicy(modifiers.RemoveActivity(['']), 0.5)
 
-    modify.verify_probability.assert_called_once_with(
-        0.5,
-        (float, list, modify.SimpleProbability, modify.ActivityProbability)
-    )
+    probability_samplers.verify_probability.assert_called_once_with(
+        0.5, (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability))
 
 
 def test_ActivityPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_probability(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'sample', return_value=True)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(probability_samplers.SimpleProbability, 'sample', return_value=True)
 
-    policy = modify.ActivityPolicy(modify.RemoveActivity(['']), modify.SimpleProbability(1.))
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(['']), probability_samplers.SimpleProbability(1.))
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    assert modify.RemoveActivity.apply_to.call_count == 4
+    assert modifiers.RemoveActivity.apply_to.call_count == 4
+
+
+def test_ActivityPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(filters.Filter, 'satisfies_conditions', return_value=False)
+
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(['']), 0.5, filters.Filter())
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
+
+
+def test_ActivityPolicy_does_nothing_if_not_selected_for_single_probability(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.7)
+
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(['work']), 0.5)
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
 
 
 def test_ActivityPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_list_of_probabilities(mocker, SmithHousehold):
-    mocker.patch.object(modify.RemoveActivity, 'apply_to')
-    mocker.patch.object(modify.SimpleProbability, 'p', return_value=1)
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(probability_samplers.SimpleProbability, 'p', return_value=1)
 
-    policy = modify.ActivityPolicy(modify.RemoveActivity(['']), [1., modify.SimpleProbability(1.)])
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(['']), [1., probability_samplers.SimpleProbability(1.)])
     household = SmithHousehold
 
     policy.apply_to(household)
 
-    assert modify.RemoveActivity.apply_to.call_count == 4
+    assert modifiers.RemoveActivity.apply_to.call_count == 4
 
+
+def test_ActivityPolicy_does_nothing_if_not_selected_for_list_of_probabilities(mocker, SmithHousehold):
+    mocker.patch.object(modifiers.RemoveActivity, 'apply_to')
+    mocker.patch.object(random, 'random', return_value=0.7)
+
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity(['']), [0.5, probability_samplers.SimpleProbability(0.5)])
+    household = SmithHousehold
+
+    policy.apply_to(household)
+
+    assert not modifiers.RemoveActivity.apply_to.called, 'method should not have been called'
