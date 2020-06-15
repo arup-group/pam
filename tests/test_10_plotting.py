@@ -3,9 +3,11 @@ import pandas as pd
 from matplotlib.figure import Figure
 
 from pam.plot.plans import build_person_df, build_cmap
-from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, plot_leg_times
+from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, plot_leg_times, plot_population_comparisons, calculate_leg_duration_by_mode
 from .fixtures import person_heh, Steve, Hilda
 from pam.core import Household, Population
+from copy import deepcopy
+from pam import modify
 
 
 def test_build_person_dataframe(person_heh):
@@ -82,3 +84,28 @@ def test_plot_leg_time_bins(Steve, Hilda):
         population.add(hh)
     fig = plot_leg_times(population)
     assert isinstance(fig, Figure)
+
+def test_plot_population_comparisons(Steve, Hilda):
+    population_1 = Population()
+    for i, person in enumerate([Steve, Hilda]):
+        hh = Household(i)
+        hh.add(person)
+        population_1.add(hh)
+    population_1.name = 'base'
+    population_2 = deepcopy(population_1)
+    population_2.name = 'work_removed'
+    
+    policy_remove_work = modify.ActivityPolicy(
+    policy=modify.RemoveActivity(['work']),
+    probability=1)
+    modify.apply_policies(population_2, [policy_remove_work])
+    
+    list_of_populations = [population_1, population_2]
+    outputs = plot_population_comparisons(list_of_populations, 'home')
+    legs = outputs[2]
+    activities = outputs[3]
+    check = calculate_leg_duration_by_mode(population_2)
+    assert isinstance(outputs[0], Figure)
+    assert isinstance(outputs[1], Figure)
+    assert legs.loc['work_removed', 'walk'] == check.loc[check['leg mode'] == 'walk', 'duration_hours'].iloc[0]
+   
