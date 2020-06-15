@@ -4,6 +4,7 @@ import logging
 import pam.utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam.variables import END_OF_DAY
 
 
 class Plan:

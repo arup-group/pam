@@ -7,7 +7,7 @@ from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, p
 from .fixtures import person_heh, Steve, Hilda
 from pam.core import Household, Population
 from copy import deepcopy
-from pam import modify
+from pam.policy import policies
 
 
 def test_build_person_dataframe(person_heh):
@@ -95,10 +95,11 @@ def test_plot_population_comparisons(Steve, Hilda):
     population_2 = deepcopy(population_1)
     population_2.name = 'work_removed'
     
-    policy_remove_work = modify.ActivityPolicy(
-    policy=modify.RemoveActivity(['work']),
-    probability=1)
-    modify.apply_policies(population_2, [policy_remove_work])
+    policy_remove_work = policies.RemovePersonActivities(
+            activities=['work'],
+            probability=1
+            )
+    policies.apply_policies(population_2, [policy_remove_work])
     
     list_of_populations = [population_1, population_2]
     outputs = plot_population_comparisons(list_of_populations, 'home')
