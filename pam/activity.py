@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import timedelta
 import logging
 import pam.utils
 import pam.variables
@@ -625,97 +624,13 @@ class Plan:
                     self[idx].end_location = trip_end_location
                 pt_trip = False
 
-    def get_home_duration(self):
+    def mode_shift(self, seq, default='walk'):
         """
-        Get the total duration of home activities.
-        """
-        #total time spent at home
-        home_duration = timedelta(0)
-        for plan in self.day:
-            if plan.act=='home':
-                home_duration+=plan.duration
-        
-        return home_duration
-
-    def mode_shift(self, seq, target_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
-        """
-        Changes mode for a leg, along with any legs in the same tour.
-        Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
-        Default speed values are from National Travel Survey data (NTS0303)
-
-        :params int seq: leg index in self.day
-        :params string target_mode: default mode shift
-        :params dict mode_speed: a dictionary of average mode speeds (kph) 
-        :params bool update_duration: whether to update leg durations based on mode speed
-
+        Changes mode of Leg
         :return: None
         """
         assert isinstance(self.day[seq], Leg)
-
-        tour = self.get_leg_tour(seq)
-        for seq, plan in enumerate(self.day):
-            if isinstance(plan, Leg):
-                act_from = self.day[seq-1]
-                act_to = self.day[seq+1]
-                for other_act in tour:
-                    #if any of the trip ends belongs in the tour change the mode
-                    if act_from.is_exact(other_act) or act_to.is_exact(other_act):
-                        if update_duration:
-                            shift_duration = ((mode_speed[plan.mode]/mode_speed[target_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
-                        plan.mode = target_mode #change mode
-                        if update_duration:
-                            self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
-        
-        if update_duration:
-            #adjust home activities time in order fit revised legs/activities within a 24hr day
-            home_duration = self.get_home_duration()
-            home_duration_factor = (self.day[-1].end_time - END_OF_DAY)/home_duration #factor to adjust home activity time by
-
-            for seq, plan in enumerate(self.day):
-                if plan.act=='home':
-                    shift_duration = -home_duration_factor*plan.duration
-                    shift_duration = timedelta(seconds=round(shift_duration/timedelta(seconds=1))) #round to second
-                    self.change_duration(seq=seq,shift_duration=shift_duration)
-
-            #make sure the last activity ends in the end of day (ie remove potential rounding errors)
-            if self.day[-1].end_time != END_OF_DAY:
-                self.day[-1].end_time = END_OF_DAY
-        
-
-    def change_duration(self, seq, shift_duration):
-        """
-        Change the duration of a leg and shift subsequent activities/legs forward
-        :params int seq: leg index in self.day
-        :params timedelta shift_duration: the number of seconds to change the leg duration by:
-
-        :return: None
-        """
-        
-        #change leg duration
-        self.day[seq].end_time = self.day[seq].end_time + shift_duration
-        
-        #shift all subsequent legs and activities
-        for idx in range(seq+1, len(self.day)):
-            start_time = self.day[idx].start_time
-            self.day[idx].shift_start_time(start_time + shift_duration)
-          
-
-    def get_leg_tour(self, seq):
-        """
-        Get the tour of a leg
-        :params int seq: plan sequence. Must be a leg sequence.
-
-        :return: a list of activities in a tour
-        """
-        assert isinstance(self.day[seq], Leg)
-
-        act_from = self.day[seq-1]
-        act_to = self.day[seq+1]
-
-        for tour in self.activity_tours():
-            for tour_act in tour:
-                if act_from.is_exact(tour_act) or act_to.is_exact(tour_act):
-                    return tour
+        # TODO Implement mode shift
 
     def crop(self):
         """
