@@ -10,6 +10,7 @@ from pam.core import Household, Person, Population
 from pam.write import write_travel_diary, \
     write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices
 from pam.read import read_matsim
+from pam.utils import minutes_to_datetime as mtdt
 
 
 def test_write_plans_xml(tmp_path, population_heh):
@@ -98,23 +99,138 @@ def test_write_travel_plans(tmp_path, population_heh):
 
 def test_writes_od_matrix_to_expected_file(tmpdir):
     population = Population()
-    for hid in range(1, 11):
-        household = Household(hid)
-        population.add(household)
-        for pid in range(2):
-            person = Person(pid)
-            person.add(Activity(1, 'home', 'Barnet'))
-            person.add(Leg(1, 'car', start_area='Barnet', end_area='Southwark'))
-            person.add(Activity(2, 'work', 'Southwark'))
-            person.add(Leg(2, 'car', start_area='Southwark', end_area='Barnet'))
-            person.add(Activity(3, 'work', 'Barnet'))
-            household.add(person)
-    od_matrix_file = os.path.join(tmpdir, "od_matrix_test.csv")
+    
+    household = Household(hid = '0')
+    person = Person(pid='0',  home_area='Barnet', attributes = {'occ':'white'})
+    person.add(Activity(1, 'home','Barnet', start_time=mtdt(0)))
+    person.add(Leg(1, mode='car', start_area='Barnet', end_area='Southwark', start_time=mtdt(400), purp='work'))
+    person.add(Activity(2,'work', 'Southwark', start_time=mtdt(420)))
+    person.add(Leg(2,'car', start_area='Southwark', end_area='Barnet', start_time=mtdt(1020), purp='work'))
+    person.add(Activity(3,'home','Barnet',start_time=mtdt(1040), end_time=mtdt(1439)))
+    household.add(person)  
+    population.add(household)
 
-    write_od_matrices(population, od_matrix_file)
+    household = Household(hid = '1')
+    person = Person(pid='1', home_area='Ealing', attributes = {'occ':'white'})
+    person.add(Activity(1, 'home','Ealing',start_time=mtdt(0)))
+    person.add(Leg(1, mode='cycle', start_area='Ealing', end_area='Westminster,City of London', start_time=mtdt(500), purp='education'))
+    person.add(Activity(2,'education', 'Westminster,City of London',start_time=mtdt(550)))
+    person.add(Leg(2,'cycle', start_area='Westminster,City of London', end_area='Ealing', start_time=mtdt(700), purp='education'))
+    person.add(Activity(3,'home','Ealing',start_time=mtdt(750), end_time=mtdt(1439)))
+    household.add(person)  
+    population.add(household)
 
-    od_matrix_csv_string = open(od_matrix_file).read()
-    assert od_matrix_csv_string == 'ozone,Barnet,Southwark\nBarnet,0,20\nSouthwark,20,0\n'
+    household = Household(hid = '2')
+    person = Person(pid='2', home_area='Ealing',attributes = {'occ':'white'})
+    person.add(Activity(1, 'home','Ealing', start_time=mtdt(0)))
+    person.add(Leg(1, mode='car', start_area='Ealing', end_area='Westminster,City of London', start_time=mtdt(450), purp='work'))
+    person.add(Activity(2,'work', 'Westminster,City of London',start_time=mtdt(480)))
+    person.add(Leg(2,'car', start_area='Westminster,City of London', end_area='Ealing', start_time=mtdt(1050), purp='work'))
+    person.add(Activity(3,'home','Ealing',start_time=mtdt(1080), end_time=mtdt(1439)))
+    household.add(person)  
+    population.add(household)
+
+    household = Household(hid = '3')
+    person = Person(pid='3', home_area='Barnet',attributes = {'occ':'blue'})
+    person.add(Activity(1, 'home','Barnet', start_time = mtdt(0)))
+    person.add(Leg(1, mode='walk', start_area='Barnet', end_area='Barnet', start_time=mtdt(450), purp='shop'))
+    person.add(Activity(2,'shop', 'Barnet',start_time=mtdt(470)))
+    person.add(Leg(2,'walk', start_area='Barnet', end_area='Barnet', start_time=mtdt(600), purp='shop'))
+    person.add(Activity(3,'home','Barnet',start_time=mtdt(620), end_time=mtdt(1439)))
+    household.add(person)  
+    population.add(household)
+
+    household = Household(hid = '4')
+    person = Person(pid='4', home_area='Ealing',attributes = {'occ':'blue'})
+    person.add(Activity(1, 'home','Ealing', start_time = mtdt(0)))
+    person.add(Leg(1, mode='cycle', start_area='Ealing', end_area='Ealing', start_time=mtdt(400), purp='work'))
+    person.add(Activity(2,'work', 'Ealing',start_time=mtdt(420)))
+    person.add(Leg(2,'cycle', start_area='Ealing', end_area='Ealing', start_time=mtdt(1030), purp='work'))
+    person.add(Activity(3,'home','Ealing',start_time=mtdt(1050), end_time=mtdt(1439)))
+    household.add(person)  
+    population.add(household)
+
+    attribute_list = ['white', 'blue', 'total']
+    mode_list = ['car', 'cycle','walk', 'total']
+    time_slice = [(400, 500), (1020, 1060)]
+    
+    write_od_matrices(population, tmpdir, leg_filter = 'Mode')   
+    for m in mode_list:
+        od_matrix_file = os.path.join(tmpdir, m+"_od.csv")
+        od_matrix_csv_string = open(od_matrix_file).read()       
+        if m == 'car':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,0,0,1,0\n' \
+                    'Ealing,0,0,0,1\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,1,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix           
+        if m == 'cycle':          
+            expected_od_matrix = \
+                    'Origin,Ealing,"Westminster,City of London"\n' \
+                    'Ealing,2,1\n' \
+                    '"Westminster,City of London",1,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix       
+        if m == 'walk':          
+            expected_od_matrix = \
+                    'Origin,Barnet\n' \
+                    'Barnet,2\n'
+            assert od_matrix_csv_string == expected_od_matrix           
+        if m == 'total':
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,2,0,1,0\n' \
+                    'Ealing,0,2,0,2\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,2,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix        
+                        
+    write_od_matrices(population, tmpdir, person_filter = 'occ')   
+    for a in attribute_list:
+        od_matrix_file = os.path.join(tmpdir, a+"_od.csv")
+        od_matrix_csv_string = open(od_matrix_file).read()      
+        if a == 'white':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,0,0,1,0\n' \
+                    'Ealing,0,0,0,2\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,2,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix          
+        if a == 'blue':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing\n' \
+                    'Barnet,2,0\n' \
+                    'Ealing,0,2\n'      
+            assert od_matrix_csv_string == expected_od_matrix         
+        if a == 'total':          
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,2,0,1,0\n' \
+                    'Ealing,0,2,0,2\n' \
+                    'Southwark,1,0,0,0\n' \
+                    '"Westminster,City of London",0,2,0,0\n'        
+            assert od_matrix_csv_string == expected_od_matrix          
+         
+    write_od_matrices(population, tmpdir, time_minutes_filter = [(400,500),(1020,1060)])   
+    for start_time, end_time in time_slice:
+        file_name = str(start_time) +'_to_'+ str(end_time)
+        od_matrix_file = os.path.join(tmpdir,'time_'+file_name+'_od.csv' )
+        od_matrix_csv_string = open(od_matrix_file).read()       
+        if (start_time, end_time) == (400, 500):
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
+                    'Barnet,1,0,1,0\n' \
+                    'Ealing,0,1,0,1\n'       
+            assert od_matrix_csv_string == expected_od_matrix               
+        if (start_time, end_time) == (1020, 1060):
+            expected_od_matrix = \
+                    'Origin,Barnet,Ealing\n' \
+                    'Ealing,0,1\n' \
+                    'Southwark,1,0\n' \
+                    '"Westminster,City of London",0,1\n'     
+            assert od_matrix_csv_string == expected_od_matrix     
 
 
 def test_writes_population_csv_file_to_expected_location(population_heh, tmpdir):
