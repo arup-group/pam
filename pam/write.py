@@ -63,7 +63,7 @@ def write_od_matrices(
     :param leg_filter: select between 'Mode', 'Purpose'
     :param person_filter: select between given attribute categories (column names) from person attribute data
     :param time_minutes_filter: a list of tuples to slice times, 
-                                e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
+    e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
 	:return: None
 	"""
 
@@ -76,7 +76,7 @@ def write_od_matrices(
                             'Person ID': pid,
                             'Origin':leg.start_location.area,
                             'Destination': leg.end_location.area,
-                            'Purpose': leg.purpose,
+                            'Purpose': leg.purp,
                             'Mode': leg.mode,
                             'Sequence': leg.seq,
                             'Start time': leg.start_time,
@@ -158,18 +158,18 @@ def write_matsim_plans(population, location, comment=None):
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
-                if isinstance(component, activity.Activity):
+                if isinstance(component, Activity):
                     et.SubElement(plan_xml, 'act', {
                         'type': component.act,
                         'x': str(float(component.location.loc.x)),
                         'y': str(float(component.location.loc.y)),
-                        'end_time': utils.datetime_to_matsim_time(component.end_time)
+                        'end_time': dttm(component.end_time)
                     }
                                   )
-                if isinstance(component, activity.Leg):
+                if isinstance(component, Leg):
                     et.SubElement(plan_xml, 'leg', {
                         'mode': component.mode,
-                        'trav_time': utils.timedelta_to_matsim_time(component.duration)})
+                        'trav_time': tdtm(component.duration)})
 
             component = person[-1]  # write the last activity without an end time
             et.SubElement(plan_xml, 'act', {
@@ -179,7 +179,7 @@ def write_matsim_plans(population, location, comment=None):
             }
                           )
 
-    utils.write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
 
 
 # todo assuming v5?
@@ -205,7 +205,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
                 attribute_xml.text = str(v)
 
-    utils.write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
+    write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
 
 # todo assuming v1?
