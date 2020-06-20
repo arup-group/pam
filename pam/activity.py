@@ -1,6 +1,8 @@
 from datetime import datetime
 from datetime import timedelta
 import logging
+from copy import copy
+
 import pam.utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
@@ -36,6 +38,14 @@ class Plan:
         for p in self.day:
             if isinstance(p, Leg):
                 yield p
+
+    @property
+    def activity_classes(self):
+        return set([a.act for a in self.activities])
+
+    @property
+    def mode_classes(self):
+        return set([l.mode for l in self.legs])
 
     @property
     def closed(self):
@@ -107,68 +117,85 @@ class Plan:
                 return False
         return True
 
-    def validate_sequence(self):
+    def add(self, p):
+        """
+        Safely add a new component to the plan.
+        :param p:
+        :return:
+        """
+        if isinstance(p, Activity):
+            if self.day and not isinstance(self.day[-1], Leg):  # enforce act-leg-act seq
+                raise PAMSequenceValidationError(f"Cannot add Activity to plan sequence.")
+            self.day.append(p)
+
+        elif isinstance(p, Leg):
+            if not self.day:
+                raise PAMSequenceValidationError(f"Cannot add Leg as first component to plan sequence.")
+            if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
+                raise PAMSequenceValidationError(f"Cannot add Leg to plan sequence.")
+            self.day.append(p)
+
+        else:
+            raise UserWarning(f"Cannot add type: {type(p)} to plan.")
+
+    # validation methods
+    
+    @property
+    def valid_sequence(self):
         """
         Check sequence of Activities and Legs.
-        :return: True
+        :return: bool
         """
         if not isinstance(self.day[0], Activity):
-            raise PAMSequenceValidationError(f"Plan does not start with Activity")
+            return False
 
         for i, component in enumerate(self.day):
             if i % 2:  # uneven
                 if not isinstance(component, Leg):
-                    raise PAMSequenceValidationError(f"Incorrect plan sequence, expected Activity at idx:{i}")
+                    return False
             else:
                 if not isinstance(component, Activity):
-                    raise PAMSequenceValidationError(f"Incorrect plan sequence, expected Leg at idx:{i}")
+                    return False
 
         if not isinstance(self.day[-1], Activity):
-            raise PAMSequenceValidationError(f"Plan does not end with Activity")
+            return False
 
         return True
 
-    def validate_times(self, sequence_check=True):
+    @property
+    def valid_times(self):
         """
         Check that start and end time of Activities and Legs are consistent.
-        :return: True
+        :return: bool
         """
-        if sequence_check:
-            self.validate_sequence()
-
         if not self.day[0].start_time == pam.utils.minutes_to_datetime(0):
-            raise PAMTimesValidationError("First activity does not start at zero")
+            return False
 
         for i in range(self.length - 1):
             if not self.day[i].end_time == self.day[i+1].start_time:
-                raise PAMTimesValidationError("Miss-match in adjoining activity end and start times")
+                return False
 
         if not self.day[-1].end_time == pam.variables.END_OF_DAY:
-            raise PAMTimesValidationError(f"Last activity does not end at {pam.variables.END_OF_DAY}; "
-                                              f"({self.day[-1].end_time})")
+            return False
 
         return True
 
-    def validate_locations(self, sequence_check=True):
+    @property
+    def valid_locations(self):
         """
         Check that locations are consistent across Activities and Legs.
-        :return: True
+        :return: bool
         """
-        if sequence_check:
-            self.validate_sequence()
-
         for i in range(1, self.length):
             component = self.day[i]
 
             if isinstance(component, Activity):
                 if not component.location == self.day[i-1].end_location:
-                    raise PAMValidationLocationsError("Activity location does not match previous leg destination")
-                # if not component.location == component[i+1].start_location:
-                # 	raise TypeError("Activity location does not match next leg origin")
+                    return False
             
             elif isinstance(component, Leg):
                 if not component.start_location == self.day[i-1].location:
-                    raise PAMValidationLocationsError("Leg start location does not match previous activity location")
+                    return False
 
         return True
 
@@ -177,12 +204,32 @@ class Plan:
         """
         Check for sequence, time and location structure and consistency.
         Note that this also checks that plan ends at END_OF_DAY.
-        :return: True
+        :return: bool
         """
-        self.validate_sequence()
-        self.validate_times(sequence_check=False)
-        self.validate_locations(sequence_check=False)
+        if self.valid_sequence and self.valid_times and self.valid_locations:
+            return True
+        else:
+            return False
 
+    def validate(self):
+        self.validate_sequence()
+        self.validate_times()
+        self.validate_locations()
+        return True
+
+    def validate_sequence(self):
+        if not self.valid_sequence:
+            raise PAMSequenceValidationError()
+        return True
+
+    def validate_times(self):
+        if not self.valid_times:
+            raise PAMTimesValidationError()
+        return True
+
+    def validate_locations(self):
+        if not self.valid_locations:
+            raise PAMValidationLocationsError()
         return True
 
     def position_of(self, target='home', search='last'):
@@ -209,26 +256,65 @@ class Plan:
                 if act.act.lower() == target:
                     return seq
 
-    def add(self, p):
-        """
-        Safely add a new component to the plan.
-        :param p:
-        :return:
-        """
-        if isinstance(p, Activity):
-            if self.day and not isinstance(self.day[-1], Leg):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Cannot add Activity to plan sequence.")
-            self.day.append(p)
+    # fixing methods
 
-        elif isinstance(p, Leg):
-            if not self.day:
-                raise PAMSequenceValidationError(f"Cannot add Leg as first component to plan sequence.")
-            if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Cannot add Leg to plan sequence.")
-            self.day.append(p)
+    def fix(self, crop=True, times=True, locations=True):
+        if crop:
+            self.crop()
+        if times:
+            self.fix_time_consistency()
+        if locations:
+            self.fix_location_consistency()
 
+    def crop(self):
+        """
+        Crop a plan to end of day (END_OF_DAY). Plan components that start after this
+        time are removed. Activities that end after this time are trimmed. If the last component
+        is a Leg, this leg is removed and the previous activity extended.
+        """
+        # crop plan beyond end of day
+        for idx, component in list(self.reversed()):
+            if component.start_time > pam.variables.END_OF_DAY:
+                self.logger.warning(f"Cropping plan components")
+                self.day = self.day[:idx]
+                break
+        
+        # crop plan that is out of sequence
+        for idx in range(1, self.length):
+            if self[idx].start_time < self[idx-1].end_time:
+                self.logger.warning(f"Cropping plan components")
+                self.day = self.day[:idx]
+                break
+            if self[idx].start_time > self[idx].end_time:
+                self.logger.warning(f"Cropping plan components")
+                self.day = self.day[:idx+1]
+                break
+
+        # deal with last component
+        if isinstance(self.day[-1], Activity):
+            self.day[-1].end_time = pam.variables.END_OF_DAY
         else:
-            raise UserWarning(f"Cannot add type: {type(p)} to plan.")
+            self.logger.warning(f"Cropping plan ending in Leg")
+            self.day.pop(-1)
+            self.day[-1].end_time = pam.variables.END_OF_DAY
+
+    def fix_time_consistency(self):
+        """
+        Force plan component time consistency.
+        """
+        for i in range(self.length - 1):
+            self.day[i+1].start_time == self.day[i].end_time
+
+    def fix_location_consistency(self):
+        """
+        Force plan locations consistency by adjusting leg locations.
+        """
+        for i in range(1, self.length-1):
+            component = self.day[i]
+            
+            if isinstance(component, Leg):
+                component.start_location = copy(self.day[i-1].location)
+                component.end_location = copy(self.day[i+1].location)
 
     def closed_duration(self, idx):
         """
@@ -717,25 +803,6 @@ class Plan:
             for tour_act in tour:
                 if act_from.is_exact(tour_act) or act_to.is_exact(tour_act):
                     return tour
-
-    def crop(self):
-        """
-        Crop a plan to end of day (END_OF_DAY). Plan components that start after this
-        time are removed. Activities that end after this time are trimmed. If the last component
-        is a Leg, this leg is removed and the previous activity extended.
-        """
-        for idx, component in list(self.reversed()):
-            if component.start_time > pam.variables.END_OF_DAY:
-                self.logger.warning(f"Cropping plan components")
-                self.day = self.day[:idx]
-                break
-        # deal with last component
-        if isinstance(self.day[-1], Activity):
-            self.day[-1].end_time = pam.variables.END_OF_DAY
-        else:
-            self.logger.warning(f"Cropping plan ending in Leg")
-            self.day.pop(-1)
-            self.day[-1].end_time = pam.variables.END_OF_DAY
 
 
 class PlanComponent:

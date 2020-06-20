@@ -3,6 +3,7 @@ import random
 import pickle
 import pam.activity as activity
 import pam.plot as plot
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 class Population:
@@ -34,6 +35,20 @@ class Population:
         for hid, household in self.households.items():
             for pid, person in household.people.items():
                 yield hid, pid, person
+
+    @property
+    def activity_classes(self):
+        acts = set()
+        for _, _, p in self.people():
+            acts.update(p.activity_classes)
+        return acts
+
+    @property
+    def mode_classes(self):
+        modes = set()
+        for _, _, p in self.people():
+            modes.update(p.mode_classes)
+        return modes
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]
@@ -76,6 +91,21 @@ class Population:
             return len(self.households)
         return len(list(self.people()))
 
+    @property
+    def activities(self):
+        acts = {}
+        for _, hh in self:
+            pass
+
+    def fix_plans(self, crop=True, times=True, locations=True):
+        for _, _, person in self.people():
+            if crop:
+                person.plan.crop()
+            if times:
+                person.plan.fix_time_consistency()
+            if locations:
+                person.plan.fix_location_consistency()
+
     def print(self):
         print(self)
         for _, household in self:
@@ -91,9 +121,10 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid):
+    def __init__(self, hid, attributes=None):
         self.hid = str(hid)
         self.people = {}
+        self.attributes = attributes
         self.area = None
 
     def add(self, person):
@@ -113,6 +144,29 @@ class Household:
     def __iter__(self):
         for pid, person in self.people.items():
             yield pid, person
+
+    @property
+    def activity_classes(self):
+        acts = set()
+        for _, p in self:
+            acts.update(p.activity_classes)
+        return acts
+
+    @property
+    def mode_classes(self):
+        modes = set()
+        for _, p in self:
+            modes.update(p.mode_classes)
+        return modes
+
+    def fix_plans(self, crop=True, times=True, locations=True):
+        for person in self:
+            if crop:
+                person.plan.crop()
+            if times:
+                person.plan.fix_time_consistency()
+            if locations:
+                person.plan.fix_location_consistency()
 
     def shared_activities(self):
         shared_activities = []
@@ -198,12 +252,57 @@ class Person:
             yield component
 
     @property
+    def activity_classes(self):
+        return self.plan.activity_classes
+
+    @property
+    def mode_classes(self):
+        return self.plan.mode_classes
+
+    @property
     def has_valid_plan(self):
         """
         Check sequence of Activities and Legs.
         :return: True
         """
         return self.plan.is_valid
+
+    def validate(self):
+        """
+        Validate plan.
+        """
+        self.plan.validate()
+        return True
+
+    def validate_sequence(self):
+        """
+        Check sequence of Activities and Legs.
+        :return: True
+        """
+        if not self.plan.valid_sequence:
+            raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
+
+        return True
+
+    def validate_times(self):
+        """
+        Check sequence of Activity and Leg times.
+        :return: True
+        """
+        if not self.plan.valid_times:
+            raise PAMTimesValidationError(f"Person {self.pid} has invalid plan times")
+
+        return True
+
+    def validate_locations(self):
+        """
+        Check sequence of Activity and Leg locations.
+        :return: True
+        """
+        if not self.plan.valid_locations:
+            raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
+
+        return True
 
     @property
     def closed_plan(self):
@@ -234,6 +333,14 @@ class Person:
         Add activity end times based on start time of next activity.
         """
         self.plan.finalise()
+
+    def fix_plan(self, crop=True, times=True, locations=True):
+        if crop:
+            self.plan.crop()
+        if times:
+            self.plan.fix_time_consistency()
+        if locations:
+            self.plan.fix_location_consistency()
 
     def clear_plan(self):
         self.plan.clear()

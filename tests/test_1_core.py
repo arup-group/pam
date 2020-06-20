@@ -139,3 +139,22 @@ def test_person_not_closed_plan_different_areas():
     person.add(Leg(2, 'car', start_area=2, end_area=3))
     person.add(Activity(3, 'work', 3))
     assert not person.closed_plan
+
+
+def test_population_classes():
+    household = Household(hid='1')
+    for i, (act, mode) in enumerate(zip(['work', 'school'], ['car', 'pt'])):
+        person = Person(pid=str(i))
+        person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+        person.add(Leg(seq=2, mode=mode, start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+        person.add(Activity(seq=3, act=act, area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+        household.add(person)
+    population = Population()
+    population.add(household)
+
+    assert population['1']['0'].activity_classes == set(['home', 'work'])
+    assert population['1'].activity_classes == set(['home', 'work', 'school'])
+    assert population.activity_classes == set(['home', 'work', 'school'])
+    assert population['1']['0'].mode_classes == set(['car'])
+    assert population['1'].mode_classes == set(['car', 'pt'])
+    assert population.mode_classes == set(['car', 'pt'])

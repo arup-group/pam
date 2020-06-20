@@ -67,3 +67,13 @@ def test_activity_with_different_times_not_in_list_exact(list_of_acts):
 def test_activity_with_different_times_not_in_list(list_of_acts):
     different_times_act = Activity(2, 'act_2', 'loc', start_time=mtdt(18 * 60 + 999), end_time=mtdt(19 * 60 + 999))
     assert different_times_act in list_of_acts
+
+
+def test_classes():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plan.add(Activity(seq=3, act='work', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    assert plan.activity_classes == set(['home', 'work'])
+    assert plan.mode_classes == set(['car'])
