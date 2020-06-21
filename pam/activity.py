@@ -241,9 +241,6 @@ class Plan:
         :return: {int, None}
         """
 
-        if search not in ['last', 'first']:
-            raise UserWarning("Method only supports search types 'first' or 'last'.")
-
         if search == 'last':
             last = None
             for seq, act in enumerate(self.day):
@@ -255,6 +252,8 @@ class Plan:
             for seq, act in enumerate(self.day):
                 if act.act.lower() == target:
                     return seq
+
+        raise UserWarning("Method only supports search types 'first' or 'last'.")
 
     # fixing methods
 
@@ -303,7 +302,7 @@ class Plan:
         Force plan component time consistency.
         """
         for i in range(self.length - 1):
-            self.day[i+1].start_time == self.day[i].end_time
+            self.day[i+1].start_time = self.day[i].end_time
 
     def fix_location_consistency(self):
         """
