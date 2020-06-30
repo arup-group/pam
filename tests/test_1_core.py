@@ -1,11 +1,12 @@
 import pytest
 from datetime import datetime, timedelta
+
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
-
 from pam import PAMSequenceValidationError
+from .fixtures import person_heh
 
 
 testdata = [
@@ -41,6 +42,13 @@ def test_population_add_household():
     assert list(population.households) == ['1']
 
 
+def test_population_add_household_error():
+    population = Population()
+    household = None
+    with pytest.raises(UserWarning):
+        population.add(household)
+
+
 def test_household_add_person():
     household = Household('1')
     person = Person('1')
@@ -48,6 +56,13 @@ def test_household_add_person():
     household.add(person)
     assert len(household.people) == 1
     assert list(household.people) == ['1']
+
+
+def test_household_add_person_error():
+    household = Household('1')
+    person = None
+    with pytest.raises(UserWarning):
+        household.add(person)
 
 
 def test_person_add_activity():
@@ -158,3 +173,85 @@ def test_population_classes():
     assert population['1']['0'].mode_classes == set(['car'])
     assert population['1'].mode_classes == set(['car', 'pt'])
     assert population.mode_classes == set(['car', 'pt'])
+
+
+def test_count_population():
+    population = Population()
+    for i in range(1, 5):
+        hh = Household(str(i))
+        for ii in range(i):
+            hh.add(Person(f"{i}_{ii}"))
+        population.add(hh)
+    assert population.population == 10
+
+
+def test_population_get_random_household():
+    population = Population()
+    population.add(Household('1'))
+    population.add(Household('2'))
+    assert isinstance(population.random_household(), Household)
+
+
+def test_population_get_random_person():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0'))
+    population['1'].add(Person('1'))
+    assert isinstance(population.random_person(), Person)
+
+
+def test_population_size():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    assert population.size == 4
+
+
+def test_population_num_households():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    assert population.num_households == 2
+
+
+def test_population_stats():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    population['2'].add(Person('2', freq=3))
+    assert isinstance(population.stats, dict)
+
+
+def test_population_fix_plans_wrapper(person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+    population.fix_plans()
+
+
+def test_population_print(capfd, person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+    population.print()
+    out, _ = capfd.readouterr()
+    assert(out)
+
+
+def test_population_sample_locs(person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+
+    class DummySampler:
+        def sample(self, loc, act):
+            return None
+
+    population.sample_locs(DummySampler())
+    assert population['1']['1'].plan[2].location.loc is None

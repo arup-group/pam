@@ -2,6 +2,7 @@ from typing import Union
 import geopandas as gp
 from shapely.geometry import Point
 import random
+import logging
 
 
 class RandomPointSampler:
@@ -16,6 +17,7 @@ class RandomPointSampler:
         :param patience: int, number of tries to sample point
         :param fail: Bool, option to raise error rather than return None
         """
+        self.logger = logging.getLogger(__name__)
 
         self.index = list(geoms.index)
 
@@ -40,6 +42,7 @@ class RandomPointSampler:
         if not idx in self.index:
             if self.fail:
                 raise IndexError(f'Cannot find idx: {idx} in geoms index')
+            self.logger.warning(f'Cannot find idx:{idx}, returning None')
             return None
 
         point =  self.sample_point_from_polygon(self.geoms[idx])

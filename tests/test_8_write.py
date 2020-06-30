@@ -1,8 +1,9 @@
 import csv
 import os
 import pytest
-
 from datetime import datetime
+from shapely.geometry import Point, LineString
+from copy import deepcopy
 
 from .fixtures import population_heh
 from pam.activity import Activity, Leg
@@ -233,6 +234,47 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
             assert od_matrix_csv_string == expected_od_matrix     
 
 
+def test_write_to_csv_no_locs(population_heh, tmpdir):
+    for _, _, person in population_heh.people():
+        for act in person.activities:
+            act.location.loc = None
+        for leg in person.legs:
+            leg.start_location.loc = None
+            leg.end_location.loc = None
+    population_heh.to_csv(tmpdir)
+    for name in ['households', 'people', 'legs', 'activities']:
+        assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
+    
+
+def test_write_to_csv_locs(population_heh, tmpdir):
+    population_heh.to_csv(tmpdir)
+    for name in ['households', 'people', 'legs', 'activities']:
+        assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
+
+
+def test_write_to_csv_some_locs(population_heh, tmpdir):
+    hh1 = population_heh['0']
+    hh2 = deepcopy(hh1)
+    hh2.hid = '1'
+    population_heh.add(hh2)
+
+    for _, person in hh2.people.items():
+        for act in person.activities:
+            act.location.loc = None
+        for leg in person.legs:
+            leg.start_location.loc = None
+            leg.end_location.loc = None
+    population_heh.to_csv(tmpdir)
+    for name in ['households', 'people', 'legs', 'activities']:
+        assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
+
+
+def test_write_to_csv_convert_locs(population_heh, tmpdir):
+    population_heh.to_csv(tmpdir, crs="EPSG:27700")
+    for name in ['households', 'people', 'legs', 'activities']:
+        assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
+
+
 def test_writes_population_csv_file_to_expected_location(population_heh, tmpdir):
     write_population_csv([population_heh], tmpdir)
 
@@ -254,12 +296,12 @@ def test_writes_households_csv_file_to_expected_location(population_heh, tmpdir)
     population_id = 0  # fixed at 0 because there is only one population being exported
     with open(households_file) as file:
         households_file_lines = file.readlines()
-        assert len(households_file_lines) == population_heh.count(households=True) + 1
+        assert len(households_file_lines) == population_heh.num_households + 1
         assert households_file_lines[0] == 'Scenario ID,Household ID,Area,Scenario_Household_ID\n'
         row_index = 0
         for hid, hh in population_heh.households.items():
             assert households_file_lines[row_index + 1] == \
-                   '{},{},{},{}\n'.format(population_id, hid, hh.area, '{}_{}'.format(population_id, hid))
+                   '{},{},{},{}\n'.format(population_id, hid, hh.location, '{}_{}'.format(population_id, hid))
             row_index += 1
 
 

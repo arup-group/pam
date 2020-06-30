@@ -1,8 +1,10 @@
 import logging
 import random
 import pickle
+
 import pam.activity as activity
 import pam.plot as plot
+from pam import write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
@@ -37,6 +39,18 @@ class Population:
                 yield hid, pid, person
 
     @property
+    def population(self):
+        return len([1 for hid, pid, person in self.people()])
+
+    @property
+    def num_households(self):
+        return len([1 for hid, hh in self.households.items()])
+
+    @property
+    def size(self):
+        return sum([person.freq for _, _, person in self.people()])
+
+    @property
     def activity_classes(self):
         acts = set()
         for _, _, p in self.people():
@@ -57,16 +71,6 @@ class Population:
         hh = self.random_household()
         return hh.random_person()
 
-    def people_count(self):
-        count = 0
-        for hid, household in self.households.items():
-            count += household.size()
-        return count
-
-    @property
-    def size(self):
-        return sum([person.freq for _, _, person in self.people()])
-
     @property
     def stats(self):
         num_households = 0
@@ -86,17 +90,6 @@ class Population:
             'num_legs': num_legs,
         }
 
-    def count(self, households=False):
-        if households:
-            return len(self.households)
-        return len(list(self.people()))
-
-    @property
-    def activities(self):
-        acts = {}
-        for _, hh in self:
-            pass
-
     def fix_plans(self, crop=True, times=True, locations=True):
         for _, _, person in self.people():
             if crop:
@@ -115,8 +108,35 @@ class Population:
         with open(path, 'wb') as file:
             pickle.dump(self, file)
 
+    def to_csv(self, dir, crs=None, to_crs="EPSG:4326"):
+        write.to_csv(self, dir, crs, to_crs)
+
     def __str__(self):
-        return f"Population: {self.people_count()} people in {self.count(households=True)} households."
+        return f"Population: {self.population} people in {self.num_households} households."
+
+    def sample_locs(self, sampler):
+        """
+        WIP Sample plan locs using a sampler
+        TODO - add method to all core classes
+        TODO - home location consistency within household
+        """
+        for _, _, person in self.people():
+            uniques = {}
+            for act in person.activities:
+                if (act.location.area, act.act) in uniques:
+                    loc = uniques[(act.location.area, act.act)]
+                    act.location.loc = loc
+                        
+                else:
+                    loc = sampler.sample(act.location.area, act.act)
+                    uniques[(act.location.area, act.act)] = loc
+                    act.location.loc = loc
+            for idx in range(person.plan.length):
+                component = person.plan[idx]
+                if isinstance(component, activity.Leg):
+                    component.start_location.loc = person.plan[idx-1].location.loc
+                    component.end_location.loc = person.plan[idx+1].location.loc
+
 
 class Household:
     logger = logging.getLogger(__name__)
@@ -125,12 +145,12 @@ class Household:
         self.hid = str(hid)
         self.people = {}
         self.attributes = attributes
-        self.area = None
 
     def add(self, person):
-        person.finalise()
+        if not isinstance(person, Person):
+            raise UserWarning(f"Expected instance of Person, not: {type(person)}")
+        # person.finalise()
         self.people[str(person.pid)] = person
-        self.area = person.home
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -144,6 +164,13 @@ class Household:
     def __iter__(self):
         for pid, person in self.people.items():
             yield pid, person
+
+    @property
+    def location(self):
+        for person in self.people.values():
+            if person.home is not None:
+                return person.home
+        self.logger.warning(f"Failed to find location for household: {self.hid}")
 
     @property
     def activity_classes(self):
