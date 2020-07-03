@@ -1,3 +1,4 @@
+![](https://github.com/arup-group/pam//workflows/CI/badge.svg)
 # Pandemic Activity Modifier (PAM)
 
 Our day to day activities have been rapidly shifted by recent policies and behavioural 
