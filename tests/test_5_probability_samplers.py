@@ -238,7 +238,7 @@ def test_ActivityProbability_defaults_to_empty_kwargs_with_custom_distros():
 
 def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_each_activity_for_person_in_Household(mocker, SmithHousehold_alt):
     mocker.patch.object(probability_samplers.ActivityProbability, 'compute_probability_for_activity', return_value=0.25)
-    prob = probability_samplers.ActivityProbability(['work', 'escort'], 0.25)
+    prob = probability_samplers.ActivityProbability(['work', 'escort_education'], 0.25)
     p = prob.p(SmithHousehold_alt)
 
     assert probability_samplers.ActivityProbability.compute_probability_for_activity.call_count == 4

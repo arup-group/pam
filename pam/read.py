@@ -301,7 +301,7 @@ def load_activity_plan(
                 pid,
                 freq=person_data.freq.iloc[0],
                 attributes=person_attribute_dict,
-                home_area=home_area
+                # home_area=home_area
             )
 
             person.add(
@@ -387,7 +387,7 @@ def read_matsim(
 
         for stage in plan:
             """
-            Loop through stages incre incrementing time and extracting attributes.
+            Loop through stages incrementing time and extracting attributes.
             """
             if stage.tag in ['act', 'activity']:
                 act_seq += 1

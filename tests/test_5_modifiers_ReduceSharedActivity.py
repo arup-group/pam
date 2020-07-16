@@ -71,7 +71,7 @@ def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_a
     timmy = household.people['3']
     bobby = household.people['4']
     assert_correct_activities(person=steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
-    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort', 'shop', 'leisure', 'escort', 'home'])
+    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort_education', 'shop', 'leisure', 'escort_education', 'home'])
     assert_correct_activities(person=timmy, ordered_activities_list=['home', 'education', 'shop', 'education', 'leisure', 'home'])
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
@@ -81,7 +81,7 @@ def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_a
 
     policy.remove_household_activities(household)
     assert_correct_activities(person=steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
-    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort', 'shop', 'leisure', 'escort', 'home'])
+    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort_education', 'shop', 'leisure', 'escort_education', 'home'])
     assert_correct_activities(person=timmy, ordered_activities_list=['home', 'education', 'shop', 'education', 'leisure', 'home'])
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 

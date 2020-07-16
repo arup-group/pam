@@ -114,12 +114,13 @@ class Population:
     def __str__(self):
         return f"Population: {self.population} people in {self.num_households} households."
 
-    def sample_locs(self, sampler):
+    def sample_locs2(self, sampler):
         """
         WIP Sample plan locs using a sampler
         TODO - add method to all core classes
         TODO - home location consistency within household
         """
+
         for _, _, person in self.people():
             uniques = {}
             for act in person.activities:
@@ -136,6 +137,65 @@ class Population:
                 if isinstance(component, activity.Leg):
                     component.start_location.loc = person.plan[idx-1].location.loc
                     component.end_location.loc = person.plan[idx+1].location.loc
+
+    def sample_locs(self, sampler):
+        """
+        WIP Sample household plan locs using a sampler.
+
+        Sampler uses activity types and areas to sample locations. Note that households share
+        locations for activities of the same type within the same area. Trivially this includes
+        household location. But also, for example, shopping activities if they are in the same area.
+
+        We treat escort activities (ie those prefixed by "escort_") as the escorted activity. For
+        example, the sampler treats "escort_education" and "education" equally. Note that this shared
+        activity sampling of location models shared facilities, but does not explicitly infer or
+        model shared transport. For example there is no consideration of if trips to shared locations
+        take place at the same time or from the same locations.
+
+        After sampling Location objects are shared between shared activity locations and corresponding
+        trips start and end locations. These objects are mutable, so care must be taken if making changes
+        as these will impact all other persons shared locations in the household. Often this behaviour
+        might be expected. For example if we change the location of the household home activity, all
+        persons and home activities are impacted.
+
+        TODO - add method to all core classes
+        """
+        for _, household in self.households.items():
+            home_loc = activity.Location(
+                area=household.location.area,
+                loc=sampler.sample(household.location.area, 'home')
+            )
+
+            unique_locations = {(household.location.area, 'home'): home_loc}
+
+            for _, person in household.people.items():
+                
+                for act in person.activities:
+
+                    # remove "escort_" from activity types.
+                    if act.act[:7] == "escort_":
+                        target_act = act.act[7:]
+                    else:
+                        target_act = act.act
+
+                    if (act.location.area, target_act) in unique_locations:
+                        location = unique_locations[(act.location.area, target_act)]
+                        act.location = location
+                            
+                    else:
+                        location = activity.Location(
+                            area=act.location.area,
+                            loc=sampler.sample(act.location.area, target_act)
+                        )
+                        unique_locations[(act.location.area, target_act)] = location
+                        act.location = location
+
+                # complete the alotting activity locations to the trip starts and ends.
+                for idx in range(person.plan.length):
+                    component = person.plan[idx]
+                    if isinstance(component, activity.Leg):
+                        component.start_location = person.plan[idx-1].location
+                        component.end_location = person.plan[idx+1].location
 
 
 class Household:
