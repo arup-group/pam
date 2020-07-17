@@ -48,10 +48,14 @@ def time_binner(data):
     return binned
 
 
-def plot_time_bins(data, sub_col):
+def plot_time_bins(data, sub_col, width=12, height_factor=1.2):
     
     subs = set(data[sub_col])
-    fig, axs = plt.subplots(len(subs), figsize=(12, 1.2*len(subs)), sharex=False)
+    fig, axs = plt.subplots(
+        len(subs),
+        figsize=(width, 1.2*len(subs)),
+        sharex=False
+        )
     
     for ax, sub in zip(axs, subs):
 

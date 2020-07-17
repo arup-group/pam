@@ -65,7 +65,7 @@ class FacilitySampler:
 
         return loc
 
-    def sample_facility(self, location_idx, activity):
+    def sample_facility(self, location_idx, activity, patience=1000):
         """
         Sample a facility id and location. If a location idx is missing, can return a random location.
         """
@@ -84,8 +84,8 @@ class FacilitySampler:
 
         if sampler is None:
             self.error_counter += 1
-            if self.error_counter > 999:
-                raise UserWarning("1000 consecutive failures to sample.")
+            if self.error_counter >= patience:
+                raise UserWarning(f"Failures to sample, exceeded patience of {patience}.")
             if self.random_default:
                 self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"

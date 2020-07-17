@@ -125,14 +125,14 @@ class Plan:
         """
         if isinstance(p, Activity):
             if self.day and not isinstance(self.day[-1], Leg):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Cannot add Activity to plan sequence.")
+                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be Leg instance.")
             self.day.append(p)
 
         elif isinstance(p, Leg):
             if not self.day:
-                raise PAMSequenceValidationError(f"Cannot add Leg as first component to plan sequence.")
+                raise PAMSequenceValidationError(f"Failed to add to plan, first component must be Activity instance.")
             if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Cannot add Leg to plan sequence.")
+                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be Activity instance.")
             self.day.append(p)
 
         else:
