@@ -246,6 +246,18 @@ class Household:
             modes.update(p.mode_classes)
         return modes
 
+    @property
+    def freq(self):
+        """
+        Return the average frequency of household members.
+        # TODO note this assumes we are basing hh freq on person freq.
+        # TODO replace this with something better.
+        """
+        person_frequencies = [person.freq for person in self.people.values()]
+        if None in person_frequencies:
+            return None
+        return sum(person_frequencies) / len(person_frequencies)
+
     def fix_plans(self, crop=True, times=True, locations=True):
         for person in self:
             if crop:

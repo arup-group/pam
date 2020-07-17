@@ -221,6 +221,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
     for hid, hh in population.households.items():
         hh_data = {
             'hid': hid,
+            'freq': hh.freq,
         }
         if isinstance(hh.attributes, dict):
             hh_data.update(hh.attributes)
@@ -235,6 +236,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
             people_data = {
                 'pid': pid,
                 'hid': hid,
+                'freq': person.freq,
             }
             if isinstance(person.attributes, dict):
                 people_data.update(person.attributes)
@@ -250,6 +252,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                     leg_data = {
                         'pid': pid,
                         'hid': hid,
+                        'freq': person.freq,
                         'origin': component.start_location.area,
                         'destination': component.end_location.area,
                         'purpose': component.purp,
@@ -274,6 +277,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                     act_data = {
                         'pid': pid,
                         'hid': hid,
+                        'freq': person.freq,
                         'activity': component.act,
                         'sequence': component.seq,
                         'start time': component.start_time,

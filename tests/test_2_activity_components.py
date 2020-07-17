@@ -109,6 +109,9 @@ def test_position_of(test_plan):
     assert test_plan.position_of('work') == 2
     assert test_plan.position_of('home') == 4
     assert test_plan.position_of('home', search='first') == 0
+
+
+def test_position_of_using_bad_option(test_plan):
     with pytest.raises(UserWarning):
         test_plan.position_of('home', search='spelling') == 1
 
@@ -133,5 +136,10 @@ def test_locations_equal():
     assert locationc == locationd
     assert not locationb == locationc
     assert not locationa == locatione
+
+
+def test_locations_equal_with_no_shared_location_type():
+    locationb = Location(loc=None, link=None, area=2)
+    locationd = Location(loc=None, link=2, area=None)
     with pytest.raises(UserWarning):
         assert not locationb == locationd

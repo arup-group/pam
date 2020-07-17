@@ -312,3 +312,17 @@ def test_population_sample_locs(person_heh):
 
     population.sample_locs(DummySampler())
     assert population['1']['1'].plan[2].location.loc is None
+
+
+def test_get_hh_freq_if_None():
+    hh = Household('1')
+    hh.add(Person('1', freq=None))
+    hh.add(Person('2', freq=2))
+    assert hh.freq is None
+
+
+def test_get_hh_freq_mean():
+    hh = Household('1')
+    hh.add(Person('1', freq=1))
+    hh.add(Person('2', freq=3))
+    assert hh.freq == 2
