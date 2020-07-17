@@ -1,8 +1,11 @@
 import logging
 import random
 import pickle
+
 import pam.activity as activity
 import pam.plot as plot
+from pam import write
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 class Population:
@@ -35,22 +38,38 @@ class Population:
             for pid, person in household.people.items():
                 yield hid, pid, person
 
+    @property
+    def population(self):
+        return len([1 for hid, pid, person in self.people()])
+
+    @property
+    def num_households(self):
+        return len([1 for hid, hh in self.households.items()])
+
+    @property
+    def size(self):
+        return sum([person.freq for _, _, person in self.people()])
+
+    @property
+    def activity_classes(self):
+        acts = set()
+        for _, _, p in self.people():
+            acts.update(p.activity_classes)
+        return acts
+
+    @property
+    def mode_classes(self):
+        modes = set()
+        for _, _, p in self.people():
+            modes.update(p.mode_classes)
+        return modes
+
     def random_household(self):
         return self.households[random.choice(list(self.households))]
 
     def random_person(self):
         hh = self.random_household()
         return hh.random_person()
-
-    def people_count(self):
-        count = 0
-        for hid, household in self.households.items():
-            count += household.size()
-        return count
-
-    @property
-    def size(self):
-        return sum([person.freq for _, _, person in self.people()])
 
     @property
     def stats(self):
@@ -71,10 +90,14 @@ class Population:
             'num_legs': num_legs,
         }
 
-    def count(self, households=False):
-        if households:
-            return len(self.households)
-        return len(list(self.people()))
+    def fix_plans(self, crop=True, times=True, locations=True):
+        for _, _, person in self.people():
+            if crop:
+                person.plan.crop()
+            if times:
+                person.plan.fix_time_consistency()
+            if locations:
+                person.plan.fix_location_consistency()
 
     def print(self):
         print(self)
@@ -85,21 +108,109 @@ class Population:
         with open(path, 'wb') as file:
             pickle.dump(self, file)
 
+    def to_csv(self, dir, crs=None, to_crs="EPSG:4326"):
+        write.to_csv(self, dir, crs, to_crs)
+
     def __str__(self):
-        return f"Population: {self.people_count()} people in {self.count(households=True)} households."
+        return f"Population: {self.population} people in {self.num_households} households."
+
+    def sample_locs2(self, sampler):
+        """
+        WIP Sample plan locs using a sampler
+        TODO - add method to all core classes
+        TODO - home location consistency within household
+        """
+
+        for _, _, person in self.people():
+            uniques = {}
+            for act in person.activities:
+                if (act.location.area, act.act) in uniques:
+                    loc = uniques[(act.location.area, act.act)]
+                    act.location.loc = loc
+                        
+                else:
+                    loc = sampler.sample(act.location.area, act.act)
+                    uniques[(act.location.area, act.act)] = loc
+                    act.location.loc = loc
+            for idx in range(person.plan.length):
+                component = person.plan[idx]
+                if isinstance(component, activity.Leg):
+                    component.start_location.loc = person.plan[idx-1].location.loc
+                    component.end_location.loc = person.plan[idx+1].location.loc
+
+    def sample_locs(self, sampler):
+        """
+        WIP Sample household plan locs using a sampler.
+
+        Sampler uses activity types and areas to sample locations. Note that households share
+        locations for activities of the same type within the same area. Trivially this includes
+        household location. But also, for example, shopping activities if they are in the same area.
+
+        We treat escort activities (ie those prefixed by "escort_") as the escorted activity. For
+        example, the sampler treats "escort_education" and "education" equally. Note that this shared
+        activity sampling of location models shared facilities, but does not explicitly infer or
+        model shared transport. For example there is no consideration of if trips to shared locations
+        take place at the same time or from the same locations.
+
+        After sampling Location objects are shared between shared activity locations and corresponding
+        trips start and end locations. These objects are mutable, so care must be taken if making changes
+        as these will impact all other persons shared locations in the household. Often this behaviour
+        might be expected. For example if we change the location of the household home activity, all
+        persons and home activities are impacted.
+
+        TODO - add method to all core classes
+        """
+        for _, household in self.households.items():
+            home_loc = activity.Location(
+                area=household.location.area,
+                loc=sampler.sample(household.location.area, 'home')
+            )
+
+            unique_locations = {(household.location.area, 'home'): home_loc}
+
+            for _, person in household.people.items():
+                
+                for act in person.activities:
+
+                    # remove "escort_" from activity types.
+                    if act.act[:7] == "escort_":
+                        target_act = act.act[7:]
+                    else:
+                        target_act = act.act
+
+                    if (act.location.area, target_act) in unique_locations:
+                        location = unique_locations[(act.location.area, target_act)]
+                        act.location = location
+                            
+                    else:
+                        location = activity.Location(
+                            area=act.location.area,
+                            loc=sampler.sample(act.location.area, target_act)
+                        )
+                        unique_locations[(act.location.area, target_act)] = location
+                        act.location = location
+
+                # complete the alotting activity locations to the trip starts and ends.
+                for idx in range(person.plan.length):
+                    component = person.plan[idx]
+                    if isinstance(component, activity.Leg):
+                        component.start_location = person.plan[idx-1].location
+                        component.end_location = person.plan[idx+1].location
+
 
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid):
+    def __init__(self, hid, attributes=None):
         self.hid = str(hid)
         self.people = {}
-        self.area = None
+        self.attributes = attributes
 
     def add(self, person):
-        person.finalise()
+        if not isinstance(person, Person):
+            raise UserWarning(f"Expected instance of Person, not: {type(person)}")
+        # person.finalise()
         self.people[str(person.pid)] = person
-        self.area = person.home
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -113,6 +224,48 @@ class Household:
     def __iter__(self):
         for pid, person in self.people.items():
             yield pid, person
+
+    @property
+    def location(self):
+        for person in self.people.values():
+            if person.home is not None:
+                return person.home
+        self.logger.warning(f"Failed to find location for household: {self.hid}")
+
+    @property
+    def activity_classes(self):
+        acts = set()
+        for _, p in self:
+            acts.update(p.activity_classes)
+        return acts
+
+    @property
+    def mode_classes(self):
+        modes = set()
+        for _, p in self:
+            modes.update(p.mode_classes)
+        return modes
+
+    @property
+    def freq(self):
+        """
+        Return the average frequency of household members.
+        # TODO note this assumes we are basing hh freq on person freq.
+        # TODO replace this with something better.
+        """
+        person_frequencies = [person.freq for person in self.people.values()]
+        if None in person_frequencies:
+            return None
+        return sum(person_frequencies) / len(person_frequencies)
+
+    def fix_plans(self, crop=True, times=True, locations=True):
+        for person in self:
+            if crop:
+                person.plan.crop()
+            if times:
+                person.plan.fix_time_consistency()
+            if locations:
+                person.plan.fix_location_consistency()
 
     def shared_activities(self):
         shared_activities = []
@@ -198,12 +351,57 @@ class Person:
             yield component
 
     @property
+    def activity_classes(self):
+        return self.plan.activity_classes
+
+    @property
+    def mode_classes(self):
+        return self.plan.mode_classes
+
+    @property
     def has_valid_plan(self):
         """
         Check sequence of Activities and Legs.
         :return: True
         """
         return self.plan.is_valid
+
+    def validate(self):
+        """
+        Validate plan.
+        """
+        self.plan.validate()
+        return True
+
+    def validate_sequence(self):
+        """
+        Check sequence of Activities and Legs.
+        :return: True
+        """
+        if not self.plan.valid_sequence:
+            raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
+
+        return True
+
+    def validate_times(self):
+        """
+        Check sequence of Activity and Leg times.
+        :return: True
+        """
+        if not self.plan.valid_times:
+            raise PAMTimesValidationError(f"Person {self.pid} has invalid plan times")
+
+        return True
+
+    def validate_locations(self):
+        """
+        Check sequence of Activity and Leg locations.
+        :return: True
+        """
+        if not self.plan.valid_locations:
+            raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
+
+        return True
 
     @property
     def closed_plan(self):
@@ -234,6 +432,14 @@ class Person:
         Add activity end times based on start time of next activity.
         """
         self.plan.finalise()
+
+    def fix_plan(self, crop=True, times=True, locations=True):
+        if crop:
+            self.plan.crop()
+        if times:
+            self.plan.fix_time_consistency()
+        if locations:
+            self.plan.fix_location_consistency()
 
     def clear_plan(self):
         self.plan.clear()

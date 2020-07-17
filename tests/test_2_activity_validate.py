@@ -10,10 +10,18 @@ from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidati
 
 
 def test_person_heh_valid(person_heh):
+    assert person_heh.has_valid_plan
+
+
+def test_person_heh_valid_plan(person_heh):
     assert person_heh.plan.is_valid
 
 
 def test_person_heh_open1_valid(person_heh_open1):
+    assert person_heh_open1.has_valid_plan
+
+
+def test_person_heh_open1_valid_plan(person_heh_open1):
     assert person_heh_open1.plan.is_valid
 
 
@@ -179,6 +187,34 @@ def test_invalid_times(act_leg_act_leg_act_bad_times):
         act_leg_act_leg_act_bad_times.plan.validate_times()
 
 
+def test_invalid_times_not_start_at_zero():
+    plan = Plan()
+    plan.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(10),
+            end_time=mtdt(180)
+        )
+    )
+    assert not plan.valid_times
+
+
+def test_invalid_times_not_end_at_end_of_day():
+    plan = Plan()
+    plan.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        )
+    )
+    assert not plan.valid_times
+
+
 @pytest.fixture
 def act_leg_act_leg_act_bad_locations1():
     person = Person('1')
@@ -279,3 +315,32 @@ def test_invalid_locations2(act_leg_act_leg_act_bad_locations2):
     assert act_leg_act_leg_act_bad_locations2.plan.validate_times()
     with pytest.raises(PAMValidationLocationsError):
         act_leg_act_leg_act_bad_locations2.plan.validate_locations()
+
+
+def test_invalid_not_end_with_act():
+    plan = Plan()
+    plan.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(180),
+            end_time=mtdt(190)
+        )
+    )
+    assert not plan.valid_sequence
+
+
+def test_validate_sequence(person_heh):
+    assert person_heh.validate()
+

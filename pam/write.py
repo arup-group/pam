@@ -1,7 +1,9 @@
 import os
 from datetime import datetime
 import pandas as pd
+import geopandas as gp
 from lxml import etree as et
+from shapely.geometry import Point, LineString
 
 from .activity import Activity, Leg
 from .utils import datetime_to_matsim_time as dttm
@@ -207,8 +209,114 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
     write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
+    # todo assuming v1?
 
-# todo assuming v1?
+
+def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
+    hhs = []
+    people = []
+    acts = []
+    legs = []
+
+    for hid, hh in population.households.items():
+        hh_data = {
+            'hid': hid,
+            'freq': hh.freq,
+        }
+        if isinstance(hh.attributes, dict):
+            hh_data.update(hh.attributes)
+        if hh.location.area is not None:
+            hh_data['area'] = hh.location.area
+        if hh.location.loc is not None:
+            hh_data['geometry'] = hh.location.loc
+
+        hhs.append(hh_data)
+
+        for pid, person in hh.people.items():
+            people_data = {
+                'pid': pid,
+                'hid': hid,
+                'freq': person.freq,
+            }
+            if isinstance(person.attributes, dict):
+                people_data.update(person.attributes)
+            if hh.location.area is not None:
+                people_data['area'] = hh.location.area
+            if hh.location.loc is not None:
+                people_data['geometry'] = hh.location.loc
+
+            people.append(people_data)
+
+            for seq, component in enumerate(person.plan):
+                if isinstance(component, Leg):
+                    leg_data = {
+                        'pid': pid,
+                        'hid': hid,
+                        'freq': person.freq,
+                        'origin': component.start_location.area,
+                        'destination': component.end_location.area,
+                        'purpose': component.purp,
+                        'origin activity': person.plan[seq-1].act,
+                        'destination activity': person.plan[seq+1].act,
+                        'mode': component.mode,
+                        'sequence': component.seq,
+                        'start time': component.start_time,
+                        'end time': component.end_time,
+                        'duration': str(component.duration),
+                    }
+                    if component.start_location.area is not None:
+                        leg_data['start_area'] = component.start_location.area
+                    if component.end_location.area is not None:
+                        leg_data['end_area'] = component.end_location.area
+                    if component.start_location.loc is not None and component.end_location.loc is not None:
+                        leg_data['geometry'] = LineString((component.start_location.loc, component.end_location.loc))
+
+                    legs.append(leg_data)
+                
+                if isinstance(component, Activity):
+                    act_data = {
+                        'pid': pid,
+                        'hid': hid,
+                        'freq': person.freq,
+                        'activity': component.act,
+                        'sequence': component.seq,
+                        'start time': component.start_time,
+                        'end time': component.end_time,
+                        'duration': str(component.duration),
+                    }
+                    if component.location.area is not None:
+                        act_data['area'] = component.location.area
+                    if component.location.loc is not None:
+                        act_data['geometry'] = component.location.loc
+
+                    acts.append(act_data)
+
+    hhs = pd.DataFrame(hhs).set_index('hid')
+    hhs = save_geojson(hhs, crs, to_crs, os.path.join(dir, 'households.geojson'))
+    hhs.to_csv(os.path.join(dir, 'households.csv'))
+
+    people = pd.DataFrame(people).set_index('pid')
+    people = save_geojson(people, crs, to_crs, os.path.join(dir, 'people.geojson'))
+    people.to_csv(os.path.join(dir, 'people.csv'))
+
+    legs = pd.DataFrame(legs)
+    legs = save_geojson(legs, crs, to_crs, os.path.join(dir, 'legs.geojson'))
+    legs.to_csv(os.path.join(dir, 'legs.csv'))
+
+    acts = pd.DataFrame(acts)
+    acts = save_geojson(acts, crs, to_crs, os.path.join(dir, 'activities.geojson'))
+    acts.to_csv(os.path.join(dir, 'activities.csv'))
+
+
+def save_geojson(df, crs, to_crs, path):
+    if 'geometry' in df.columns:
+        df = gp.GeoDataFrame(df, geometry='geometry')
+        if crs is not None:
+            df.crs = crs
+            df.to_crs(to_crs, inplace=True)
+        df.to_file(path, driver='GeoJSON')
+        df = df.drop('geometry', axis=1)
+    return df
 
 
 def write_population_csv(list_of_populations, export_path):
@@ -235,7 +343,7 @@ def write_population_csv(list_of_populations, export_path):
             households.append({
                 'Scenario ID': idx,
                 'Household ID': hid,
-                'Area': hh.area,
+                'Area': hh.location,
                 'Scenario_Household_ID': str(idx) + str("_") + str(hid)
             })
         file_path = os.path.join(export_path, 'households.csv')

@@ -48,10 +48,14 @@ def time_binner(data):
     return binned
 
 
-def plot_time_bins(data, sub_col):
+def plot_time_bins(data, sub_col, width=12, height_factor=1.2):
     
     subs = set(data[sub_col])
-    fig, axs = plt.subplots(len(subs), figsize=(12, len(subs)), sharex=True)
+    fig, axs = plt.subplots(
+        len(subs),
+        figsize=(width, 1.2*len(subs)),
+        sharex=False
+        )
     
     for ax, sub in zip(axs, subs):
 
@@ -65,22 +69,23 @@ def plot_time_bins(data, sub_col):
         ax.grid(which='minor', color='w', linestyle='-', linewidth=2)
         for pos in ['right','top','bottom','left']:
             ax.spines[pos].set_visible(False)
-        ax.set_ylabel(sub.title(), fontsize='medium')
-        
+        ax.set_title(sub.title(), fontsize='medium', rotation=0)
+
+    fig.tight_layout()
     return fig
 
 
 def plot_activity_times(population):
     acts = extract_activity_log(population)
     fig = plot_time_bins(acts, sub_col='act')
-    fig.suptitle("Activity Time Bins")
+    # fig.suptitle("Activity Time Bins")
     return fig
 
 
 def plot_leg_times(population):
     legs = extract_leg_log(population)
     fig = plot_time_bins(legs, sub_col='mode')
-    fig.suptitle("Travel Time Bins")
+    # fig.suptitle("Travel Time Bins")
     return fig
 
 def calculate_leg_duration_by_mode(population):
