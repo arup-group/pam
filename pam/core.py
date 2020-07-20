@@ -280,6 +280,7 @@ class Household:
 
     def print(self):
         print(self)
+        print(self.attributes)
         for _, person in self:
             person.print()
 

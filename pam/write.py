@@ -9,7 +9,7 @@ from .activity import Activity, Leg
 from .utils import datetime_to_matsim_time as dttm
 from .utils import timedelta_to_matsim_time as tdtm
 from .utils import minutes_to_datetime as mtdt
-from .utils import write_xml
+from .utils import write_xml, create_local_dir
 
 
 def write_travel_diary(population, path, attributes_path=None):
@@ -68,8 +68,9 @@ def write_od_matrices(
     e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
 	:return: None
 	"""
+    create_local_dir(path)
 
-    legs = []      
+    legs = []
     
     for hid, household in population.households.items():
         for pid, person in household.people.items():
@@ -182,9 +183,7 @@ def write_matsim_plans(population, location, comment=None):
             )
 
     write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
-
-
-# todo assuming v5?
+    # todo assuming v5?
 
 
 def write_matsim_attributes(population, location, comment=None, household_key=None):
@@ -213,6 +212,9 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
 
 def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
+
+    create_local_dir(dir)
+
     hhs = []
     people = []
     acts = []
@@ -324,6 +326,8 @@ def write_population_csv(list_of_populations, export_path):
     This function creates csv export files of populations, households, people, legs and actvities. 
     This export could be used to share data outside of Python or build an interactive dashboard.
     """
+    create_local_dir(export_path)
+
     populations = []
     households = []
     people = []

@@ -92,7 +92,7 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
 
 
 def test_write_travel_plans(tmp_path, population_heh):
-    location = str(tmp_path / "test.csv")
+    location = os.path.join(tmp_path, "test.csv")
     write_travel_diary(population_heh, path=location)
 
     expected_file = "{}/test.csv".format(tmp_path)
