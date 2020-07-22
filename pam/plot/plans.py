@@ -1,7 +1,11 @@
 import pandas as pd
+from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
+import plotly.graph_objs as go
+from plotly.offline import offline
 import pam.activity as activity
+import pam.utils as utils
 
 
 def plot_person(person, kwargs=None):
@@ -30,7 +34,7 @@ def plot_household(household, kwargs=None):
 
 def build_person_df(person):
     """
-    Loop through a persons plan, creating a pandas dataframe for plotting.
+    Loop through a persons plan, creating a pandas dataframe defining activities for plotting.
     """
     activities, modes, start_times, end_times, durations = [], [], [], [], []
 
@@ -52,10 +56,42 @@ def build_person_df(person):
     return df
 
 
+def build_person_travel_geodataframe(person):
+    """
+    Loop through a persons legs, creating a geopandas GeoDataFrame defining travel for plotting.
+    """
+    df = pd.DataFrame()
+    for leg in person.legs:
+        if (leg.start_location.loc is None) or (leg.end_location.loc is None):
+            raise AttributeError('To create a geopandas.DataFrame you need specific locations. Make sure Legs have'
+                                 'loc attribute defined with a shapely.Point or s2sphere.CellId.')
+        _leg_dict = leg.__dict__.copy()
+        _leg_dict['geometry'] = utils.get_linestring(leg.start_location.loc, leg.end_location.loc)
+        coords = list(_leg_dict['geometry'].coords)
+        _leg_dict['start_location'] = coords[0]
+        _leg_dict['end_location'] = coords[-1]
+        df = df.append(pd.Series(_leg_dict), ignore_index=True)
+
+    df['pid'] = person.pid
+    df = GeoDataFrame(df, geometry='geometry')
+    return df
+
+
+def build_rgb_travel_cmap(df, colour_by):
+    colors = [(int(tup[0]*255), int(tup[1]*255), int(tup[2]*255)) for tup in plt.cm.Set3.colors[::-1]]
+    colour_by_unique = df[colour_by].unique()
+    # repeat colours if unique items > 12
+    len_factor = (len(colour_by_unique) // len(colors)) + 1
+    d_color = dict(zip(colour_by_unique, colors*len_factor))
+    return d_color
+
+
 def build_cmap(df):
     colors = plt.cm.Set3.colors[::-1]
     activities_unique = df['act'].unique()
-    d_color = dict(zip(activities_unique, colors))
+    # repeat colours if unique items > 1
+    len_factor = (len(activities_unique) // len(colors)) + 1
+    d_color = dict(zip(activities_unique, colors*len_factor))
     d_color['Travel'] = (.3,.3,.3)
     return d_color
 
@@ -148,3 +184,79 @@ def plot_activities(df, cmap: dict = None, path: str = ''):
 
     if path:
         plt.savefig(path)
+
+
+def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: dict = None,
+                      mapbox_access_token: str = ''):
+    if not mapbox_access_token:
+        raise Warning('You need to pass `mapbox_access_token` for the plot to appear.')
+    _gdf = gdf.copy()
+    _gdf['start_time'] = _gdf['start_time'].dt.strftime('%H:%M:%S')
+    _gdf['end_time'] = _gdf['end_time'].dt.strftime('%H:%M:%S')
+    _gdf['seq'] = _gdf['seq'].astype(int)
+
+    if cmap is None:
+        cmap = build_rgb_travel_cmap(gdf, colour_by)
+
+    data = []
+    all_coords = []
+
+    if groupby is None:
+        groupby = []
+    for name, group in _gdf.groupby([colour_by] + groupby):
+        if len(groupby) > 0:
+            colour_by_item = name[0]
+        else:
+            colour_by_item = name
+        colour = 'rgb({},{},{})'.format(cmap[colour_by_item][0], cmap[colour_by_item][1], cmap[colour_by_item][2])
+
+        lat = []
+        lon = []
+        hovertext = []
+        for idx in group.index:
+            coords = group.loc[idx, 'geometry'].coords
+            all_coords.extend(coords)
+            lat = lat + [point[1] for point in coords] + [float('nan')]
+            lon = lon + [point[0] for point in coords] + [float('nan')]
+            _hovertext = [''] * (len(coords) + 1)
+            _hovertext[0] = 'pid: {}<br>start time: {}<br>trip seq: {}<br>mode: {}'.format(
+                group.loc[idx, 'pid'], group.loc[idx, 'start_time'], group.loc[idx, 'seq'], group.loc[idx, 'mode'])
+            _hovertext[-2] = 'pid: {}<br>end time: {}<br>trip seq: {}<br>mode: {}'.format(
+                group.loc[idx, 'pid'], group.loc[idx, 'end_time'], group.loc[idx, 'seq'], group.loc[idx, 'mode'])
+            hovertext = hovertext + _hovertext
+
+        data.append(go.Scattermapbox(
+            lat=lat,
+            lon=lon,
+            hovertext=hovertext,
+            hoverinfo='text',
+            mode='lines+markers',
+            marker=dict(
+                size=10,
+                color=colour,
+                opacity=0.75
+            ),
+            line=dict(
+                color=colour
+            ),
+            name='{}'.format(name)
+        ))
+
+    layout = go.Layout(
+        title='',
+        autosize=True,
+        hovermode='closest',
+        mapbox=go.layout.Mapbox(
+            accesstoken=mapbox_access_token,
+            bearing=0,
+            center=go.layout.mapbox.Center(
+                lat=sum([point[1] for point in all_coords]) / len(all_coords),
+                lon=sum([point[0] for point in all_coords]) / len(all_coords)
+            ),
+            pitch=0,
+            zoom=10,
+            style='dark'
+        )
+    )
+    fig = go.Figure(data=data, layout=layout)
+    return fig

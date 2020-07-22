@@ -48,6 +48,24 @@ class Population:
             count += household.size()
         return count
 
+    def build_travel_geodataframe(self):
+        gdf = None
+        for hid, household in self.households.items():
+            _gdf = household.build_travel_geodataframe()
+            _gdf['hid'] = hid
+            if gdf is None:
+                gdf = _gdf
+            else:
+                gdf = gdf.append(_gdf)
+        gdf = gdf.sort_values(['hid', 'pid', 'seq']).reset_index(drop=True)
+        return gdf
+
+    def plot_travel_plotly(self, **kwargs):
+        return plot.plot_travel_plans(
+            self.build_travel_geodataframe(),
+            **kwargs
+        )
+
     @property
     def size(self):
         return sum([person.freq for _, _, person in self.people()])
@@ -135,6 +153,24 @@ class Household:
 
     def plot(self, kwargs=None):
         plot.plot_household(self, kwargs)
+
+    def build_travel_geodataframe(self):
+        gdf = None
+        for _, person in self:
+            _gdf = person.build_travel_geodataframe()
+            _gdf['hid'] = self.hid
+            if gdf is None:
+                gdf = _gdf
+            else:
+                gdf = gdf.append(_gdf)
+        gdf = gdf.sort_values(['pid', 'seq']).reset_index(drop=True)
+        return gdf
+
+    def plot_travel_plotly(self, **kwargs):
+        return plot.plot_travel_plans(
+            self.build_travel_geodataframe(),
+            **kwargs
+        )
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -245,6 +281,15 @@ class Person:
 
     def plot(self, kwargs=None):
         plot.plot_person(self, kwargs)
+
+    def build_travel_geodataframe(self):
+        return plot.build_person_travel_geodataframe(self)
+
+    def plot_travel_plotly(self, **kwargs):
+        return plot.plot_travel_plans(
+            self.build_travel_geodataframe(),
+            **kwargs
+        )
 
     def __str__(self):
         return f"Person: {self.pid}"

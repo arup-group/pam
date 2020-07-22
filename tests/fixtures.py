@@ -7,8 +7,8 @@ from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
 
-def instantiate_household_with(persons: list):
-    household = Household(1)
+def instantiate_household_with(persons: list, hid=1):
+    household = Household(hid)
     for person in persons:
         household.add(person)
     return household
