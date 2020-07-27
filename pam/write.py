@@ -359,7 +359,8 @@ def write_population_csv(list_of_populations, export_path):
                 'Scenario_Person_ID': str(idx) + str("_") + str(pid),
                 'Scenario ID': idx,
                 'Household ID': hid,
-                'Person ID': pid
+                'Person ID': pid,
+                'Frequency': person.freq
             }
             people.append({**d_to_append, **person.attributes})
         file_path = os.path.join(export_path, 'people.csv')
@@ -380,6 +381,7 @@ def write_population_csv(list_of_populations, export_path):
                     'Start time': leg.start_time,
                     'End time': leg.end_time,
                     'Duration': str(leg.duration)
+                
                 })
         file_path = os.path.join(export_path, 'legs.csv')
         pd.DataFrame(legs).to_csv(file_path, index=False)
