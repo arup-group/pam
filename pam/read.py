@@ -402,11 +402,11 @@ def load_travel_diary_from_to(
 
             person = core.Person(
                 pid,
-                freq=person_data.freq.iloc[0],
+                freq=person_data.iloc[0].freq,
                 attributes=person_attribute_dict,
             )
 
-            first_act = trips.oact.iloc[0].lower()
+            first_act = trips.iloc[0].oact.lower()
             if not first_act == "home":
                 logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
 
@@ -414,7 +414,7 @@ def load_travel_diary_from_to(
                 activity.Activity(
                     seq=0,
                     act=first_act,
-                    area=trips.ozone.iloc[0],
+                    area=trips.iloc[0].ozone,
                     start_time=utils.minutes_to_datetime(0),
                 )
             )
