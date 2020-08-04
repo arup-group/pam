@@ -344,6 +344,112 @@ def load_activity_plan(
     return population
 
 
+def load_travel_diary_from_to(
+    trips:pd.DataFrame,
+    person_attributes:Union[pd.DataFrame,None]=None,
+    hh_attributes:Union[pd.DataFrame,None]=None,
+    sample_perc:Union[float,None]=None,
+    ):
+    """
+    Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
+    format. This is a variation of the standard load_travel_diary() method because it does not require
+    activity inference or home location.
+    We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity)
+    and dact (destination activity).
+    :param trips: DataFrame
+    :param person_attributes: DataFrame
+    :param hh_attributes: DataFrame
+    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :return: core.Population
+    """
+    # TODO check for required col headers and give useful error?
+
+    logger = logging.getLogger(__name__)
+
+    if not isinstance(trips, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population travel diaries")
+
+    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population person attributes")
+
+    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population household attributes")
+
+    if sample_perc is not None:
+        trips = sample_population(
+            trips,
+            sample_perc,
+            weight_col='freq'
+            )  # sample the travel population
+
+    population = core.Population()
+
+    for hid, household_data in trips.groupby('hid'):
+
+        if hh_attributes is not None:
+            hh_attribute_dict = hh_attributes.loc[hid].to_dict()
+        else:
+            hh_attribute_dict = None
+
+        household = core.Household(hid, attributes=hh_attribute_dict)
+
+        for pid, person_data in household_data.groupby('pid'):
+
+            if person_attributes is not None:
+                person_attribute_dict = person_attributes.loc[pid].to_dict()
+            else:
+                person_attribute_dict = None
+
+            person = core.Person(
+                pid,
+                freq=person_data.freq.iloc[0],
+                attributes=person_attribute_dict,
+            )
+
+            first_act = trips.oact.iloc[0].lower()
+            if not first_act == "home":
+                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
+
+            person.add(
+                activity.Activity(
+                    seq=0,
+                    act=first_act,
+                    area=trips.ozone.iloc[0],
+                    start_time=utils.minutes_to_datetime(0),
+                )
+            )
+
+            for n in range(len(trips)):
+                trip = trips.iloc[n]
+
+                person.add(
+                    activity.Leg(
+                        seq=n,
+                        mode=trip['mode'].lower(),
+                        start_area=trip.ozone,
+                        end_area=trip.dzone,
+                        start_time=utils.minutes_to_datetime(trip.tst),
+                        end_time=utils.minutes_to_datetime(trip.tet)
+                    )
+                )
+
+                person.add(
+                    activity.Activity(
+                        seq=n + 1,
+                        act=trip.dact.lower(),
+                        area=trip.dzone,
+                        start_time=utils.minutes_to_datetime(trip.tet),
+                    )
+                )
+
+            person.plan.finalise()
+            household.add(person)
+
+        population.add(household)
+
+    return population
+
+
 def read_matsim(
         plans_path,
         attributes_path=None,
