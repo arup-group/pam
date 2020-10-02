@@ -362,16 +362,17 @@ def read_matsim(
 
             if stage.tag == 'leg':
                 route = None
+                service = None
+                o_stop = None
+                d_stop = None
                 for r in stage:
                     route = r.text
                     if (route is not None) and ('PT' in route):
-                        route = route.split('===')[3]
-                    else:
-                        route = None
-                if route:
-                    mode = route
-                else:
-                    mode = stage.get('mode')
+                        pt_details = route.split('===')
+                        o_stop = pt_details[1]
+                        d_stop = pt_details[4]
+                        service = pt_details[2]
+                        route = pt_details[3]
 
                 leg_seq += 1
 
@@ -386,7 +387,7 @@ def read_matsim(
                 person.add(
                     activity.Leg(
                         seq=leg_seq,
-                        mode=mode,
+                        mode=stage.get('mode'),
                         start_loc=None,
                         end_loc=None,
                         start_link=stage.get('start_link'),
@@ -395,6 +396,10 @@ def read_matsim(
                         end_area=None,
                         start_time=departure_dt,
                         end_time=arrival_dt,
+                        o_stop=o_stop,
+                        d_stop=d_stop,
+                        service_id=service,
+                        route_id=route,
                     )
                 )
 
