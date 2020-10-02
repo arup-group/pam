@@ -361,6 +361,18 @@ def read_matsim(
                 )
 
             if stage.tag == 'leg':
+                route = None
+                for r in stage:
+                    route = r.text
+                    if (route is not None) and ('PT' in route):
+                        route = route.split('===')[3]
+                    else:
+                        route = None
+                if route:
+                    mode = route
+                else:
+                    mode = stage.get('mode')
+
                 leg_seq += 1
 
                 trav_time = stage.get('trav_time')
@@ -374,7 +386,7 @@ def read_matsim(
                 person.add(
                     activity.Leg(
                         seq=leg_seq,
-                        mode=stage.get('mode'),
+                        mode=mode,
                         start_loc=None,
                         end_loc=None,
                         start_link=stage.get('start_link'),
