@@ -826,6 +826,7 @@ class Leg(PlanComponent):
             d_stop=None,
             service_id=None,
             route_id=None,
+            network_route=None
     ):
         self.seq = seq
         self.purp = purp
@@ -839,6 +840,8 @@ class Leg(PlanComponent):
         self.route_id = route_id
         self.o_stop = o_stop
         self.d_stop = d_stop
+        # list of link ids from network for routed modes
+        self.network_route = network_route
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \

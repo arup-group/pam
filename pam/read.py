@@ -361,18 +361,22 @@ def read_matsim(
                 )
 
             if stage.tag == 'leg':
-                route = None
-                service = None
+                network_route = None
+                route_id = None
+                service_id = None
                 o_stop = None
                 d_stop = None
                 for r in stage:
-                    route = r.text
-                    if (route is not None) and ('PT' in route):
-                        pt_details = route.split('===')
-                        o_stop = pt_details[1]
-                        d_stop = pt_details[4]
-                        service = pt_details[2]
-                        route = pt_details[3]
+                    network_route = r.text
+                    if network_route is not None:
+                        if 'PT' in network_route:
+                            pt_details = network_route.split('===')
+                            o_stop = pt_details[1]
+                            d_stop = pt_details[4]
+                            service_id = pt_details[2]
+                            route_id = pt_details[3]
+                        else:
+                            network_route = network_route.split(' ')
 
                 leg_seq += 1
 
@@ -398,8 +402,9 @@ def read_matsim(
                         end_time=arrival_dt,
                         o_stop=o_stop,
                         d_stop=d_stop,
-                        service_id=service,
-                        route_id=route,
+                        service_id=service_id,
+                        route_id=route_id,
+                        network_route=network_route
                     )
                 )
 

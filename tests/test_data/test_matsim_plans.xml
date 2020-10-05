@@ -101,4 +101,18 @@
 
 	</person>
 
+	<person id="census_2">
+		<plan selected="yes">
+		  <activity end_time="07:24:52" type="home" x="515226" y="188222"/>
+		  <leg mode="bike" dep_time="07:36:02" trav_time="00:42:16">
+				<route type="links" start_link="link_1" end_link="link_3" trav_time="00:42:16" distance="9647.24116945626" vehicleRefId="census_2">link_1 link_2 link_3</route>
+		  </leg>
+		  <activity end_time="14:50:52" type="work" x="529652" y="183897"/>
+		  <leg mode="bike" dep_time="17:36:02" trav_time="00:42:16">
+				<route type="links" start_link="link_3" end_link="link_1" trav_time="00:42:16" distance="9647.24116945626" vehicleRefId="census_2">link_3 link_2 link_1</route>
+		  </leg>
+		  <activity type="home" x="515226" y="188222"/>
+		</plan>
+	</person>
+
 </population>
