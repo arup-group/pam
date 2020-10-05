@@ -2,9 +2,7 @@ import pytest
 import pandas as pd
 from matplotlib.figure import Figure
 from shapely.geometry import Point, LineString
-from pandas.testing import assert_frame_equal
 from plotly.graph_objs import Scattermapbox
-
 
 from pam.plot.plans import build_person_df, build_cmap, build_person_travel_geodataframe, build_rgb_travel_cmap, \
     plot_travel_plans
@@ -14,6 +12,7 @@ from .fixtures import person_heh, Steve, Hilda, instantiate_household_with
 from pam.core import Household, Population
 from copy import deepcopy
 from pam.policy import policies
+from tests.test_utils import cyclist, pt_person
 
 
 def test_build_person_dataframe(person_heh):
@@ -127,56 +126,31 @@ def test_plot_population_comparisons(Steve, Hilda):
     assert legs.loc['work_removed', 'walk'] == check.loc[check['leg mode'] == 'walk', 'duration_hours'].iloc[0]
 
 
-def test_plot_travel_plans(Steve):
-    for leg in Steve.legs:
-        leg.start_location.loc = Point(1, 2)
-        leg.end_location.loc = Point(2, 3)
-    gdf = build_person_travel_geodataframe(Steve)
-    fig = plot_travel_plans(gdf, mapbox_access_token='token')
-    assert len(fig.data) == 2
-    assert isinstance(fig.data[0], Scattermapbox)
-    assert isinstance(fig.data[1], Scattermapbox)
-    assert fig.data[0].name == 'car'
-    assert fig.data[1].name == 'walk'
-
-
-def test_plot_travel_plans_coloured_by_purp(Steve):
-    for leg in Steve.legs:
-        leg.start_location.loc = Point(1, 2)
-        leg.end_location.loc = Point(2, 3)
-        leg.purp = 'purp'
-    gdf = build_person_travel_geodataframe(Steve)
-    fig = plot_travel_plans(gdf, colour_by='purp', mapbox_access_token='token')
+def test_plot_travel_plans(cyclist):
+    fig = cyclist.plot_travel_plotly(mapbox_access_token='token')
     assert len(fig.data) == 1
     assert isinstance(fig.data[0], Scattermapbox)
-    assert fig.data[0].name == 'purp'
+    assert fig.data[0].name == 'bike'
 
 
-def test_plot_travel_plans_grouped_by_legs(Steve):
-    for leg in Steve.legs:
-        leg.start_location.loc = Point(1, 2)
-        leg.end_location.loc = Point(2, 3)
-    gdf = build_person_travel_geodataframe(Steve)
-    fig = plot_travel_plans(gdf, groupby=['seq'], mapbox_access_token='token')
-    for i in range(4):
-        assert isinstance(fig.data[i], Scattermapbox)
-    assert [fig.data[i].name for i in range(4)] == ["('car', 1)", "('car', 4)", "('walk', 2)", "('walk', 3)"]
+def test_plot_travel_plans_coloured_by_purp(pt_person):
+    fig = pt_person.plot_travel_plotly(colour_by='pid', mapbox_access_token='token')
+    assert len(fig.data) == 1
+    assert isinstance(fig.data[0], Scattermapbox)
+    assert fig.data[0].name == 'census_1'
 
 
-def test_plot_travel_plans_for_household(Steve, Hilda):
-    hhld = instantiate_household_with([Steve, Hilda])
-    for pid, person in hhld:
-        for leg in person.legs:
-            leg.start_location.loc = Point(1, 2)
-            leg.end_location.loc = Point(2, 3)
-    gdf = hhld.build_travel_geodataframe()
-    fig = plot_travel_plans(gdf, groupby=['seq'], mapbox_access_token='token')
+def test_plot_travel_plans_grouped_by_legs(pt_person):
+    fig = pt_person.plot_travel_plotly(groupby=['seq'], mapbox_access_token='token')
+    for dat in fig.data:
+        assert isinstance(dat, Scattermapbox)
+    assert [dat.name for dat in fig.data] == ["('pt', 3)", "('pt', 5)", "('pt', 7)", "('transit_walk', 1)",
+                                              "('transit_walk', 2)", "('transit_walk', 4)", "('transit_walk', 6)",
+                                              "('transit_walk', 8)"]
 
 
-def test_plot_travel_plans_for_household_method(Steve, Hilda):
-    hhld = instantiate_household_with([Steve, Hilda])
-    for pid, person in hhld:
-        for leg in person.legs:
-            leg.start_location.loc = Point(1, 2)
-            leg.end_location.loc = Point(2, 3)
+def test_plot_travel_plans_for_household(cyclist, pt_person):
+    hhld = instantiate_household_with([cyclist, pt_person])
     fig = hhld.plot_travel_plotly(mapbox_access_token='token')
+    assert len(fig.data) == 3
+    assert [dat.name for dat in fig.data] == ['bike', 'pt', 'transit_walk']

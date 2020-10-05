@@ -242,6 +242,13 @@ def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: 
             name='{}'.format(name)
         ))
 
+    if all_coords:
+        c_lat = sum([point[1] for point in all_coords]) / len(all_coords)
+        c_lon = sum([point[0] for point in all_coords]) / len(all_coords)
+    else:
+        c_lat = 0
+        c_lon = 0
+
     layout = go.Layout(
         title='',
         autosize=True,
@@ -250,8 +257,8 @@ def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: 
             accesstoken=mapbox_access_token,
             bearing=0,
             center=go.layout.mapbox.Center(
-                lat=sum([point[1] for point in all_coords]) / len(all_coords),
-                lon=sum([point[0] for point in all_coords]) / len(all_coords)
+                lat=c_lat,
+                lon=c_lon
             ),
             pitch=0,
             zoom=10,
