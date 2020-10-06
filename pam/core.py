@@ -50,17 +50,16 @@ class Population:
 
     def build_travel_geodataframe(self, **kwargs):
         """
-        Builds geopandas.GeoDataFrame for Households's Legs
+        Builds geopandas.GeoDataFrame for travel Legs found for all agents in the Population.
         :param kwargs: arguments for plot.build_person_travel_geodataframe,
             from_epsg: coordinate system the plans are currently in
             to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
                 from_epsg as well to use this.
-        :return:
+        :return: geopandas.GeoDataFrame with columns for household id (hid) and person id (pid)
         """
         gdf = None
         for hid, household in self.households.items():
             _gdf = household.build_travel_geodataframe(**kwargs)
-            _gdf['hid'] = hid
             if gdf is None:
                 gdf = _gdf
             else:
@@ -180,12 +179,12 @@ class Household:
 
     def build_travel_geodataframe(self, **kwargs):
         """
-        Builds geopandas.GeoDataFrame for Households's Legs
+        Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household
         :param kwargs: arguments for plot.build_person_travel_geodataframe,
             from_epsg: coordinate system the plans are currently in
             to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
                 from_epsg as well to use this.
-        :return:
+        :return: geopandas.GeoDataFrame with columns for household id (hid) and person id (pid)
         """
         gdf = None
         for _, person in self:
@@ -336,7 +335,7 @@ class Person:
             from_epsg: coordinate system the plans are currently in
             to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
                 from_epsg as well to use this.
-        :return:
+        :return: geopandas.GeoDataFrame with columns for person id (pid)
         """
         return plot.build_person_travel_geodataframe(self, **kwargs)
 
