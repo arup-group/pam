@@ -6,36 +6,61 @@ import os
 import gzip
 import logging
 import pickle
+from typing import Union
 
 import pam.core as core
 import pam.activity as activity
 import pam.utils as utils
 
 
-def load_travel_diary(trips_df, attributes_df, sample_perc=None, complex=True, include_loc=False):
+def load_travel_diary(
+    trips:pd.DataFrame,
+    person_attributes:Union[pd.DataFrame,None]=None,
+    hh_attributes:Union[pd.DataFrame,None]=None,
+    sample_perc:Union[float,None]=None,
+    complex:bool=True,
+    include_loc:bool=False,
+    ):
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
     format.
-    :param trips_df: DataFrame
-    :param attributes_df: DataFrame
+    :param trips: DataFrame
+    :param person_attributes: DataFrame
+    :param hh_attributes: DataFrame
     :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :param complex: bool
+    :param include_loc: bool 
     :return: core.Population
     """
     # TODO check for required col headers and give useful error?
 
-    if not isinstance(trips_df, pd.DataFrame):
+    if not isinstance(trips, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
-    if not isinstance(attributes_df, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population attributes")
+    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for person_attributes")
+
+    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for hh_attributes")
 
     if sample_perc is not None:
-        trips_df = sample_population(trips_df, attributes_df, sample_perc,
-                                     weight_col='freq')  # sample the travel population
+        trips = sample_population(
+            trips,
+            sample_perc,
+            weight_col='freq'
+            )  # sample the travel population
 
     if complex:
-        return complex_travel_diary_read(trips_df, attributes_df, include_loc)
-    return basic_travel_diary_read(trips_df, attributes_df)
+        return complex_travel_diary_read(
+            trips,
+            person_attributes,
+            hh_attributes,
+            include_loc
+            )
+    return basic_travel_diary_read(
+        trips,
+        person_attributes
+        )
 
 
 def basic_travel_diary_read(trips_df, attributes_df):
@@ -77,8 +102,8 @@ def basic_travel_diary_read(trips_df, attributes_df):
                 person.add(
                     activity.Leg(
                         seq=n,
-                        mode=trip['mode'],
-                        purp=trip.purp,
+                        mode=trip['mode'].lower(),
+                        purp=trip.purp.lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
                         start_time=utils.minutes_to_datetime(trip.tst),
@@ -101,7 +126,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
                     person.add(
                         activity.Activity(
                             seq=n + 1,
-                            act=trip.purp,
+                            act=trip.purp.lower(),
                             area=trip.dzone,
                             start_time=utils.minutes_to_datetime(trip.tet),
                         )
@@ -109,7 +134,7 @@ def basic_travel_diary_read(trips_df, attributes_df):
 
                     if trip.dzone not in activity_map:  # update history
                         # only keeping first activity at each location to ensure returns home
-                        activity_map[trip.dzone] = trip.purp
+                        activity_map[trip.dzone] = trip.purp.lower()
 
                     activities.append(destination_activity)
 
@@ -121,21 +146,36 @@ def basic_travel_diary_read(trips_df, attributes_df):
     return population
 
 
-def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
+def complex_travel_diary_read(
+    trips,
+    all_person_attributes,
+    all_hh_attributes,
+    include_loc=False
+    ):
     population = core.Population()
 
-    for hid, household_data in trips_df.groupby('hid'):
+    for hid, household_data in trips.groupby('hid'):
 
-        household = core.Household(hid)
+        if all_hh_attributes is not None:
+            hh_attributes = all_hh_attributes.loc[hid].to_dict()
+        else:
+            hh_attributes = None
+
+        household = core.Household(hid, attributes=hh_attributes)
 
         for pid, person_data in household_data.groupby('pid'):
 
             trips = person_data.sort_values('seq')
 
+            if all_person_attributes is not None:
+                person_attributes = all_person_attributes.loc[pid].to_dict()
+            else:
+                person_attributes = None
+
             person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
-                attributes=attributes_df.loc[pid].to_dict(),
+                attributes=person_attributes,
                 home_area=trips.hzone.iloc[0]
                 )
             loc = None
@@ -164,8 +204,8 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
                 person.add(
                     activity.Leg(
                         seq=n,
-                        purp=trip.purp,
-                        mode=trip['mode'],
+                        purp=trip.purp.lower(),
+                        mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
                         start_loc=start_loc,
@@ -195,14 +235,20 @@ def complex_travel_diary_read(trips_df, attributes_df, include_loc=False):
     return population
 
 
-def load_activity_plan(trips_df, attributes_df, sample_perc=None):
+def load_activity_plan(
+    trips:pd.DataFrame,
+    person_attributes:Union[pd.DataFrame,None]=None,
+    hh_attributes:Union[pd.DataFrame,None]=None,
+    sample_perc:Union[float,None]=None,
+    ):
     """
     Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
     format. This is a variation of the standard load_travel_diary() method because it does not require
     activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
     We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-    :param trips_df: DataFrame
-    :param attributes_df: DataFrame
+    :param trips: DataFrame
+    :param person_attributes: DataFrame
+    :param hh_attributes: DataFrame
     :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
     :return: core.Population
     """
@@ -210,21 +256,32 @@ def load_activity_plan(trips_df, attributes_df, sample_perc=None):
 
     logger = logging.getLogger(__name__)
 
-    if not isinstance(trips_df, pd.DataFrame):
+    if not isinstance(trips, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
-    if not isinstance(attributes_df, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population attributes")
+    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population person attributes")
+
+    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population household attributes")
 
     if sample_perc is not None:
-        trips_df = sample_population(trips_df, attributes_df, sample_perc,
-                                     weight_col='freq')  # sample the travel population
+        trips = sample_population(
+            trips,
+            sample_perc,
+            weight_col='freq'
+            )  # sample the travel population
 
     population = core.Population()
 
-    for hid, household_data in trips_df.groupby('hid'):
+    for hid, household_data in trips.groupby('hid'):
 
-        household = core.Household(hid)
+        if hh_attributes is not None:
+            hh_attribute_dict = hh_attributes.loc[hid].to_dict()
+        else:
+            hh_attribute_dict = None
+
+        household = core.Household(hid, attributes=hh_attribute_dict)
 
         for pid, person_data in household_data.groupby('pid'):
 
@@ -235,11 +292,16 @@ def load_activity_plan(trips_df, attributes_df, sample_perc=None):
             if not origin_area == home_area:
                 logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
 
+            if person_attributes is not None:
+                person_attribute_dict = person_attributes.loc[pid].to_dict()
+            else:
+                person_attribute_dict = None
+
             person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
-                attributes=attributes_df.loc[pid].to_dict(),
-                home_area=home_area
+                attributes=person_attribute_dict,
+                # home_area=home_area
             )
 
             person.add(
@@ -257,7 +319,7 @@ def load_activity_plan(trips_df, attributes_df, sample_perc=None):
                 person.add(
                     activity.Leg(
                         seq=n,
-                        mode=trip['mode'],
+                        mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
                         start_time=utils.minutes_to_datetime(trip.tst),
@@ -325,7 +387,7 @@ def read_matsim(
 
         for stage in plan:
             """
-            Loop through stages incre incrementing time and extracting attributes.
+            Loop through stages incrementing time and extracting attributes.
             """
             if stage.tag in ['act', 'activity']:
                 act_seq += 1
@@ -461,7 +523,7 @@ def selected_plans(plans_path):
                 yield person.get('id'), plan
 
 
-def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
+def sample_population(trips_df, sample_perc, attributes_df=None, weight_col='freq'):
     """
     Return the trips of a random sample of the travel population.
     We merge the trips and attribute datasets to enable probability weights based on population demographics.
@@ -473,9 +535,17 @@ def sample_population(trips_df, attributes_df, sample_perc, weight_col='freq'):
 
     :return: Pandas DataFrame, a sampled version of the trips_df dataframe
     """
-    sample_pids = trips_df.groupby('pid')[['freq']].sum().join(
-        attributes_df, how='left'
-    ).sample(frac=sample_perc, weights=weight_col).index
+    if attributes_df is not None:
+        sample_pids = trips_df.groupby('pid')[['freq']].sum().join(
+            attributes_df, how='left'
+        ).sample(
+            frac=sample_perc, weights=weight_col
+            ).index
+    else:
+        sample_pids = trips_df.groupby('pid')[['freq']].sum().sample(
+            frac=sample_perc, weights=weight_col
+            ).index
+
     return trips_df[trips_df.pid.isin(sample_pids)]
 
 

@@ -67,3 +67,75 @@ def test_activity_with_different_times_not_in_list_exact(list_of_acts):
 def test_activity_with_different_times_not_in_list(list_of_acts):
     different_times_act = Activity(2, 'act_2', 'loc', start_time=mtdt(18 * 60 + 999), end_time=mtdt(19 * 60 + 999))
     assert different_times_act in list_of_acts
+
+
+def test_mode_and_activity_classes():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plan.add(Activity(seq=3, act='work', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    assert plan.activity_classes == set(['home', 'work'])
+    assert plan.mode_classes == set(['car'])
+
+
+def test_get_component():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plan.add(Activity(seq=3, act='work', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    assert plan.get(0).act == 'home'
+    assert plan.get(4) is None
+    assert plan.get(4, '1') == '1'
+
+
+def test_return_first_act_as_home_act_if_missing():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plan.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    assert plan.home == 'A'
+
+
+def test_compare_plans_equal():
+    plana = Plan()
+    plana.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plana.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plana.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    planb = Plan()
+    planb.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    planb.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    planb.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    assert plana == planb
+
+
+def test_compare_plans_not_equal():
+    plana = Plan()
+    plana.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plana.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plana.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    planb = Plan()
+    planb.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(800)))
+    planb.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(800), end_time=mtdt(620)))
+    planb.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    assert not plana == planb
+
+
+def test_compare_plans_not_equal_types():
+    plana = Plan()
+    plana.add(Activity(seq=1, act='work', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plana.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    plana.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+
+    with pytest.raises(UserWarning):
+        assert not plana == None
+
+
+def test_add_wrong_type():
+    plan = Plan()
+    with pytest.raises(UserWarning):
+        plan.add(None)

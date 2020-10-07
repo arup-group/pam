@@ -1,7 +1,7 @@
 import random
 
 
-def freq_sample(freq: int, sample: float):
+def freq_sample(freq: float, sample: float):
     """
     Down or up sample a frequency based on a sample size. Sub unit frequencies are
     rounded probabalistically.

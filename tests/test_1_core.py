@@ -1,11 +1,12 @@
 import pytest
 from datetime import datetime, timedelta
+
 from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
-
 from pam import PAMSequenceValidationError
+from .fixtures import person_heh
 
 
 testdata = [
@@ -41,6 +42,13 @@ def test_population_add_household():
     assert list(population.households) == ['1']
 
 
+def test_population_add_household_error():
+    population = Population()
+    household = None
+    with pytest.raises(UserWarning):
+        population.add(household)
+
+
 def test_household_add_person():
     household = Household('1')
     person = Person('1')
@@ -48,6 +56,13 @@ def test_household_add_person():
     household.add(person)
     assert len(household.people) == 1
     assert list(household.people) == ['1']
+
+
+def test_household_add_person_error():
+    household = Household('1')
+    person = None
+    with pytest.raises(UserWarning):
+        household.add(person)
 
 
 def test_person_add_activity():
@@ -139,3 +154,175 @@ def test_person_not_closed_plan_different_areas():
     person.add(Leg(2, 'car', start_area=2, end_area=3))
     person.add(Activity(3, 'work', 3))
     assert not person.closed_plan
+
+
+def test_extract_person_activity_classes():
+    person = Person(pid=str(1))
+    person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    person.add(Leg(seq=2, mode='bike', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    person.add(Activity(seq=3, act='work', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    person.add(Leg(seq=2, mode='pt', start_area='B', end_area='A', start_time=mtdt(1200), end_time=mtdt(1220)))
+    person.add(Activity(seq=3, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
+
+    assert person.activity_classes == set(['home', 'work'])
+
+
+def test_extract_person_mode_classes():
+    person = Person(pid=str(1))
+    person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    person.add(Leg(seq=2, mode='bike', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+    person.add(Activity(seq=3, act='work', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    person.add(Leg(seq=2, mode='pt', start_area='B', end_area='A', start_time=mtdt(1200), end_time=mtdt(1220)))
+    person.add(Activity(seq=3, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
+
+    assert person.mode_classes == set(['bike', 'pt'])
+    
+    
+def test_extract_household_activity_classes():
+    household = Household(hid='1')
+    for i, (act, mode) in enumerate(zip(['work', 'school'], ['car', 'pt'])):
+        person = Person(pid=str(i))
+        person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+        person.add(Leg(seq=2, mode=mode, start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+        person.add(Activity(seq=3, act=act, area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+        household.add(person)
+
+    assert household.activity_classes == set(['home', 'work', 'school'])
+
+
+def test_extract_household_mode_classes():
+    household = Household(hid='1')
+    for i, (act, mode) in enumerate(zip(['work', 'school'], ['car', 'pt'])):
+        person = Person(pid=str(i))
+        person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+        person.add(Leg(seq=2, mode=mode, start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+        person.add(Activity(seq=3, act=act, area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+        household.add(person)
+
+    assert household.mode_classes == set(['car', 'pt'])
+
+
+def test_extract_population_activity_classes():
+    population = Population()
+    for hid, (_act, _mode) in enumerate(zip(['leisure', 'shop'], ['car', 'walk'])):
+        household = Household(hid=str(hid))
+        population.add(household)
+        for i, (act, mode) in enumerate(zip(['work', _act], ['car', _mode])):
+            person = Person(pid=str(i))
+            person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+            person.add(Leg(seq=2, mode=mode, start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+            person.add(Activity(seq=3, act=act, area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+            household.add(person)
+
+    assert population.activity_classes == set(['home', 'leisure', 'work', 'shop'])
+
+
+def test_extract_population_mode_classes():
+    population = Population()
+    for hid, (_act, _mode) in enumerate(zip(['work', 'shop'], ['pt', 'walk'])):
+        household = Household(hid=str(hid))
+        population.add(household)
+        for i, (act, mode) in enumerate(zip(['work', _act], ['car', _mode])):
+            person = Person(pid=str(i))
+            person.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+            person.add(Leg(seq=2, mode=mode, start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620)))
+            person.add(Activity(seq=3, act=act, area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+            household.add(person)
+
+    assert population.mode_classes == set(['car', 'pt', 'walk'])
+
+
+def test_count_population():
+    population = Population()
+    for i in range(1, 5):
+        hh = Household(str(i))
+        for ii in range(i):
+            hh.add(Person(f"{i}_{ii}"))
+        population.add(hh)
+    assert population.population == 10
+
+
+def test_population_get_random_household():
+    population = Population()
+    population.add(Household('1'))
+    population.add(Household('2'))
+    assert isinstance(population.random_household(), Household)
+
+
+def test_population_get_random_person():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0'))
+    population['1'].add(Person('1'))
+    assert isinstance(population.random_person(), Person)
+
+
+def test_population_size():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    assert population.size == 4
+
+
+def test_population_num_households():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    assert population.num_households == 2
+
+
+def test_population_stats():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2'))
+    population['2'].add(Person('2', freq=3))
+    assert isinstance(population.stats, dict)
+
+
+def test_population_fix_plans_wrapper(person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+    population.fix_plans()
+
+
+def test_population_print(capfd, person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+    population.print()
+    out, _ = capfd.readouterr()
+    assert(out)
+
+
+def test_population_sample_locs(person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+
+    class DummySampler:
+        def sample(self, loc, act):
+            return None
+
+    population.sample_locs(DummySampler())
+    assert population['1']['1'].plan[2].location.loc is None
+
+
+def test_get_hh_freq_if_None():
+    hh = Household('1')
+    hh.add(Person('1', freq=None))
+    hh.add(Person('2', freq=2))
+    assert hh.freq is None
+
+
+def test_get_hh_freq_mean():
+    hh = Household('1')
+    hh.add(Person('1', freq=1))
+    hh.add(Person('2', freq=3))
+    assert hh.freq == 2

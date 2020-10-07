@@ -3,6 +3,7 @@ import geopandas as gp
 from shapely.geometry import Point
 import random
 from lxml import etree as et
+import logging
 
 from pam.samplers.spatial import RandomPointSampler
 from pam.utils import write_xml
@@ -30,13 +31,14 @@ class FacilitySampler:
         :param fail: flag hard fail if sample not found
         :param random_default: flag for defaulting to random sample when activity missing
         """
+        self.logger = logging.getLogger(__name__)
         
         if activities is None:
             self.activities = list(set(facilities.activity))
         else:
             self.activities = activities
 
-        self.samplers = self.build_facilities_sampler(facilities, zones, activities)
+        self.samplers = self.build_facilities_sampler(facilities, zones)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -46,6 +48,10 @@ class FacilitySampler:
 
         self.facilities = {}
         self.index_counter = 0
+        self.error_counter = 0
+
+    def clear(self):
+        self.facilities = {}
 
     def sample(self, location_idx, activity):
         """
@@ -59,19 +65,29 @@ class FacilitySampler:
 
         return loc
 
-    def sample_facility(self, location_idx, activity):
+    def sample_facility(self, location_idx, activity, patience=1000):
         """
         Sample a facility id and location. If a location idx is missing, can return a random location.
         """
         if str(location_idx) not in self.samplers:
+            if self.random_default:
+                self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
+                idx = f"_{self.index_counter}"
+                self.index_counter += 1
+                return idx, self.random_sampler.sample(location_idx)
             if self.fail:
                 raise IndexError(f'Cannot find idx: {location_idx} in facilities sampler')
+            self.logger.warning(f'Missing location idx:{location_idx}')
             return None, None
         
         sampler = self.samplers[str(location_idx)][activity]
 
         if sampler is None:
+            self.error_counter += 1
+            if self.error_counter >= patience:
+                raise UserWarning(f"Failures to sample, exceeded patience of {patience}.")
             if self.random_default:
+                self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
                 self.index_counter += 1
                 return idx, self.random_sampler.sample(location_idx)
@@ -82,24 +98,30 @@ class FacilitySampler:
             else:
                 return None, None
         else:
+            self.error_counter = 0
             return next(sampler)
 
-    @staticmethod
-    def build_facilities_sampler(facilities, zones, activities):
+    def build_facilities_sampler(self, facilities, zones):
         """
         Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
         TODO - look to move to more carefully defined input data format for facilities
         """
+        self.logger.warning("Joining facilities data to zones, this may take a while.")
         activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
+
         sampler_dict = {}
 
+        self.logger.warning("Building sampler, this may take a while.")
         for zone in set(activity_areas.index_right):
-            zone_facs = activity_areas.loc[activity_areas.index_right == zone]
             sampler_dict[str(zone)] = {}
-            for act in activities:
-                points = [(i, g) for i, g in zone_facs.loc[zone_facs.activity == act].geometry.items()]
-                if len(points):
+            zone_facs = activity_areas.loc[activity_areas.index_right == zone]
+            
+            for act in self.activities:
+                self.logger.debug(f"Building sampler for zone:{zone} act:{act}.")
+                facs = zone_facs.loc[zone_facs.activity == act]
+                if not facs.empty:
+                    points = [(i, g) for i, g in facs.geometry.items()]
                     sampler_dict[str(zone)][act] = inf_yielder(points)
                 else:
                     sampler_dict[str(zone)][act] = None

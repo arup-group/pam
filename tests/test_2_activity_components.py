@@ -1,8 +1,9 @@
 import pytest
 from datetime import timedelta
 
-from pam.activity import Plan, Activity, Leg
+from pam.activity import Plan, Activity, Leg, Location
 from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 
 def test_act_init():
@@ -49,3 +50,96 @@ def test_shift_start_time():
 def test_shift_end_time():
     act = Activity(1, 'home', 1, start_time=mtdt(900), end_time=mtdt(930))
     assert act.shift_end_time(new_end_time=mtdt(920)) == mtdt(890)
+
+
+@pytest.fixture
+def test_plan():
+    plan = Plan()
+    plan.add(
+        Activity(
+            seq=1,
+            act='home',
+            area='a',
+            start_time=mtdt(0),
+            end_time=mtdt(180)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='a',
+            end_area='b',
+            start_time=mtdt(180),
+            end_time=mtdt(190)
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act='work',
+            area='b',
+            start_time=mtdt(190),
+            end_time=mtdt(200)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode='car',
+            start_area='b',
+            end_area='a',
+            start_time=mtdt(200),
+            end_time=mtdt(390)
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act='home',
+            area='b',
+            start_time=mtdt(390),
+            end_time=END_OF_DAY
+        )
+    )
+    return plan
+
+
+def test_position_of(test_plan):
+    assert test_plan.position_of('work') == 2
+    assert test_plan.position_of('home') == 4
+    assert test_plan.position_of('home', search='first') == 0
+
+
+def test_position_of_using_bad_option(test_plan):
+    with pytest.raises(UserWarning):
+        test_plan.position_of('home', search='spelling') == 1
+
+
+def test_position_of_missing(test_plan):
+    assert test_plan.position_of('play') is None
+
+
+def test_location_gets():
+    location = Location(loc=None, link=1, area=2)
+    assert location.min == 1
+    assert location.max == 2
+
+
+def test_locations_equal():
+    locationa = Location(loc=None, link=1, area=2)
+    locationb = Location(loc=None, link=None, area=2)
+    locationc = Location(loc=None, link=2, area=1)
+    locationd = Location(loc=None, link=2, area=None)
+    locatione = Location(loc=None, link=2, area=2)
+    assert locationa == locationb
+    assert locationc == locationd
+    assert not locationb == locationc
+    assert not locationa == locatione
+
+
+def test_locations_equal_with_no_shared_location_type():
+    locationb = Location(loc=None, link=None, area=2)
+    locationd = Location(loc=None, link=2, area=None)
+    with pytest.raises(UserWarning):
+        assert not locationb == locationd

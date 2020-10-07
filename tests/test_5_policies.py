@@ -412,7 +412,7 @@ def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(
     bobby = household.people['4']
 
     assert_correct_activities(person=steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
-    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort', 'shop', 'leisure', 'escort', 'home'])
+    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort_education', 'shop', 'leisure', 'escort_education', 'home'])
     assert_correct_activities(person=timmy, ordered_activities_list=['home', 'education', 'shop', 'education', 'leisure', 'home'])
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
@@ -424,7 +424,7 @@ def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(
     policy.apply_to(household)
 
     assert_correct_activities(person=steve, ordered_activities_list=['home', 'leisure', 'work', 'home'])
-    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort', 'shop', 'leisure', 'escort', 'home'])
+    assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort_education', 'shop', 'leisure', 'escort_education', 'home'])
     assert_correct_activities(person=timmy, ordered_activities_list=['home', 'education', 'shop', 'education', 'leisure', 'home'])
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
