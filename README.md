@@ -5,6 +5,8 @@ Our day to day activities have been rapidly shifted by recent policies and behav
 changes related to the COVID-19 pandemic. If we want to better plan existing and near-term 
 scenarios (for transport systems and other sectors) - existing models need to be updated and new scenarios generated quickly.
 
+ ![PAM](resources/PAM-motivation.png)
+
 **Who is this for?** PAM is intended for use by any modeller or planner using trip diary data or activity plans.
 **What can this do?** PAM provides an API and examples for modifying activity plans based on COVID-19 scenarios.
 
@@ -174,14 +176,12 @@ Logic also be added to apply:
 - times
 - durations
 
-
-
-
-
 ## Input/output data formats
 
 We primarily expect to support tabular input the form of a travel diary and person attributes as 
 described below. However we also support tabular activity plans formats and MATSim xml.
+
+If you have data in different forms or formats please let us know, we might like to support it.
 
 #### Travel diary
 
@@ -387,5 +387,3 @@ We have encountered many variations of sequences for plans, including wrapping a
 Although they are generally edge cases, they exists and generally represent real people. We are 
 therefore endeavoring to support all these cases in our plan modifiers. This is resulting some 
 difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
-
- ![PAM](resources/PAM-motivation.png)
