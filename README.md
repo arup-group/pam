@@ -178,15 +178,43 @@ Logic also be added to apply:
 
 ## Input/output data formats
 
-We primarily expect to support tabular input the form of a travel diary and person attributes as 
-described below. However we also support tabular activity plans formats and MATSim xml.
+In most use cases we load, manipulate and write population data using the `pam.core.Population` class. The first step in any application is therefore to load data into this format. The typical requirement is to load data from three tabular (pandas.DataFrame) inputs:
+- plans
+- person_attributes
+- household_attributes
 
-If you have data in different forms or formats please let us know, we might like to support it.
+Plans inputs can be in a variety of formats (for example activity vs trip records). We also support MATSim xml.
 
-#### Travel diary
+There are a number of population 'read' methods in `pam.read`. The most commonly used being `pam.read.load_travel_diary`. However this method is somewhat in flux as we identify the most common requirements. Please get in touch if you would like additional support or feel free to add your own.
 
-Tabular data with each row describing a unique trip from an origin (assumed home at start of day)
- to destination. trips are uniquely identified by person ids and ordered by sequence number. 
+Example use:
+
+```
+import pandas as pd
+import pam
+
+plans = pd.DataFrame(plans.csv)
+person_attributes = pd.DataFrame(person_attributes.csv)
+household_attributes = pd.DataFrame(household_attributes.csv)
+
+# wrangling of input DataFrames into correct formats, etc
+#
+#
+
+population = pam.read.load_travel_diary(
+    trips = plans.csv
+    person_attributes = person_attributes,
+    hh_attributes = household_attributes,
+)
+```
+
+The expectation is that the inputs will require some form of manipulation before being read into pam, for example to add the required headers as described below.
+
+#### Plans (Typically as Trips, but various types including Activity Logs also supported)
+
+Tabular data (pandas.DataFrame) with each row describing a unique trip from an origin (assumed home at start of day)
+ to destination. trips are uniquely identified by person id (`pid`) and household id (`hid`). They are assumed ordered by sequence number.
+
  Trips are labelled with home, origin, and destination zones, purpose, mode, start time, end 
  time and some form of weighting:
   
@@ -203,12 +231,16 @@ Tabular data with each row describing a unique trip from an origin (assumed home
 - `tet` - trip end time (minutes)
 - `freq` - weighting for representative population
 
+Some read methods can infer home locations and/or trip purpose. All attributes (including freq) can be changed once loaded into population format.
+
 #### Persons data
 
-Tabular data describing socio-economic characteristics for each person. For example:
+Tabular data (pandas.DataFrame) describing socio-economic characteristics and other attributes for each person. `pid` is a required field.  Other fields can be additionally added to describe person attributes that may be used for modfification or sampling methods. These attributes will also be included when writing to MATSim xml format.
 
-**Recommended fields:**
+**Required fields:**
 - `pid` - person ID
+
+**Example attribute fields:**
 - `hsize` - household size
 - `car` - number of cars owned by household
 - `inc` - income group
@@ -219,6 +251,28 @@ Tabular data describing socio-economic characteristics for each person. For exam
 - `license` - eg yes/no/unknown
 - `job` - eg full-time/part-time/education/retired/unknown
 - `occ` - occupation group
+
+
+#### Household_attributes input
+
+Tabular data (pandas.DataFrame) with each row describing a unique household. `hid` is a required field used as the unique identifier for each household. Other fields can be additionally added to describe household attributes that may be used for modfification or sampling methods.
+
+**Required fields:**
+- `hid` - household ID
+
+**Example attribute fields:**
+- `freq` - weighting for representative population
+- `persons` - hh occupancy
+- `income` - hh income
+- etc
+
+
+#### MATSim xml
+
+We also support reading and writting from MATSim formatted xml plans and person attributes.
+
+Read functionality is contained in `pam.read`. Write functionality in `pam.write`.
+
 
 ## Get involved
 
