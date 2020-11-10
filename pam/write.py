@@ -209,17 +209,11 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
                 # We should ensure types further upstream
                 # This solves TfL Phase 2 issue 
 
-                if isinstance(v, (str,int)):
+                if not isinstance(v, dict):
                     attribute_xml.text = str(v)
-                
-                elif isinstance(v, dict):
+                else
                     attribute_xml.text = str(list(v.values())[0])
 
-                else:
-                    print(type(v))
-                    print(attributes)
-                    print(pid)
-                    print(v)
 
     write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
