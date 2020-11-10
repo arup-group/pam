@@ -204,7 +204,22 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
             for k, v in attributes.items():
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
-                attribute_xml.text = str(v[1])
+
+                # This is hacky
+                # We should ensure types further upstream
+                # This solves TfL Phase 2 issue 
+
+                if isinstance(v, (str,int)):
+                    attribute_xml.text = str(v)
+                
+                elif isinstance(v, dict):
+                    attribute_xml.text = str(list(v.values())[0])
+
+                else:
+                    print(type(v))
+                    print(attributes)
+                    print(pid)
+                    print(v)
 
     write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
