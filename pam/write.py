@@ -211,7 +211,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
                 if not isinstance(v, dict):
                     attribute_xml.text = str(v)
-                else
+                else:
                     attribute_xml.text = str(list(v.values())[0])
 
 
