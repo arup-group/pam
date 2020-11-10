@@ -204,7 +204,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
 
             for k, v in attributes.items():
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
-                attribute_xml.text = str(v)
+                attribute_xml.text = str(v[1])
 
     write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
