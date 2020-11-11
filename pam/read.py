@@ -14,7 +14,7 @@ import pam.utils as utils
 
 
 def load_travel_diary(
-    trips:pd.DataFrame,
+    trip_diary:pd.DataFrame,
     person_attributes:Union[pd.DataFrame,None]=None,
     hh_attributes:Union[pd.DataFrame,None]=None,
     sample_perc:Union[float,None]=None,
@@ -24,7 +24,7 @@ def load_travel_diary(
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
     format.
-    :param trips: DataFrame
+    :param trip_diary: DataFrame
     :param person_attributes: DataFrame
     :param hh_attributes: DataFrame
     :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
@@ -34,7 +34,7 @@ def load_travel_diary(
     """
     # TODO check for required col headers and give useful error?
 
-    if not isinstance(trips, pd.DataFrame):
+    if not isinstance(trip_diary, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
     if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
@@ -44,29 +44,29 @@ def load_travel_diary(
         raise UserWarning("Unrecognised input for hh_attributes")
 
     if sample_perc is not None:
-        trips = sample_population(
-            trips,
+        trip_diary = sample_population(
+            trip_diary,
             sample_perc,
             weight_col='freq'
             )  # sample the travel population
 
     if complex:
         return complex_travel_diary_read(
-            trips,
+            trip_diary,
             person_attributes,
             hh_attributes,
             include_loc
             )
     return basic_travel_diary_read(
-        trips,
+        trip_diary,
         person_attributes
         )
 
 
-def basic_travel_diary_read(trips_df, attributes_df):
+def basic_travel_diary_read(trip_diary, attributes_df):
     population = core.Population()
 
-    for hid, household_data in trips_df.groupby('hid'):
+    for hid, household_data in trip_diary.groupby('hid'):
 
         household = core.Household(hid)
 
@@ -147,14 +147,14 @@ def basic_travel_diary_read(trips_df, attributes_df):
 
 
 def complex_travel_diary_read(
-    trips,
+    trip_diary,
     all_person_attributes,
     all_hh_attributes,
     include_loc=False
     ):
     population = core.Population()
 
-    for hid, household_data in trips.groupby('hid'):
+    for hid, household_data in trip_diary.groupby('hid'):
 
         if all_hh_attributes is not None:
             hh_attributes = all_hh_attributes.loc[hid].to_dict()
@@ -236,7 +236,7 @@ def complex_travel_diary_read(
 
 
 def load_activity_plan(
-    trips:pd.DataFrame,
+    trip_diary:pd.DataFrame,
     person_attributes:Union[pd.DataFrame,None]=None,
     hh_attributes:Union[pd.DataFrame,None]=None,
     sample_perc:Union[float,None]=None,
@@ -246,7 +246,7 @@ def load_activity_plan(
     format. This is a variation of the standard load_travel_diary() method because it does not require
     activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
     We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-    :param trips: DataFrame
+    :param trip_diary: DataFrame
     :param person_attributes: DataFrame
     :param hh_attributes: DataFrame
     :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
@@ -256,7 +256,7 @@ def load_activity_plan(
 
     logger = logging.getLogger(__name__)
 
-    if not isinstance(trips, pd.DataFrame):
+    if not isinstance(trip_diary, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
     if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
@@ -266,15 +266,15 @@ def load_activity_plan(
         raise UserWarning("Unrecognised input for population household attributes")
 
     if sample_perc is not None:
-        trips = sample_population(
-            trips,
+        trip_diary = sample_population(
+            trip_diary,
             sample_perc,
             weight_col='freq'
             )  # sample the travel population
 
     population = core.Population()
 
-    for hid, household_data in trips.groupby('hid'):
+    for hid, household_data in trip_diary.groupby('hid'):
 
         if hh_attributes is not None:
             hh_attribute_dict = hh_attributes.loc[hid].to_dict()
@@ -331,6 +331,114 @@ def load_activity_plan(
                     activity.Activity(
                         seq=n + 1,
                         act=trip.activity.lower(),
+                        area=trip.dzone,
+                        start_time=utils.minutes_to_datetime(trip.tet),
+                    )
+                )
+
+            person.plan.finalise()
+            household.add(person)
+
+        population.add(household)
+
+    return population
+
+
+def load_travel_diary_from_to(
+    trip_diary:pd.DataFrame,
+    person_attributes:Union[pd.DataFrame,None]=None,
+    hh_attributes:Union[pd.DataFrame,None]=None,
+    sample_perc:Union[float,None]=None,
+    ):
+    """
+    Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
+    format. This is a variation of the standard load_travel_diary() method because it does not require
+    activity inference or home location.
+    We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity)
+    and dact (destination activity).
+    :param trip_diary: DataFrame
+    :param person_attributes: DataFrame
+    :param hh_attributes: DataFrame
+    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :return: core.Population
+    """
+    # TODO check for required col headers and give useful error?
+
+    logger = logging.getLogger(__name__)
+
+    if not isinstance(trip_diary, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population travel diaries")
+
+    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population person attributes")
+
+    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
+        raise UserWarning("Unrecognised input for population household attributes")
+
+    if sample_perc is not None:
+        trip_diary = sample_population(
+            trip_diary,
+            sample_perc,
+            weight_col='freq'
+            )  # sample the travel population
+
+    population = core.Population()
+
+    for hid, household_data in trip_diary.groupby('hid'):
+
+        if hh_attributes is not None:
+            hh_attribute_dict = hh_attributes.loc[hid].to_dict()
+        else:
+            hh_attribute_dict = None
+
+        household = core.Household(hid, attributes=hh_attribute_dict)
+
+        for pid, person_data in household_data.groupby('pid'):
+
+            if person_attributes is not None:
+                person_attribute_dict = person_attributes.loc[pid].to_dict()
+            else:
+                person_attribute_dict = None
+
+            person = core.Person(
+                pid,
+                freq=person_data.iloc[0].freq,
+                attributes=person_attribute_dict,
+            )
+
+            trips = person_data.sort_values('seq')
+
+            first_act = trips.iloc[0].oact.lower()
+            if not first_act == "home":
+                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
+
+            person.add(
+                activity.Activity(
+                    seq=0,
+                    act=first_act,
+                    area=trips.iloc[0].ozone,
+                    start_time=utils.minutes_to_datetime(0),
+                )
+            )
+
+            for n in range(len(trips)):
+                trip = trips.iloc[n]
+
+                person.add(
+                    activity.Leg(
+                        seq=n,
+                        mode=trip['mode'].lower(),
+                        start_area=trip.ozone,
+                        end_area=trip.dzone,
+                        start_time=utils.minutes_to_datetime(trip.tst),
+                        end_time=utils.minutes_to_datetime(trip.tet)
+                    )
+                )
+
+                person.add(
+                    activity.Activity(
+                        seq=n + 1,
+                        act=trip.dact.lower(),
                         area=trip.dzone,
                         start_time=utils.minutes_to_datetime(trip.tet),
                     )
