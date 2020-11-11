@@ -3,6 +3,8 @@ import gzip
 from lxml import etree
 from io import BytesIO
 import os
+from shapely.geometry import Point, LineString
+from s2sphere import CellId
 
 
 def minutes_to_datetime(minutes: int):
@@ -46,6 +48,25 @@ def td_to_s(td):
     # if not td.seconds and td.days:
     #     return 24*60*60
     return td.seconds
+
+
+def get_linestring(from_point, to_point):
+    """
+    Makes a shapely.geometry.LineString out of two points
+    :param from_point: shapely.geometry.Point or s2sphere.CellId
+    :param to_point: shapely.geometry.Point or s2sphere.CellId
+    :return:
+    """
+    if all(isinstance(p, CellId) for p in [from_point, to_point]):
+        from_point = from_point.to_lat_lng()
+        from_point = Point(from_point.lng().degrees, from_point.lat().degrees)
+        to_point = to_point.to_lat_lng()
+        to_point = Point(to_point.lng().degrees, to_point.lat().degrees)
+
+    if not all(isinstance(p, Point) for p in [from_point, to_point]):
+        raise TypeError(f'You need to pass points of type {type(Point)} or {type(CellId)}.'
+                        f'Types passed: type(from_point)={type(from_point)} and type(to_point)={type(to_point)}')
+    return LineString([from_point, to_point])
 
 
 def get_elems(path, tag):

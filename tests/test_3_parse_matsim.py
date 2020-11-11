@@ -40,6 +40,31 @@ def test_parse_complex_matsim():
    assert person.has_valid_plan
 
 
+def test_parsing_complex_person_results_in_valid_pt_leg():
+    population = read_matsim(test_trips_path, test_attributes_path)
+    person = population['census_1']['census_1']
+
+    pt_leg = person.plan.day[5]
+    assert pt_leg.mode == 'pt'
+    assert pt_leg.service_id == '25239'
+    assert pt_leg.route_id == 'VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf'
+    assert pt_leg.o_stop == '9100ROMFORD.link:25821'
+    assert pt_leg.d_stop == '9100UPMNSP6.link:302438'
+
+
+def test_parsing_person_with_network_route():
+    population = read_matsim(test_trips_path)
+    person = population['census_2']['census_2']
+
+    bike_trip = person.plan.day[1]
+    assert bike_trip.mode == 'bike'
+    assert bike_trip.network_route == ['link_1', 'link_2', 'link_3']
+    assert bike_trip.service_id is None
+    assert bike_trip.route_id is None
+    assert bike_trip.o_stop is None
+    assert bike_trip.d_stop is None
+
+
 def test_remove_pt_interactions():
     population = read_matsim(test_trips_path, test_attributes_path)
     person = population['census_1']['census_1']

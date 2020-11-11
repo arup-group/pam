@@ -40,6 +40,7 @@ pandocfilters==1.4.2
 parso==0.7.0
 pexpect==4.8.0
 pickleshare==0.7.5
+plotly==4.10.0
 pluggy==0.13.1
 prometheus-client==0.7.1
 prompt-toolkit==3.0.5
@@ -57,6 +58,7 @@ pytz==2019.3
 pyzmq==19.0.0
 qtconsole==4.7.3
 QtPy==1.9.0
+s2sphere==0.2.5
 Rtree==0.9.4
 Send2Trash==1.5.0
 setuptools>=42.0.1
