@@ -304,10 +304,14 @@ def load_activity_plan(
                 # home_area=home_area
             )
 
+            first_act = trips.iloc[0].activity.lower()
+            if not first_act == "home":
+                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
+
             person.add(
                 activity.Activity(
                     seq=0,
-                    act='home',
+                    act=first_act,
                     area=origin_area,
                     start_time=utils.minutes_to_datetime(0),
                 )
