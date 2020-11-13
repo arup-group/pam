@@ -139,6 +139,10 @@ class Population:
             if locations:
                 person.plan.fix_location_consistency()
 
+    def validate(self):
+        for hid, pid, person in self.people():
+            person.validate()
+
     def print(self):
         print(self)
         for _, household in self:

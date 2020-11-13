@@ -36,21 +36,23 @@ def build_person_df(person):
     """
     Loop through a persons plan, creating a pandas dataframe defining activities for plotting.
     """
-    activities, modes, start_times, end_times, durations = [], [], [], [], []
-
+    data = {
+        "act" : [],
+        "modes": [],
+        "start_time": [],
+        "end_time": [],
+        "dur": [],
+    }
     for component in person.plan.day:
-        activities.append(component.act.lower().title())
+        data["act"].append(component.act.lower().title())
         if isinstance(component, activity.Leg):
-            modes.append(component.mode.lower().title())
+            data["modes"].append(component.mode.lower().title())
         else:
-            modes.append(None)
-        start_times.append(component.start_time.hour + component.start_time.minute/60)
-        end_times.append(component.end_time.hour + component.end_time.minute/60)
-        durations.append(component.duration.total_seconds()/3600)
-
-    df = pd.DataFrame(
-        zip(activities, modes, start_times, durations),
-        columns=['act', 'mode', 'start_time', 'dur'])
+            data["modes"].append(None)
+        data["start_time"].append(component.start_time.hour + component.start_time.minute/60)
+        data["end_time"].append(component.end_time.hour + component.end_time.minute/60)
+        data["dur"].append(component.duration.total_seconds()/3600)
+    df = pd.DataFrame(data)
     df['pid'] = person.pid
 
     return df

@@ -1,5 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
+import numpy as np
 
 from pam.utils import dt_to_s, td_to_s
 from datetime import timedelta
@@ -56,12 +57,12 @@ def plot_time_bins(data, sub_col, width=12, height_factor=1.2):
         figsize=(width, 1.2*len(subs)),
         sharex=False
         )
-    
-    for ax, sub in zip(axs, subs):
+    if not isinstance(axs, np.ndarray):
+        axs = [axs]
 
+    for ax, sub in zip(axs, subs):
         binned = time_binner(data.loc[data[sub_col] == sub])
         ax.pcolormesh(binned.T, cmap='cool', edgecolors='white', linewidth=1)
-
         ax.set_xticks([i for i in range(0,97,8)])
         ax.set_xticklabels([f"{h:02}:00" for h in range(0,25,2)])
         ax.set_yticks([0.5,1.5,2.5])
@@ -70,7 +71,6 @@ def plot_time_bins(data, sub_col, width=12, height_factor=1.2):
         for pos in ['right','top','bottom','left']:
             ax.spines[pos].set_visible(False)
         ax.set_title(sub.title(), fontsize='medium', rotation=0)
-
     fig.tight_layout()
     return fig
 
@@ -195,7 +195,6 @@ def plot_activity_duration_by_act(list_of_populations, exclude = None, axis = No
         columns='act', 
         values='duration_hours'
     )
-    
     
     if(exclude != None):
         title = 'activities by type (excl '+ exclude + ')'
