@@ -49,7 +49,6 @@ Assuming python ~3.7 and using git:
 ```
 git clone git@github.com:arup-group/pam.git
 cd pam
-pip install -r requirements.txt
 pip install -e .
 ```
 

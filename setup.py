@@ -3,6 +3,8 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt") as f:
+    install_requires = f.read().splitlines()
 
 setup(
     name="pam",
@@ -21,4 +23,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    install_requires=install_requires,
 )
