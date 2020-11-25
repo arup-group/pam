@@ -183,8 +183,8 @@ def test_facility_dict_build():
 
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ['home', 'work', 'education'])
     assert len(sampler.samplers) == 2
-    assert sampler.samplers['0']['education'] == None
-    assert isinstance(sampler.samplers['0']['work'], GeneratorType)
+    assert sampler.samplers[0]['education'] == None
+    assert isinstance(sampler.samplers[0]['work'], GeneratorType)
 
 
 def test_facility_sampler_normal():
