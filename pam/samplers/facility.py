@@ -69,7 +69,7 @@ class FacilitySampler:
         """
         Sample a facility id and location. If a location idx is missing, can return a random location.
         """
-        if str(location_idx) not in self.samplers:
+        if location_idx not in self.samplers:
             if self.random_default:
                 self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
@@ -80,7 +80,7 @@ class FacilitySampler:
             self.logger.warning(f'Missing location idx:{location_idx}')
             return None, None
         
-        sampler = self.samplers[str(location_idx)][activity]
+        sampler = self.samplers[location_idx][activity]
 
         if sampler is None:
             self.error_counter += 1
@@ -109,12 +109,11 @@ class FacilitySampler:
         """
         self.logger.warning("Joining facilities data to zones, this may take a while.")
         activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
-
         sampler_dict = {}
 
         self.logger.warning("Building sampler, this may take a while.")
         for zone in set(activity_areas.index_right):
-            sampler_dict[str(zone)] = {}
+            sampler_dict[zone] = {}
             zone_facs = activity_areas.loc[activity_areas.index_right == zone]
             
             for act in self.activities:
@@ -122,9 +121,9 @@ class FacilitySampler:
                 facs = zone_facs.loc[zone_facs.activity == act]
                 if not facs.empty:
                     points = [(i, g) for i, g in facs.geometry.items()]
-                    sampler_dict[str(zone)][act] = inf_yielder(points)
+                    sampler_dict[zone][act] = inf_yielder(points)
                 else:
-                    sampler_dict[str(zone)][act] = None
+                    sampler_dict[zone][act] = None
         return sampler_dict
 
     def write_facilities_xml(self, path, comment=None):
