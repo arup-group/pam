@@ -156,8 +156,9 @@ def write_matsim_plans(population, location, comment=None):
         population_xml.append(et.Comment(comment))
     population_xml.append(et.Comment(f"Created {datetime.today()}"))
 
-    for _, household in population:
+    for hid, household in population:
         for pid, person in household:
+            person.attributes["hid"] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:

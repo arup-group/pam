@@ -24,7 +24,7 @@ class Plan:
             for act in self.activities:
                 if act.act is not None and act.act.lower()[:4] == 'home':
                     return act.location
-        self.logger.warning( "failed to find home, return area at start of day")
+        # self.logger.warning( "failed to find home, return area at start of day")  # too much logging!
         return self.day[0].location
 
     @property
