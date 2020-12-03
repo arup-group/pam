@@ -156,6 +156,40 @@ def test_population_combine_population():
     assert isinstance(pop1.households['test_1'].people['test_1'], Person)
 
 
+def test_population_combine_household():
+    pop1 = Population()
+    hh1 = Household('1')
+    p1 = Person('1')
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    hh2 = Household('1')
+    p2 = Person('1')
+    hh2.add(p2)
+
+    pop1.combine(hh2, 'test_')
+    assert set(pop1.households) == {'1', 'test_1'}
+    assert set(pop1.households['test_1'].people) == {'test_1'}
+    assert isinstance(pop1.households['test_1'], Household)
+    assert isinstance(pop1.households['test_1'].people['test_1'], Person)
+
+
+def test_population_combine_person():
+    pop1 = Population()
+    hh1 = Household('1')
+    p1 = Person('1')
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    p2 = Person('1')
+
+    pop1.combine(p2, 'test_')
+    assert set(pop1.households) == {'1', 'test_1'}
+    assert set(pop1.households['test_1'].people) == {'test_1'}
+    assert isinstance(pop1.households['test_1'], Household)
+    assert isinstance(pop1.households['test_1'].people['test_1'], Person)
+
+
 def test_population_combine_population_duplicate_key():
     pop1 = Population()
     hh1 = Household('1')
@@ -172,3 +206,30 @@ def test_population_combine_population_duplicate_key():
     with pytest.raises(KeyError):
         pop1.combine(pop2, '')
 
+
+def test_population_combine_household_duplicate_key():
+    pop1 = Population()
+    hh1 = Household('1')
+    p1 = Person('1')
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    hh2 = Household('1')
+    p2 = Person('1')
+    hh2.add(p2)
+
+    with pytest.raises(KeyError):
+        pop1.combine(hh2, '')
+
+
+def test_population_combine_person_duplicate_key():
+    pop1 = Population()
+    hh1 = Household('1')
+    p1 = Person('1')
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    p2 = Person('1')
+
+    with pytest.raises(KeyError):
+        pop1.combine(p2, '')

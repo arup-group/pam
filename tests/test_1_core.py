@@ -326,3 +326,32 @@ def test_get_hh_freq_mean():
     hh.add(Person('1', freq=1))
     hh.add(Person('2', freq=3))
     assert hh.freq == 2
+
+
+def test_get_subpopulations():
+    pop = Population()
+    hh = Household('1')
+    hh.add(Person('1', attributes={"subpopulation": "A"}))
+    hh.add(Person('2', attributes={"subpopulation": "B"}))
+    pop.add(hh)
+    hh = Household('2')
+    hh.add(Person('1', attributes={"subpopulation": "A"}))
+    hh.add(Person('2', attributes={"subpopulation": "C"}))
+    pop.add(hh)
+    assert pop.subpopulations == {"A", "B", "C"}
+
+
+def test_get_atributes():
+    pop = Population()
+    hh = Household('1')
+    hh.add(Person('1', attributes={"subpopulation": "A", "age": 10}))
+    hh.add(Person('2', attributes={"subpopulation": "B", "age": 20}))
+    pop.add(hh)
+    hh = Household('2')
+    hh.add(Person('1', attributes={"subpopulation": "A", "age": 10}))
+    hh.add(Person('2', attributes={"subpopulation": "C", "age": 30}))
+    pop.add(hh)
+    assert pop.attributes == {
+        "subpopulation": {"A", "B", "C"},
+        "age": {10, 20, 30}
+    }

@@ -226,10 +226,11 @@ class Population:
             self += other
             return None
         if isinstance(other, Person):
-            other.reindex(prefix)
             hh = Household(other.pid) # we create a new hh for single person
-            hh += other
+            hh.add(other)
+            hh.reindex(prefix)
             self += hh
+            return None
         raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
     def sample_locs2(self, sampler):
