@@ -1,6 +1,8 @@
 import logging
 import random
 import pickle
+import copy
+from collections import defaultdict
 
 import pam.activity as activity
 import pam.plot as plot
@@ -63,6 +65,24 @@ class Population:
         for _, _, p in self.people():
             modes.update(p.mode_classes)
         return modes
+
+    @property
+    def subpopulations(self):
+        subpopulations = set()
+        for _, _, p in self.people():
+            subpopulations.add(p.attributes.get("subpopulation"))
+        return subpopulations
+
+    @property
+    def attributes(self):
+        attributes = defaultdict(set)
+        for _, _, p in self.people():
+            for k, v in p.attributes.items():
+                attributes[k].add(v)
+        for k, v in attributes.items():
+            if len(v) > 25:
+                attributes[k] = None
+        return dict(attributes)
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]
@@ -157,6 +177,61 @@ class Population:
 
     def __str__(self):
         return f"Population: {self.population} people in {self.num_households} households."
+
+    def __iadd__(self, other):
+        """
+        Unsafe addition with assignment (no guarantee of unique ids).
+        """
+        self.logger.debug("Note that this method requires all identifiers from populations being combined to be unique.")
+        if isinstance(other, Population):
+            for hid, hh in other.households.items():
+                self.households[hid] = copy.deepcopy(hh)
+            return self
+        if isinstance(other, Household):
+            self.households[other.hid] = copy.deepcopy(other)
+            return self
+        if isinstance(other, Person):
+            self.households[other.pid] = Household(other.pid)
+            self.households[other.pid].people[other.pid] = copy.deepcopy(other)
+            return self
+        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
+
+    def reindex(self, prefix: str):
+        """
+        Safely reindex all household and person identifiers in population using a prefix.
+        """
+        for hid in list(self.households):
+            hh = self.households[hid]
+            new_hid = prefix + hid
+            if new_hid in self.households:
+                raise KeyError(f"Duplicate household identifier (hid): {new_hid}")
+
+            hh.reindex(prefix)
+
+            self.households[new_hid] = hh
+            del self.households[hid]
+
+    def combine(self, other, prefix=""):
+        """
+        Safe addition with assignment by adding a prefix to create unique pids and hids.
+        """
+        prefix = str(prefix)
+
+        if isinstance(other, Population):
+            other.reindex(prefix)
+            self += other
+            return None
+        if isinstance(other, Household):
+            other.reindex(prefix)
+            self += other
+            return None
+        if isinstance(other, Person):
+            hh = Household(other.pid) # we create a new hh for single person
+            hh.add(other)
+            hh.reindex(prefix)
+            self += hh
+            return None
+        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
     def sample_locs2(self, sampler):
         """
@@ -379,6 +454,34 @@ class Household:
     def __str__(self):
         return f"Household: {self.hid}"
 
+    def __iadd__(self, other):
+        """
+        Unsafe addition with assignment (no guarantee of unique ids).
+        """
+        self.logger.debug("Note that this method requires all identifiers from populations being combined to be unique.")
+        if isinstance(other, Household):
+            for pid, person in other.people.items():
+                self.people[pid] = copy.deepcopy(person)
+            return self
+        if isinstance(other, Person):
+            self.people[other.pid] = copy.deepcopy(other)
+            return self
+        raise TypeError(f"Object for addition must be a Household or Person object, not {type(other)}")
+
+    def reindex(self, prefix: str):
+        """
+        Safely reindex all person identifiers in household using a prefix.
+        """
+        self.hid = prefix + self.hid
+        for pid in list(self.people):
+            person = self.people[pid]
+            new_pid = prefix + pid
+            if new_pid in self.people:
+                raise KeyError(f"Duplicate person identifier (pid): {new_pid}")
+            person.reindex(prefix)
+            self.people[new_pid] = person
+            del self.people[pid]
+
     def pickle(self, path):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
@@ -538,6 +641,9 @@ class Person:
 
     def plot(self, kwargs=None):
         plot.plot_person(self, kwargs)
+
+    def reindex(self, prefix: str):
+        self.pid = prefix + self.pid
 
     def build_travel_geodataframe(self, **kwargs):
         """
