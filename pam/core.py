@@ -459,8 +459,8 @@ class Household:
         """
         self.logger.debug("Note that this method requires all identifiers from populations being combined to be unique.")
         if isinstance(other, Household):
-            for hid, hh in other.households.items():
-                self.households[hid] = copy.deepcopy(hh)
+            for pid, person in other.people.items():
+                self.people[pid] = copy.deepcopy(person)
             return self
         if isinstance(other, Person):
             self.people[other.pid] = copy.deepcopy(other)
