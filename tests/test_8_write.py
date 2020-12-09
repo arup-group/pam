@@ -11,7 +11,7 @@ from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam.write import write_travel_diary, \
-    write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices
+    write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 
@@ -572,6 +572,24 @@ def test_writes_activities_csv_file_to_expected_location(population_heh, tmpdir)
             assert row['Duration'] == '{}'.format(expected_activity.duration)
             activity_index += 1
 
+def test_benchmark_trips_hour(tmp_path):
+    test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
+    test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                        "test_data/test_matsim_attributes.xml"))
+    population = read_matsim(test_trips_path, test_attributes_path)
+    benchmark = write_benchmarks(
+        population,
+        dimensions=['departure_hour'],
+        data_fields=['freq'],
+        aggfunc=[sum],
+        path=None
+    )
+    expected_benchmark = pd.DataFrame(
+        {'departure_hour': {0: 6, 1: 7, 2: 14, 3: 20, 4: 21},
+        'freq_sum': {0: 1000, 1: 2000, 2: 2000, 3: 2000, 4: 5000}}
+        )
+
+    assert benchmark.equals(expected_benchmark)   
 
 ###########################################################
 # helper functions
