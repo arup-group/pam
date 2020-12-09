@@ -456,16 +456,16 @@ def write_benchmarks(
     ## aggregate across specified dimensions
     if dimensions != None:
         if data_fields != None:
-            df = df.groupby(dimensions)[data_fields].agg(aggfunc)#.reset_index()
+            df = df.groupby(dimensions)[data_fields].agg(aggfunc)
         else:
-            df = df.value_counts(dimensions)#.reset_index()
+            df = df.value_counts(dimensions)
             
     ## show as percentages
     if normalise_by != None:
         if normalise_by == 'total':
             df = df / df.sum(axis = 0)
         else:
-            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())#.sort_index(level = normalise_by)        
+            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())     
     df = df.sort_index().reset_index()
     
     ## flatten column MultiIndex
@@ -478,6 +478,11 @@ def write_benchmarks(
         
     ## export or return dataframe
     if path != None:
-        df.to_csv(path, index=False)
+        if path.lower().endswith('.csv'):
+            df.to_csv(path, index=False)
+        elif path.lower().endswith('.json'):
+            df.to_json(path, orient='records')
+        else:
+            raise ValueError('Please specify a valid csv or json file path.')
     else:
         return df
