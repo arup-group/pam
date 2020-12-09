@@ -430,8 +430,7 @@ def write_benchmarks(
     df = []
     for hid, pid, person in population.people():
         for seq, leg in enumerate(person.legs):
-            df.append(
-                {
+            record = {
                     'pid': pid,
                     'hid': hid,
                     'hzone': person.home,
@@ -444,12 +443,9 @@ def write_benchmarks(
                     'tet': leg.end_time.time(),
                     'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
                     'freq': person.freq,
-                    'gender': person.attributes['gender'],
-                    'job' : person.attributes['job'],
-                    'occ' : person.attributes['occ'],
-                    'inc' : person.attributes['inc']
                 }
-            )
+            record = {**record, **dict(person.attributes)} # add person attributes
+            df.append(record)
     df = pd.DataFrame(df)
     
     ## add extra fields used for benchmarking
@@ -469,9 +465,8 @@ def write_benchmarks(
         if normalise_by == 'total':
             df = df / df.sum(axis = 0)
         else:
-            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum()).sort_index(level = normalise_by)
-        
-    df = df.reset_index()
+            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())#.sort_index(level = normalise_by)        
+    df = df.sort_index().reset_index()
     
     ## flatten column MultiIndex
     if isinstance(df.columns, pd.MultiIndex):
