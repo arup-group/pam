@@ -403,3 +403,86 @@ def write_population_csv(list_of_populations, export_path):
                 })
         file_path = os.path.join(export_path, 'activities.csv')
         pd.DataFrame(activities).to_csv(file_path, index=False)
+
+
+def write_benchmarks(
+    population,
+    dimensions=None,
+    data_fields=None,
+    aggfunc = [len],
+    normalise_by = None,
+    colnames = None,
+    path = None
+):
+    """
+	Extract user-specified benchmarks from the population.
+	:param pam.core.Population population: PAM population
+    :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
+    :params list data_fields: The data to summarise. If None, simply count the instances of each group
+    :params list of functions aggfunc: A set of functions to apply to each data_field, after grouping by the specified dimensions. For example: [len, sum], [sum, np.mean], [np.sum], etc
+    :params list normalise_by: convert calculated values to percentages across the specified -by this field- dimension(s).
+    :params list colnames: if different to None, rename the columns of the returned dataset  
+    :param str path: directory to write the benchmarks. If None, the functions returns the dataframe instead.
+
+	:return: None if an export path is provided, otherwise Pandas DataFrame 
+	"""
+    ## collect data
+    df = []
+    for hid, pid, person in population.people():
+        for seq, leg in enumerate(person.legs):
+            df.append(
+                {
+                    'pid': pid,
+                    'hid': hid,
+                    'hzone': person.home,
+                    'ozone': leg.start_location.area,
+                    'dzone': leg.end_location.area,
+                    'seq': seq,
+                    'purp': leg.purp,
+                    'mode': leg.mode,
+                    'tst': leg.start_time.time(),
+                    'tet': leg.end_time.time(),
+                    'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
+                    'freq': person.freq,
+                    'gender': person.attributes['gender'],
+                    'job' : person.attributes['job'],
+                    'occ' : person.attributes['occ'],
+                    'inc' : person.attributes['inc']
+                }
+            )
+    df = pd.DataFrame(df)
+    
+    ## add extra fields used for benchmarking
+    df['personhrs'] = df['freq'] * df['duration'] / 60
+    df['departure_hour'] = df.tst.apply(lambda x:x.hour)
+    df['arrival_hour'] = df.tet.apply(lambda x:x.hour)
+    
+    ## aggregate across specified dimensions
+    if dimensions != None:
+        if data_fields != None:
+            df = df.groupby(dimensions)[data_fields].agg(aggfunc)#.reset_index()
+        else:
+            df = df.value_counts(dimensions)#.reset_index()
+            
+    ## show as percentages
+    if normalise_by != None:
+        if normalise_by == 'total':
+            df = df / df.sum(axis = 0)
+        else:
+            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum()).sort_index(level = normalise_by)
+        
+    df = df.reset_index()
+    
+    ## flatten column MultiIndex
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.map('_'.join).str.strip('_')
+    
+    ## rename columns
+    if colnames != None:
+        df.columns = colnames
+        
+    ## export or return dataframe
+    if path != None:
+        df.to_csv(path, index=False)
+    else:
+        return df
