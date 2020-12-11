@@ -11,7 +11,8 @@ from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam.write import write_travel_diary, \
-    write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks
+    write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks, \
+    write_distance_benchmark, write_mode_distance_benchmark, write_mode_duration_benchmark, write_duration_benchmark, write_departure_time_benchmark
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 
@@ -590,6 +591,18 @@ def test_benchmark_trips_hour(tmp_path):
         )
 
     assert benchmark.equals(expected_benchmark)   
+
+def test_write_benchmarks_multiple(tmpdir):
+    test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
+    test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                        "test_data/test_matsim_attributes.xml"))
+    population = read_matsim(test_trips_path, test_attributes_path)
+
+    assert list(write_distance_benchmark(population).trips) == [2000, 3000, 1000, 5000, 0, 0, 0, 0]
+    assert list(write_mode_distance_benchmark(population).trips) == [2000.0, 3000.0, 1000.0, 5000.0, 0.0, 0.0, 0.0, 0.0]
+    assert list(write_mode_duration_benchmark(population).trips) == [2000.0, 0.0, 0.0, 3000.0, 2000.0, 1000.0, 0.0, 0.0, 1000.0]
+    assert list(write_duration_benchmark(population).trips) == [2000, 0, 0, 3000, 2000, 1000, 0, 0, 1000]
+    assert list(write_departure_time_benchmark(population).trips) == [1000, 2000, 2000, 2000, 5000]
 
 ###########################################################
 # helper functions

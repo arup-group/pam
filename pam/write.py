@@ -442,6 +442,8 @@ def write_benchmarks(
                     'tst': leg.start_time.time(),
                     'tet': leg.end_time.time(),
                     'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
+                    # calculate leg euclidean distance in km:
+                    'euclidean_distance': ((leg.end_location.loc.x-leg.start_location.loc.x)**2 + (leg.end_location.loc.y-leg.start_location.loc.y)**2)**0.5 / 1000,
                     'freq': person.freq,
                 }
             record = {**record, **dict(person.attributes)} # add person attributes
@@ -452,11 +454,21 @@ def write_benchmarks(
     df['personhrs'] = df['freq'] * df['duration'] / 60
     df['departure_hour'] = df.tst.apply(lambda x:x.hour)
     df['arrival_hour'] = df.tet.apply(lambda x:x.hour)
+    df['euclidean_distance_category'] = pd.cut(
+        df.euclidean_distance, 
+        bins =[0,1,5,10,25,50,100,200,999999],
+        labels = ['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km', '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
+    )    
+    df['duration_category'] = pd.cut(
+        df.duration, 
+        bins =[0,5,10,15,30,45,60,90,120,999999],
+        labels = ['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min', '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
+    )
     
     ## aggregate across specified dimensions
     if dimensions != None:
         if data_fields != None:
-            df = df.groupby(dimensions)[data_fields].agg(aggfunc)
+            df = df.groupby(dimensions)[data_fields].agg(aggfunc).fillna(0)
         else:
             df = df.value_counts(dimensions)
             
@@ -486,3 +498,29 @@ def write_benchmarks(
             raise ValueError('Please specify a valid csv or json file path.')
     else:
         return df
+
+
+#### benchmark wrappers:
+def write_distance_benchmark(population, path=None):
+    # number of trips by (euclidean) distance category
+    return write_benchmarks(population, dimensions = ['euclidean_distance_category'], data_fields= ['freq'], colnames = ['distance', 'trips'], aggfunc = [sum], path=path)
+
+def write_mode_distance_benchmark(population, path=None):
+    # number of trips by (euclidean) distance category and mode
+    return write_benchmarks(population, dimensions = ['mode','euclidean_distance_category'], data_fields= ['freq'], colnames = ['mode','distance', 'trips'], aggfunc = [sum], path=path)
+
+def write_duration_benchmark(population, path=None):
+    # number of trips by duration
+    return write_benchmarks(population, dimensions = ['duration_category'], data_fields= ['freq'], colnames = ['duration', 'trips'], aggfunc = [sum], path=path)
+
+def write_mode_duration_benchmark(population, path=None):
+    # number of trips by duration and mode
+    return write_benchmarks(population, dimensions = ['mode','duration_category'], data_fields= ['freq'], colnames = ['mode','duration', 'trips'], aggfunc = [sum], path=path)
+
+def write_departure_time_benchmark(population, path=None):
+    # number of trips by hour of departure
+    return write_benchmarks(population, dimensions = ['departure_hour'], data_fields= ['freq'], colnames = ['departure_hour', 'trips'], aggfunc = [sum], path=path)
+
+def write_mode_purpose_split_benchmark(population, path=None):
+    # purpose split for each mode
+    return write_benchmarks(population, dimensions = ['mode','purp'], data_fields= ['freq'], normalise_by = ['mode'], colnames = ['mode','purpose', 'trips'], aggfunc = [sum])
