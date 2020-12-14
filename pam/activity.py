@@ -920,6 +920,12 @@ class Leg(PlanComponent):
                self.mode == other.mode and \
                self.duration == other.duration
 
+    @property
+    def euclidean_distance(self):
+        # calculate leg euclidean distance in km:
+        # assumes grid definition of Location class
+        return ((self.end_location.loc.x-self.start_location.loc.x)**2 + (self.end_location.loc.y-self.start_location.loc.y)**2)**0.5 / 1000
+
 
 class Location:
     def __init__(self, loc=None, link=None, area=None):

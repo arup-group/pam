@@ -441,9 +441,8 @@ def write_benchmarks(
                     'mode': leg.mode,
                     'tst': leg.start_time.time(),
                     'tet': leg.end_time.time(),
-                    'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
-                    # calculate leg euclidean distance in km:
-                    'euclidean_distance': ((leg.end_location.loc.x-leg.start_location.loc.x)**2 + (leg.end_location.loc.y-leg.start_location.loc.y)**2)**0.5 / 1000,
+                    'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes                    
+                    'euclidean_distance': leg.euclidean_distance,
                     'freq': person.freq,
                 }
             record = {**record, **dict(person.attributes)} # add person attributes
@@ -496,8 +495,8 @@ def write_benchmarks(
             df.to_json(path, orient='records')
         else:
             raise ValueError('Please specify a valid csv or json file path.')
-    else:
-        return df
+    
+    return df
 
 
 #### benchmark wrappers:
