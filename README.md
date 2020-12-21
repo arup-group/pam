@@ -49,10 +49,13 @@ Assuming python ~3.7 and using git:
 ```
 git clone git@github.com:arup-group/pam.git
 cd pam
+python3 -m venv venv #intall into virtual environment
+source venv/bin/activate
 pip install -e .
 ```
 
-We known that requirements are already available in a up to date Anaconda installation.
+We known that requirements are already available in a up to date Anaconda installation. 
+If you're not using Anaconda, sometimes the above will fail due to spatial library dependencies not being properly installed using pip. If you see any errors relating to fiona or rtree this is likely the case. To fix it, wipe the virtual environment and recreate, `brew install spatialindex` (Mac) then install everything else in the `venv` using `pip install -e .` again. 
 
 ## Why Activity Plans?
 
