@@ -8,6 +8,8 @@ import logging
 from pam.samplers.spatial import RandomPointSampler
 from pam.utils import write_xml
 
+import pandas as pd
+import numpy as np
 
 class FacilitySampler:
 
@@ -18,7 +20,8 @@ class FacilitySampler:
         activities: list=None,
         build_xml: bool=True,
         fail: bool=True,
-        random_default: bool=True
+        random_default: bool=True,
+        weight_on: str=None
         ):
         """
         Sampler object for facilities. optionally build a facility xml output (for MATSim).
@@ -30,6 +33,7 @@ class FacilitySampler:
         :param build_xml: flag for facility xml output (for MATSim)
         :param fail: flag hard fail if sample not found
         :param random_default: flag for defaulting to random sample when activity missing
+        :param weight_on: the column name of the facilities geodataframe which contains facility weights (for sampling)
         """
         self.logger = logging.getLogger(__name__)
         
@@ -38,7 +42,7 @@ class FacilitySampler:
         else:
             self.activities = activities
 
-        self.samplers = self.build_facilities_sampler(facilities, zones)
+        self.samplers = self.build_facilities_sampler(facilities, zones, weight_on = weight_on)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -101,11 +105,13 @@ class FacilitySampler:
             self.error_counter = 0
             return next(sampler)
 
-    def build_facilities_sampler(self, facilities, zones):
+    def build_facilities_sampler(self, facilities, zones, weight_on = None):
         """
         Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
         TODO - look to move to more carefully defined input data format for facilities
+
+        :params str weight_on: a column (name) of the facilities geodataframe to be used as a sampling weight
         """
         self.logger.warning("Joining facilities data to zones, this may take a while.")
         activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
@@ -121,7 +127,8 @@ class FacilitySampler:
                 facs = zone_facs.loc[zone_facs.activity == act]
                 if not facs.empty:
                     points = [(i, g) for i, g in facs.geometry.items()]
-                    sampler_dict[zone][act] = inf_yielder(points)
+                    weights = facs[weight_on] / facs[weight_on].sum() if weight_on != None else None # sum of weights/probabilities should be one
+                    sampler_dict[zone][act] = inf_yielder(points, weights)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -156,11 +163,18 @@ class FacilitySampler:
             )
 
 
-def inf_yielder(candidates):
+def inf_yielder(candidates, weights = None):
     """
     Endlessly yield shuffled candidate items.
     """
-    while True:
-        random.shuffle(candidates)
-        for c in candidates:
-            yield c
+    if isinstance(weights, pd.Series):
+        # if a series of facility weights is provided, perform weighted sampling with replacement
+        while True:
+            yield candidates[np.random.choice(len(candidates), p = weights)]
+    else:
+        while True:
+            random.shuffle(candidates)
+            for c in candidates:
+                yield c
+
+
