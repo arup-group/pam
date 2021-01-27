@@ -127,7 +127,8 @@ class FacilitySampler:
                 facs = zone_facs.loc[zone_facs.activity == act]
                 if not facs.empty:
                     points = [(i, g) for i, g in facs.geometry.items()]
-                    weights = facs[weight_on] / facs[weight_on].sum() if weight_on != None else None # sum of weights/probabilities should be one
+                    # sum of weights/probabilities should be one:
+                    weights = facs[weight_on] / facs[weight_on].sum() if weight_on != None else None
                     sampler_dict[zone][act] = inf_yielder(points, weights)
                 else:
                     sampler_dict[zone][act] = None
