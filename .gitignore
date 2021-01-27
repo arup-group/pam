@@ -30,3 +30,8 @@ sample-perf-report.html
 simple-pam-data-x10000-benchmark.dat
 simple-pam-data-x10000-benchmark.png
 PAM_benchmarking.ipynb
+sandbox
+build
+dist
+fs.ipynb
+facility_sampling.ipynb
