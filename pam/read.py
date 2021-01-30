@@ -20,6 +20,7 @@ def load_travel_diary(
     sample_perc:Union[float,None]=None,
     complex:bool=True,
     include_loc:bool=False,
+    hh_loc_input:bool=False,
     ):
     """
     Turn standard tabular data inputs (travel survey and attributes) into core population
@@ -29,7 +30,8 @@ def load_travel_diary(
     :param hh_attributes: DataFrame
     :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
     :param complex: bool
-    :param include_loc: bool 
+    :param include_loc: bool
+    :param hh_loc_input:bool=False. If False look for hh zone input from trips input. If True seek to load from hh_attributes.
     :return: core.Population
     """
     # TODO check for required col headers and give useful error?
@@ -55,7 +57,8 @@ def load_travel_diary(
             trip_diary,
             person_attributes,
             hh_attributes,
-            include_loc
+            include_loc,
+            hh_loc_input=hh_loc_input,
             )
     return basic_travel_diary_read(
         trip_diary,
@@ -150,7 +153,8 @@ def complex_travel_diary_read(
     trip_diary,
     all_person_attributes,
     all_hh_attributes,
-    include_loc=False
+    include_loc=False,
+    hh_loc_input=False,
     ):
     population = core.Population()
 
@@ -172,11 +176,16 @@ def complex_travel_diary_read(
             else:
                 person_attributes = None
 
+            if hh_loc_input:
+                home_area = hh_attributes["hzone"]
+            else:
+                home_area=trips.hzone.iloc[0]
+
             person = core.Person(
                 pid,
                 freq=person_data.freq.iloc[0],
                 attributes=person_attributes,
-                home_area=trips.hzone.iloc[0]
+                home_area=home_area
                 )
             loc = None
             if include_loc:
