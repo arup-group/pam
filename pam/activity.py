@@ -683,7 +683,7 @@ class Plan:
             Activity(
                 seq=1,
                 act='home',
-                area=self.home,
+                area=self.home.area,
                 start_time=pam.utils.minutes_to_datetime(0),
                 end_time=pam.variables.END_OF_DAY,
             )

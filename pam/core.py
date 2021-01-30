@@ -280,6 +280,7 @@ class Population:
         TODO - add method to all core classes
         """
         for _, household in self.households.items():
+
             home_loc = activity.Location(
                 area=household.location.area,
                 loc=sampler.sample(household.location.area, 'home')
@@ -296,7 +297,7 @@ class Population:
                         target_act = act.act[7:]
                     else:
                         target_act = act.act
-
+                    
                     if (act.location.area, target_act) in unique_locations:
                         location = unique_locations[(act.location.area, target_act)]
                         act.location = location
