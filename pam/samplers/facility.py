@@ -146,7 +146,7 @@ class FacilitySampler:
                     # sum of weights/probabilities should be one
                     weights = facs[weight_on] if weight_on != None else None
                     transit_distance = facs['transit'] if max_walk != None else None
-                    sampler_dict[zone][act] = flex_yielder(points, weights, transit_distance, max_walk)
+                    sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -181,14 +181,17 @@ class FacilitySampler:
             )
 
 def euclidean_distance(p1, p2):
+    """
+    Calculate euclidean distance between two Activity.location.loc objects
+    """
     return ((p1.x-p2.x)**2 + (p1.y-p2.y)**2)**0.5
 
 
-def flex_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
+def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
     """
     Build a generator which can accept arguments.
     """
-    return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder(
+    return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder_select(
             candidates = candidates, 
             weights = weights, 
             transit_distance = transit_distance, 
