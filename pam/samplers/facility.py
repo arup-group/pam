@@ -10,7 +10,7 @@ from pam.utils import write_xml
 
 import pandas as pd
 import numpy as np
-
+from types import GeneratorType
 
 
 EXPECTED_SPEEDS = {
@@ -19,9 +19,9 @@ EXPECTED_SPEEDS = {
     'bus':10, 
     'walk':5, 
     'cycle':15
-} # kph
+} # mode speeds expressed as *euclidean* kilometers per hour 
 
-TRANSIT_MODES = ['bus','rail','pt']
+TRANSIT_MODES = ['bus','rail','pt'] # modes for which the maximum walk distance applies
 SMALL_VALUE = 0.000001
 
 
@@ -119,7 +119,10 @@ class FacilitySampler:
                 return None, None
         else:
             self.error_counter = 0
-            return next(sampler(previous_mode, previous_duration, previous_loc))
+            if isinstance(sampler, GeneratorType):
+                return next(sampler)
+            else:
+                return next(sampler(previous_mode, previous_duration, previous_loc))
 
     def build_facilities_sampler(self, facilities, zones, weight_on = None, max_walk = None):
         """
@@ -143,10 +146,14 @@ class FacilitySampler:
                 facs = zone_facs.loc[zone_facs.activity == act]
                 if not facs.empty:
                     points = [(i, g) for i, g in facs.geometry.items()]
-                    # sum of weights/probabilities should be one
-                    weights = facs[weight_on] if weight_on != None else None
-                    transit_distance = facs['transit'] if max_walk != None else None
-                    sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk)
+                    if weight_on != None:
+                        # weighted sampler
+                        weights = facs[weight_on]
+                        transit_distance = facs['transit'] if max_walk != None else None
+                        sampler_dict[zone][act] = inf_yielder_weighted(points, weights, transit_distance, max_walk)
+                    else:
+                        # simple sampler
+                        sampler_dict[zone][act] = inf_yielder_simple(points)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -191,15 +198,18 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
     """
     Build a generator which can accept arguments.
     """
-    return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder_select(
-            candidates = candidates, 
-            weights = weights, 
-            transit_distance = transit_distance, 
-            max_walk = max_walk,
-            previous_mode = previous_mode, 
-            previous_duration = previous_duration, 
-            previous_loc = previous_loc
-        )
+    if isinstance(weights, pd.Series):
+        return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder_select(
+                candidates = candidates, 
+                weights = weights, 
+                transit_distance = transit_distance, 
+                max_walk = max_walk,
+                previous_mode = previous_mode, 
+                previous_duration = previous_duration, 
+                previous_loc = previous_loc
+            )
+    else:
+        return inf_yielder_simple(candidates)
 
 def inf_yielder_select(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc):
     """
@@ -249,7 +259,7 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previo
                 expected_distance = (previous_duration / pd.Timedelta(hours=1)) * speed  
                 distance_weights = np.abs(distances - expected_distance)
 
-                # normalise weights 
+                # normalise weights by distance
                 weights = weights / np.exp(distance_weights) # exponentiate distances to normalise very small distances               
                 # weights = weights / (1 + np.exp(distance_weights - distance_weights.mean())) # alternative formulation: logistic curve
 
