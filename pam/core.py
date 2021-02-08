@@ -317,6 +317,63 @@ class Population:
                         component.end_location = person.plan[idx+1].location
 
 
+    def sample_locs_complex(self, sampler):
+        """
+        Extends sample_locs method to enable more complex and rules-based sampling.
+        Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
+        It is generally slower than sample_locs, as it loops through both activities and legs.
+        """
+        for _, household in self.households.items():
+            home_loc = activity.Location(
+                area=household.location.area,
+                loc=sampler.sample(household.location.area, 'home', previous_mode = None, previous_duration=None, previous_loc = None)
+            )
+            previous_mode = None
+
+            unique_locations = {(household.location.area, 'home'): home_loc}
+            # TODO: work should probably also be a unique location
+
+            for _, person in household.people.items():
+                
+                for idx, plan in enumerate(person.plan):
+                    # loop through all plan elements
+
+                    if isinstance(plan, activity.Leg):
+                        previous_mode = plan.mode # keep track of last mode
+                        previous_duration = plan.duration
+
+                    elif isinstance(plan, activity.Activity):
+                        act = plan
+
+                        # remove "escort_" from activity types.
+                        # TODO: model joint trips
+                        if act.act[:7] == "escort_":
+                            target_act = act.act[7:]
+                        else:
+                            target_act = act.act
+
+                        if (act.location.area, target_act) in unique_locations:
+                            location = unique_locations[(act.location.area, target_act)]
+                            act.location = location
+                                
+                        else:
+                            location = activity.Location(
+                                area=act.location.area,
+                                loc=sampler.sample(act.location.area, target_act, previous_mode, previous_duration, previous_loc)
+                            )
+                            unique_locations[(act.location.area, target_act)] = location
+                            act.location = location
+                        
+                        previous_loc = location.loc # keep track of previous location
+
+                # complete the alotting activity locations to the trip starts and ends.
+                for idx in range(person.plan.length):
+                    component = person.plan[idx]
+                    if isinstance(component, activity.Leg):
+                        component.start_location = person.plan[idx-1].location
+                        component.end_location = person.plan[idx+1].location
+
+
 
 class Household:
     logger = logging.getLogger(__name__)

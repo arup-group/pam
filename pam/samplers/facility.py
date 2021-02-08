@@ -11,6 +11,20 @@ from pam.utils import write_xml
 import pandas as pd
 import numpy as np
 
+
+
+EXPECTED_SPEEDS = {
+    'average':10,
+    'car':20,
+    'bus':10, 
+    'walk':5, 
+    'cycle':15
+} # kph
+
+TRANSIT_MODES = ['bus','rail','pt']
+SMALL_VALUE = 0.000001
+
+
 class FacilitySampler:
 
     def __init__(
@@ -21,7 +35,8 @@ class FacilitySampler:
         build_xml: bool=True,
         fail: bool=True,
         random_default: bool=True,
-        weight_on: str=None
+        weight_on: str=None,
+        max_walk: float=None,
         ):
         """
         Sampler object for facilities. optionally build a facility xml output (for MATSim).
@@ -34,6 +49,7 @@ class FacilitySampler:
         :param fail: flag hard fail if sample not found
         :param random_default: flag for defaulting to random sample when activity missing
         :param weight_on: the column name of the facilities geodataframe which contains facility weights (for sampling)
+        :param max_walk: maximum walking distnace from a transit stop
         """
         self.logger = logging.getLogger(__name__)
         
@@ -42,7 +58,7 @@ class FacilitySampler:
         else:
             self.activities = activities
 
-        self.samplers = self.build_facilities_sampler(facilities, zones, weight_on = weight_on)
+        self.samplers = self.build_facilities_sampler(facilities, zones, weight_on = weight_on, max_walk = max_walk)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -57,19 +73,19 @@ class FacilitySampler:
     def clear(self):
         self.facilities = {}
 
-    def sample(self, location_idx, activity):
+    def sample(self, location_idx, activity, previous_mode=None, previous_duration=None, previous_loc=None):
         """
         Sample a shapely.Point from the given location and for the given activity.
         """
 
-        idx, loc = self.sample_facility(location_idx, activity)
+        idx, loc = self.sample_facility(location_idx, activity, previous_mode=previous_mode, previous_duration=previous_duration, previous_loc=previous_loc)
 
         if idx is not None and self.build_xml:
             self.facilities[idx] = {'loc': loc, 'act': activity}
 
         return loc
 
-    def sample_facility(self, location_idx, activity, patience=1000):
+    def sample_facility(self, location_idx, activity, patience=1000, previous_mode=None, previous_duration=None, previous_loc=None):
         """
         Sample a facility id and location. If a location idx is missing, can return a random location.
         """
@@ -103,9 +119,9 @@ class FacilitySampler:
                 return None, None
         else:
             self.error_counter = 0
-            return next(sampler)
+            return next(sampler(previous_mode, previous_duration, previous_loc))
 
-    def build_facilities_sampler(self, facilities, zones, weight_on = None):
+    def build_facilities_sampler(self, facilities, zones, weight_on = None, max_walk = None):
         """
         Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
@@ -127,8 +143,10 @@ class FacilitySampler:
                 facs = zone_facs.loc[zone_facs.activity == act]
                 if not facs.empty:
                     points = [(i, g) for i, g in facs.geometry.items()]
-                    weights = facs[weight_on] / facs[weight_on].sum() if weight_on != None else None # sum of weights/probabilities should be one
-                    sampler_dict[zone][act] = inf_yielder(points, weights)
+                    # sum of weights/probabilities should be one
+                    weights = facs[weight_on] if weight_on != None else None
+                    transit_distance = facs['transit'] if max_walk != None else None
+                    sampler_dict[zone][act] = flex_yielder(points, weights, transit_distance, max_walk)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -162,19 +180,77 @@ class FacilitySampler:
             matsim_filename='facilities_v1'
             )
 
+def euclidean_distance(p1, p2):
+    return ((p1.x-p2.x)**2 + (p1.y-p2.y)**2)**0.5
 
-def inf_yielder(candidates, weights = None):
+
+def flex_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
+    """
+    Build a generator which can accept arguments.
+    """
+    return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder(
+            candidates = candidates, 
+            weights = weights, 
+            transit_distance = transit_distance, 
+            max_walk = max_walk,
+            previous_mode = previous_mode, 
+            previous_duration = previous_duration, 
+            previous_loc = previous_loc
+        )
+
+def inf_yielder_select(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc):
+    """
+    Redirect to the simple or weighted sampler
+    """
+    if isinstance(weights, pd.Series):
+        return inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc)
+    else:
+        return inf_yielder_simple(candidates)
+
+def inf_yielder_simple(candidates):
     """
     Endlessly yield shuffled candidate items.
     """
+    while True:
+        random.shuffle(candidates)
+        for c in candidates:
+            yield c
+
+def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc):
+    """
+    A more complex sampler, which allows for weighted and rule-based sampling.
+    """
+
     if isinstance(weights, pd.Series):
         # if a series of facility weights is provided, perform weighted sampling with replacement
         while True:
-            yield candidates[np.random.choice(len(candidates), p = weights)]
-    else:
-        while True:
-            random.shuffle(candidates)
-            for c in candidates:
-                yield c
 
+            ## if a transit mode is used and the distance from a stop 
+            ## is longer than the maximum walking distance
+            ## then replace the weight with a very small value
+            if isinstance(transit_distance, pd.Series) and previous_mode in TRANSIT_MODES:
+                weights = np.where(
+                    transit_distance > max_walk,
+                    weights * SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
+                    weights
+                )
+                
+            # if the last location has been passed to the sampler, normalise by (expected) distance
+            if previous_loc != None:
+                
+                # calculate euclidean distance between the last visited location and every candidate location
+                distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
+
+                # calculate deviation from "expected" distance
+                speed = EXPECTED_SPEEDS[previous_mode] if previous_mode in EXPECTED_SPEEDS.keys() else EXPECTED_SPEEDS['average'] 
+                expected_distance = (previous_duration / pd.Timedelta(hours=1)) * speed  
+                distance_weights = np.abs(distances - expected_distance)
+
+                # normalise weights 
+                weights = weights / np.exp(distance_weights) # exponentiate distances to normalise very small distances               
+                # weights = weights / (1 + np.exp(distance_weights - distance_weights.mean())) # alternative formulation: logistic curve
+
+            weights = weights / weights.sum() # probability weights should add up to 1
+
+            yield candidates[np.random.choice(len(candidates), p = weights)]
 
