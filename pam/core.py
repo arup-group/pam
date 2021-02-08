@@ -334,6 +334,9 @@ class Population:
             # TODO: work should probably also be a unique location
 
             for _, person in household.people.items():
+                previous_mode = None
+                previous_duration = None
+                previous_loc = None
                 
                 for idx, plan in enumerate(person.plan):
                     # loop through all plan elements
@@ -359,7 +362,7 @@ class Population:
                         else:
                             location = activity.Location(
                                 area=act.location.area,
-                                loc=sampler.sample(act.location.area, target_act, previous_mode, previous_duration, previous_loc)
+                                loc=sampler.sample(act.location.area, target_act, previous_mode = previous_mode, previous_duration = previous_duration, previous_loc = previous_loc)
                             )
                             unique_locations[(act.location.area, target_act)] = location
                             act.location = location
