@@ -8,6 +8,7 @@ import pam.activity as activity
 import pam.plot as plot
 from pam import write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam import variables
 
 
 class Population:
@@ -306,7 +307,10 @@ class Population:
                             area=act.location.area,
                             loc=sampler.sample(act.location.area, target_act)
                         )
-                        unique_locations[(act.location.area, target_act)] = location
+                        if target_act in variables.LONG_TERM_ACTIVITIES:
+                            # one location per zone for long-term choices (only)
+                            # short-term activities, such as shopping can visit multiple locations in the same zone
+                            unique_locations[(act.location.area, target_act)] = location   
                         act.location = location
 
                 # complete the alotting activity locations to the trip starts and ends.
@@ -331,7 +335,6 @@ class Population:
             previous_mode = None
 
             unique_locations = {(household.location.area, 'home'): home_loc}
-            # TODO: work should probably also be a unique location
 
             for _, person in household.people.items():
                 previous_mode = None
@@ -364,7 +367,8 @@ class Population:
                                 area=act.location.area,
                                 loc=sampler.sample(act.location.area, target_act, previous_mode = previous_mode, previous_duration = previous_duration, previous_loc = previous_loc)
                             )
-                            unique_locations[(act.location.area, target_act)] = location
+                            if target_act in variables.LONG_TERM_ACTIVITIES:
+                                unique_locations[(act.location.area, target_act)] = location                                
                             act.location = location
                         
                         previous_loc = location.loc # keep track of previous location

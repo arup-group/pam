@@ -7,23 +7,11 @@ import logging
 
 from pam.samplers.spatial import RandomPointSampler
 from pam.utils import write_xml
+from pam import variables
 
 import pandas as pd
 import numpy as np
 from types import GeneratorType
-
-
-EXPECTED_EUCLIDEAN_SPEEDS = {
-    'average':10,
-    'car':20,
-    'bus':10, 
-    'walk':5, 
-    'cycle':15
-} # mode speeds expressed as *euclidean* kilometers per hour 
-
-TRANSIT_MODES = ['bus','rail','pt'] # modes for which the maximum walk distance applies
-SMALL_VALUE = 0.000001
-
 
 class FacilitySampler:
 
@@ -201,7 +189,7 @@ def euclidean_distance(p1, p2):
 
 def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
     """
-    Build a generator which can accept arguments.
+    Redirect to the appropriate sampler.
     :params list candidates: a list of tuples, containing candidate facilities and their index:
     :params pd.Series weights: sampling weights (ie facility floorspace)
     :params pd.Series transit_distance: distance of each candidate facility from the closest PT stop
@@ -245,13 +233,12 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previo
         # if a series of facility weights is provided, perform weighted sampling with replacement
         while True:
 
-            ## if a transit mode is used and the distance from a stop 
-            ## is longer than the maximum walking distance
+            ## if a transit mode is used and the distance from a stop is longer than the maximum walking distance,
             ## then replace the weight with a very small value
-            if isinstance(transit_distance, pd.Series) and previous_mode in TRANSIT_MODES:
+            if isinstance(transit_distance, pd.Series) and previous_mode in variables.TRANSIT_MODES:
                 weights = np.where(
                     transit_distance > max_walk,
-                    weights * SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
+                    weights * variables.SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
                     weights
                 )
                 
@@ -262,13 +249,18 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previo
                 distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
 
                 # calculate deviation from "expected" distance
-                speed = EXPECTED_EUCLIDEAN_SPEEDS[previous_mode] if previous_mode in EXPECTED_EUCLIDEAN_SPEEDS.keys() else EXPECTED_EUCLIDEAN_SPEEDS['average'] 
+                speed = variables.EXPECTED_EUCLIDEAN_SPEEDS[previous_mode] if previous_mode in variables.EXPECTED_EUCLIDEAN_SPEEDS.keys() else variables.EXPECTED_EUCLIDEAN_SPEEDS['average']
                 expected_distance = (previous_duration / pd.Timedelta(hours=1)) * speed  
+                expected_distance = expected_distance * 1000 # convert km to meters
                 distance_weights = np.abs(distances - expected_distance)
+                distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid zero weights
 
-                # normalise weights by distance
-                weights = weights / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances               
-                # weights = weights / (1 + np.exp(distance_weights - distance_weights.mean())) # alternative formulation: logistic curve
+                ## normalise weights by distance            
+                # weights = weights.values / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances 
+                # weights = weights.values / np.exp(distance_weights/distance_weights.max())          
+                # weights = weights / (1 + np.exp(1*(distance_weights - distance_weights.mean()))) # alternative formulation: logistic curve
+                # weights = weights.values / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve   
+                weights = weights.values / (distance_weights ** 2) # distance decay factor of 2 
 
             weights = weights / weights.sum() # probability weights should add up to 1
 
