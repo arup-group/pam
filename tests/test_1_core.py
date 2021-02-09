@@ -314,6 +314,19 @@ def test_population_sample_locs(person_heh):
     assert population['1']['1'].plan[2].location.loc is None
 
 
+def test_population_sample_locs_complex(person_heh):
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(person_heh)
+
+    class DummySampler:
+        def sample(self, loc, acty, previous_mode, previous_duration, previous_loc):
+            return None
+
+    population.sample_locs_complex(DummySampler())
+    assert population['1']['1'].plan[2].location.loc is None
+
+
 def test_get_hh_freq_if_None():
     hh = Household('1')
     hh.add(Person('1', freq=None))

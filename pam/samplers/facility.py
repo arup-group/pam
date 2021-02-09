@@ -13,7 +13,7 @@ import numpy as np
 from types import GeneratorType
 
 
-EXPECTED_SPEEDS = {
+EXPECTED_EUCLIDEAN_SPEEDS = {
     'average':10,
     'car':20,
     'bus':10, 
@@ -76,6 +76,11 @@ class FacilitySampler:
     def sample(self, location_idx, activity, previous_mode=None, previous_duration=None, previous_loc=None):
         """
         Sample a shapely.Point from the given location and for the given activity.
+        :params str location_idx: the zone to sample from
+        :params str activity: activity purpose
+        :params str previous_mode: transport mode used to access facility
+        :params pd.Timedelta previous_duration: the time duration of the arriving leg
+        :params shapely.Point previous_loc: the location of the last visited activity
         """
 
         idx, loc = self.sample_facility(location_idx, activity, previous_mode=previous_mode, previous_duration=previous_duration, previous_loc=previous_loc)
@@ -150,10 +155,10 @@ class FacilitySampler:
                         # weighted sampler
                         weights = facs[weight_on]
                         transit_distance = facs['transit'] if max_walk != None else None
-                        sampler_dict[zone][act] = inf_yielder_weighted(points, weights, transit_distance, max_walk)
+                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk)
                     else:
                         # simple sampler
-                        sampler_dict[zone][act] = inf_yielder_simple(points)
+                        sampler_dict[zone][act] = inf_yielder(points)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -197,9 +202,13 @@ def euclidean_distance(p1, p2):
 def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
     """
     Build a generator which can accept arguments.
+    :params list candidates: a list of tuples, containing candidate facilities and their index:
+    :params pd.Series weights: sampling weights (ie facility floorspace)
+    :params pd.Series transit_distance: distance of each candidate facility from the closest PT stop
+    :params float max_walk: maximum walking distance from a PT stop
     """
     if isinstance(weights, pd.Series):
-        return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder_select(
+        return lambda previous_mode = None, previous_duration = None, previous_loc = None: inf_yielder_weighted(
                 candidates = candidates, 
                 weights = weights, 
                 transit_distance = transit_distance, 
@@ -208,15 +217,6 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
                 previous_duration = previous_duration, 
                 previous_loc = previous_loc
             )
-    else:
-        return inf_yielder_simple(candidates)
-
-def inf_yielder_select(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc):
-    """
-    Redirect to the simple or weighted sampler
-    """
-    if isinstance(weights, pd.Series):
-        return inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc)
     else:
         return inf_yielder_simple(candidates)
 
@@ -231,7 +231,14 @@ def inf_yielder_simple(candidates):
 
 def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previous_mode, previous_duration, previous_loc):
     """
-    A more complex sampler, which allows for weighted and rule-based sampling.
+    A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
+    :params list candidates: a list of tuples, containing candidate facilities and their index:
+    :params pd.Series weights: sampling weights (ie facility floorspace)
+    :params pd.Series transit_distance: distance of each candidate facility from the closest PT stop
+    :params float max_walk: maximum walking distance from a PT stop
+    :params str previous_mode: transport mode used to access facility
+    :params pd.Timedelta previous_duration: the time duration of the arriving leg
+    :params shapely.Point previous_loc: the location of the last visited activity
     """
 
     if isinstance(weights, pd.Series):
@@ -255,12 +262,12 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, previo
                 distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
 
                 # calculate deviation from "expected" distance
-                speed = EXPECTED_SPEEDS[previous_mode] if previous_mode in EXPECTED_SPEEDS.keys() else EXPECTED_SPEEDS['average'] 
+                speed = EXPECTED_EUCLIDEAN_SPEEDS[previous_mode] if previous_mode in EXPECTED_EUCLIDEAN_SPEEDS.keys() else EXPECTED_EUCLIDEAN_SPEEDS['average'] 
                 expected_distance = (previous_duration / pd.Timedelta(hours=1)) * speed  
                 distance_weights = np.abs(distances - expected_distance)
 
                 # normalise weights by distance
-                weights = weights / np.exp(distance_weights) # exponentiate distances to normalise very small distances               
+                weights = weights / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances               
                 # weights = weights / (1 + np.exp(distance_weights - distance_weights.mean())) # alternative formulation: logistic curve
 
             weights = weights / weights.sum() # probability weights should add up to 1
