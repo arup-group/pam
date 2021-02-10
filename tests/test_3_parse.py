@@ -1,9 +1,11 @@
 import os
 import pytest
 import pandas as pd
+from datetime import datetime
 
 from pam.core import Population, Household, Person
 from pam.read import load_travel_diary, load_pickle
+from pam.utils import parse_time
 from .fixtures import person_crop_last_act, person_crop_last_leg
 
 test_trips_path = os.path.abspath(
@@ -12,6 +14,17 @@ test_trips_path = os.path.abspath(
 test_attributes_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
 )
+
+
+testdata = [
+    (0, datetime(1900, 1, 1, 0, 0)),
+    (1, datetime(1900, 1, 1, 0, 1)),
+    (60, datetime(1900, 1, 1, 1, 0)),
+    ('1900-01-01 13:00:00', datetime(1900, 1, 1, 13, 0)),
+]
+@pytest.mark.parametrize("a,expected", testdata)
+def test_time_parse(a, expected):
+    assert parse_time(a) == expected
 
 
 @pytest.fixture

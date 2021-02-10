@@ -1,10 +1,19 @@
 from datetime import datetime
+import numpy as np
 import gzip
 from lxml import etree
 from io import BytesIO
 import os
 from shapely.geometry import Point, LineString
 from s2sphere import CellId
+
+
+def parse_time(time):
+    if isinstance(time, int) or isinstance(time, np.int64):
+        return minutes_to_datetime(time)
+    if isinstance(time, str):
+        return datetime_string_to_datetime(time)
+    raise UserWarning(f"Cannot parse {time} of type {type(time)} that is not int (assuming minutes) or str (%Y-%m-%d %H:%M:%S)")
 
 
 def minutes_to_datetime(minutes: int):
@@ -16,6 +25,15 @@ def minutes_to_datetime(minutes: int):
     days, remainder = divmod(minutes, 24 * 60)
     hours, minutes = divmod(remainder, 60)
     return datetime(1900, 1, 1+days, hours, minutes)
+
+
+def datetime_string_to_datetime(string: str):
+    """
+    Convert datetime formatted string to datetime
+    :param string: str "%Y-%m-%d %H:%M:%S"
+    :return: datetime
+    """
+    return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 
 def datetime_to_matsim_time(dt):

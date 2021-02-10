@@ -225,11 +225,12 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
         hh_data = {
             'hid': hid,
             'freq': hh.freq,
+            'zone': hh.location.area,
         }
         if isinstance(hh.attributes, dict):
             hh_data.update(hh.attributes)
-        if hh.location.area is not None:
-            hh_data['area'] = hh.location.area
+        # if hh.location.area is not None:
+        #     hh_data['area'] = hh.location.area
         if hh.location.loc is not None:
             hh_data['geometry'] = hh.location.loc
 
@@ -240,11 +241,12 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                 'pid': pid,
                 'hid': hid,
                 'freq': person.freq,
+                'zone': hh.location.area,
             }
             if isinstance(person.attributes, dict):
                 people_data.update(person.attributes)
-            if hh.location.area is not None:
-                people_data['area'] = hh.location.area
+            # if hh.location.area is not None:
+            #     people_data['area'] = hh.location.area
             if hh.location.loc is not None:
                 people_data['geometry'] = hh.location.loc
 
@@ -256,21 +258,21 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                         'pid': pid,
                         'hid': hid,
                         'freq': person.freq,
-                        'origin': component.start_location.area,
-                        'destination': component.end_location.area,
-                        'purpose': component.purp,
+                        'ozone': component.start_location.area,
+                        'dzone': component.end_location.area,
+                        'purp': component.purp,
                         'origin activity': person.plan[seq-1].act,
                         'destination activity': person.plan[seq+1].act,
                         'mode': component.mode,
-                        'sequence': component.seq,
-                        'start time': component.start_time,
-                        'end time': component.end_time,
+                        'seq': component.seq,
+                        'tst': component.start_time,
+                        'tet': component.end_time,
                         'duration': str(component.duration),
                     }
-                    if component.start_location.area is not None:
-                        leg_data['start_area'] = component.start_location.area
-                    if component.end_location.area is not None:
-                        leg_data['end_area'] = component.end_location.area
+                    # if component.start_location.area is not None:
+                    #     leg_data['start_area'] = component.start_location.area
+                    # if component.end_location.area is not None:
+                    #     leg_data['end_area'] = component.end_location.area
                     if component.start_location.loc is not None and component.end_location.loc is not None:
                         leg_data['geometry'] = LineString((component.start_location.loc, component.end_location.loc))
 
@@ -282,13 +284,14 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                         'hid': hid,
                         'freq': person.freq,
                         'activity': component.act,
-                        'sequence': component.seq,
+                        'seq': component.seq,
                         'start time': component.start_time,
                         'end time': component.end_time,
                         'duration': str(component.duration),
+                        'zone': component.location.area,
                     }
-                    if component.location.area is not None:
-                        act_data['area'] = component.location.area
+                    # if component.location.area is not None:
+                    #     act_data['area'] = component.location.area
                     if component.location.loc is not None:
                         act_data['geometry'] = component.location.loc
 
