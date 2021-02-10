@@ -295,20 +295,20 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                     acts.append(act_data)
 
     hhs = pd.DataFrame(hhs).set_index('hid')
-    hhs = save_geojson(hhs, crs, to_crs, os.path.join(dir, 'households.geojson'))
-    hhs.to_csv(os.path.join(dir, 'households.csv'))
+    save_geojson(hhs, crs, to_crs, os.path.join(dir, 'households.geojson'))
+    save_csv(hhs, os.path.join(dir, 'households.csv'))
 
     people = pd.DataFrame(people).set_index('pid')
-    people = save_geojson(people, crs, to_crs, os.path.join(dir, 'people.geojson'))
-    people.to_csv(os.path.join(dir, 'people.csv'))
+    save_geojson(people, crs, to_crs, os.path.join(dir, 'people.geojson'))
+    save_csv(people, os.path.join(dir, 'people.csv'))
 
     legs = pd.DataFrame(legs)
-    legs = save_geojson(legs, crs, to_crs, os.path.join(dir, 'legs.geojson'))
-    legs.to_csv(os.path.join(dir, 'legs.csv'))
+    save_geojson(legs, crs, to_crs, os.path.join(dir, 'legs.geojson'))
+    save_csv(legs, os.path.join(dir, 'legs.csv'))
 
     acts = pd.DataFrame(acts)
-    acts = save_geojson(acts, crs, to_crs, os.path.join(dir, 'activities.geojson'))
-    acts.to_csv(os.path.join(dir, 'activities.csv'))
+    save_geojson(acts, crs, to_crs, os.path.join(dir, 'activities.geojson'))
+    save_csv(acts, os.path.join(dir, 'activities.csv'))
 
 
 def save_geojson(df, crs, to_crs, path):
@@ -318,8 +318,12 @@ def save_geojson(df, crs, to_crs, path):
             df.crs = crs
             df.to_crs(to_crs, inplace=True)
         df.to_file(path, driver='GeoJSON')
+
+
+def save_csv(df, path):
+    if 'geometry' in df.columns:
         df = df.drop('geometry', axis=1)
-    return df
+    df.to_csv(path)
 
 
 def write_population_csv(list_of_populations, export_path):

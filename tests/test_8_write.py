@@ -286,6 +286,7 @@ def test_write_to_csv_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
 
     hh_df = pd.read_csv(os.path.join(tmpdir, "households.csv"))
+    print(hh_df.head())
     assert list(hh_df.columns) == ['hid', 'freq', 'area']
     assert len(hh_df) == 1
 
