@@ -251,25 +251,25 @@ def test_write_to_csv_no_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
 
     hh_df = pd.read_csv(os.path.join(tmpdir, "households.csv"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone']
     assert len(hh_df) == 1
 
     people_df = pd.read_csv(os.path.join(tmpdir, "people.csv"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc']
     assert len(people_df) == 1
 
     legs_df = pd.read_csv(os.path.join(tmpdir, "legs.csv"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration'
        ]
     assert len(legs_df) == 2
 
     acts_df = pd.read_csv(os.path.join(tmpdir, "activities.csv"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone'
        ]
     assert len(acts_df) == 3
 
@@ -286,25 +286,25 @@ def test_write_to_csv_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
 
     hh_df = pd.read_csv(os.path.join(tmpdir, "households.csv"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone']
     assert len(hh_df) == 1
 
     people_df = pd.read_csv(os.path.join(tmpdir, "people.csv"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc']
     assert len(people_df) == 1
 
     legs_df = pd.read_csv(os.path.join(tmpdir, "legs.csv"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration'
        ]
     assert len(legs_df) == 2
 
     acts_df = pd.read_csv(os.path.join(tmpdir, "activities.csv"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone'
        ]
     assert len(acts_df) == 3
 
@@ -313,25 +313,25 @@ def test_write_to_csv_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
 
     hh_df = gp.read_file(os.path.join(tmpdir, "households.geojson"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area', 'geometry']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone', 'geometry']
     assert len(hh_df) == 1
 
     people_df = gp.read_file(os.path.join(tmpdir, "people.geojson"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area', 'geometry']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc', 'geometry']
     assert len(people_df) == 1
 
     legs_df = gp.read_file(os.path.join(tmpdir, "legs.geojson"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area', 'geometry'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration', 'geometry'
        ]
     assert len(legs_df) == 2
 
     acts_df = gp.read_file(os.path.join(tmpdir, "activities.geojson"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area', 'geometry'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone', 'geometry'
        ]
     assert len(acts_df) == 3
 
@@ -355,25 +355,25 @@ def test_write_to_csv_some_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
 
     hh_df = pd.read_csv(os.path.join(tmpdir, "households.csv"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone']
     assert len(hh_df) == 2
 
     people_df = pd.read_csv(os.path.join(tmpdir, "people.csv"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc']
     assert len(people_df) == 2
 
     legs_df = pd.read_csv(os.path.join(tmpdir, "legs.csv"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration'
        ]
     assert len(legs_df) == 4
 
     acts_df = pd.read_csv(os.path.join(tmpdir, "activities.csv"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone'
        ]
     assert len(acts_df) == 6
 
@@ -382,25 +382,25 @@ def test_write_to_csv_some_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
 
     hh_df = gp.read_file(os.path.join(tmpdir, "households.geojson"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area', 'geometry']
-    assert len(hh_df) == 2
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone', 'geometry']
+    assert len(hh_df) == 2  
 
     people_df = gp.read_file(os.path.join(tmpdir, "people.geojson"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area', 'geometry']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc', 'geometry']
     assert len(people_df) == 2
 
     legs_df = gp.read_file(os.path.join(tmpdir, "legs.geojson"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area', 'geometry'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration', 'geometry'
        ]
     assert len(legs_df) == 4
 
     acts_df = gp.read_file(os.path.join(tmpdir, "activities.geojson"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area', 'geometry'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone', 'geometry'
        ]
     assert len(acts_df) == 6
 
@@ -413,25 +413,25 @@ def test_write_to_csv_convert_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
 
     hh_df = pd.read_csv(os.path.join(tmpdir, "households.csv"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone']
     assert len(hh_df) == 1
 
     people_df = pd.read_csv(os.path.join(tmpdir, "people.csv"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc']
     assert len(people_df) == 1
 
     legs_df = pd.read_csv(os.path.join(tmpdir, "legs.csv"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration'
        ]
     assert len(legs_df) == 2
 
     acts_df = pd.read_csv(os.path.join(tmpdir, "activities.csv"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone'
        ]
     assert len(acts_df) == 3
 
@@ -440,25 +440,25 @@ def test_write_to_csv_convert_locs(population_heh, tmpdir):
         assert os.path.exists(os.path.join(tmpdir, f"{name}.geojson"))
 
     hh_df = gp.read_file(os.path.join(tmpdir, "households.geojson"))
-    assert list(hh_df.columns) == ['hid', 'freq', 'area', 'geometry']
+    assert list(hh_df.columns) == ['hid', 'freq', 'zone', 'geometry']
     assert len(hh_df) == 1
 
     people_df = gp.read_file(os.path.join(tmpdir, "people.geojson"))
-    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hh_size', 'inc', 'area', 'geometry']
+    assert list(people_df.columns) == ['pid', 'hid', 'freq', 'zone', 'hh_size', 'inc', 'geometry']
     assert len(people_df) == 1
 
     legs_df = gp.read_file(os.path.join(tmpdir, "legs.geojson"), index_col=0)
     assert list(legs_df.columns) == [
-        'pid', 'hid', 'freq', 'origin', 'destination', 'purpose', 'origin activity',
-       'destination activity', 'mode', 'sequence', 'start time', 'end time',
-       'duration', 'start_area', 'end_area', 'geometry'
+        'pid', 'hid', 'freq', 'ozone', 'dzone', 'purp', 'origin activity',
+       'destination activity', 'mode', 'seq', 'tst', 'tet',
+       'duration', 'geometry'
        ]
     assert len(legs_df) == 2
 
     acts_df = gp.read_file(os.path.join(tmpdir, "activities.geojson"), index_col=0)
     assert list(acts_df.columns) == [
-        'pid', 'hid', 'freq', 'activity', 'sequence', 'start time', 'end time',
-       'duration', 'area', 'geometry'
+        'pid', 'hid', 'freq', 'activity', 'seq', 'start time', 'end time',
+       'duration', 'zone', 'geometry'
        ]
     assert len(acts_df) == 3
 

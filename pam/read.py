@@ -93,7 +93,7 @@ def basic_travel_diary_read(trip_diary, attributes_df):
                     seq=0,
                     act='home' if home_area == origin_area else 'work',
                     area=origin_area,
-                    start_time=utils.minutes_to_datetime(0),
+                    start_time=utils.parse_time(0),
                 )
             )
 
@@ -109,8 +109,8 @@ def basic_travel_diary_read(trip_diary, attributes_df):
                         purp=trip.purp.lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=utils.minutes_to_datetime(trip.tst),
-                        end_time=utils.minutes_to_datetime(trip.tet)
+                        start_time=utils.parse_time(trip.tst),
+                        end_time=utils.parse_time(trip.tet)
                     )
                 )
 
@@ -121,7 +121,7 @@ def basic_travel_diary_read(trip_diary, attributes_df):
                             seq=n + 1,
                             act=activity_map[trip.dzone],
                             area=trip.dzone,
-                            start_time=utils.minutes_to_datetime(trip.tet),
+                            start_time=utils.parse_time(trip.tet),
                         )
                     )
 
@@ -131,7 +131,7 @@ def basic_travel_diary_read(trip_diary, attributes_df):
                             seq=n + 1,
                             act=trip.purp.lower(),
                             area=trip.dzone,
-                            start_time=utils.minutes_to_datetime(trip.tet),
+                            start_time=utils.parse_time(trip.tet),
                         )
                     )
 
@@ -196,7 +196,7 @@ def complex_travel_diary_read(
                     act=None,
                     area=trips.ozone.iloc[0],
                     loc=loc,
-                    start_time=utils.minutes_to_datetime(0),
+                    start_time=utils.parse_time(0),
                 )
             )
 
@@ -219,8 +219,8 @@ def complex_travel_diary_read(
                         end_area=trip.dzone,
                         start_loc=start_loc,
                         end_loc=end_loc,
-                        start_time=utils.minutes_to_datetime(trip.tst),
-                        end_time=utils.minutes_to_datetime(trip.tet),
+                        start_time=utils.parse_time(trip.tst),
+                        end_time=utils.parse_time(trip.tet),
                     )
                 )
 
@@ -230,7 +230,7 @@ def complex_travel_diary_read(
                         act=None,
                         area=trip.dzone,
                         loc=end_loc,
-                        start_time=utils.minutes_to_datetime(trip.tet),
+                        start_time=utils.parse_time(trip.tet),
                     )
                 )
 
@@ -318,7 +318,7 @@ def load_activity_plan(
                     seq=0,
                     act='home',
                     area=origin_area,
-                    start_time=utils.minutes_to_datetime(0),
+                    start_time=utils.parse_time(0),
                 )
             )
 
@@ -331,8 +331,8 @@ def load_activity_plan(
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=utils.minutes_to_datetime(trip.tst),
-                        end_time=utils.minutes_to_datetime(trip.tet)
+                        start_time=utils.parse_time(trip.tst),
+                        end_time=utils.parse_time(trip.tet)
                     )
                 )
 
@@ -341,7 +341,7 @@ def load_activity_plan(
                         seq=n + 1,
                         act=trip.activity.lower(),
                         area=trip.dzone,
-                        start_time=utils.minutes_to_datetime(trip.tet),
+                        start_time=utils.parse_time(trip.tet),
                     )
                 )
 
@@ -426,7 +426,7 @@ def load_travel_diary_from_to(
                     seq=0,
                     act=first_act,
                     area=trips.iloc[0].ozone,
-                    start_time=utils.minutes_to_datetime(0),
+                    start_time=utils.parse_time(0),
                 )
             )
 
@@ -439,8 +439,8 @@ def load_travel_diary_from_to(
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
-                        start_time=utils.minutes_to_datetime(trip.tst),
-                        end_time=utils.minutes_to_datetime(trip.tet)
+                        start_time=utils.parse_time(trip.tst),
+                        end_time=utils.parse_time(trip.tet)
                     )
                 )
 
@@ -449,7 +449,7 @@ def load_travel_diary_from_to(
                         seq=n + 1,
                         act=trip.dact.lower(),
                         area=trip.dzone,
-                        start_time=utils.minutes_to_datetime(trip.tet),
+                        start_time=utils.parse_time(trip.tet),
                     )
                 )
 
