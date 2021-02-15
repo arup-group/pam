@@ -38,7 +38,10 @@ supply or utility demand.
 - Why Activity Plans?
 - Modelling the pandemic
 - Example modifiers/policies
-- Input/output data formats 
+- Populations
+- Input/output data formats
+- Other formats
+- Activity Plans
 - Get involved
 - Technical notes
 
@@ -178,103 +181,200 @@ Logic also be added to apply:
 - times
 - durations
 
-## Input/output data formats
+## Populations
 
-In most use cases we load, manipulate and write population data using the `pam.core.Population` class. The first step in any application is therefore to load data into this format. The typical requirement is to load data from three tabular (pandas.DataFrame) inputs:
-- plans
-- person_attributes
-- household_attributes
+We have some read methods for common input data formats - but first let's take a quick 
+look at the core pam data structure for populations:
 
-Plans inputs can be in a variety of formats (for example activity vs trip records). We also support MATSim xml.
+```
+from pam.core import Population, Household, Person
 
-There are a number of population 'read' methods in `pam.read`. The most commonly used being `pam.read.load_travel_diary`. However this method is somewhat in flux as we identify the most common requirements. Please get in touch if you would like additional support or feel free to add your own.
+population = Population()  # initialise an empty population
 
-Example use:
+household = Household('hid0', attributes = {'struct': 'A', 'dogs': 2, ...})
+population.add(household)
 
+person = Person('pid0', attributes = {'age': 33, 'height': 'tall', ...})
+household.add(person)
+
+person = Person('pid1', attributes = {'age': 35, 'cats_or_dogs?': 'dogs', ...})
+household.add(person)
+
+population.print()
+```
+
+## Read methods
+
+The first step in any application is to load your data into the core pam format (pam.core.Population). We 
+are trying to support comon tabular formats ('travel diaries') using `pam.read.load_travel_diary`. A 
+travel diary can be composed of three tables:
+ 
+- `trips` (required) -  a trip diary for all people in the population, with rows representing trips
+- `persons_attributes` (optional) - optionally include persons attributes (eg: `person income`)
+- `households_attributes` (optional) - optionally include households attributes (eg: `hh number of cars`)
+
+The input tables are expected as pandas.DataFrame, eg:
 ```
 import pandas as pd
 import pam
 
-plans = pd.DataFrame(plans.csv)
-person_attributes = pd.DataFrame(person_attributes.csv)
-household_attributes = pd.DataFrame(household_attributes.csv)
+trips_df = pd.read_csv(trips.csv)
+persons_df = pd.read_csv(persons.csv)
 
-# wrangling of input DataFrames into correct formats, etc
-#
-#
+# Fix headers and wrangle as required
+# ...
 
 population = pam.read.load_travel_diary(
-    trips = plans.csv
-    person_attributes = person_attributes,
-    hh_attributes = household_attributes,
-)
+    trips = trips_df,
+    persons_attributes = persons_df,
+    hhs_attributes = None,
+    )
+
+print(population.stats)
+
+example_person = population.random_person
+example_person.print()
+example_person.plot()
 ```
 
-The expectation is that the inputs will require some form of manipulation before being read into pam, for example to add the required headers as described below.
+PAM requires tabular inputs to follow a basic structure. Rows in the `trips` dataframe represent unique trips by all persons, rows in the 
+`persons_attributes` dataframe represent unique persons and rows in the `hhs_attributes` dataframe represent unique households. Fields 
+named `pid` (person ID) and `hid` (household ID) are used to provide unique identifiers to people and households.
 
-#### Plans (Typically as Trips, but various types including Activity Logs also supported)
+**Trips Input:**
 
-Tabular data (pandas.DataFrame) with each row describing a unique trip from an origin (assumed home at start of day)
- to destination. trips are uniquely identified by person id (`pid`) and household id (`hid`). They are assumed ordered by sequence number.
+eg:
+| pid | hid | seq | hzone | ozone | dzone | purp | mode | tst | tet | freq |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | Harrow | Harrow | Camden | work | pt | 444 | 473 | 4.54 |
+| 0 | 0 | 1 | Harrow | Camden | Harrow | home | pt | 890 | 919 | 4.54 |
+| 1 | 0 | 0 | Harrow | Harrow | Tower Hamlets | work | car | 507 | 528 | 2.2 |
+| 1 | 0 | 1 | Harrow | Tower Hamlets | Harrow | home | car | 1065 | 1086 | 2.2 |
+| 2 | 1 | 0 | Islington | Islington | Hackney | shop | pt | 422 | 425 | 12.33 |
+| 2 | 1 | 1 | Islington | Hackney | Hackney | leisure | walk | 485 | 500 | 12.33 |
+| 2 | 1 | 2 | Islington | Croydon | Islington | home | pt | 560 | 580 | 12.33 |
 
- Trips are labelled with home, origin, and destination zones, purpose, mode, start time, end 
- time and some form of weighting:
-  
-**Required fields:**
-- `pid` - person ID
-- `hid` - household ID
-- `seq` - trip sequence number
+
+A `trips` table is composed of rows representing unique trips for all persons in the population. Trips must be correctly ordered according to their sequence unless a numeric `seq` (trip sequence) field is provided, in which case trips will be ordered accordingly for each person.
+
+The `trips` input **must** include the following fields:
+- `pid` - person ID, used as a unique identifier to associate trips belonging to the same person and to join trips with person attributes if provided.
+- `ozone` - trip origin zone ID
+- `dzone` - trip destination zone ID
+- `mode` - trip mode - note that lower case strings are enforced
+- `tst` - trip start time in minutes (integer) or a datetime string (eg: "2020-01-01 14:00:00")
+- `tet` - trip end time in minutes (integer) or a datetime string (eg: "2020-01-01 14:00:00")
+
+The `trips` input must **either**: 
+- `purp` - trip or tour purpose, eg 'work'
+- `oact` and `dact` - origin activity type and destination activity type, eg 'home' and 'work'
+
+*Note that lower case strings are enforced and that 'home' activities should be encoded as `home`.*
+
+The `trips` input **may** also include the following fields:
+- `hid` - household ID, used as a unique identifier to associate persons belonging to the same household and to join with household attributes if provided
+- `freq` - trip weighting for representative population
+- `seq` - trip sequence number, if omitted pam will assume that trips are already ordered
 - `hzone` - household zone
-- `ozone` - trip origin zone
-- `dzone` - trip destination zone
-- `purp` - trip purpose
-- `mode` - trip mode
-- `tst` - trip start time (minutes)
-- `tet` - trip end time (minutes)
-- `freq` - weighting for representative population
 
-Some read methods can infer home locations and/or trip purpose. All attributes (including freq) can be changed once loaded into population format.
+**'trip purpose' vs 'tour purpose':**
 
-#### Persons data
+We've encountered a few different ways that trip purpose can be encoded. The preferred way being to encode a trip purpose as being the activity of the destination, so that a trip home would be encoded as `purp = home`. However we've also seen the more complex 'tour purpose' encoding, in which case a return trip from work to home is encoded as `purp = work`. Good news is that the `pam.read.load_travel_diary` will deal ok with either. But it's worth checking.
 
-Tabular data (pandas.DataFrame) describing socio-economic characteristics and other attributes for each person. `pid` is a required field.  Other fields can be additionally added to describe person attributes that may be used for modfification or sampling methods. These attributes will also be included when writing to MATSim xml format.
+**Using persons_attributes and /or households_attributes**
 
-**Required fields:**
-- `pid` - person ID
+eg:
+```
+# persons.csv
+| pid | hid | hzone | freq | income| age | driver | cats or dogs |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | Harrow | 10.47 | high | high | yes | dogs |
+| 1 | 0 | Harrow | 0.034 | low | medium | no | dogs |
+| 2 | 1 | Islington | 8.9 | medium | low | yes | dogs |
 
-**Example attribute fields:**
-- `hsize` - household size
-- `car` - number of cars owned by household
-- `inc` - income group
-- `hstr` - household structure
-- `gender` - eg male/female/unknown
-- `age` - age group
-- `race` - ethnicity
-- `license` - eg yes/no/unknown
-- `job` - eg full-time/part-time/education/retired/unknown
-- `occ` - occupation group
+# households.csv
+| hid | hzone | freq | persons | cars |
+| --- | --- | --- | --- | --- |
+| 0 | Harrow | 10.47 | 2 | 1 |
+| 1 | Islington | 0.034 | 1 | 1 |
+```
 
+If you are using persons_attributes (`persons_attributes`) this table must contain a `pid` field (person ID). If you are using persons_attributes (`households_attributes`) this table must contain a `hid` field (household ID). In both cases, the frequency field `freq` may be used. All other attributes can be included with column names to suit the attribute. Note that `hzone` (home zone) can optionally be provided in the attribute tables.
 
-#### Household_attributes input
+**A note about 'freq':**
 
-Tabular data (pandas.DataFrame) with each row describing a unique household. `hid` is a required field used as the unique identifier for each household. Other fields can be additionally added to describe household attributes that may be used for modfification or sampling methods.
+Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using `freq`. We generally assume a frequency to represent expected occurances in a full population. For example if we use a person frequency (`person.freq`) the the sum of all these frequencies (`population.size`), will equal the expected population size.
 
-**Required fields:**
-- `hid` - household ID
+Because it is quite common to provide a person or household `freq` in the trips table, there are two special options (`trip_freq_as_person_freq = True` and `trip_freq_as_hh_freq = True`) that can be used to pass the `freq` field from the trips table to either the people or households table instead.
 
-**Example attribute fields:**
-- `freq` - weighting for representative population
-- `persons` - hh occupancy
-- `income` - hh income
-- etc
+### Other formats
 
+PAM can read/write to tabular formats and MATSim xml. Please get in touch if you would like additional support or feel free to add your own.
 
-#### MATSim xml
+### Writing
 
-We also support reading and writting from MATSim formatted xml plans and person attributes.
+The write methods can be found in the `pam.write` module.
 
-Read functionality is contained in `pam.read`. Write functionality in `pam.write`.
+## Activity Plans
 
+But what about activity plans?
+
+PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips'). The main rules are (i) that plans must consist of sequences of alternate `pam.activity.Activity` and `pam.activity.Leg` objects and (ii) that a plan must start and end with an `Activity`:
+
+```
+from pam.core import Person
+from pam.activity import Leg, Activity
+from pam
+
+person = Person('Tony', attributes = {'age': 9, 'phylosophy': 'stoicism'})
+
+person.add(
+    Activity(
+        act='home',
+        area='zone A',
+    )
+)
+
+person.add(
+    Leg(
+        mode='car',
+        start_time=utils.parse_time(600),  # (minutes)
+        end_time=utils.parse_time(630),
+    )
+)
+
+person.add(
+    Activity(
+        act='work',
+        area='zone B',
+        )
+    )
+
+person.add(
+    Leg(
+        mode='car',
+        start_time=utils.parse_time(1800),
+        end_time=utils.parse_time(1830),
+    )
+)
+
+# Continue adding Activities and Legs alternately.
+# A sequence must start and end with an activity.
+# ...
+
+person.add(
+    Activity(
+        act='home',
+        area='zone B'
+    )
+)
+
+activities = list(person.plan.activities)
+trips = list(person.plan.legs)
+
+person.print()
+
+```
 
 ## Get involved
 

@@ -1,3 +1,4 @@
+from numpy import DataSource
 import pandas as pd
 from shapely.geometry import Point
 from datetime import datetime, timedelta
@@ -14,194 +15,310 @@ import pam.utils as utils
 
 
 def load_travel_diary(
-    trip_diary:pd.DataFrame,
-    person_attributes:Union[pd.DataFrame,None]=None,
-    hh_attributes:Union[pd.DataFrame,None]=None,
-    sample_perc:Union[float,None]=None,
-    complex:bool=True,
-    include_loc:bool=False,
-    hh_loc_input:bool=False,
+    trips: pd.DataFrame,
+    persons_attributes: Union[pd.DataFrame, None] = None,
+    hhs_attributes: Union[pd.DataFrame, None] = None,
+    sample_perc: Union[float, None] = None,
+    tour_based: bool = True,
+    from_to: bool = False,
+    include_loc: bool = False,
+    sort_by_seq: Union[bool, None] = None,
+    trip_freq_as_person_freq: bool = False,
+    trip_freq_as_hh_freq: bool = False,
     ):
     """
-    Turn standard tabular data inputs (travel survey and attributes) into core population
-    format.
-    :param trip_diary: DataFrame
-    :param person_attributes: DataFrame
-    :param hh_attributes: DataFrame
-    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
-    :param complex: bool
-    :param include_loc: bool
-    :param hh_loc_input:bool=False. If False look for hh zone input from trips input. If True seek to load from hh_attributes.
+    Turn standard tabular data inputs (travel survey and attributes) into core population format.
+    :param trips: DataFrame
+    :param persons_attributes: DataFrame
+    :param hhs_attributes: DataFrame
+    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage
+    :param tour_based: bool=True, set to False to force a simpler trip-based purpose parser
+    :param from_to: bool=False, set to True to force the from-to purpose parser (requires 'oact' and 'dact' trips columns)
+    :param include_loc: bool=False, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' trips columns)
+    :param sort_by_seq=None, optionally force trip sorting as True or False
+    :param trip_freq_as_person_freq:bool=False.
+    :param trip_freq_as_hh_freq:bool=False.
     :return: core.Population
     """
     # TODO check for required col headers and give useful error?
 
-    if not isinstance(trip_diary, pd.DataFrame):
+    logger = logging.getLogger(__name__)
+
+    if not isinstance(trips, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")
 
-    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
+    if persons_attributes is not None and not isinstance(persons_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for person_attributes")
 
-    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
+    if hhs_attributes is not None and not isinstance(hhs_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for hh_attributes")
 
+    if ('oact' in trips.columns and 'dact' in trips.columns) or from_to:
+        logger.warning("Using from-to activity parser using 'oact' and 'dact' columns")
+        from_to = True
+
+        # check that trips diary has required fields
+        missing = {'pid', 'ozone', 'dzone', 'oact', 'dact', 'mode', 'tst', 'tet'} - set(trips.columns)
+        if missing:
+            raise UserWarning(f"Input trips_diary missing required column names: {missing}.")
+
+    else:
+        if tour_based:
+            logger.warning("Using tour based purpose parser using (recommended)")
+        else:
+            logger.warning(
+                """
+                Using simple trip based purpose parser using, this assumes first activity is 'home'.
+                If you do not wish to assume this, try setting 'tour_based' = True (default).
+                """
+                )
+        
+        # check that trips diary has required fields
+        missing = {'pid', 'ozone', 'dzone', 'purp', 'mode', 'tst', 'tet'} - set(trips.columns)
+        if missing:
+            raise UserWarning(f"Input trips_diary missing required column names: {missing}.")
+
+    if sort_by_seq and 'seq' not in trips.columns:
+        raise UserWarning(
+    f"""
+    You must include a trips 'seq' column if you wish to sort trips:
+    Either include a 'seq' column or use the existing ordering by 
+    setting 'sort_by_seq' = False/None (default).
+    """
+    )
+
+    if include_loc and not all(x in trips.columns for x in ['start_loc', 'end_loc']):
+        raise UserWarning(
+    f"""
+    You must include a trips 'start_loc' and 'end_loc' column if you wish to use precise locations:
+    Either include a 'start_loc' and 'end_loc' column or set 'include_loc' = False (default).
+    Note that these columns must be shapely Point geometries.
+    """
+    )
+
+    # check that person_attributes has required fields if used
+    if persons_attributes is not None and 'pid' not in persons_attributes.columns:
+        raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
+
+    # check if hh_attributes are being used
+    if hhs_attributes is not None:
+        if 'hid' not in hhs_attributes.columns:
+            raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
+
+        if 'hid' in trips.columns:
+            logger.info("Using person to household mapping from trips_diary data")
+        elif 'hid' in persons_attributes.columns:
+            logger.info("Loading person to household mapping from person_attributes data")
+            person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
+            trips['hid'] = trips.pid.map(person_hh_mapping)
+        else:
+            raise UserWarning(
+        f"""
+        Household attributes found but failed to build person to household mapping from provided inputs:
+        Please provide a household ID field ('hid') in either the trips_dairy or person_attributes inputs.
+        """
+        )
+
+    # add hid to trips if not already added
+    if not 'hid' in trips.columns:
+        logger.warning(
+            """
+            No household entities found, households will be composed of individual persons using 'pid':
+            If you wish to correct this, please add 'hid' to either the trips or persons_attributes inputs.
+            """
+            )
+        trips['hid'] = trips.pid
+
+    # add hzone to trips_diary
+    if not 'hzone' in trips.columns:
+        if hhs_attributes is not None and 'hzone' in hhs_attributes.columns:
+            logger.info("Loading household area ('hzone') from hh_attributes input.")
+            hh_mapping = dict(zip(hhs_attributes.hid, hhs_attributes.hzone))
+            trips['hzone'] = trips.hid.map(hh_mapping)
+        elif persons_attributes is not None and 'hzone' in persons_attributes.columns and 'hid' in persons_attributes.columns:
+            logger.info("Loading household area ('hzone') from person_attributes input.")
+            hh_mapping = dict(zip(persons_attributes.hid, persons_attributes.hzone))
+            trips['hzone'] = trips.hid.map(hh_mapping)
+        else:
+            logger.warning(
+        f"""
+        Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
+        Pam will try to infer home location from activities, but thos behaviour is not recommended.
+        """
+        )
+
+    if  trip_freq_as_person_freq:  # use trip freq as person freq
+        if 'freq' not in trips.columns:
+            raise UserWarning(
+                f"""
+                You have opted to use 'trip_freq_as_person_freq' but cannot build this mapping:
+                Please check 'freq' is included in the trips_diary input.
+                """
+                )
+            
+        logger.info("Loading person freq ('freq') from trips_diary freq input.")
+        pid_freq_map = dict(zip(trips.pid, trips.freq))  # this will take last freq from trips
+
+        if persons_attributes is None:
+            logger.info("Building new person attributes dataframe to hold person frequency.")
+            persons_attributes = pd.DataFrame({'pid': list(pid_freq_map.keys()), 'freq': list(pid_freq_map.values())})
+        else:
+            logger.info("Adding freq to person attributes using trip frequency.")
+            persons_attributes['freq'] = persons_attributes.pid.map(pid_freq_map)
+
+        trips.drop('freq', axis=1, inplace=True)
+
+    if  trip_freq_as_hh_freq:
+        if 'freq' not in trips.columns:
+            raise UserWarning(
+                f"""
+                You have opted to use 'trip_freq_as_hh_freq' but cannot build this mapping:
+                Please check 'freq' is included in the trips_diary input.
+                """
+                )
+        if 'hid' not in trips.columns:
+            raise UserWarning(
+                f"""
+                You have opted to use 'trip_freq_as_hh_freq' but cannot build this mapping:
+                Please check 'hid' is included in the trips_diary input.
+                """
+                )
+            
+        logger.info("Loading houshold freq ('freq') from trips_diary freq input.")
+        hid_freq_map = dict(zip(trips.hid, trips.freq))  # this will take last freq from trips
+
+        if hhs_attributes is None:
+            logger.info("Building new household attributes dataframe to hold houshold frequency.")
+            hhs_attributes = pd.DataFrame({'hid': list(hid_freq_map.keys()), 'freq': list(hid_freq_map.values())})
+        else:
+            logger.info("Adding freq to household attributes using trip frequency.")
+            hhs_attributes['freq'] = hhs_attributes.pid.map(hid_freq_map)
+
+        trips.drop('freq', axis=1, inplace=True)
+
+    # Add an empty frequency fields if required
+    if 'freq' not in trips.columns:
+        logger.warning("Using freq of 'None' for all trips.")
+        trips['freq'] = None
+
+    if persons_attributes is not None and 'freq' not in persons_attributes.columns:
+        logger.warning("Using freq of 'None' for all persons.")
+        persons_attributes['freq'] = None
+
+    if hhs_attributes is not None and 'freq' not in hhs_attributes.columns:
+        logger.warning("Using freq of 'None' for all households.")
+        hhs_attributes['freq'] = None
+
     if sample_perc is not None:
-        trip_diary = sample_population(
-            trip_diary,
-            sample_perc,
+        if 'freq' not in trips.columns:
+            raise UserWarning(
+                f"""
+                You have opted to use a sample ({sample_perc}, but this option requires that trips frequencies are set:):
+                Please add a 'freq' column to the trips dataframe or remove sampling (set 'sample_perc' = None).
+                """
+                )
+        trips = sample_population(
+            trips=trips,
+            sample_perc=sample_perc,
             weight_col='freq'
             )  # sample the travel population
 
-    if complex:
-        return complex_travel_diary_read(
-            trip_diary,
-            person_attributes,
-            hh_attributes,
-            include_loc,
-            hh_loc_input=hh_loc_input,
+    if from_to:
+        logger.debug("Initiating from-to parser.")
+        return from_to_travel_diary_read(
+            trips = trips,
+            persons_attributes = persons_attributes,
+            hhs_attributes = hhs_attributes,
+            include_loc = include_loc,
+            sort_by_seq  = sort_by_seq,
+        )
+
+    if tour_based:
+        logger.debug("Initiating tour-based parser.")
+        return tour_based_travel_diary_read(
+            trips = trips,
+            persons_attributes = persons_attributes,
+            hhs_attributes = hhs_attributes,
+            include_loc = include_loc,
+            sort_by_seq  = sort_by_seq,
             )
-    return basic_travel_diary_read(
-        trip_diary,
-        person_attributes
+
+    logger.debug("Initiating trip-based parser.")
+    return trip_based_travel_diary_read(
+        trips = trips,
+        persons_attributes = persons_attributes,
+        hhs_attributes = hhs_attributes,
+        include_loc = include_loc,
+        sort_by_seq = sort_by_seq,
         )
 
 
-def basic_travel_diary_read(trip_diary, attributes_df):
-    population = core.Population()
-
-    for hid, household_data in trip_diary.groupby('hid'):
-
-        household = core.Household(hid)
-
-        for pid, person_data in household_data.groupby('pid'):
-
-            trips = person_data.sort_values('seq')
-            home_area = trips.hzone.iloc[0]
-            origin_area = trips.ozone.iloc[0]
-            activity_map = {home_area: 'home'}
-            activities = ['home', 'work']
-
-            person = core.Person(
-                pid,
-                freq=person_data.freq.iloc[0],
-                attributes=attributes_df.loc[pid].to_dict(),
-                home_area=home_area
-            )
-
-            person.add(
-                activity.Activity(
-                    seq=0,
-                    act='home' if home_area == origin_area else 'work',
-                    area=origin_area,
-                    start_time=utils.parse_time(0),
-                )
-            )
-
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
-
-                destination_activity = trip.purp
-
-                person.add(
-                    activity.Leg(
-                        seq=n,
-                        mode=trip['mode'].lower(),
-                        purp=trip.purp.lower(),
-                        start_area=trip.ozone,
-                        end_area=trip.dzone,
-                        start_time=utils.parse_time(trip.tst),
-                        end_time=utils.parse_time(trip.tet)
-                    )
-                )
-
-                if destination_activity in activities and activity_map.get(
-                        trip.dzone):  # assume return trip to this activity
-                    person.add(
-                        activity.Activity(
-                            seq=n + 1,
-                            act=activity_map[trip.dzone],
-                            area=trip.dzone,
-                            start_time=utils.parse_time(trip.tet),
-                        )
-                    )
-
-                else:
-                    person.add(
-                        activity.Activity(
-                            seq=n + 1,
-                            act=trip.purp.lower(),
-                            area=trip.dzone,
-                            start_time=utils.parse_time(trip.tet),
-                        )
-                    )
-
-                    if trip.dzone not in activity_map:  # update history
-                        # only keeping first activity at each location to ensure returns home
-                        activity_map[trip.dzone] = trip.purp.lower()
-
-                    activities.append(destination_activity)
-
-            person.plan.finalise()
-            household.add(person)
-
-        population.add(household)
-
-    return population
-
-
-def complex_travel_diary_read(
-    trip_diary,
-    all_person_attributes,
-    all_hh_attributes,
-    include_loc=False,
-    hh_loc_input=False,
+def tour_based_travel_diary_read(
+    trips: pd.DataFrame,
+    persons_attributes: Union[pd.DataFrame, None] = None,
+    hhs_attributes: Union[pd.DataFrame, None] = None,
+    include_loc = False,
+    sort_by_seq: Union[bool, None] = None,
     ):
+    """
+    Complex travel diray reader. Will try to infer home activiity and tour based purposes.
+    :param trips: DataFrame
+    :param persons_attributes: DataFrame
+    :param hhs_attributes: DataFrame
+    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
+    :param sort_by_seq=None, optionally force trip sorting as True or False
+    :return: core.Population
+    """
+
     population = core.Population()
 
-    for hid, household_data in trip_diary.groupby('hid'):
+    if sort_by_seq is None and 'seq' in trips.columns:
+        sort_by_seq = True
 
-        if all_hh_attributes is not None:
-            hh_attributes = all_hh_attributes.loc[hid].to_dict()
+    for hid, household_trips in trips.groupby('hid'):
+
+        if hhs_attributes is not None:
+            hh_attributes = hhs_attributes.loc[hid].to_dict()
         else:
-            hh_attributes = None
+            hh_attributes = {}
 
-        household = core.Household(hid, attributes=hh_attributes)
+        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
 
-        for pid, person_data in household_data.groupby('pid'):
+        for pid, person_trips in household_trips.groupby('pid'):
+            
+            if sort_by_seq:
+                person_trips = person_trips.sort_values('seq')
 
-            trips = person_data.sort_values('seq')
-
-            if all_person_attributes is not None:
-                person_attributes = all_person_attributes.loc[pid].to_dict()
+            if persons_attributes is not None:
+                person_attributes = persons_attributes.loc[pid].to_dict()
             else:
-                person_attributes = None
+                person_attributes = {}
 
-            if hh_loc_input:
-                home_area = hh_attributes["hzone"]
-            else:
-                home_area=trips.hzone.iloc[0]
+            home_area=person_trips.hzone.iloc[0]
 
             person = core.Person(
                 pid,
-                freq=person_data.freq.iloc[0],
                 attributes=person_attributes,
-                home_area=home_area
+                home_area=home_area,
+                freq=person_attributes.pop('freq', None)
                 )
+
             loc = None
             if include_loc:
-                loc = trips.start_loc.iloc[0]
+                loc = person_trips.start_loc.iloc[0]
+
             person.add(
                 activity.Activity(
                     seq=0,
                     act=None,
-                    area=trips.ozone.iloc[0],
+                    area=person_trips.ozone.iloc[0],
                     loc=loc,
                     start_time=utils.parse_time(0),
                 )
             )
 
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
+            for n in range(len(person_trips)):
+                trip = person_trips.iloc[n]
 
                 start_loc = None
                 end_loc = None
@@ -221,6 +338,7 @@ def complex_travel_diary_read(
                         end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
                         end_time=utils.parse_time(trip.tet),
+                        freq=trip.freq,
                     )
                 )
 
@@ -235,7 +353,7 @@ def complex_travel_diary_read(
                 )
 
             person.plan.finalise()
-            person.plan.infer_activities_from_leg_purpose()
+            person.plan.infer_activities_from_tour_purpose()
 
             household.add(person)
 
@@ -244,86 +362,87 @@ def complex_travel_diary_read(
     return population
 
 
-def load_activity_plan(
-    trip_diary:pd.DataFrame,
-    person_attributes:Union[pd.DataFrame,None]=None,
-    hh_attributes:Union[pd.DataFrame,None]=None,
-    sample_perc:Union[float,None]=None,
+def trip_based_travel_diary_read(
+    trips: pd.DataFrame,
+    persons_attributes: Union[pd.DataFrame, None] = None,
+    hhs_attributes: Union[pd.DataFrame, None] = None,
+    include_loc = False,
+    sort_by_seq: Union[bool, None] = None,
     ):
     """
     Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
     format. This is a variation of the standard load_travel_diary() method because it does not require
     activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
     We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-    :param trip_diary: DataFrame
-    :param person_attributes: DataFrame
-    :param hh_attributes: DataFrame
-    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :param trips: DataFrame
+    :param persons_attributes: DataFrame
+    :param hhs_attributes: DataFrame
+    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
+    :param sort_by_seq=None, optionally force trip sorting as True or False
     :return: core.Population
     """
-    # TODO check for required col headers and give useful error?
 
     logger = logging.getLogger(__name__)
 
-    if not isinstance(trip_diary, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population travel diaries")
-
-    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population person attributes")
-
-    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population household attributes")
-
-    if sample_perc is not None:
-        trip_diary = sample_population(
-            trip_diary,
-            sample_perc,
-            weight_col='freq'
-            )  # sample the travel population
+    if sort_by_seq is None and 'seq' in trips.columns:
+        sort_by_seq = True
 
     population = core.Population()
 
-    for hid, household_data in trip_diary.groupby('hid'):
+    for hid, household_trips in trips.groupby('hid'):
 
-        if hh_attributes is not None:
-            hh_attribute_dict = hh_attributes.loc[hid].to_dict()
+        if hhs_attributes is not None:
+            hh_attributes = hhs_attributes.loc[hid].to_dict()
         else:
-            hh_attribute_dict = None
+            hh_attributes = {}
 
-        household = core.Household(hid, attributes=hh_attribute_dict)
+        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
 
-        for pid, person_data in household_data.groupby('pid'):
+        for pid, person_trips in household_trips.groupby('pid'):
 
-            trips = person_data.sort_values('seq')
-            home_area = trips.hzone.iloc[0]
-            origin_area = trips.ozone.iloc[0]
+            if sort_by_seq:
+                person_trips = person_trips.sort_values('seq')
+
+            home_area = person_trips.hzone.iloc[0]
+            origin_area = person_trips.ozone.iloc[0]
 
             if not origin_area == home_area:
                 logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
 
-            if person_attributes is not None:
-                person_attribute_dict = person_attributes.loc[pid].to_dict()
+            if persons_attributes is not None:
+                person_attributes = persons_attributes.loc[pid].to_dict()
             else:
-                person_attribute_dict = None
+                person_attributes = {}
 
             person = core.Person(
                 pid,
-                freq=person_data.freq.iloc[0],
-                attributes=person_attribute_dict,
+                attributes=person_attributes,
+                freq=person_attributes.pop('freq', None),
                 # home_area=home_area
             )
+
+            loc = None
+            if include_loc:
+                loc = person_trips.start_loc.iloc[0]
 
             person.add(
                 activity.Activity(
                     seq=0,
                     act='home',
                     area=origin_area,
+                    loc=loc,
                     start_time=utils.parse_time(0),
                 )
             )
 
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
+            for n in range(len(person_trips)):
+                trip = person_trips.iloc[n]
+
+                start_loc = None
+                end_loc = None
+                if include_loc:
+                    start_loc = trip.start_loc
+                    end_loc = trip.end_loc
 
                 person.add(
                     activity.Leg(
@@ -331,6 +450,8 @@ def load_activity_plan(
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
+                        start_loc=start_loc,
+                        end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
                         end_time=utils.parse_time(trip.tet)
                     )
@@ -341,6 +462,7 @@ def load_activity_plan(
                         seq=n + 1,
                         act=trip.activity.lower(),
                         area=trip.dzone,
+                        loc=end_loc,
                         start_time=utils.parse_time(trip.tet),
                     )
                 )
@@ -353,11 +475,12 @@ def load_activity_plan(
     return population
 
 
-def load_travel_diary_from_to(
-    trip_diary:pd.DataFrame,
-    person_attributes:Union[pd.DataFrame,None]=None,
-    hh_attributes:Union[pd.DataFrame,None]=None,
-    sample_perc:Union[float,None]=None,
+def from_to_travel_diary_read(
+    trips: pd.DataFrame,
+    persons_attributes: Union[pd.DataFrame, None] = None,
+    hhs_attributes: Union[pd.DataFrame, None] = None,
+    include_loc = False,
+    sort_by_seq: Union[bool, None] = False,
     ):
     """
     Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
@@ -365,73 +488,73 @@ def load_travel_diary_from_to(
     activity inference or home location.
     We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity)
     and dact (destination activity).
-    :param trip_diary: DataFrame
-    :param person_attributes: DataFrame
-    :param hh_attributes: DataFrame
-    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage.
+    :param trips: DataFrame
+    :param persons_attributes: DataFrame
+    :param hhs_attributes: DataFrame
     :return: core.Population
+    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
+    :param sort_by_seq=None, optionally force trip sorting as True or False
     """
     # TODO check for required col headers and give useful error?
 
     logger = logging.getLogger(__name__)
 
-    if not isinstance(trip_diary, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population travel diaries")
-
-    if person_attributes is not None and not isinstance(person_attributes, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population person attributes")
-
-    if hh_attributes is not None and not isinstance(hh_attributes, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population household attributes")
-
-    if sample_perc is not None:
-        trip_diary = sample_population(
-            trip_diary,
-            sample_perc,
-            weight_col='freq'
-            )  # sample the travel population
+    if sort_by_seq is None and 'seq' in trips.columns:
+        sort_by_seq = True
 
     population = core.Population()
 
-    for hid, household_data in trip_diary.groupby('hid'):
+    for hid, household_trips in trips.groupby('hid'):
 
-        if hh_attributes is not None:
-            hh_attribute_dict = hh_attributes.loc[hid].to_dict()
+        if hhs_attributes is not None:
+            hh_attributes = hhs_attributes.loc[hid].to_dict()
         else:
-            hh_attribute_dict = None
+            hh_attributes = {}
 
-        household = core.Household(hid, attributes=hh_attribute_dict)
+        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
 
-        for pid, person_data in household_data.groupby('pid'):
+        for pid, person_trips in household_trips.groupby('pid'):
 
-            if person_attributes is not None:
-                person_attribute_dict = person_attributes.loc[pid].to_dict()
+            if sort_by_seq:
+                person_trips = person_trips.sort_values('seq')
+
+            if persons_attributes is not None:
+                person_attributes = persons_attributes.loc[pid].to_dict()
             else:
-                person_attribute_dict = None
+                person_attributes = {}
 
             person = core.Person(
                 pid,
-                freq=person_data.iloc[0].freq,
-                attributes=person_attribute_dict,
+                attributes=person_attributes,
+                freq=person_attributes.pop('freq', None),
             )
 
-            trips = person_data.sort_values('seq')
-
-            first_act = trips.iloc[0].oact.lower()
+            first_act = person_trips.iloc[0].oact.lower()
             if not first_act == "home":
                 logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
+
+            loc = None
+            if include_loc:
+                loc = person_trips.start_loc.iloc[0]
 
             person.add(
                 activity.Activity(
                     seq=0,
                     act=first_act,
-                    area=trips.iloc[0].ozone,
+                    area=person_trips.iloc[0].ozone,
+                    loc=loc,
                     start_time=utils.parse_time(0),
                 )
             )
 
-            for n in range(len(trips)):
-                trip = trips.iloc[n]
+            for n in range(len(person_trips)):
+                trip = person_trips.iloc[n]
+
+                start_loc = None
+                end_loc = None
+                if include_loc:
+                    start_loc = trip.start_loc
+                    end_loc = trip.end_loc
 
                 person.add(
                     activity.Leg(
@@ -439,6 +562,8 @@ def load_travel_diary_from_to(
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
+                        start_loc=start_loc,
+                        end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
                         end_time=utils.parse_time(trip.tet)
                     )
@@ -449,6 +574,7 @@ def load_travel_diary_from_to(
                         seq=n + 1,
                         act=trip.dact.lower(),
                         area=trip.dzone,
+                        loc=end_loc,
                         start_time=utils.parse_time(trip.tet),
                     )
                 )
@@ -464,7 +590,7 @@ def load_travel_diary_from_to(
 def read_matsim(
         plans_path,
         attributes_path=None,
-        weight=1000,
+        weight=100,
         household_key=None,
         simplify_pt_trips=False,
         autocomplete=True,
@@ -604,11 +730,11 @@ def read_matsim(
                 household = population.get(attributes.get(household_key))
                 household.add(person)
             else:  # new household
-                household = core.Household(attributes.get(household_key))
+                household = core.Household(attributes.get(household_key), freq=weight)
                 household.add(person)
                 population.add(household)
         else:  # not using households, create dummy household
-            household = core.Household(person_id)
+            household = core.Household(person_id, freq=weight)
             household.add(person)
             population.add(household)
 

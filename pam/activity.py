@@ -11,10 +11,11 @@ from pam.variables import END_OF_DAY
 
 class Plan:
   
-    def __init__(self, home_area=None):
+    def __init__(self, home_area=None, freq=None):
         self.day = []
         self.home_area = Location(area=home_area)
         self.logger = logging.getLogger(__name__)
+        self.freq = freq
 
     @property
     def home(self):
@@ -354,7 +355,7 @@ class Plan:
 
         return candidates
 
-    def infer_activities_from_leg_purpose(self):
+    def infer_activities_from_tour_purpose(self):
         """
         Infer and set activity types based on trip purpose. Algorithm works like breadth first search,
         initiated from inferred home locations. Search takes place in two stages, first pass forward,
@@ -845,13 +846,15 @@ class Activity(PlanComponent):
             link=None,
             loc=None,
             start_time=None,
-            end_time=None
+            end_time=None,
+            freq=None,
     ):
         self.seq = seq
         self.act = act
         self.location = Location(loc=loc, link=link, area=area)
         self.start_time = start_time
         self.end_time = end_time
+        self.freq=freq
 
     def __str__(self):
         return f"Activity({self.seq} act:{self.act}, location:{self.location}, " \
@@ -892,7 +895,8 @@ class Leg(PlanComponent):
             d_stop=None,
             service_id=None,
             route_id=None,
-            network_route=None
+            network_route=None,
+            freq=None,
     ):
         self.seq = seq
         self.purp = purp
@@ -908,6 +912,7 @@ class Leg(PlanComponent):
         self.d_stop = d_stop
         # list of link ids from network for routed modes
         self.network_route = network_route
+        self.freq = freq
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \

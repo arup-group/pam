@@ -322,10 +322,11 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid, attributes=None):
+    def __init__(self, hid, attributes={}, freq=None):
         self.hid = str(hid)
         self.people = {}
         self.attributes = attributes
+        self.hh_freq=freq
 
     def add(self, person):
         if not isinstance(person, Person):
@@ -370,10 +371,13 @@ class Household:
     @property
     def freq(self):
         """
-        Return the average frequency of household members.
+        Return hh_freq, else if None, return the average frequency of household members.
         # TODO note this assumes we are basing hh freq on person freq.
         # TODO replace this with something better.
         """
+        if self.hh_freq:
+            return self.hh_freq
+
         person_frequencies = [person.freq for person in self.people.values()]
         if None in person_frequencies:
             return None
@@ -491,7 +495,7 @@ class Household:
 class Person:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, pid, freq=1, attributes=None, home_area=None):
+    def __init__(self, pid, freq=None, attributes={}, home_area=None):
         self.pid = str(pid)
         self.freq = freq
         self.attributes = attributes

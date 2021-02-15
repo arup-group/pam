@@ -141,13 +141,12 @@ def write_matsim(
 	:param population: core.Population
 	:return: None
 	"""
-    # note - these are written sequentially to reduce RAM required...
     write_matsim_plans(population, plans_path, comment)
     write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
 
 
 def write_matsim_plans(population, location, comment=None):
-    # todo write this incrementally to save memory: https://lxml.de/api.html#incremental-xml-generation
+    # todo write this incrementally: https://lxml.de/api.html#incremental-xml-generation
 
     population_xml = et.Element('population')
 
