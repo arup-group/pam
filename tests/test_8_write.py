@@ -577,7 +577,7 @@ def test_benchmark_trips_hour(tmp_path):
     test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
     test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                         "test_data/test_matsim_attributes.xml"))
-    population = read_matsim(test_trips_path, test_attributes_path)
+    population = read_matsim(test_trips_path, test_attributes_path, weight=1000)
     benchmark = write_benchmarks(
         population,
         dimensions=['departure_hour'],
@@ -596,7 +596,7 @@ def test_write_benchmarks_multiple(tmpdir):
     test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
     test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                         "test_data/test_matsim_attributes.xml"))
-    population = read_matsim(test_trips_path, test_attributes_path)
+    population = read_matsim(test_trips_path, test_attributes_path, weight=1000)
 
     assert list(write_distance_benchmark(population).trips) == [2000, 3000, 1000, 5000, 0, 0, 0, 0]
     assert list(write_mode_distance_benchmark(population).trips) == [2000.0, 3000.0, 1000.0, 5000.0, 0.0, 0.0, 0.0, 0.0]

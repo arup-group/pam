@@ -12,7 +12,7 @@ from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidati
 
 class Population:
 
-    def __init__(self, name=None):
+    def __init__(self, name: str = None):
         self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
@@ -50,7 +50,14 @@ class Population:
 
     @property
     def size(self):
-        return sum([person.freq for _, _, person in self.people()])
+        return self.freq
+
+    @property
+    def freq(self):
+        frequencies = [hh.freq for hh in self.households.values()]
+        if None in frequencies:
+            return None
+        return sum(frequencies)
 
     @property
     def activity_classes(self):
@@ -129,7 +136,7 @@ class Population:
         gdf = gdf.sort_values(['hid', 'pid', 'seq']).reset_index(drop=True)
         return gdf
 
-    def plot_travel_plotly(self, epsg='epsg:4326', **kwargs):
+    def plot_travel_plotly(self, epsg: str = 'epsg:4326', **kwargs):
         """
         Uses plotly's Scattermapbox to plot agents' travel
         :param epsg: coordinate system the plans spatial information is in, e.g. 'epsg:27700'
@@ -150,7 +157,12 @@ class Population:
             **kwargs
         )
 
-    def fix_plans(self, crop=True, times=True, locations=True):
+    def fix_plans(
+        self,
+        crop: bool = True,
+        times = True,
+        locations = True
+        ):
         for _, _, person in self.people():
             if crop:
                 person.plan.crop()
@@ -168,11 +180,16 @@ class Population:
         for _, household in self:
             household.print()
 
-    def pickle(self, path):
+    def pickle(self, path: str):
         with open(path, 'wb') as file:
             pickle.dump(self, file)
 
-    def to_csv(self, dir, crs=None, to_crs="EPSG:4326"):
+    def to_csv(
+        self,
+        dir: str,
+        crs = None,
+        to_crs: str = "EPSG:4326"
+        ):
         write.to_csv(self, dir, crs, to_crs)
 
     def __str__(self):
@@ -233,29 +250,6 @@ class Population:
             return None
         raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
-    def sample_locs2(self, sampler):
-        """
-        WIP Sample plan locs using a sampler
-        TODO - add method to all core classes
-        TODO - home location consistency within household
-        """
-
-        for _, _, person in self.people():
-            uniques = {}
-            for act in person.activities:
-                if (act.location.area, act.act) in uniques:
-                    loc = uniques[(act.location.area, act.act)]
-                    act.location.loc = loc
-                        
-                else:
-                    loc = sampler.sample(act.location.area, act.act)
-                    uniques[(act.location.area, act.act)] = loc
-                    act.location.loc = loc
-            for idx in range(person.plan.length):
-                component = person.plan[idx]
-                if isinstance(component, activity.Leg):
-                    component.start_location.loc = person.plan[idx-1].location.loc
-                    component.end_location.loc = person.plan[idx+1].location.loc
 
     def sample_locs(self, sampler):
         """
@@ -322,10 +316,11 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid, attributes=None):
+    def __init__(self, hid, attributes={}, freq=None):
         self.hid = str(hid)
         self.people = {}
         self.attributes = attributes
+        self.hh_freq=freq
 
     def add(self, person):
         if not isinstance(person, Person):
@@ -370,17 +365,32 @@ class Household:
     @property
     def freq(self):
         """
-        Return the average frequency of household members.
+        Return hh_freq, else if None, return the average frequency of household members.
         # TODO note this assumes we are basing hh freq on person freq.
         # TODO replace this with something better.
         """
-        person_frequencies = [person.freq for person in self.people.values()]
-        if None in person_frequencies:
+        if self.hh_freq:
+            return self.hh_freq
+
+        if not self.people:
             return None
-        return sum(person_frequencies) / len(person_frequencies)
+
+        return self.av_person_freq
+
+    def set_freq(self, freq):
+        self.hh_freq = freq
+
+    @property
+    def av_person_freq(self):
+        if not self.people:
+            return None
+        frequencies = [person.freq for person in self.people.values()]
+        if None in frequencies:
+            return None
+        return sum(frequencies) / len(frequencies)
 
     def fix_plans(self, crop=True, times=True, locations=True):
-        for person in self:
+        for _, person in self:
             if crop:
                 person.plan.crop()
             if times:
@@ -491,13 +501,42 @@ class Household:
 class Person:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, pid, freq=1, attributes=None, home_area=None):
+    def __init__(self, pid, freq=None, attributes={}, home_area=None):
         self.pid = str(pid)
-        self.freq = freq
+        self.person_freq = freq
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
 
+    @property
+    def freq(self):
+        """
+        Return person_freq, else if None, return the average frequency of legs.
+        TODO consider passing parent hh on creation so that we can retrieve hh freq if required.
+        """
+        if self.person_freq:
+            return self.person_freq
+        return self.av_trip_freq
+
+    def set_freq(self, freq):
+        self.person_freq = freq
+
+    @property
+    def av_trip_freq(self):
+        if not self.num_legs:
+            return None
+        frequencies = [leg.freq for leg in self.legs]
+        if None in frequencies:
+            return None
+        return sum(frequencies) / len(frequencies)
+
+    @property
+    def av_activity_freq(self):
+        frequencies = [act.freq for act in self.activities]
+        if None in frequencies:
+            return None
+        return sum(frequencies) / len(frequencies)
+        
     @property
     def home(self):
         if self.plan:

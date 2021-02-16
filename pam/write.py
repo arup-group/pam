@@ -16,6 +16,8 @@ def write_travel_diary(population, path, attributes_path=None):
     """
 	Write a core population object to the standard population tabular formats.
 	Only write attributes if given attributes_path.
+    Limited to person attributes only.
+    TODO add household attributes
 	:param population: core.Population
 	:return: None
 	"""
@@ -45,6 +47,7 @@ def write_travel_diary(population, path, attributes_path=None):
             line = person.attributes
             line['hid'] = hid
             line['pid'] = pid
+            line['freq']
             record.append(line)
         pd.DataFrame(record).to_csv(attributes_path)
 
@@ -60,6 +63,7 @@ def write_od_matrices(
 	Write a core population object to tabular O-D weighted matrices.
 	Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
     A single filter can be applied each time.
+    TODO include freq (assume hh)
 	:param population: core.Population
     :param path: directory to write OD matrix files
     :param leg_filter: select between 'Mode', 'Purpose'
@@ -75,21 +79,24 @@ def write_od_matrices(
     for hid, household in population.households.items():
         for pid, person in household.people.items():
             for leg in person.legs:
-                data = {'Household ID': hid,
-                            'Person ID': pid,
-                            'Origin':leg.start_location.area,
-                            'Destination': leg.end_location.area,
-                            'Purpose': leg.purp,
-                            'Mode': leg.mode,
-                            'Sequence': leg.seq,
-                            'Start time': leg.start_time,
-                            'End time': leg.end_time}                
+                data = {
+                    'Household ID': hid,
+                    'Person ID': pid,
+                    'Origin':leg.start_location.area,
+                    'Destination': leg.end_location.area,
+                    'Purpose': leg.purp,
+                    'Mode': leg.mode,
+                    'Sequence': leg.seq,
+                    'Start time': leg.start_time,
+                    'End time': leg.end_time,
+                    'Freq': household.freq,
+                    }
                 if person_filter:
                     legs.append({**data, **person.attributes})
                 else:
                     legs.append(data)         
         
-    df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')              
+    df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')
     matrix = df_total.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
     matrix.to_csv(os.path.join(path, 'total_od.csv'))
 
@@ -104,7 +111,7 @@ def write_od_matrices(
         return None
 
     elif person_filter:
-        data_legs_grouped=data_legs.groupby(person_filter)              
+        data_legs_grouped=data_legs.groupby(person_filter)
         for filter, leg in data_legs_grouped:
             df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
             matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
@@ -141,13 +148,12 @@ def write_matsim(
 	:param population: core.Population
 	:return: None
 	"""
-    # note - these are written sequentially to reduce RAM required...
     write_matsim_plans(population, plans_path, comment)
     write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
 
 
 def write_matsim_plans(population, location, comment=None):
-    # todo write this incrementally to save memory: https://lxml.de/api.html#incremental-xml-generation
+    # todo write this incrementally: https://lxml.de/api.html#incremental-xml-generation
 
     population_xml = et.Element('population')
 
@@ -187,7 +193,7 @@ def write_matsim_plans(population, location, comment=None):
     # todo assuming v5?
 
 
-def write_matsim_attributes(population, location, comment=None, household_key=None):
+def write_matsim_attributes(population, location, comment=None, household_key='hid'):
     attributes_xml = et.Element('objectAttributes')  # start forming xml
 
     # Add some useful comments
@@ -202,6 +208,7 @@ def write_matsim_attributes(population, location, comment=None, household_key=No
             attributes = person.attributes
             if household_key:  # add hid to household_key if using household key
                 attributes[household_key] = hid
+                # TODO write hh attributes or add hh output
 
             for k, v in attributes.items():
                 attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
@@ -257,7 +264,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                     leg_data = {
                         'pid': pid,
                         'hid': hid,
-                        'freq': person.freq,
+                        'freq': component.freq,
                         'ozone': component.start_location.area,
                         'dzone': component.end_location.area,
                         'purp': component.purp,
@@ -282,7 +289,7 @@ def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
                     act_data = {
                         'pid': pid,
                         'hid': hid,
-                        'freq': person.freq,
+                        'freq': component.freq,
                         'activity': component.act,
                         'seq': component.seq,
                         'start time': component.start_time,
@@ -333,6 +340,7 @@ def write_population_csv(list_of_populations, export_path):
     """"
     This function creates csv export files of populations, households, people, legs and actvities. 
     This export could be used to share data outside of Python or build an interactive dashboard.
+    TODO account for frequency
     """
     create_local_dir(export_path)
 
@@ -423,6 +431,7 @@ def write_benchmarks(
 ):
     """
 	Extract user-specified benchmarks from the population.
+    TODO account for frequency
 	:param pam.core.Population population: PAM population
     :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
     :params list data_fields: The data to summarise. If None, simply count the instances of each group

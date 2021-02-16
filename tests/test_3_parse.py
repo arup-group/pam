@@ -46,6 +46,11 @@ def test_load(test_trips, test_attributes):
     assert population
 
 
+def test_load_from_paths():
+    population = load_travel_diary(test_trips_path, test_attributes_path)
+    assert population
+
+
 def test_agent_pid_0_simple_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households['0'].people['0'].activities]
