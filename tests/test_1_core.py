@@ -5,7 +5,8 @@ from pam.core import Population, Household, Person
 from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam import PAMSequenceValidationError
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam.variables import END_OF_DAY
 from .fixtures import person_heh
 
 
@@ -106,6 +107,133 @@ def test_person_add_leg_leg_raise_error():
     leg = Leg(2, 'car', start_area=2, end_area=1)
     with pytest.raises(PAMSequenceValidationError):
         person.add(leg)
+
+
+def test_yield_plan():
+    person = Person('1')
+    act = Activity(1, 'home', 1)
+    person.add(act)
+    leg = Leg(1, 'car', start_area=1, end_area=2)
+    person.add(leg)
+    yield_plan = [c for c in person]
+    assert len(yield_plan) == 2
+    assert isinstance(yield_plan[0], Activity)
+    assert isinstance(yield_plan[1], Leg)
+
+
+def test_person_validate_sequence():
+    person = Person('1')
+    person.plan.day = [
+        Activity(act='home', area=1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(start_area=1, end_area=2, start_time=mtdt(1), end_time=mtdt(2)),
+        Activity(act='work', area=2, start_time=mtdt(2), end_time=END_OF_DAY)
+        ]
+    assert person.validate_sequence()
+
+
+def test_person_validate_sequence_fail1():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1),
+        Leg(1, 'car', start_area=1, end_area=2),
+        ]
+    with pytest.raises(PAMSequenceValidationError):
+        assert person.validate_sequence()
+
+
+def test_person_validate_sequence_fail2():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1),
+        Leg(1, 'car', start_area=1, end_area=2),
+        Leg(1, 'car', start_area=1, end_area=2),
+        Activity()
+        ]
+    with pytest.raises(PAMSequenceValidationError):
+        assert person.validate_sequence()
+
+
+def test_person_validate_times():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(1), end_time=mtdt(2)),
+        Activity(1, 'work', 2, start_time=mtdt(2), end_time=END_OF_DAY),
+        ]
+    assert person.validate_times()
+
+
+def test_person_validate_times_fail():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(0), end_time=mtdt(1)),
+        Activity(1, 'work', 2, start_time=mtdt(2), end_time=END_OF_DAY),
+        ]
+    with pytest.raises(PAMTimesValidationError):
+        assert person.validate_times()
+
+
+def test_person_validate_times_gap_fail():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(10), end_time=mtdt(11)),
+        Activity(1, 'work', 2, start_time=mtdt(11), end_time=END_OF_DAY),
+        ]
+    person.validate_sequence()
+    with pytest.raises(PAMTimesValidationError):
+        assert person.validate_times()
+
+
+def test_person_validate_locations():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', start_time=mtdt(0), end_time=mtdt(1), area=1),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(1), end_time=mtdt(2)),
+        Activity(1, 'work', 2, start_time=mtdt(2), end_time=END_OF_DAY),
+        ]
+    assert person.validate_locations()
+
+
+def test_person_validate_locations_fail():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', start_time=mtdt(0), end_time=mtdt(1), area=2),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(0), end_time=mtdt(1)),
+        Activity(1, 'work', 1, start_time=mtdt(1), end_time=END_OF_DAY),
+        ]
+    with pytest.raises(PAMValidationLocationsError):
+        assert person.validate_locations()
+
+
+def test_crop_plan():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(25 * 60)),
+        ]
+    person.fix_plan()
+    assert person.validate_sequence()
+
+
+def test_fix_time_consistency_plan():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(10), end_time=mtdt(11)),
+        ]
+    person.fix_plan()
+    assert person.validate_sequence()
+
+
+def test_fix_location_consistency_plan():
+    person = Person('1')
+    person.plan.day = [
+        Activity(1, 'home', 1, start_time=mtdt(0), end_time=mtdt(1)),
+        Leg(1, 'car', start_area=2, end_area=2, start_time=mtdt(1), end_time=mtdt(2)),
+        ]
+    person.fix_plan()
+    assert person.validate_sequence()
 
 
 def test_person_home_based():
@@ -329,6 +457,45 @@ def test_population_sample_locs(person_heh):
     population.sample_locs(DummySampler())
     assert population['1']['1'].plan[2].location.loc is None
 
+
+def test_set_hh_freq():
+    hh = Household('1', freq=None)
+    hh.set_freq(1)
+    assert hh.freq == 1
+
+
+def test_av_person_freq():
+    hh = Household('1')
+    hh.add(Person('1', freq=1))
+    hh.add(Person('2', freq=2))
+    assert hh.av_person_freq == 1.5
+
+
+def test_set_person_freq():
+    person = Person('1', freq=None)
+    person.set_freq(1)
+    assert person.freq == 1
+
+
+def test_av_trip_freq():
+    person = Person('1', freq=None)
+    person.add(Activity())
+    person.add(Leg(freq=1))
+    person.add(Activity())
+    person.add(Leg(freq=3))
+    person.add(Activity())
+    assert person.av_trip_freq == 2
+
+
+def test_av_activity_freq():
+    person = Person('1', freq=None)
+    person.add(Activity(freq=1))
+    person.add(Leg())
+    person.add(Activity(freq=2))
+    person.add(Leg())
+    person.add(Activity(freq=3))
+    assert person.av_activity_freq == 2
+    
 
 def test_get_hh_freq_if_None():
     hh = Household('1')
