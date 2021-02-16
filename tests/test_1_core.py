@@ -262,8 +262,17 @@ def test_population_size():
     population.add(Household('1'))
     population['1'].add(Person('0', freq=1))
     population['1'].add(Person('1', freq=3))
-    population.add(Household('2'))
+    population.add(Household('2', freq=2))
     assert population.size == 4
+
+
+def test_population_size_None():
+    population = Population()
+    population.add(Household('1'))
+    population['1'].add(Person('0', freq=1))
+    population['1'].add(Person('1', freq=3))
+    population.add(Household('2', freq=None))
+    assert population.size is None
 
 
 def test_population_num_households():
@@ -290,6 +299,13 @@ def test_population_fix_plans_wrapper(person_heh):
     population.add(Household('1'))
     population['1'].add(person_heh)
     population.fix_plans()
+
+
+def test_hh_fix_plans_wrapper(person_heh):
+    population = Population()
+    population.add(Household('1'))  
+    population['1'].add(person_heh)
+    population['1'].fix_plans()
 
 
 def test_population_print(capfd, person_heh):
@@ -326,6 +342,24 @@ def test_get_hh_freq_mean():
     hh.add(Person('1', freq=1))
     hh.add(Person('2', freq=3))
     assert hh.freq == 2
+
+
+def test_get_person_av_freq_from_trips():
+    person = Person('1', freq=None)
+    person.add(Activity())
+    person.add(Leg(freq=1))
+    person.add(Activity())
+    person.add(Leg(freq=3))
+    person.add(Activity())
+    assert person.freq == 2
+
+
+def test_get_person_freq_from_trips():
+    person = Person('1', freq=None)
+    person.add(Activity())
+    person.add(Leg(freq=1))
+    person.add(Activity())
+    assert person.freq == 1
 
 
 def test_get_subpopulations():

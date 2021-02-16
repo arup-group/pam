@@ -40,7 +40,7 @@ supply or utility demand.
 - Example modifiers/policies
 - Populations
 - Input/output data formats
-- Other formats
+- Read/Write/Other formats
 - Activity Plans
 - Get involved
 - Technical notes
@@ -303,17 +303,25 @@ If you are using persons_attributes (`persons_attributes`) this table must conta
 
 **A note about 'freq':**
 
-Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using `freq`. We generally assume a frequency to represent expected occurances in a full population. For example if we use a person frequency (`person.freq`) the the sum of all these frequencies (`population.size`), will equal the expected population size.
+Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using columns called `freq`. We generally assume a frequency to represent expected occurances in a full population. For example if we use a person frequency (`person.freq`) the the sum of all these frequencies (`population.size`), will equal the expected population size.
 
 Because it is quite common to provide a person or household `freq` in the trips table, there are two special options (`trip_freq_as_person_freq = True` and `trip_freq_as_hh_freq = True`) that can be used to pass the `freq` field from the trips table to either the people or households table instead.
 
-### Other formats
+Generally PAM will assume when you want some weighted output, that it should use household frequencies. If these have not been set then PAM will assume that the household frequency is the average 
+frequency of persons within the household. If person frequencies are not set the PAM will assume that the person frequency is the average frequency of legs within the persons plan. If you wish to adjust frequencies of a population then you should use the `set_freq()` method, eg:
 
-PAM can read/write to tabular formats and MATSim xml. Please get in touch if you would like additional support or feel free to add your own.
+```
+factor = 1.2
+household.set_freq(household.freq * factor)
+for pid, person in household:
+    person.set_freq(person.freq * factor)
+```
 
-### Writing
+### Read/Write/Other formats
 
-The write methods can be found in the `pam.write` module.
+PAM can read/write to tabular formats and MATSim xml (`pam.read.read_matsim` and `pam.write.write_matsim`). PAM can also write to segmented OD matrices using `pam.write.write_od_matrices`.
+
+Please get in touch if you would like additional support or feel free to add your own.
 
 ## Activity Plans
 

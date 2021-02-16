@@ -15,9 +15,9 @@ import pam.utils as utils
 
 
 def load_travel_diary(
-    trips: pd.DataFrame,
-    persons_attributes: Union[pd.DataFrame, None] = None,
-    hhs_attributes: Union[pd.DataFrame, None] = None,
+    trips: Union[pd.DataFrame, str],
+    persons_attributes: Union[pd.DataFrame, str, None] = None,
+    hhs_attributes: Union[pd.DataFrame, str, None] = None,
     sample_perc: Union[float, None] = None,
     tour_based: bool = True,
     from_to: bool = False,
@@ -43,6 +43,18 @@ def load_travel_diary(
     # TODO check for required col headers and give useful error?
 
     logger = logging.getLogger(__name__)
+
+    if isinstance(trips, str):
+        logger.warning(f"Attempting to load trips dataframe from path: {trips}")
+        trips = pd.read_csv(trips)
+
+    if isinstance(persons_attributes, str):
+        logger.warning(f"Attempting to load trips dataframe from path: {persons_attributes}")
+        persons_attributes = pd.read_csv(persons_attributes)
+
+    if isinstance(hhs_attributes, str):
+        logger.warning(f"Attempting to load trips dataframe from path: {hhs_attributes}")
+        hhs_attributes = pd.read_csv(hhs_attributes)
 
     if not isinstance(trips, pd.DataFrame):
         raise UserWarning("Unrecognised input for population travel diaries")

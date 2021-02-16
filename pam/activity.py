@@ -15,7 +15,7 @@ class Plan:
         self.day = []
         self.home_area = Location(area=home_area)
         self.logger = logging.getLogger(__name__)
-        self.freq = freq
+        self.plan_freq = freq
 
     @property
     def home(self):
