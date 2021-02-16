@@ -235,6 +235,24 @@ def load_travel_diary(
             weight_col='freq'
             )  # sample the travel population
 
+    logger.debug("Resetting trips index if required")
+    if trips.index.name is not None:
+        persons_attributes.reset_index(inplace=True)
+
+    if persons_attributes is not None:
+        logger.debug("Setting persons_attributes index to pid")
+        if persons_attributes.index.name is None:
+            persons_attributes.set_index('pid', inplace=True)
+        elif not persons_attributes.index.name == 'pid':
+            persons_attributes = persons_attributes.reset_index().set_index('pid')
+
+    if hhs_attributes is not None:
+        logger.debug("Setting households_attributes index to hid")
+        if hhs_attributes.index.name is None:
+            hhs_attributes.set_index('pid', inplace=True)
+        elif not hhs_attributes.index.name == 'hid':
+            hhs_attributes = hhs_attributes.reset_index().set_index('hid')
+
     if from_to:
         logger.debug("Initiating from-to parser.")
         return from_to_travel_diary_read(
