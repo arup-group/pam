@@ -57,13 +57,18 @@ def load_travel_diary(
         hhs_attributes = pd.read_csv(hhs_attributes)
 
     if not isinstance(trips, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population travel diaries")
+        raise UserWarning("Unrecognised input for trips input.")
 
     if persons_attributes is not None and not isinstance(persons_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for person_attributes")
 
     if hhs_attributes is not None and not isinstance(hhs_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for hh_attributes")
+
+    # reset indexes if named
+    for table in [trips, persons_attributes, hhs_attributes]:
+        if table is not None and table.index.name is not None:
+            table.reset_index(inplace=True)
 
     if ('oact' in trips.columns and 'dact' in trips.columns) or from_to:
         logger.warning("Using from-to activity parser using 'oact' and 'dact' columns")
@@ -109,12 +114,13 @@ def load_travel_diary(
     )
 
     # check that person_attributes has required fields if used
-    if persons_attributes is not None and 'pid' not in persons_attributes.columns:
-        raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
+    if persons_attributes is not None:
+        if 'pid' not in persons_attributes.columns and not persons_attributes.index.name == 'pid':
+            raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
 
     # check if hh_attributes are being used
     if hhs_attributes is not None:
-        if 'hid' not in hhs_attributes.columns:
+        if 'hid' not in hhs_attributes.columns and not hhs_attributes.index.name == 'hid':
             raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
 
         if 'hid' in trips.columns:
@@ -249,7 +255,7 @@ def load_travel_diary(
     if hhs_attributes is not None:
         logger.debug("Setting households_attributes index to hid")
         if hhs_attributes.index.name is None:
-            hhs_attributes.set_index('pid', inplace=True)
+            hhs_attributes.set_index('hid', inplace=True)
         elif not hhs_attributes.index.name == 'hid':
             hhs_attributes = hhs_attributes.reset_index().set_index('hid')
 
