@@ -118,19 +118,19 @@ def load_travel_diary(
         if hhs_attributes.index.name != 'hid':
             raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
 
-            if 'hid' in trips.columns:
-                logger.info("Using person to household mapping from trips_diary data")
-            elif 'hid' in persons_attributes.columns:
-                logger.info("Loading person to household mapping from person_attributes data")
-                person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
-                trips['hid'] = trips.pid.map(person_hh_mapping)
-            else:
-                raise UserWarning(
-            f"""
-            Household attributes found but failed to build person to household mapping from provided inputs:
-            Please provide a household ID field ('hid') in either the trips_dairy or person_attributes inputs.
-            """
-            )
+        if 'hid' in trips.columns:
+            logger.info("Using person to household mapping from trips_diary data")
+        elif 'hid' in persons_attributes.columns:
+            logger.info("Loading person to household mapping from person_attributes data")
+            person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
+            trips['hid'] = trips.pid.map(person_hh_mapping)
+        else:
+            raise UserWarning(
+        f"""
+        Household attributes found but failed to build person to household mapping from provided inputs:
+        Please provide a household ID field ('hid') in either the trips_dairy or person_attributes inputs.
+        """
+        )
 
     # add hid to trips if not already added
     if not 'hid' in trips.columns:
