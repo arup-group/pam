@@ -125,7 +125,7 @@ def load_travel_diary(
 
         if 'hid' in trips.columns:
             logger.info("Using person to household mapping from trips_diary data")
-        elif 'hid' in persons_attributes.columns:
+        elif persons_attributes is not None and 'hid' in persons_attributes.columns:
             logger.info("Loading person to household mapping from person_attributes data")
             person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
             trips['hid'] = trips.pid.map(person_hh_mapping)
@@ -161,7 +161,7 @@ def load_travel_diary(
             logger.warning(
         f"""
         Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
-        Pam will try to infer home location from activities, but thos behaviour is not recommended.
+        Pam will try to infer home location from activities, but this behaviour is not recommended.
         """
         )
 
@@ -210,7 +210,7 @@ def load_travel_diary(
             hhs_attributes = pd.DataFrame({'hid': list(hid_freq_map.keys()), 'freq': list(hid_freq_map.values())})
         else:
             logger.info("Adding freq to household attributes using trip frequency.")
-            hhs_attributes['freq'] = hhs_attributes.pid.map(hid_freq_map)
+            hhs_attributes['freq'] = hhs_attributes.hid.map(hid_freq_map)
 
         trips.drop('freq', axis=1, inplace=True)
 
@@ -496,7 +496,7 @@ def trip_based_travel_diary_read(
                 person.add(
                     activity.Activity(
                         seq=n + 1,
-                        act=trip.activity.lower(),
+                        act=trip.purp.lower(),
                         area=trip.dzone,
                         loc=end_loc,
                         start_time=utils.parse_time(trip.tet),

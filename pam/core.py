@@ -374,12 +374,10 @@ class Household:
         # TODO replace this with something better.
         """
         if self.hh_freq:
-            print("returning HH freq")
             return self.hh_freq
 
         if not self.people:
             return None
-        print("NOT returning HH freq")
         return self.av_person_freq
 
     def set_freq(self, freq):
