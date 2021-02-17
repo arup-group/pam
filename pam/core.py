@@ -42,7 +42,11 @@ class Population:
 
     @property
     def population(self):
+        self.logger.info("Returning un weighted person count.")
         return len([1 for hid, pid, person in self.people()])
+    
+    def __len__(self):
+        return self.population
 
     @property
     def num_households(self):
@@ -374,7 +378,6 @@ class Household:
 
         if not self.people:
             return None
-
         return self.av_person_freq
 
     def set_freq(self, freq):

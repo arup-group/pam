@@ -57,13 +57,18 @@ def load_travel_diary(
         hhs_attributes = pd.read_csv(hhs_attributes)
 
     if not isinstance(trips, pd.DataFrame):
-        raise UserWarning("Unrecognised input for population travel diaries")
+        raise UserWarning("Unrecognised input for trips input.")
 
     if persons_attributes is not None and not isinstance(persons_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for person_attributes")
 
     if hhs_attributes is not None and not isinstance(hhs_attributes, pd.DataFrame):
         raise UserWarning("Unrecognised input for hh_attributes")
+
+    # reset indexes if named
+    for table in [trips, persons_attributes, hhs_attributes]:
+        if table is not None and table.index.name is not None:
+            table.reset_index(inplace=True)
 
     if ('oact' in trips.columns and 'dact' in trips.columns) or from_to:
         logger.warning("Using from-to activity parser using 'oact' and 'dact' columns")
@@ -109,17 +114,18 @@ def load_travel_diary(
     )
 
     # check that person_attributes has required fields if used
-    if persons_attributes is not None and 'pid' not in persons_attributes.columns:
-        raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
+    if persons_attributes is not None:
+        if 'pid' not in persons_attributes.columns and not persons_attributes.index.name == 'pid':
+            raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
 
     # check if hh_attributes are being used
     if hhs_attributes is not None:
-        if 'hid' not in hhs_attributes.columns:
+        if 'hid' not in hhs_attributes.columns and not hhs_attributes.index.name == 'hid':
             raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
 
         if 'hid' in trips.columns:
             logger.info("Using person to household mapping from trips_diary data")
-        elif 'hid' in persons_attributes.columns:
+        elif persons_attributes is not None and 'hid' in persons_attributes.columns:
             logger.info("Loading person to household mapping from person_attributes data")
             person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
             trips['hid'] = trips.pid.map(person_hh_mapping)
@@ -155,7 +161,7 @@ def load_travel_diary(
             logger.warning(
         f"""
         Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
-        Pam will try to infer home location from activities, but thos behaviour is not recommended.
+        Pam will try to infer home location from activities, but this behaviour is not recommended.
         """
         )
 
@@ -204,7 +210,7 @@ def load_travel_diary(
             hhs_attributes = pd.DataFrame({'hid': list(hid_freq_map.keys()), 'freq': list(hid_freq_map.values())})
         else:
             logger.info("Adding freq to household attributes using trip frequency.")
-            hhs_attributes['freq'] = hhs_attributes.pid.map(hid_freq_map)
+            hhs_attributes['freq'] = hhs_attributes.hid.map(hid_freq_map)
 
         trips.drop('freq', axis=1, inplace=True)
 
@@ -249,7 +255,7 @@ def load_travel_diary(
     if hhs_attributes is not None:
         logger.debug("Setting households_attributes index to hid")
         if hhs_attributes.index.name is None:
-            hhs_attributes.set_index('pid', inplace=True)
+            hhs_attributes.set_index('hid', inplace=True)
         elif not hhs_attributes.index.name == 'hid':
             hhs_attributes = hhs_attributes.reset_index().set_index('hid')
 
@@ -490,7 +496,7 @@ def trip_based_travel_diary_read(
                 person.add(
                     activity.Activity(
                         seq=n + 1,
-                        act=trip.activity.lower(),
+                        act=trip.purp.lower(),
                         area=trip.dzone,
                         loc=end_loc,
                         start_time=utils.parse_time(trip.tet),

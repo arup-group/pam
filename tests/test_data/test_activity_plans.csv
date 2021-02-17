@@ -1,4 +1,4 @@
-pid,hid,seq,hzone,ozone,dzone,activity,mode,tst,tet,freq
+pid,hid,seq,hzone,ozone,dzone,purp,mode,tst,tet,freq
 0,0,1,a,a,b,work,car,500,530,10
 0,0,2,a,b,a,home,car,1000,1030,10
 1,0,1,a,a,b,work,car,500,530,10
