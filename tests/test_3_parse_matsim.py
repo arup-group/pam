@@ -7,6 +7,9 @@ from pam.read import load_attributes_map, read_matsim
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
 )
+test_tripsv12_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+)
 test_attributes_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_attributes.xml")
 )
@@ -30,7 +33,6 @@ def test_load_attributes_map():
 def test_parse_simple_matsim():
    population = read_matsim(test_trips_path, test_attributes_path)
    person = population['census_0']['census_0']
-   
    assert person.has_valid_plan
 
 
@@ -84,3 +86,21 @@ test_bad_attributes_path = os.path.abspath(
 def test_read_plan_with_negative_durations():
     population = read_matsim(test_bad_trips_path, test_bad_attributes_path)
     population['test']['test'].print()
+
+
+# v12
+def test_parse_v12_matsim():
+   population = read_matsim(test_tripsv12_path, version=12)
+   person = population['chris']['chris']
+   assert person.has_valid_plan
+   assert person.attributes == {'subpopulation': 'rich', 'age': 'yes'}
+
+
+def test_fail_v12_plus_attributes():
+    with pytest.raises(UserWarning):
+        population = read_matsim(test_tripsv12_path, attributes_path='fake', version=12)
+
+
+def test_fail_bad_version():
+    with pytest.raises(UserWarning):
+        population = read_matsim(test_tripsv12_path, version=1)

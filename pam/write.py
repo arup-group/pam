@@ -136,7 +136,8 @@ def write_od_matrices(
 def write_matsim(
         population,
         plans_path,
-        attributes_path,
+        attributes_path = None,
+        version : int = 11,
         comment=None,
         household_key=None
 ):
@@ -148,8 +149,63 @@ def write_matsim(
 	:param population: core.Population
 	:return: None
 	"""
-    write_matsim_plans(population, plans_path, comment)
-    write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
+    if version == 12:
+        write_matsim_v12(population=population, location=plans_path, comment=comment)
+    elif version == 11:
+        if attributes_path is None:
+            raise UserWarning("Please provide an attributes_path for a default v12 write.")
+        write_matsim_plans(population, plans_path, comment)
+        write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
+    else:
+        raise UserWarning("Version must be 11 or 12.")
+
+
+def write_matsim_v12(population, location, household_key='hid', comment=None):
+    # todo write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+
+    population_xml = et.Element('population')
+
+    # Add some useful comments
+    if comment:
+        population_xml.append(et.Comment(comment))
+    population_xml.append(et.Comment(f"Created {datetime.today()}"))
+
+    for hid, household in population:
+        for pid, person in household:
+            if household_key is not None:
+                person.attributes[household_key] = hid  # force add hid as an attribute
+            person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
+
+            attributes_xml = et.SubElement(person_xml, 'attributes')
+            for k, v in person.attributes.items():
+                attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
+                attribute_xml.text = str(v)
+
+            plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
+            for component in person[:-1]:
+                if isinstance(component, Activity):
+                    et.SubElement(plan_xml, 'act', {
+                        'type': component.act,
+                        'x': str(float(component.location.loc.x)),
+                        'y': str(float(component.location.loc.y)),
+                        'end_time': dttm(component.end_time)
+                    }
+                                  )
+                if isinstance(component, Leg):
+                    et.SubElement(plan_xml, 'leg', {
+                        'mode': component.mode,
+                        'trav_time': tdtm(component.duration)})
+
+            component = person[-1]  # write the last activity without an end time
+            et.SubElement(plan_xml, 'act', {
+                'type': component.act,
+                'x': str(float(component.location.loc.x)),
+                'y': str(float(component.location.loc.y)),
+                }
+            )
+
+    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    # todo assuming v5?
 
 
 def write_matsim_plans(population, location, comment=None):
@@ -164,7 +220,7 @@ def write_matsim_plans(population, location, comment=None):
 
     for hid, household in population:
         for pid, person in household:
-            person.attributes["hid"] = hid  # force add hid as an attribute
+            # person.attributes["hid"] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:

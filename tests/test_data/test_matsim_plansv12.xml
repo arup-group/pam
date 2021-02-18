@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE population SYSTEM "http://www.matsim.org/files/dtd/population_v6.dtd">
+
+<population>
+
+	<attributes>
+		<attribute name="coordinateReferenceSystem" class="java.lang.String">EPSG:27700</attribute>
+	</attributes>
+
+
+<!-- ====================================================================== -->
+
+	<person id="chris">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">rich</attribute>
+			<attribute name="age" class="java.lang.String">yes</attribute>
+		</attributes>
+		<plan score="129.464432800573" selected="yes">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="07:00:00" >
+			</activity>
+			<leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="1-2" end_link="3-4" trav_time="00:07:34" distance="10100.0" vehicleRefId="chris">1-2 2-3 3-4</route>
+			</leg>
+			<activity type="work" link="3-4" x="10100.0" y="0.0" end_time="16:30:00" >
+			</activity>
+			<leg mode="car" dep_time="16:30:00" trav_time="00:07:43">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="3-4" end_link="1-2" trav_time="00:07:43" distance="10300.0" vehicleRefId="chris">3-4 4-3 3-2 2-1 1-2</route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
+
+	<person id="fatema">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
+			<attribute name="age" class="java.lang.String">no</attribute>
+		</attributes>
+		<plan score="111.87873939522729" selected="yes">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="08:00:00" >
+			</activity>
+			<leg mode="bike" dep_time="08:00:00" trav_time="00:52:31">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bike</attribute>
+				</attributes>
+				<route type="generic" start_link="1-2" end_link="3-4" trav_time="00:52:31" distance="13130.0"></route>
+			</leg>
+			<activity type="work" link="3-4" x="10100.0" y="0.0" end_time="17:30:00" >
+			</activity>
+			<leg mode="bike" dep_time="17:30:00" trav_time="00:52:31">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bike</attribute>
+				</attributes>
+				<route type="generic" start_link="3-4" end_link="1-2" trav_time="00:52:31" distance="13130.0"></route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
+
+	<person id="fred">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
+			<attribute name="age" class="java.lang.String">no</attribute>
+		</attributes>
+		<plan score="113.01188458431385" selected="yes">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="08:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="1-2" end_link="1-2" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="pt interaction" link="1-2" x="50.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="bus" trav_time="00:43:42">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="default_pt" start_link="1-2" end_link="3-4" trav_time="00:43:42" distance="10100.0">
+				{"transitRouteId":"work_bound","boardingTime":"08:30:00","transitLineId":"city_line","accessFacilityId":"home_stop_out","egressFacilityId":"work_stop_in"}
+				</route>
+			</leg>
+			<activity type="pt interaction" link="3-4" x="10050.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="3-4" end_link="3-4" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="work" link="3-4" x="10100.0" y="0.0" end_time="17:30:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="3-4" end_link="4-3" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="pt interaction" link="4-3" x="10050.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="bus" trav_time="00:13:42">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="default_pt" start_link="4-3" end_link="2-1" trav_time="00:13:42" distance="10100.0">
+				{"transitRouteId":"home_bound","boardingTime":"18:00:00","transitLineId":"city_line","accessFacilityId":"work_stop_out","egressFacilityId":"home_stop_in"}
+				</route>
+			</leg>
+			<activity type="pt interaction" link="2-1" x="50.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="2-1" end_link="1-2" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
+
+	<person id="gerry">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
+			<attribute name="age" class="java.lang.String">no</attribute>
+		</attributes>
+		<plan score="105.5293475373047" selected="yes">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="07:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="1-2" end_link="1-2" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="pt interaction" link="1-2" x="50.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="pt" trav_time="00:43:42">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="default_pt" start_link="1-2" end_link="3-4" trav_time="00:43:42" distance="10100.0">
+				{"transitRouteId":"work_bound","boardingTime":"07:30:00","transitLineId":"city_line","accessFacilityId":"home_stop_out","egressFacilityId":"work_stop_in"}
+				</route>
+			</leg>
+			<activity type="pt interaction" link="3-4" x="10050.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="3-4" end_link="3-4" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="work" link="3-4" x="10100.0" y="0.0" end_time="16:30:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="3-4" end_link="4-3" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="pt interaction" link="4-3" x="10050.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="pt" trav_time="01:13:42">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="default_pt" start_link="4-3" end_link="2-1" trav_time="01:13:42" distance="10100.0">
+				{"transitRouteId":"home_bound","boardingTime":"17:00:00","transitLineId":"city_line","accessFacilityId":"work_stop_out","egressFacilityId":"home_stop_in"}
+				</route>
+			</leg>
+			<activity type="pt interaction" link="2-1" x="50.0" y="0.0" max_dur="00:00:00" >
+			</activity>
+			<leg mode="walk" trav_time="00:01:18">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">bus</attribute>
+				</attributes>
+				<route type="generic" start_link="2-1" end_link="1-2" trav_time="00:01:18" distance="65.0"></route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
+
+	<person id="nick">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
+			<attribute name="age" class="java.lang.String">no</attribute>
+		</attributes>
+		<plan score="129.592238766919" selected="yes">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="08:00:00" >
+			</activity>
+			<leg mode="car" dep_time="08:00:00" trav_time="00:00:04">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="1-2" end_link="1-5" trav_time="00:00:04" distance="10100.0">1-2 2-1 1-5</route>
+			</leg>
+			<activity type="work" link="1-5" x="0.0" y="10000.0" end_time="17:30:00" >
+			</activity>
+			<leg mode="car" dep_time="17:30:00" trav_time="00:07:34">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="1-5" end_link="1-2" trav_time="00:07:34" distance="10100.0">1-5 5-1 1-2</route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
+	</person>
+
+<!-- ====================================================================== -->
+
+</population>

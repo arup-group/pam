@@ -625,12 +625,13 @@ def from_to_travel_diary_read(
 
 def read_matsim(
         plans_path,
-        attributes_path=None,
-        weight=100,
-        household_key=None,
-        simplify_pt_trips=False,
-        autocomplete=True,
-        crop=True
+        attributes_path = None,
+        weight : int = 100,
+        version : int = 11,
+        household_key : Union[str, None] = None,
+        simplify_pt_trips : bool = False,
+        autocomplete : bool = True,
+        crop : bool = True
 ):
     """
     Load a MATSim format population into core population format.
@@ -640,6 +641,7 @@ def read_matsim(
     :param plans: path to matsim format xml
     :param attributes: path to matsim format xml
     :param weight: int
+    :param version: int {11,12}, default = 11
     :param household_key: {str, None}
     :return: Population
     """
@@ -647,15 +649,27 @@ def read_matsim(
 
     population = core.Population()
 
-    if attributes_path:
+    if attributes_path is not None and version == 12:
+        raise UserWarning(
+    """
+    You have provided an attributes_path and enables matsim version 12, but 
+    v12 does not require an attributes input:
+    Either remove the attributes_path arg, or enable version 11.
+    """
+    )
+
+    if version not in [11, 12]:
+        raise UserWarning("Version must be set to 11 or 12.")
+
+    attributes_map = {}
+    if version == 12:
+        attributes_map = load_attributes_map_from_v12(plans_path)
+    elif attributes_path:
         attributes_map = load_attributes_map(attributes_path)
 
     for person_id, plan in selected_plans(plans_path):
 
-        if attributes_path:
-            attributes = attributes_map[person_id]
-        else:
-            attributes = {}
+        attributes = attributes_map.get(person_id, {})
 
         person = core.Person(person_id, attributes=attributes, freq=weight)
 
@@ -775,6 +789,23 @@ def read_matsim(
             population.add(household)
 
     return population
+
+
+def load_attributes_map_from_v12(plans_path):
+    return dict(
+        [
+            get_attributes_from_plans(elem)
+            for elem in utils.get_elems(plans_path, "person")
+        ]
+    )
+
+
+def get_attributes_from_plans(elem):
+    ident = elem.xpath("@id")[0]
+    attributes = {}
+    for attr in elem.xpath('./attributes/attribute'):
+        attributes[attr.get('name')] = attr.text
+    return ident, attributes
 
 
 def load_attributes_map(attributes_path):

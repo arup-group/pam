@@ -10,7 +10,7 @@ import geopandas as gp
 from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
-from pam.write import write_travel_diary, \
+from pam.write import write_travel_diary, write_matsim, write_matsim_v12,  \
     write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks, \
     write_distance_benchmark, write_mode_distance_benchmark, write_mode_duration_benchmark, write_duration_benchmark, write_departure_time_benchmark
 from pam.read import read_matsim
@@ -20,13 +20,14 @@ from pam.utils import minutes_to_datetime as mtdt
 def test_write_plans_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
     write_matsim_plans(population_heh, location=location, comment="test")
+    expected_file = "{}/test.xml".format(tmp_path)
+    assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
 
 
 def test_write_plans_gzip(tmp_path, population_heh):
     location = str(tmp_path / "test.xml.gz")
     write_matsim_plans(population_heh, location=location, comment="test")
-
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -90,6 +91,37 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
     complex_plan_out = population_out['census_1']['census_1'].plan
 
     assert complex_plan_in == complex_plan_out
+
+
+def test_write_plans_xml_v12(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml")
+    write_matsim_v12(population=population_heh, location=location, comment="test")
+    expected_file = "{}/test.xml".format(tmp_path)
+    assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
+
+
+def test_write_plans_xml_v12_gzip(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml.gz")
+    write_matsim_v12(population=population_heh, location=location, comment="test")
+    expected_file = "{}/test.xml.gz".format(tmp_path)
+    assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
+
+def test_write_matsim_xml_v12(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml")
+    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
+    expected_file = "{}/test.xml".format(tmp_path)
+    assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
+
+
+def test_write_matsim_xml_v12_gzip(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml.gz")
+    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
+    expected_file = "{}/test.xml.gz".format(tmp_path)
+    assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
 
 
 def test_write_travel_plans(tmp_path, population_heh):
