@@ -70,8 +70,16 @@ class Population:
             return False
         if not len(self) == len(other):
             return False
-        for hid, hh in self:
-            if not other.get(hid) == hh:
+        if not self.stats == other.stats:
+            return False
+        used = []
+        for _, hh in self:
+            for hid, hh2 in other:
+                if hid in used:
+                    continue
+                if hh == hh2:
+                    used.append(hid)
+                    break
                 return False
         return True
 
@@ -394,8 +402,14 @@ class Household:
             return False
         if not len(self) == len(other):
             return False
-        for pid, person in self:
-            if not other.get(pid) == person:
+        used = []
+        for _, person in self:
+            for pid, person2 in other:
+                if pid in used:
+                    continue
+                if person == person2:
+                    used.append(pid)
+                    break
                 return False
         return True
 

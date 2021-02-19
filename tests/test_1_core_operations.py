@@ -255,10 +255,10 @@ def test_population_contains_hh():
     assert hh2 in population
 
     # same hh and person diff indexes
-    # hh2 = Household('X', attributes={1:1})
-    # p2 = Person('person_X', attributes={1:1})
-    # hh2.add(p2)
-    # assert hh2 in population
+    hh2 = Household('X', attributes={1:1})
+    p2 = Person('person_X', attributes={1:1})
+    hh2.add(p2)
+    assert hh2 in population
 
     # diff person and diff hh
     hh3 = Household('B', attributes={1:2})
@@ -405,7 +405,7 @@ def test_hhs_equal_with_persons():
 
     assert hh1 == hh1
     assert hh1 == hh2
-    assert not hh1 == hh3
+    assert hh1 == hh3
     assert not hh1 == hh4
     assert not hh1 == hh5
 
@@ -441,6 +441,6 @@ def test_populations_equal():
 
     assert pop1 == pop1
     assert pop1 == pop2
-    assert not pop1 == pop3
+    assert pop1 == pop3
     assert not pop1 == pop4
     assert not pop1 == pop5
