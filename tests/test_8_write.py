@@ -19,7 +19,7 @@ from pam.utils import minutes_to_datetime as mtdt
 
 def test_write_plans_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
-    write_matsim_plans(population_heh, location=location, comment="test")
+    write_matsim_plans(population_heh, path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -27,7 +27,7 @@ def test_write_plans_xml(tmp_path, population_heh):
 
 def test_write_plans_gzip(tmp_path, population_heh):
     location = str(tmp_path / "test.xml.gz")
-    write_matsim_plans(population_heh, location=location, comment="test")
+    write_matsim_plans(population_heh, path=location, comment="test")
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -53,7 +53,7 @@ def test_write_attributes_gzip(tmp_path, population_heh):
 
 def test_write_read_continuity_xml(tmp_path, population_heh):
     plans_location = str(tmp_path / "test_plans.xml")
-    write_matsim_plans(population_heh, location=plans_location, comment="test")
+    write_matsim_plans(population_heh, path=plans_location, comment="test")
     attributes_location = str(tmp_path / "test_attributes.xml")
     write_matsim_attributes(population_heh, location=attributes_location, comment="test")
     population = read_matsim(
@@ -64,7 +64,7 @@ def test_write_read_continuity_xml(tmp_path, population_heh):
 
 def test_write_read_continuity_gzip(tmp_path, population_heh):
     plans_location = str(tmp_path / "test_plans.xml.gz")
-    write_matsim_plans(population_heh, location=plans_location, comment="test")
+    write_matsim_plans(population_heh, path=plans_location, comment="test")
     attributes_location = str(tmp_path / "test_attributes.xml.gz")
     write_matsim_attributes(population_heh, location=attributes_location, comment="test")
     population = read_matsim(
@@ -81,7 +81,7 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
     complex_plan_in = population_in['census_1']['census_1'].plan
 
     plans_location = str(tmp_path / "test_plans.xml")
-    write_matsim_plans(population_in, location=plans_location, comment="test")
+    write_matsim_plans(population_in, path=plans_location, comment="test")
     attributes_location = str(tmp_path / "test_attributes.xml")
     write_matsim_attributes(population_in, location=attributes_location, comment="test")
 
@@ -95,7 +95,7 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
 
 def test_write_plans_xml_v12(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
-    write_matsim_v12(population=population_heh, location=location, comment="test")
+    write_matsim_v12(population=population_heh, path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -103,7 +103,7 @@ def test_write_plans_xml_v12(tmp_path, population_heh):
 
 def test_write_plans_xml_v12_gzip(tmp_path, population_heh):
     location = str(tmp_path / "test.xml.gz")
-    write_matsim_v12(population=population_heh, location=location, comment="test")
+    write_matsim_v12(population=population_heh, path=location, comment="test")
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -126,7 +126,7 @@ def test_write_matsim_xml_v12_gzip(tmp_path, population_heh):
 
 def test_write_travel_plans(tmp_path, population_heh):
     location = os.path.join(tmp_path, "test.csv")
-    write_travel_diary(population_heh, path=location)
+    write_travel_diary(population_heh, plans_path=location)
 
     expected_file = "{}/test.csv".format(tmp_path)
     assert os.path.exists(expected_file)

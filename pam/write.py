@@ -4,6 +4,7 @@ import pandas as pd
 import geopandas as gp
 from lxml import etree as et
 from shapely.geometry import Point, LineString
+from typing import Tuple, Union, Optional, Callable, List
 
 from .activity import Activity, Leg
 from .utils import datetime_to_matsim_time as dttm
@@ -12,14 +13,21 @@ from .utils import minutes_to_datetime as mtdt
 from .utils import write_xml, create_local_dir
 
 
-def write_travel_diary(population, path, attributes_path=None):
+def write_travel_diary(
+    population,
+    plans_path : str,
+    attributes_path : Optional[str] = None
+    ) -> None:
     """
 	Write a core population object to the standard population tabular formats.
 	Only write attributes if given attributes_path.
     Limited to person attributes only.
+    TODO can this be combined with the write csv function?
     TODO add household attributes
+
 	:param population: core.Population
-	:return: None
+	:param plans_path: str path
+	:param attributes_path: str path
 	"""
     record = []
     for hid, pid, person in population.people():
@@ -34,12 +42,12 @@ def write_travel_diary(population, path, attributes_path=None):
                     'seq': seq,
                     'purp': leg.purp,
                     'mode': leg.mode,
-                    'tst': leg.start_time.time(),  # todo convert to min
-                    'tet': leg.end_time.time(),  # todo convert to min
+                    'tst': leg.start_time.time(),
+                    'tet': leg.end_time.time(),
                     'freq': person.freq,
                 }
             )
-    pd.DataFrame(record).to_csv(path)
+    pd.DataFrame(record).to_csv(plans_path)
 
     if attributes_path:
         record = []
@@ -54,23 +62,24 @@ def write_travel_diary(population, path, attributes_path=None):
 
 def write_od_matrices(
         population, 
-        path, 
-        leg_filter=None, 
-        person_filter=None, 
-        time_minutes_filter=None):
+        path : str, 
+        leg_filter : Optional[str] = None, 
+        person_filter : Optional[str] = None, 
+        time_minutes_filter : Optional[List[Tuple[int]]] = None
+        ) -> None:
 
     """
 	Write a core population object to tabular O-D weighted matrices.
 	Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
     A single filter can be applied each time.
     TODO include freq (assume hh)
+
 	:param population: core.Population
     :param path: directory to write OD matrix files
     :param leg_filter: select between 'Mode', 'Purpose'
     :param person_filter: select between given attribute categories (column names) from person attribute data
     :param time_minutes_filter: a list of tuples to slice times, 
     e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
-	:return: None
 	"""
     create_local_dir(path)
 
@@ -135,33 +144,50 @@ def write_od_matrices(
 
 def write_matsim(
         population,
-        plans_path,
-        attributes_path = None,
+        plans_path : str,
+        attributes_path : Optional[str] = None,
         version : int = 11,
-        comment=None,
-        household_key=None
-):
+        comment : Optional[str] = None,
+        household_key : Optional[str] = 'hid'
+    ) -> None:
     """
-	Write a core population object to matsim xml formats.
+	Write a core population object to matsim xml formats (either version 11 or 12). 
 	Note that this requires activity locs to be set (shapely.geomerty.Point).
-	Comment string is optional.
-	Set household_key of you wish to add household id to attributes.
-	:param population: core.Population
+    TODO add support for PathLib?
+
+	:param population: core.Population, population to be writen to disk
+	:param plans_path: str, output path (.xml or .xml.gz)
+	:param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
+	:param version: int {11,12}, matsim version, default 11
+	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+	:param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
 	:return: None
 	"""
     if version == 12:
-        write_matsim_v12(population=population, location=plans_path, comment=comment)
+        write_matsim_v12(population=population, path=plans_path, comment=comment)
     elif version == 11:
         if attributes_path is None:
-            raise UserWarning("Please provide an attributes_path for a default v12 write.")
+            raise UserWarning("Please provide an attributes_path for a (default) v11 write.")
         write_matsim_plans(population, plans_path, comment)
         write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
     else:
         raise UserWarning("Version must be 11 or 12.")
 
 
-def write_matsim_v12(population, location, household_key='hid', comment=None):
-    # todo write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+def write_matsim_v12(
+    population,
+    path : str,
+    household_key : Optional[str] = 'hid',
+    comment : Optional[str] = None
+    ) -> None:
+    """
+    Write a matsim version 12 output (persons plans and attributes combined).
+    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+	:param population: core.Population, population to be writen to disk
+	:param path: str, output path (.xml or .xml.gz)
+	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param household_key: {str, None}, default 'hid'
+    """
 
     population_xml = et.Element('population')
 
@@ -204,12 +230,22 @@ def write_matsim_v12(population, location, household_key='hid', comment=None):
                 }
             )
 
-    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v5')
     # todo assuming v5?
 
 
-def write_matsim_plans(population, location, comment=None):
-    # todo write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+def write_matsim_plans(
+    population,
+    path : str,
+    comment : Optional[str] = None
+    ) -> None:
+    """
+    Write a matsim version 11 plan output (persons plans only).
+    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+	:param population: core.Population, population to be writen to disk
+	:param path: str, output path (.xml or .xml.gz)
+	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    """
 
     population_xml = et.Element('population')
 
@@ -245,11 +281,25 @@ def write_matsim_plans(population, location, comment=None):
             }
             )
 
-    write_xml(population_xml, location, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v5')
     # todo assuming v5?
 
 
-def write_matsim_attributes(population, location, comment=None, household_key='hid'):
+def write_matsim_attributes(
+    population,
+    location : str,
+    comment : Optional[str] = None,
+    household_key : Optional[str] = 'hid'
+    ) -> None:
+    """
+    Write a matsim version 11 attributes output (persons attributes only).
+    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+	:param population: core.Population, population to be writen to disk
+	:param path: str, output path (.xml or .xml.gz)
+	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param household_key: {str, None}, default 'hid'
+    """
+
     attributes_xml = et.Element('objectAttributes')  # start forming xml
 
     # Add some useful comments
@@ -275,7 +325,50 @@ def write_matsim_attributes(population, location, comment=None, household_key='h
     # todo assuming v1?
 
 
-def to_csv(population, dir, crs=None, to_crs="EPSG:4326"):
+def dump(
+    population,
+    dir : str,
+    crs : Optional[str] = None,
+    to_crs : Optional[str] = "EPSG:4326"
+    ) -> None:
+    """
+    Write a population to disk as tabular data in csv format. Outputs are:
+    - households.csv: household ids and attributes
+    - people.csv: agent ids and attributes
+    - legs.csv: activity plan trip records
+    - activities.csv: corresponding plan activities
+    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    :param population: core.Population
+    :param dir: str, path to output directory
+    :param crs: str, population coordinate system (generally we use local grid systems)
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    """
+    to_csv(
+        population = population,
+        dir = dir,
+        crs = crs,
+        to_crs = to_crs
+    )
+
+
+def to_csv(
+    population,
+    dir : str,
+    crs : Optional[str] = None,
+    to_crs : Optional[str] = "EPSG:4326"
+    ) -> None:
+    """
+    Write a population to disk as tabular data in csv format. Outputs are:
+    - households.csv: household ids and attributes
+    - people.csv: agent ids and attributes
+    - legs.csv: activity plan trip records
+    - activities.csv: corresponding plan activities
+    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    :param population: core.Population
+    :param dir: str, path to output directory
+    :param crs: str, population coordinate system (generally we use local grid systems)
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    """
 
     create_local_dir(dir)
 
@@ -392,11 +485,17 @@ def save_csv(df, path):
     df.to_csv(path)
 
 
-def write_population_csv(list_of_populations, export_path):
+def write_population_csv(
+    list_of_populations : list,
+    export_path : str,
+    ) -> None:
     """"
     This function creates csv export files of populations, households, people, legs and actvities. 
     This export could be used to share data outside of Python or build an interactive dashboard.
     TODO account for frequency
+    
+    :param population: core.Population
+    :param dir: str, path to output directory
     """
     create_local_dir(export_path)
 
@@ -478,9 +577,9 @@ def write_population_csv(list_of_populations, export_path):
 
 def write_benchmarks(
     population,
-    dimensions=None,
-    data_fields=None,
-    aggfunc = [len],
+    dimensions : Optional[List[str]] = None,
+    data_fields : Optional[List[str]] = None,
+    aggfunc : List[Callable]= [len],
     normalise_by = None,
     colnames = None,
     path = None
