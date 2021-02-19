@@ -124,6 +124,18 @@ def test_write_matsim_xml_v12_gzip(tmp_path, population_heh):
     # TODO make assertions about the content of the created file
 
 
+def test_read_write_v12_consistent(tmp_path):
+    test_tripsv12_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+    )
+    population = read_matsim(test_tripsv12_path, version=12)
+    location = str(tmp_path / "test.xml.gz")
+    write_matsim(population=population, version=12, plans_path=location, comment="test")
+    expected_file = "{}/test.xml.gz".format(tmp_path)
+    population2 = read_matsim(expected_file, version=12)
+    assert population == population2
+
+
 def test_write_travel_plans(tmp_path, population_heh):
     location = os.path.join(tmp_path, "test.csv")
     write_travel_diary(population_heh, plans_path=location)

@@ -202,9 +202,9 @@ def write_matsim_v12(
                 person.attributes[household_key] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
 
-            attributes_xml = et.SubElement(person_xml, 'attributes')
+            attributes_xml = et.SubElement(person_xml, 'attributes', {})
             for k, v in person.attributes.items():
-                attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
+                attribute_xml = et.SubElement(attributes_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
                 attribute_xml.text = str(v)
 
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
@@ -230,7 +230,7 @@ def write_matsim_v12(
                 }
             )
 
-    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v5')
+    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v6')
     # todo assuming v5?
 
 

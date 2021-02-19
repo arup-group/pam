@@ -48,6 +48,33 @@ class Population:
     def __len__(self):
         return self.population
 
+    def __contains__(self, other):
+        if isinstance(other, Household):
+            for _, hh in self:
+                if other == hh:
+                    return True
+            return False
+        if isinstance(other, Person):
+            for _, _, person in self.people():
+                if other == person:
+                    return True
+            return False
+        raise UserWarning(f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person.")
+
+    def __eq__(self, other):
+        """
+        Note that this method requires that both populations are using consistent hh and persons IDs.
+        """
+        if not isinstance(other, Population):
+            self.logger.warning(f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
+            return False
+        if not len(self) == len(other):
+            return False
+        for hid, hh in self:
+            if not other.get(hid) == hh:
+                return False
+        return True
+
     @property
     def num_households(self):
         return len([1 for hid, hh in self.households.items()])
@@ -345,6 +372,33 @@ class Household:
         for pid, person in self.people.items():
             yield pid, person
 
+    def __len__(self):
+        return len(self.people)
+
+    def __contains__(self, other_person):
+        if not isinstance(other_person, Person):
+            raise UserWarning(f"Cannot check if household contains object type: {type(other_person)}, please provide Person.")
+        for _, person in self:
+            if other_person == person:
+                return True
+        return False
+
+    def __eq__(self, other):
+        """
+        Note that this method requires that both hhs are using consistent hh persons IDs.
+        """
+        if not isinstance(other, Household):
+            self.logger.warning(f"Cannot compare household to non household: ({type(other)}).")
+            return False
+        if not self.attributes == other.attributes:
+            return False
+        if not len(self) == len(other):
+            return False
+        for pid, person in self:
+            if not other.get(pid) == person:
+                return False
+        return True
+
     @property
     def location(self):
         for person in self.people.values():
@@ -582,6 +636,16 @@ class Person:
     def __iter__(self):
         for component in self.plan:
             yield component
+
+    def __eq__(self, other):
+        if not isinstance(other, Person):
+            self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
+            return False
+        if not self.attributes == other.attributes:
+            return False
+        if not self.plan == other.plan:
+            return False
+        return True
 
     @property
     def activity_classes(self):
