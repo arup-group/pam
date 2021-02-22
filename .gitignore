@@ -35,3 +35,4 @@ build
 dist
 fs.ipynb
 facility_sampling.ipynb
+weighted-facility-sampling_demo.ipynb
