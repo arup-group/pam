@@ -8,6 +8,7 @@ import gzip
 import logging
 import pickle
 from typing import Union
+import json
 
 import pam.core as core
 import pam.activity as activity
@@ -716,25 +717,10 @@ def read_matsim(
                 )
 
             if stage.tag == 'leg':
-                network_route = None
-                route_id = None
-                service_id = None
-                o_stop = None
-                d_stop = None
-                for r in stage:
-                    network_route = r.text
-                    if network_route is not None:
-                        if 'PT' in network_route:
-                            pt_details = network_route.split('===')
-                            o_stop = pt_details[1]
-                            d_stop = pt_details[4]
-                            service_id = pt_details[2]
-                            route_id = pt_details[3]
-                        else:
-                            network_route = network_route.split(' ')
 
+                route, mode, network_route, transit_route = \
+                    extract_route_attributes(stage, version)
                 leg_seq += 1
-
                 trav_time = stage.get('trav_time')
                 if trav_time:
                     h, m, s = trav_time.split(":")
@@ -746,20 +732,17 @@ def read_matsim(
                 person.add(
                     activity.Leg(
                         seq=leg_seq,
-                        mode=stage.get('mode'),
-                        start_loc=None,
-                        end_loc=None,
-                        start_link=stage.get('start_link'),
-                        end_link=stage.get('end_link'),
-                        start_area=None,
-                        end_area=None,
+                        mode=mode,
+                        start_link=route.get('start_link'),
+                        end_link=route.get('end_link'),
                         start_time=departure_dt,
                         end_time=arrival_dt,
-                        o_stop=o_stop,
-                        d_stop=d_stop,
-                        service_id=service_id,
-                        route_id=route_id,
-                        network_route=network_route
+                        distance=float(route.get("distance", 0)),
+                        service_id = transit_route.get("transitLineId"),
+                        route_id = transit_route.get("transitRouteId"),
+                        o_stop = transit_route.get("accessFacilityId"),
+                        d_stop = transit_route.get("egressFacilityId"),
+                        network_route=network_route,
                     )
                 )
 
@@ -789,6 +772,71 @@ def read_matsim(
             population.add(household)
 
     return population
+
+
+def extract_route_attributes(leg, version):
+    if version == 12:
+        return extract_route_v12(leg)
+    return extract_route_v11(leg)
+
+
+def extract_route_v11(leg):
+    """
+    Extract mode, network route and transit route as available.
+
+    Args:
+        leg (xml_leg_element)
+
+    Returns:
+        (xml_elem, string, list, dict): (route, mode, network route, transit route)
+    """
+    route = leg.xpath("route")
+    mode = leg.get("mode")
+    if not route:
+        return {}, mode, None, {}
+    route = route[0]
+    if mode == "pt":
+        return route, mode, None, v11_transit_route(route)
+    network_route = route.text
+    if network_route is not None:
+        return route, mode, network_route.split(" "), {}
+    return route, mode, None, {}
+
+
+def extract_route_v12(leg):
+    """
+    Extract route_element, mode, network route and transit route as available.
+
+    Args:
+        leg (xml_leg_element)
+
+    Returns:
+        (xml_element, string, list, dict): (route, mode, network route, transit route)
+    """
+    route = leg.xpath("route")
+    mode = leg.get("mode")
+    if not route:
+        return {}, mode, None, {}
+    route = route[0]
+    if route.get("type") == "default_pt":
+        return route, mode, None, v12_transit_route(route)
+    network_route = route.text
+    if network_route is not None:
+        return route, mode, network_route.split(" "), {}
+    return route, mode, None, {}
+
+
+def v12_transit_route(route):
+    return json.loads(route.text.strip())
+
+def v11_transit_route(route):
+    pt_details = route.text.split('===')
+    return {
+        "accessFacilityId": pt_details[1],
+        "transitLineId": pt_details[2],
+        "transitRouteId": pt_details[3],
+        "egressFacilityId": pt_details[4]
+    }
 
 
 def load_attributes_map_from_v12(plans_path):

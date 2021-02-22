@@ -890,13 +890,14 @@ class Leg(PlanComponent):
             end_loc=None,
             start_time=None,
             end_time=None,
+            distance=None,
             purp=None,
+            freq=None,
             o_stop=None,
             d_stop=None,
             service_id=None,
             route_id=None,
             network_route=None,
-            freq=None,
     ):
         self.seq = seq
         self.purp = purp
@@ -905,14 +906,14 @@ class Leg(PlanComponent):
         self.end_location = Location(loc=end_loc, link=end_link, area=end_area)
         self.start_time = start_time
         self.end_time = end_time
-        # related to the PT network, relevant for simulated plans
+        self._distance = distance
+        self.freq = freq
+        # relevant for simulated plans
         self.service_id = service_id
         self.route_id = route_id
         self.o_stop = o_stop
         self.d_stop = d_stop
-        # list of link ids from network for routed modes
         self.network_route = network_route
-        self.freq = freq
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
@@ -924,6 +925,12 @@ class Leg(PlanComponent):
                self.end_location == other.end_location and \
                self.mode == other.mode and \
                self.duration == other.duration
+
+    @property
+    def distance(self):
+        if self._distance is not None:
+            return self._distance
+        return self.euclidean_distance
 
     @property
     def euclidean_distance(self):
