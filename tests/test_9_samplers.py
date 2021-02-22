@@ -294,7 +294,7 @@ def test_facility_sampler_weighted_maxwalk():
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ['home', 'work', 'education'], weight_on='floorspace', max_walk=1000)
-    assert sampler.sample(0, 'work', previous_mode='bus') == Point((1.8,1.8))
+    assert sampler.sample(0, 'work', mode='bus') == Point((1.8,1.8))
 
 def test_facility_sampler_missing_activity_return_None_weighted():
 
@@ -332,6 +332,6 @@ def test_facility_sampler_weighted_distance():
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ['home', 'work', 'education'], weight_on='floorspace')
     sampled_facilities = []
     for i in range(20):
-        sampled_facilities.append(sampler.sample(0, 'work', previous_mode='walk', previous_duration=pd.Timedelta(minutes=15), previous_loc=Point(0,0)))
+        sampled_facilities.append(sampler.sample(0, 'work', mode='walk', previous_duration=pd.Timedelta(minutes=15), previous_loc=Point(0,0)))
     assert pd.Series(sampled_facilities).value_counts(normalize=True).idxmax() == Point((1000,750))
     

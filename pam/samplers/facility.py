@@ -50,6 +50,11 @@ class FacilitySampler:
         else:
             self.activities = activities
 
+        ## overrides for transit mode and speed specifications
+        self.TRANSIT_MODES = transit_modes if transit_modes is not None else variables.TRANSIT_MODES
+        self.EXPECTED_EUCLIDEAN_SPEEDS = expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
+
+        # build samplers
         self.samplers = self.build_facilities_sampler(facilities, zones, weight_on = weight_on, max_walk = max_walk)
         self.build_xml = build_xml
         self.fail = fail
@@ -62,9 +67,6 @@ class FacilitySampler:
         self.index_counter = 0
         self.error_counter = 0
 
-        ## overrides for transit mode and speed specifications
-        self.TRANSIT_MODES = transit_modes if transit_modes is not None else variables.TRANSIT_MODES
-        self.EXPECTED_EUCLIDEAN_SPEEDS = expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
 
     def clear(self):
         self.facilities = {}
@@ -195,7 +197,7 @@ def euclidean_distance(p1, p2):
     return ((p1.x-p2.x)**2 + (p1.y-p2.y)**2)**0.5
 
 
-def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None):
+def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None, transit_modes=None, expected_euclidean_speeds=None):
     """
     Redirect to the appropriate sampler.
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -209,6 +211,8 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
                 weights = weights, 
                 transit_distance = transit_distance, 
                 max_walk = max_walk,
+                transit_modes=transit_modes,
+                expected_euclidean_speeds=expected_euclidean_speeds,
                 mode = mode, 
                 previous_duration = previous_duration, 
                 previous_loc = previous_loc
@@ -258,7 +262,7 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
 
                 # calculate deviation from "expected" distance
                 speed = expected_euclidean_speeds[mode] if mode in expected_euclidean_speeds.keys() else expected_euclidean_speeds['average']
-                expected_distance = (previous_duration / pd.Timedelta(seconds=1)) * speed  
+                expected_distance = (previous_duration / pd.Timedelta(seconds=1)) * speed  # (in meters)
                 distance_weights = np.abs(distances - expected_distance)
                 distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid having zero weights
 
