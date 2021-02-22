@@ -258,7 +258,7 @@ class Population:
                     component.start_location.loc = person.plan[idx-1].location.loc
                     component.end_location.loc = person.plan[idx+1].location.loc
 
-    def sample_locs(self, sampler):
+    def sample_locs(self, sampler, long_term_activities = None, joint_trips_prefix = 'escort_'):
         """
         WIP Sample household plan locs using a sampler.
 
@@ -279,7 +279,12 @@ class Population:
         persons and home activities are impacted.
 
         TODO - add method to all core classes
+        :params list long_term activities: a list of activities for which location is only assigned once (per zone)
+        :params str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
         """
+        if long_term_activities is None:
+            long_term_activities = variables.LONG_TERM_ACTIVITIES
+
         for _, household in self.households.items():
             home_loc = activity.Location(
                 area=household.location.area,
@@ -288,13 +293,13 @@ class Population:
 
             unique_locations = {(household.location.area, 'home'): home_loc}
 
-            for _, person in household.people.items():
+            for __, person in household.people.items():
                 
                 for act in person.activities:
 
-                    # remove "escort_" from activity types.
-                    if act.act[:7] == "escort_":
-                        target_act = act.act[7:]
+                    # remove escort prefix from activity types.
+                    if act.act[:len(joint_trips_prefix)] == joint_trips_prefix:
+                        target_act = act.act[(len(joint_trips_prefix)):]
                     else:
                         target_act = act.act
 
@@ -307,7 +312,7 @@ class Population:
                             area=act.location.area,
                             loc=sampler.sample(act.location.area, target_act)
                         )
-                        if target_act in variables.LONG_TERM_ACTIVITIES:
+                        if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
                             # short-term activities, such as shopping can visit multiple locations in the same zone
                             unique_locations[(act.location.area, target_act)] = location   
@@ -321,40 +326,46 @@ class Population:
                         component.end_location = person.plan[idx+1].location
 
 
-    def sample_locs_complex(self, sampler):
+    def sample_locs_complex(self, sampler, long_term_activities = None, joint_trips_prefix = 'escort_'):
         """
         Extends sample_locs method to enable more complex and rules-based sampling.
         Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
         It is generally slower than sample_locs, as it loops through both activities and legs.
-        """
+        :params list long_term activities: a list of activities for which location is only assigned once (per zone)
+        :params str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
+        """        
+        if long_term_activities is None:
+            long_term_activities = variables.LONG_TERM_ACTIVITIES
+        
+
         for _, household in self.households.items():
             home_loc = activity.Location(
                 area=household.location.area,
-                loc=sampler.sample(household.location.area, 'home', previous_mode = None, previous_duration=None, previous_loc = None)
+                loc=sampler.sample(household.location.area, 'home', mode = None, previous_duration=None, previous_loc = None)
             )
-            previous_mode = None
+            mode = None
 
             unique_locations = {(household.location.area, 'home'): home_loc}
 
             for _, person in household.people.items():
-                previous_mode = None
+                mode = None
                 previous_duration = None
                 previous_loc = None
                 
-                for idx, plan in enumerate(person.plan):
+                for idx, component in enumerate(person.plan):
                     # loop through all plan elements
 
-                    if isinstance(plan, activity.Leg):
-                        previous_mode = plan.mode # keep track of last mode
-                        previous_duration = plan.duration
+                    if isinstance(component, activity.Leg):
+                        mode = component.mode # keep track of last mode
+                        previous_duration = component.duration
 
-                    elif isinstance(plan, activity.Activity):
-                        act = plan
+                    elif isinstance(component, activity.Activity):
+                        act = component
 
                         # remove "escort_" from activity types.
                         # TODO: model joint trips
-                        if act.act[:7] == "escort_":
-                            target_act = act.act[7:]
+                        if act.act[:len(joint_trips_prefix)] == joint_trips_prefix:
+                            target_act = act.act[(len(joint_trips_prefix)):]
                         else:
                             target_act = act.act
 
@@ -365,9 +376,9 @@ class Population:
                         else:
                             location = activity.Location(
                                 area=act.location.area,
-                                loc=sampler.sample(act.location.area, target_act, previous_mode = previous_mode, previous_duration = previous_duration, previous_loc = previous_loc)
+                                loc=sampler.sample(act.location.area, target_act, mode = mode, previous_duration = previous_duration, previous_loc = previous_loc)
                             )
-                            if target_act in variables.LONG_TERM_ACTIVITIES:
+                            if target_act in long_term_activities:
                                 unique_locations[(act.location.area, target_act)] = location                                
                             act.location = location
                         
