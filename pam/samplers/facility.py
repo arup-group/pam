@@ -151,7 +151,7 @@ class FacilitySampler:
                         # weighted sampler
                         weights = facs[weight_on]
                         transit_distance = facs['transit'] if max_walk is not None else None
-                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk)
+                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk, self.TRANSIT_MODES, self.EXPECTED_EUCLIDEAN_SPEEDS)
                     else:
                         # simple sampler
                         sampler_dict[zone][act] = inf_yielder(points)
@@ -225,7 +225,7 @@ def inf_yielder_simple(candidates):
         for c in candidates:
             yield c
 
-def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, mode, previous_duration, previous_loc):
+def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transit_modes, expected_euclidean_speeds, mode, previous_duration, previous_loc):
     """
     A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -243,7 +243,7 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, mode, 
 
             ## if a transit mode is used and the distance from a stop is longer than the maximum walking distance,
             ## then replace the weight with a very small value
-            if isinstance(transit_distance, pd.Series) and mode in self.TRANSIT_MODES:
+            if isinstance(transit_distance, pd.Series) and mode in transit_modes:
                 weights = np.where(
                     transit_distance > max_walk,
                     weights * variables.SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
@@ -257,7 +257,7 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, mode, 
                 distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
 
                 # calculate deviation from "expected" distance
-                speed = self.EXPECTED_EUCLIDEAN_SPEEDS[mode] if mode in self.EXPECTED_EUCLIDEAN_SPEEDS.keys() else self.EXPECTED_EUCLIDEAN_SPEEDS['average']
+                speed = expected_euclidean_speeds[mode] if mode in expected_euclidean_speeds.keys() else expected_euclidean_speeds['average']
                 expected_distance = (previous_duration / pd.Timedelta(seconds=1)) * speed  
                 distance_weights = np.abs(distances - expected_distance)
                 distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid having zero weights
