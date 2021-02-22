@@ -320,7 +320,7 @@ def test_population_sample_locs_complex(person_heh):
     population['1'].add(person_heh)
 
     class DummySampler:
-        def sample(self, loc, acty, previous_mode, previous_duration, previous_loc):
+        def sample(self, loc, acty, mode, previous_duration, previous_loc):
             return None
 
     population.sample_locs_complex(DummySampler())
