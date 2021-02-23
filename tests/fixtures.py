@@ -258,8 +258,8 @@ def population_heh():
     home_loc = Point(0,0)
     education_loc = Point(110,110)
     attributes = {
-        'hid': 0,
-        'hh_size': 3,
+        'hid': '0',
+        'hh_size': '3',
         'inc': "high"
     }
     person = Person('1', attributes=attributes)

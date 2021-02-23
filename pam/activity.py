@@ -930,7 +930,7 @@ class Leg(PlanComponent):
     def distance(self):
         if self._distance is not None:
             return self._distance
-        return self.euclidean_distance
+        return self.euclidean_distance * 1000
 
     @property
     def euclidean_distance(self):

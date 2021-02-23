@@ -728,6 +728,10 @@ def read_matsim(
                     arrival_dt = departure_dt + leg_duration
                 else:
                     arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
+                
+                distance = route.get("distance")
+                if distance is not None:
+                    distance = float(distance)
 
                 person.add(
                     activity.Leg(
@@ -737,7 +741,7 @@ def read_matsim(
                         end_link=route.get('end_link'),
                         start_time=departure_dt,
                         end_time=arrival_dt,
-                        distance=float(route.get("distance", 0)),
+                        distance=distance,
                         service_id = transit_route.get("transitLineId"),
                         route_id = transit_route.get("transitRouteId"),
                         o_stop = transit_route.get("accessFacilityId"),

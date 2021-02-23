@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import lxml
 import pandas as pd
 import geopandas as gp
 from lxml import etree as et
@@ -164,7 +165,12 @@ def write_matsim(
 	:return: None
 	"""
     if version == 12:
-        write_matsim_v12(population=population, path=plans_path, comment=comment)
+        write_matsim_v12(
+            population=population,
+            path=plans_path,
+            comment=comment,
+            household_key=household_key
+            )
     elif version == 11:
         if attributes_path is None:
             raise UserWarning("Please provide an attributes_path for a (default) v11 write.")
@@ -210,7 +216,7 @@ def write_matsim_v12(
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
                 if isinstance(component, Activity):
-                    et.SubElement(plan_xml, 'act', {
+                    et.SubElement(plan_xml, 'activity', {
                         'type': component.act,
                         'x': str(float(component.location.loc.x)),
                         'y': str(float(component.location.loc.y)),
@@ -223,7 +229,7 @@ def write_matsim_v12(
                         'trav_time': tdtm(component.duration)})
 
             component = person[-1]  # write the last activity without an end time
-            et.SubElement(plan_xml, 'act', {
+            et.SubElement(plan_xml, 'activity', {
                 'type': component.act,
                 'x': str(float(component.location.loc.x)),
                 'y': str(float(component.location.loc.y)),
@@ -256,7 +262,6 @@ def write_matsim_plans(
 
     for hid, household in population:
         for pid, person in household:
-            # person.attributes["hid"] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
@@ -297,12 +302,11 @@ def write_matsim_attributes(
 	:param population: core.Population, population to be writen to disk
 	:param path: str, output path (.xml or .xml.gz)
 	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, default 'hid'
+    :param household_key: {str, None}, default 'hid', optionally include the hh ID with given key
     """
 
     attributes_xml = et.Element('objectAttributes')  # start forming xml
 
-    # Add some useful comments
     if comment:
         attributes_xml.append(et.Comment(comment))
     attributes_xml.append(et.Comment(f"Created {datetime.today()}"))
@@ -323,6 +327,36 @@ def write_matsim_attributes(
     write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
 
     # todo assuming v1?
+
+
+def v11_plans_dtd():
+    dtd_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "fixtures", "dtd", "population_v5.dtd"
+            )
+        )
+    return et.DTD(dtd_path)
+
+
+def object_attributes_dtd():
+    dtd_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "fixtures", "dtd", "objectattributes_v1.dtd"
+            )
+        )
+    return et.DTD(dtd_path)
+
+
+def v12_plans_dtd():
+    dtd_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "fixtures", "dtd", "population_v6.dtd"
+            )
+        )
+    return et.DTD(dtd_path)
 
 
 def dump(

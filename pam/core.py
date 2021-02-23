@@ -63,7 +63,8 @@ class Population:
 
     def __eq__(self, other):
         """
-        Note that this method requires that both populations are using consistent hh and persons IDs.
+        Check for equality of two populations, equality is based on equal attributes and activity plans
+        of all household and household members. Identifiers (eg hid and pid) are disregarded.
         """
         if not isinstance(other, Population):
             self.logger.warning(f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
@@ -393,7 +394,9 @@ class Household:
 
     def __eq__(self, other):
         """
-        Note that this method requires that both hhs are using consistent hh persons IDs.
+        Check for equality of two households, equality is based on equal attributes and activity plans
+        of household and household members. Identifiers (eg hid and pid) are disregarded unless they
+        are included in attributes.
         """
         if not isinstance(other, Household):
             self.logger.warning(f"Cannot compare household to non household: ({type(other)}).")
@@ -652,6 +655,10 @@ class Person:
             yield component
 
     def __eq__(self, other):
+        """
+        Check for equality of two persons, equality is based on equal attributes and activity plans.
+        Identifiers (eg pid) are disregarded unless they are included in attributes.
+        """
         if not isinstance(other, Person):
             self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
             return False

@@ -235,66 +235,91 @@ def test_population_combine_person_duplicate_key():
         pop1.combine(p2, '')
 
 
-def test_population_contains_hh():
+@pytest.fixture()
+def population():
     population = Population()
     hh = Household('A', attributes={1:1})
-    p = Person('person_A', attributes={1:1})
-    hh.add(p)
+    pa = Person('person_A', attributes={1:1})
+    hh.add(pa)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
     population.add(hh)
+    population.add(Household('B'))
+    return population
 
-    # same hh and person
-    hh2 = Household('A', attributes={1:1})
+
+def test_population_contains_hh_with_same_hh_and_person(population):
+    hh = Household('A', attributes={1:1})
     p2 = Person('person_A', attributes={1:1})
-    hh2.add(p2)
-    assert hh2 in population
+    hh.add(p2)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh in population
 
-    # same hh and person diff index for hh
-    hh2 = Household('X', attributes={1:1})
+
+def test_population_contains_hh_with_same_hh_and_person_diff_index_for_hh(population):
+    hh = Household('X', attributes={1:1})
     p2 = Person('person_A', attributes={1:1})
-    hh2.add(p2)
-    assert hh2 in population
+    hh.add(p2)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh in population
 
-    # same hh and person diff indexes
-    hh2 = Household('X', attributes={1:1})
+
+def test_population_contains_hh_with_same_hh_and_person_diff_indexes(population):
+    hh = Household('X', attributes={1:1})
     p2 = Person('person_X', attributes={1:1})
-    hh2.add(p2)
-    assert hh2 in population
+    hh.add(p2)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh in population
 
-    # diff person and diff hh
-    hh3 = Household('B', attributes={1:2})
+
+def test_population_not_contains_hh_with_diff_person_and_diff_hh(population):
+    hh = Household('B', attributes={1:2})
     p3 = Person('person_B', attributes={1:3})
-    hh3.add(p3)
-    assert hh3 not in population
+    hh.add(p3)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh not in population
 
-    # diff hh and same person
-    hh4 = Household('B', attributes={1:2})
+
+def test_population_not_contains_hh_with_diff_hh_and_same_person(population):
+    hh = Household('B', attributes={1:2})
     p4 = Person('person_A', attributes={1:1})
-    hh4.add(p4)
-    assert hh4 not in population
-
-    # same hh and diff person
-    hh5 = Household('A', attributes={1:1})
-    p5 = Person('person_A', attributes={1:4})
-    hh4.add(p5)
-    assert hh5 not in population
+    hh.add(p4)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh not in population
 
 
-def test_population_contains_person():
-    population = Population()
+def test_population_not_contains_hh_same_hh_and_diff_person(population):
     hh = Household('A', attributes={1:1})
-    p = Person('person_A', attributes={1:1})
-    hh.add(p)
-    population.add(hh)
+    p5 = Person('person_A', attributes={1:4})
+    hh.add(p5)
+    pb = Person('Person_B', attributes={1:3})
+    hh.add(pb)
+    assert hh not in population
 
-    # same person
+
+def test_population_not_contains_hh_same_hh_and_diff_num_persons(population):
+    hh = Household('A', attributes={1:1})
+    p5 = Person('person_A', attributes={1:1})
+    hh.add(p5)
+    assert hh not in population
+
+
+def test_population_contains_person_same_person(population):
     p2 = Person('person_A', attributes={1:1})
     assert p2 in population
 
-    # diff person index
+
+def test_population_contains_person_with_diff_index(population):
     p2 = Person('person_X', attributes={1:1})
     assert p2 in population
 
-    # diff person
+
+def test_population_not_contains_diff_person(population):
     p2 = Person('person_A', attributes={1:2})
     assert p2 not in population
 
@@ -305,20 +330,25 @@ def test_population_contains_wrong_type():
         assert None in population
 
 
-def test_hh_contains_person():
+@pytest.fixture()
+def hh():
     hh = Household('A', attributes={1:1})
     p = Person('person_A', attributes={1:1})
     hh.add(p)
+    return hh
 
-    # same person
+
+def test_hh_contains_same_person(hh):
     p2 = Person('person_A', attributes={1:1})
     assert p2 in hh
 
-    # diff person index
+
+def test_hh_contains_person_with_diff_index(hh):
     p2 = Person('person_X', attributes={1:1})
     assert p2 in hh
 
-    # diff person
+
+def test_hh_not_contains_diff_person(hh):
     p2 = Person('person_A', attributes={1:2})
     assert p2 not in hh
 
@@ -328,19 +358,46 @@ def test_hh_contains_wrong_type():
     with pytest.raises(UserWarning):
         assert None in hh
 
-def test_persons_equal_with_attributes():
+
+def test_same_persons_equal():
+    p1 = Person(1, attributes = {1:1})
+    assert p1 == p1
+
+
+def test_persons_equal_with_same_attributes():
     p1 = Person(1, attributes = {1:1})
     p2 = Person(1, attributes = {1:1})
-    p3 = Person(2, attributes = {1:1})
-    p4 = Person(1, attributes = {1:2})
     assert p1 == p2
-    assert p1 == p1
-    assert p2 == p3
+
+
+def test_persons_equal_with_same_attributes_diff_index():
+    p1 = Person(1, attributes = {1:1})
+    p3 = Person(2, attributes = {1:1})
+    assert p1 == p3
+
+
+def test_persons_not_equal_with_diff_attributes():
+    p1 = Person(1, attributes = {1:1})
+    p4 = Person(1, attributes = {1:2})
     assert not p1 == p4
+
+
+def test_persons_not_equal_with_wrong_type():
+    p1 = Person(1, attributes = {1:1})
     assert not p1 == None
 
 
-def test_persons_equal_with_plans():
+def test_persons_equal_with_plans_same_person():
+    p1 = Person('1', attributes = {1:1})
+    p1.plan.day = [
+        Activity(act='a', area=1, start_time=0, end_time=1),
+        Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
+        Activity(act='b', area=2, start_time=2, end_time=4)
+    ]
+    assert p1 == p1
+
+
+def test_persons_equal_with_same_plans():
     p1 = Person('1', attributes = {1:1})
     p1.plan.day = [
         Activity(act='a', area=1, start_time=0, end_time=1),
@@ -353,8 +410,28 @@ def test_persons_equal_with_plans():
         Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
         Activity(act='b', area=2, start_time=2, end_time=4)
     ]
+    assert p1 == p2
+
+
+def test_persons_not_equal_with_plans_diff_attributes_same_plan():
+    p1 = Person('1', attributes = {1:1})
+    p1.plan.day = [
+        Activity(act='a', area=1, start_time=0, end_time=1),
+        Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
+        Activity(act='b', area=2, start_time=2, end_time=4)
+    ]
     p3 = Person('3', attributes = {1:2})
     p3.plan.day = [
+        Activity(act='a', area=1, start_time=0, end_time=1),
+        Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
+        Activity(act='b', area=2, start_time=2, end_time=4)
+    ]
+    assert not p1 == p3
+
+
+def test_persons_not_equal_with_diff_plans():
+    p1 = Person('1', attributes = {1:1})
+    p1.plan.day = [
         Activity(act='a', area=1, start_time=0, end_time=1),
         Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
         Activity(act='b', area=2, start_time=2, end_time=4)
@@ -365,22 +442,34 @@ def test_persons_equal_with_plans():
         Leg(mode='car', start_area=1, end_area=2, start_time=1, end_time=2),
         Activity(act='b', area=3, start_time=2, end_time=4)
     ]
-    assert p1 == p1
-    assert p1 == p2
-    assert not p1 == p3
     assert not p1 == p4
-    assert not p1 == None
 
 
-def test_hhs_equal_with_attributes():
+def test_hhs_equal_with_attributes_same_hh():
+    hh1 = Household('1', attributes = {1:1})
+    assert hh1 == hh1
+
+
+def test_hhs_equal_with_same_attributes():
     hh1 = Household('1', attributes = {1:1})
     hh2 = Household('1', attributes = {1:1})
-    hh3 = Household('2', attributes = {1:1})
-    hh4 = Household('1', attributes = {1:2})
     assert hh1 == hh2
-    assert hh1 == hh1
-    assert hh2 == hh3
+
+
+def test_hhs_equal_with_same_attributes_diff_index():
+    hh1 = Household('1', attributes = {1:1})
+    hh3 = Household('2', attributes = {1:1})
+    assert hh1 == hh3
+
+
+def test_hhs_not_equal_with_diff_attributes():
+    hh1 = Household('1', attributes = {1:1})
+    hh4 = Household('1', attributes = {1:2})
     assert not hh1 == hh4
+
+
+def test_hhs_not_equal_with_diff_type():
+    hh1 = Household('1', attributes = {1:1})
     assert not hh1 == None
 
 
@@ -409,8 +498,71 @@ def test_hhs_equal_with_persons():
     assert not hh1 == hh4
     assert not hh1 == hh5
 
+def test_hhs_equal_with_persons_same_hh():
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
 
-def test_populations_equal():
+    assert hh1 == hh1
+
+
+def test_hhs_with_persons_equal_with_same_persons():
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+
+    hh2 = Household('1', attributes={1:1})
+    p2 = Person('1', attributes={1:1})
+    hh2.add(p2)
+
+    assert hh1 == hh2
+
+
+def test_hhs_with_persons_equal_with_same_persons_diff_pid():
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+
+    hh3 = Household('2', attributes={1:1})
+    p3 = Person('2', attributes={1:1})
+    hh3.add(p3)
+
+    assert hh1 == hh3
+
+
+def test_hhs_not_equal_with_missing_persons():
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+
+    hh4 = Household('2', attributes={1:2})
+
+    assert not hh1 == hh4
+
+
+def test_hhs_not_equal_with_diff_persons_attributes():
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+
+    hh5 = Household('2', attributes={1:1})
+    p5 = Person('1', attributes={1:2})
+    hh5.add(p5)
+
+    assert not hh1 == hh5
+
+
+def test_populations_equal_given_same_population():
+    pop1 = Population()
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    assert pop1 == pop1
+
+
+def test_populations_equal_with_same_hh_and_person_attributes():
     pop1 = Population()
     hh1 = Household('1', attributes={1:1})
     p1 = Person('1', attributes={1:1})
@@ -423,15 +575,45 @@ def test_populations_equal():
     hh2.add(p2)
     pop2.add(hh2)
 
+    assert pop1 == pop2
+
+
+def test_populations_equal_given_same_hh_and_persons_with_diff_ids():
+    pop1 = Population()
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+    pop1.add(hh1)
+
     pop3 = Population()
     hh3 = Household('2', attributes={1:1})
     p3 = Person('2', attributes={1:1})
     hh3.add(p3)
     pop3.add(hh3)
 
+    assert pop1 == pop3
+
+
+def test_populations_not_equal_given_missing_person():
+    pop1 = Population()
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+    pop1.add(hh1)
+
     pop4 = Population()
     hh4 = Household('2', attributes={1:2})
     pop4.add(hh4)
+
+    assert not pop1 == pop4
+
+
+def test_populations_not_equal_given_wrong_person_attributes():
+    pop1 = Population()
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+    pop1.add(hh1)
 
     pop5 = Population()
     hh5 = Household('2', attributes={1:1})
@@ -439,8 +621,14 @@ def test_populations_equal():
     hh5.add(p5)
     pop5.add(hh5)
 
-    assert pop1 == pop1
-    assert pop1 == pop2
-    assert pop1 == pop3
-    assert not pop1 == pop4
     assert not pop1 == pop5
+
+
+def test_populations_not_equal_given_diff_type():
+    pop1 = Population()
+    hh1 = Household('1', attributes={1:1})
+    p1 = Person('1', attributes={1:1})
+    hh1.add(p1)
+    pop1.add(hh1)
+
+    assert not pop1 == None

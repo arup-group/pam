@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!ELEMENT objectAttributes      (object)*>
+<!-- this was originally "objectAttributes"-->
+
+<!ELEMENT object (attribute)*>
+<!ATTLIST object
+          id        CDATA #REQUIRED>
+
+<!ELEMENT attribute       (#PCDATA)>
+<!ATTLIST attribute
+          name        CDATA #REQUIRED
+          class       CDATA #REQUIRED>
