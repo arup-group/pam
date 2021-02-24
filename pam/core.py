@@ -49,6 +49,42 @@ class Population:
     def __len__(self):
         return self.population
 
+    def __contains__(self, other):
+        if isinstance(other, Household):
+            for _, hh in self:
+                if other == hh:
+                    return True
+            return False
+        if isinstance(other, Person):
+            for _, _, person in self.people():
+                if other == person:
+                    return True
+            return False
+        raise UserWarning(f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person.")
+
+    def __eq__(self, other):
+        """
+        Check for equality of two populations, equality is based on equal attributes and activity plans
+        of all household and household members. Identifiers (eg hid and pid) are disregarded.
+        """
+        if not isinstance(other, Population):
+            self.logger.warning(f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
+            return False
+        if not len(self) == len(other):
+            return False
+        if not self.stats == other.stats:
+            return False
+        used = []
+        for _, hh in self:
+            for hid, hh2 in other:
+                if hid in used:
+                    continue
+                if hh == hh2:
+                    used.append(hid)
+                    break
+                return False
+        return True
+
     @property
     def num_households(self):
         return len([1 for hid, hh in self.households.items()])
@@ -420,6 +456,41 @@ class Household:
         for pid, person in self.people.items():
             yield pid, person
 
+    def __len__(self):
+        return len(self.people)
+
+    def __contains__(self, other_person):
+        if not isinstance(other_person, Person):
+            raise UserWarning(f"Cannot check if household contains object type: {type(other_person)}, please provide Person.")
+        for _, person in self:
+            if other_person == person:
+                return True
+        return False
+
+    def __eq__(self, other):
+        """
+        Check for equality of two households, equality is based on equal attributes and activity plans
+        of household and household members. Identifiers (eg hid and pid) are disregarded unless they
+        are included in attributes.
+        """
+        if not isinstance(other, Household):
+            self.logger.warning(f"Cannot compare household to non household: ({type(other)}).")
+            return False
+        if not self.attributes == other.attributes:
+            return False
+        if not len(self) == len(other):
+            return False
+        used = []
+        for _, person in self:
+            for pid, person2 in other:
+                if pid in used:
+                    continue
+                if person == person2:
+                    used.append(pid)
+                    break
+                return False
+        return True
+
     @property
     def location(self):
         for person in self.people.values():
@@ -657,6 +728,20 @@ class Person:
     def __iter__(self):
         for component in self.plan:
             yield component
+
+    def __eq__(self, other):
+        """
+        Check for equality of two persons, equality is based on equal attributes and activity plans.
+        Identifiers (eg pid) are disregarded unless they are included in attributes.
+        """
+        if not isinstance(other, Person):
+            self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
+            return False
+        if not self.attributes == other.attributes:
+            return False
+        if not self.plan == other.plan:
+            return False
+        return True
 
     @property
     def activity_classes(self):

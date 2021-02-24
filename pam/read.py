@@ -8,6 +8,7 @@ import gzip
 import logging
 import pickle
 from typing import Union
+import json
 
 import pam.core as core
 import pam.activity as activity
@@ -625,12 +626,13 @@ def from_to_travel_diary_read(
 
 def read_matsim(
         plans_path,
-        attributes_path=None,
-        weight=100,
-        household_key=None,
-        simplify_pt_trips=False,
-        autocomplete=True,
-        crop=True
+        attributes_path = None,
+        weight : int = 100,
+        version : int = 11,
+        household_key : Union[str, None] = None,
+        simplify_pt_trips : bool = False,
+        autocomplete : bool = True,
+        crop : bool = True
 ):
     """
     Load a MATSim format population into core population format.
@@ -640,6 +642,7 @@ def read_matsim(
     :param plans: path to matsim format xml
     :param attributes: path to matsim format xml
     :param weight: int
+    :param version: int {11,12}, default = 11
     :param household_key: {str, None}
     :return: Population
     """
@@ -647,15 +650,27 @@ def read_matsim(
 
     population = core.Population()
 
-    if attributes_path:
+    if attributes_path is not None and version == 12:
+        raise UserWarning(
+    """
+    You have provided an attributes_path and enables matsim version 12, but 
+    v12 does not require an attributes input:
+    Either remove the attributes_path arg, or enable version 11.
+    """
+    )
+
+    if version not in [11, 12]:
+        raise UserWarning("Version must be set to 11 or 12.")
+
+    attributes_map = {}
+    if version == 12:
+        attributes_map = load_attributes_map_from_v12(plans_path)
+    elif attributes_path:
         attributes_map = load_attributes_map(attributes_path)
 
     for person_id, plan in selected_plans(plans_path):
 
-        if attributes_path:
-            attributes = attributes_map[person_id]
-        else:
-            attributes = {}
+        attributes = attributes_map.get(person_id, {})
 
         person = core.Person(person_id, attributes=attributes, freq=weight)
 
@@ -702,25 +717,10 @@ def read_matsim(
                 )
 
             if stage.tag == 'leg':
-                network_route = None
-                route_id = None
-                service_id = None
-                o_stop = None
-                d_stop = None
-                for r in stage:
-                    network_route = r.text
-                    if network_route is not None:
-                        if 'PT' in network_route:
-                            pt_details = network_route.split('===')
-                            o_stop = pt_details[1]
-                            d_stop = pt_details[4]
-                            service_id = pt_details[2]
-                            route_id = pt_details[3]
-                        else:
-                            network_route = network_route.split(' ')
 
+                route, mode, network_route, transit_route = \
+                    extract_route_attributes(stage, version)
                 leg_seq += 1
-
                 trav_time = stage.get('trav_time')
                 if trav_time:
                     h, m, s = trav_time.split(":")
@@ -728,24 +728,25 @@ def read_matsim(
                     arrival_dt = departure_dt + leg_duration
                 else:
                     arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
+                
+                distance = route.get("distance")
+                if distance is not None:
+                    distance = float(distance)
 
                 person.add(
                     activity.Leg(
                         seq=leg_seq,
-                        mode=stage.get('mode'),
-                        start_loc=None,
-                        end_loc=None,
-                        start_link=stage.get('start_link'),
-                        end_link=stage.get('end_link'),
-                        start_area=None,
-                        end_area=None,
+                        mode=mode,
+                        start_link=route.get('start_link'),
+                        end_link=route.get('end_link'),
                         start_time=departure_dt,
                         end_time=arrival_dt,
-                        o_stop=o_stop,
-                        d_stop=d_stop,
-                        service_id=service_id,
-                        route_id=route_id,
-                        network_route=network_route
+                        distance=distance,
+                        service_id = transit_route.get("transitLineId"),
+                        route_id = transit_route.get("transitRouteId"),
+                        o_stop = transit_route.get("accessFacilityId"),
+                        d_stop = transit_route.get("egressFacilityId"),
+                        network_route=network_route,
                     )
                 )
 
@@ -775,6 +776,88 @@ def read_matsim(
             population.add(household)
 
     return population
+
+
+def extract_route_attributes(leg, version):
+    if version == 12:
+        return extract_route_v12(leg)
+    return extract_route_v11(leg)
+
+
+def extract_route_v11(leg):
+    """
+    Extract mode, network route and transit route as available.
+
+    Args:
+        leg (xml_leg_element)
+
+    Returns:
+        (xml_elem, string, list, dict): (route, mode, network route, transit route)
+    """
+    route = leg.xpath("route")
+    mode = leg.get("mode")
+    if not route:
+        return {}, mode, None, {}
+    route = route[0]
+    if mode == "pt":
+        return route, mode, None, v11_transit_route(route)
+    network_route = route.text
+    if network_route is not None:
+        return route, mode, network_route.split(" "), {}
+    return route, mode, None, {}
+
+
+def extract_route_v12(leg):
+    """
+    Extract route_element, mode, network route and transit route as available.
+
+    Args:
+        leg (xml_leg_element)
+
+    Returns:
+        (xml_element, string, list, dict): (route, mode, network route, transit route)
+    """
+    route = leg.xpath("route")
+    mode = leg.get("mode")
+    if not route:
+        return {}, mode, None, {}
+    route = route[0]
+    if route.get("type") == "default_pt":
+        return route, mode, None, v12_transit_route(route)
+    network_route = route.text
+    if network_route is not None:
+        return route, mode, network_route.split(" "), {}
+    return route, mode, None, {}
+
+
+def v12_transit_route(route):
+    return json.loads(route.text.strip())
+
+def v11_transit_route(route):
+    pt_details = route.text.split('===')
+    return {
+        "accessFacilityId": pt_details[1],
+        "transitLineId": pt_details[2],
+        "transitRouteId": pt_details[3],
+        "egressFacilityId": pt_details[4]
+    }
+
+
+def load_attributes_map_from_v12(plans_path):
+    return dict(
+        [
+            get_attributes_from_plans(elem)
+            for elem in utils.get_elems(plans_path, "person")
+        ]
+    )
+
+
+def get_attributes_from_plans(elem):
+    ident = elem.xpath("@id")[0]
+    attributes = {}
+    for attr in elem.xpath('./attributes/attribute'):
+        attributes[attr.get('name')] = attr.text
+    return ident, attributes
 
 
 def load_attributes_map(attributes_path):
