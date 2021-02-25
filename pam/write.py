@@ -620,7 +620,6 @@ def write_benchmarks(
 ):
     """
 	Extract user-specified benchmarks from the population.
-    TODO account for frequency
 	:param pam.core.Population population: PAM population
     :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
     :params list data_fields: The data to summarise. If None, simply count the instances of each group
