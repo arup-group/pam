@@ -11,6 +11,7 @@ from pam import variables
 
 import pandas as pd
 import numpy as np
+import pickle
 from types import GeneratorType
 
 class FacilitySampler:
@@ -26,7 +27,8 @@ class FacilitySampler:
         weight_on: str=None,
         max_walk: float=None,
         transit_modes: list=None,
-        expected_euclidean_speeds: dict=None
+        expected_euclidean_speeds: dict=None,
+        activity_areas_path: str=None
         ):
         """
         Sampler object for facilities. optionally build a facility xml output (for MATSim).
@@ -42,6 +44,7 @@ class FacilitySampler:
         :param max_walk: maximum walking distnace from a transit stop
         :param list transit_modes: a list of PT modes. If not specified, the default list in variables.TRANSIT_MODES is used
         :param list expected_euclidean_speeds: a dictionary specifying the euclidean speed of the various modes (m/s). If not specified, the default list in variables.EXPECTED_EUCLIDEAN_SPEEDS is used
+        :param str activity_areas_path: path to the activity areas shapefile (previously exported throught the FacilitySampler.export_activity_areas method)
         """
         self.logger = logging.getLogger(__name__)
         
@@ -54,8 +57,14 @@ class FacilitySampler:
         self.TRANSIT_MODES = transit_modes if transit_modes is not None else variables.TRANSIT_MODES
         self.EXPECTED_EUCLIDEAN_SPEEDS = expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
 
+        # spatial join
+        if activity_areas_path is None:
+            self.activity_areas = self.spatial_join(facilities, zones)
+        else:
+            self.load_activity_areas(activity_areas_path)
+
         # build samplers
-        self.samplers = self.build_facilities_sampler(facilities, zones, weight_on = weight_on, max_walk = max_walk)
+        self.samplers = self.build_facilities_sampler(self.activity_areas, weight_on = weight_on, max_walk = max_walk)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -127,7 +136,28 @@ class FacilitySampler:
             else:
                 return next(sampler(mode, previous_duration, previous_loc))
 
-    def build_facilities_sampler(self, facilities, zones, weight_on = None, max_walk = None):
+    def spatial_join(self, facilities, zones):
+        """
+        Spatially join facility and zone data
+        """
+        self.logger.warning("Joining facilities data to zones, this may take a while.")
+        return gp.sjoin(facilities, zones, how='inner', op='intersects')
+
+    def export_activity_areas(self, filepath):
+        """
+        Export the spatially joined facilities-zones geodataframe
+        """
+        with open(filepath, 'wb') as f:
+            pickle.dump(self.activity_areas, f)
+
+    def load_activity_areas(self, filepath):
+        """
+        Load the spatially joined facilities-zones geodataframe
+        """
+        with open(filepath, 'rb') as f:
+            self.activity_areas = pickle.load(f)
+
+    def build_facilities_sampler(self, activity_areas, weight_on = None, max_walk = None):
         """
         Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
@@ -135,8 +165,7 @@ class FacilitySampler:
 
         :params str weight_on: a column (name) of the facilities geodataframe to be used as a sampling weight
         """
-        self.logger.warning("Joining facilities data to zones, this may take a while.")
-        activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
+        activity_areas = self.activity_areas
         sampler_dict = {}
 
         self.logger.warning("Building sampler, this may take a while.")
