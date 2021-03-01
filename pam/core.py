@@ -824,7 +824,7 @@ class Person:
         """
         Add activity end times based on start time of next activity.
         """
-        self.plan.finalise()
+        self.plan.finalise_activity_end_times()
 
     def fix_plan(self, crop=True, times=True, locations=True):
         if crop:

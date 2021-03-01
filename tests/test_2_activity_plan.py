@@ -111,7 +111,7 @@ def test_finalise():
     plan.add(leg)
     act = Activity(2, 'work', 1, start_time=mtdt(930))
     plan.add(act)
-    plan.finalise()
+    plan.finalise_activity_end_times()
     assert plan.day[0].end_time == mtdt(900)
     assert plan.day[-1].end_time == END_OF_DAY
 

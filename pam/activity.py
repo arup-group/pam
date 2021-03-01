@@ -441,7 +441,7 @@ class Plan:
                 if idx-2 >= 0:
                     queue.append(idx-2)
 
-    def finalise(self):
+    def finalise_activity_end_times(self):
         """
         Add activity end times based on start time of next activity.
         """
@@ -449,6 +449,19 @@ class Plan:
             for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
                 self.day[seq].end_time = self.day[seq+1].start_time
         self.day[-1].end_time = pam.variables.END_OF_DAY
+    
+    def set_leg_purposes(self):
+        """
+        Set leg purposes to destination activity.
+        Skip 'pt interaction' activities.
+        """
+        for seq, component in enumerate(self):
+            if isinstance(component, Leg):
+                for j in range(seq+1, len(self.day)-1, 2):
+                    act = self.day[j].act
+                    if not act == "pt interaction":
+                        self.day[seq].purp = act
+                        break
         
     def autocomplete_matsim(self):
         """
