@@ -389,8 +389,9 @@ def tour_based_travel_diary_read(
                     )
                 )
 
-            person.plan.finalise()
+            person.plan.finalise_activity_end_times()
             person.plan.infer_activities_from_tour_purpose()
+            person.plan.set_leg_purposes()
 
             household.add(person)
 
@@ -480,10 +481,12 @@ def trip_based_travel_diary_read(
                 if include_loc:
                     start_loc = trip.start_loc
                     end_loc = trip.end_loc
+                purpose = trip.purp.lower()
 
                 person.add(
                     activity.Leg(
                         seq=n,
+                        purp=purpose,
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
@@ -497,14 +500,14 @@ def trip_based_travel_diary_read(
                 person.add(
                     activity.Activity(
                         seq=n + 1,
-                        act=trip.purp.lower(),
+                        act=purpose,
                         area=trip.dzone,
                         loc=end_loc,
                         start_time=utils.parse_time(trip.tet),
                     )
                 )
 
-            person.plan.finalise()
+            person.plan.finalise_activity_end_times()
             household.add(person)
 
         population.add(household)
@@ -592,10 +595,12 @@ def from_to_travel_diary_read(
                 if include_loc:
                     start_loc = trip.start_loc
                     end_loc = trip.end_loc
+                purpose=trip.dact.lower()
 
                 person.add(
                     activity.Leg(
                         seq=n,
+                        purp=purpose,
                         mode=trip['mode'].lower(),
                         start_area=trip.ozone,
                         end_area=trip.dzone,
@@ -609,14 +614,14 @@ def from_to_travel_diary_read(
                 person.add(
                     activity.Activity(
                         seq=n + 1,
-                        act=trip.dact.lower(),
+                        act=purpose,
                         area=trip.dzone,
                         loc=end_loc,
                         start_time=utils.parse_time(trip.tet),
                     )
                 )
 
-            person.plan.finalise()
+            person.plan.finalise_activity_end_times()
             household.add(person)
 
         population.add(household)
@@ -752,6 +757,8 @@ def read_matsim(
 
         if simplify_pt_trips:
             person.plan.simplify_pt_trips()
+        
+        person.plan.set_leg_purposes()
 
         if crop:
             person.plan.crop()

@@ -36,7 +36,7 @@ def test_duration():
     plan.add(leg)
     act = Activity(2, 'work', 1, start_time=mtdt(930))
     plan.add(act)
-    plan.finalise()
+    plan.finalise_activity_end_times()
     assert plan.day[0].duration == timedelta(minutes=900)
     assert plan.day[1].duration == timedelta(minutes=30)
     assert plan.day[-1].duration == timedelta(seconds=(24*60-930)*60)
