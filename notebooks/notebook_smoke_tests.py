@@ -120,7 +120,7 @@ if __name__ == '__main__':
     for kernel in command_args['kernel_name']:
         return_code, cmd = install_ipython_kernel(kernel)
         if return_code:
-            print("{}Warning: Jupyter kernel installation shell command did not exit normally"
+            print("{}Warning: Kernel installation shell command did not exit normally"
                   " - this may cause problems later{}".format(Fore.RED, Style.RESET_ALL))
 
     notebook_results = {}
