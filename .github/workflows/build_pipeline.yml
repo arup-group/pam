@@ -19,13 +19,13 @@ jobs:
     - name: Install dependencies
       run: |
         export ACCEPT_EULA=Y
-        sudo apt-get update
+        sudo apt update
         python -m pip install --upgrade pip
-        sudo apt-get install -y python3-pip libgdal-dev locales
-        sudo apt-get install -y libspatialindex-dev
+        sudo apt install -y python3-pip libgdal-dev locales
+        sudo apt install -y libspatialindex-dev
         export CPLUS_INCLUDE_PATH=/usr/include/gdal
         export C_INCLUDE_PATH=/usr/include/gdal
-        sudo apt-get install ca-certificates
+        sudo apt install ca-certificates
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
         pip install GDAL==3.0.2
         pip install -r requirements.txt
