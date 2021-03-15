@@ -64,6 +64,7 @@ def execute_notebook(notebook_path):
     print("Executing notebook '{}{}{}'...".format(Fore.YELLOW, notebook_path, Style.RESET_ALL))
     execute_notebook_cmd = [
         'jupyter', 'nbconvert',
+        '--ExecutePreprocessor.timeout=120',
         '--to', 'notebook',
         '--execute', '"{}"'.format(notebook_path),
         '--output-dir=/tmp'
