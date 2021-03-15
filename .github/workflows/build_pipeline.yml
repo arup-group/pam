@@ -20,7 +20,7 @@ jobs:
       run: |
         export ACCEPT_EULA=Y
         sudo apt install ca-certificates
-        sudo apt update
+#        sudo apt update
         python -m pip install --upgrade pip
         sudo apt install -y python3-pip libgdal-dev locales
         sudo apt install -y libspatialindex-dev
