@@ -12,3 +12,4 @@ pytest-mock==3.1.0
 plotly==4.10.0
 typing==3.7.4
 s2sphere==0.2.5
+xlrd==2.0.1
