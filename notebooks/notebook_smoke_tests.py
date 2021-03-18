@@ -92,8 +92,7 @@ def trim_time_delta(time_delta):
 
 
 def print_summary(notebook_results_dict):
-    print("\n\n")
-    print("                       Summary")
+    print("\n                      Summary")
     print("-------------------------------------------------------------")
     for notebook_file, result in notebook_results_dict.items():
         short_name = notebook_file.split('/')[-1]
