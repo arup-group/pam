@@ -38,6 +38,9 @@ jobs:
       run: |
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
         ./scripts/code-coverage.sh
+    - name: Smoke test notebooks
+      run: |
+        ./scripts/notebooks-smoke-test.sh
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:

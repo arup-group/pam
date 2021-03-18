@@ -113,12 +113,12 @@ if __name__ == '__main__':
                                                                          command_args['notebook_directory'],
                                                                          Style.RESET_ALL))
     notebooks = find_notebooks(command_args['notebook_directory'])
-    print("Found {}{}{} notebooks files in {}{}{}".format(Fore.YELLOW,
-                                                          len(notebooks),
-                                                          Style.RESET_ALL,
-                                                          Fore.YELLOW,
-                                                          command_args['notebook_directory'],
-                                                          Style.RESET_ALL))
+    print("Found {}{}{} notebook files in {}{}{}".format(Fore.YELLOW,
+                                                         len(notebooks),
+                                                         Style.RESET_ALL,
+                                                         Fore.YELLOW,
+                                                         command_args['notebook_directory'],
+                                                         Style.RESET_ALL))
     if not notebooks:
         print("No notebooks to test - our work here is done. Double check the {}{}{} directory if this seems wrong."
               .format(Fore.YELLOW, command_args['notebook_directory'], Style.RESET_ALL))
