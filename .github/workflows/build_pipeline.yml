@@ -28,7 +28,7 @@ jobs:
         sudo apt-get install ca-certificates
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
         pip install GDAL==3.0.2
-        pip install -r requirements.txt
+        pip install -e .
     - name: Lint with flake8
       run: |
         pip install flake8
