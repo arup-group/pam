@@ -83,6 +83,16 @@ def run_shell_command(shell_cmd):
 
 def find_notebooks(notebook_dir):
     notebook_paths = glob.glob("{}/*.ipynb".format(notebook_dir))
+    print("Found {}{}{} notebook files in {}{}{}".format(Fore.YELLOW,
+                                                         len(notebook_paths),
+                                                         Style.RESET_ALL,
+                                                         Fore.YELLOW,
+                                                         notebook_dir,
+                                                         Style.RESET_ALL))
+    if not notebook_paths:
+        print("No notebooks to test - our work here is done. Double check the {}{}{} directory if this seems wrong."
+              .format(Fore.YELLOW, notebook_dir, Style.RESET_ALL))
+        sys.exit(0)
     notebook_paths.sort()
     return notebook_paths
 
@@ -92,7 +102,8 @@ def trim_time_delta(time_delta):
 
 
 def print_summary(notebook_results_dict):
-    print("\n                      Summary")
+    print("\n-------------------------------------------------------------")
+    print("                        Summary")
     print("-------------------------------------------------------------")
     for notebook_file, result in notebook_results_dict.items():
         short_name = notebook_file.split('/')[-1]
@@ -102,33 +113,37 @@ def print_summary(notebook_results_dict):
         print("{}: {}{} in {}{}".format(short_name,
                                         colour, outcome,
                                         trim_time_delta(duration), Style.RESET_ALL))
+    passes = [ret_code for ret_code, time in notebook_results.values() if ret_code == 0]
+    failures = [ret_code for ret_code, time in notebook_results.values() if ret_code != 0]
+    print("\n{} failed, {} passed in {}{}{}".format(len(failures),
+                                                    len(passes),
+                                                    Fore.YELLOW,
+                                                    trim_time_delta(datetime.now() - start),
+                                                    Style.RESET_ALL))
+    print("-------------------------------------------------------------\n")
+
+
+def install_kernels(kernel_list):
+    for kernel in kernel_list:
+        exit_code, shell_cmd, exec_time = install_ipython_kernel(kernel)
+        if exit_code:
+            print("{}Warning: Kernel installation shell command did not exit normally for kernel '{}'"
+                  " - this may cause problems later{}".format(Fore.RED, kernel, Style.RESET_ALL))
 
 
 if __name__ == '__main__':
-    print_banner()
     start = datetime.now()
     command_args = parse_args(sys.argv[1:])
+    print_banner()
     print("Smoke testing Jupyter notebooks in {}'{}'{} directory".format(Fore.YELLOW,
                                                                          command_args['notebook_directory'],
                                                                          Style.RESET_ALL))
-    notebooks = find_notebooks(command_args['notebook_directory'])
-    print("Found {}{}{} notebook files in {}{}{}".format(Fore.YELLOW,
-                                                         len(notebooks),
-                                                         Style.RESET_ALL,
-                                                         Fore.YELLOW,
-                                                         command_args['notebook_directory'],
-                                                         Style.RESET_ALL))
-    if not notebooks:
-        print("No notebooks to test - our work here is done. Double check the {}{}{} directory if this seems wrong."
-              .format(Fore.YELLOW, command_args['notebook_directory'], Style.RESET_ALL))
-        sys.exit(0)
 
+    notebooks = find_notebooks(command_args['notebook_directory'])
     pprint(notebooks, width=120)
-    for kernel in command_args['kernel_name']:
-        return_code, cmd, run_time = install_ipython_kernel(kernel)
-        if return_code:
-            print("{}Warning: Kernel installation shell command did not exit normally"
-                  " - this may cause problems later{}".format(Fore.RED, Style.RESET_ALL))
+    print("")
+    install_kernels(command_args['kernel_name'])
+    print("")
 
     notebook_results = {}
     for notebook in notebooks:
@@ -137,11 +152,4 @@ if __name__ == '__main__':
         notebook_results[notebook] = (return_code, run_time)
 
     print_summary(notebook_results)
-    passes = [ret_code for ret_code, time in notebook_results.values() if ret_code == 0]
-    failures = [ret_code for ret_code, time in notebook_results.values() if ret_code != 0]
-    print("\n{} failed, {} passed in {}{}{}\n".format(len(failures),
-                                                      len(passes),
-                                                      Fore.YELLOW,
-                                                      trim_time_delta(datetime.now() - start),
-                                                      Style.RESET_ALL))
     sys.exit(sum(ret_code for ret_code, time in notebook_results.values()))
