@@ -168,11 +168,11 @@ def home_education_shop_education_home():
 
 def test_home_education_home_removal_of_education_act(person_home_education_home):
     household = instantiate_household_with([person_home_education_home])
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
 
     policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
 def test_home_education_home_education_home_removal_of_education_act():
@@ -187,12 +187,12 @@ def test_home_education_home_education_home_removal_of_education_act():
     person.add(Leg(seq=2, mode='car', start_area='b', end_area='a', start_time=mtdt(520), end_time=mtdt(580)))
     person.add(Activity(seq=3, act='home', area='a', start_time=mtdt(680), end_time=END_OF_DAY))
     household = instantiate_household_with([person])
-    assert_correct_activities(person=household.people['1'],
+    assert_correct_activities(person=household.people[1],
                               ordered_activities_list=['home', 'education', 'home', 'education', 'home'])
 
     policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
 def test_home_work_home_education_home_removal_of_education_act():
@@ -283,11 +283,11 @@ def test_home_work_home_education_home_removal_of_education_act():
         )
     )
     household = instantiate_household_with([person])
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'work', 'home', 'education', 'home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'work', 'home', 'education', 'home'])
 
     policy = policies.ActivityPolicy(modifiers.RemoveActivity(activities=['education']), 1)
     policy.apply_to(household)
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'work', 'home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'work', 'home'])
 
 
 def test_attribute_based_remove_activity_policy_removes_all_matching_activities_from_strictly_relevant_people(
@@ -300,9 +300,9 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
     def job_condition_education(attribute_value):
         return attribute_value == 'education'
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
-    assert age_condition_over_17(household.people['1'].attributes['age'])
-    assert job_condition_education(household.people['1'].attributes['job'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
+    assert age_condition_over_17(household.people[1].attributes['age'])
+    assert job_condition_education(household.people[1].attributes['job'])
 
     policy_remove_higher_education = policies.ActivityPolicy(
         modifiers.RemoveActivity(['education']),
@@ -311,7 +311,7 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
     )
 
     policy_remove_higher_education.apply_to(household)
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
 def test_attribute_based_remove_activity_policy_does_not_remove_matching_activities_from_strictly_irrelevant_people(
@@ -324,9 +324,9 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
     def job_condition_wasevrrr(attribute_value):
         return attribute_value == 'wasevrrr'
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
-    assert age_condition_over_17(household.people['1'].attributes['age'])
-    assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
+    assert age_condition_over_17(household.people[1].attributes['age'])
+    assert not job_condition_wasevrrr(household.people[1].attributes['job'])
 
     policy_remove_higher_education = policies.ActivityPolicy(
         modifiers.RemoveActivity(['education']),
@@ -337,7 +337,7 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
 
     policy_remove_higher_education.apply_to(household)
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
 
 
 def test_attribute_based_remove_activity_policy_removes_all_matching_activities_from_non_strictly_relevant_people(
@@ -350,9 +350,9 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
     def job_condition_wasevrrr(attribute_value):
         return attribute_value == 'wasevrrr'
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
-    assert age_condition_over_17(household.people['1'].attributes['age'])
-    assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
+    assert age_condition_over_17(household.people[1].attributes['age'])
+    assert not job_condition_wasevrrr(household.people[1].attributes['job'])
 
     policy_remove_higher_education = policies.ActivityPolicy(
         modifiers.RemoveActivity(['education']),
@@ -363,7 +363,7 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
 
     policy_remove_higher_education.apply_to(household)
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
 def test_attribute_based_remove_activity_policy_does_not_remove_matching_activities_from_non_strictly_irrelevant_people(
@@ -376,9 +376,9 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
     def job_condition_wasevrrr(attribute_value):
         return attribute_value == 'wasevrrr'
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
-    assert not age_condition_under_0(household.people['1'].attributes['age'])
-    assert not job_condition_wasevrrr(household.people['1'].attributes['job'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
+    assert not age_condition_under_0(household.people[1].attributes['age'])
+    assert not job_condition_wasevrrr(household.people[1].attributes['job'])
 
     policy_remove_higher_education = policies.ActivityPolicy(
         modifiers.RemoveActivity(['education']),
@@ -389,7 +389,7 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
 
     policy_remove_higher_education.apply_to(household)
 
-    assert_correct_activities(person=household.people['1'], ordered_activities_list=['home', 'education', 'home'])
+    assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
 
 
 def test_remove_activity_policy_only_removes_individual_activities(mocker, home_education_shop_education_home):
@@ -406,10 +406,10 @@ def test_remove_activity_policy_only_removes_individual_activities(mocker, home_
 def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(mocker, SmithHousehold):
     mocker.patch.object(random, 'random', side_effect=[1] + [0] + [1] * 18)
     household = SmithHousehold
-    steve = household.people['1']
-    hilda = household.people['2']
-    timmy = household.people['3']
-    bobby = household.people['4']
+    steve = household.people[1]
+    hilda = household.people[2]
+    timmy = household.people[3]
+    bobby = household.people[4]
 
     assert_correct_activities(person=steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
     assert_correct_activities(person=hilda, ordered_activities_list=['home', 'escort_education', 'shop', 'leisure', 'escort_education', 'home'])
@@ -580,7 +580,7 @@ def test_person_policy_with_person_based_probability(mocker, SmithHousehold):
     policy = policies.PersonPolicy(
         modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
         probability_samplers.PersonProbability(0.5))
-    bobby = household.people['4']
+    bobby = household.people[4]
     policy.apply_to(household)
 
     modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
@@ -614,7 +614,7 @@ def test_person_policy_with_person_based_probability_with_a_satisfied_person_att
     policy = policies.PersonPolicy(
         modifiers.RemoveActivity(['education', 'escort', 'leisure', 'shop', 'work']),
         probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution}))
-    bobby = household.people['4']
+    bobby = household.people[4]
     policy.apply_to(household)
 
     modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(bobby)
@@ -630,7 +630,7 @@ def test_person_policy_with_activity_based_probability(SmithHousehold, mocker):
         probability_samplers.ActivityProbability(['education', 'escort', 'leisure', 'shop', 'work'], 0.5)
     )
     policy.apply_to(household)
-    steve = household.people['1']
+    steve = household.people[1]
 
     modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
 
@@ -666,7 +666,7 @@ def test_person_policy_with_activity_based_probability_with_a_satisfied_person_a
          probability_samplers.PersonProbability(discrete_sampler, {'mapping': age_mapping, 'distribution': age_distribution})]
     )
     policy.apply_to(household)
-    steve = household.people['1']
+    steve = household.people[1]
 
     modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(steve)
 
@@ -771,10 +771,10 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_d
 
 def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHousehold):
     household = SmithHousehold
-    Steve = household.people['1']
-    Timmy = household.people['3']
+    Steve = household.people[1]
+    Timmy = household.people[3]
     Timmy.plan[4].act = 'shop_1'
-    Bobby = household.people['4']
+    Bobby = household.people[4]
 
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
@@ -784,7 +784,7 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHo
     Hilda.add(Activity(3, 'shop_2', 'c', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
     Hilda.add(Leg(3, 'walk', 'c', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
     Hilda.add(Activity(4, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
-    household.people['2'] = Hilda
+    household.people[2] = Hilda
 
     assert_correct_activities(person=Steve, ordered_activities_list=['home', 'work', 'leisure', 'work', 'home'])
     assert_correct_activities_locations(person=Steve, ordered_activities_locations_list=['a', 'b', 'c', 'b', 'a'])
@@ -823,7 +823,7 @@ def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(SmithHouseh
     Hilda.add(Activity(4, 'shop_2', 'c', start_time=mtdt(12 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
     Hilda.add(Leg(4, 'walk', 'c', 'a', start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
     Hilda.add(Activity(5, 'home', 'a', start_time=mtdt(17 * 60), end_time=END_OF_DAY))
-    household.people['2'] = Hilda
+    household.people[2] = Hilda
 
     assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop_1', 'home', 'shop_2', 'home'])
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'a'])
@@ -852,7 +852,7 @@ def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHou
     Hilda.add(Activity(5, 'leisure', 'c', start_time=mtdt(17 * 60), end_time=mtdt(17 * 60 + 30)))
     Hilda.add(Leg(5, 'walk', 'c', 'a', start_time=mtdt(17 * 60 + 30), end_time=mtdt(18 * 60)))
     Hilda.add(Activity(6, 'home', 'a', start_time=mtdt(18 * 60), end_time=END_OF_DAY))
-    household.people['2'] = Hilda
+    household.people[2] = Hilda
 
     assert_correct_activities(person=Hilda, ordered_activities_list=['home', 'shop', 'home', 'shop', 'leisure', 'home'])
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'b', 'a', 'c', 'c', 'a'])

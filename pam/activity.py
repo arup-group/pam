@@ -13,14 +13,14 @@ class Plan:
   
     def __init__(self, home_area=None, freq=None):
         self.day = []
-        self.home_area = Location(area=home_area)
+        self.home_location = Location(area=home_area)
         self.logger = logging.getLogger(__name__)
         self.plan_freq = freq
 
     @property
     def home(self):
-        # if self.home_location.exists:
-        #     return self.home_location
+        if self.home_location.exists:
+            return self.home_location
         if self.day:
             for act in self.activities:
                 if act.act is not None and act.act.lower()[:4] == 'home':
@@ -363,7 +363,7 @@ class Plan:
         first, because it's assumed that this is how the diary is originally filled in.
         """
         #find home activities
-        home_idxs = self.infer_activity_idxs(target=self.home_area)
+        home_idxs = self.infer_activity_idxs(target=self.home)
         for idx in home_idxs:
             self.day[idx].act = 'home'
 

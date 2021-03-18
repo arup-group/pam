@@ -1,10 +1,11 @@
 from logging import error
 import os
 from io import StringIO
+from pam.core import Person
 import pandas as pd
 import pytest
 
-from pam.read import load_travel_diary
+from pam.read import build_population, load_travel_diary
 from pam import PAMValidationLocationsError
 
 
@@ -47,6 +48,17 @@ pid,hid,hzone,freq,income,age,driver,cats or dogs
     return pd.read_csv(persons_attributes_csv)
 
 @pytest.fixture
+def extra_persons_attributes():
+    persons_attributes_csv = StringIO("""
+pid,hid,hzone,freq,income,age,driver,cats or dogs
+0,0,Harrow,1,high,high,yes,dogs
+1,0,Harrow,2,low,medium,no,dogs
+2,1,Islington,1,medium,low,yes,dogs
+3,1,Islington,1,medium,low,yes,dogs
+""")
+    return pd.read_csv(persons_attributes_csv)
+
+@pytest.fixture
 def hhs_attributes():
     hhs_attributes_csv = StringIO("""
 hid,hzone,freq,persons,cars
@@ -70,7 +82,39 @@ test_hhs_attributes_path = os.path.abspath(
 
 # simple trips only cases
 
+def test_build_population_trips_only(trips):
+    population = build_population(trips=trips)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 3}
+
+
+def test_build_population_trips_only_activity_encoding(activity_encoded_trips):
+    population = build_population(trips=activity_encoded_trips)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 3}
+
+
+def test_build_population_person_attributes_only(persons_attributes):
+    population = build_population(persons_attributes=persons_attributes)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 3}
+
+
+def test_build_population_person_attributes_only_with_extra_person(extra_persons_attributes):
+    population = build_population(persons_attributes=extra_persons_attributes)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 4}
+
+
+def test_build_population_hhs_only(hhs_attributes):
+    population = build_population(hhs_attributes=hhs_attributes)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 0}
+
+
+def test_build_population_from_persons_and_hhs(hhs_attributes, persons_attributes):
+    population = build_population(persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    assert population.stats == {'num_activities': 0, 'num_households': 2, 'num_legs': 0, 'num_people': 3}
+
+
 def test_read_trips_only(trips):
+    print(trips.describe())
+    print(trips.dtypes)
     population = load_travel_diary(trips=trips)
     assert len(population) == 3
 
@@ -93,8 +137,8 @@ def test_read_trips_from_path():
 
 def test_read_weights_from_trips(trips):
     population = load_travel_diary(trips=trips)
-    assert population['1'].freq == 6
-    assert population['1']['2'].freq == 6
+    assert population[1].freq == 6
+    assert population[1][2].freq == 6
 
 
 # trips and persons attributes cases
@@ -134,8 +178,14 @@ def test_persons_read_with_pid_not_as_index(trips, persons_attributes):
 
 def test_read_weights_from_persons(trips, persons_attributes):
     population = load_travel_diary(trips=trips, persons_attributes=persons_attributes)
-    assert population['0'].freq == 1.5
-    assert population['0']['0'].freq == 1
+    assert population[0].freq == 1.5
+    assert population[0][0].freq == 1
+
+
+def test_extra_person_stays_at_home(trips, extra_persons_attributes):
+    population = load_travel_diary(trips=trips, persons_attributes=extra_persons_attributes)
+    assert len(population[1][3].plan) == 1
+    assert population[1][3].plan.day[0].act == "home"
 
 
 # trips, persons and hhs attributes cases
@@ -155,7 +205,7 @@ def test_read_trips_and_persons_and_hhs_no_index(trips, persons_attributes, hhs_
     population = load_travel_diary(
         trips=trips,
         persons_attributes=persons_attributes,
-        hhs_attributes=hhs_attributes_
+        hhs_attributes=hhs_attributes
         )
     assert len(population) == 3
 
@@ -188,13 +238,16 @@ def test_read_hhs_with_missing_persons_input(trips, persons_attributes, hhs_attr
 
 
 def test_read_hhs_with_missing_persons_input_and_no_trips_hid(trips, persons_attributes, hhs_attributes):
-    trips_ = trips.drop('hid', axis=1)
-    with pytest.raises(UserWarning):
-        population = load_travel_diary(
-            trips=trips_,
-            persons_attributes=None,
-            hhs_attributes=hhs_attributes
-            )
+    trips = trips.drop('hid', axis=1)
+    population = load_travel_diary(
+        trips=trips,
+        persons_attributes=None,
+        hhs_attributes=hhs_attributes
+        )
+    assert len(population) == 3
+    for hid, hh in population:
+        assert len(hh.people) == 1
+        assert isinstance(hh[hid], Person)
 
 
 def test_read_hh_weights_from_hhs(trips, persons_attributes, hhs_attributes):
@@ -203,7 +256,7 @@ def test_read_hh_weights_from_hhs(trips, persons_attributes, hhs_attributes):
         persons_attributes=persons_attributes,
         hhs_attributes=hhs_attributes
         )
-    assert population['0'].freq == 1
+    assert population[0].freq == 1
 
 
 # test ommitting sequence
@@ -224,9 +277,9 @@ def test_read_trips_without_seq(trips):
 
 
 def test_read_trips_without_seq_fail_if_out_of_order(trips):
-    trips_ = trips.drop('seq', axis=1).iloc[::-1]
+    trips = trips.drop('seq', axis=1).iloc[::-1]
     population = load_travel_diary(
-        trips=trips_
+        trips=trips
     )
     with pytest.raises(PAMValidationLocationsError):
         population.validate()
@@ -240,7 +293,7 @@ def test_use_trips_freq_as_persons_freq_overwrite(trips, persons_attributes):
         persons_attributes=persons_attributes,
         trip_freq_as_person_freq=True
         )
-    assert population['0']['0'].freq == 2
+    assert population[0][0].freq == 2
 
 
 def test_use_trips_freq_as_persons_freq_no_persons_attributes(trips):
@@ -249,7 +302,7 @@ def test_use_trips_freq_as_persons_freq_no_persons_attributes(trips):
         persons_attributes=None,
         trip_freq_as_person_freq=True
         )
-    assert population['0']['0'].freq == 2
+    assert population[0][0].freq == 2
 
 
 def test_use_trips_freq_as_hhs_freq_overwrite(trips, persons_attributes, hhs_attributes):
@@ -259,7 +312,7 @@ def test_use_trips_freq_as_hhs_freq_overwrite(trips, persons_attributes, hhs_att
         hhs_attributes=hhs_attributes,
         trip_freq_as_hh_freq=True
         )
-    assert population['0'].freq == 4
+    assert population[0].freq == 4
 
 
 def test_use_trips_freq_as_hhs_freq_no_persons_attributes(trips):
@@ -269,7 +322,7 @@ def test_use_trips_freq_as_hhs_freq_no_persons_attributes(trips):
         hhs_attributes=None,
         trip_freq_as_hh_freq=True
         )
-    assert population['0'].freq == 4
+    assert population[0].freq == 4
 
 
 def test_use_trips_freq_as_persons_and_hhs_freq_overwrite(trips, persons_attributes, hhs_attributes):
