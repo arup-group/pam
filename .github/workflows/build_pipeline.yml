@@ -49,7 +49,7 @@ jobs:
         aws-region: eu-west-1
     - name: Push zip to S3
       run: |
-        echo $BITBUCKET_COMMIT > release
+        echo $GITHUB_SHA > release
         zip -r app.zip .
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
