@@ -415,7 +415,7 @@ def to_csv(
         hh_data = {
             'hid': hid,
             'freq': hh.freq,
-            'zone': hh.location.area,
+            'hzone': hh.location.area,
         }
         if isinstance(hh.attributes, dict):
             hh_data.update(hh.attributes)
@@ -431,7 +431,7 @@ def to_csv(
                 'pid': pid,
                 'hid': hid,
                 'freq': person.freq,
-                'zone': hh.location.area,
+                'hzone': hh.location.area,
             }
             if isinstance(person.attributes, dict):
                 people_data.update(person.attributes)
