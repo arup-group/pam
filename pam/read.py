@@ -344,8 +344,6 @@ def build_population(
     Returns:
         pam.Population: population object
     """
-    # print(trips)
-    # print(persons_attributes)
     population = core.Population()
     add_hhs_from_hhs_attributes(population=population, hhs_attributes=hhs_attributes)
     add_hhs_from_persons_attributes(population=population, persons_attributes=persons_attributes)
@@ -390,7 +388,6 @@ def add_hhs_from_persons_attributes(
     for hid, hh_data in persons_attributes.groupby('hid'):
         if hid not in population.households:
             hzone = hh_data.iloc[0].to_dict().get("hzone")
-            print(hid, hzone)
             household = core.Household(
                 hid,
                 area=hzone
@@ -437,7 +434,6 @@ def add_persons_from_persons_attributes(
             if pid in household.people:
                 continue
             person_attributes = persons_attributes.loc[pid].to_dict()
-            print(hid, pid, person_attributes)
             person = core.Person(
                 pid,
                 attributes=person_attributes,
