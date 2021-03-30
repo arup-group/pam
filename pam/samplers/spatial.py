@@ -33,7 +33,7 @@ class RandomPointSampler:
         self.patience = patience
         self.fail = fail
 
-    def sample(self, idx: Union[int, str]):
+    def sample(self, idx: Union[int, str], activity):
         """
         :param idx: index for geom index
         :return: Point object or None

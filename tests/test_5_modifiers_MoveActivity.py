@@ -17,18 +17,18 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_
     mocker.patch.object(MoveActivityTourToHomeLocation, 'move_individual_activities')
 
     policy = MoveActivityTourToHomeLocation([''])
-    policy.apply_to(SmithHousehold, SmithHousehold['4'], [Activity])
+    policy.apply_to(SmithHousehold, SmithHousehold[4], [Activity])
 
-    MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold['4'], [Activity])
+    MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold[4], [Activity])
 
 
 def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_given_person(mocker, SmithHousehold):
     mocker.patch.object(MoveActivityTourToHomeLocation, 'move_person_activities')
 
     policy = MoveActivityTourToHomeLocation([''])
-    policy.apply_to(SmithHousehold, SmithHousehold['4'])
+    policy.apply_to(SmithHousehold, SmithHousehold[4])
 
-    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold['4'])
+    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold[4])
 
 
 def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_household(mocker, SmithHousehold):

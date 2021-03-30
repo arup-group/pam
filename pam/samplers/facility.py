@@ -106,7 +106,7 @@ class FacilitySampler:
                 self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
                 self.index_counter += 1
-                return idx, self.random_sampler.sample(location_idx)
+                return idx, self.random_sampler.sample(location_idx, activity)
             if self.fail:
                 raise IndexError(f'Cannot find idx: {location_idx} in facilities sampler')
             self.logger.warning(f'Missing location idx:{location_idx}')
@@ -122,7 +122,7 @@ class FacilitySampler:
                 self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
                 self.index_counter += 1
-                return idx, self.random_sampler.sample(location_idx)
+                return idx, self.random_sampler.sample(location_idx, activity)
             elif self.fail:
                 raise UserWarning(
             f'Cannot find activity: {activity} in location: {location_idx}, consider allowing random default.'

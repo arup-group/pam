@@ -6,18 +6,18 @@ def test_RemoveActivity_apply_to_delegates_to_remove_individual_activities_when_
     mocker.patch.object(modifiers.RemoveActivity, 'remove_individual_activities')
 
     policy = modifiers.RemoveActivity([''])
-    policy.apply_to(SmithHousehold, SmithHousehold['4'], [Activity])
+    policy.apply_to(SmithHousehold, SmithHousehold[4], [Activity])
 
-    modifiers.RemoveActivity.remove_individual_activities.assert_called_once_with(SmithHousehold['4'], [Activity])
+    modifiers.RemoveActivity.remove_individual_activities.assert_called_once_with(SmithHousehold[4], [Activity])
 
 
 def test_RemoveActivity_apply_to_delegates_to_remove_person_activities_when_given_person(mocker, SmithHousehold):
     mocker.patch.object(modifiers.RemoveActivity, 'remove_person_activities')
 
     policy = modifiers.RemoveActivity([''])
-    policy.apply_to(SmithHousehold, SmithHousehold['4'])
+    policy.apply_to(SmithHousehold, SmithHousehold[4])
 
-    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(SmithHousehold['4'])
+    modifiers.RemoveActivity.remove_person_activities.assert_called_once_with(SmithHousehold[4])
 
 
 def test_RemoveActivity_apply_to_delegates_to_remove_household_activities_when_given_household(mocker, SmithHousehold):

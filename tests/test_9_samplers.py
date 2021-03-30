@@ -139,7 +139,7 @@ def test_random_point_from_geoseries():
     poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry)
-    assert isinstance(sampler.sample(0), Point)
+    assert isinstance(sampler.sample(0, None), Point)
 
 
 def test_random_point_from_geodataframe():
@@ -147,7 +147,7 @@ def test_random_point_from_geodataframe():
     poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf)
-    assert isinstance(sampler.sample(0), Point)
+    assert isinstance(sampler.sample(0, None), Point)
 
 
 def test_random_point_from_geoseries_impatient():
@@ -156,7 +156,7 @@ def test_random_point_from_geoseries_impatient():
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf, fail=True, patience=0)
     with pytest.raises(TimeoutError):
-        sampler.sample(0)
+        sampler.sample(0, None)
 
 
 def test_inf_yield():

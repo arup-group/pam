@@ -7,7 +7,7 @@ import os
 import gzip
 import logging
 import pickle
-from typing import Union
+from typing import Union, Optional
 import json
 
 import pam.core as core
@@ -82,7 +82,7 @@ def load_travel_diary(
 
     else:
         if tour_based:
-            logger.warning("Using tour based purpose parser using (recommended)")
+            logger.warning("Using tour based purpose parser (recommended)")
         else:
             logger.warning(
                 """
@@ -114,59 +114,7 @@ def load_travel_diary(
     """
     )
 
-    # check that person_attributes has required fields if used
-    if persons_attributes is not None:
-        if 'pid' not in persons_attributes.columns and not persons_attributes.index.name == 'pid':
-            raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
-
-    # check if hh_attributes are being used
-    if hhs_attributes is not None:
-        if 'hid' not in hhs_attributes.columns and not hhs_attributes.index.name == 'hid':
-            raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
-
-        if 'hid' in trips.columns:
-            logger.info("Using person to household mapping from trips_diary data")
-        elif persons_attributes is not None and 'hid' in persons_attributes.columns:
-            logger.info("Loading person to household mapping from person_attributes data")
-            person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
-            trips['hid'] = trips.pid.map(person_hh_mapping)
-        else:
-            raise UserWarning(
-        f"""
-        Household attributes found but failed to build person to household mapping from provided inputs:
-        Please provide a household ID field ('hid') in either the trips_dairy or person_attributes inputs.
-        """
-        )
-
-    # add hid to trips if not already added
-    if not 'hid' in trips.columns:
-        logger.warning(
-            """
-            No household entities found, households will be composed of individual persons using 'pid':
-            If you wish to correct this, please add 'hid' to either the trips or persons_attributes inputs.
-            """
-            )
-        trips['hid'] = trips.pid
-
-    # add hzone to trips_diary
-    if not 'hzone' in trips.columns:
-        if hhs_attributes is not None and 'hzone' in hhs_attributes.columns:
-            logger.info("Loading household area ('hzone') from hh_attributes input.")
-            hh_mapping = dict(zip(hhs_attributes.hid, hhs_attributes.hzone))
-            trips['hzone'] = trips.hid.map(hh_mapping)
-        elif persons_attributes is not None and 'hzone' in persons_attributes.columns and 'hid' in persons_attributes.columns:
-            logger.info("Loading household area ('hzone') from person_attributes input.")
-            hh_mapping = dict(zip(persons_attributes.hid, persons_attributes.hzone))
-            trips['hzone'] = trips.hid.map(hh_mapping)
-        else:
-            logger.warning(
-        f"""
-        Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
-        Pam will try to infer home location from activities, but this behaviour is not recommended.
-        """
-        )
-
-    if  trip_freq_as_person_freq:  # use trip freq as person freq
+    if trip_freq_as_person_freq:  # use trip freq as person freq
         if 'freq' not in trips.columns:
             raise UserWarning(
                 f"""
@@ -187,7 +135,7 @@ def load_travel_diary(
 
         trips.drop('freq', axis=1, inplace=True)
 
-    if  trip_freq_as_hh_freq:
+    if trip_freq_as_hh_freq:
         if 'freq' not in trips.columns:
             raise UserWarning(
                 f"""
@@ -214,6 +162,93 @@ def load_travel_diary(
             hhs_attributes['freq'] = hhs_attributes.hid.map(hid_freq_map)
 
         trips.drop('freq', axis=1, inplace=True)
+
+    # add hid to trips if not already added
+    if not 'hid' in trips.columns \
+        and (persons_attributes is None or 'hid' not in persons_attributes.columns) \
+        and (hhs_attributes is None or 'pid' not in hhs_attributes.columns):
+        logger.warning(
+            """
+            No household entities found, households will be composed of individual persons using 'pid':
+            If you wish to correct this, please add 'hid' to either the trips or persons_attributes inputs.
+            """
+            )
+        trips['hid'] = trips.pid
+
+
+    # check that person_attributes has required fields if used
+    if persons_attributes is not None:
+        if 'pid' not in persons_attributes.columns and not persons_attributes.index.name == 'pid':
+            raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
+
+        if 'hid' not in persons_attributes and 'hid' in trips:
+            logger.warning("Adding pid->hh mapping to persons_attributes from trips.")
+            mapping = dict(zip(trips.pid, trips.hid))
+            persons_attributes['hid'] = persons_attributes.pid.map(mapping)
+
+        if 'hzone' not in persons_attributes.columns and 'hid' in persons_attributes.columns:
+            if hhs_attributes is not None and 'hzone' in hhs_attributes:
+                logger.warning("Adding home locations to persons attributes using hhs_attributes.")
+                mapping = dict(zip(hhs_attributes.hid, hhs_attributes.hzone))
+                persons_attributes['hzone'] = persons_attributes.hid.map(mapping)
+            elif 'hzone' in trips and 'hid' in trips:
+                logger.warning("Adding home locations to persons attributes using trips attributes.")
+                mapping = dict(zip(trips.hid, trips.hzone))
+                persons_attributes['hzone'] = persons_attributes.hid.map(mapping)
+
+
+    # check if hh_attributes are being used
+    if hhs_attributes is not None:
+        if 'hid' not in hhs_attributes.columns and not hhs_attributes.index.name == 'hid':
+            raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
+
+        if 'hid' in trips.columns:
+            logger.info("Using person to household mapping from trips_diary data")
+            if persons_attributes is not None and 'hid' not in persons_attributes.columns:
+                logger.info("Loading person to household mapping for person_attributes from trips data")
+                person_hh_mapping = dict(zip(trips.pid, trips.hid))
+                persons_attributes['hid'] = persons_attributes.pid.map(person_hh_mapping)
+
+        elif persons_attributes is not None and 'hid' in persons_attributes.columns:
+            logger.info("Loading person to household mapping from person_attributes data")
+            person_hh_mapping = dict(zip(persons_attributes.pid, persons_attributes.hid))
+            trips['hid'] = trips.pid.map(person_hh_mapping)
+
+        else:
+            raise UserWarning(
+            f"""
+            Household attributes found but failed to build person to household mapping from provided inputs:
+            Please provide a household ID field ('hid') in either the trips_diary or person_attributes inputs.
+            """
+            )
+
+        if 'hzone' not in hhs_attributes.columns:
+            if persons_attributes is not None and 'hzone' in persons_attributes and 'hid' in persons_attributes.columns:
+                logger.warning("Adding home locations to hhs attributes using persons_attributes.")
+                mapping = dict(zip(persons_attributes.hid, persons_attributes.hzone))
+                hhs_attributes['hzone'] = hhs_attributes.hid.map(mapping)
+            elif 'hzone' in trips and 'hid' in trips:
+                logger.warning("Adding home locations to hhs attributes using trips attributes.")
+                mapping = dict(zip(trips.hid, trips.hzone))
+                hhs_attributes['hzone'] = hhs_attributes.hid.map(mapping)
+
+    # add hzone to trips_diary
+    if not 'hzone' in trips.columns:
+        if hhs_attributes is not None and 'hzone' in hhs_attributes.columns:
+            logger.info("Loading household area ('hzone') from hh_attributes input.")
+            hh_mapping = dict(zip(hhs_attributes.hid, hhs_attributes.hzone))
+            trips['hzone'] = trips.hid.map(hh_mapping)
+        elif persons_attributes is not None and 'hzone' in persons_attributes.columns and 'hid' in persons_attributes.columns:
+            logger.info("Loading household area ('hzone') from person_attributes input.")
+            hh_mapping = dict(zip(persons_attributes.hid, persons_attributes.hzone))
+            trips['hzone'] = trips.hid.map(hh_mapping)
+        else:
+            logger.warning(
+        f"""
+        Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
+        Pam will try to infer home location from activities, but this behaviour is not recommended.
+        """
+        )
 
     # Add an empty frequency fields if required
     if 'freq' not in trips.columns:
@@ -290,6 +325,149 @@ def load_travel_diary(
         )
 
 
+def build_population(
+    trips: Optional[pd.DataFrame] = None,
+    persons_attributes: Optional[pd.DataFrame] = None,
+    hhs_attributes: Optional[pd.DataFrame] = None
+    ):
+    """
+    Build a population of households and persons (without plans) 
+    from available trips, persons_attributes and households_attributes 
+    data.
+    Details of required table formats are in the README.
+
+    Args:
+        trips (Optional[pd.DataFrame]): trips table
+        persons_attributes (Optional[pd.DataFrame]): persons attributes table
+        hhs_attributes (Optional[pd.DataFrame]): households attributes table
+
+    Returns:
+        pam.Population: population object
+    """
+    population = core.Population()
+    add_hhs_from_hhs_attributes(population=population, hhs_attributes=hhs_attributes)
+    add_hhs_from_persons_attributes(population=population, persons_attributes=persons_attributes)
+    add_hhs_from_trips(population=population, trips=trips)
+    add_persons_from_persons_attributes(population=population, persons_attributes=persons_attributes)
+    add_persons_from_trips(population=population, trips=trips)
+    return population
+
+
+def add_hhs_from_hhs_attributes(
+    population: core.Population,
+    hhs_attributes: Optional[pd.DataFrame] = None
+    ):
+    logger = logging.getLogger(__name__)
+
+    if hhs_attributes is None:
+        return None
+
+    logger.info("Adding hhs from hhs_attributes")
+    for hid, hh in hhs_attributes.groupby('hid'):
+        if hid not in population.households:
+            hh_attributes = hhs_attributes.loc[hid].to_dict()
+            household = core.Household(
+                hid,
+                attributes=hh_attributes,
+                freq=hh_attributes.pop("freq", None),
+                area=hh_attributes.pop("hzone", None)
+                )
+            population.add(household)
+
+
+def add_hhs_from_persons_attributes(
+    population: core.Population,
+    persons_attributes: Optional[pd.DataFrame] = None
+    ):
+    logger = logging.getLogger(__name__)
+
+    if persons_attributes is None or 'hid' not in persons_attributes.columns:
+        return None
+
+    logger.info("Adding hhs from persons_attributes")
+    for hid, hh_data in persons_attributes.groupby('hid'):
+        if hid not in population.households:
+            hzone = hh_data.iloc[0].to_dict().get("hzone")
+            household = core.Household(
+                hid,
+                area=hzone
+                )
+            population.add(household)
+
+
+def add_hhs_from_trips(
+    population: core.Population,
+    trips: Optional[pd.DataFrame] = None,
+    ):
+    logger = logging.getLogger(__name__)
+
+    if trips is None or 'hid' not in trips.columns:
+        return None
+
+    logger.info("Adding hhs from trips")
+    for hid, hh_data in trips.groupby('hid'):
+        if hid not in population.households:
+            hzone = hh_data.iloc[0].to_dict().get("hzone")
+            household = core.Household(
+                hid,
+                area=hzone
+                )
+            population.add(household)
+
+
+def add_persons_from_persons_attributes(
+    population: core.Population,
+    persons_attributes: Optional[pd.DataFrame] = None,
+    ):
+    logger = logging.getLogger(__name__)
+
+    if persons_attributes is None or 'hid' not in persons_attributes.columns:
+        return None
+
+    logger.info("Adding persons from persons_attributes")
+    for hid, hh_data in persons_attributes.groupby('hid'):
+        household = population.get(hid)
+        if household is None:
+            logger.warning(f"Failed to find household {hid} in population - unable to add person.")
+            continue
+        for pid in hh_data.index:
+            if pid in household.people:
+                continue
+            person_attributes = persons_attributes.loc[pid].to_dict()
+            person = core.Person(
+                pid,
+                attributes=person_attributes,
+                home_area=person_attributes.pop('hzone', None),
+                freq=person_attributes.pop('freq', None)
+                )
+            household.add(person)
+        
+
+def add_persons_from_trips(
+    population: core.Population,
+    trips: Optional[pd.DataFrame] = None,
+    ):
+    logger = logging.getLogger(__name__)
+
+    if trips is None or 'hid' not in trips.columns:
+        return None
+
+    logger.info("Adding persons from trips")
+    for hid, hh_data in trips.groupby('hid'):
+        household = population.households.get(hid)
+        if household is None:
+            logger.warning(f"Failed to find household {hid} in population - unable to add person.")
+            continue
+        for pid, person_data in hh_data.groupby('pid'):
+            if pid in household.people:
+                continue
+            person = core.Person(
+                pid,
+                home_area=person_data.iloc[0].to_dict().get("hzone"),
+                )
+            household.add(person)
+        
+
 def tour_based_travel_diary_read(
     trips: pd.DataFrame,
     persons_attributes: Union[pd.DataFrame, None] = None,
@@ -307,42 +485,33 @@ def tour_based_travel_diary_read(
     :return: core.Population
     """
 
-    population = core.Population()
+    logger = logging.getLogger(__name__)
+
+    population = build_population(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+    )
 
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+    
+    for hid, household in population:
+        for pid, person in household:
+            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
 
-    for hid, household_trips in trips.groupby('hid'):
-
-        if hhs_attributes is not None:
-            hh_attributes = hhs_attributes.loc[hid].to_dict()
-        else:
-            hh_attributes = {}
-
-        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
-
-        for pid, person_trips in household_trips.groupby('pid'):
+            if not len(person_trips):
+                person.stay_at_home()
+                continue
             
             if sort_by_seq:
                 person_trips = person_trips.sort_values('seq')
 
-            if persons_attributes is not None:
-                person_attributes = persons_attributes.loc[pid].to_dict()
-            else:
-                person_attributes = {}
-
-            home_area=person_trips.hzone.iloc[0]
-
-            person = core.Person(
-                pid,
-                attributes=person_attributes,
-                home_area=home_area,
-                freq=person_attributes.pop('freq', None)
-                )
-
             loc = None
             if include_loc:
                 loc = person_trips.start_loc.iloc[0]
+            
+            person = population[hid][pid] 
 
             person.add(
                 activity.Activity(
@@ -393,10 +562,6 @@ def tour_based_travel_diary_read(
             person.plan.infer_activities_from_tour_purpose()
             person.plan.set_leg_purposes()
 
-            household.add(person)
-
-        population.add(household)
-
     return population
 
 
@@ -422,21 +587,22 @@ def trip_based_travel_diary_read(
 
     logger = logging.getLogger(__name__)
 
+    population = build_population(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+    )
+
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+    
+    for hid, household in population:
+        for pid, person in household:
+            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
 
-    population = core.Population()
-
-    for hid, household_trips in trips.groupby('hid'):
-
-        if hhs_attributes is not None:
-            hh_attributes = hhs_attributes.loc[hid].to_dict()
-        else:
-            hh_attributes = {}
-
-        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
-
-        for pid, person_trips in household_trips.groupby('pid'):
+            if not len(person_trips):
+                person.stay_at_home()
+                continue
 
             if sort_by_seq:
                 person_trips = person_trips.sort_values('seq')
@@ -539,21 +705,22 @@ def from_to_travel_diary_read(
 
     logger = logging.getLogger(__name__)
 
+    population = build_population(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+    )
+
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+    
+    for hid, household in population:
+        for pid, person in household:
+            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
 
-    population = core.Population()
-
-    for hid, household_trips in trips.groupby('hid'):
-
-        if hhs_attributes is not None:
-            hh_attributes = hhs_attributes.loc[hid].to_dict()
-        else:
-            hh_attributes = {}
-
-        household = core.Household(hid, attributes=hh_attributes, freq=hh_attributes.pop('freq', None))
-
-        for pid, person_trips in household_trips.groupby('pid'):
+            if not len(person_trips):
+                person.stay_at_home()
+                continue
 
             if sort_by_seq:
                 person_trips = person_trips.sort_values('seq')

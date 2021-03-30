@@ -21,7 +21,7 @@ class Population:
     def add(self, household):
         if not isinstance(household, Household):
             raise UserWarning(f"Expected instance of Household, not: {type(household)}")
-        self.households[str(household.hid)] = household
+        self.households[household.hid] = household
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -260,7 +260,7 @@ class Population:
         """
         for hid in list(self.households):
             hh = self.households[hid]
-            new_hid = prefix + hid
+            new_hid = prefix + str(hid)
             if new_hid in self.households:
                 raise KeyError(f"Duplicate household identifier (hid): {new_hid}")
 
@@ -431,17 +431,21 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid, attributes={}, freq=None):
-        self.hid = str(hid)
+    def __init__(self, hid, attributes={}, freq=None, area=None, loc=None):
+        self.hid = hid
         self.people = {}
         self.attributes = attributes
         self.hh_freq=freq
+        if area is not None or loc is not None: 
+            self._location = activity.Location(area=area, loc=loc)
+        else:
+            self._location = None
 
     def add(self, person):
         if not isinstance(person, Person):
             raise UserWarning(f"Expected instance of Person, not: {type(person)}")
         # person.finalise()
-        self.people[str(person.pid)] = person
+        self.people[person.pid] = person
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -493,6 +497,8 @@ class Household:
 
     @property
     def location(self):
+        if self._location is not None:
+            return self._location
         for person in self.people.values():
             if person.home is not None:
                 return person.home
@@ -651,7 +657,7 @@ class Person:
     logger = logging.getLogger(__name__)
 
     def __init__(self, pid, freq=None, attributes={}, home_area=None):
-        self.pid = str(pid)
+        self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
