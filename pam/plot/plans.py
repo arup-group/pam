@@ -8,28 +8,19 @@ import pam.activity as activity
 import pam.utils as utils
 
 
-def plot_person(person, kwargs=None):
+def plot_person(person, **kwargs):
     df = build_person_df(person)
-    if kwargs is not None:
-        plot_activities(df, **kwargs)
-    else:
-        plot_activities(df)
+    plot_activities(df, **kwargs)
 
 
 def plot_persons(persons, kwargs=None):
     df = pd.concat([build_person_df(person) for person in persons])
-    if kwargs is not None:
-        plot_activities(df, **kwargs)
-    else:
-        plot_activities(df)
+    plot_activities(df, **kwargs)
 
 
-def plot_household(household, kwargs=None):
+def plot_household(household, **kwargs):
     df = pd.concat([build_person_df(person) for person in household.people.values()])
-    if kwargs is not None:
-        plot_activities(df, **kwargs)
-    else:
-        plot_activities(df)
+    plot_activities(df, **kwargs)
 
 
 def build_person_df(person):
@@ -108,12 +99,15 @@ def build_cmap(df):
     return d_color
 
 
-def plot_activities(df, cmap: dict = None, path: str = ''):
+def plot_activities(df, **kwargs):
     """
     Plot activity plans from pandas dataframe.
     """
-    if cmap is None:
+    if "cmap" not in kwargs:
         cmap = build_cmap(df)
+    else:
+        cmap=kwargs["cmap"]
+
     df['color'] = df['act'].map(cmap)
     pids = df['pid'].unique()
 
@@ -194,8 +188,8 @@ def plot_activities(df, cmap: dict = None, path: str = ''):
         bbox_to_anchor=(.5, -.5), loc='upper center', borderaxespad=0.)
     plt.tight_layout()
 
-    if path:
-        plt.savefig(path)
+    if kwargs.get("path") is not None:
+        plt.savefig(kwargs["path"])
 
 
 def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: dict = None,

@@ -573,8 +573,8 @@ class Household:
     def size(self):
         return len(self.people)
 
-    def plot(self, kwargs=None):
-        plot.plot_household(self, kwargs)
+    def plot(self, **kwargs):
+        plot.plot_household(self, **kwargs)
 
     def build_travel_geodataframe(self, **kwargs):
         """
@@ -848,8 +848,8 @@ class Person:
         print(self.attributes)
         self.plan.print()
 
-    def plot(self, kwargs=None):
-        plot.plot_person(self, kwargs)
+    def plot(self, **kwargs):
+        plot.plot_person(self, **kwargs)
 
     def reindex(self, prefix: str):
         self.pid = prefix + self.pid
