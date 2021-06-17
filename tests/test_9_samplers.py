@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import geopandas as gp
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, Point, LinearRing, LineString, MultiLineString, MultiPolygon, MultiPoint
 from types import GeneratorType
 
 from pam.samplers import attributes, basic, facility, spatial
@@ -110,7 +110,7 @@ def test_freq_sampler_random_round(freq, sample, lower, upper):
     assert basic.freq_sample(freq, sample) in [lower, upper]
 
 
-def test_sample_point_from_geoseries():
+def test_sample_point_from_geoseries_of_polygons():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
     poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
@@ -118,7 +118,7 @@ def test_sample_point_from_geoseries():
     assert isinstance(sampler.sample_point_from_polygon(gdf.geometry[0]), Point)
 
 
-def test_sample_point_from_geoseries_invalid():
+def test_sample_point_from_geoseries_of_polygons_invalid():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
     poly = Polygon(((0,0), (1,0), (0,1), (1,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
@@ -126,15 +126,45 @@ def test_sample_point_from_geoseries_invalid():
     assert isinstance(sampler.sample_point_from_polygon(gdf.geometry[0]), Point)
 
 
-def test_sample_point_from_geoseries_impatient():
+def test_sample_point_from_geoseries_of_polygons_no_area():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
     poly = Polygon(((0,0), (1,0), (0,0)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
-    assert sampler.sample_point_from_polygon(gdf.geometry[0]) is None
+    assert isinstance(sampler.sample_point_from_polygon(gdf.geometry[0]), Point)
 
 
-def test_random_point_from_geoseries():
+def test_random_sample_point_from_multipolygon():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    p2 = Polygon(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiPolygon([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
+    assert isinstance(sampler.sample_point_from_multipolygon(gdf.geometry[0]), Point)
+
+
+def test_random_sample_point_from_multilinestring():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = LinearRing(((0,0), (1,0), (1,1), (0,1)))
+    p2 = LineString(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiLineString([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
+    assert isinstance(sampler.sample_point_from_multilinestring(gdf.geometry[0]), Point)
+
+
+def test_random_sample_point_from_multipoint():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Point((0,0))
+    p2 = Point((10,10))
+    poly = MultiPoint([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
+    assert isinstance(sampler.sample_point_from_multipoint(gdf.geometry[0]), Point)
+
+
+def test_random_point_from_geoseries_of_polygons():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
     poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
@@ -142,20 +172,47 @@ def test_random_point_from_geoseries():
     assert isinstance(sampler.sample(0, None), Point)
 
 
-def test_random_point_from_geodataframe():
+def test_random_point_from_geodataframe_of_polygons():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
-    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
-    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    p1 = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    p2 = Polygon(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiPolygon([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[p1, p2, poly])
     sampler = spatial.RandomPointSampler(gdf)
     assert isinstance(sampler.sample(0, None), Point)
+    assert isinstance(sampler.sample(1, None), Point)
+    assert isinstance(sampler.sample(2, None), Point)
 
 
-def test_random_point_from_geoseries_impatient():
+def test_random_point_from_geodataframe_of_lines():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
-    poly = Polygon(((0,0), (1,0), (0,0)))
-    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    p1 = LinearRing(((0,0), (1,0), (1,1), (0,1)))
+    p2 = LineString(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiLineString([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[p1, p2, poly])
+    sampler = spatial.RandomPointSampler(gdf)
+    assert isinstance(sampler.sample(0, None), Point)
+    assert isinstance(sampler.sample(1, None), Point)
+    assert isinstance(sampler.sample(2, None), Point)
+
+
+def test_random_point_from_geodataframe_of_points():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Point((0,0))
+    p2 = Point((10,10))
+    poly = MultiPoint([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[p1, p2, poly])
+    sampler = spatial.RandomPointSampler(gdf)
+    assert isinstance(sampler.sample(0, None), Point)
+    assert isinstance(sampler.sample(1, None), Point)
+    assert isinstance(sampler.sample(2, None), Point)
+
+
+def test_random_point_fail():
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    gdf = gp.GeoDataFrame(df, geometry=[None]*3)
     sampler = spatial.RandomPointSampler(gdf, fail=True, patience=0)
-    with pytest.raises(TimeoutError):
+    with pytest.raises(AttributeError):
         sampler.sample(0, None)
 
 
