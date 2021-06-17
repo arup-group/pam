@@ -45,27 +45,70 @@ class RandomPointSampler:
             self.logger.warning(f'Cannot find idx:{idx}, returning None')
             return None
 
-        point =  self.sample_point_from_polygon(self.geoms[idx])
+        geom = self.geoms[idx]
 
+        if not geom.is_valid:
+            geom.buffer(0)
+
+        if geom.geom_type == "Polygon":
+            return self.validate_return(self.sample_point_from_polygon(geom), idx)
+
+        if geom.geom_type == "MultiPolygon":
+            return self.validate_return(self.sample_point_from_multipolygon(geom), idx)
+
+        if geom.geom_type == "LineString" or geom.geom_type == "LinearRing":
+            return self.validate_return(self.sample_point_from_linestring(geom), idx)
+
+        if geom.geom_type == "MultiLineString":
+            return self.validate_return(self.sample_point_from_multilinestring(geom), idx)
+
+        if geom.geom_type == "Point":
+            return self.validate_return(self.sample_point_from_point(geom), idx)
+
+        if geom.geom_type == "MultiPoint":
+            return self.validate_return(self.sample_point_from_multipoint(geom), idx)
+
+        self.logger.warning(f"Unknown geom type {geom.geom_type}, attempting to sample.")
+
+        return self.validate_return(self.sample_point_from_polygon(geom), idx)
+
+    def validate_return(self, point, idx):
         if point is None and self.fail:
             raise TimeoutError(f"Failed to sample point for geom idx: {idx}")
         return point
 
+    def sample_point_from_point(self, geom):
+        return geom
 
-    def sample_point_from_polygon(self, poly):
+    def sample_point_from_multipoint(self, geom):
+        return random.choice(list(geom))
+    
+    def sample_point_from_linestring(self, geom):
+        """
+        Also works for linearRing
+        """
+        return geom.interpolate(random.random(), True)
+    
+    def sample_point_from_multilinestring(self, geom):
+        line = random.choice(list(geom))
+        return self.sample_point_from_linestring(line)
+
+    def sample_point_from_polygon(self, geom):
         """
         Return random coordinates within polygon, note that will return float coordinates.
         """
-        if not poly.is_valid:
-            poly.buffer(0)
 
-        min_x, min_y, max_x, max_y = poly.bounds
+        min_x, min_y, max_x, max_y = geom.bounds
         for _ in range(self.patience):
             random_point = Point(random.uniform(min_x, max_x), random.uniform(min_y, max_y))
-            if random_point.within(poly):
+            if random_point.within(geom):
                 return random_point
 
-        return None
+        return Point(random.uniform(min_x, max_x), random.uniform(min_y, max_y))
+    
+    def sample_point_from_multipolygon(self, geom):
+        poly = random.choices(geom, weights=[poly.area for poly in geom])[0]
+        return self.sample_point_from_polygon(poly)
 
 
 class GeometryRandomSampler:
