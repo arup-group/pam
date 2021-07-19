@@ -640,6 +640,8 @@ def write_benchmarks(
                     'hzone': person.home,
                     'ozone': leg.start_location.area,
                     'dzone': leg.end_location.area,
+                    'oloc': leg.start_location,
+                    'dloc': leg.end_location,
                     'seq': seq,
                     'purp': leg.purp,
                     'mode': leg.mode,
