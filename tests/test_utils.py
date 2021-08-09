@@ -115,7 +115,7 @@ def correct_pt_person_geodataframe():
                                  4: 'census_1',
                                  5: 'census_1',
                                  6: 'census_1',
-                                 7: 'census_1'}})
+                                 7: 'census_1'}}).sort_index(axis=1)
 
 
 @pytest.fixture()
@@ -141,7 +141,7 @@ def correct_cyclist_geodataframe():
          'service_id': {0: None, 1: None},
          'start_location': {0: (515226.0, 188222.0), 1: (529652.0, 183897.0)},
          'start_time': {0: Timestamp('1900-01-01 07:24:52'), 1: Timestamp('1900-01-01 14:50:52')},
-         'pid': {0: 'census_2', 1: 'census_2'}})
+         'pid': {0: 'census_2', 1: 'census_2'}}).sort_index(axis=1)
 
 
 def test_build_geodataframe_for_pt_person(pt_person, correct_pt_person_geodataframe):
@@ -212,7 +212,7 @@ def test_building_travel_geodataframefor_person_wfh():
              'end_location': {0: Point(1, 1)}, 'start_time': {0: None}, 'end_time': {0: None}, '_distance': {0: None},
              'freq': {0: None}, 'service_id': {0: None}, 'route_id': {0: None}, 'o_stop': {0: None},
              'd_stop': {0: None}, 'network_route': {0: None}, 'geometry': {0: Point(1, 1)}, 'pid': {0: '1'}}
-        ))
+        ).sort_index(axis=1))
 
 
 def test_get_linestring_with_s2_cellids():

@@ -88,7 +88,7 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
         if to_epsg:
             df = df.to_crs(to_epsg)
 
-    return df
+    return df.sort_index(axis=1)
 
 
 def build_rgb_travel_cmap(df, colour_by):
