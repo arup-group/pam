@@ -1,9 +1,11 @@
 import pandas as pd
+import plotly.graph_objs as go
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
-import plotly.graph_objs as go
-from plotly.offline import offline
+from s2sphere import CellId
+from shapely.geometry import Point
+
 import pam.activity as activity
 import pam.utils as utils
 
@@ -60,7 +62,8 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
     """
     df = pd.DataFrame()
     for leg in person.legs:
-        if (leg.start_location.loc is None) or (leg.end_location.loc is None):
+        if (not isinstance(leg.start_location.loc, (Point, CellId))) or (
+        not isinstance(leg.end_location.loc, (Point, CellId))):
             raise AttributeError('To create a geopandas.DataFrame you need specific locations. Make sure Legs have'
                                  'loc attribute defined with a shapely.Point or s2sphere.CellId.')
         _leg_dict = leg.__dict__.copy()
