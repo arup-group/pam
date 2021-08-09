@@ -1,12 +1,16 @@
-import pytest
 import os
-from pandas import Timestamp, DataFrame
-from pandas.testing import assert_frame_equal
+
+import pytest
 from geopandas import GeoDataFrame
+from pandas import Timestamp
+from pandas.testing import assert_frame_equal
 from s2sphere import CellId
 from shapely.geometry import LineString, Point
-from pam import utils, plot, read
-from pam.core import Household, Population
+
+from pam import utils, read
+from pam.activity import Activity
+from pam.core import Population, Person
+from pam.variables import END_OF_DAY
 from tests.fixtures import instantiate_household_with
 
 test_trips_path = os.path.abspath(
@@ -145,7 +149,7 @@ def test_build_geodataframe_for_pt_person(pt_person, correct_pt_person_geodatafr
     assert_frame_equal(gdf, correct_pt_person_geodataframe)
 
 
-def test_building_geodataframe_with_reprojection(pt_person, correct_pt_person_geodataframe):
+def test_building_geodataframe_with_reprojection(pt_person):
     gdf = pt_person.build_travel_geodataframe(from_epsg='epsg:27700', to_epsg='epsg:4326')
     assert [[(round(p[0], 6), round(p[1], 6)) for p in ls.coords] for ls in gdf['geometry'].to_list()] == [
         [(0.123336, 51.537168), (0.175434, 51.567355)], [(0.175434, 51.567355), (0.183252, 51.574827)],
@@ -192,6 +196,23 @@ def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodatafra
     correct_gdf = correct_gdf.reset_index(drop=True)
 
     assert_frame_equal(gdf, correct_gdf)
+
+
+def test_building_travel_geodataframefor_person_wfh():
+    person = Person('1')
+    act = Activity(1, 'home', loc=Point(1, 1), start_time=utils.minutes_to_datetime(0), end_time=END_OF_DAY)
+    person.add(act)
+    assert person.num_legs == 0
+    gdf = person.build_travel_geodataframe()
+
+    assert_frame_equal(
+        gdf,
+        GeoDataFrame(
+            {'seq': {0: None}, 'purp': {0: None}, 'mode': {0: None}, 'start_location': {0: Point(1, 1)},
+             'end_location': {0: Point(1, 1)}, 'start_time': {0: None}, 'end_time': {0: None}, '_distance': {0: None},
+             'freq': {0: None}, 'service_id': {0: None}, 'route_id': {0: None}, 'o_stop': {0: None},
+             'd_stop': {0: None}, 'network_route': {0: None}, 'geometry': {0: Point(1, 1)}, 'pid': {0: '1'}}
+        ))
 
 
 def test_get_linestring_with_s2_cellids():

@@ -72,6 +72,14 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
         _leg_dict['start_location'] = coords[0]
         _leg_dict['end_location'] = coords[-1]
         df = df.append(pd.Series(_leg_dict), ignore_index=True)
+    if person.num_legs == 0:
+        # fake leg to get columns for the frame
+        fake_leg = activity.Leg()
+        _leg_dict = fake_leg.__dict__.copy()
+        _leg_dict['start_location'] = Point(person.plan[0].location.loc)
+        _leg_dict['end_location'] = Point(person.plan[0].location.loc)
+        _leg_dict['geometry'] = Point(person.plan[0].location.loc)
+        df = pd.DataFrame(_leg_dict, index=[0])
 
     df['pid'] = person.pid
     df = GeoDataFrame(df, geometry='geometry')
