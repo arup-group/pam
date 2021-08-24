@@ -552,4 +552,4 @@ This need not be a `home` activity, for example in the case of night workers.
 We have encountered many variations of sequences for plans, including wrapping and wrapping. 
 Although they are generally edge cases, they exists and generally represent real people. We are 
 therefore endeavoring to support all these cases in our plan modifiers. This is resulting some 
-difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
+difficult to follow logic (eg `pam.activity.Plan.fill_plan()`). 
