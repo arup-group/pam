@@ -60,27 +60,6 @@ pip install -e .
 We known that requirements are already available in a up to date Anaconda installation. 
 If you're not using Anaconda, sometimes the above will fail due to spatial library dependencies not being properly installed using pip. If you see any errors relating to fiona or rtree this is likely the case. To fix it, wipe the virtual environment and recreate, `brew install spatialindex` (Mac) then install everything else in the `venv` using `pip install -e .` again. 
 
-**Windows installation** </br>
-We strongly recommend using a virtual environment.
-
-If installation fails, we recommend to try the following code **using the Anaconda Powershell Prompt**:
-
-```
-# Clone the folders into the CD
-git clone git@github.com:arup-group/pam.git
-
-# Create a conda environment
-conda create -n venv python=3.7  
-
-# Check your Python version running python in your terminal
-conda activate venv
-conda install geopandas
-# change directory to pam
-cd pam
-# install the current directory (your project) in editable mode (-e .)
-pip install -e .
-```
-
 ## Why Activity Plans?
 
  ![example-activity-plans](resources/example-activity-plans.png) 
