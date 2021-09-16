@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd"><population>
+  <!--Created 2021-09-15 18:47:55.200915-->
+  <person id="hwh_car">
+    <attributes>
+      <attribute class="java.lang.String" name="subpopulation">med income</attribute>
+      <attribute class="java.lang.String" name="hid">hwh_car</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="0.0" y="5100.0" end_time="07:25:00"/>
+      <leg mode="car" trav_time="01:00:00"/>
+      <activity type="work" x="5100.0" y="5100.0" end_time="16:30:00"/>
+      <leg mode="car" trav_time="01:00:00"/>
+      <activity type="Home" x="0.0" y="5100.0"/>
+    </plan>
+  </person>
+  <person id="hwh_ecar">
+    <attributes>
+      <attribute class="java.lang.String" name="subpopulation">eletric</attribute>
+      <attribute class="java.lang.String" name="hid">hwh_ecar</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="0.0" y="5100.0" end_time="07:25:00"/>
+      <leg mode="car" trav_time="01:00:00"/>
+      <activity type="work" x="5100.0" y="5100.0" end_time="16:30:00"/>
+      <leg mode="car" trav_time="01:00:00"/>
+      <activity type="Home" x="0.0" y="5100.0"/>
+    </plan>
+  </person>
+  <person id="hwh_bus">
+    <attributes>
+      <attribute class="java.lang.String" name="subpopulation">medium income</attribute>
+      <attribute class="java.lang.String" name="hid">hwh_bus</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="0.0" y="5100.0" end_time="07:25:00"/>
+      <leg mode="bus" trav_time="01:00:00"/>
+      <activity type="work" x="5100.0" y="5100.0" end_time="16:30:00"/>
+      <leg mode="bus" trav_time="01:00:00"/>
+      <activity type="Home" x="0.0" y="5100.0"/>
+    </plan>
+  </person>
+  <person id="hwh_train">
+    <attributes>
+      <attribute class="java.lang.String" name="subpopulation">medium income</attribute>
+      <attribute class="java.lang.String" name="hid">hwh_train</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="10100.0" y="5100.0" end_time="07:25:00"/>
+      <leg mode="train" trav_time="01:00:00"/>
+      <activity type="work" x="5100.0" y="5100.0" end_time="16:30:00"/>
+      <leg mode="train" trav_time="01:00:00"/>
+      <activity type="Home" x="10000.0" y="5100.0"/>
+    </plan>
+  </person>
+  <person id="hwh_mm">
+    <attributes>
+      <attribute class="java.lang.String" name="subpopulation">low income</attribute>
+      <attribute class="java.lang.String" name="hid">hwh_mm</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="10100.0" y="5100.0" end_time="07:25:00"/>
+      <leg mode="train" trav_time="01:00:00"/>
+      <activity type="education" x="5100.0" y="10000.0" end_time="16:30:00"/>
+      <leg mode="train" trav_time="01:00:00"/>
+      <activity type="Home" x="10000.0" y="5100.0"/>
+    </plan>
+  </person>
+</population>
