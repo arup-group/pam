@@ -30,35 +30,36 @@ def write_travel_diary(
 	:param plans_path: str path
 	:param attributes_path: str path
 	"""
-    record = []
-    for hid, pid, person in population.people():
-        for seq, leg in enumerate(person.legs):
-            record.append(
-                {
-                    'pid': pid,
-                    'hid': hid,
-                    'hzone': person.home,
-                    'ozone': leg.start_location.area,
-                    'dzone': leg.end_location.area,
-                    'seq': seq,
-                    'purp': leg.purp,
-                    'mode': leg.mode,
-                    'tst': leg.start_time.time(),
-                    'tet': leg.end_time.time(),
-                    'freq': person.freq,
-                }
-            )
-    pd.DataFrame(record).to_csv(plans_path)
+    to_csv(population,plans_path)
+#    record = []
+#    for hid, pid, person in population.people():
+#        for seq, leg in enumerate(person.legs):
+#            record.append(
+#                {
+#                    'pid': pid,
+#                    'hid': hid,
+#                    'hzone': person.home,
+#                    'ozone': leg.start_location.area,
+#                    'dzone': leg.end_location.area,
+#                    'seq': seq,
+#                    'purp': leg.purp,
+#                    'mode': leg.mode,
+#                    'tst': leg.start_time.time(),
+#                    'tet': leg.end_time.time(),
+#                    'freq': person.freq,
+#                }
+#            )
+#    pd.DataFrame(record).to_csv(plans_path)
 
-    if attributes_path:
-        record = []
-        for hid, pid, person in population.people():
-            line = person.attributes
-            line['hid'] = hid
-            line['pid'] = pid
-            line['freq']
-            record.append(line)
-        pd.DataFrame(record).to_csv(attributes_path)
+#    if attributes_path:
+#        record = []
+#        for hid, pid, person in population.people():
+#            line = person.attributes
+#            line['hid'] = hid
+#            line['pid'] = pid
+#            line['freq']
+#            record.append(line)
+#        pd.DataFrame(record).to_csv(attributes_path)
 
 
 def write_od_matrices(
