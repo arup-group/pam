@@ -257,13 +257,50 @@ def test_read_write_v12_consistent(tmp_path):
     assert population == population2
 
 
-def test_write_travel_plans(tmp_path, population_heh):
-    location = os.path.join(tmp_path, "test.csv")
+def test_write_travel_plans_creates_directory_with_expected_files(tmp_path, population_heh):
+    location = os.path.join(tmp_path, "test_plans")
+    assert not os.path.exists(location), "Output directory should not exist before we write the diaries"
+
     write_travel_diary(population_heh, plans_path=location)
 
-    expected_file = "{}/test.csv".format(tmp_path)
-    assert os.path.exists(expected_file)
-    # TODO make assertions about the content of the created file
+    assert os.path.exists(location)
+    assert os.path.isdir(location)
+    expected_files = {
+        'activities.csv',
+        'activities.geojson',
+        'households.csv',
+        'households.geojson',
+        'legs.csv',
+        'legs.geojson',
+        'people.csv',
+        'people.geojson',
+    }
+    assert set(os.listdir(location)) == expected_files, \
+        "Directory does not contain expected file list '{}'".format(expected_files)
+
+
+def test_write_travel_plans_creates_expected_activities_csv_file(tmp_path, population_heh):
+    location = os.path.join(tmp_path, "test_plans")
+    activities_csv_file = os.path.join(location, 'activities.csv')
+    assert not os.path.exists(activities_csv_file), \
+        "Activities CSV file should not exist before we write the diaries, but did"
+
+    write_travel_diary(population_heh, plans_path=location)
+
+    assert os.path.exists(activities_csv_file), \
+        "Activities file does not exist at expected path '{}'".format(activities_csv_file)
+    with open(activities_csv_file, 'r') as csv_file:
+        csv_data = csv_file.read()
+    # Note - the following expectation is based only on what the function actually writes in this branch, which is, I
+    # think, not what it *should* (and used to) write, so you will need to modify these expectations in order to
+    # make the test fail as it should be doing. But this should give you the skeleton test to adapt for each of the
+    # files that are written out. I would also say this file is right at the limits of the amount of data I am happy
+    # comparing as strings - any more and I would think about using some kind of CSV class, a DataFrame, or whatever
+    assert csv_data == ''',pid,hid,freq,activity,seq,start time,end time,duration,zone
+0,1,0,,home,1,1900-01-01 00:00:00,1900-01-01 01:00:00,1:00:00,a
+1,1,0,,education,2,1900-01-01 01:30:00,1900-01-01 02:00:00,0:30:00,b
+2,1,0,,home,3,1900-01-01 03:00:00,1900-01-02 00:00:00,21:00:00,a
+'''
 
 
 def test_writes_od_matrix_to_expected_file(tmpdir):
