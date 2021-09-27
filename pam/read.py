@@ -349,7 +349,8 @@ def build_population(
     add_hhs_from_persons_attributes(population=population, persons_attributes=persons_attributes)
     add_hhs_from_trips(population=population, trips=trips)
     add_persons_from_persons_attributes(population=population, persons_attributes=persons_attributes)
-    add_persons_from_trips(population=population, trips=trips)
+    # add_persons_from_trips(population=population, trips=trips)
+    add_persons_from_trips(population=population, trips=trips[~((trips.pid.isin(persons_attributes.index))&(trips.hid.isin(persons_attributes.hid)))]) # only add persons missing from the attributes table
     return population
 
 
@@ -384,10 +385,14 @@ def add_hhs_from_persons_attributes(
     if persons_attributes is None or 'hid' not in persons_attributes.columns:
         return None
 
+    # hzone_lookup = persons_attributes.reset_index()[['hid','hzone']].drop_duplicates().set_index('hid').hzone.to_dict()
+    hzone_lookup = persons_attributes.groupby('hid').head(1).set_index('hid').hzone.to_dict()
+
     logger.info("Adding hhs from persons_attributes")
     for hid, hh_data in persons_attributes.groupby('hid'):
         if hid not in population.households:
-            hzone = hh_data.iloc[0].to_dict().get("hzone")
+            # hzone = hh_data.iloc[0].to_dict().get("hzone")
+            hzone = hzone_lookup[hid]
             household = core.Household(
                 hid,
                 area=hzone
@@ -424,6 +429,8 @@ def add_persons_from_persons_attributes(
     if persons_attributes is None or 'hid' not in persons_attributes.columns:
         return None
 
+    persons_attributes_dict  = persons_attributes.reset_index().set_index(['hid','pid']).to_dict('index')
+
     logger.info("Adding persons from persons_attributes")
     for hid, hh_data in persons_attributes.groupby('hid'):
         household = population.get(hid)
@@ -433,7 +440,9 @@ def add_persons_from_persons_attributes(
         for pid in hh_data.index:
             if pid in household.people:
                 continue
-            person_attributes = persons_attributes.loc[pid].to_dict()
+
+            person_attributes = persons_attributes_dict[hid, pid]
+
             person = core.Person(
                 pid,
                 attributes=person_attributes,
@@ -466,7 +475,31 @@ def add_persons_from_trips(
                 home_area=person_data.iloc[0].to_dict().get("hzone"),
                 )
             household.add(person)
-        
+
+def reindex_df_dict(
+    df: pd.DataFrame,
+    key_hh: str,
+    key_person: str,
+    values_dict = False
+    ):
+    """
+    Restructure a dataframe as a nested dictionary of dataframes,
+        where the first level is the household index,
+        the second level is the person index,
+        the value is the dataframe slice corresponding to that person
+
+    The dictionary structure allows for much faster access to a person's data.
+    :params pd.DataFrame df: the pandas dataframe to reindex
+    :params str key_hh: the household key column name
+    :params str key_person: the person key column name
+    :params boolean values_dict: whether to convert the person data to a dictionary as well
+    """
+    df_dict = {x:{} for x in df[key_hh].unique()}
+    for (hid, pid), group in df.groupby([key_hh,key_person]):
+        if values_dict:
+            group = group.to_dict('records')[0]
+        df_dict[hid][pid] = group
+    return df_dict
 
 def tour_based_travel_diary_read(
     trips: pd.DataFrame,
@@ -495,17 +528,19 @@ def tour_based_travel_diary_read(
 
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+
+    if sort_by_seq:
+        trips = trips.sort_values(['hid','pid','seq'])
+
+    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
+            person_trips = trips_dict.get(hid, {}).get(pid, {})
 
             if not len(person_trips):
                 person.stay_at_home()
                 continue
-            
-            if sort_by_seq:
-                person_trips = person_trips.sort_values('seq')
 
             loc = None
             if include_loc:
@@ -523,8 +558,7 @@ def tour_based_travel_diary_read(
                 )
             )
 
-            for n in range(len(person_trips)):
-                trip = person_trips.iloc[n]
+            for n, trip in person_trips.iterrows():
 
                 start_loc = None
                 end_loc = None
@@ -595,17 +629,19 @@ def trip_based_travel_diary_read(
 
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+
+    if sort_by_seq:
+        trips = trips.sort_values(['hid','pid','seq'])
+    
+    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
+            person_trips = trips_dict.get(hid, {}).get(pid, {})
 
             if not len(person_trips):
                 person.stay_at_home()
                 continue
-
-            if sort_by_seq:
-                person_trips = person_trips.sort_values('seq')
 
             home_area = person_trips.hzone.iloc[0]
             origin_area = person_trips.ozone.iloc[0]
@@ -639,8 +675,7 @@ def trip_based_travel_diary_read(
                 )
             )
 
-            for n in range(len(person_trips)):
-                trip = person_trips.iloc[n]
+            for n, trip in person_trips.iterrows():
 
                 start_loc = None
                 end_loc = None
@@ -713,17 +748,19 @@ def from_to_travel_diary_read(
 
     if sort_by_seq is None and 'seq' in trips.columns:
         sort_by_seq = True
+
+    if sort_by_seq:
+        trips = trips.sort_values(['hid','pid','seq'])
+    
+    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips.loc[(trips.hid == hid) & (trips.pid == pid)]
+            person_trips = trips_dict.get(hid, {}).get(pid, {})
 
             if not len(person_trips):
                 person.stay_at_home()
                 continue
-
-            if sort_by_seq:
-                person_trips = person_trips.sort_values('seq')
 
             if persons_attributes is not None:
                 person_attributes = persons_attributes.loc[pid].to_dict()
@@ -754,8 +791,7 @@ def from_to_travel_diary_read(
                 )
             )
 
-            for n in range(len(person_trips)):
-                trip = person_trips.iloc[n]
+            for n, trip in person_trips.iterrows():
 
                 start_loc = None
                 end_loc = None
