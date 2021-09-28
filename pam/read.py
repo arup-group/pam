@@ -349,8 +349,8 @@ def build_population(
     add_hhs_from_persons_attributes(population=population, persons_attributes=persons_attributes)
     add_hhs_from_trips(population=population, trips=trips)
     add_persons_from_persons_attributes(population=population, persons_attributes=persons_attributes)
-    # add_persons_from_trips(population=population, trips=trips)
-    add_persons_from_trips(population=population, trips=trips[~((trips.pid.isin(persons_attributes.index))&(trips.hid.isin(persons_attributes.hid)))]) # only add persons missing from the attributes table
+    add_persons_from_trips(population=population, trips=trips)
+    
     return population
 
 
@@ -462,19 +462,19 @@ def add_persons_from_trips(
         return None
 
     logger.info("Adding persons from trips")
-    for hid, hh_data in trips.groupby('hid'):
+    # for hid, hh_data in trips.groupby('hid'):
+    for (hid, pid), hh_person_data in trips.groupby(['hid', 'pid']):
         household = population.households.get(hid)
         if household is None:
             logger.warning(f"Failed to find household {hid} in population - unable to add person.")
             continue
-        for pid, person_data in hh_data.groupby('pid'):
-            if pid in household.people:
-                continue
-            person = core.Person(
-                pid,
-                home_area=person_data.iloc[0].to_dict().get("hzone"),
-                )
-            household.add(person)
+        if pid in household.people:
+            continue
+        person = core.Person(
+            pid,
+            home_area=hh_person_data.iloc[0].to_dict().get("hzone"),
+            )
+        household.add(person)
 
 def reindex_df_dict(
     df: pd.DataFrame,
