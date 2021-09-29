@@ -281,11 +281,7 @@ def test_write_travel_diary_creates_directory_with_expected_files(tmp_path, popu
 
 def test_write_travel_diary_creates_expected_legs_csv_file(tmp_path, population_heh):
     location = os.path.join(tmp_path, "test_plans")
-<<<<<<< HEAD
     legs_csv_file = os.path.join(location, 'legs.csv')
-=======
-    legs = os.path.join(location, 'legs.csv')
->>>>>>> ae8d1a77c5f2463e51390c0d7614193dd740d95e
     assert not os.path.exists(legs_csv_file), \
         "Legs CSV file should not exist before we write the diaries, but did"
 
