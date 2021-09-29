@@ -432,6 +432,8 @@ def to_csv(
                         'tst': component.start_time,
                         'tet': component.end_time,
                         'duration': str(component.duration),
+                        'hzone': hh.location.area,
+
                     }
                     # if component.start_location.area is not None:
                     #     leg_data['start_area'] = component.start_location.area
