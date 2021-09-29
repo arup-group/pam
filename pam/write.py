@@ -31,8 +31,7 @@ def write_travel_diary(
 	:param attributes_path: str path
 	"""
     to_csv(population,plans_path)
-    if attributes_path:
-        to_csv(attributes_path)
+
 
 
 def write_od_matrices(
