@@ -257,7 +257,7 @@ def test_read_write_v12_consistent(tmp_path):
     assert population == population2
 
 
-def test_write_travel_plans_creates_directory_with_expected_files(tmp_path, population_heh):
+def test_write_travel_diary_creates_directory_with_expected_files(tmp_path, population_heh):
     location = os.path.join(tmp_path, "test_plans")
     assert not os.path.exists(location), "Output directory should not exist before we write the diaries"
 
@@ -279,27 +279,25 @@ def test_write_travel_plans_creates_directory_with_expected_files(tmp_path, popu
         "Directory does not contain expected file list '{}'".format(expected_files)
 
 
-def test_write_travel_plans_creates_expected_activities_csv_file(tmp_path, population_heh):
+def test_write_travel_diary_creates_expected_legs_csv_file(tmp_path, population_heh):
     location = os.path.join(tmp_path, "test_plans")
-    activities_csv_file = os.path.join(location, 'activities.csv')
-    assert not os.path.exists(activities_csv_file), \
-        "Activities CSV file should not exist before we write the diaries, but did"
+    legs = os.path.join(location, 'legs.csv')
+    assert not os.path.exists(legs_csv_file), \
+        "Legs CSV file should not exist before we write the diaries, but did"
 
     write_travel_diary(population_heh, plans_path=location)
 
-    assert os.path.exists(activities_csv_file), \
-        "Activities file does not exist at expected path '{}'".format(activities_csv_file)
-    with open(activities_csv_file, 'r') as csv_file:
+    assert os.path.exists(legs_csv_file), \
+        "Legs file does not exist at expected path '{}'".format(legs_csv_file)
+    with open(legs_csv_file, 'r') as csv_file:
         csv_data = csv_file.read()
-    # Note - the following expectation is based only on what the function actually writes in this branch, which is, I
-    # think, not what it *should* (and used to) write, so you will need to modify these expectations in order to
-    # make the test fail as it should be doing. But this should give you the skeleton test to adapt for each of the
-    # files that are written out. I would also say this file is right at the limits of the amount of data I am happy
-    # comparing as strings - any more and I would think about using some kind of CSV class, a DataFrame, or whatever
-    assert csv_data == ''',pid,hid,freq,activity,seq,start time,end time,duration,zone
-0,1,0,,home,1,1900-01-01 00:00:00,1900-01-01 01:00:00,1:00:00,a
-1,1,0,,education,2,1900-01-01 01:30:00,1900-01-01 02:00:00,0:30:00,b
-2,1,0,,home,3,1900-01-01 03:00:00,1900-01-02 00:00:00,21:00:00,a
+    # Note - the following expectation is based on what the master branch code wrote, not what it currently
+    # writes. Therefore the current test should not fail in the master branch, but will fail in the new commit.
+    # The order of the columns is slightly different in the to_csv which now includes the household zone in a
+    # new column at the end
+    assert csv_data == ''',pid,hid,hzone,ozone,dzone,seq,purp,mode,tst,tet,freq
+0,1,0,POINT (0 0),a,b,0,,car,01:00:00,01:30:00,
+1,1,0,POINT (0 0),b,a,1,,car,02:00:00,03:00:00,
 '''
 
 
