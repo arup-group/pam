@@ -385,7 +385,6 @@ def add_hhs_from_persons_attributes(
     if persons_attributes is None or 'hid' not in persons_attributes.columns:
         return None
 
-    # hzone_lookup = persons_attributes.reset_index()[['hid','hzone']].drop_duplicates().set_index('hid').hzone.to_dict()
     if 'hzone' in persons_attributes.columns:
         hzone_lookup = persons_attributes.groupby('hid').head(1).set_index('hid').hzone.to_dict()
     else:
@@ -394,7 +393,6 @@ def add_hhs_from_persons_attributes(
     logger.info("Adding hhs from persons_attributes")
     for hid, hh_data in persons_attributes.groupby('hid'):
         if hid not in population.households:
-            # hzone = hh_data.iloc[0].to_dict().get("hzone")
             hzone = hzone_lookup.get(hid)
             household = core.Household(
                 hid,
@@ -465,7 +463,6 @@ def add_persons_from_trips(
         return None
 
     logger.info("Adding persons from trips")
-    # for hid, hh_data in trips.groupby('hid'):
     for (hid, pid), hh_person_data in trips.groupby(['hid', 'pid']):
         household = population.households.get(hid)
         if household is None:
@@ -483,7 +480,6 @@ def reindex_df_dict(
     df: pd.DataFrame,
     key_hh: str,
     key_person: str,
-    values_dict = False
     ):
     """
     Restructure a dataframe as a nested dictionary of dataframes,
@@ -499,8 +495,6 @@ def reindex_df_dict(
     """
     df_dict = {x:{} for x in df[key_hh].unique()}
     for (hid, pid), group in df.groupby([key_hh,key_person]):
-        if values_dict:
-            group = group.to_dict('records')[0]
         df_dict[hid][pid] = group
     return df_dict
 
