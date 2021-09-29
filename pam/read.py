@@ -476,7 +476,7 @@ def add_persons_from_trips(
             )
         household.add(person)
 
-def reindex_df_dict(
+def hh_person_df_to_dict(
     df: pd.DataFrame,
     key_hh: str,
     key_person: str,
@@ -494,8 +494,8 @@ def reindex_df_dict(
     :params boolean values_dict: whether to convert the person data to a dictionary as well
     """
     df_dict = {x:{} for x in df[key_hh].unique()}
-    for (hid, pid), group in df.groupby([key_hh,key_person]):
-        df_dict[hid][pid] = group
+    for (hid, pid), person_data in df.groupby([key_hh,key_person]):
+        df_dict[hid][pid] = person_data
     return df_dict
 
 def tour_based_travel_diary_read(
@@ -529,11 +529,11 @@ def tour_based_travel_diary_read(
     if sort_by_seq:
         trips = trips.sort_values(['hid','pid','seq'])
 
-    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
+    trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, {})
+            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
 
             if not len(person_trips):
                 person.stay_at_home()
@@ -630,11 +630,11 @@ def trip_based_travel_diary_read(
     if sort_by_seq:
         trips = trips.sort_values(['hid','pid','seq'])
     
-    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
+    trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, {})
+            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
 
             if not len(person_trips):
                 person.stay_at_home()
@@ -749,11 +749,11 @@ def from_to_travel_diary_read(
     if sort_by_seq:
         trips = trips.sort_values(['hid','pid','seq'])
     
-    trips_dict = reindex_df_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
+    trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
     
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, {})
+            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
 
             if not len(person_trips):
                 person.stay_at_home()
