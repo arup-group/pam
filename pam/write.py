@@ -14,26 +14,6 @@ from .utils import minutes_to_datetime as mtdt
 from .utils import write_xml, create_local_dir
 
 
-def write_travel_diary(
-    population,
-    plans_path : str,
-    attributes_path : Optional[str] = None
-    ) -> None:
-    """
-	Write a core population object to the standard population tabular formats.
-	Only write attributes if given attributes_path.
-    Limited to person attributes only.
-    TODO can this be combined with the write csv function?
-    TODO add household attributes
-
-	:param population: core.Population
-	:param plans_path: str path
-	:param attributes_path: str path
-	"""
-    to_csv(population,plans_path)
-
-
-
 def write_od_matrices(
         population, 
         path : str, 
@@ -43,18 +23,18 @@ def write_od_matrices(
         ) -> None:
 
     """
-	Write a core population object to tabular O-D weighted matrices.
-	Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
+    Write a core population object to tabular O-D weighted matrices.
+    Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
     A single filter can be applied each time.
     TODO include freq (assume hh)
 
-	:param population: core.Population
+    :param population: core.Population
     :param path: directory to write OD matrix files
     :param leg_filter: select between 'Mode', 'Purpose'
     :param person_filter: select between given attribute categories (column names) from person attribute data
     :param time_minutes_filter: a list of tuples to slice times, 
     e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
-	"""
+    """
     create_local_dir(path)
 
     legs = []
@@ -125,18 +105,18 @@ def write_matsim(
         household_key : Optional[str] = 'hid'
     ) -> None:
     """
-	Write a core population object to matsim xml formats (either version 11 or 12). 
-	Note that this requires activity locs to be set (shapely.geomerty.Point).
+    Write a core population object to matsim xml formats (either version 11 or 12). 
+    Note that this requires activity locs to be set (shapely.geomerty.Point).
     TODO add support for PathLib?
 
-	:param population: core.Population, population to be writen to disk
-	:param plans_path: str, output path (.xml or .xml.gz)
-	:param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
-	:param version: int {11,12}, matsim version, default 11
-	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-	:param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
-	:return: None
-	"""
+    :param population: core.Population, population to be writen to disk
+    :param plans_path: str, output path (.xml or .xml.gz)
+    :param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
+    :param version: int {11,12}, matsim version, default 11
+    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
+    :return: None
+    """
     if version == 12:
         write_matsim_v12(
             population=population,
@@ -162,9 +142,9 @@ def write_matsim_v12(
     """
     Write a matsim version 12 output (persons plans and attributes combined).
     TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
-	:param population: core.Population, population to be writen to disk
-	:param path: str, output path (.xml or .xml.gz)
-	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param population: core.Population, population to be writen to disk
+    :param path: str, output path (.xml or .xml.gz)
+    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, default 'hid'
     """
 
@@ -221,9 +201,9 @@ def write_matsim_plans(
     """
     Write a matsim version 11 plan output (persons plans only).
     TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
-	:param population: core.Population, population to be writen to disk
-	:param path: str, output path (.xml or .xml.gz)
-	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param population: core.Population, population to be writen to disk
+    :param path: str, output path (.xml or .xml.gz)
+    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     """
 
     population_xml = et.Element('population')
@@ -272,9 +252,9 @@ def write_matsim_attributes(
     """
     Write a matsim version 11 attributes output (persons attributes only).
     TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
-	:param population: core.Population, population to be writen to disk
-	:param path: str, output path (.xml or .xml.gz)
-	:param comment: {str, None}, default None, optionally add a comment string to the xml outputs
+    :param population: core.Population, population to be writen to disk
+    :param path: str, output path (.xml or .xml.gz)
+    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, default 'hid', optionally include the hh ID with given key
     """
 
@@ -330,32 +310,6 @@ def v12_plans_dtd():
             )
         )
     return et.DTD(dtd_path)
-
-
-def dump(
-    population,
-    dir : str,
-    crs : Optional[str] = None,
-    to_crs : Optional[str] = "EPSG:4326"
-    ) -> None:
-    """
-    Write a population to disk as tabular data in csv format. Outputs are:
-    - households.csv: household ids and attributes
-    - people.csv: agent ids and attributes
-    - legs.csv: activity plan trip records
-    - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
-    """
-    to_csv(
-        population = population,
-        dir = dir,
-        crs = crs,
-        to_crs = to_crs
-    )
 
 
 def to_csv(
@@ -431,8 +385,6 @@ def to_csv(
                         'tst': component.start_time,
                         'tet': component.end_time,
                         'duration': str(component.duration),
-                        'hzone': hh.location.area,
-
                     }
                     # if component.start_location.area is not None:
                     #     leg_data['start_area'] = component.start_location.area
@@ -479,6 +431,33 @@ def to_csv(
     save_csv(acts, os.path.join(dir, 'activities.csv'))
 
 
+
+def dump(
+    population,
+    dir : str,
+    crs : Optional[str] = None,
+    to_crs : Optional[str] = "EPSG:4326"
+    ) -> None:
+    """
+    Write a population to disk as tabular data in csv format. Outputs are:
+    - households.csv: household ids and attributes
+    - people.csv: agent ids and attributes
+    - legs.csv: activity plan trip records
+    - activities.csv: corresponding plan activities
+    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    :param population: core.Population
+    :param dir: str, path to output directory
+    :param crs: str, population coordinate system (generally we use local grid systems)
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    """
+    to_csv(
+        population = population,
+        dir = dir,
+        crs = crs,
+        to_crs = to_crs
+    )
+
+
 def save_geojson(df, crs, to_crs, path):
     if 'geometry' in df.columns:
         df = gp.GeoDataFrame(df, geometry='geometry')
@@ -489,99 +468,52 @@ def save_geojson(df, crs, to_crs, path):
 
 
 def save_csv(df, path):
+    """Write GeoDataFrame as csv by droppoing geometry column"""
     if 'geometry' in df.columns:
         df = df.drop('geometry', axis=1)
     df.to_csv(path)
 
 
-def write_population_csv(
+def write_population_csvs(
     list_of_populations : list,
-    export_path : str,
+    dir : str,
+    crs : Optional[str] = None,
+    to_crs : Optional[str] = "EPSG:4326"
     ) -> None:
     """"
-    This function creates csv export files of populations, households, people, legs and actvities. 
-    This export could be used to share data outside of Python or build an interactive dashboard.
-    TODO account for frequency
-    
+    Write a list of populations to disk as tabular data in csv format. Outputs are:
+    - populations.csv: summary of populations
+    - households.csv: household ids and attributes
+    - people.csv: agent ids and attributes
+    - legs.csv: activity plan trip records
+    - activities.csv: corresponding plan activities
+    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
     :param population: core.Population
     :param dir: str, path to output directory
+    :param crs: str, population coordinate system (generally we use local grid systems)
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
     """
-    create_local_dir(export_path)
+    create_local_dir(dir)
 
     populations = []
-    households = []
-    people = []
-    legs = []
-    activities = []
-
     for idx, population in enumerate(list_of_populations):
-        populations.append(
-            {
-                'Scenario ID': idx,
-                'Scenario name': population.name
+        if population.name is None:
+            population.name = idx
+        populations.append({
+                'population_id': idx,
+                'population_name': population.name
             })
-        file_path = os.path.join(export_path, 'populations.csv')
-        pd.DataFrame(populations).to_csv(file_path, index=False)
+        to_csv(
+            population=population,
+            dir= os.path.join(dir, population.name),
+            crs=crs,
+            to_crs=to_crs
+            )
 
-        for hid, hh in population.households.items():
-            households.append({
-                'Scenario ID': idx,
-                'Household ID': hid,
-                'Area': hh.location,
-                'Scenario_Household_ID': str(idx) + str("_") + str(hid)
-            })
-        file_path = os.path.join(export_path, 'households.csv')
-        pd.DataFrame(households).to_csv(file_path, index=False)
-
-        for hid, pid, person in population.people():
-            d_to_append = {
-                'Scenario_Household_ID': str(idx) + str("_") + str(hid),
-                'Scenario_Person_ID': str(idx) + str("_") + str(pid),
-                'Scenario ID': idx,
-                'Household ID': hid,
-                'Person ID': pid,
-                'Frequency': person.freq
-            }
-            people.append({**d_to_append, **person.attributes})
-        file_path = os.path.join(export_path, 'people.csv')
-        pd.DataFrame(people).to_csv(file_path, index=False)
-
-        for hid, pid, person in population.people():
-            for seq, leg in enumerate(person.legs):
-                legs.append({
-                    'Scenario_Person_ID': str(idx) + str("_") + str(pid),
-                    'Scenario ID': idx,
-                    'Household ID': hid,
-                    'Person ID': pid,
-                    'Origin': leg.start_location.area,
-                    'Destination': leg.end_location.area,
-                    'Purpose': leg.act,
-                    'Mode': leg.mode,
-                    'Sequence': leg.seq,
-                    'Start time': leg.start_time,
-                    'End time': leg.end_time,
-                    'Duration': str(leg.duration)
-                
-                })
-        file_path = os.path.join(export_path, 'legs.csv')
-        pd.DataFrame(legs).to_csv(file_path, index=False)
-
-        for hid, pid, person in population.people():
-            for seq, activity in enumerate(person.activities):
-                activities.append({
-                    'Scenario_Person_ID': str(idx) + str("_") + str(pid),
-                    'Scenario ID': idx,
-                    'Household ID': hid,
-                    'Person ID': pid,
-                    'Location': activity.location.area,
-                    'Purpose': activity.act,
-                    'Sequence': activity.seq,
-                    'Start time': activity.start_time,
-                    'End time': activity.end_time,
-                    'Duration': str(activity.duration)
-                })
-        file_path = os.path.join(export_path, 'activities.csv')
-        pd.DataFrame(activities).to_csv(file_path, index=False)
+    pd.DataFrame(populations).to_csv(
+        os.path.join(dir, 'populations.csv'),
+        index=False
+        )
 
 
 def write_benchmarks(
@@ -594,8 +526,8 @@ def write_benchmarks(
     path = None
 ):
     """
-	Extract user-specified benchmarks from the population.
-	:param pam.core.Population population: PAM population
+    Extract user-specified benchmarks from the population.
+    :param pam.core.Population population: PAM population
     :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
     :params list data_fields: The data to summarise. If None, simply count the instances of each group
     :params list of functions aggfunc: A set of functions to apply to each data_field, after grouping by the specified dimensions. For example: [len, sum], [sum, np.mean], [np.sum], etc
@@ -603,8 +535,8 @@ def write_benchmarks(
     :params list colnames: if different to None, rename the columns of the returned dataset  
     :param str path: directory to write the benchmarks. If None, the functions returns the dataframe instead.
 
-	:return: None if an export path is provided, otherwise Pandas DataFrame 
-	"""
+    :return: None if an export path is provided, otherwise Pandas DataFrame 
+    """
     ## collect data
     df = []
     for hid, pid, person in population.people():
@@ -683,24 +615,66 @@ def write_benchmarks(
 #### benchmark wrappers:
 def write_distance_benchmark(population, path=None):
     # number of trips by (euclidean) distance category
-    return write_benchmarks(population, dimensions = ['euclidean_distance_category'], data_fields= ['freq'], colnames = ['distance', 'trips'], aggfunc = [sum], path=path)
+    return write_benchmarks(
+        population,
+        dimensions = ['euclidean_distance_category'],
+        data_fields= ['freq'],
+        colnames = ['distance', 'trips'],
+        aggfunc = [sum],
+        path=path
+        )
 
 def write_mode_distance_benchmark(population, path=None):
     # number of trips by (euclidean) distance category and mode
-    return write_benchmarks(population, dimensions = ['mode','euclidean_distance_category'], data_fields= ['freq'], colnames = ['mode','distance', 'trips'], aggfunc = [sum], path=path)
+    return write_benchmarks(
+        population,
+        dimensions = ['mode','euclidean_distance_category'],
+        data_fields= ['freq'],
+        colnames = ['mode','distance', 'trips'],
+        aggfunc = [sum],
+        path=path
+        )
 
 def write_duration_benchmark(population, path=None):
     # number of trips by duration
-    return write_benchmarks(population, dimensions = ['duration_category'], data_fields= ['freq'], colnames = ['duration', 'trips'], aggfunc = [sum], path=path)
+    return write_benchmarks(
+        population,
+        dimensions = ['duration_category'],
+        data_fields= ['freq'],
+        colnames = ['duration', 'trips'],
+        aggfunc = [sum],
+        path=path
+        )
 
 def write_mode_duration_benchmark(population, path=None):
     # number of trips by duration and mode
-    return write_benchmarks(population, dimensions = ['mode','duration_category'], data_fields= ['freq'], colnames = ['mode','duration', 'trips'], aggfunc = [sum], path=path)
+    return write_benchmarks(
+        population,
+        dimensions = ['mode','duration_category'],
+        data_fields= ['freq'],
+        colnames = ['mode','duration','trips'],
+        aggfunc = [sum],
+        path=path
+        )
 
 def write_departure_time_benchmark(population, path=None):
     # number of trips by hour of departure
-    return write_benchmarks(population, dimensions = ['departure_hour'], data_fields= ['freq'], colnames = ['departure_hour', 'trips'], aggfunc = [sum], path=path)
+    return write_benchmarks(
+        population,
+        dimensions = ['departure_hour'],
+        data_fields= ['freq'],
+        colnames = ['departure_hour', 'trips'],
+        aggfunc = [sum],
+        path=path
+        )
 
 def write_mode_purpose_split_benchmark(population, path=None):
     # purpose split for each mode
-    return write_benchmarks(population, dimensions = ['mode','purp'], data_fields= ['freq'], normalise_by = ['mode'], colnames = ['mode','purpose', 'trips'], aggfunc = [sum])
+    return write_benchmarks(
+        population,
+        dimensions = ['mode','purp'],
+        data_fields= ['freq'],
+        normalise_by = ['mode'],
+        colnames = ['mode','purpose','trips'],
+        aggfunc = [sum]
+        )
