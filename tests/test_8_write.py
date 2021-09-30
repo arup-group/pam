@@ -12,8 +12,8 @@ from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam import write
-from pam.write import write_travel_diary, write_matsim, write_matsim_v12,  \
-    write_population_csv, write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks, \
+from pam.write import write_matsim, write_matsim_v12,  \
+    write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks, \
     write_distance_benchmark, write_mode_distance_benchmark, write_mode_duration_benchmark, write_duration_benchmark, write_departure_time_benchmark
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
@@ -255,15 +255,6 @@ def test_read_write_v12_consistent(tmp_path):
     expected_file = "{}/test.xml.gz".format(tmp_path)
     population2 = read_matsim(expected_file, version=12)
     assert population == population2
-
-
-def test_write_travel_plans(tmp_path, population_heh):
-    location = os.path.join(tmp_path, "test.csv")
-    write_travel_diary(population_heh, plans_path=location)
-
-    expected_file = "{}/test.csv".format(tmp_path)
-    assert os.path.exists(expected_file)
-    # TODO make assertions about the content of the created file
 
 
 def test_writes_od_matrix_to_expected_file(tmpdir):
@@ -628,120 +619,11 @@ def test_write_to_csv_convert_locs(population_heh, tmpdir):
     assert len(acts_df) == 3
 
 
-def test_writes_population_csv_file_to_expected_location(population_heh, tmpdir):
-    write_population_csv([population_heh], tmpdir)
-
-    populations_file = "{}/populations.csv".format(tmpdir)
-    assert os.path.exists(populations_file)
-    with open(populations_file) as file:
-        populations_file_lines = file.readlines()
-        assert len(populations_file_lines) == 2
-        assert populations_file_lines[0] == 'Scenario ID,Scenario name\n'
-        assert populations_file_lines[1] == '0,{}\n'.format(population_heh.name)
-
-
-def test_writes_households_csv_file_to_expected_location(population_heh, tmpdir):
-    write_population_csv([population_heh], tmpdir)
-
-    households_file = "{}/households.csv".format(tmpdir)
-    assert os.path.exists(households_file)
-
-    population_id = 0  # fixed at 0 because there is only one population being exported
-    with open(households_file) as file:
-        households_file_lines = file.readlines()
-        assert len(households_file_lines) == population_heh.num_households + 1
-        assert households_file_lines[0] == 'Scenario ID,Household ID,Area,Scenario_Household_ID\n'
-        row_index = 0
-        for hid, hh in population_heh.households.items():
-            assert households_file_lines[row_index + 1] == \
-                   '{},{},{},{}\n'.format(population_id, hid, hh.location, '{}_{}'.format(population_id, hid))
-            row_index += 1
-
-
-def test_writes_people_csv_file_to_expected_location(population_heh, tmpdir):
-    write_population_csv([population_heh], tmpdir)
-
-    people_file = "{}/people.csv".format(tmpdir)
-    assert os.path.exists(people_file)
-    expected_person_index = 0
-    population_id = 0 # fixed at 0 because there is only one population being exported
-    people_in_pop = list(population_heh.people())
-    with open(people_file) as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            expected_hid, expected_pid, expected_person = people_in_pop[expected_person_index]
-            assert row['Scenario ID'] == '{}'.format(population_id)
-            assert row['Household ID'] == '{}'.format(expected_hid)
-            assert row['Person ID'] == '{}'.format(expected_pid)
-            assert row['Scenario_Household_ID'] == '{}_{}'.format(population_id, expected_hid)
-            assert row['Scenario_Person_ID'] == '{}_{}'.format(population_id, expected_pid)
-            for column in get_all_people_attributes(population_heh):
-                if expected_person.attributes and column in expected_person.attributes:
-                    assert row[column] == str(expected_person.attributes[column])
-                else:
-                    assert row[column] == ''
-            expected_person_index += 1
-
-
-def test_writes_legs_csv_file_to_expected_location(population_heh, tmpdir):
-    write_population_csv([population_heh], tmpdir)
-
-    legs_file = "{}/legs.csv".format(tmpdir)
-    assert os.path.exists(legs_file)
-    expected_legs = get_ordered_legs(population_heh)
-    leg_index = 0
-    population_id = 0
-    with open(legs_file) as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            expected_objects = expected_legs[leg_index]
-            expected_hid, expected_pid, expected_person = expected_objects[0]
-            expected_leg = expected_objects[1]
-            assert row['Scenario_Person_ID'] == '{}_{}'.format(population_id, expected_pid)
-            assert row['Scenario ID'] == '{}'.format(population_id)
-            assert row['Household ID'] == '{}'.format(expected_hid)
-            assert row['Person ID'] == '{}'.format(expected_pid)
-            assert row['Origin'] == '{}'.format(expected_leg.start_location.area)
-            assert row['Destination'] == '{}'.format(expected_leg.end_location.area)
-            assert row['Purpose'] == '{}'.format(expected_leg.act)
-            assert row['Mode'] == '{}'.format(expected_leg.mode)
-            assert row['Sequence'] == '{}'.format(expected_leg.seq)
-            assert row['Start time'] == '{}'.format(expected_leg.start_time)
-            assert row['End time'] == '{}'.format(expected_leg.end_time)
-            assert row['Duration'] == '{}'.format(expected_leg.duration)
-            leg_index += 1
-
-
-def test_writes_activities_csv_file_to_expected_location(population_heh, tmpdir):
-    write_population_csv([population_heh], tmpdir)
-
-    activities_file = "{}/activities.csv".format(tmpdir)
-    assert os.path.exists(activities_file)
-    expected_activities = get_ordered_activities(population_heh)
-    activity_index = 0
-    population_id = 0
-    with open(activities_file) as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            expected_objects = expected_activities[activity_index]
-            expected_hid, expected_pid, expected_person = expected_objects[0]
-            expected_activity = expected_objects[1]
-            assert row['Scenario_Person_ID'] == '{}_{}'.format(population_id, expected_pid)
-            assert row['Scenario ID'] == '{}'.format(population_id)
-            assert row['Household ID'] == '{}'.format(expected_hid)
-            assert row['Person ID'] == '{}'.format(expected_pid)
-            assert row['Location'] == '{}'.format(expected_activity.location.area)
-            assert row['Purpose'] == '{}'.format(expected_activity.act)
-            assert row['Sequence'] == '{}'.format(expected_activity.seq)
-            assert row['Start time'] == '{}'.format(expected_activity.start_time)
-            assert row['End time'] == '{}'.format(expected_activity.end_time)
-            assert row['Duration'] == '{}'.format(expected_activity.duration)
-            activity_index += 1
-
 def test_benchmark_trips_hour(tmp_path):
     test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
-    test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                        "test_data/test_matsim_attributes.xml"))
+    test_attributes_path = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "test_data/test_matsim_attributes.xml"
+        ))
     population = read_matsim(test_trips_path, test_attributes_path, weight=1000)
     benchmark = write_benchmarks(
         population,
