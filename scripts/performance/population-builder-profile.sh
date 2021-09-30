@@ -16,6 +16,10 @@ FAILURE='\033[0;31m'
 CHECKMARK_SYMBOL='\xE2\x9C\x94'
 CROSS_SYMBOL='\xE2\x9D\x8C'
 
+# default tolerances
+mem_tolerance='5'
+runtime_tolerance='5'
+
 script_name=$0
 function usage() {
     echo ""
@@ -78,16 +82,6 @@ then
    usage 1
 fi
 
-if [[ -z "$mem_tolerance" ]]
-then
-    mem_tolerance='5'
-fi
-
-if [[ -z "$runtime_tolerance" ]]
-then
-    runtime_tolerance='5'
-fi
-
 if [[ -z "$benchmark_file" ]]
 then
     printf "No benchmark file specified\n"
@@ -133,8 +127,8 @@ then
     if (( $(echo "$mem_usage_diff >= 0" | bc -l) )); then
       mem_usage_diff_str=`echo "+$mem_usage_diff"`
     fi
-
     printf "Used ${EM}${mem_usage_diff_str}${PLAIN} MB memory compared to the benchmark run\n"
+
     runtime_diff=`bc <<< "$running_time - $benchmark_running_time"`
     runtime_diff_str=`echo "$runtime_diff"`
     if (( $(echo "$runtime_diff >= 0" | bc -l) )); then
