@@ -9,8 +9,8 @@
 pushd "${0%/*}"
 
 ./population-builder-profile.sh \
--d data/simple_travel_diaries.gz  \
--a data/simple_persons_data.gz \
+-d test-data/simple_travel_diaries.gz  \
+-a test-data/simple_persons_data.gz \
 -b `realpath pop-builder-perf-benchmark.dat` \
 -m 20 \
 -r 10
