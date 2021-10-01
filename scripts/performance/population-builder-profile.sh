@@ -16,6 +16,10 @@ FAILURE='\033[0;31m'
 CHECKMARK_SYMBOL='\xE2\x9C\x94'
 CROSS_SYMBOL='\xE2\x9D\x8C'
 
+# default tolerances
+mem_tolerance='5'
+runtime_tolerance='5'
+
 script_name=$0
 function usage() {
     echo ""
@@ -43,6 +47,16 @@ function get_max_mem() {
     echo $max_mem
 }
 
+function print_benchmark_config() {
+    printf "Using supplied profile file ${EM}${benchmark_file}${PLAIN} as a benchmark...\n"
+    benchmark_running_time=`get_running_time $benchmark_file`
+    printf "Benchmark run time was ${EM}${benchmark_running_time} seconds${PLAIN}\n"
+    benchmark_max_mem=`get_max_mem $benchmark_file`
+    printf "Benchmark max mem was ${EM}${benchmark_max_mem} MB${PLAIN}\n"
+    printf "Benchmark mem tolerance is ${EM}${mem_tolerance} MB${PLAIN}\n"
+    printf "Benchmark runtime tolerance is ${EM}${runtime_tolerance} seconds${PLAIN}\n"
+}
+
 while getopts ":d:a:b:m:r:h" opt; do
   case $opt in
     d) travel_diaries="$OPTARG"
@@ -68,27 +82,11 @@ then
    usage 1
 fi
 
-if [[ -z "$mem_tolerance" ]]
-then
-    mem_tolerance='5'
-fi
-
-if [[ -z "$runtime_tolerance" ]]
-then
-    runtime_tolerance='5'
-fi
-
 if [[ -z "$benchmark_file" ]]
 then
-   printf "No benchmark file specified\n"
+    printf "No benchmark file specified\n"
 else
-   printf "Using supplied profile file ${EM}${benchmark_file}${PLAIN} as a benchmark...\n"
-   benchmark_running_time=`get_running_time $benchmark_file`
-   printf "Benchmark run time was ${EM}${benchmark_running_time} seconds${PLAIN}\n"
-   benchmark_max_mem=`get_max_mem $benchmark_file`
-   printf "Benchmark max mem was ${EM}${benchmark_max_mem} MB${PLAIN}\n"
-   printf "Benchmark mem tolerance is ${EM}${mem_tolerance} MB${PLAIN}\n"
-   printf "Benchmark runtime tolerance is ${EM}${runtime_tolerance} seconds${PLAIN}\n"
+    print_benchmark_config
 fi
 
 pushd "${0%/*}"
@@ -125,9 +123,18 @@ mprof plot $profile_file -o $plot_file -t "PAM Activity Loader Profile ($profile
 if [[ -n "$benchmark_max_mem" ]]
 then
     mem_usage_diff=`bc <<< "$mem_max - $benchmark_max_mem"`
-    printf "Used ${EM}${mem_usage_diff}${PLAIN} MB more memory than the benchmark run\n"
+    mem_usage_diff_str=`echo "$mem_usage_diff"`
+    if (( $(echo "$mem_usage_diff >= 0" | bc -l) )); then
+      mem_usage_diff_str=`echo "+$mem_usage_diff"`
+    fi
+    printf "Used ${EM}${mem_usage_diff_str}${PLAIN} MB memory compared to the benchmark run\n"
+
     runtime_diff=`bc <<< "$running_time - $benchmark_running_time"`
-    printf "Took ${EM}${runtime_diff}${PLAIN} seconds longer than the benchmark run\n"
+    runtime_diff_str=`echo "$runtime_diff"`
+    if (( $(echo "$runtime_diff >= 0" | bc -l) )); then
+      runtime_diff_str=`echo "+$runtime_diff"`
+    fi
+    printf "Took ${EM}${runtime_diff_str}${PLAIN} seconds compared to the benchmark run\n"
 
     if (( $(echo "$mem_tolerance > $mem_usage_diff" | bc -l) ))
     then
