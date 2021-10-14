@@ -520,12 +520,12 @@ class Plan:
             self.day.pop(seq)
             return seq-2, seq+1
 
-    def move_activity(self, seq, default='home', target_mode='walk'):
+    def move_activity(self, seq, default='home', new_mode='walk'):
         """
         Changes Activity location and associated journeys
         :param seq:
 		:param default: 'home' or pam.activity.Location
-		:param target_mode: 'walk' or pam.activity.target_mode
+		:param new_mode: 'walk' or pam.activity.new_mode
         :return: None
         """
         assert isinstance(self.day[seq], Activity)
@@ -543,12 +543,12 @@ class Plan:
             # if it's not the first activity of plan
             # update leg that leads to activity at seq
             self.day[seq - 1].end_location = new_location
-            self.mode_shift(seq - 1, target_mode)
+            self.mode_shift(seq - 1, new_mode)
         if seq != len(self.day) - 1:
             # if it's not the last activity of plan
             # update leg that leads to activity at seq
             self.day[seq + 1].start_location = new_location
-            self.mode_shift(seq + 1, target_mode)
+            self.mode_shift(seq + 1, new_mode)
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
@@ -738,14 +738,14 @@ class Plan:
         
         return home_duration
 
-    def mode_shift(self, seq, target_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
+    def mode_shift(self, seq, new_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
         """
         Changes mode for a leg, along with any legs in the same tour.
         Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
         Default speed values are from National Travel Survey data (NTS0303)
 
         :params int seq: leg index in self.day
-        :params string target_mode: default mode shift
+        :params string new_mode: default mode shift
         :params dict mode_speed: a dictionary of average mode speeds (kph) 
         :params bool update_duration: whether to update leg durations based on mode speed
 
@@ -762,8 +762,8 @@ class Plan:
                     #if any of the trip ends belongs in the tour change the mode
                     if act_from.is_exact(other_act) or act_to.is_exact(other_act):
                         if update_duration:
-                            shift_duration = ((mode_speed[plan.mode]/mode_speed[target_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
-                        plan.mode = target_mode #change mode
+                            shift_duration = ((mode_speed[plan.mode] / mode_speed[new_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
+                        plan.mode = new_mode #change mode
                         if update_duration:
                             self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
         

@@ -210,57 +210,57 @@ class MoveActivityTourToHomeLocation(Modifier):
     :param location, default 'home'
     Location to which the tour should be moved.
 
-    :param target_mode, default 'walk'
+    :param new_mode, default 'walk'
     Mode used in the legs to/from the activity when we relocate the activity
     """
 
-    def __init__(self, activities: List[str], location: str = 'home', target_mode: str = 'walk'):
+    def __init__(self, activities: List[str], location: str = 'home', new_mode: str = 'walk'):
         super().__init__()
         # list of activities defines the accepted activity tour,
         # any combination of activities in activities sandwiched
         # by home activities will be selected
         self.activities = activities
         self.default = location
-        self.mode = target_mode
+        self.mode = new_mode
 
     def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activities: List[pam.activity.Activity] = None, target_mode=None):
+                 activities: List[pam.activity.Activity] = None, new_mode=None):
         if activities and person:
-            self.move_individual_activities(person, activities, target_mode)
+            self.move_individual_activities(person, activities, new_mode)
         elif person:
-            self.move_person_activities(person, target_mode)
+            self.move_person_activities(person, new_mode)
         elif household and isinstance(household, pam.core.Household):
-            self.move_household_activities(household, target_mode)
+            self.move_household_activities(household, new_mode)
         else:
             raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
                                       ''.format(type(household), type(person), type(activities),
                                                 type(pam.core.Household)))
 
-    def move_activities(self, person, target_mode, p):
+    def move_activities(self, person, new_mode, p):
         tours = self.matching_activity_tours(person.plan, p)
         if tours:
             for seq in range(len(person.plan)):
                 if isinstance(person.plan[seq], pam.activity.Activity):
                     act = person.plan[seq]
                     if self.is_part_of_tour(act, tours):
-                        person.move_activity(seq, target_mode,default=self.default)
+                        person.move_activity(seq, new_mode, default=self.default)
 
-    def move_individual_activities(self, person, target_mode, activities):
+    def move_individual_activities(self, person, new_mode, activities):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
             return act.isin_exact(activities)
 
-        self.move_activities(person, target_mode, p=is_a_selected_activity)
+        self.move_activities(person, new_mode=new_mode, p=is_a_selected_activity)
 
-    def move_person_activities(self, person, target_mode):
+    def move_person_activities(self, person, new_mode):
         def return_true(act):
             return True
 
-        self.move_activities(person, target_mode, p=return_true)
+        self.move_activities(person, new_mode, p=return_true)
 
-    def move_household_activities(self, household):
+    def move_household_activities(self, household, new_mode):
         for pid, person in household.people.items():
-            self.move_person_activities(person, target_mode)
+            self.move_person_activities(person, new_mode)
 
     def matching_activity_tours(self, plan, p):
         tours = plan.activity_tours()

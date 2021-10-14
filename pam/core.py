@@ -899,15 +899,15 @@ class Person:
         """
         return self.plan.remove_activity(seq)
 
-    def move_activity(self, seq, default='home', target_mode='walk'):
+    def move_activity(self, seq, default='home', new_mode='walk'):
         """
         Move an activity from plan at given seq to default location
         :param seq:
         :param default: 'home' or pam.activity.Location
-        :param target_mode: 'walk' or pam.activity.target_mode
+        :param new_mode: 'walk' or pam.activity.new_mode
         :return: None
         """
-        return self.plan.move_activity(seq, default, target_mode)
+        return self.plan.move_activity(seq, default, new_mode)
 
     def fill_plan(self, p_idx, s_idx, default='home'):
         """
