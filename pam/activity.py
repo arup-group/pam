@@ -520,11 +520,12 @@ class Plan:
             self.day.pop(seq)
             return seq-2, seq+1
 
-    def move_activity(self, seq, default='home'):
+    def move_activity(self, seq, default='home', target_mode='walk'):
         """
-        Changes Activity location
+        Changes Activity location and associated journeys
         :param seq:
 		:param default: 'home' or pam.activity.Location
+		:param target_mode: 'walk' or pam.activity.target_mode
         :return: None
         """
         assert isinstance(self.day[seq], Activity)
@@ -542,12 +543,12 @@ class Plan:
             # if it's not the first activity of plan
             # update leg that leads to activity at seq
             self.day[seq - 1].end_location = new_location
-            self.mode_shift(seq - 1)
+            self.mode_shift(seq - 1, target_mode)
         if seq != len(self.day) - 1:
             # if it's not the last activity of plan
             # update leg that leads to activity at seq
             self.day[seq + 1].start_location = new_location
-            self.mode_shift(seq + 1)
+            self.mode_shift(seq + 1, target_mode)
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
