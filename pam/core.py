@@ -904,7 +904,7 @@ class Person:
         Move an activity from plan at given seq to default location
         :param seq:
         :param default: 'home' or pam.activity.Location
-        :param new_mode: 'walk' or pam.activity.new_mode
+        :param new_mode: access/egress journey switching to this mode. Ie 'walk'
         :return: None
         """
         return self.plan.move_activity(seq, default, new_mode)

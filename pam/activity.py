@@ -525,7 +525,7 @@ class Plan:
         Changes Activity location and associated journeys
         :param seq:
 		:param default: 'home' or pam.activity.Location
-		:param new_mode: 'walk' or pam.activity.new_mode
+		:param new_mode: access/egress journey switching to this mode. Ie 'walk'
         :return: None
         """
         assert isinstance(self.day[seq], Activity)
