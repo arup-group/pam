@@ -16,10 +16,19 @@ def assert_correct_activities(person, ordered_activities_list):
 def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_person_and_activities(mocker, SmithHousehold):
     mocker.patch.object(MoveActivityTourToHomeLocation, 'move_individual_activities')
 
+    policy = MoveActivityTourToHomeLocation([''], new_mode='car')
+    policy.apply_to(SmithHousehold, SmithHousehold[4], [Activity])
+
+    MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold[4], [Activity], 'car')
+
+
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_person_and_activities_default_new_mode(mocker, SmithHousehold):
+    mocker.patch.object(MoveActivityTourToHomeLocation, 'move_individual_activities')
+
     policy = MoveActivityTourToHomeLocation([''])
     policy.apply_to(SmithHousehold, SmithHousehold[4], [Activity])
 
-    MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold[4], [Activity])
+    MoveActivityTourToHomeLocation.move_individual_activities.assert_called_once_with(SmithHousehold[4], [Activity], 'walk')
 
 
 def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_given_person(mocker, SmithHousehold):
@@ -28,7 +37,7 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_
     policy = MoveActivityTourToHomeLocation([''])
     policy.apply_to(SmithHousehold, SmithHousehold[4])
 
-    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold[4])
+    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold[4], 'walk')
 
 
 def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_household(mocker, SmithHousehold):
@@ -37,7 +46,7 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_
     policy = MoveActivityTourToHomeLocation([''])
     policy.apply_to(SmithHousehold)
 
-    MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(SmithHousehold)
+    MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(SmithHousehold, 'walk')
 
 
 def test_MoveActivityTourToHomeLocation_throws_exception_if_apply_to_given_wrong_input(Bobby):

@@ -224,7 +224,8 @@ class MoveActivityTourToHomeLocation(Modifier):
         self.new_mode = new_mode
 
     def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activities: List[pam.activity.Activity] = None, new_mode=None):
+                 activities: List[pam.activity.Activity] = None):
+        new_mode = self.new_mode
         if activities and person:
             self.move_individual_activities(person, activities, new_mode)
         elif person:
@@ -236,31 +237,31 @@ class MoveActivityTourToHomeLocation(Modifier):
                                       ''.format(type(household), type(person), type(activities),
                                                 type(pam.core.Household)))
 
-    def move_activities(self, person, p):
+    def move_activities(self, person, p, new_mode='walk'):
         tours = self.matching_activity_tours(person.plan, p)
         if tours:
             for seq in range(len(person.plan)):
                 if isinstance(person.plan[seq], pam.activity.Activity):
                     act = person.plan[seq]
                     if self.is_part_of_tour(act, tours):
-                        person.move_activity(seq, default=self.default, new_mode='walk')
+                        person.move_activity(seq, default=self.default, new_mode=new_mode)
 
-    def move_individual_activities(self, person, activities, new_mode):
+    def move_individual_activities(self, person, activities, new_mode='walk'):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
             return act.isin_exact(activities)
 
-        self.move_activities(person, p=is_a_selected_activity, new_mode='walk')
+        self.move_activities(person, p=is_a_selected_activity, new_mode=new_mode)
 
-    def move_person_activities(self, person, new_mode):
+    def move_person_activities(self, person, new_mode='walk'):
         def return_true(act):
             return True
 
-        self.move_activities(person, p=return_true, new_mode='walk')
+        self.move_activities(person, p=return_true, new_mode=new_mode)
 
-    def move_household_activities(self, household, new_mode):
+    def move_household_activities(self, household, new_mode='walk'):
         for pid, person in household.people.items():
-            self.move_person_activities(person, new_mode)
+            self.move_person_activities(person, new_mode=new_mode)
 
     def matching_activity_tours(self, plan, p):
         tours = plan.activity_tours()
