@@ -22,6 +22,38 @@ def plot_household(household, **kwargs):
     df = pd.concat([build_person_df(person) for person in household.people.values()])
     plot_activities(df, **kwargs)
 
+def build_plan_df(plan, pid='sample'):
+    """
+    Loop through a plan, creating a pandas dataframe defining activities for plotting.
+    """
+    data = {
+        "act" : [],
+        "modes": [],
+        "start_time": [],
+        "end_time": [],
+        "dur": [],
+    }
+    for component in plan.day:
+        data["act"].append(component.act.lower().title())
+        if isinstance(component, activity.Leg):
+            data["modes"].append(component.mode.lower().title())
+        else:
+            data["modes"].append(None)
+        data["start_time"].append(component.start_time.hour + component.start_time.minute/60)
+        data["end_time"].append(component.end_time.hour + component.end_time.minute/60)
+        data["dur"].append(component.duration.total_seconds()/3600)
+    df = pd.DataFrame(data)
+    df['pid'] = pid
+
+    return df
+
+def plot_plan(plan, kwargs=None):
+    df = build_plan_df(plan)
+    if kwargs is not None:
+        plot_activities(df, **kwargs)
+    else:
+        plot_activities(df)
+
 
 def build_person_df(person):
     """

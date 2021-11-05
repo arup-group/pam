@@ -8,7 +8,6 @@ from pam.core import Person
 from pam.activity import Activity, Leg, Plan
 from pam import utils
 
-
 class CharyparNagelPlanScorer:
 
     example_config = {
