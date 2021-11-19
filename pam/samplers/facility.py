@@ -166,17 +166,22 @@ class FacilitySampler:
         :params str weight_on: a column (name) of the facilities geodataframe to be used as a sampling weight
         """
         activity_areas = self.activity_areas
+        # convert to dictionary for faster indexing
+        activity_areas_dict = {x:{} for x in activity_areas['index_right'].unique()}
+        for (zone, act), facility_data in activity_areas.groupby(['index_right', 'activity']):
+            activity_areas_dict[zone][act] = facility_data
+
         sampler_dict = {}
 
         self.logger.warning("Building sampler, this may take a while.")
         for zone in set(activity_areas.index_right):
             sampler_dict[zone] = {}
-            zone_facs = activity_areas.loc[activity_areas.index_right == zone]
+            zone_facs = activity_areas_dict.get(zone, {})
             
             for act in self.activities:
                 self.logger.debug(f"Building sampler for zone:{zone} act:{act}.")
-                facs = zone_facs.loc[zone_facs.activity == act]
-                if not facs.empty:
+                facs = zone_facs.get(act, None)
+                if facs is not None:
                     points = [(i, g) for i, g in facs.geometry.items()]
                     if weight_on is not None:
                         # weighted sampler
