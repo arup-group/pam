@@ -54,10 +54,10 @@ jobs:
         echo $GITHUB_REPOSITORY
         echo $GITHUB_SHA
         echo $GITHUB_SHA > release
-        if test "$GITHUB_REF" = "refs/heads/master"; then
-          echo "Branch is master - no need to make a release name..."
+        if test "$GITHUB_REF" = "refs/heads/main"; then
+          echo "Branch is main - no need to make a release name..."
         else
-          echo "Making a release name for non-master branch..."
+          echo "Making a release name for non-main branch..."
           branch=`echo $GITHUB_REF | awk -F '/' '{print $3}'`
           release_name=`echo $GITHUB_ACTOR-$branch`
           echo "Release name: $release_name"
