@@ -1,23 +1,31 @@
-![](https://github.com/arup-group/pam//workflows/CI/badge.svg)
-# Pandemic Activity Modifier (PAM)
+# Population Activity Modeller (PAM)
 
-Our day to day activities have been rapidly shifted by recent policies and behavioural 
-changes related to the COVID-19 pandemic. If we want to better plan existing and near-term 
-scenarios (for transport systems and other sectors) - existing models need to be updated and new scenarios generated quickly.
+![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg)
+
+PAM is a python API for activity sequence modelling. Primary features:
+
+- common format read/write inccluding MATSim xml
+- sequence inference from travel diary data
+- rules based sequence modification
+- sequence visualisation
+- facility sampling
+- research extensions
+
+PAM was originally called the "Pandemic Activity Modifier". It was built in response to COVID-19, to better and more quickly update models for behaviour changes from lockdown policies than existing aggregate models.
 
  ![PAM](resources/PAM-motivation.png)
 
 **Who is this for?** PAM is intended for use by any modeller or planner using trip diary data or activity plans.
-**What can this do?** PAM provides an API and examples for modifying activity plans based on COVID-19 scenarios.
+**What can this do?** PAM provides an API and examples for modifying activity plans, for example, based on COVID-19 lockdown scenarios.
 
 You can read about PAM on medium [here](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e).
 
- ## Features
+## Features
 
 This project is not a new activity model. Instead it to seeks to adjust existing activity 
 representations, already derived from exiting models or survey data:
 
- ![PAM](resources/PAM-features.png)
+![PAM](resources/PAM-features.png)
 
 (i) **Read/Load** input data (eg travel diary) to household and person Activity Plans.
 
@@ -31,7 +39,7 @@ the logic of arbitrarily complex activity chains.
 This work is primarily intended for transport modellers, to make quick transport demand
 scenarios. But it may also be useful for other activity based demand modelling such as for goods 
 supply or utility demand.
- 
+
 ## Contents
 
 - Installation
@@ -150,6 +158,7 @@ In general, a policy is defined in the following way:
         - `ActivityProbability` 
 
 PAM allows multiple of such policies to be combined to build realistic and complex scenarios. Leveraging activity plans means that PAM can implement detailed policies that are dependant on:
+
 - person attributes
 - household attributes
 - activity types
@@ -161,7 +170,7 @@ PAM allows multiple of such policies to be combined to build realistic and compl
 
 A full overview of policies and examples of the policies available are [detailed in this notebook](https://github.com/arup-group/pam/blob/master/notebooks/PAM%20Policies%20walk-through.ipynb).
 
-## Example modifiers/policies:   
+## Example modifiers/policies:
 
 ##### Ill and self-quarantined
 
@@ -229,7 +238,7 @@ population.print()
 The first step in any application is to load your data into the core pam format (pam.core.Population). We 
 are trying to support comon tabular formats ('travel diaries') using `pam.read.load_travel_diary`. A 
 travel diary can be composed of three tables:
- 
+
 - `trips` (required) -  a trip diary for all people in the population, with rows representing trips
 - `persons_attributes` (optional) - optionally include persons attributes (eg: `person income`)
 - `households_attributes` (optional) - optionally include households attributes (eg: `hh number of cars`)
@@ -418,23 +427,26 @@ Less abstractly, there are a good number of **coding** and **non-coding** tasks 
 with:
 
 ### Give feedback
+
 Read through this document, let us know what you think, share. Feedback gladly received as an 
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can email fred.shone@arup.com.
-    
+
 ### Literature review
+
 We still need validation of the overall approach. Much of the methodology (detailed in this 
 document) is based on what can pragmatically be done, not what theoretically should be done. We'd
  appreciate links to relevant papers. Or even better we'd love a lit review - we'll add it to 
  this document.
- 
+
 ### Research
 
 We need help with designing useful features, applying them to real problems. As part of this we 
 need:
 
 #### Evidence and data for validation
+
 We know, for example, that many people have removed certain 
 activities from their daily plans, such as to school or university. But we don't know how many. We'd 
 like help finding and eventually applying **validation data** such as recent [change in 
@@ -458,7 +470,7 @@ But we'd like help to **find evidence** for other modifications that we think ar
 - defining key workers
 
 #### Evidence for technical methodology
-    
+
 Modifying a plan to remove an activity can cascade into other changes. In the case of 
 people with complex chains of activities, the removal of a single activity requires adjustments 
 to the remainder. Do people leave later of earlier if they have more time for example? The 
@@ -470,10 +482,12 @@ For a quick start at the code, checkout the
 [getting started notebook/s](https://github.com/arup-group/pam/tree/master/notebooks).
 
 #### Test
+
 If you've come this far - please consider cloning this repo, follow the installation instructions
  run the tests and maybe try out any example notebooks.
- 
+
 #### Dev
+
 We maintain a backlog of tasks, please in touch if you would like to contribute - or raise your own issue.
 
 We need help to **go faster**. We expect to deal with populations in the tens of millions. We would 
@@ -492,7 +506,6 @@ Help gladly received as an
 [issue](https://github.com/arup-group/pam/issues), on 
 [slack](https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA)
  or you can email fred.shone@arup.com.
- 
 
 ## Technical notes
 
