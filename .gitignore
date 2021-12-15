@@ -1,8 +1,13 @@
+**/examples/data/cambridge/
+**/examples/data/UKDA-5340-processed/
+**/examples/data/UKDA-5340-tab/
+**/examples/data/Counties_Unitary_Authorities_dec2017_full_extent/
+**/examples/data/.DS_Store
 pam.egg-info/
 *.xls
 *.xlsx
 *.pptx
-.DS_Store
+*.DS_Store
 .cache/
 .idea/
 .ipynb_checkpoints/
