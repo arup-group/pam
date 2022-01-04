@@ -1,4 +1,5 @@
 import pytest
+import random
 import pandas as pd
 import geopandas as gp
 from shapely.geometry import Polygon, Point, LinearRing, LineString, MultiLineString, MultiPolygon, MultiPoint
@@ -36,6 +37,13 @@ def fred():
         'gender': 1
     }
 
+@pytest.fixture
+def fixed_seed():
+    return 1
+
+@pytest.fixture
+def fixed_seed2():
+    return 10
 
 @pytest.fixture
 def bins():
@@ -53,6 +61,16 @@ def cat_joint_distribution():
     distribution = {
         'younger': {'male': 0, 'female': 0},
         'older': {'male': 0, 'female': 1}
+    }
+    return mapping, distribution
+
+@pytest.fixture
+def dog_joint_distribution():
+
+    mapping = ['agebin', 'gender']
+    distribution = {
+        'younger': {'male': 0.5, 'female': 0.0},
+        'older': {'male': 0.0, 'female': 0.5}
     }
     return mapping, distribution
 
@@ -85,6 +103,22 @@ def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(fred, c
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) == False
 
+def test_random_seed_1(fixed_seed):
+    random.seed(fixed_seed)
+    assert random.random() <= 0.5
+
+def test_random_seed_2(fixed_seed2):
+    random.seed(fixed_seed2)
+    assert random.random() >= 0.5
+
+def test_applt_discrete_joint_distribution_sampler_reproducibility_to_michael_carefully(michael, dog_joint_distribution, fixed_seed):
+    mapping, dist = dog_joint_distribution
+    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist, careful=True, seed=fixed_seed) == True
+
+def test_applt_discrete_joint_distribution_sampler_reproducibility_to_kasia_carefully(kasia, dog_joint_distribution, fixed_seed2):
+    mapping, dist = dog_joint_distribution
+    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist, careful=True, seed=fixed_seed2) == False
+
 
 testdata = [
     (0, 1.5, 0),
@@ -110,12 +144,30 @@ def test_freq_sampler_random_round(freq, sample, lower, upper):
     assert basic.freq_sample(freq, sample) in [lower, upper]
 
 
+testdata = [
+    (1, 1.5, 2),
+    (1, .5, 1),
+    (1, 0.0001, 0),
+    (1, 1.0001, 1),
+]
+@pytest.mark.parametrize("freq,sample,value", testdata)
+def test_freq_sampler_random_round_fixed_seed(freq, sample, value, fixed_seed):
+    assert basic.freq_sample(freq, sample, seed=fixed_seed) == value
+
 def test_sample_point_from_geoseries_of_polygons():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
     poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry)
     assert isinstance(sampler.sample_point_from_polygon(gdf.geometry[0]), Point)
+
+
+def test_sample_point_from_geoseries_of_polygons_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry,seed=fixed_seed)
+    assert list(sampler.sample_point_from_polygon(gdf.geometry[0]).coords[0]) == [0.13436424411240122, 0.8474337369372327]
 
 
 def test_sample_point_from_geoseries_of_polygons_invalid():
@@ -143,6 +195,14 @@ def test_random_sample_point_from_multipolygon():
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
     assert isinstance(sampler.sample_point_from_multipolygon(gdf.geometry[0]), Point)
 
+def test_random_sample_point_from_multipolygon_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    p2 = Polygon(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiPolygon([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
+    assert list(sampler.sample_point_from_multipolygon(gdf.geometry[0]).coords[0]) == [0.13436424411240122, 0.8474337369372327]
 
 def test_random_sample_point_from_multilinestring():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
@@ -152,6 +212,15 @@ def test_random_sample_point_from_multilinestring():
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
     assert isinstance(sampler.sample_point_from_multilinestring(gdf.geometry[0]), Point)
+
+def test_random_sample_point_from_multilinestring_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = LinearRing(((0,0), (1,0), (1,1), (0,1)))
+    p2 = LineString(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiLineString([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
+    assert list(sampler.sample_point_from_multipolygon(gdf.geometry[0]).coords[0]) == [10.134364244112401, 10.847433736937234]
 
 
 def test_random_sample_point_from_multipoint():
@@ -163,6 +232,15 @@ def test_random_sample_point_from_multipoint():
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0)
     assert isinstance(sampler.sample_point_from_multipoint(gdf.geometry[0]), Point)
 
+def test_random_sample_point_from_multipoint_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Point((0,0))
+    p2 = Point((10,10))
+    poly = MultiPoint([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
+    assert list(sampler.sample_point_from_multipolygon(gdf.geometry[0]).coords[0]) == [10.0, 10.0]
+
 
 def test_random_point_from_geoseries_of_polygons():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
@@ -170,6 +248,13 @@ def test_random_point_from_geoseries_of_polygons():
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry)
     assert isinstance(sampler.sample(0, None), Point)
+
+def test_random_point_from_geoseries_of_polygons_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    poly = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
+    sampler = spatial.RandomPointSampler(gdf.geometry, seed=fixed_seed)
+    assert sampler.sample(0, None).coords[0] == (0.13436424411240122, 0.8474337369372327)
 
 
 def test_random_point_from_geodataframe_of_polygons():
@@ -183,6 +268,16 @@ def test_random_point_from_geodataframe_of_polygons():
     assert isinstance(sampler.sample(1, None), Point)
     assert isinstance(sampler.sample(2, None), Point)
 
+def test_random_point_from_geodataframe_of_polygons_random_seed(fixed_seed):
+    df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
+    p1 = Polygon(((0,0), (1,0), (1,1), (0,1)))
+    p2 = Polygon(((10,10), (11,10), (11,11), (10,11)))
+    poly = MultiPolygon([p1, p2])
+    gdf = gp.GeoDataFrame(df, geometry=[p1, p2, poly])
+    sampler = spatial.RandomPointSampler(gdf, seed=fixed_seed)
+    assert sampler.sample(0, None).coords[0] == (0.13436424411240122, 0.8474337369372327)
+    assert sampler.sample(1, None).coords[0] == (10.134364244112401, 10.847433736937234)
+    assert sampler.sample(2, None).coords[0] == (0.13436424411240122, 0.8474337369372327)
 
 def test_random_point_from_geodataframe_of_lines():
     df = pd.DataFrame({1:[1,2,3], 2: [4,5,6]})
@@ -278,6 +373,23 @@ def test_facility_sampler_missing_activity_random_sample():
 
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ['home', 'work', 'education'])
     assert isinstance(sampler.sample(0, 'education'), Point)
+
+def test_facility_sampler_missing_activity_random_sample_fixed_seed(fixed_seed):
+
+    facility_df = pd.DataFrame({'id':[1,2,3,4], 'activity': ['home','work','home','education']})
+    points = [Point((1,1)), Point((1,1)), Point((3,3)), Point((3,3))]
+    facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
+
+    zones_df = pd.DataFrame({'a':[1,2,3], 'b': [4,5,6]})
+    polys = [
+        Polygon(((0,0), (0,2), (2,2), (2,0))),
+        Polygon(((2,2), (2,4), (4,4), (4,2))),
+        Polygon(((4,4), (4,6), (6,6), (6,4)))
+    ]
+    zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
+
+    sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ['home', 'work', 'education'],seed=fixed_seed)
+    assert sampler.sample(0, 'education').coords[0] == (0.26872848822480244, 1.6948674738744653)
 
 
 def test_facility_sampler_missing_activity_return_None():
@@ -391,4 +503,3 @@ def test_facility_sampler_weighted_distance():
     for i in range(20):
         sampled_facilities.append(sampler.sample(0, 'work', mode='walk', previous_duration=pd.Timedelta(minutes=15), previous_loc=Point(0,0)))
     assert pd.Series(sampled_facilities).value_counts(normalize=True).idxmax() == Point((1000,750))
-    
