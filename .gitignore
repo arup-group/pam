@@ -1,4 +1,9 @@
 pam.egg-info/
+
+/data/inputs/**
+
+*.mapbox_token
+*.DS_Store
 *.xls
 *.xlsx
 *.pptx
