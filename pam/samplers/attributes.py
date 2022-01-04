@@ -1,6 +1,4 @@
-# from random import random
 import random
-
 
 def bin_integer_transformer(features, target, bins, default=None):
     """
