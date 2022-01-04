@@ -28,11 +28,12 @@ class FacilitySampler:
         max_walk: float=None,
         transit_modes: list=None,
         expected_euclidean_speeds: dict=None,
-        activity_areas_path: str=None
+        activity_areas_path: str=None,
+        seed: int=None
         ):
         """
         Sampler object for facilities. optionally build a facility xml output (for MATSim).
-        Note that if a zone id is missing then the sampler will not be able to default to 
+        Note that if a zone id is missing then the sampler will not be able to default to
         random sample, so will either return None or fail as per the fail flag.
         :param facilities: facilities Geodataframe
         :param zones: zones Geodataframe
@@ -45,9 +46,10 @@ class FacilitySampler:
         :param list transit_modes: a list of PT modes. If not specified, the default list in variables.TRANSIT_MODES is used
         :param list expected_euclidean_speeds: a dictionary specifying the euclidean speed of the various modes (m/s). If not specified, the default list in variables.EXPECTED_EUCLIDEAN_SPEEDS is used
         :param str activity_areas_path: path to the activity areas shapefile (previously exported throught the FacilitySampler.export_activity_areas method)
+        :params int seed: seed number for reproducible results (None default - does not fix seed)
         """
         self.logger = logging.getLogger(__name__)
-        
+
         if activities is None:
             self.activities = list(set(facilities.activity))
         else:
@@ -70,7 +72,7 @@ class FacilitySampler:
         self.random_default = random_default
 
         if random_default:
-            self.random_sampler = RandomPointSampler(geoms=zones, fail=fail)
+            self.random_sampler = RandomPointSampler(geoms=zones, fail=fail, seed=seed)
 
         self.facilities = {}
         self.index_counter = 0
@@ -111,7 +113,7 @@ class FacilitySampler:
                 raise IndexError(f'Cannot find idx: {location_idx} in facilities sampler')
             self.logger.warning(f'Missing location idx:{location_idx}')
             return None, None
-        
+
         sampler = self.samplers[location_idx][activity]
 
         if sampler is None:
@@ -177,7 +179,7 @@ class FacilitySampler:
         for zone in set(activity_areas.index_right):
             sampler_dict[zone] = {}
             zone_facs = activity_areas_dict.get(zone, {})
-            
+
             for act in self.activities:
                 self.logger.debug(f"Building sampler for zone:{zone} act:{act}.")
                 facs = zone_facs.get(act, None)
@@ -241,14 +243,14 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
     """
     if isinstance(weights, pd.Series):
         return lambda mode = None, previous_duration = None, previous_loc = None: inf_yielder_weighted(
-                candidates = candidates, 
-                weights = weights, 
-                transit_distance = transit_distance, 
+                candidates = candidates,
+                weights = weights,
+                transit_distance = transit_distance,
                 max_walk = max_walk,
                 transit_modes=transit_modes,
                 expected_euclidean_speeds=expected_euclidean_speeds,
-                mode = mode, 
-                previous_duration = previous_duration, 
+                mode = mode,
+                previous_duration = previous_duration,
                 previous_loc = previous_loc
             )
     else:
@@ -287,10 +289,10 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
                     weights * variables.SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
                     weights
                 )
-                
+
             # if the last location has been passed to the sampler, normalise by (expected) distance
             if previous_loc is not None:
-                
+
                 # calculate euclidean distance between the last visited location and every candidate location
                 distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
 
@@ -300,14 +302,13 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
                 distance_weights = np.abs(distances - expected_distance)
                 distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid having zero weights
 
-                ## normalise weights by distance            
-                # weights = weights.values / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances 
-                # weights = weights.values / np.exp(distance_weights/distance_weights.max())          
+                ## normalise weights by distance
+                # weights = weights.values / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances
+                # weights = weights.values / np.exp(distance_weights/distance_weights.max())
                 # weights = weights / (1 + np.exp(1*(distance_weights - distance_weights.mean()))) # alternative formulation: logistic curve
-                # weights = weights.values / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve   
-                weights = weights.values / (distance_weights ** 2) # distance decay factor of 2 
+                # weights = weights.values / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve
+                weights = weights.values / (distance_weights ** 2) # distance decay factor of 2
 
             weights = weights / weights.sum() # probability weights should add up to 1
 
             yield candidates[np.random.choice(len(candidates), p = weights)]
-

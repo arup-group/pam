@@ -1,4 +1,5 @@
-from random import random
+# from random import random
+import random
 
 
 def bin_integer_transformer(features, target, bins, default=None):
@@ -17,7 +18,7 @@ def bin_integer_transformer(features, target, bins, default=None):
     return default
 
 
-def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False):
+def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False, seed:int=None):
     """
     Randomly sample from a joint distribution based some discrete features.
 
@@ -30,7 +31,11 @@ def discrete_joint_distribution_sampler(features, mapping, distribution, careful
     ['age', 'gender']
 
     Missing keys return False, unless careful is set to True, which will raise an error.
+
+    :params int seed: seed number for reproducible results (None default - does not fix seed)
     """
+    # Fix random seed
+    random.seed(seed)
     p = distribution
     for key in mapping:
         value = features.get(key)
@@ -43,5 +48,4 @@ def discrete_joint_distribution_sampler(features, mapping, distribution, careful
                 raise KeyError(f"Can not find feature for {key}: {value} in distribution: {p}")
             else:
                 return False
-
-    return random() <= p
+    return random.random() <= p
