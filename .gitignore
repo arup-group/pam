@@ -1,4 +1,6 @@
 pam.egg-info/
+/data/**
+*.mapbox_token
 *.xls
 *.xlsx
 *.pptx
