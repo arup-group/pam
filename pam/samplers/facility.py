@@ -50,6 +50,9 @@ class FacilitySampler:
         """
         self.logger = logging.getLogger(__name__)
 
+        # Fix random seed
+        self.seed = seed
+
         if activities is None:
             self.activities = list(set(facilities.activity))
         else:
@@ -189,10 +192,10 @@ class FacilitySampler:
                         # weighted sampler
                         weights = facs[weight_on]
                         transit_distance = facs['transit'] if max_walk is not None else None
-                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk, self.TRANSIT_MODES, self.EXPECTED_EUCLIDEAN_SPEEDS)
+                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk, self.TRANSIT_MODES, self.EXPECTED_EUCLIDEAN_SPEEDS, seed=self.seed)
                     else:
                         # simple sampler
-                        sampler_dict[zone][act] = inf_yielder(points)
+                        sampler_dict[zone][act] = inf_yielder(points,seed=self.seed)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
@@ -233,7 +236,7 @@ def euclidean_distance(p1, p2):
     return ((p1.x-p2.x)**2 + (p1.y-p2.y)**2)**0.5
 
 
-def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None, transit_modes=None, expected_euclidean_speeds=None):
+def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None, transit_modes=None, expected_euclidean_speeds=None, seed:int=None):
     """
     Redirect to the appropriate sampler.
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -251,21 +254,24 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
                 expected_euclidean_speeds=expected_euclidean_speeds,
                 mode = mode,
                 previous_duration = previous_duration,
-                previous_loc = previous_loc
+                previous_loc = previous_loc,
+                seed = seed
             )
     else:
-        return inf_yielder_simple(candidates)
+        return inf_yielder_simple(candidates, seed = seed)
 
-def inf_yielder_simple(candidates):
+def inf_yielder_simple(candidates, seed:int = None):
     """
     Endlessly yield shuffled candidate items.
     """
+    # Fix random seed
+    random.seed(seed)
     while True:
         random.shuffle(candidates)
         for c in candidates:
             yield c
 
-def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transit_modes, expected_euclidean_speeds, mode, previous_duration, previous_loc):
+def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transit_modes, expected_euclidean_speeds, mode, previous_duration, previous_loc, seed:int=None):
     """
     A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -275,8 +281,10 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
     :params str mode: transport mode used to access facility
     :params pd.Timedelta previous_duration: the time duration of the arriving leg
     :params shapely.Point previous_loc: the location of the last visited activity
+    :params int seed: seed of pseudorandom number generator (default None means that the seed remains unfixed)
     """
-
+    # Fix random seed
+    np.random.seed(seed)
     if isinstance(weights, pd.Series):
         # if a series of facility weights is provided, perform weighted sampling with replacement
         while True:
@@ -310,5 +318,4 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
                 weights = weights.values / (distance_weights ** 2) # distance decay factor of 2
 
             weights = weights / weights.sum() # probability weights should add up to 1
-
             yield candidates[np.random.choice(len(candidates), p = weights)]

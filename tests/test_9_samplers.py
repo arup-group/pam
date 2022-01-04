@@ -318,6 +318,16 @@ def test_inf_yield():
     assert set([next(sampler) for i in range(12)]) == set(candidates)
     assert len([i for i in [next(sampler) for i in range(12)] if i == 1]) == 4
 
+def test_inf_yield_simple_random_seed(fixed_seed):
+    candidates = [1,2,3]
+    sampler = facility.inf_yielder(candidates,seed=fixed_seed)
+    assert [next(sampler) for i in range(3)] == [2, 3, 1]
+
+def test_inf_yield_weighted_random_seed(fixed_seed):
+    candidates = [1,2,3]
+    weights = pd.Series(data=[0.1,0.2,0.7],index=[1,2,3])
+    sampler = facility.inf_yielder(candidates,weights=weights,seed=fixed_seed)
+    assert [next(sampler(None,None,None)) for i in range(3)] == [3, 3, 3]
 
 def test_facility_dict_build():
 
