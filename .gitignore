@@ -1,3 +1,9 @@
+
+*.swp
+*.mapbox_token
+
+data/inputs/cambridge/**
+
 **/examples/data/cambridge/
 **/examples/data/UKDA-5340-processed/
 **/examples/data/UKDA-5340-tab/
