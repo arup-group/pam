@@ -2,6 +2,7 @@
 *.swp
 *.mapbox_token
 
+data/inputs/Counties_Unitary_Authorities_dec2017_full_extent/**
 data/inputs/cambridge/**
 
 **/examples/data/cambridge/
@@ -48,3 +49,5 @@ facility_sampling.ipynb
 weighted-facility-sampling_demo.ipynb
 notebooks/Downloads/
 outputs/
+data/inputs/Counties_Unitary_Authorities_dec2017_full_extent/NTS_boundaries.geojson
+data/inputs/Counties_Unitary_Authorities_dec2017_full_extent/NTS_boundaries.geojson
