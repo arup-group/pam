@@ -944,6 +944,7 @@ class Leg(PlanComponent):
         self.end_time = end_time
         self._distance = distance
         self.freq = freq
+        # relevant for simulated plans
         self.service_id = service_id
         self.route_id = route_id
         self.o_stop = o_stop

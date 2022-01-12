@@ -71,7 +71,8 @@ class CharyparNagelPlanScorer:
             subpopulation (str): person attribute name for subpopulation, Defalts to "subpopulation".
             plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.
         """
-        cnfg = self.cnfg[person.attributes[subpopulation]]
+        subpop = person.attributes[subpopulation]
+        cnfg = self.cnfg[subpop]
         return self.score_plan(person.plan, plan_cost=plan_costs, cnfg=cnfg)
 
     def score_plan(

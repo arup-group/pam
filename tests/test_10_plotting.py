@@ -5,7 +5,7 @@ from shapely.geometry import Point, LineString
 from plotly.graph_objs import Scattermapbox
 
 from pam.plot.plans import build_person_df, build_cmap, build_person_travel_geodataframe, build_rgb_travel_cmap, \
-    plot_travel_plans
+    plot_travel_plans, plot_activities
 from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, plot_leg_times, \
     plot_population_comparisons, calculate_leg_duration_by_mode
 from .fixtures import person_heh, Steve, Hilda, instantiate_household_with
@@ -154,3 +154,11 @@ def test_plot_travel_plans_for_household(cyclist, pt_person):
     fig = hhld.plot_travel_plotly(mapbox_access_token='token')
     assert len(fig.data) == 3
     assert [dat.name for dat in fig.data] == ['bike', 'pt', 'transit_walk']
+
+
+def test_plot_activities(person_heh):
+    df = build_person_df(person_heh)
+    try:
+        fig = plot_activities(df)
+    except (RuntimeError, TypeError, NameError, OSError, ValueError):
+        pytest.fail("Error")
