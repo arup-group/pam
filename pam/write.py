@@ -624,6 +624,7 @@ def write_distance_benchmark(population, path=None):
         path=path
         )
 
+
 def write_mode_distance_benchmark(population, path=None):
     # number of trips by (euclidean) distance category and mode
     return write_benchmarks(
@@ -634,6 +635,7 @@ def write_mode_distance_benchmark(population, path=None):
         aggfunc = [sum],
         path=path
         )
+
 
 def write_duration_benchmark(population, path=None):
     # number of trips by duration
@@ -646,6 +648,7 @@ def write_duration_benchmark(population, path=None):
         path=path
         )
 
+
 def write_mode_duration_benchmark(population, path=None):
     # number of trips by duration and mode
     return write_benchmarks(
@@ -656,6 +659,7 @@ def write_mode_duration_benchmark(population, path=None):
         aggfunc = [sum],
         path=path
         )
+
 
 def write_departure_time_benchmark(population, path=None):
     # number of trips by hour of departure
@@ -668,6 +672,7 @@ def write_departure_time_benchmark(population, path=None):
         path=path
         )
 
+
 def write_mode_purpose_split_benchmark(population, path=None):
     # purpose split for each mode
     return write_benchmarks(
@@ -678,3 +683,29 @@ def write_mode_purpose_split_benchmark(population, path=None):
         colnames = ['mode','purpose','trips'],
         aggfunc = [sum]
         )
+
+
+def write_benchmarks_batch(population, path):
+    """
+    Write a batch of bms to the given directory location.
+
+    Args:
+        population (pam.core.Population)
+        path (str): destination directory
+
+    Returns:
+        List: list of bms
+    """
+    if not os.path.exists(path):
+        os.mkdir(path)
+    
+    bms = [
+        (write_distance_benchmark, "distance_benchmark.csv"),
+        (write_mode_distance_benchmark, "mode_distance_benchmark.csv"),
+        (write_duration_benchmark, "duration_benchmark.csv"),
+        (write_mode_duration_benchmark, "mode_duration_benchmark.csv"),
+        (write_departure_time_benchmark, "departure_time_benchmark.csv"),
+        (write_mode_purpose_split_benchmark, "mode_purpose_split_benchmark.csv")
+    ]
+
+    return [bm(population, os.path.join(path, name)) for bm, name in bms]
