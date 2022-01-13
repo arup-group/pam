@@ -3,6 +3,7 @@ from datetime import timedelta
 import logging
 from copy import copy
 
+from pam.plot import plans as plot
 import pam.utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
@@ -82,6 +83,9 @@ class Plan:
         if -self.length <= idx < self.length:
             return self.day[idx]
         return default
+
+    def plot(self, kwargs=None):
+        plot.plot_plan(self, kwargs)
 
     def activity_tours(self):
         tours = []
@@ -825,6 +829,10 @@ class PlanComponent:
     def duration(self):
         return self.end_time - self.start_time
 
+    @property
+    def hours(self):
+        return pam.utils.timedelta_to_hours(self.end_time - self.start_time)
+
     def shift_start_time(self, new_start_time):
         """
         Given a new start time, set start time, set end time based on previous duration and
@@ -848,6 +856,19 @@ class PlanComponent:
         self.end_time = new_end_time
         self.start_time = new_end_time - duration
         return self.start_time
+
+    def shift_duration(self, new_duration, new_start_time=None):
+        """
+        Given a new duration and optionally start time, set start time, set end time based on duration and
+        return new end time.
+        :param new_duration: timedelta
+        :param new_start_time: datetime
+        :return: datetime
+        """
+        if new_start_time is not None:
+            self.start_time = new_start_time
+        self.end_time = self.start_time + new_duration
+        return self.end_time
 
 
 class Activity(PlanComponent):
@@ -909,6 +930,7 @@ class Leg(PlanComponent):
             freq=None,
             o_stop=None,
             d_stop=None,
+            boarding_time=None,
             service_id=None,
             route_id=None,
             network_route=None,
@@ -927,6 +949,7 @@ class Leg(PlanComponent):
         self.route_id = route_id
         self.o_stop = o_stop
         self.d_stop = d_stop
+        self.boarding_time = boarding_time
         self.network_route = network_route
 
     def __str__(self):
