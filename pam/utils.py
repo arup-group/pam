@@ -241,7 +241,6 @@ def timedelta_to_hours(td):
     return td.total_seconds() / 3600
 
 
-
 def matsim_duration_to_hours(mt):
     mt = mt.split(":")
     return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())

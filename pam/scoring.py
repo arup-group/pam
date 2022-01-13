@@ -183,7 +183,7 @@ class CharyparNagelPlanScorer:
         transits = []
         in_transit = 0
         for activity in plan.activities:
-            if activity.act == "pt interaction":
+            if activity.act == "pt_interaction":
                 in_transit += 1
             else:
                 if in_transit:
@@ -252,8 +252,7 @@ class CharyparNagelPlanScorer:
         return 0.0
 
     def late_arrival_score(self, activity, cnfg) -> float:
-        if cnfg[activity.act].get("latestStartTime") is not None \
-        and cnfg.get("lateArrival"):
+        if cnfg[activity.act].get("latestStartTime") is not None and cnfg.get("lateArrival"):
             latest_start_time = utils.matsim_time_to_datetime(
                 cnfg[activity.act]["latestStartTime"]
                 )
