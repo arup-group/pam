@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -79,4 +80,4 @@ if __name__ == '__main__':
 
     with open('pam-performance-report.html', 'w') as report:
         report.write(html_report)
-    print("Performance report written to {}".format('pam-performance-report.html'))
+    print("Performance report written to {}".format(os.path.abspath('pam-performance-report.html')))

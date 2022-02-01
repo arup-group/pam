@@ -146,6 +146,7 @@ def correct_cyclist_geodataframe():
 
 def test_build_geodataframe_for_pt_person(pt_person, correct_pt_person_geodataframe):
     gdf = pt_person.build_travel_geodataframe()
+    gdf = gdf[correct_pt_person_geodataframe.columns]
     assert_frame_equal(gdf, correct_pt_person_geodataframe)
 
 
@@ -160,6 +161,7 @@ def test_building_geodataframe_with_reprojection(pt_person):
 
 def test_build_geodataframe_for_cyclist(cyclist, correct_cyclist_geodataframe):
     gdf = cyclist.build_travel_geodataframe()
+    gdf = gdf[correct_cyclist_geodataframe.columns]
     assert_frame_equal(gdf, correct_cyclist_geodataframe)
 
 
@@ -172,6 +174,7 @@ def test_build_hhld_geodataframe(pt_person, cyclist, correct_pt_person_geodatafr
     correct_gdf = correct_gdf.append(correct_cyclist_geodataframe)
     correct_gdf = correct_gdf.reset_index(drop=True)
     correct_gdf['hid'] = 'household_id'
+    gdf = gdf[correct_gdf.columns]
     assert_frame_equal(gdf, correct_gdf)
 
 
@@ -194,7 +197,7 @@ def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodatafra
     correct_gdf = correct_gdf.append(correct_cyclist_geodataframe)
 
     correct_gdf = correct_gdf.reset_index(drop=True)
-
+    gdf = gdf[correct_gdf.columns]
     assert_frame_equal(gdf, correct_gdf)
 
 

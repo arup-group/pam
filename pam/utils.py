@@ -43,6 +43,13 @@ def datetime_to_matsim_time(dt):
     return dt.strftime("%H:%M:%S")
 
 
+def matsim_time_to_datetime(string):
+    """
+    Convert matsim format time (08:27:33) to datetime.
+    """
+    return datetime.strptime(string, "%H:%M:%S")
+
+
 def timedelta_to_matsim_time(td):
     """
     Convert datetime timedelta object to matsim string format (00:00:00)
@@ -228,3 +235,12 @@ def safe_strptime(s):
         string = f"{days+1}-{hours:02d}" + s[-6:]
         return datetime.strptime(string, '%d-%H:%M:%S')
     return datetime.strptime(s, '%H:%M:%S')
+
+
+def timedelta_to_hours(td):
+    return td.total_seconds() / 3600
+
+
+def matsim_duration_to_hours(mt):
+    mt = mt.split(":")
+    return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())

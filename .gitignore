@@ -1,4 +1,6 @@
 pam.egg-info/
+/data/**
+*.mapbox_token
 *.xls
 *.xlsx
 *.pptx
@@ -8,8 +10,7 @@ pam.egg-info/
 .ipynb_checkpoints/
 .pytest_cache/
 __pycache__
-data/
-example_data/.DS_Store
+examples/data/example_data/.DS_Store
 https_github.com_fredshone.egg-info/
 __pycache__
 parser.ipynb

@@ -3,6 +3,7 @@ from datetime import timedelta
 import logging
 from copy import copy
 
+from pam.plot import plans as plot
 import pam.utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
@@ -82,6 +83,9 @@ class Plan:
         if -self.length <= idx < self.length:
             return self.day[idx]
         return default
+
+    def plot(self, kwargs=None):
+        plot.plot_plan(self, kwargs)
 
     def activity_tours(self):
         tours = []
@@ -520,11 +524,12 @@ class Plan:
             self.day.pop(seq)
             return seq-2, seq+1
 
-    def move_activity(self, seq, default='home'):
+    def move_activity(self, seq, default='home', new_mode='walk'):
         """
-        Changes Activity location
+        Changes Activity location and associated journeys
         :param seq:
 		:param default: 'home' or pam.activity.Location
+		:param new_mode: access/egress journey switching to this mode. Ie 'walk'
         :return: None
         """
         assert isinstance(self.day[seq], Activity)
@@ -542,12 +547,12 @@ class Plan:
             # if it's not the first activity of plan
             # update leg that leads to activity at seq
             self.day[seq - 1].end_location = new_location
-            self.mode_shift(seq - 1)
+            self.mode_shift(seq - 1, new_mode)
         if seq != len(self.day) - 1:
             # if it's not the last activity of plan
             # update leg that leads to activity at seq
             self.day[seq + 1].start_location = new_location
-            self.mode_shift(seq + 1)
+            self.mode_shift(seq + 1, new_mode)
 
     def fill_plan(self, idx_start, idx_end, default='home'):
         """
@@ -737,14 +742,14 @@ class Plan:
         
         return home_duration
 
-    def mode_shift(self, seq, target_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
+    def mode_shift(self, seq, new_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
         """
         Changes mode for a leg, along with any legs in the same tour.
         Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
         Default speed values are from National Travel Survey data (NTS0303)
 
         :params int seq: leg index in self.day
-        :params string target_mode: default mode shift
+        :params string new_mode: default mode shift
         :params dict mode_speed: a dictionary of average mode speeds (kph) 
         :params bool update_duration: whether to update leg durations based on mode speed
 
@@ -761,8 +766,8 @@ class Plan:
                     #if any of the trip ends belongs in the tour change the mode
                     if act_from.is_exact(other_act) or act_to.is_exact(other_act):
                         if update_duration:
-                            shift_duration = ((mode_speed[plan.mode]/mode_speed[target_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
-                        plan.mode = target_mode #change mode
+                            shift_duration = ((mode_speed[plan.mode] / mode_speed[new_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
+                        plan.mode = new_mode #change mode
                         if update_duration:
                             self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
         
@@ -824,6 +829,10 @@ class PlanComponent:
     def duration(self):
         return self.end_time - self.start_time
 
+    @property
+    def hours(self):
+        return pam.utils.timedelta_to_hours(self.end_time - self.start_time)
+
     def shift_start_time(self, new_start_time):
         """
         Given a new start time, set start time, set end time based on previous duration and
@@ -847,6 +856,19 @@ class PlanComponent:
         self.end_time = new_end_time
         self.start_time = new_end_time - duration
         return self.start_time
+
+    def shift_duration(self, new_duration, new_start_time=None):
+        """
+        Given a new duration and optionally start time, set start time, set end time based on duration and
+        return new end time.
+        :param new_duration: timedelta
+        :param new_start_time: datetime
+        :return: datetime
+        """
+        if new_start_time is not None:
+            self.start_time = new_start_time
+        self.end_time = self.start_time + new_duration
+        return self.end_time
 
 
 class Activity(PlanComponent):
@@ -908,6 +930,7 @@ class Leg(PlanComponent):
             freq=None,
             o_stop=None,
             d_stop=None,
+            boarding_time=None,
             service_id=None,
             route_id=None,
             network_route=None,
@@ -926,6 +949,7 @@ class Leg(PlanComponent):
         self.route_id = route_id
         self.o_stop = o_stop
         self.d_stop = d_stop
+        self.boarding_time = boarding_time
         self.network_route = network_route
 
     def __str__(self):

@@ -928,3 +928,200 @@ def person_work_home_work_not_closed():
 
     return person
 
+
+@pytest.fixture()
+def default_config():
+    return {
+        'mUM': 1,
+        'utilityOfLineSwitch': -1,
+        'performing': 6,
+        'waiting': -1,
+        'waitingPt': -2,
+        'lateArrival': -18,
+        'earlyDeparture': -1,
+        'work': {
+            'typicalDuration': '08:30:00',
+            'openingTime': '06:00:00',
+            'closingTime': '20:00:00',
+            'latestStartTime': '09:30:00',
+            'earliestEndTime': '16:00:00',
+            "minimalDuration": "08:00:00"
+            },
+        "education": {
+            "typicalDuration": "06:00:00",
+            "openingTime": "06:00:00",
+            "closingTime": "20:00:00",
+            "minimalDuration": "01:00:00"
+        },
+        'home': {
+            'typicalDuration': '12:00:00',
+            "minimalDuration": "08:00:00"
+            },
+        'shop': {
+            'typicalDuration': '00:30:00',
+            "minimalDuration": "00:10:00"
+            },
+        'car': {
+            'constant': -1,
+            'dailyMonetaryConstant': -1,
+            'dailyUtilityConstant': -1,
+            'marginalUtilityOfDistance': -1,
+            'marginalUtilityOfTravelling': -5,
+            'monetaryDistanceRate': -0.0005
+            },
+        'pt': {
+            'marginalUtilityOfTravelling': -5,
+            'monetaryDistanceRate': -0.001
+            },
+        'bus': {
+            'marginalUtilityOfTravelling': -5,
+            'monetaryDistanceRate': -0.001
+            },
+        'train': {
+            'marginalUtilityOfTravelling': -5,
+            'monetaryDistanceRate': -0.001
+            },
+        'walk': {
+            'marginalUtilityOfTravelling': -12,
+            },
+        'bike': {
+            'marginalUtilityOfTravelling': -12,
+            }
+        }
+
+
+@pytest.fixture()
+def config():
+    # includes the default name
+    return {
+        "default": {
+            'mUM': 1,
+            'utilityOfLineSwitch': -1,
+            'performing': 6,
+            'waiting': 0,
+            'waitingPt': -2,
+            'lateArrival': -18,
+            'earlyDeparture': -0,
+            'work': {
+                'typicalDuration': '08:30:00',
+                'openingTime': '06:00:00',
+                'closingTime': '20:00:00',
+                'latestStartTime': '09:30:00',
+                'earliestEndTime': '16:00:00',
+                "minimalDuration": "08:00:00"
+                },
+            "education": {
+                "typicalDuration": "06:00:00",
+                "openingTime": "06:00:00",
+                "closingTime": "20:00:00",
+                "minimalDuration": "01:00:00"
+            },
+            'home': {
+                'typicalDuration': '12:00:00',
+                "minimalDuration": "08:00:00"
+                },
+            'shop': {
+                'typicalDuration': '00:30:00',
+                "minimalDuration": "00:10:00"
+                },
+            'car': {
+                'constant': -0,
+                'dailyMonetaryConstant': -0,
+                'dailyUtilityConstant': -0,
+                'marginalUtilityOfDistance': -0,
+                'marginalUtilityOfTravelling': -5,
+                'monetaryDistanceRate': -0.0005
+                },
+            'pt': {
+                'marginalUtilityOfTravelling': -5,
+                'monetaryDistanceRate': -0.001
+                },
+            'bus': {
+                'marginalUtilityOfTravelling': -5,
+                'monetaryDistanceRate': -0.001
+                },
+            'train': {
+                'marginalUtilityOfTravelling': -5,
+                'monetaryDistanceRate': -0.001
+                },
+            'walk': {
+                'marginalUtilityOfTravelling': -12,
+                },
+            'bike': {
+                'marginalUtilityOfTravelling': -12,
+                }
+            }
+        }
+
+
+@pytest.fixture()
+def default_leg():
+    default_leg = Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5)
+    return default_leg
+
+
+@pytest.fixture()
+def pt_wait_leg():
+    pt_wait_leg = Leg(1, 'bus', 'a', 'b', start_time=mtdt(8 * 60), boarding_time=mtdt(8 * 60 + 5),
+                      end_time=mtdt(8 * 60 + 15), distance=5)
+    return pt_wait_leg
+
+
+@pytest.fixture()
+def car_leg():
+    car_leg = Leg(1, 'car', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5)
+    return car_leg
+
+
+@pytest.fixture()
+def short_activity():
+    short_activity = Activity(2, 'work', 'b', start_time=mtdt(8 * 60), end_time=mtdt(11 * 60))
+    return short_activity
+
+
+@pytest.fixture()
+def late_activity():
+    late_activity = Activity(2, 'work', 'b', start_time=mtdt(11 * 60), end_time=mtdt(18 * 60))
+    return late_activity
+
+
+@pytest.fixture()
+def Anna():
+    Anna = Person(4, attributes={'age': 6, 'job': 'education', 'gender': 'female', 'subpopulation': 'default'})
+    Anna.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    Anna.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30), distance=5))
+    Anna.add(Activity(2, 'education', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60)))
+    Anna.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5))
+    Anna.add(Activity(5, 'home', 'a', start_time=mtdt(16 * 60 + 30), end_time=END_OF_DAY))
+    return Anna
+
+
+@pytest.fixture()
+def AnnaPT():
+    AnnaPT = Person(4, attributes={'age': 6, 'job': 'education', 'gender': 'female', 'subpopulation': 'default'})
+    AnnaPT.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
+    AnnaPT.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 10), distance=1))
+    AnnaPT.add(Activity(1, 'pt_interaction', 'a', start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 10)))
+    AnnaPT.add(Leg(1, 'bus', 'a', 'b', start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 20), distance=5))
+    AnnaPT.add(Activity(1, 'pt_interaction', 'a', start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 20)))
+    AnnaPT.add(Leg(1, 'bus', 'a', 'b', start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 30), distance=5))
+    AnnaPT.add(Activity(1, 'pt_interaction', 'a', start_time=mtdt(8 * 60 + 30), end_time=mtdt(8 * 60 + 30)))
+    AnnaPT.add(Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60 + 30), end_time=mtdt(8 * 60 + 40), distance=1))
+    AnnaPT.add(Activity(2, 'education', 'b', start_time=mtdt(8 * 60 + 40), end_time=mtdt(16 * 60)))
+    AnnaPT.add(Leg(2, 'walk', 'b', 'c', start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5))
+    AnnaPT.add(Activity(5, 'home', 'a', start_time=mtdt(16 * 60 + 30), end_time=END_OF_DAY))
+    return AnnaPT
+
+
+@pytest.fixture()
+def early_activity():
+    early_activity = Activity(2, 'work', 'b', start_time=mtdt(4 * 60), end_time=mtdt(11 * 60))
+    return early_activity
+
+
+@pytest.fixture()
+def small_plan():
+    Henry = Person(4, attributes={'age': 6, 'job': 'education', 'gender': 'male', 'subpopulation': 'subpopulation'})
+    Henry.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(24 * 60)))
+    small_plan = Henry.plan
+    return small_plan

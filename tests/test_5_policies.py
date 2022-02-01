@@ -730,8 +730,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_tr
     assert Hilda.plan[3].mode != 'pt'
 
 
-@pytest.mark.xfail() # to follow mode shift implementation
-def test_MoveActivityToHomeLocation_performs_mode_shift_to_car_due_to_driving_licence():
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_car():
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': True})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -741,7 +740,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_car_due_to_driving_li
     hhld = instantiate_household_with([Hilda])
 
     policy = policies.PersonPolicy(
-        modifiers.MoveActivityTourToHomeLocation(['shop']),
+        modifiers.MoveActivityTourToHomeLocation(['shop'], new_mode='car'),
         probability_samplers.PersonProbability(1)
     )
     policy.apply_to(hhld)
@@ -750,7 +749,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_car_due_to_driving_li
     assert Hilda.plan[3].mode == 'car'
 
 
-def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk_due_to_lack_of_driving_licence():
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk():
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': False})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))

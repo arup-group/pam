@@ -48,14 +48,16 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
     - name: Push zip to S3
+      env:
+        AWS_S3_CODE_BUCKET: ${{ secrets.AWS_S3_CODE_BUCKET }}
       run: |
         echo $GITHUB_REPOSITORY
         echo $GITHUB_SHA
         echo $GITHUB_SHA > release
-        if test "$GITHUB_REF" = "refs/heads/master"; then
-          echo "Branch is master - no need to make a release name..."
+        if test "$GITHUB_REF" = "refs/heads/main"; then
+          echo "Branch is main - no need to make a release name..."
         else
-          echo "Making a release name for non-master branch..."
+          echo "Making a release name for non-main branch..."
           branch=`echo $GITHUB_REF | awk -F '/' '{print $3}'`
           release_name=`echo $GITHUB_ACTOR-$branch`
           echo "Release name: $release_name"
@@ -64,7 +66,7 @@ jobs:
         zip -r app.zip .
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
-        aws s3 cp app.zip s3://arup-arup-ukimea-tcs-dev-test-code/$repo_slug.zip
+        aws s3 cp app.zip "s3://$AWS_S3_CODE_BUCKET/$repo_slug.zip"
     - name: Send build success notification
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.0
