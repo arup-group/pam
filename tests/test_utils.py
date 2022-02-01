@@ -211,10 +211,10 @@ def test_building_travel_geodataframefor_person_wfh():
     assert_frame_equal(
         gdf,
         GeoDataFrame(
-            {'seq': {0: None}, 'purp': {0: None}, 'mode': {0: None}, 'start_location': {0: Point(1, 1)},
-             'end_location': {0: Point(1, 1)}, 'start_time': {0: None}, 'end_time': {0: None}, '_distance': {0: None},
-             'freq': {0: None}, 'service_id': {0: None}, 'route_id': {0: None}, 'o_stop': {0: None},
-             'd_stop': {0: None}, 'network_route': {0: None}, 'geometry': {0: Point(1, 1)}, 'pid': {0: '1'}}
+            {'_distance': {0: None}, 'boarding_time': {0: None}, 'd_stop': {0: None}, 'end_location': {0: Point(1, 1)},
+             'end_time': {0: None}, 'freq': {0: None}, 'geometry': {0: Point(1, 1)}, 'mode': {0: None},
+             'network_route': {0: None}, 'o_stop': {0: None}, 'pid': {0: '1'}, 'purp': {0: None}, 'route_id': {0: None},
+             'seq': {0: None}, 'service_id': {0: None}, 'start_location': {0: Point(1, 1)}, 'start_time': {0: None}}
         ).sort_index(axis=1))
 
 
