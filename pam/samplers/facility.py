@@ -311,11 +311,11 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
                 distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid having zero weights
 
                 ## normalise weights by distance
-                # weights = weights.values / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances
-                # weights = weights.values / np.exp(distance_weights/distance_weights.max())
+                # weights = weights / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances
+                # weights = weights / np.exp(distance_weights/distance_weights.max())
                 # weights = weights / (1 + np.exp(1*(distance_weights - distance_weights.mean()))) # alternative formulation: logistic curve
-                # weights = weights.values / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve
-                weights = weights.values / (distance_weights ** 2) # distance decay factor of 2
+                # weights = weights / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve
+                weights = weights / (distance_weights ** 2) # distance decay factor of 2
 
             weights = weights / weights.sum() # probability weights should add up to 1
             yield candidates[np.random.choice(len(candidates), p = weights)]
