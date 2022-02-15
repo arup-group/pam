@@ -297,6 +297,8 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
                     weights * variables.SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
                     weights
                 )
+            else:
+                weights = weights.values
 
             # if the last location has been passed to the sampler, normalise by (expected) distance
             if previous_loc is not None:
