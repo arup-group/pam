@@ -731,6 +731,26 @@ class Person:
     def __getitem__(self, val):
         return self.plan[val]
 
+    @property
+    def last_component(self):
+        if self.plan:
+            return self.plan[-1]
+        return None
+
+    @property
+    def last_activity(self):
+        acts = list(self.activities)
+        if acts:
+            return acts[-1]
+        return None
+
+    @property
+    def last_leg(self):
+        legs = list(self.legs)
+        if legs:
+            return legs[-1]
+        return None
+
     def __iter__(self):
         for component in self.plan:
             yield component
