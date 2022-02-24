@@ -3,12 +3,14 @@ import random
 import pickle
 import copy
 from collections import defaultdict
+from typing import Union
 
 import pam.activity as activity
 import pam.plot as plot
 from pam import write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam import variables
+from vehicle import Vehicle, ElectricVehicle
 
 
 class Population:
@@ -656,12 +658,13 @@ class Household:
 class Person:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, pid, freq=None, attributes={}, home_area=None):
+    def __init__(self, pid, freq=None, attributes={}, home_area=None, vehicle: Union[Vehicle, ElectricVehicle] = None):
         self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
+        self.vehicle = vehicle
 
     @property
     def freq(self):
@@ -675,6 +678,9 @@ class Person:
 
     def set_freq(self, freq):
         self.person_freq = freq
+
+    def assign_vehicle(self, vehicle: Union[Vehicle, ElectricVehicle]):
+        self.vehicle = vehicle
 
     @property
     def av_trip_freq(self):
