@@ -8,9 +8,9 @@ from typing import Union
 import pam.activity as activity
 import pam.plot as plot
 from pam import write
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, PAMVehicleIdError
 from pam import variables
-from vehicle import Vehicle, ElectricVehicle
+from pam.vehicle import Vehicle, ElectricVehicle
 
 
 class Population:
@@ -664,7 +664,8 @@ class Person:
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
-        self.vehicle = vehicle
+        if vehicle:
+            self.assign_vehicle(vehicle)
 
     @property
     def freq(self):
@@ -680,6 +681,8 @@ class Person:
         self.person_freq = freq
 
     def assign_vehicle(self, vehicle: Union[Vehicle, ElectricVehicle]):
+        if vehicle.id != self.pid:
+            raise PAMVehicleIdError(f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
         self.vehicle = vehicle
 
     @property
