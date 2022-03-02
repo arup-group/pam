@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Union
 
+
 # Vehicle definition Classes based on MATSim DTD file:
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v1.0.xsd
 

@@ -10,7 +10,7 @@ import pam.plot as plot
 from pam import write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, PAMVehicleIdError
 from pam import variables
-from pam.vehicle import Vehicle, ElectricVehicle
+from pam.vehicle import Vehicle
 
 
 class Population:
@@ -47,7 +47,7 @@ class Population:
     def population(self):
         self.logger.info("Returning un weighted person count.")
         return len([1 for hid, pid, person in self.people()])
-    
+
     def __len__(self):
         return self.population
 
@@ -331,7 +331,7 @@ class Population:
             unique_locations = {(household.location.area, 'home'): home_loc}
 
             for __, person in household.people.items():
-                
+
                 for act in person.activities:
 
                     # remove escort prefix from activity types.
@@ -339,11 +339,11 @@ class Population:
                         target_act = act.act[(len(joint_trips_prefix)):]
                     else:
                         target_act = act.act
-                    
+
                     if (act.location.area, target_act) in unique_locations:
                         location = unique_locations[(act.location.area, target_act)]
                         act.location = location
-                            
+
                     else:
                         location = activity.Location(
                             area=act.location.area,
@@ -352,7 +352,7 @@ class Population:
                         if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
                             # short-term activities, such as shopping can visit multiple locations in the same zone
-                            unique_locations[(act.location.area, target_act)] = location   
+                            unique_locations[(act.location.area, target_act)] = location
                         act.location = location
 
                 # complete the alotting activity locations to the trip starts and ends.
@@ -370,10 +370,10 @@ class Population:
         It is generally slower than sample_locs, as it loops through both activities and legs.
         :params list long_term activities: a list of activities for which location is only assigned once (per zone)
         :params str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
-        """        
+        """
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
-        
+
 
         for _, household in self.households.items():
             home_loc = activity.Location(
@@ -388,7 +388,7 @@ class Population:
                 mode = None
                 previous_duration = None
                 previous_loc = None
-                
+
                 for idx, component in enumerate(person.plan):
                     # loop through all plan elements
 
@@ -409,16 +409,16 @@ class Population:
                         if (act.location.area, target_act) in unique_locations:
                             location = unique_locations[(act.location.area, target_act)]
                             act.location = location
-                                
+
                         else:
                             location = activity.Location(
                                 area=act.location.area,
                                 loc=sampler.sample(act.location.area, target_act, mode = mode, previous_duration = previous_duration, previous_loc = previous_loc)
                             )
                             if target_act in long_term_activities:
-                                unique_locations[(act.location.area, target_act)] = location                                
+                                unique_locations[(act.location.area, target_act)] = location
                             act.location = location
-                        
+
                         previous_loc = location.loc # keep track of previous location
 
                 # complete the alotting activity locations to the trip starts and ends.
@@ -438,7 +438,7 @@ class Household:
         self.people = {}
         self.attributes = attributes
         self.hh_freq=freq
-        if area is not None or loc is not None: 
+        if area is not None or loc is not None:
             self._location = activity.Location(area=area, loc=loc)
         else:
             self._location = None
@@ -658,7 +658,7 @@ class Household:
 class Person:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, pid, freq=None, attributes={}, home_area=None, vehicle: Union[Vehicle, ElectricVehicle] = None):
+    def __init__(self, pid, freq=None, attributes={}, home_area=None, vehicle: Vehicle = None):
         self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
@@ -680,7 +680,7 @@ class Person:
     def set_freq(self, freq):
         self.person_freq = freq
 
-    def assign_vehicle(self, vehicle: Union[Vehicle, ElectricVehicle]):
+    def assign_vehicle(self, vehicle: Vehicle):
         if vehicle.id != self.pid:
             raise PAMVehicleIdError(f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
         self.vehicle = vehicle
@@ -700,7 +700,7 @@ class Person:
         if None in frequencies:
             return None
         return sum(frequencies) / len(frequencies)
-        
+
     @property
     def home(self):
         if self.plan:
