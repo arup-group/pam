@@ -151,6 +151,12 @@ class Population:
     def vehicle_types(self):
         return {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
 
+    def electric_vehicle_charger_types(self):
+        chargers = set()
+        for v in self.electric_vehicles():
+            chargers |= set(v.charger_types.split(','))
+        return chargers
+
     def random_household(self):
         return self.households[random.choice(list(self.households))]
 

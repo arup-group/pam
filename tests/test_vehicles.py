@@ -1,10 +1,11 @@
 import pytest
 import lxml
 import os
+import logging
 from pam.core import Person, Population, Household
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam import PAMVehicleIdError
-from pam.write import write_all_vehicles, write_electric_vehicles
+from pam.write import write_vehicles, write_all_vehicles, write_electric_vehicles
 
 
 def test_instantiating_vehicle_without_id_fails():
@@ -99,13 +100,12 @@ def test_population_with_electric_vehicles_has_vehicles(population_with_electric
     assert population_with_electric_vehicles.has_vehicles
 
 
-def test_population_with_electric_vehicles_has_elestric_vehicles(population_with_electric_vehicles):
+def test_population_with_electric_vehicles_has_electric_vehicles(population_with_electric_vehicles):
     assert population_with_electric_vehicles.has_electric_vehicles
 
 
 def test_extracting_vehicles_from_population(population_with_electric_vehicles):
-    pop_vehicles = population_with_electric_vehicles.vehicles()
-    assert pop_vehicles == {
+    assert population_with_electric_vehicles.vehicles() == {
         Vehicle('Vladya'),
         Vehicle('Stevie'),
         ElectricVehicle('Eddy')
@@ -123,18 +123,25 @@ def test_sorting_vehicles_list(population_with_electric_vehicles):
 
 
 def test_extracting_electric_vehicles_from_population(population_with_electric_vehicles):
-    pop_vehicles = population_with_electric_vehicles.electric_vehicles()
-    assert pop_vehicles == {
+    assert population_with_electric_vehicles.electric_vehicles() == {
         ElectricVehicle('Eddy')
     }
 
 
 def test_extracting_vehicle_types_from_population(population_with_electric_vehicles):
-    pop_vehicle_types = population_with_electric_vehicles.vehicle_types()
-    assert pop_vehicle_types == {
+    assert population_with_electric_vehicles.vehicle_types() == {
         VehicleType('defaultVehicleType'),
         VehicleType('defaultElectricVehicleType')
     }
+
+
+def test_extracting_unique_electric_charger_types_from_population(population_with_electric_vehicles):
+    hhld = Household(hid='4')
+    hhld.add(Person('Micky Faraday',
+                    vehicle=ElectricVehicle(charger_types='other,tesla', id='Micky Faraday')))
+    population_with_electric_vehicles.add(hhld)
+
+    assert population_with_electric_vehicles.electric_vehicle_charger_types() == {'default', 'other', 'tesla'}
 
 
 @pytest.fixture
@@ -217,3 +224,46 @@ def test_generates_electric_vehicles_xml_file_containing_expected_vehicles(tmpdi
 
     vehicles = xml_obj.findall('vehicle')
     assert expected_vehicles == [v.attrib for v in vehicles]
+
+
+def test_generating_vehicle_files_from_nonelectric_population_produces_both_files(tmpdir,
+                                                                                  population_with_default_vehicles):
+    expected_all_vehicles_file = os.path.join(tmpdir, 'all_vehicles.xml')
+    expected_electric_vehicles_file = os.path.join(tmpdir, 'electric_vehicles.xml')
+
+    assert not os.path.exists(expected_all_vehicles_file)
+    assert not os.path.exists(expected_electric_vehicles_file)
+
+    write_vehicles(tmpdir, population_with_default_vehicles)
+
+    assert os.path.exists(expected_all_vehicles_file)
+    assert not os.path.exists(expected_electric_vehicles_file)
+
+
+def test_generating_vehicle_files_from_electric_population_produces_both_files(tmpdir,
+                                                                               population_with_electric_vehicles):
+    expected_all_vehicles_file = os.path.join(tmpdir, 'all_vehicles.xml')
+    expected_electric_vehicles_file = os.path.join(tmpdir, 'electric_vehicles.xml')
+
+    assert not os.path.exists(expected_all_vehicles_file)
+    assert not os.path.exists(expected_electric_vehicles_file)
+
+    write_vehicles(tmpdir, population_with_electric_vehicles)
+
+    assert os.path.exists(expected_all_vehicles_file)
+    assert os.path.exists(expected_electric_vehicles_file)
+
+
+def test_generating_vehicle_files_from_electric_population_informs_of_charger_types(tmpdir,
+                                                                                    population_with_electric_vehicles,
+                                                                                    caplog):
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.INFO)
+
+    write_vehicles(tmpdir, population_with_electric_vehicles)
+
+    recs = [rec for rec in caplog.records if 'electric' in rec.message]
+    last_electric_message = recs[-1]
+    assert last_electric_message.levelname == 'INFO'
+    assert 'unique charger types: ' in last_electric_message.message
+    assert "{'default'}" in last_electric_message.message

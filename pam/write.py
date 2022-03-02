@@ -734,11 +734,17 @@ def write_vehicles(output_dir,
             file_name=all_vehicles_filename)
         if population.has_electric_vehicles:
             logging.info('Population includes electric vehicles')
+            electric_vehicles = population.electric_vehicles()
             write_electric_vehicles(
                 output_dir,
-                vehicles=population.electric_vehicles(),
+                vehicles=electric_vehicles,
                 file_name=electric_vehicles_filename
             )
+            electric_vehicle_charger_types = population.electric_vehicle_charger_types()
+            logging.info(f'Found {len(electric_vehicles)} electric vehicles '
+                         f'with unique charger types: {electric_vehicle_charger_types}. '
+                         "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
+                         "if you're running a simulation using org.matsim.contrib.ev")
         else:
             logging.info('Provided population does not have electric vehicles')
     else:
