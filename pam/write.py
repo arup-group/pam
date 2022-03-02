@@ -1,13 +1,14 @@
 import os
 from datetime import datetime
-import lxml
+import logging
 import pandas as pd
 import geopandas as gp
 from lxml import etree as et
 from shapely.geometry import Point, LineString
-from typing import Tuple, Union, Optional, Callable, List
+from typing import Tuple, Optional, Callable, List, Set
 
 from .activity import Activity, Leg
+from .vehicle import Vehicle, ElectricVehicle, VehicleType
 from .utils import datetime_to_matsim_time as dttm
 from .utils import timedelta_to_matsim_time as tdtm
 from .utils import minutes_to_datetime as mtdt
@@ -100,6 +101,7 @@ def write_matsim(
         population,
         plans_path : str,
         attributes_path : Optional[str] = None,
+        vehicles_dir : Optional[str] = None,
         version : int = 11,
         comment : Optional[str] = None,
         household_key : Optional[str] = 'hid'
@@ -112,6 +114,7 @@ def write_matsim(
     :param population: core.Population, population to be writen to disk
     :param plans_path: str, output path (.xml or .xml.gz)
     :param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
+    :param vehicles_dir: {str,None}, default None, path to output directory for vehicle files
     :param version: int {11,12}, matsim version, default 11
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
@@ -131,6 +134,14 @@ def write_matsim(
         write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
     else:
         raise UserWarning("Version must be 11 or 12.")
+    # write vehicles
+    if population.has_vehicles:
+        logging.info('Population includes vehicles')
+        if vehicles_dir is None:
+            raise UserWarning("Please provide an vehicles_dir to write vehicle files")
+        else:
+            logging.info(f'Saving vehicles to {vehicles_dir}')
+            write_vehicles(output_dir=vehicles_dir, population=population)
 
 
 def write_matsim_v12(
@@ -709,3 +720,45 @@ def write_benchmarks_batch(population, path):
     ]
 
     return [bm(population, os.path.join(path, name)) for bm, name in bms]
+
+
+def write_vehicles(output_dir,
+                   population,
+                   all_vehicles_filename="all_vehicles.xml",
+                   electric_vehicles_filename="electric_vehicles.xml"):
+    if population.has_vehicles:
+        write_all_vehicles(
+            output_dir,
+            vehicles=population.vehicles(),
+            vehicle_types=population.vehicle_types(),
+            file_name=all_vehicles_filename)
+        if population.has_electric_vehicles:
+            logging.info('Population includes electric vehicles')
+            write_electric_vehicles(
+                output_dir,
+                vehicles=population.electric_vehicles(),
+                file_name=electric_vehicles_filename
+            )
+        else:
+            logging.info('Provided population does not electric vehicles')
+    else:
+        logging.warning('Provided population does not have vehicles')
+
+
+def write_all_vehicles(
+        output_dir,
+        vehicles: Set[Vehicle],
+        vehicle_types: Set[VehicleType],
+        file_name="all_vehicles.xml"):
+    path = os.path.join(output_dir, file_name)
+    logging.info(f'Writing all vehicles to {path}')
+    pass
+
+
+def write_electric_vehicles(
+        output_dir,
+        vehicles: Set[ElectricVehicle],
+        file_name="electric_vehicles.xml"):
+    path = os.path.join(output_dir, file_name)
+    logging.info(f'Writing electric vehicles to {path}')
+    pass
