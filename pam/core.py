@@ -10,7 +10,7 @@ import pam.plot as plot
 from pam import write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, PAMVehicleIdError
 from pam import variables
-from pam.vehicle import Vehicle
+from pam.vehicle import Vehicle, ElectricVehicle
 
 
 class Population:
@@ -138,8 +138,15 @@ class Population:
     def has_vehicles(self):
         return bool(self.vehicles())
 
+    @property
+    def has_electric_vehicles(self):
+        return bool(self.electric_vehicles())
+
     def vehicles(self):
         return {p.vehicle for _, _, p in self.people() if p.vehicle is not None}
+
+    def electric_vehicles(self):
+        return {v for v in self.vehicles() if isinstance(v, ElectricVehicle)}
 
     def vehicle_types(self):
         return {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}

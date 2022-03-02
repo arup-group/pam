@@ -88,8 +88,16 @@ def test_population_with_default_vehicles_has_vehicles(population_with_default_v
     assert population_with_default_vehicles.has_vehicles
 
 
+def test_population_with_default_vehicles_does_not_have_electric_vehicles(population_with_default_vehicles):
+    assert not population_with_default_vehicles.has_electric_vehicles
+
+
 def test_population_with_electric_vehicles_has_vehicles(population_with_electric_vehicles):
     assert population_with_electric_vehicles.has_vehicles
+
+
+def test_population_with_electric_vehicles_has_elestric_vehicles(population_with_electric_vehicles):
+    assert population_with_electric_vehicles.has_electric_vehicles
 
 
 def test_extracting_vehicles_from_population(population_with_electric_vehicles):
@@ -99,6 +107,14 @@ def test_extracting_vehicles_from_population(population_with_electric_vehicles):
         Vehicle('Stevie'),
         ElectricVehicle('Eddy')
     }
+
+
+def test_extracting_electric_vehicles_from_population(population_with_electric_vehicles):
+    pop_vehicles = population_with_electric_vehicles.electric_vehicles()
+    assert pop_vehicles == {
+        ElectricVehicle('Eddy')
+    }
+
 
 def test_extracting_vehicle_types_from_population(population_with_electric_vehicles):
     pop_vehicle_types = population_with_electric_vehicles.vehicle_types()
