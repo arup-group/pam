@@ -109,6 +109,16 @@ def test_extracting_vehicles_from_population(population_with_electric_vehicles):
     }
 
 
+def test_sorting_vehicles_list(population_with_electric_vehicles):
+    pop_vehicles = list(population_with_electric_vehicles.vehicles())
+    pop_vehicles.sort()
+    assert pop_vehicles == [
+        ElectricVehicle('Eddy'),
+        Vehicle('Stevie'),
+        Vehicle('Vladya')
+    ]
+
+
 def test_extracting_electric_vehicles_from_population(population_with_electric_vehicles):
     pop_vehicles = population_with_electric_vehicles.electric_vehicles()
     assert pop_vehicles == {

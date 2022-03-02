@@ -33,6 +33,9 @@ class Vehicle:
     id: str
     vehicle_type: VehicleType = VehicleType()
 
+    def __lt__(self, other):
+        return self.id < other.id
+
 
 @dataclass(frozen=True)
 class ElectricVehicle(Vehicle):
