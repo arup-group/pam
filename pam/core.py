@@ -134,6 +134,16 @@ class Population:
                 attributes[k] = None
         return dict(attributes)
 
+    @property
+    def has_vehicles(self):
+        return bool(self.vehicles())
+
+    def vehicles(self):
+        return {p.vehicle for _, _, p in self.people() if p.vehicle is not None}
+
+    def vehicle_types(self):
+        return {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
+
     def random_household(self):
         return self.households[random.choice(list(self.households))]
 
@@ -664,6 +674,7 @@ class Person:
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
         self.home_area = home_area
+        self.vehicle = None
         if vehicle:
             self.assign_vehicle(vehicle)
 

@@ -6,13 +6,13 @@ from typing import Union
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v1.0.xsd
 
 
-@dataclass
+@dataclass(frozen=True)
 class CapacityType:
     seats: int = 4  # persons
     standingRoom: int = 0  # persons
 
 
-@dataclass
+@dataclass(frozen=True)
 class VehicleType:
     id: str = 'defaultVehicleType'
     length: float = 7.5  # metres
@@ -28,14 +28,15 @@ class VehicleType:
     doorOperation: str = 'serial'
 
 
-@dataclass
+@dataclass(frozen=True)
 class Vehicle:
     id: str
     vehicle_type: VehicleType = VehicleType()
 
 
-@dataclass
+@dataclass(frozen=True)
 class ElectricVehicle(Vehicle):
+    vehicle_type: VehicleType = VehicleType(id='defaultElectricVehicleType')
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = 'default'  # supported charger types; comma-separated list: 'default,other'
