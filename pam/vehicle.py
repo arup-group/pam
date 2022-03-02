@@ -13,9 +13,8 @@ class CapacityType:
     standingRoomInPersons: int = 0  # persons
 
     def to_xml(self, xf):
-        with xf.element("attributes"):
-            et.Element("attribute", {'seats': str(self.seats)})
-            et.Element("attribute", {'standingRoomInPersons': str(self.standingRoomInPersons)})
+        xf.write(et.Element("capacity",
+                            {'seats': str(self.seats), 'standingRoomInPersons': str(self.standingRoomInPersons)}))
 
 
 @dataclass(frozen=True)
@@ -28,18 +27,15 @@ class VehicleType:
     description: str = 'personal_vehicle'
     passengerCarEquivalents: float = 1.0
     flowEfficiencyFactor: float = 1.0
-    maximumVelocity: Union[float, str] = 'INF'  # meterPerSecond
 
     def to_xml(self, xf):
         with xf.element("vehicleType", {'id': self.id}):
             rec = et.Element("description")
             rec.text = self.description
             xf.write(rec)
-            with xf.element("capacity"):
-                self.capacity.to_xml(xf)
+            self.capacity.to_xml(xf)
             xf.write(et.Element("length", {'meter': str(self.length)}))
             xf.write(et.Element("width", {'meter': str(self.width)}))
-            xf.write(et.Element("maximumVelocity", {'meterPerSecond': str(self.maximumVelocity)}))
             xf.write(et.Element("passengerCarEquivalents", {'pce': str(self.passengerCarEquivalents)}))
             xf.write(et.Element("networkMode", {'networkMode': str(self.networkMode)}))
             xf.write(et.Element("flowEfficiencyFactor", {'factor': str(self.flowEfficiencyFactor)}))
