@@ -781,4 +781,4 @@ def write_electric_vehicles(
             doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">')
         with xf.element("vehicles"):
             for vehicle in vehicles:
-                vehicle.to_xml(xf)
+                vehicle.to_e_xml(xf)

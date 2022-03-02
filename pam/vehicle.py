@@ -64,7 +64,7 @@ class ElectricVehicle(Vehicle):
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = 'default'  # supported charger types; comma-separated list: 'default,other'
 
-    def to_xml(self, xf):
+    def to_e_xml(self, xf):
         xf.write(
             et.Element("vehicle",
                        {'id': str(self.id), 'battery_capacity': str(self.battery_capacity),
