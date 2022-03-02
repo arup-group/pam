@@ -1,7 +1,10 @@
 import pytest
+import lxml
+import os
 from pam.core import Person, Population, Household
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam import PAMVehicleIdError
+from pam.write import write_all_vehicles
 
 
 def test_instantiating_vehicle_without_id_fails():
@@ -132,3 +135,53 @@ def test_extracting_vehicle_types_from_population(population_with_electric_vehic
         VehicleType('defaultVehicleType'),
         VehicleType('defaultElectricVehicleType')
     }
+
+
+@pytest.fixture
+def vehicles_v2_xsd():
+    xsd_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', 'pam', "fixtures", "dtd", "vehicleDefinitions_v2.0.xsd"))
+
+    xml_schema_doc = lxml.etree.parse(xsd_path)
+    yield lxml.etree.XMLSchema(xml_schema_doc)
+
+
+def test_writing_all_vehicles_results_in_valid_xml_file(tmpdir, population_with_electric_vehicles, vehicles_v2_xsd):
+    write_all_vehicles(tmpdir, population_with_electric_vehicles.vehicles(),
+                       population_with_electric_vehicles.vehicle_types())
+
+    generated_file_path = os.path.join(tmpdir, 'all_vehicles.xml')
+    xml_obj = lxml.etree.parse(generated_file_path)
+    vehicles_v2_xsd.assertValid(xml_obj)
+
+
+def test_generates_matsim_vehicles_xml_file_containing_expected_vehicle_types(tmpdir,
+                                                                              population_with_electric_vehicles):
+    expected_vehicle_types = {'defaultVehicleType', 'defaultElectricVehicleType'}
+
+    write_all_vehicles(tmpdir, population_with_electric_vehicles.vehicles(),
+                       population_with_electric_vehicles.vehicle_types())
+
+    generated_file_path = os.path.join(tmpdir, 'all_vehicles.xml')
+    xml_obj = lxml.etree.parse(generated_file_path)
+
+    vehicle_types = xml_obj.findall('{http://www.matsim.org/files/dtd}vehicleType')
+    vehicle_types = set(vehicle_type.get('id') for vehicle_type in vehicle_types)
+    assert expected_vehicle_types == vehicle_types
+
+
+def test_generates_matsim_vehicles_xml_file_containing_expected_vehicles(tmpdir, population_with_electric_vehicles):
+    expected_vehicles = {
+        'Eddy': 'defaultElectricVehicleType',
+        'Stevie': 'defaultVehicleType',
+        'Vladya': 'defaultVehicleType'
+    }
+
+    write_all_vehicles(tmpdir, population_with_electric_vehicles.vehicles(),
+                       population_with_electric_vehicles.vehicle_types())
+
+    generated_file_path = os.path.join(tmpdir, 'all_vehicles.xml')
+    xml_obj = lxml.etree.parse(generated_file_path)
+
+    vehicles = xml_obj.findall('{http://www.matsim.org/files/dtd}vehicle')
+    assert expected_vehicles == {vehicle.get('id'): vehicle.get('type') for vehicle in vehicles}

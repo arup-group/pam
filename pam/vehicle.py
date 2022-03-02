@@ -1,15 +1,21 @@
 from dataclasses import dataclass
 from typing import Union
+from lxml import etree as et
 
 
 # Vehicle definition Classes based on MATSim DTD file:
-# https://www.matsim.org/files/dtd/vehicleDefinitions_v1.0.xsd
+# https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
 
 
 @dataclass(frozen=True)
 class CapacityType:
     seats: int = 4  # persons
-    standingRoom: int = 0  # persons
+    standingRoomInPersons: int = 0  # persons
+
+    def to_xml(self, xf):
+        with xf.element("attributes"):
+            et.Element("attribute", {'seats': str(self.seats)})
+            et.Element("attribute", {'standingRoomInPersons': str(self.standingRoomInPersons)})
 
 
 @dataclass(frozen=True)
@@ -23,9 +29,20 @@ class VehicleType:
     passengerCarEquivalents: float = 1.0
     flowEfficiencyFactor: float = 1.0
     maximumVelocity: Union[float, str] = 'INF'  # meterPerSecond
-    accessTime: float = 1.0  # secondsPerPerson
-    egressTime: float = 1.0  # secondsPerPerson
-    doorOperation: str = 'serial'
+
+    def to_xml(self, xf):
+        with xf.element("vehicleType", {'id': self.id}):
+            rec = et.Element("description")
+            rec.text = self.description
+            xf.write(rec)
+            with xf.element("capacity"):
+                self.capacity.to_xml(xf)
+            xf.write(et.Element("length", {'meter': str(self.length)}))
+            xf.write(et.Element("width", {'meter': str(self.width)}))
+            xf.write(et.Element("maximumVelocity", {'meterPerSecond': str(self.maximumVelocity)}))
+            xf.write(et.Element("passengerCarEquivalents", {'pce': str(self.passengerCarEquivalents)}))
+            xf.write(et.Element("networkMode", {'networkMode': str(self.networkMode)}))
+            xf.write(et.Element("flowEfficiencyFactor", {'factor': str(self.flowEfficiencyFactor)}))
 
 
 @dataclass(frozen=True)

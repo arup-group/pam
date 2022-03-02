@@ -740,7 +740,7 @@ def write_vehicles(output_dir,
                 file_name=electric_vehicles_filename
             )
         else:
-            logging.info('Provided population does not electric vehicles')
+            logging.info('Provided population does not have electric vehicles')
     else:
         logging.warning('Provided population does not have vehicles')
 
@@ -752,7 +752,21 @@ def write_all_vehicles(
         file_name="all_vehicles.xml"):
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing all vehicles to {path}')
-    pass
+
+    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+        xf.write_declaration()
+        vehicleDefinitions_attribs = {
+            'xmlns': "http://www.matsim.org/files/dtd",
+            'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance",
+            'xsi:schemaLocation': "http://www.matsim.org/files/dtd "
+                                  "http://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd"}
+        with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
+            for vehicle_type in set(vehicle_types):
+                vehicle_type.to_xml(xf)
+            vehicles = list(vehicles)
+            vehicles.sort()
+            for vehicle in vehicles:
+                xf.write(et.Element("vehicle", {'id': vehicle.id, 'type': vehicle.vehicle_type.id}))
 
 
 def write_electric_vehicles(
