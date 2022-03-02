@@ -766,7 +766,7 @@ def write_all_vehicles(
             vehicles = list(vehicles)
             vehicles.sort()
             for vehicle in vehicles:
-                xf.write(et.Element("vehicle", {'id': vehicle.id, 'type': vehicle.vehicle_type.id}))
+                vehicle.to_xml(xf)
 
 
 def write_electric_vehicles(
@@ -775,4 +775,10 @@ def write_electric_vehicles(
         file_name="electric_vehicles.xml"):
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing electric vehicles to {path}')
-    pass
+
+    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+        xf.write_declaration(
+            doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">')
+        with xf.element("vehicles"):
+            for vehicle in vehicles:
+                vehicle.to_xml(xf)

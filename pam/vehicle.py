@@ -53,6 +53,9 @@ class Vehicle:
     def __lt__(self, other):
         return self.id < other.id
 
+    def to_xml(self, xf):
+        xf.write(et.Element("vehicle", {'id': str(self.id), 'type': str(self.vehicle_type.id)}))
+
 
 @dataclass(frozen=True)
 class ElectricVehicle(Vehicle):
@@ -60,3 +63,11 @@ class ElectricVehicle(Vehicle):
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = 'default'  # supported charger types; comma-separated list: 'default,other'
+
+    def to_xml(self, xf):
+        xf.write(
+            et.Element("vehicle",
+                       {'id': str(self.id), 'battery_capacity': str(self.battery_capacity),
+                        'initial_soc': str(self.initial_soc), 'charger_types': str(self.charger_types),
+                        'vehicle_type': str(self.vehicle_type.id)}
+        ))

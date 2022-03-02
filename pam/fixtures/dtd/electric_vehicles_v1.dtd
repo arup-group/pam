@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ============================================================ -->
+
+<!-- For further information or questions, please contact
+     Michal Maciejewski, maciejewski at vsp dot tu-berlin dot de -->
+
+<!-- ============================================================ -->
+
+<!ELEMENT vehicles (vehicle)*>
+
+<!ELEMENT vehicle EMPTY>
+
+<!-- initial_soc - in kWh -->
+<!-- battery_capacity - in kWh -->
+<!-- charger_types - supported charger types; comma-separated list; "default" if not provided) -->
+<!-- vehicle_type - "defaultVehicleType" if not provided -->
+<!ATTLIST vehicle
+	id CDATA #REQUIRED
+	initial_soc CDATA #REQUIRED
+	battery_capacity CDATA #REQUIRED
+	charger_types CDATA #IMPLIED
+	vehicle_type CDATA #IMPLIED>
