@@ -481,7 +481,7 @@ methods for this logic is in `pam.core.People`.
 For a quick start at the code, checkout the 
 [getting started notebook/s](https://github.com/arup-group/pam/tree/master/notebooks). To find
 beginner-friendly existing bugs and feature requests you may like to have a crack at, take a
-look [here](contribute).
+look [here](https://github.com/arup-group/pam/contribute).
 
 #### Test
 
