@@ -12,6 +12,11 @@ class CapacityType:
     seats: int = 4  # persons
     standingRoomInPersons: int = 0  # persons
 
+    @classmethod
+    def from_xml_elem(cls, elem):
+        attribs = {k: int(v) for k, v in elem.attrib.items()}
+        return cls(**attribs)
+
     def to_xml(self, xf):
         xf.write(et.Element("capacity",
                             {'seats': str(self.seats), 'standingRoomInPersons': str(self.standingRoomInPersons)}))
@@ -27,6 +32,20 @@ class VehicleType:
     description: str = 'personal_vehicle'
     passengerCarEquivalents: float = 1.0
     flowEfficiencyFactor: float = 1.0
+
+    @classmethod
+    def from_xml_elem(cls, elem):
+        attribs = {attrib.tag.replace('{http://www.matsim.org/files/dtd}', ''): attrib for attrib in elem}
+        return cls(
+            id=elem.get('id'),
+            length=float(attribs["length"].attrib['meter']),
+            width=float(attribs["width"].attrib['meter']),
+            passengerCarEquivalents=float(attribs["passengerCarEquivalents"].attrib['pce']),
+            networkMode=attribs["networkMode"].attrib['networkMode'],
+            flowEfficiencyFactor=float(attribs["flowEfficiencyFactor"].attrib['factor']),
+            capacity=CapacityType.from_xml_elem(attribs['capacity']),
+            description=attribs['description'].text
+        )
 
     def to_xml(self, xf):
         with xf.element("vehicleType", {'id': self.id}):
@@ -66,4 +85,5 @@ class ElectricVehicle(Vehicle):
                        {'id': str(self.id), 'battery_capacity': str(self.battery_capacity),
                         'initial_soc': str(self.initial_soc), 'charger_types': str(self.charger_types),
                         'vehicle_type': str(self.vehicle_type.id)}
-        ))
+                       )
+        )

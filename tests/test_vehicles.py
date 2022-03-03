@@ -6,6 +6,7 @@ from pam.core import Person, Population, Household
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam import PAMVehicleIdError
 from pam.write import write_vehicles, write_all_vehicles, write_electric_vehicles
+from pam.read import read_matsim, read_all_vehicles_file, read_electric_vehicles_file
 
 
 def test_instantiating_vehicle_without_id_fails():
@@ -267,3 +268,75 @@ def test_generating_vehicle_files_from_electric_population_informs_of_charger_ty
     assert last_electric_message.levelname == 'INFO'
     assert 'unique charger types: ' in last_electric_message.message
     assert "{'default'}" in last_electric_message.message
+
+
+@pytest.fixture
+def ev_population_xml_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "ev_population.xml"))
+
+
+@pytest.fixture
+def all_vehicle_xml_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "all_vehicles.xml"))
+
+
+@pytest.fixture
+def expected_all_vehicle_xml_output():
+    return {
+        'Eddy': Vehicle('Eddy', VehicleType('defaultElectricVehicleType')),
+        'Stevie': Vehicle('Stevie', VehicleType('defaultVehicleType')),
+        'Vladya': Vehicle('Vladya', VehicleType('defaultVehicleType'))
+    }
+
+
+@pytest.fixture
+def electric_vehicles_xml_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "electric_vehicles.xml"))
+
+
+@pytest.fixture
+def expected_electric_vehicle_xml_output():
+    return {
+        'Eddy': ElectricVehicle('Eddy', VehicleType('defaultElectricVehicleType')),
+        'Stevie': Vehicle('Stevie', VehicleType('defaultVehicleType')),
+        'Vladya': Vehicle('Vladya', VehicleType('defaultVehicleType'))
+    }
+
+
+def test_reading_all_vehicles_file(all_vehicle_xml_path, expected_all_vehicle_xml_output):
+    vehicles = read_all_vehicles_file(all_vehicle_xml_path)
+    assert vehicles == expected_all_vehicle_xml_output
+
+
+def test_reading_electric_vehicles_with_all_vehicles_results_in_vehicles_being_updated_to_electric_vehicle_class(
+        electric_vehicles_xml_path, expected_all_vehicle_xml_output, expected_electric_vehicle_xml_output):
+    vehicles = read_electric_vehicles_file(electric_vehicles_xml_path, expected_all_vehicle_xml_output)
+    assert vehicles == expected_electric_vehicle_xml_output
+
+
+def test_reading_electric_vehicles_only_results_in_defaulted_vehicle_type(electric_vehicles_xml_path):
+    vehicles = read_electric_vehicles_file(electric_vehicles_xml_path)
+    assert vehicles == {'Eddy': ElectricVehicle(id='Eddy')}
+
+
+def test_reading_population_with_both_vehicle_files_assigns_all_vehicles_correctly(
+        ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, expected_electric_vehicle_xml_output):
+    pop = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        electric_vehicles_path=electric_vehicles_xml_path,
+        version=12
+    )
+    for person in ['Eddy', 'Stevie', 'Vladya']:
+        pop.get(person).people[person].vehicle = expected_electric_vehicle_xml_output[person]
+
+
+def test_reading_population_with_all_vehicle_file_defaults_to_vehicle_class(
+        ev_population_xml_path, all_vehicle_xml_path, expected_all_vehicle_xml_output):
+    pop = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        version=12
+    )
+    for person in ['Eddy', 'Stevie', 'Vladya']:
+        pop.get(person).people[person].vehicle = expected_all_vehicle_xml_output[person]
