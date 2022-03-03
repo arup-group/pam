@@ -226,8 +226,8 @@ def test_generates_electric_vehicles_xml_file_containing_expected_vehicles(tmpdi
     assert expected_vehicles == [v.attrib for v in vehicles]
 
 
-def test_generating_vehicle_files_from_nonelectric_population_produces_both_files(tmpdir,
-                                                                                  population_with_default_vehicles):
+def test_generating_vehicle_files_from_nonelectric_population_produces_only_vehicle_file(
+        tmpdir, population_with_default_vehicles):
     expected_all_vehicles_file = os.path.join(tmpdir, 'all_vehicles.xml')
     expected_electric_vehicles_file = os.path.join(tmpdir, 'electric_vehicles.xml')
 
