@@ -108,7 +108,7 @@ def write_matsim(
     ) -> None:
     """
     Write a core population object to matsim xml formats (either version 11 or 12). 
-    Note that this requires activity locs to be set (shapely.geomerty.Point).
+    Note that this requires activity locs to be set (shapely.geometry.Point).
     TODO add support for PathLib?
 
     :param population: core.Population, population to be writen to disk
@@ -726,6 +726,17 @@ def write_vehicles(output_dir,
                    population,
                    all_vehicles_filename="all_vehicles.xml",
                    electric_vehicles_filename="electric_vehicles.xml"):
+    """
+    Writes:
+        - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+        - electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    given a population in which Persons have been assigned vehicles.
+    :param output_dir: output directory for all_vehicles file
+    :param population: pam.core.Population
+    :param all_vehicles_filename: name of output all vehicles file, defaults to 'all_vehicles.xml`
+    :param electric_vehicles_filename: name of output electric vehicles file, defaults to 'electric_vehicles.xml`
+    :return:
+    """
     if population.has_vehicles:
         if population.has_uniquely_indexed_vehicle_types:
             write_all_vehicles(
@@ -760,6 +771,15 @@ def write_all_vehicles(
         vehicles: Set[Vehicle],
         vehicle_types: Set[VehicleType],
         file_name="all_vehicles.xml"):
+    """
+    Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    for MATSim
+    :param output_dir: output directory for all_vehicles file
+    :param vehicles: collection of vehicles to write
+    :param vehicle_types: collection of vehicle types to write
+    :param file_name: name of output file, defaults to 'all_vehicles.xml`
+    :return: None
+    """
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing all vehicles to {path}')
 
@@ -783,6 +803,14 @@ def write_electric_vehicles(
         output_dir,
         vehicles: Set[ElectricVehicle],
         file_name="electric_vehicles.xml"):
+    """
+    Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    for MATSim
+    :param output_dir: output directory for electric_vehicles file
+    :param vehicles: collection of electric vehicles to write
+    :param file_name: name of output file, defaults to 'electric_vehicles.xml`
+    :return: None
+    """
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing electric vehicles to {path}')
 

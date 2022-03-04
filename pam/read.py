@@ -1134,10 +1134,11 @@ def sample_population(trips_df, sample_perc, attributes_df=None, weight_col='fre
 
 def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
     """
-
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and
+    electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     :param all_vehicles_path: path to matsim all_vehicles xml file
     :param electric_vehicles_path: path to matsim electric_vehicles xml (optional)
-    :return:
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
     vehicles = read_all_vehicles_file(all_vehicles_path)
     if electric_vehicles_path:
@@ -1147,9 +1148,9 @@ def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
 
 def read_all_vehicles_file(path):
     """
-
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
     :param path: path to matsim all_vehicles xml file
-    :return: dictionary of all vehicles: {ID: Vehicle class object}
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
     """
     vehicles = {}
     vehicle_types = {}
@@ -1166,12 +1167,12 @@ def read_all_vehicles_file(path):
 
 def read_electric_vehicles_file(path, vehicles: dict = None):
     """
-
+    Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     :param path: path to matsim electric_vehicles xml
-    :param vehicles: dictionary of {ID: Vehicle} objects, some of which may need to be updated to ElectricVehicle
+    :param vehicles: dictionary of {ID: pam.vehicle.Vehicle} objects, some of which may need to be updated to ElectricVehicle
         based on contents of the electric_vehicles xml file. Optional, if not passed, vehicles will default to the
         VehicleType defaults.
-    :return:
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
     if vehicles is None:
         logging.warning('All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types'

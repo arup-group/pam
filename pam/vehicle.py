@@ -3,8 +3,9 @@ from typing import Union
 from lxml import etree as et
 
 
-# Vehicle definition Classes based on MATSim DTD file:
+# Vehicle classes to represent Vehicles based on MATSim DTD files:
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+# https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
 
 
 @dataclass(frozen=True)

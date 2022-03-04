@@ -713,6 +713,11 @@ class Person:
         self.person_freq = freq
 
     def assign_vehicle(self, vehicle: Vehicle):
+        """
+        Give a Vehicle or ElectricVehicle to an agent
+        :param vehicle:
+        :return:
+        """
         if vehicle.id != self.pid:
             raise PAMVehicleIdError(f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
         self.vehicle = vehicle
