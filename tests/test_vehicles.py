@@ -136,6 +136,25 @@ def test_extracting_vehicle_types_from_population(population_with_electric_vehic
     }
 
 
+def test_population_with_electric_vehicles_has_uniquely_defined_vehicle_types(population_with_electric_vehicles):
+    assert population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
+
+
+def test_population_with_non_uniquely_defined_vehicle_types(population_with_electric_vehicles):
+    hhld = Household(hid='4')
+    hhld.add(Person('Micky Faraday',
+                    vehicle=ElectricVehicle(charger_types='other,tesla', id='Micky Faraday',
+                                            vehicle_type=VehicleType('defaultElectricVehicleType', networkMode='e_car')
+                                            )))
+    population_with_electric_vehicles.add(hhld)
+    assert population_with_electric_vehicles.vehicle_types() == {
+        VehicleType('defaultVehicleType'),
+        VehicleType('defaultElectricVehicleType'),
+        VehicleType('defaultElectricVehicleType', networkMode='e_car')
+    }
+    assert not population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
+
+
 def test_extracting_unique_electric_charger_types_from_population(population_with_electric_vehicles):
     hhld = Household(hid='4')
     hhld.add(Person('Micky Faraday',

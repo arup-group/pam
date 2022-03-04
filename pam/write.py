@@ -727,26 +727,30 @@ def write_vehicles(output_dir,
                    all_vehicles_filename="all_vehicles.xml",
                    electric_vehicles_filename="electric_vehicles.xml"):
     if population.has_vehicles:
-        write_all_vehicles(
-            output_dir,
-            vehicles=population.vehicles(),
-            vehicle_types=population.vehicle_types(),
-            file_name=all_vehicles_filename)
-        if population.has_electric_vehicles:
-            logging.info('Population includes electric vehicles')
-            electric_vehicles = population.electric_vehicles()
-            write_electric_vehicles(
+        if population.has_uniquely_indexed_vehicle_types:
+            write_all_vehicles(
                 output_dir,
-                vehicles=electric_vehicles,
-                file_name=electric_vehicles_filename
-            )
-            electric_vehicle_charger_types = population.electric_vehicle_charger_types()
-            logging.info(f'Found {len(electric_vehicles)} electric vehicles '
-                         f'with unique charger types: {electric_vehicle_charger_types}. '
-                         "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
-                         "if you're running a simulation using org.matsim.contrib.ev")
+                vehicles=population.vehicles(),
+                vehicle_types=population.vehicle_types(),
+                file_name=all_vehicles_filename)
+            if population.has_electric_vehicles:
+                logging.info('Population includes electric vehicles')
+                electric_vehicles = population.electric_vehicles()
+                write_electric_vehicles(
+                    output_dir,
+                    vehicles=electric_vehicles,
+                    file_name=electric_vehicles_filename
+                )
+                electric_vehicle_charger_types = population.electric_vehicle_charger_types()
+                logging.info(f'Found {len(electric_vehicles)} electric vehicles '
+                             f'with unique charger types: {electric_vehicle_charger_types}. '
+                             "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
+                             "if you're running a simulation using org.matsim.contrib.ev")
+            else:
+                logging.info('Provided population does not have electric vehicles')
         else:
-            logging.info('Provided population does not have electric vehicles')
+            logging.warning('The vehicle types in provided population do not have unique indices. Current Vehicle '
+                            f'Type IDs: {[vt.id for vt in population.vehicle_types()]}')
     else:
         logging.warning('Provided population does not have vehicles')
 

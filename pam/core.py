@@ -142,6 +142,14 @@ class Population:
     def has_electric_vehicles(self):
         return bool(self.electric_vehicles())
 
+    @property
+    def has_uniquely_indexed_vehicle_types(self):
+        # checks indexing of vehicle types in population
+        vehicle_types = self.vehicle_types()
+        all_vehicle_type_ids = [vt.id for vt in vehicle_types]
+        unique_vehicle_type_ids = set(all_vehicle_type_ids)
+        return len(all_vehicle_type_ids) == len(unique_vehicle_type_ids)
+
     def vehicles(self):
         return {p.vehicle for _, _, p in self.people() if p.vehicle is not None}
 
