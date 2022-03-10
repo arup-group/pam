@@ -8,16 +8,23 @@ def sample(
     sample: float,
     seed: int=None,
     verbose: bool=False
-    ):
+    ) -> Population:
     """
     Sample a new population from the existing using a sample size, eg 0.1 for a 10% sample.
     Returns a new pam.core.Population object with households sampled based on input freq.
     Freq of returned population is set to 1/sample, eg 0.1 -> 10, such that each household
     and person represents 10 people from input population.
+    Note that in the current implementation frequencies are automatically discovered from the population object households,
+    person and leg weights, in that order. When gathering frequencies, for
+    example for a household from multiple person in that houshold, the household
+    frequency is taken as the average person frequency. Similarly for persons
+    and their legs.
     Args:
         population (Population): input population object to sample from using population freq
         sample (float): sample size of new population, eg 0.1 for a 10% sample
         verbose (bool): verbosity
+    Returns:
+        pam.core.Population
     """
 
     sampled_population = Population()
