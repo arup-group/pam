@@ -146,24 +146,21 @@ class CharyparNagelPlanScorer:
         activities = list(plan.activities)
         if len(activities) == 1:
             return self.score_activity(activities[0], cnfg)
-        wrapped_activity, other_activities = self.activities_wrapper(activities)
-        return self.score_activity(wrapped_activity, cnfg) \
-            + sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
+        activities = self.activities_wrapper(activities)
+        return sum([self.score_activity(act, cnfg) for act in activities if act.act != "pt interaction"])
 
 
     def activities_wrapper(self, activities):
-        non_wrapped = activities[1:-1]
         if not activities[0].act == activities[-1].act:
-            self.logger.warning(
-                f"Wrapping non-alike activities: {activities[0].act} -> {activities[-1].act}"
-                )
+            return activities
 
-        wrapped_act = Activity(
+        activities[-1] = Activity(
             act=activities[0].act,
             start_time=activities[-1].start_time,
             end_time=activities[0].end_time + td(days=1)
         )
-        return wrapped_act, non_wrapped
+        del activities[0]
+        return activities
 
     def score_activity(self, activity, cnfg):
         return sum([
