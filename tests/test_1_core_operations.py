@@ -9,6 +9,50 @@ from pam import PAMSequenceValidationError
 from .fixtures import person_heh
 
 
+def test_get_last_component_activity():
+    p = Person(0)
+    p.add(Activity())
+    assert isinstance(p.last_component, Activity)
+
+
+def test_get_last_component_leg():
+    p = Person(0)
+    p.add(Activity())
+    p.add(Leg())
+    assert isinstance(p.last_component, Leg)
+
+
+def test_get_last_activity():
+    p = Person(0)
+    p.add(Activity())
+    p.add(Leg())
+    p.add(Activity(seq=2))
+    p.add(Leg())
+    assert isinstance(p.last_activity, Activity)
+    assert p.last_activity.seq == 2
+
+
+def test_get_last_activity_empty():
+    p = Person(0)
+    assert p.last_component is None
+
+
+def test_get_last_leg():
+    p = Person(0)
+    p.add(Activity())
+    p.add(Leg())
+    p.add(Activity())
+    p.add(Leg(seq=2))
+    p.add(Activity())
+    assert isinstance(p.last_leg, Leg)
+    assert p.last_leg.seq == 2
+
+
+def test_get_last_activity_empty():
+    p = Person(0)
+    assert p.last_leg is None
+
+
 def test_population_iadd_population():
     pop1 = Population()
     hh1 = Household('1')
