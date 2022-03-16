@@ -48,7 +48,7 @@ def jitter_activity(
     prev_duration = act.duration
     tail = (len(plan) - i)/2
 
-    min_start = max(act.start_time + min_duration, act.end_time - jitter)
+    min_end = max(act.start_time + min_duration, act.end_time - jitter)
 
     allowance = plan[-1].end_time - act.end_time
     for j in range(i+1, len(plan), 2):  # legs
@@ -57,9 +57,10 @@ def jitter_activity(
         allowance =- min_duration
 
     max_end = min(plan[-1].end_time - allowance, act.end_time + jitter)
-    duration = (max_end - min_start).seconds
+    jitter_range = (max_end - min_end).seconds
 
-    new_duration = timedelta(seconds=randrange(duration))
+    jitter = timedelta(seconds=randrange(jitter_range))
+    new_duration = min_end - act.start_time + jitter
     change = (new_duration - prev_duration)/tail
 
     time = act.shift_duration(new_duration)
