@@ -150,7 +150,7 @@ class CharyparNagelPlanScorer:
             # if the first and last activity are not of the same type
             # then the activities are not wrapped
             # see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265
-            score = sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
+            score = sum([self.score_activity(act, cnfg) for act in activities if act.act != "pt interaction"])
         else:
             wrapped_activity, other_activities = self.activities_wrapper(activities)
             score = self.score_activity(wrapped_activity, cnfg) \
@@ -290,7 +290,7 @@ class CharyparNagelPlanScorer:
         if cnfg.get("waitingPt") and leg.boarding_time:
             waiting = (leg.boarding_time - leg.start_time).seconds / 3600
             if waiting > 0:
-                return cnfg["waitingPt"] * waiting
+                return (cnfg["waitingPt"] - cnfg[leg.mode].get("marginalUtilityOfTravelling", 0.0)) * waiting
         return 0.0
 
     def mode_constant_score(self, leg, cnfg):
