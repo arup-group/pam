@@ -146,18 +146,20 @@ class CharyparNagelPlanScorer:
         activities = list(plan.activities)
         if len(activities) == 1:
             return self.score_activity(activities[0], cnfg)
-        wrapped_activity, other_activities = self.activities_wrapper(activities)
-        return self.score_activity(wrapped_activity, cnfg) \
-            + sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
-
+        if not activities[0].act == activities[-1].act:
+            # if the first and last activity are not of the same type
+            # then the activities are not wrapped
+            # see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265
+            score = sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
+        else:
+            wrapped_activity, other_activities = self.activities_wrapper(activities)
+            score = self.score_activity(wrapped_activity, cnfg) \
+                + sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
+        
+        return score
 
     def activities_wrapper(self, activities):
         non_wrapped = activities[1:-1]
-        if not activities[0].act == activities[-1].act:
-            self.logger.warning(
-                f"Wrapping non-alike activities: {activities[0].act} -> {activities[-1].act}"
-                )
-
         wrapped_act = Activity(
             act=activities[0].act,
             start_time=activities[-1].start_time,
@@ -234,7 +236,9 @@ class CharyparNagelPlanScorer:
             duration = (actual_end_time - actual_start_time).seconds / 3600
 
         if duration < typical_dur / np.e:
-            return (duration - typical_dur/np.e) * performing * (typical_dur / np.e)
+            # return (duration - typical_dur/np.e) * performing * (typical_dur / np.e)
+            return (duration * np.e - typical_dur) * performing
+            # return (typical_dur - duration * np.e) * performing
 
         return performing * typical_dur * (np.log(duration / typical_dur) + (1 / prio))
 
