@@ -6,6 +6,7 @@ import logging
 
 from pam.core import Person
 from pam.activity import Activity, Leg, Plan
+from pam.variables import TRANSIT_MODES
 from pam import utils
 
 class CharyparNagelPlanScorer:
@@ -110,7 +111,7 @@ class CharyparNagelPlanScorer:
                 print()
                 print(f"({i}) Activity: {component.act}")
                 print(f"\tDuration: {component.duration}")
-                if component.act == 'pt interaction':
+                if component.act in ['pt interaction', 'pt_interaction']:
                     continue
                 print(f"\tScore: {self.score_activity(component, cnfg=config)}")
                 print(f"\tDuration_score: {self.duration_score(component, cnfg=config)}")
@@ -150,11 +151,11 @@ class CharyparNagelPlanScorer:
             # if the first and last activity are not of the same type
             # then the activities are not wrapped
             # see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265
-            score = sum([self.score_activity(act, cnfg) for act in activities if act.act != "pt interaction"])
+            score = sum([self.score_activity(act, cnfg) for act in activities if act.act not in ["pt interaction", "pt_interaction"]])
         else:
             wrapped_activity, other_activities = self.activities_wrapper(activities)
             score = self.score_activity(wrapped_activity, cnfg) \
-                + sum([self.score_activity(act, cnfg) for act in other_activities if act.act != "pt interaction"])
+                + sum([self.score_activity(act, cnfg) for act in other_activities if act.act not in ["pt interaction", "pt_interaction"]])
         
         return score
 
@@ -179,22 +180,26 @@ class CharyparNagelPlanScorer:
         return self.score_pt_interchanges(plan, cnfg) \
              + sum([self.score_leg(leg, cnfg) for leg in plan.legs])
 
-    def score_pt_interchanges(self, plan, cnfg):
+    def score_pt_interchanges(self, plan : Plan, cnfg : dict) -> float:
+        """
+        Calculates utility of line switch.
+        """
         if not cnfg.get("utilityOfLineSwitch"):
             return 0.0
         transits = []
         in_transit = 0
-        for activity in plan.activities:
-            if activity.act == "pt_interaction":
-                in_transit += 1
-            else:
-                if in_transit:
+        for i in plan:
+            if isinstance(i, Activity):
+                if i.act not in ['pt interaction', 'pt_interaction']:
+                    if in_transit > 0:
+                        in_transit -= 1 # the first PT vehicle does not incur a line switch penalty
                     transits.append(in_transit)
                     in_transit = 0
-        cost = 0
-        for transit in transits:
-            if transit > 2:
-                cost += cnfg.get("utilityOfLineSwitch", 0) * (transit-2)
+            elif isinstance(i, Leg):
+                if i.mode in TRANSIT_MODES:
+                    # number of PT modes used in each trip
+                    in_transit += 1
+        cost = sum(transits) * cnfg.get("utilityOfLineSwitch", 0)
         return cost
 
     def score_leg(self, leg, cnfg):
@@ -236,9 +241,7 @@ class CharyparNagelPlanScorer:
             duration = (actual_end_time - actual_start_time).seconds / 3600
 
         if duration < typical_dur / np.e:
-            # return (duration - typical_dur/np.e) * performing * (typical_dur / np.e)
             return (duration * np.e - typical_dur) * performing
-            # return (typical_dur - duration * np.e) * performing
 
         return performing * typical_dur * (np.log(duration / typical_dur) + (1 / prio))
 
