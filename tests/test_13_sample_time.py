@@ -23,7 +23,7 @@ def test_jitter_activity_mid_plan(Steve):
     assert Steve.plan.validate()
 
 
-def test_jitter_activity_mid_plan2(Steve):
+def test_jitter_activity_later_in_plan(Steve):
     jitter_activity(
         plan = Steve.plan,
         i = 4,
