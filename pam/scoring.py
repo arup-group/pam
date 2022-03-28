@@ -238,7 +238,7 @@ class CharyparNagelPlanScorer:
         if actual_end_time < actual_start_time or actual_start_time > actual_end_time:
             duration = 0
         else:
-            duration = (actual_end_time - actual_start_time).seconds / 3600
+            duration = (actual_end_time - actual_start_time) / td(hours = 1)
 
         if duration < typical_dur / np.e:
             return (duration * np.e - typical_dur) * performing
@@ -255,7 +255,7 @@ class CharyparNagelPlanScorer:
         opening_dt = utils.matsim_time_to_datetime(opening_time)
         start_dt = activity.start_time
         if start_dt.time() < opening_dt.time():
-            return waiting * (opening_dt - start_dt).seconds / 3600
+            return waiting * ((opening_dt - start_dt)  / td(hours = 1))
         return 0.0
 
     def late_arrival_score(self, activity, cnfg) -> float:
@@ -265,7 +265,7 @@ class CharyparNagelPlanScorer:
                 )
             if activity.start_time.time() > latest_start_time.time():
                 return cnfg["lateArrival"] \
-                    * (activity.start_time - latest_start_time).seconds / 3600
+                    * ((activity.start_time - latest_start_time) / td(hours = 1))
         return 0.0
 
     def early_departure_score(self, activity, cnfg) -> float:
@@ -276,7 +276,7 @@ class CharyparNagelPlanScorer:
                 )
             if activity.end_time.time() < earliest_end_time.time():
                 return cnfg["earlyDeparture"] \
-                    * (earliest_end_time - activity.end_time).seconds / 3600
+                    * ((earliest_end_time - activity.end_time) / td(hours = 1))
         return 0.0
 
     def too_short_score(self, activity, cnfg) -> float:
@@ -291,16 +291,19 @@ class CharyparNagelPlanScorer:
 
     def pt_waiting_time_score(self, leg, cnfg):
         if cnfg.get("waitingPt") and leg.boarding_time:
-            waiting = (leg.boarding_time - leg.start_time).seconds / 3600
+            waiting = (leg.boarding_time - leg.start_time) / td(hours = 1)
             if waiting > 0:
-                return (cnfg["waitingPt"] - cnfg[leg.mode].get("marginalUtilityOfTravelling", 0.0)) * waiting
+                return cnfg["waitingPt"] * waiting
         return 0.0
 
     def mode_constant_score(self, leg, cnfg):
         return cnfg[leg.mode].get("constant", 0.0)
 
     def travel_time_score(self, leg, cnfg) -> float:
-        return leg.hours * cnfg[leg.mode].get("marginalUtilityOfTravelling", 0.0)
+        duration = leg.hours
+        if cnfg.get("waitingPt") and leg.boarding_time:
+            duration -= ((leg.boarding_time - leg.start_time) / td(hours = 1))
+        return duration * cnfg[leg.mode].get("marginalUtilityOfTravelling", 0.0)
     
     def travel_distance_score(self, leg, cnfg) -> float:
         return leg.distance * (cnfg[leg.mode].get("marginalUtilityOfDistance", 0.0) \

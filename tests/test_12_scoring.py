@@ -71,6 +71,7 @@ def test_late_arrival_score(default_config, late_activity):
 
 def test_pt_waiting_time_score(default_config, pt_wait_leg):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
+    # 5 minutes wait time
     result = scorer.pt_waiting_time_score(pt_wait_leg, default_config)
     assert result == -0.16666666666666666
 
@@ -110,13 +111,14 @@ def test_score_plan_activities(Anna, default_config):
 def test_score_small_plan_activity(small_plan, default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
     result = scorer.score_plan_activities(small_plan, default_config)
-    assert result == -116.92968471643337
+    # 24-hr home activity 
+    assert result == 121.90659700031607
 
 
 def test_duration_score(default_config, short_activity):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
     result = scorer.duration_score(short_activity, default_config)
-    assert result == -2.3822907838409333
+    assert result == -2.0709270877371857
 
 
 def test_waiting_score(default_config, early_activity):
