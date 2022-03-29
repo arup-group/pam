@@ -210,12 +210,13 @@ class Population:
         gdf = None
         for hid, household in self.households.items():
             _gdf = household.build_travel_geodataframe(**kwargs)
-            if gdf is None:
-                gdf = _gdf
-            else:
-                gdf = gdf.append(_gdf)
-        gdf = gdf.sort_values(['hid', 'pid', 'seq']).reset_index(drop=True)
-        return gdf
+            if _gdf is not None:
+                if gdf is None:
+                    gdf = _gdf
+                else:
+                    gdf = gdf.append(_gdf)
+        if gdf is not None:
+            return gdf.sort_values(['hid', 'pid', 'seq']).reset_index(drop=True)
 
     def plot_travel_plotly(self, epsg: str = 'epsg:4326', **kwargs):
         """
@@ -628,13 +629,14 @@ class Household:
         gdf = None
         for _, person in self:
             _gdf = person.build_travel_geodataframe(**kwargs)
-            _gdf['hid'] = self.hid
-            if gdf is None:
-                gdf = _gdf
-            else:
-                gdf = gdf.append(_gdf)
-        gdf = gdf.sort_values(['pid', 'seq']).reset_index(drop=True)
-        return gdf
+            if _gdf is not None:
+                _gdf['hid'] = self.hid
+                if gdf is None:
+                    gdf = _gdf
+                else:
+                    gdf = gdf.append(_gdf)
+        if gdf is not None:
+            return gdf.sort_values(['pid', 'seq']).reset_index(drop=True)
 
     def plot_travel_plotly(self, epsg='epsg:4326', **kwargs):
         """

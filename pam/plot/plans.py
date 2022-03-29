@@ -90,8 +90,11 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
     :param from_epsg: coordinate system the plans are currently in, optional
     :param to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
     from_epsg as well to use this.
-    :return:
+    :return: geopandas.GeoDataFrame with Person's legs, or None if the Person does not travel
     """
+    if person.num_legs == 0:
+        return None
+
     df = pd.DataFrame()
     for leg in person.legs:
         if (not isinstance(leg.start_location.loc, (Point, CellId))) or (
@@ -104,14 +107,6 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
         _leg_dict['start_location'] = coords[0]
         _leg_dict['end_location'] = coords[-1]
         df = df.append(pd.Series(_leg_dict), ignore_index=True)
-    if person.num_legs == 0:
-        # fake leg to get columns for the frame
-        fake_leg = activity.Leg()
-        _leg_dict = fake_leg.__dict__.copy()
-        _leg_dict['start_location'] = Point(person.plan[0].location.loc)
-        _leg_dict['end_location'] = Point(person.plan[0].location.loc)
-        _leg_dict['geometry'] = Point(person.plan[0].location.loc)
-        df = pd.DataFrame(_leg_dict, index=[0])
 
     df['pid'] = person.pid
     df = GeoDataFrame(df, geometry='geometry')

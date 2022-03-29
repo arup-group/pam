@@ -208,14 +208,23 @@ def test_building_travel_geodataframefor_person_wfh():
     assert person.num_legs == 0
     gdf = person.build_travel_geodataframe()
 
-    assert_frame_equal(
-        gdf,
-        GeoDataFrame(
-            {'_distance': {0: None}, 'boarding_time': {0: None}, 'd_stop': {0: None}, 'end_location': {0: Point(1, 1)},
-             'end_time': {0: None}, 'freq': {0: None}, 'geometry': {0: Point(1, 1)}, 'mode': {0: None},
-             'network_route': {0: None}, 'o_stop': {0: None}, 'pid': {0: '1'}, 'purp': {0: None}, 'route_id': {0: None},
-             'seq': {0: None}, 'service_id': {0: None}, 'start_location': {0: Point(1, 1)}, 'start_time': {0: None}}
-        ).sort_index(axis=1))
+    assert gdf is None
+
+
+def test_building_pop_geodataframe_leaves_out_the_wfh_person(pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
+    pop = Population()
+    pop.add(instantiate_household_with([pt_person, cyclist], hid='1'))
+    pop.add(instantiate_household_with([pt_person], hid='2'))
+    pop.add(instantiate_household_with([cyclist], hid='3'))
+
+    wfh = Person('1')
+    act = Activity(1, 'home', loc=Point(1, 1), start_time=utils.minutes_to_datetime(0), end_time=END_OF_DAY)
+    wfh.add(act)
+    pop.add(instantiate_household_with([wfh], hid='wfh'))
+
+    gdf = pop.build_travel_geodataframe()
+
+    assert set(gdf['hid']) == {'1', '2', '3'}
 
 
 def test_get_linestring_with_s2_cellids():
