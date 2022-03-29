@@ -143,3 +143,41 @@ def test_locations_equal_with_no_shared_location_type():
     locationd = Location(loc=None, link=2, area=None)
     with pytest.raises(UserWarning):
         assert not locationb == locationd
+
+
+def test_plan_contains_empty():
+    plan = Plan()
+    assert Activity() not in plan
+
+
+def test_plan_contains_true():
+    plan = Plan()
+    act = Activity(start_time=0, loc=0)
+    plan.add(act)
+    assert act in plan
+
+
+def test_plan_contains_true_multiple():
+    plan = Plan()
+    act = Activity(start_time=0, loc=0)
+    plan.add(act)
+    plan.add(Leg())
+    plan.add(Activity(start_time=1, loc=0))
+    assert act in plan
+
+
+def test_plan_contains_true_multiple_different_order():
+    plan = Plan()
+    plan.add(Activity(start_time=0, loc=0))
+    plan.add(Leg())
+    act = Activity(start_time=1, loc=0)
+    plan.add(act)
+    assert act in plan
+
+
+def test_plan_contains_false():
+    plan = Plan()
+    act = Activity(start_time=0, loc=0)
+    plan.add(act)
+    act = Activity(start_time=0, loc=1)
+    assert act not in plan

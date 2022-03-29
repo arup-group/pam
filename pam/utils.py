@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 import gzip
 from lxml import etree
@@ -25,6 +25,15 @@ def minutes_to_datetime(minutes: int):
     days, remainder = divmod(minutes, 24 * 60)
     hours, minutes = divmod(remainder, 60)
     return datetime(1900, 1, 1+days, hours, minutes)
+
+
+def minutes_to_timedelta(minutes: int):
+    """
+    Convert minutes to timedelta
+    :param minutes: int
+    :return: timedelta
+    """
+    return timedelta(minutes=minutes)
 
 
 def datetime_string_to_datetime(string: str):
@@ -58,7 +67,7 @@ def timedelta_to_matsim_time(td):
     minutes, seconds = divmod(remainder, 60)
     return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
-      
+
 def dt_to_s(dt):
     """
     Convert datetime to seconds since start of day.

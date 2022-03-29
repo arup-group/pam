@@ -11,7 +11,7 @@ from pam.variables import END_OF_DAY
 
 
 class Plan:
-  
+
     def __init__(self, home_area=None, freq=None):
         self.day = []
         self.home_location = Location(area=home_area)
@@ -122,6 +122,14 @@ class Plan:
                 return False
         return True
 
+    def __contains__(self, other):
+        if not isinstance(other, PlanComponent):
+            raise UserWarning(f"Expected PlanComponent type (either Leg or Activity) not ({type(other)})")
+        for c in self:
+            if c == other:
+                return True
+        return False
+
     def add(self, p):
         """
         Safely add a new component to the plan.
@@ -144,7 +152,7 @@ class Plan:
             raise UserWarning(f"Cannot add type: {type(p)} to plan.")
 
     # validation methods
-    
+
     @property
     def valid_sequence(self):
         """
@@ -197,7 +205,7 @@ class Plan:
             if isinstance(component, Activity):
                 if not component.location == self.day[i-1].end_location:
                     return False
-            
+
             elif isinstance(component, Leg):
                 if not component.start_location == self.day[i-1].location:
                     return False
@@ -282,7 +290,7 @@ class Plan:
                 self.logger.warning(f"Cropping plan components")
                 self.day = self.day[:idx]
                 break
-        
+
         # crop plan that is out of sequence
         for idx in range(1, self.length):
             if self[idx].start_time < self[idx-1].end_time:
@@ -315,7 +323,7 @@ class Plan:
         """
         for i in range(1, self.length-1):
             component = self.day[i]
-            
+
             if isinstance(component, Leg):
                 component.start_location = copy(self.day[i-1].location)
                 component.end_location = copy(self.day[i+1].location)
@@ -373,7 +381,7 @@ class Plan:
 
         area_map = {}
         remaining = set(range(0, self.length, 2)) - set(home_idxs)
-        
+
         # forward traverse
         queue = [idx+2 for idx in home_idxs if idx+2 < self.length]  # add next act idxs to queue\
         last_act = None
@@ -405,7 +413,7 @@ class Plan:
                     remaining -= {idx}
                     if idx+2 in remaining:
                         queue.append(idx+2)
-        
+
         while queue:
             idx = queue.pop()
 
@@ -453,7 +461,7 @@ class Plan:
             for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
                 self.day[seq].end_time = self.day[seq+1].start_time
         self.day[-1].end_time = pam.variables.END_OF_DAY
-    
+
     def set_leg_purposes(self):
         """
         Set leg purposes to destination activity.
@@ -466,7 +474,7 @@ class Plan:
                     if not act == "pt interaction":
                         self.day[seq].purp = act
                         break
-        
+
     def autocomplete_matsim(self):
         """
         complete leg start and end locations
@@ -591,7 +599,7 @@ class Plan:
 
         if self.day[idx_start] == self.day[idx_end]:  # combine activities
             """
-            These activities are the same (based on type and location), so can be combined, 
+            These activities are the same (based on type and location), so can be combined,
             but there are 2 sub cases:
             i) idx_start < idx_end -> wrapped combine
             ii) else -> regular combine can ignore wrapping
@@ -607,7 +615,7 @@ class Plan:
             return True
 
         """
-        Remaining are plans where the activities are different so fill not be combined, instread 
+        Remaining are plans where the activities are different so fill not be combined, instread
         we will use 'expand' to refill the plan. There are 2 sub cases:
         i) idx_start < idx_end -> wrapped combine
         ii) else -> regular combine can ignore wrapping
@@ -739,7 +747,7 @@ class Plan:
         for plan in self.day:
             if plan.act=='home':
                 home_duration+=plan.duration
-        
+
         return home_duration
 
     def mode_shift(self, seq, new_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
@@ -750,7 +758,7 @@ class Plan:
 
         :params int seq: leg index in self.day
         :params string new_mode: default mode shift
-        :params dict mode_speed: a dictionary of average mode speeds (kph) 
+        :params dict mode_speed: a dictionary of average mode speeds (kph)
         :params bool update_duration: whether to update leg durations based on mode speed
 
         :return: None
@@ -770,7 +778,7 @@ class Plan:
                         plan.mode = new_mode #change mode
                         if update_duration:
                             self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
-        
+
         if update_duration:
             #adjust home activities time in order fit revised legs/activities within a 24hr day
             home_duration = self.get_home_duration()
@@ -785,7 +793,7 @@ class Plan:
             #make sure the last activity ends in the end of day (ie remove potential rounding errors)
             if self.day[-1].end_time != END_OF_DAY:
                 self.day[-1].end_time = END_OF_DAY
-        
+
 
     def change_duration(self, seq, shift_duration):
         """
@@ -795,15 +803,15 @@ class Plan:
 
         :return: None
         """
-        
+
         #change leg duration
         self.day[seq].end_time = self.day[seq].end_time + shift_duration
-        
+
         #shift all subsequent legs and activities
         for idx in range(seq+1, len(self.day)):
             start_time = self.day[idx].start_time
             self.day[idx].shift_start_time(start_time + shift_duration)
-          
+
 
     def get_leg_tour(self, seq):
         """

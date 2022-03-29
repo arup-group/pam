@@ -28,3 +28,11 @@ class PAMValidationLocationsError(PAMValidationError):
     """
 
     pass
+
+
+class PAMVehicleIdError(PAMValidationError):
+    """
+    Custom exception raised for Vehicle not matching Person ID
+    """
+
+    pass
