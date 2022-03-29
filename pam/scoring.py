@@ -147,7 +147,7 @@ class CharyparNagelPlanScorer:
         activities = list(plan.activities)
         if len(activities) == 1:
             return self.score_activity(activities[0], cnfg)
-        if not activities[0].act == activities[-1].act:
+        if activities[0].act != activities[-1].act:
             # if the first and last activity are not of the same type
             # then the activities are not wrapped
             # see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265
