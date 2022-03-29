@@ -138,7 +138,7 @@ def write_matsim(
     if population.has_vehicles:
         logging.info('Population includes vehicles')
         if vehicles_dir is None:
-            raise UserWarning("Please provide an vehicles_dir to write vehicle files")
+            raise UserWarning("Please provide a vehicles_dir to write vehicle files")
         else:
             logging.info(f'Saving vehicles to {vehicles_dir}')
             write_vehicles(output_dir=vehicles_dir, population=population)
@@ -746,7 +746,7 @@ def write_vehicles(output_dir,
                 file_name=all_vehicles_filename)
             if population.has_electric_vehicles:
                 logging.info('Population includes electric vehicles')
-                electric_vehicles = population.electric_vehicles()
+                electric_vehicles = set(population.electric_vehicles())
                 write_electric_vehicles(
                     output_dir,
                     vehicles=electric_vehicles,

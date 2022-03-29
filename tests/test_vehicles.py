@@ -106,7 +106,7 @@ def test_population_with_electric_vehicles_has_electric_vehicles(population_with
 
 
 def test_extracting_vehicles_from_population(population_with_electric_vehicles):
-    assert population_with_electric_vehicles.vehicles() == {
+    assert set(population_with_electric_vehicles.vehicles()) == {
         Vehicle('Vladya'),
         Vehicle('Stevie'),
         ElectricVehicle('Eddy')
@@ -124,13 +124,13 @@ def test_sorting_vehicles_list(population_with_electric_vehicles):
 
 
 def test_extracting_electric_vehicles_from_population(population_with_electric_vehicles):
-    assert population_with_electric_vehicles.electric_vehicles() == {
+    assert set(population_with_electric_vehicles.electric_vehicles()) == {
         ElectricVehicle('Eddy')
     }
 
 
 def test_extracting_vehicle_types_from_population(population_with_electric_vehicles):
-    assert population_with_electric_vehicles.vehicle_types() == {
+    assert set(population_with_electric_vehicles.vehicle_types()) == {
         VehicleType('defaultVehicleType'),
         VehicleType('defaultElectricVehicleType')
     }
@@ -147,7 +147,7 @@ def test_population_with_non_uniquely_defined_vehicle_types(population_with_elec
                                             vehicle_type=VehicleType('defaultElectricVehicleType', networkMode='e_car')
                                             )))
     population_with_electric_vehicles.add(hhld)
-    assert population_with_electric_vehicles.vehicle_types() == {
+    assert set(population_with_electric_vehicles.vehicle_types()) == {
         VehicleType('defaultVehicleType'),
         VehicleType('defaultElectricVehicleType'),
         VehicleType('defaultElectricVehicleType', networkMode='e_car')

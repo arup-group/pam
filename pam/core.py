@@ -136,11 +136,11 @@ class Population:
 
     @property
     def has_vehicles(self):
-        return bool(self.vehicles())
+        return bool(list(self.vehicles()))
 
     @property
     def has_electric_vehicles(self):
-        return bool(self.electric_vehicles())
+        return bool(list(self.electric_vehicles()))
 
     @property
     def has_uniquely_indexed_vehicle_types(self):
@@ -151,13 +151,20 @@ class Population:
         return len(all_vehicle_type_ids) == len(unique_vehicle_type_ids)
 
     def vehicles(self):
-        return {p.vehicle for _, _, p in self.people() if p.vehicle is not None}
+        for _, _, p in self.people():
+            v = p.vehicle
+            if v is not None:
+                yield v
 
     def electric_vehicles(self):
-        return {v for v in self.vehicles() if isinstance(v, ElectricVehicle)}
+        for v in self.vehicles():
+            if isinstance(v, ElectricVehicle):
+                yield v
 
     def vehicle_types(self):
-        return {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
+        v_types = {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
+        for vt in v_types:
+            yield vt
 
     def electric_vehicle_charger_types(self):
         chargers = set()
