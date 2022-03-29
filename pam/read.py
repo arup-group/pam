@@ -13,6 +13,7 @@ import json
 import pam.core as core
 import pam.activity as activity
 import pam.utils as utils
+from pam.vehicle import VehicleType, Vehicle, ElectricVehicle
 
 
 def load_travel_diary(
@@ -832,6 +833,8 @@ def from_to_travel_diary_read(
 def read_matsim(
         plans_path,
         attributes_path = None,
+        all_vehicles_path = None,
+        electric_vehicles_path = None,
         weight : int = 100,
         version : int = 11,
         household_key : Union[str, None] = None,
@@ -846,6 +849,8 @@ def read_matsim(
     <attribute class="java.lang.String" name="hid">hh_0001</attribute>
     :param plans: path to matsim format xml
     :param attributes: path to matsim format xml
+    :param all_vehicles_path: path to matsim all_vehicles xml file
+    :param electric_vehicles_path: path to matsim electric_vehicles xml
     :param weight: int
     :param version: int {11,12}, default = 11
     :param household_key: {str, None}
@@ -867,6 +872,10 @@ def read_matsim(
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
+    vehicles = {}
+    if all_vehicles_path:
+        vehicles = read_vehicles(all_vehicles_path, electric_vehicles_path)
+
     attributes_map = {}
     if version == 12:
         attributes_map = load_attributes_map_from_v12(plans_path)
@@ -877,7 +886,12 @@ def read_matsim(
 
         attributes = attributes_map.get(person_id, {})
 
-        person = core.Person(person_id, attributes=attributes, freq=weight)
+        if person_id in vehicles:
+            vehicle = vehicles[person_id]
+        else:
+            vehicle = None
+
+        person = core.Person(person_id, attributes=attributes, freq=weight, vehicle=vehicle)
 
         act_seq = 0
         leg_seq = 0
@@ -1116,6 +1130,69 @@ def sample_population(trips_df, sample_perc, attributes_df=None, weight_col='fre
             ).index
 
     return trips_df[trips_df.pid.isin(sample_pids)]
+
+
+def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
+    """
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and
+    electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    :param all_vehicles_path: path to matsim all_vehicles xml file
+    :param electric_vehicles_path: path to matsim electric_vehicles xml (optional)
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
+    """
+    vehicles = read_all_vehicles_file(all_vehicles_path)
+    if electric_vehicles_path:
+        vehicles = read_electric_vehicles_file(electric_vehicles_path, vehicles)
+    return vehicles
+
+
+def read_all_vehicles_file(path):
+    """
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    :param path: path to matsim all_vehicles xml file
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
+    """
+    vehicles = {}
+    vehicle_types = {}
+
+    for vehicle_type_elem in utils.get_elems(path, "vehicleType"):
+        vehicle_types[vehicle_type_elem.get('id')] = VehicleType.from_xml_elem(vehicle_type_elem)
+
+    for vehicle_elem in utils.get_elems(path, "vehicle"):
+        vehicles[vehicle_elem.get('id')] = Vehicle(id=vehicle_elem.get('id'),
+                                                   vehicle_type=vehicle_types[vehicle_elem.get('type')])
+
+    return vehicles
+
+
+def read_electric_vehicles_file(path, vehicles: dict = None):
+    """
+    Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    :param path: path to matsim electric_vehicles xml
+    :param vehicles: dictionary of {ID: pam.vehicle.Vehicle} objects, some of which may need to be updated to ElectricVehicle
+        based on contents of the electric_vehicles xml file. Optional, if not passed, vehicles will default to the
+        VehicleType defaults.
+    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
+    """
+    if vehicles is None:
+        logging.warning('All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types'
+                        'Definitions assumed by the Electric Vehicles')
+        vehicles = {}
+    for vehicle_elem in utils.get_elems(path, "vehicle"):
+        attribs = dict(vehicle_elem.attrib)
+        id = attribs.pop('id')
+        attribs['battery_capacity'] = float(attribs['battery_capacity'])
+        attribs['initial_soc'] = float(attribs['initial_soc'])
+        if id in vehicles:
+            elem_vehicle_type = attribs.pop('vehicle_type')
+            vehicle_type = vehicles[id].vehicle_type
+            if elem_vehicle_type != vehicle_type.id:
+                raise RuntimeError(f'Electric vehicle: {id} has mis-matched vehicle type '
+                                   f'defined: {elem_vehicle_type} != {vehicle_type.id}')
+        else:
+            vehicle_type = VehicleType(id=attribs.pop('vehicle_type'))
+        vehicles[id] = ElectricVehicle(id=id, vehicle_type=vehicle_type, **attribs)
+    return vehicles
 
 
 def load_pickle(path):
