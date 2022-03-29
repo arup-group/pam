@@ -5,8 +5,13 @@ from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from pam.scoring import CharyparNagelPlanScorer
 from .fixtures import default_config, config, default_leg, pt_wait_leg, car_leg, short_activity, late_activity, Anna, \
-    AnnaPT, early_activity, small_plan
+    AnnaPT, early_activity, small_plan, config_complex
+import os
+from pam.read import read_matsim
 
+test_experienced_plans_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data", "test_matsim_experienced_plans_v12.xml")
+)
 
 def test_score_plan_monetary_cost(default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
@@ -131,3 +136,13 @@ def test_score_pt_interchanges(AnnaPT, default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
     result = scorer.score_pt_interchanges(AnnaPT.plan, default_config)
     assert result == -1
+
+def test_scores_experienced(config_complex):
+    """ Test calculated scores against MATSim experienced plan scores. """
+    population = read_matsim(test_experienced_plans_path, version = 12, crop = False) 
+    scorer = CharyparNagelPlanScorer(config_complex)
+    for hid, pid, person in population.people():
+        person.attributes['subpopulation'] = 'default'
+        matsim_score = person.plan.score
+        pam_score = scorer.score_person(person)
+        assert abs(matsim_score - pam_score) < 0.1

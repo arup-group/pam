@@ -965,6 +965,11 @@ def read_matsim(
         
         person.plan.set_leg_purposes()
 
+        score = plan.get('score', None)
+        if score:
+            score = float(score)
+        person.plan.score = score # experienced plan scores
+
         if crop:
             person.plan.crop()
 
