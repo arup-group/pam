@@ -1542,6 +1542,69 @@
 		</plan>
 
 	</person>
+	
+	<person id="Jim" selected = "yes">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">electric</attribute>
+		</attributes>
+		<plan score="77.762093585343" selected="yes">
+			<activity type="home" link="1-1" end_time="07:39:44" >
+			</activity>
+			<leg mode="walk" dep_time="07:39:44" trav_time="00:02:36">
+				<route type="generic" start_link="1-1" end_link="1-1" trav_time="00:02:36" distance="130.0"></route>
+			</leg>
+			<activity type="pt interaction" link="1-1" x="0.0" y="5000.0" start_time="07:42:20" end_time="07:42:20" >
+			</activity>
+			<leg mode="bus" dep_time="07:42:20" trav_time="00:26:06">
+				<attributes>
+					<attribute name="enterVehicleTime" class="java.lang.Double">28801.0</attribute>
+				</attributes>
+				<route type="default_pt" start_link="1-1" end_link="2-2" trav_time="00:26:06" distance="5001.0">{"transitRouteId":"city_bus","boardingTime":"08:00:01","transitLineId":"city_bus","accessFacilityId":"A","egressFacilityId":"B"}</route>
+			</leg>
+			<activity type="pt interaction" link="2-2" x="5000.0" y="5000.0" start_time="08:08:26" end_time="08:08:26" >
+			</activity>
+			<leg mode="bus" dep_time="08:08:26" trav_time="00:40:57">
+				<attributes>
+					<attribute name="enterVehicleTime" class="java.lang.Double">31164.0</attribute>
+				</attributes>
+				<route type="default_pt" start_link="2-2" end_link="3-3" trav_time="00:40:57" distance="5001.0">{"transitRouteId":"city_bus2","boardingTime":"08:39:24","transitLineId":"city_bus2","accessFacilityId":"B","egressFacilityId":"F"}</route>
+			</leg>
+			<activity type="pt interaction" link="3-3" x="10100.0" y="5100.0" start_time="08:49:23" end_time="08:49:23" >
+			</activity>
+			<leg mode="walk" dep_time="08:49:23" trav_time="00:00:00">
+				<route type="generic" start_link="3-3" end_link="2-3" trav_time="00:00:00" distance="0.0"></route>
+			</leg>
+			<activity type="work" link="2-3" x="10100.0" y="5100.0" start_time="08:49:23" end_time="16:18:37" >
+			</activity>
+			<leg mode="walk" dep_time="16:18:37" trav_time="00:00:00">
+				<route type="generic" start_link="2-3" end_link="3-3" trav_time="00:00:00" distance="0.0"></route>
+			</leg>
+			<activity type="pt interaction" link="3-3" x="10100.0" y="5100.0" start_time="16:18:37" end_time="16:18:37" >
+			</activity>
+			<leg mode="bus" dep_time="16:18:37" trav_time="00:20:46">
+				<attributes>
+					<attribute name="enterVehicleTime" class="java.lang.Double">59401.0</attribute>
+				</attributes>
+				<route type="default_pt" start_link="3-3" end_link="2-2" trav_time="00:20:46" distance="5001.0">{"transitRouteId":"city_bus2","boardingTime":"16:30:01","transitLineId":"city_bus2","accessFacilityId":"F","egressFacilityId":"B"}</route>
+			</leg>
+			<activity type="pt interaction" link="2-2" x="5000.0" y="5000.0" start_time="16:39:23" end_time="16:39:23" >
+			</activity>
+			<leg mode="bus" dep_time="16:39:23" trav_time="00:44:10">
+				<attributes>
+					<attribute name="enterVehicleTime" class="java.lang.Double">60001.0</attribute>
+				</attributes>
+				<route type="default_pt" start_link="2-2" end_link="1-1" trav_time="00:44:10" distance="25014.0">{"transitRouteId":"city_bus","boardingTime":"16:40:01","transitLineId":"city_bus","accessFacilityId":"B","egressFacilityId":"A"}</route>
+			</leg>
+			<activity type="pt interaction" link="1-1" x="0.0" y="5000.0" start_time="17:23:33" end_time="17:23:33" >
+			</activity>
+			<leg mode="walk" dep_time="17:23:33" trav_time="00:02:36">
+				<route type="generic" start_link="1-1" end_link="1-1" trav_time="00:02:36" distance="130.0"></route>
+			</leg>
+			<activity type="home" link="1-1" x="0.0" y="5100.0" start_time="17:26:09" >
+			</activity>
+		</plan>
+
+	</person>
 
 <!-- ====================================================================== -->
 
