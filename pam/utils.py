@@ -55,8 +55,17 @@ def datetime_to_matsim_time(dt):
 def matsim_time_to_datetime(string):
     """
     Convert matsim format time (08:27:33) to datetime.
+    Allows reading MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
     """
-    return datetime.strptime(string, "%H:%M:%S")
+    if string[0] not in ["0","1"]:
+        days, hours = divmod(int(string[:2]), 24)
+        days += 1
+        return datetime.strptime(
+            "{:02d} {:02d}{}".format(days, hours, string[2:]), 
+            "%d %H:%M:%S"
+        )
+    else:
+        return datetime.strptime(string, "%H:%M:%S")
 
 
 def timedelta_to_matsim_time(td):

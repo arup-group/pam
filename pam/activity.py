@@ -8,6 +8,7 @@ import pam.utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.variables import END_OF_DAY
+from pam.utils import minutes_to_datetime
 
 
 class Plan:
@@ -181,14 +182,14 @@ class Plan:
         Check that start and end time of Activities and Legs are consistent.
         :return: bool
         """
-        if not self.day[0].start_time == pam.utils.minutes_to_datetime(0):
+        if not self.day[0].start_time == minutes_to_datetime(0):
             return False
 
         for i in range(self.length - 1):
             if not self.day[i].end_time == self.day[i+1].start_time:
                 return False
 
-        if not self.day[-1].end_time == pam.variables.END_OF_DAY:
+        if not self.day[-1].end_time == END_OF_DAY:
             return False
 
         return True
