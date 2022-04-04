@@ -17,6 +17,7 @@ class Plan:
         self.home_location = Location(area=home_area)
         self.logger = logging.getLogger(__name__)
         self.plan_freq = freq
+        self.score = None
 
     @property
     def home(self):

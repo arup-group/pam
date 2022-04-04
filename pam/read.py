@@ -951,6 +951,10 @@ def read_matsim(
                 distance = route.get("distance")
                 if distance is not None:
                     distance = float(distance)
+                
+                boarding_time = transit_route.get("boardingTime")
+                if boarding_time is not None:
+                    boarding_time = utils.matsim_time_to_datetime(boarding_time)
 
                 person.add(
                     activity.Leg(
@@ -965,6 +969,7 @@ def read_matsim(
                         route_id = transit_route.get("transitRouteId"),
                         o_stop = transit_route.get("accessFacilityId"),
                         d_stop = transit_route.get("egressFacilityId"),
+                        boarding_time = boarding_time,
                         network_route=network_route,
                     )
                 )
@@ -973,6 +978,11 @@ def read_matsim(
             person.plan.simplify_pt_trips()
         
         person.plan.set_leg_purposes()
+
+        score = plan.get('score', None)
+        if score:
+            score = float(score)
+        person.plan.score = score # experienced plan scores
 
         if crop:
             person.plan.crop()
