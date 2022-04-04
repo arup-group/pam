@@ -147,6 +147,3 @@ def test_scores_experienced(config_complex):
         matsim_score = person.plan.score
         pam_score = scorer.score_person(person)
         assert abs(matsim_score - pam_score) < 0.1
-
-def test_score_pt_interchange(config_complex):
-    pass
