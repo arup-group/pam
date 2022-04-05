@@ -52,11 +52,14 @@ def datetime_to_matsim_time(dt):
     return dt.strftime("%H:%M:%S")
 
 
-def matsim_time_to_datetime(string):
+def matsim_time_to_datetime(string : str) -> datetime:
     """
     Convert matsim format time (08:27:33) to datetime.
+    Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
+
+    :param string: Time from start of the simulation (%H:%M:%S)
     """
-    return datetime.strptime(string, "%H:%M:%S")
+    return safe_strptime(string)
 
 
 def timedelta_to_matsim_time(td):

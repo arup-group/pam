@@ -8,6 +8,7 @@ from shapely.geometry import LineString, Point
 from pam import utils, plot, read
 from pam.core import Household, Population
 from tests.fixtures import instantiate_household_with
+from datetime import datetime
 
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
@@ -204,3 +205,19 @@ def test_get_linestring_with_s2_cellids():
     ls = utils.get_linestring(from_point, to_point)
     assert isinstance(ls, LineString)
     assert [(round(c[0], 6), round(c[1], 6)) for c in ls.coords] == [(-0.137925, 51.521699), (-0.134456, 51.520027)]
+
+
+def test_matsim_time():
+    """ Parse matsim timestamp """
+    dt = utils.matsim_time_to_datetime('12:01:02')
+    assert dt == datetime(1900, 1, 1, 12, 1, 2)
+
+def test_matsim_time_past_midnight():
+    """ Day-two matsim timestamp """
+    dt = utils.matsim_time_to_datetime('25:01:02')
+    assert dt == datetime(1900, 1, 2, 1, 1, 2)
+
+def test_matsim_time_day_three():
+    """ Day-three matsim timestamp """
+    dt = utils.matsim_time_to_datetime('49:01:02')
+    assert dt == datetime(1900, 1, 3, 1, 1, 2)
