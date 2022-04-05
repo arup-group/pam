@@ -2,6 +2,7 @@ import os
 import pytest
 
 from pam.read import load_attributes_map, read_matsim
+from pam.activity import Plan
 
 
 test_trips_path = os.path.abspath(
@@ -127,3 +128,13 @@ def test_fail_v12_plus_attributes():
 def test_fail_bad_version():
     with pytest.raises(UserWarning):
         population = read_matsim(test_tripsv12_path, version=1)
+
+def test_parse_simple_matsim_non_selected():
+   population = read_matsim(test_trips_path, test_attributes_path, keep_non_selected=True)
+   person1 = population['census_1']['census_1']
+   person2 = population['census_2']['census_2']
+   assert person1.has_valid_plan
+   assert person2.has_valid_plan
+   assert len(person1.plans_non_selected) == 1
+   assert len(person2.plans_non_selected) == 0
+   assert isinstance(person1.plans_non_selected[0], Plan)
