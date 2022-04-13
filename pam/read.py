@@ -840,7 +840,8 @@ def read_matsim(
         household_key : Union[str, None] = None,
         simplify_pt_trips : bool = False,
         autocomplete : bool = True,
-        crop : bool = True
+        crop : bool = True,
+        keep_non_selected : bool = False
 ):
     """
     Load a MATSim format population into core population format.
@@ -854,6 +855,7 @@ def read_matsim(
     :param weight: int
     :param version: int {11,12}, default = 11
     :param household_key: {str, None}
+    :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected).
     :return: Population
     """
     logger = logging.getLogger(__name__)
@@ -882,117 +884,30 @@ def read_matsim(
     elif attributes_path:
         attributes_map = load_attributes_map(attributes_path)
 
-    for person_id, plan in selected_plans(plans_path):
-
+    for person_xml in utils.get_elems(plans_path, "person"):
+        person_id = person_xml.get('id')
         attributes = attributes_map.get(person_id, {})
-
         if person_id in vehicles:
             vehicle = vehicles[person_id]
         else:
             vehicle = None
-
         person = core.Person(person_id, attributes=attributes, freq=weight, vehicle=vehicle)
 
-        act_seq = 0
-        leg_seq = 0
-        arrival_dt = datetime(1900, 1, 1)
-        departure_dt = None
-
-        for stage in plan:
-            """
-            Loop through stages incrementing time and extracting attributes.
-            """
-            if stage.tag in ['act', 'activity']:
-                act_seq += 1
-                act_type = stage.get('type')
-
-                loc = None
-                x, y = stage.get('x'), stage.get('y')
-                if x and y:
-                    loc = Point(int(float(x)), int(float(y)))
-
-                if act_type == 'pt interaction':
-                    departure_dt = arrival_dt + timedelta(
-                        seconds=0.)  # todo this seems to be the case in matsim for pt interactions
-
-                else:
-                    departure_dt = utils.safe_strptime(
-                        stage.get('end_time', '23:59:59')
+        for plan_xml in person_xml:
+            if plan_xml.get('selected') == 'yes':
+                person.plan = parse_matsim_plan(
+                    plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips, 
+                    crop=crop, autocomplete=autocomplete
+                    )
+            elif keep_non_selected and plan_xml.get('selected') == 'no':
+                person.plans_non_selected.append(
+                    parse_matsim_plan(
+                        plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips, 
+                        crop=crop, autocomplete=autocomplete
+                        )
                     )
 
-                if departure_dt < arrival_dt:
-                    logger.warning(f"Negative duration activity found at pid={person_id}")
-
-                person.add(
-                    activity.Activity(
-                        seq=act_seq,
-                        act=act_type,
-                        loc=loc,
-                        link=stage.get('link'),
-                        area=None,  # todo
-                        start_time=arrival_dt,
-                        end_time=departure_dt
-                    )
-                )
-
-            if stage.tag == 'leg':
-
-                route, mode, network_route, transit_route = \
-                    extract_route_attributes(stage, version)
-                leg_seq += 1
-                trav_time = stage.get('trav_time')
-                if trav_time:
-                    h, m, s = trav_time.split(":")
-                    leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-                    arrival_dt = departure_dt + leg_duration
-                else:
-                    arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
-                
-                distance = route.get("distance")
-                if distance is not None:
-                    distance = float(distance)
-                
-                boarding_time = transit_route.get("boardingTime")
-                if boarding_time is not None:
-                    boarding_time = utils.matsim_time_to_datetime(boarding_time)
-
-                person.add(
-                    activity.Leg(
-                        seq=leg_seq,
-                        mode=mode,
-                        start_link=route.get('start_link'),
-                        end_link=route.get('end_link'),
-                        start_time=departure_dt,
-                        end_time=arrival_dt,
-                        distance=distance,
-                        service_id = transit_route.get("transitLineId"),
-                        route_id = transit_route.get("transitRouteId"),
-                        o_stop = transit_route.get("accessFacilityId"),
-                        d_stop = transit_route.get("egressFacilityId"),
-                        boarding_time = boarding_time,
-                        network_route=network_route,
-                    )
-                )
-
-        if simplify_pt_trips:
-            person.plan.simplify_pt_trips()
-        
-        person.plan.set_leg_purposes()
-
-        score = plan.get('score', None)
-        if score:
-            score = float(score)
-        person.plan.score = score # experienced plan scores
-
-        if crop:
-            person.plan.crop()
-
-        if autocomplete:
-            person.plan.autocomplete_matsim()
-
-        """
-        Check if using households, then update population accordingly.
-        """
+        # Check if using households, then update population accordingly.
         if household_key and attributes.get(household_key):  # using households
             if population.get(attributes.get(household_key)):  # existing household
                 household = population.get(attributes.get(household_key))
@@ -1008,6 +923,110 @@ def read_matsim(
 
     return population
 
+def parse_matsim_plan(plan_xml, person_id : str, version : int, simplify_pt_trips : bool, crop : bool, autocomplete : bool) -> activity.Plan:
+    """
+    Parse a MATSim plan.
+    """
+    logger = logging.getLogger(__name__)
+    act_seq = 0
+    leg_seq = 0
+    arrival_dt = datetime(1900, 1, 1)
+    departure_dt = None
+    plan = activity.Plan()
+
+    for stage in plan_xml:
+        """
+        Loop through stages incrementing time and extracting attributes.
+        """
+        if stage.tag in ['act', 'activity']:
+            act_seq += 1
+            act_type = stage.get('type')
+
+            loc = None
+            x, y = stage.get('x'), stage.get('y')
+            if x and y:
+                loc = Point(int(float(x)), int(float(y)))
+
+            if act_type == 'pt interaction':
+                departure_dt = arrival_dt + timedelta(
+                    seconds=0.)  # todo this seems to be the case in matsim for pt interactions
+
+            else:
+                departure_dt = utils.safe_strptime(
+                    stage.get('end_time', '23:59:59')
+                )
+
+            if departure_dt < arrival_dt:
+                logger.warning(f"Negative duration activity found at pid={person_id}")
+
+            plan.add(
+                activity.Activity(
+                    seq=act_seq,
+                    act=act_type,
+                    loc=loc,
+                    link=stage.get('link'),
+                    area=None,  # todo
+                    start_time=arrival_dt,
+                    end_time=departure_dt
+                )
+            )
+
+        if stage.tag == 'leg':
+
+            route, mode, network_route, transit_route = \
+                extract_route_attributes(stage, version)
+            leg_seq += 1
+            trav_time = stage.get('trav_time')
+            if trav_time:
+                h, m, s = trav_time.split(":")
+                leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                arrival_dt = departure_dt + leg_duration
+            else:
+                arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
+            
+            distance = route.get("distance")
+            if distance is not None:
+                distance = float(distance)
+            
+            boarding_time = transit_route.get("boardingTime")
+            if boarding_time is not None:
+                boarding_time = utils.matsim_time_to_datetime(boarding_time)
+
+            plan.add(
+                activity.Leg(
+                    seq=leg_seq,
+                    mode=mode,
+                    start_link=route.get('start_link'),
+                    end_link=route.get('end_link'),
+                    start_time=departure_dt,
+                    end_time=arrival_dt,
+                    distance=distance,
+                    service_id = transit_route.get("transitLineId"),
+                    route_id = transit_route.get("transitRouteId"),
+                    o_stop = transit_route.get("accessFacilityId"),
+                    d_stop = transit_route.get("egressFacilityId"),
+                    boarding_time = boarding_time,
+                    network_route=network_route,
+                )
+            )
+
+    if simplify_pt_trips:
+        plan.simplify_pt_trips()
+    
+    plan.set_leg_purposes()
+
+    score = plan_xml.get('score', None)
+    if score:
+        score = float(score)
+    plan.score = score # experienced plan scores
+
+    if crop:
+        plan.crop()
+
+    if autocomplete:
+        plan.autocomplete_matsim()
+
+    return plan
 
 def extract_route_attributes(leg, version):
     if version == 12:

@@ -701,6 +701,7 @@ class Person:
         self.person_freq = freq
         self.attributes = attributes
         self.plan = activity.Plan(home_area=home_area)
+        self.plans_non_selected = []
         self.home_area = home_area
         self.vehicle = None
         if vehicle:
