@@ -576,6 +576,7 @@ def tour_based_travel_diary_read(
                         end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
                         end_time=utils.parse_time(trip.tet),
+                        distance = trip.get('distance'),
                         freq=trip.freq,
                     )
                 )
@@ -692,7 +693,8 @@ def trip_based_travel_diary_read(
                         start_loc=start_loc,
                         end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
-                        end_time=utils.parse_time(trip.tet)
+                        end_time=utils.parse_time(trip.tet),
+                        distance = trip.get('distance')
                     )
                 )
 
@@ -808,7 +810,8 @@ def from_to_travel_diary_read(
                         start_loc=start_loc,
                         end_loc=end_loc,
                         start_time=utils.parse_time(trip.tst),
-                        end_time=utils.parse_time(trip.tet)
+                        end_time=utils.parse_time(trip.tet),
+                        distance = trip.get('distance')
                     )
                 )
 
