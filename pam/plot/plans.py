@@ -206,18 +206,21 @@ def plot_activities(df, **kwargs):
         for side in ['top', 'right', 'bottom', 'left']:
             ax.spines[side].set_visible(False)
 
-    legend_elements = []
-    for act, color in cmap.items():
-        legend_elements.append(
-            Patch(facecolor=color, edgecolor='black', label=act)
-        )
+    if kwargs.get("legend", True) == True:
+        legend_elements = []
+        for act, color in cmap.items():
+            legend_elements.append(
+                Patch(facecolor=color, edgecolor='black', label=act)
+            )
+        plt.legend(
+            handles=legend_elements, ncol=len(legend_elements),
+            prop={'size':12}, frameon=False,
+            bbox_to_anchor=(.5, -.5), loc='upper center', borderaxespad=0.
+            )
             
     plt.xticks(range(25))
     plt.xlim(right=24)
-    plt.legend(
-        handles=legend_elements, ncol=len(legend_elements),
-        prop={'size':12}, frameon=False,
-        bbox_to_anchor=(.5, -.5), loc='upper center', borderaxespad=0.)
+
     plt.tight_layout()
 
     if kwargs.get("path") is not None:
