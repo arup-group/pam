@@ -448,7 +448,7 @@ def add_persons_from_persons_attributes(
             person = core.Person(
                 pid,
                 attributes=person_attributes,
-                home_area=person_attributes.pop('hzone', None),
+                home_area=person_attributes.get('hzone', None),
                 freq=person_attributes.pop('freq', None)
                 )
             household.add(person)
@@ -642,7 +642,7 @@ def trip_based_travel_diary_read(
                 person.stay_at_home()
                 continue
 
-            home_area = person_trips.hzone.iloc[0]
+            home_area = household.location.area or person_trips.hzone.iloc[0]
             origin_area = person_trips.ozone.iloc[0]
 
             if not origin_area == home_area:
@@ -657,7 +657,7 @@ def trip_based_travel_diary_read(
                 pid,
                 attributes=person_attributes,
                 freq=person_attributes.pop('freq', None),
-                # home_area=home_area
+                home_area=home_area
             )
 
             loc = None
@@ -767,10 +767,13 @@ def from_to_travel_diary_read(
             else:
                 person_attributes = {}
 
+            home_area = household.location.area or person_attributes.get('hzone', None)
+
             person = core.Person(
                 pid,
                 attributes=person_attributes,
                 freq=person_attributes.pop('freq', None),
+                home_area=home_area
             )
 
             first_act = person_trips.iloc[0].oact.lower()
