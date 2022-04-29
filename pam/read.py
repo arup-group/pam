@@ -642,7 +642,7 @@ def trip_based_travel_diary_read(
                 person.stay_at_home()
                 continue
 
-            home_area = household.location.area or person_trips.hzone.iloc[0]
+            home_area = getattr(household.location, 'area', None) or person_trips.hzone.iloc[0]
             origin_area = person_trips.ozone.iloc[0]
 
             if not origin_area == home_area:
@@ -767,7 +767,7 @@ def from_to_travel_diary_read(
             else:
                 person_attributes = {}
 
-            home_area = household.location.area or person_attributes.get('hzone', None)
+            home_area = getattr(household.location, 'area', None) or person_attributes.get('hzone', None)
 
             person = core.Person(
                 pid,
