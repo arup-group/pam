@@ -187,7 +187,7 @@ def test_move_activity_with_home_default():
 
     plan.move_activity(2)
 
-    assert plan[2].location == 'a'
+    assert plan[2].location.area == 'a'
 
 
 def test_move_activity_with_home_default_updates_legs():
@@ -200,8 +200,8 @@ def test_move_activity_with_home_default_updates_legs():
 
     plan.move_activity(2)
 
-    assert plan[1].end_location == 'a'
-    assert plan[3].start_location == 'a'
+    assert plan[1].end_location.area == 'a'
+    assert plan[3].start_location.area == 'a'
 
 
 def test_move_activity_with_different_default():

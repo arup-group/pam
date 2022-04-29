@@ -113,8 +113,6 @@ def test_build_population_from_persons_and_hhs(hhs_attributes, persons_attribute
 
 
 def test_read_trips_only(trips):
-    print(trips.describe())
-    print(trips.dtypes)
     population = load_travel_diary(trips=trips)
     assert len(population) == 3
 
@@ -351,7 +349,7 @@ def test_use_trips_freq_as_persons_and_hhs_freq_no_persons_attributes(trips):
 
 def test_trip_based_encoding(trips):
     population = load_travel_diary(trips=trips, tour_based=False)
-    assert len(population) == 3 
+    assert len(population) == 3
 
 
 def test_act_based_encoding(activity_encoded_trips):
@@ -367,11 +365,11 @@ def test_read_trips_location(trips):
         persons_attributes=None,
         hhs_attributes=None
         )
-    assert population[0][0].home_area == 'Harrow'
-    
-    # person and household location match 
+    assert population[0][0].home.area == 'Harrow'
+
+    # person and household location match
     for hid, pid, person in population.people():
-        assert person.home_area == population[hid].location.area
+        assert person.home.area == population[hid].location.area
 
 
 def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes, hhs_attributes):
@@ -380,8 +378,46 @@ def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes,
         persons_attributes=persons_attributes,
         hhs_attributes=hhs_attributes
         )
-    assert population[0][0].home_area == 'Harrow'
-    
-    # person and household location match 
+    assert population[0][0].home.area == 'Harrow'
+
+    # person and household location match
     for hid, pid, person in population.people():
-        assert person.home_area == population[hid].location.area
+        assert person.home.area == population[hid].location.area
+
+
+def test_home_location_consistency_between_person_and_plan(trips, persons_attributes, hhs_attributes):
+    """
+    Note that this works because people share a location object with their plans.
+    """
+    population = load_travel_diary(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+        )
+    hh = population[0]
+    person = hh[0]
+    assert person.home.area == "Harrow"
+    assert person.plan.home == "Harrow"
+    person.home.area = "Test"
+    assert person.home.area == "Test"
+    assert person.plan.home == "Test"
+
+
+def test_home_location_consistency_between_hhs_and_persons_when_changing_hh_area(trips, persons_attributes, hhs_attributes):
+    population = load_travel_diary(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+        )
+    hh = population[0]
+    person = hh[0]
+
+    assert hh.location.area == "Harrow"
+    assert person.home == "Harrow"
+    hh.location.area = "Test"
+    assert person.home == "Harrow"  # no change
+    hh.set_area("Test")
+    hh.set_loc("Test")
+    assert person.home == "Test"
+    assert hh.location == person.home
+

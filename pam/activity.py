@@ -2,7 +2,9 @@ from datetime import datetime
 from datetime import timedelta
 import logging
 from copy import copy
+from sunau import Au_read
 
+from pam.location import Location
 from pam.plot import plans as plot
 import pam.utils
 import pam.variables
@@ -12,9 +14,16 @@ from pam.variables import END_OF_DAY
 
 class Plan:
 
-    def __init__(self, home_area=None, freq=None):
+    def __init__(self, home_area=None, home_location:Location=None, home_loc=None, freq=None):
         self.day = []
-        self.home_location = Location(area=home_area)
+        if home_location:
+            self.home_location = home_location
+        else:
+            self.home_location = Location()
+        if home_area:
+            self.home_location.area = home_area
+        if home_loc:
+            self.home_location.loc = home_loc
         self.logger = logging.getLogger(__name__)
         self.plan_freq = freq
         self.score = None
@@ -983,49 +992,3 @@ class Leg(PlanComponent):
         # calculate leg euclidean distance in km:
         # assumes grid definition of Location class
         return ((self.end_location.loc.x-self.start_location.loc.x)**2 + (self.end_location.loc.y-self.start_location.loc.y)**2)**0.5 / 1000
-
-
-class Location:
-    def __init__(self, loc=None, link=None, area=None):
-        self.loc = loc
-        self.link = link
-        self.area = area
-
-    @property
-    def min(self):
-        if self.loc is not None:
-            return self.loc
-        if self.link is not None:
-            return self.link
-        if self.area is not None:
-            return self.area
-
-    @property
-    def max(self):
-        if self.area is not None:
-            return self.area
-        if self.link is not None:
-            return self.link
-        if self.loc is not None:
-            return self.loc
-
-    @property
-    def exists(self):
-        if self.area or self.link or self.loc:
-            return True
-
-    def __str__(self):
-        return str(self.min)
-
-    def __eq__(self, other):
-        if isinstance(other, str):
-            return self.area == other
-        if self.loc is not None and other.loc is not None:
-            return self.loc == other.loc
-        if self.link is not None and other.link is not None:
-            return self.link == other.link
-        if self.area is not None and other.area is not None:
-            return self.area == other.area
-        raise UserWarning(
-            "Cannot check for location equality without same loc types (areas/locs/links)."
-        )

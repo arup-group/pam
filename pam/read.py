@@ -1,10 +1,6 @@
-from numpy import DataSource
 import pandas as pd
 from shapely.geometry import Point
 from datetime import datetime, timedelta
-from lxml import etree as et
-import os
-import gzip
 import logging
 import pickle
 from typing import Union, Optional
@@ -91,7 +87,7 @@ def load_travel_diary(
                 If you do not wish to assume this, try setting 'tour_based' = True (default).
                 """
                 )
-        
+
         # check that trips diary has required fields
         missing = {'pid', 'ozone', 'dzone', 'purp', 'mode', 'tst', 'tet'} - set(trips.columns)
         if missing:
@@ -101,7 +97,7 @@ def load_travel_diary(
         raise UserWarning(
     f"""
     You must include a trips 'seq' column if you wish to sort trips:
-    Either include a 'seq' column or use the existing ordering by 
+    Either include a 'seq' column or use the existing ordering by
     setting 'sort_by_seq' = False/None (default).
     """
     )
@@ -123,7 +119,7 @@ def load_travel_diary(
                 Please check 'freq' is included in the trips_diary input.
                 """
                 )
-            
+
         logger.info("Loading person freq ('freq') from trips_diary freq input.")
         pid_freq_map = dict(zip(trips.pid, trips.freq))  # this will take last freq from trips
 
@@ -151,7 +147,7 @@ def load_travel_diary(
                 Please check 'hid' is included in the trips_diary input.
                 """
                 )
-            
+
         logger.info("Loading houshold freq ('freq') from trips_diary freq input.")
         hid_freq_map = dict(zip(trips.hid, trips.freq))  # this will take last freq from trips
 
@@ -332,8 +328,8 @@ def build_population(
     hhs_attributes: Optional[pd.DataFrame] = None
     ):
     """
-    Build a population of households and persons (without plans) 
-    from available trips, persons_attributes and households_attributes 
+    Build a population of households and persons (without plans)
+    from available trips, persons_attributes and households_attributes
     data.
     Details of required table formats are in the README.
 
@@ -452,7 +448,7 @@ def add_persons_from_persons_attributes(
                 freq=person_attributes.pop('freq', None)
                 )
             household.add(person)
-        
+
 
 def add_persons_from_trips(
     population: core.Population,
@@ -516,8 +512,6 @@ def tour_based_travel_diary_read(
     :return: core.Population
     """
 
-    logger = logging.getLogger(__name__)
-
     population = build_population(
         trips=trips,
         persons_attributes=persons_attributes,
@@ -531,7 +525,7 @@ def tour_based_travel_diary_read(
         trips = trips.sort_values(['hid','pid','seq'])
 
     trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
-    
+
     for hid, household in population:
         for pid, person in household:
             person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
@@ -543,8 +537,8 @@ def tour_based_travel_diary_read(
             loc = None
             if include_loc:
                 loc = person_trips.start_loc.iloc[0]
-            
-            person = population[hid][pid] 
+
+            person = population[hid][pid]
 
             person.add(
                 activity.Activity(
@@ -618,8 +612,6 @@ def trip_based_travel_diary_read(
     :return: core.Population
     """
 
-    logger = logging.getLogger(__name__)
-
     population = build_population(
         trips=trips,
         persons_attributes=persons_attributes,
@@ -631,9 +623,9 @@ def trip_based_travel_diary_read(
 
     if sort_by_seq:
         trips = trips.sort_values(['hid','pid','seq'])
-    
+
     trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
-    
+
     for hid, household in population:
         for pid, person in household:
             person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
@@ -642,23 +634,8 @@ def trip_based_travel_diary_read(
                 person.stay_at_home()
                 continue
 
-            home_area = getattr(household.location, 'area', None) or person_trips.hzone.iloc[0]
+            home_area = household.location.area or person_trips.hzone.iloc[0]
             origin_area = person_trips.ozone.iloc[0]
-
-            if not origin_area == home_area:
-                logger.warning(f" Person pid:{pid} plan does not start with 'home' activity")
-
-            if persons_attributes is not None:
-                person_attributes = persons_attributes.loc[pid].to_dict()
-            else:
-                person_attributes = {}
-
-            person = core.Person(
-                pid,
-                attributes=person_attributes,
-                freq=person_attributes.pop('freq', None),
-                home_area=home_area
-            )
 
             loc = None
             if include_loc:
@@ -736,8 +713,6 @@ def from_to_travel_diary_read(
     :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
     :param sort_by_seq=None, optionally force trip sorting as True or False
     """
-    # TODO check for required col headers and give useful error?
-
     logger = logging.getLogger(__name__)
 
     population = build_population(
@@ -751,9 +726,9 @@ def from_to_travel_diary_read(
 
     if sort_by_seq:
         trips = trips.sort_values(['hid','pid','seq'])
-    
+
     trips_dict = hh_person_df_to_dict(trips, 'hid', 'pid') # convert to dict for faster indexing
-    
+
     for hid, household in population:
         for pid, person in household:
             person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
@@ -762,23 +737,9 @@ def from_to_travel_diary_read(
                 person.stay_at_home()
                 continue
 
-            if persons_attributes is not None:
-                person_attributes = persons_attributes.loc[pid].to_dict()
-            else:
-                person_attributes = {}
-
-            home_area = getattr(household.location, 'area', None) or person_attributes.get('hzone', None)
-
-            person = core.Person(
-                pid,
-                attributes=person_attributes,
-                freq=person_attributes.pop('freq', None),
-                home_area=home_area
-            )
-
             first_act = person_trips.iloc[0].oact.lower()
             if not first_act == "home":
-                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity")
+                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity: {first_act}")
 
             loc = None
             if include_loc:
@@ -871,7 +832,7 @@ def read_matsim(
     if attributes_path is not None and version == 12:
         raise UserWarning(
     """
-    You have provided an attributes_path and enables matsim version 12, but 
+    You have provided an attributes_path and enables matsim version 12, but
     v12 does not require an attributes input:
     Either remove the attributes_path arg, or enable version 11.
     """
@@ -902,13 +863,13 @@ def read_matsim(
         for plan_xml in person_xml:
             if plan_xml.get('selected') == 'yes':
                 person.plan = parse_matsim_plan(
-                    plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips, 
+                    plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips,
                     crop=crop, autocomplete=autocomplete
                     )
             elif keep_non_selected and plan_xml.get('selected') == 'no':
                 person.plans_non_selected.append(
                     parse_matsim_plan(
-                        plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips, 
+                        plan_xml=plan_xml, person_id=person_id, version=version, simplify_pt_trips=simplify_pt_trips,
                         crop=crop, autocomplete=autocomplete
                         )
                     )
@@ -989,11 +950,11 @@ def parse_matsim_plan(plan_xml, person_id : str, version : int, simplify_pt_trip
                 arrival_dt = departure_dt + leg_duration
             else:
                 arrival_dt = departure_dt  # todo this assumes 0 duration unless already known
-            
+
             distance = route.get("distance")
             if distance is not None:
                 distance = float(distance)
-            
+
             boarding_time = transit_route.get("boardingTime")
             if boarding_time is not None:
                 boarding_time = utils.matsim_time_to_datetime(boarding_time)
@@ -1018,7 +979,7 @@ def parse_matsim_plan(plan_xml, person_id : str, version : int, simplify_pt_trip
 
     if simplify_pt_trips:
         plan.simplify_pt_trips()
-    
+
     plan.set_leg_purposes()
 
     score = plan_xml.get('score', None)
