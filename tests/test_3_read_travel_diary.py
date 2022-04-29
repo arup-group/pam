@@ -357,3 +357,31 @@ def test_trip_based_encoding(trips):
 def test_act_based_encoding(activity_encoded_trips):
     population = load_travel_diary(trips=activity_encoded_trips)
     assert len(population) == 3
+
+
+# test inferring home location
+
+def test_read_trips_location(trips):
+    population = load_travel_diary(
+        trips=trips,
+        persons_attributes=None,
+        hhs_attributes=None
+        )
+    assert population[0][0].home_area == 'Harrow'
+    
+    # person and household location match 
+    for hid, pid, person in population.people():
+        assert person.home_area == population[hid].location.area
+
+
+def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes, hhs_attributes):
+    population = load_travel_diary(
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes
+        )
+    assert population[0][0].home_area == 'Harrow'
+    
+    # person and household location match 
+    for hid, pid, person in population.people():
+        assert person.home_area == population[hid].location.area
