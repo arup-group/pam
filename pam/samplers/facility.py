@@ -65,11 +65,12 @@ class FacilitySampler:
         # spatial join
         if activity_areas_path is None:
             self.activity_areas = self.spatial_join(facilities, zones)
+            self.activity_areas_dict = self.activity_areas_indexing(self.activity_areas)
         else:
             self.load_activity_areas(activity_areas_path)
 
         # build samplers
-        self.samplers = self.build_facilities_sampler(self.activity_areas, weight_on = weight_on, max_walk = max_walk)
+        self.samplers = self.build_facilities_sampler(self.activity_areas_dict, weight_on = weight_on, max_walk = max_walk)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -146,21 +147,33 @@ class FacilitySampler:
         Spatially join facility and zone data
         """
         self.logger.warning("Joining facilities data to zones, this may take a while.")
-        return gp.sjoin(facilities, zones, how='inner', op='intersects')
+        activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
+        return activity_areas
+
+    def activity_areas_indexing(self, activity_areas):
+        """
+        Convert joined zone-activities gdf to a nested dictionary for faster indexing
+        The first index level refers to zones, while the second to activity purposes.
+        """
+        activity_areas_dict = {x:{} for x in activity_areas['index_right'].unique()}
+        for (zone, act), facility_data in activity_areas.groupby(['index_right', 'activity']):
+            activity_areas_dict[zone][act] = facility_data
+       
+        return activity_areas_dict
 
     def export_activity_areas(self, filepath):
         """
         Export the spatially joined facilities-zones geodataframe
         """
         with open(filepath, 'wb') as f:
-            pickle.dump(self.activity_areas, f)
+            pickle.dump(self.activity_areas_dict, f)
 
     def load_activity_areas(self, filepath):
         """
         Load the spatially joined facilities-zones geodataframe
         """
         with open(filepath, 'rb') as f:
-            self.activity_areas = pickle.load(f)
+            self.activity_areas_dict = pickle.load(f)
 
     def build_facilities_sampler(self, activity_areas, weight_on = None, max_walk = None):
         """
@@ -170,24 +183,18 @@ class FacilitySampler:
 
         :params str weight_on: a column (name) of the facilities geodataframe to be used as a sampling weight
         """
-        activity_areas = self.activity_areas
-        # convert to dictionary for faster indexing
-        activity_areas_dict = {x:{} for x in activity_areas['index_right'].unique()}
-        for (zone, act), facility_data in activity_areas.groupby(['index_right', 'activity']):
-            activity_areas_dict[zone][act] = facility_data
-
         sampler_dict = {}
 
         self.logger.warning("Building sampler, this may take a while.")
-        for zone in set(activity_areas.index_right):
+        for zone in set(activity_areas.keys()):
             sampler_dict[zone] = {}
-            zone_facs = activity_areas_dict.get(zone, {})
+            zone_facs = activity_areas.get(zone, {})
 
             for act in self.activities:
                 self.logger.debug(f"Building sampler for zone:{zone} act:{act}.")
                 facs = zone_facs.get(act, None)
                 if facs is not None:
-                    points = [(i, g) for i, g in facs.geometry.items()]
+                    points = list(facs.geometry.items())
                     if weight_on is not None:
                         # weighted sampler
                         weights = facs[weight_on]
