@@ -2,7 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 import logging
 from copy import copy
-from sunau import Au_read
+from typing import Optional
 
 from pam.location import Location
 from pam.plot import plans as plot
@@ -14,7 +14,13 @@ from pam.variables import END_OF_DAY
 
 class Plan:
 
-    def __init__(self, home_area=None, home_location:Location=None, home_loc=None, freq=None):
+    def __init__(
+        self,
+        home_area=None,
+        home_location: Optional[Location] = None,
+        home_loc=None,
+        freq=None
+        ):
         self.day = []
         if home_location:
             self.home_location = home_location

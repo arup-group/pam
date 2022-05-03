@@ -3,7 +3,7 @@ import random
 import pickle
 import copy
 from collections import defaultdict
-from typing import Union
+from typing import Optional
 
 from pam.location import Location
 import pam.activity as activity
@@ -477,7 +477,7 @@ class Household:
         hid,
         attributes={},
         freq=None,
-        location: Location = None,
+        location: Optional[Location] = None,
         area=None,
         loc=None
         ):
@@ -734,7 +734,7 @@ class Person:
         pid,
         freq=None,
         attributes={},
-        home_location: Location = None,
+        home_location: Optional[Location] = None,
         home_area=None,
         home_loc=None,
         vehicle: Vehicle = None
