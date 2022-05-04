@@ -73,7 +73,7 @@ class CreateDistribution:
 
 ### Samplers
 
-class FrequencySampler: # rename to FrequencySampler?
+class FrequencySampler: # test: what if someone enters a one-size distribution?
     """
     Object for initiating and sampling from frequency weighted distributing
     """
@@ -95,7 +95,7 @@ class FrequencySampler: # rename to FrequencySampler?
         """
         return random.choices(self.distribution, weights=self.frequency, k=n)
 
-class InputDemand:
+class InputDemand: # test: what if the activity does not exist in the facility_zone?
 
     """
     Object to build a dataframe that estimates demand and builds constraints to determine a tour sequence.
