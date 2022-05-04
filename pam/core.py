@@ -3,8 +3,9 @@ import random
 import pickle
 import copy
 from collections import defaultdict
-from typing import Union
+from typing import Optional
 
+from pam.location import Location
 import pam.activity as activity
 import pam.plot as plot
 from pam import write
@@ -471,15 +472,27 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid, attributes={}, freq=None, area=None, loc=None):
+    def __init__(
+        self,
+        hid,
+        attributes={},
+        freq=None,
+        location: Optional[Location] = None,
+        area=None,
+        loc=None
+        ):
         self.hid = hid
         self.people = {}
         self.attributes = attributes
         self.hh_freq=freq
-        if area is not None or loc is not None:
-            self._location = activity.Location(area=area, loc=loc)
+        if location:
+            self._location = location
         else:
-            self._location = None
+            self._location = Location()
+        if area:  # potential overwrite
+            self._location.area = area
+        if loc:  # potential overwrite
+            self._location.loc = loc
 
     def add(self, person):
         if not isinstance(person, Person):
@@ -537,12 +550,32 @@ class Household:
 
     @property
     def location(self):
-        if self._location is not None:
+        if self._location.exists:
             return self._location
         for person in self.people.values():
-            if person.home is not None:
+            if person.home.exists:
                 return person.home
         self.logger.warning(f"Failed to find location for household: {self.hid}")
+        return self._location
+
+    def set_location(self, location:Location):
+        """
+        Set both hh and person home_location, but note that hhs and
+        their persons do not share location object.
+        """
+        self._location = location
+        for _, person in self:
+            person.set_location(location.copy())
+
+    def set_area(self, area):
+        self._location.area = area
+        for _, person in self:
+            person.set_area(area)
+
+    def set_loc(self, loc):
+        self._location.loc = loc
+        for _, person in self:
+            person.set_loc(loc)
 
     @property
     def activity_classes(self):
@@ -696,13 +729,29 @@ class Household:
 class Person:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, pid, freq=None, attributes={}, home_area=None, vehicle: Vehicle = None):
+    def __init__(
+        self,
+        pid,
+        freq=None,
+        attributes={},
+        home_location: Optional[Location] = None,
+        home_area=None,
+        home_loc=None,
+        vehicle: Vehicle = None
+        ):
         self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
-        self.plan = activity.Plan(home_area=home_area)
+        if home_location is not None:
+            self.home_location = home_location
+        else:
+            self.home_location = Location()
+        if home_area:
+            self.home_location.area = home_area
+        if home_loc:
+            self.home_location.loc = home_loc
+        self.plan = activity.Plan(home_location=self.home_location)  # person and their plan share Location
         self.plans_non_selected = []
-        self.home_area = home_area
         self.vehicle = None
         if vehicle:
             self.assign_vehicle(vehicle)
@@ -748,8 +797,22 @@ class Person:
 
     @property
     def home(self):
+        if self.home_location.exists:
+            return self.home_location
         if self.plan:
             return self.plan.home
+
+    def set_location(self, location:Location):
+        self.home_location = location
+        self.plan.home_location = location
+
+    def set_area(self, area):
+        self.home_location.area = area
+        self.plan.home_location.area = area
+
+    def set_loc(self, loc):
+        self.home_location.loc = loc
+        self.plan.home_location.loc = loc
 
     @property
     def activities(self):
