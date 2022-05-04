@@ -7,7 +7,16 @@ from shapely.geometry import Point, Polygon
 from pam.samplers import tour
 
 
-def test_frequency_sampler_dtype():
+def test_distribution_type():
+    bins = range(0,24)
+    pivots = {7: 2.2, 8: 1.5, 9: 1.7, 10: 1.9}
+    total = 100
+
+    dist = tour.CreateDistribution().build_distribution(bins=bins, pivots=pivots, total=total)
+    
+    assert isinstance(dist, dict)
+
+def test_frequency_sampler_type():
     sampler = tour.FrequencySampler(range(60))
     assert isinstance(sampler.sample(), int)
 
@@ -24,8 +33,6 @@ def test_facility_density_missing_activity():
         Polygon(((4,4), (4,6), (6,6), (6,4)))
     ]
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
-
-    facility_zone = gp.sjoin(facility_gdf, zones_gdf, how='inner', op='intersects')
 
     o_density, d_density = tour.InputDemand().facility_density(facilities=facility_gdf,
                                                                       zones=zones_gdf,
