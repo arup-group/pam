@@ -47,8 +47,8 @@ jobs:
       uses: rtCamp/action-slack-notify@v2.0.0
       env:
         SLACK_MESSAGE: ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has succeeded
-        SLACK_TITLE: Build Success
-        SLACK_CHANNEL: city-modelling-feeds
+        SLACK_TITLE: Daily CI Build Success
+        SLACK_CHANNEL: pam-feeds
         SLACK_USERNAME: GitHub Build Bot
         SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -58,9 +58,10 @@ jobs:
       uses: rtCamp/action-slack-notify@v2.0.0
       env:
         SLACK_COLOR: '#FF0000'
-        SLACK_MESSAGE: ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has failed
-        SLACK_TITLE: Build Failure!
-        SLACK_CHANNEL: city-modelling-feeds
+        SLACK_LINK_NAMES: true
+        SLACK_MESSAGE: @here ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has failed
+        SLACK_TITLE: Daily CI Build Failure!
+        SLACK_CHANNEL: pam-feeds
         SLACK_USERNAME: GitHub Build Bot
         SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
