@@ -3,8 +3,6 @@ import matplotlib
 from matplotlib import pyplot as plt
 import random
 import pandas as pd
-import scipy
-from scipy import spatial
 
 import pam
 from pam.activity import Activity, Leg
