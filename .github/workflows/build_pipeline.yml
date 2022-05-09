@@ -41,6 +41,9 @@ jobs:
     - name: Smoke test notebooks
       run: |
         ./scripts/notebooks-smoke-test.sh
+    - name: Check for large files
+      run: |
+        ./scripts/check-file-sizes.sh
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
