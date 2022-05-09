@@ -4,7 +4,6 @@ import random
 import pandas as pd
 import geopandas as gp
 from shapely.geometry import Point, Polygon
-from scipy import spatial
 
 from pam.core import Person
 from pam.samplers import tour
@@ -25,6 +24,9 @@ polys = [
     ]
 
 zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
+
+od_matrix = [[0, 2.82842712, 5.65685425], [2.82842712, 0, 2.82842712],[5.65685425, 2.82842712, 0]]
+df_od = pd.DataFrame(od_matrix, index=zones_gdf.a, columns=zones_gdf.a)
 
 facility_sampler = FacilitySampler(
     facilities=facility_gdf,
@@ -77,10 +79,6 @@ def test_dzone_sampler_dzone_d_density_zero():
                                                                 d_activity='delivery')
     
     o_zone = 3
-    zones_list = zones_gdf.centroid.apply(lambda x: [x.x, x.y]).to_list()
-    od_matrix = spatial.distance_matrix(x=zones_list, y=zones_list)
-    df_od = pd.DataFrame(od_matrix, index=zones_gdf.a, columns=zones_gdf.a)
-
     dist_threshold = df_od.median().agg('median')
 
     d_zone = tour.TourSequence().dzone_sampler(d_density=d_density,
