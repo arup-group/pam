@@ -1,8 +1,10 @@
+from unittest.case import DIFF_OMITTED
 import pytest
 import random
 import pandas as pd
 import geopandas as gp
 from shapely.geometry import Point, Polygon
+from scipy import spatial
 
 from pam.core import Person
 from pam.samplers import tour
@@ -10,7 +12,7 @@ from pam.samplers.facility import FacilitySampler
 from pam.variables import END_OF_DAY
 
 # Test input data
-facility_df = pd.DataFrame({'id':[1,2,3,4], 'activity': ['home','work','home','depot']})
+facility_df = pd.DataFrame({'id':[1,2,3,4], 'activity': ['home','delivery','home','depot']})
 points = [Point((1,1)), Point((1,1)), Point((3,3)), Point((3,3))]
 facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -65,14 +67,29 @@ def test_facility_density_missing_activity():
 
 
     assert len(o_density) > 0
-    assert len(d_density) == 0
+    assert len(d_density) > 0
 
+def test_dzone_sampler_dzone_d_density_zero():
+    o_density, d_density = tour.InputDemand().facility_density(facilities=facility_gdf,
+                                                                zones=zones_gdf,
+                                                                zone_id='a',
+                                                                o_activity='depot',
+                                                                d_activity='delivery')
+    
+    o_zone = 3
+    zones_list = zones_gdf.centroid.apply(lambda x: [x.x, x.y]).to_list()
+    od_matrix = spatial.distance_matrix(x=zones_list, y=zones_list)
+    df_od = pd.DataFrame(od_matrix, index=zones_gdf.a, columns=zones_gdf.a)
 
-def test_od_columns():
-    df_origin, df_destination, df_od = tour.InputDemand().od_distance(zones=zones_gdf)
+    dist_threshold = df_od.median().agg('median')
 
-    assert list(df_od.drop(['distance'], axis=1).columns) == (list(df_origin.columns) + list(df_destination.columns))
-
+    d_zone = tour.TourSequence().dzone_sampler(d_density=d_density,
+                                               o_zone=o_zone,
+                                               df_od=df_od,
+                                               dist_threshold=dist_threshold,
+                                               zone_id='a')
+    
+    assert d_zone == 0
 
 def test_activity_endtm_endofday():
     agent_id = 'LGV_1'

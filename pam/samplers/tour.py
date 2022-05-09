@@ -3,6 +3,8 @@ import matplotlib
 from matplotlib import pyplot as plt
 import random
 import pandas as pd
+import scipy
+from scipy import spatial
 
 import pam
 from pam.activity import Activity, Leg
@@ -95,7 +97,7 @@ class FrequencySampler: # test: what if someone enters a one-size distribution?
         """
         return random.choices(self.distribution, weights=self.frequency, k=n)
 
-class InputDemand: # test: what if the activity does not exist in the facility_zone?
+class InputDemand: 
 
     """
     Object to build a dataframe that estimates demand and builds constraints to determine a tour sequence.
@@ -108,7 +110,7 @@ class InputDemand: # test: what if the activity does not exist in the facility_z
         :param: facilities, zones, zone_id, and od activities (str).
         :return: origin and destination density.
         """
-        facility_zone = gp.sjoin(facilities, zones, how='inner', op='intersects')
+        facility_zone = gp.sjoin(facilities, zones, how='inner', predicate='intersects')
 
         # Below could be a for loop to create two dataframes.
         o_density = facility_zone[facility_zone['activity']==o_activity].groupby(zone_id).agg({'activity':'count'}).reset_index()
@@ -119,78 +121,31 @@ class InputDemand: # test: what if the activity does not exist in the facility_z
 
         return o_density, d_density
 
-    def od_distance(self, zones):
-        
-        """"
-        Create an od dataframe from the zones data that calculates distance between zone centroids.
-        This code seems similar in principal to the "write_od_matrices" function, but needs to be rewritten slightly.
-        """
-
-        # Create copies of zones file to create an od dataframe.
-        df_origin = zones.copy()
-        df_origin['centroid'] = df_origin['geometry'].centroid
-        cols = df_origin.columns
-
-        df_destination = df_origin.copy()
-        
-        # Name columns as origin or destination.
-        o_cols = {cols[i]:f'o_{cols[i]}' for i in range(len(cols))}
-        d_cols = {cols[i]:f'd_{cols[i]}' for i in range(len(cols))}
-
-        df_origin.rename(columns=o_cols, inplace=True)
-        df_destination.rename(columns=d_cols, inplace=True)
-
-        # For loop to create od dataframe. 
-
-        df_od = []
-
-        for k in range(len(df_destination)):
-            data_d = {i:df_destination[i][k] for i in df_destination}
-            for j in range(len(df_origin)):
-                data_o = {i:df_origin[i][j] for i in df_origin}
-                data_o.update(data_d)
-                df_od.append(data_o)
-
-        df_od = pd.DataFrame(df_od)
-
-
-        # Ideally, would like to not have to do the below steps. It would be better if the geometry types maintained their
-        # type when entered into a dictionary, this would allow for distance to be calculated within the for-loop, possibly.
-
-        # When storing geometry types into dictionaries, they become objects. Now, they need to return to their geometry type.
-        geo_cols = ['o_geometry', 'd_geometry', 'o_centroid', 'd_centroid']
-        for i in geo_cols:
-            df_od[i] = gp.GeoSeries(df_od[i])
-
-        # Adding in a distance metric.
-        df_od['distance'] = 0
-        for i in range(len(df_od)):
-            df_od['distance'].loc[i] = (df_od['o_centroid'].loc[i].distance(df_od['d_centroid'].loc[i])*1.4)/1000
-
-        return df_origin, df_destination, df_od
-
-
-# Class: Stop Location & Sequence? Sequence the stops, we can have this be random or "greedy" or something else.
-
 class TourSequence:
     """
     Object samples destinations based on the destination density and develops a tour sequence.
     """
 
     
-    def dzone_sampler(self, d_density, o_zone, df_od, dist_threshold, dist_id, zone_id):
+    def dzone_sampler(self, d_density, o_zone, df_od, dist_threshold, zone_id):
         """
-        :params: d_density and df_od from InputDemand object, o_zone, dist_str (usually 'distance'), zone_id
+        :params: d_density and df_od from InputDemand object, o_zone, zone_id
         :return: sampled d_zone. 
         """
         
-        dest_list = df_od[(df_od[f'o_{zone_id}']==o_zone) & (df_od[dist_id] <= dist_threshold)][f'd_{zone_id}']
-        d_density_threshold = d_density[d_density[zone_id].isin(dest_list)]
-        d_zone = FrequencySampler(list(d_density_threshold[zone_id]), list(d_density_threshold['density']))
+        dest_list = df_od.loc[o_zone]
+        dest_list = dest_list[dest_list<dist_threshold].index
+        d_density_threshold = d_density[d_density[zone_id].isin(dest_list)] # what if there are not any d_zones within dest_list?
+        
+        if len(d_density_threshold) == 0:
+            print('No destination available, resampling o_zone...')
+            d_zone = 0
+        else:
+            d_zone = FrequencySampler(list(d_density_threshold[zone_id]), list(d_density_threshold['density']))
 
         return d_zone
 
-    def stop_sequence(self, stops, d_density, o_zone, df_od, dist_threshold, dist_id, zone_id, facility_sampler, o_loc, d_activity):
+    def stop_sequence(self, stops, d_density, ozone_sampler, df_od, dist_threshold, dist_id, zone_id, facility_sampler, o_activity, d_activity):
         """
         Creates a sequence for a number of stops. Sequence is determined by distance from origin. 
         :params stops: # of stops, this could be one or sampled from a distribution
@@ -204,12 +159,16 @@ class TourSequence:
 
         TODO - Function to produce a sequence that minimises distance between stops. 
         """
+        o_zone = ozone_sampler.sample()
+        o_loc = facility_sampler.sample(o_zone, o_activity)
 
         d_seq = []
 
         for j in range(stops):
-        # select a d_zone within threshold distance, eventually we can subset the o_d matrix to within thershold.
-            d_zone = self.dzone_sampler(d_density, o_zone, df_od, dist_threshold, dist_id, zone_id).sample()
+        # select a d_zone within threshold distance
+            d_zone = self.dzone_sampler(d_density, o_zone, df_od, dist_threshold, zone_id).sample()
+            if d_zone == 0:
+                break
             d_facility = facility_sampler.sample(d_zone, d_activity)
             d_seq.append({
                 'stops': j,
@@ -224,7 +183,7 @@ class TourSequence:
         d_seq = d_seq.sort_values(by=dist_id)
         d_loc = d_seq['destination_facility'].to_dict()
 
-        return d_zone, d_loc
+        return o_zone, o_loc, d_zone, d_loc
     
 
 class ActivityDuration:
