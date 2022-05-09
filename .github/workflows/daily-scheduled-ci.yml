@@ -1,0 +1,67 @@
+name: Daily PAM CI Build
+
+on:
+  schedule:
+    - cron: '23 14 * * 1-5'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        export ACCEPT_EULA=Y
+        sudo apt-get update
+        python -m pip install --upgrade pip
+        sudo apt-get install -y python3-pip libgdal-dev locales
+        sudo apt-get install -y libspatialindex-dev
+        export CPLUS_INCLUDE_PATH=/usr/include/gdal
+        export C_INCLUDE_PATH=/usr/include/gdal
+        sudo apt-get install ca-certificates
+        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        pip install GDAL==3.0.2
+        pip install -e .
+
+    - name: Run tests
+      run: |
+        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+        ./scripts/code-coverage.sh
+
+    - name: Send build success notification
+      if: success()
+      uses: rtCamp/action-slack-notify@v2.0.0
+      env:
+        SLACK_MESSAGE: ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has succeeded
+        SLACK_TITLE: Daily CI Build Success
+        SLACK_CHANNEL: pam-feeds
+        SLACK_USERNAME: GitHub Build Bot
+        SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+    - name: Send build failure notification
+      if: failure()
+      uses: rtCamp/action-slack-notify@v2.0.0
+      env:
+        SLACK_COLOR: '#FF0000'
+        SLACK_LINK_NAMES: true
+        SLACK_MESSAGE: '<!here> ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has failed'
+        SLACK_TITLE: Daily CI Build Failure!
+        SLACK_CHANNEL: pam-feeds
+        SLACK_USERNAME: GitHub Build Bot
+        SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
