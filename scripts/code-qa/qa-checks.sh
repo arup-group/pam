@@ -12,6 +12,6 @@ pushd "${0%/*}"
 
 ./code-coverage.sh
 ./notebooks-smoke-test.sh
-./check-file-sizes.sh
+./check-staged-file-sizes.sh
 
 popd

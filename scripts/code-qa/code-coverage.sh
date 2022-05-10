@@ -2,8 +2,7 @@
 
 set -e
 
-pushd "${0%/*}"
-pushd ../..
+pushd "${0%/*}/../.."
 
 python3 -m pytest -vv \
 --cov=. \
@@ -14,5 +13,5 @@ tests/
 return_code=$?
 
 popd
-popd
+
 exit $return_code
