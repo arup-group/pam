@@ -39,7 +39,7 @@ if [ "$HAS_ERROR" != 0 ]; then
     echo "FAILURE: $HAS_ERROR files are over $TOO_LARGE_KB KB."
     exit $HAS_ERROR
 fi
-if [ "$HAS_ERROR" != 0 ]; then
+if [ "$HAS_WARNING" != 0 ]; then
     echo "WARNING: $HAS_WARNING files are over $WARNING_SIZE_KB KB, are you sure these can't be made smaller?"
 else
     echo "All good to proceed with these file sizes."
