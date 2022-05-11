@@ -43,7 +43,7 @@ jobs:
         ./scripts/code-qa/notebooks-smoke-test.sh
     - name: Check for large files
       run: |
-        ./scripts/code-qa/check-file-sizes.sh
+        ./scripts/code-qa/check-all-file-sizes.sh
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
