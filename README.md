@@ -65,7 +65,7 @@ source venv/bin/activate
 pip install -e .
 ```
 
-We known that requirements are already available in a up to date Anaconda installation.
+Requirements are already available in a up to date Anaconda installation.
 If you're not using Anaconda, sometimes the above will fail due to spatial library dependencies not being properly installed using pip. If you see any errors relating to fiona or rtree this is likely the case. To fix it, wipe the virtual environment and recreate, `brew install spatialindex` (Mac) then install everything else in the `venv` using `pip install -e .` again.
 
 **Windows installation** </br>
@@ -100,12 +100,11 @@ If you plan to make changes to the code then please make use of the following to
 - `scripts/code-qa/check-all-file-sizes.sh` - check for large file sizes
 
 **Git Commit Hook** </br>
-You can automate the above checks using our git commit hook. To implement this automation simply copy `scripts/got-hooks/pre-commit` to `.git/hooks/pre-commit`. eg for OSX:
+You can automate the above checks using our git commit hook. To implement this automation simply copy `scripts/git-hooks/pre-commit` to `.git/hooks/pre-commit`. eg for OSX:
 
 ```sh
-cp scripts/got-hooks/pre-commit .git/hooks/
+cp scripts/git-hooks/pre-commit .git/hooks/
 ```
-
 
 ## Why Activity Plans?
 
