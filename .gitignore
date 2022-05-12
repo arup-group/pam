@@ -41,3 +41,4 @@ notebooks/Downloads/
 outputs/
 michael-local-requirements.txt
 dev
+venv
