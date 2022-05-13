@@ -37,10 +37,13 @@ jobs:
     - name: Run tests
       run: |
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-coverage.sh
+        ./scripts/code-qa/code-coverage.sh
     - name: Smoke test notebooks
       run: |
-        ./scripts/notebooks-smoke-test.sh
+        ./scripts/code-qa/notebooks-smoke-test.sh
+    - name: Check for large files
+      run: |
+        ./scripts/code-qa/check-all-file-sizes.sh
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
