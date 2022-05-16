@@ -40,7 +40,7 @@ jobs:
     - name: Run tests
       run: |
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-coverage.sh
+        ./scripts/code-qa/code-coverage.sh
 
     - name: Send build success notification
       if: success()
