@@ -32,19 +32,19 @@ def test_load_attributes_map():
 
 
 def test_parse_simple_matsim():
-   population = read_matsim(test_trips_path, test_attributes_path)
+   population = read_matsim(test_trips_path, test_attributes_path, version=11)
    person = population['census_0']['census_0']
    assert person.has_valid_plan
 
 
 def test_parse_complex_matsim():
-   population = read_matsim(test_trips_path, test_attributes_path)
+   population = read_matsim(test_trips_path, test_attributes_path, version=11)
    person = population['census_1']['census_1']
    assert person.has_valid_plan
 
 
 def test_parsing_complex_person_results_in_valid_pt_leg():
-    population = read_matsim(test_trips_path, test_attributes_path)
+    population = read_matsim(test_trips_path, test_attributes_path, version=11)
     person = population['census_1']['census_1']
 
     pt_leg = person.plan.day[5]
@@ -57,7 +57,7 @@ def test_parsing_complex_person_results_in_valid_pt_leg():
 
 
 def test_parsing_person_with_network_route():
-    population = read_matsim(test_trips_path)
+    population = read_matsim(test_trips_path, version=11)
     person = population['census_2']['census_2']
 
     bike_trip = person.plan.day[1]
@@ -67,7 +67,7 @@ def test_parsing_person_with_network_route():
 
 
 def test_remove_pt_interactions():
-    population = read_matsim(test_trips_path, test_attributes_path)
+    population = read_matsim(test_trips_path, test_attributes_path, version=11)
     person = population['census_1']['census_1']
     person.plan.simplify_pt_trips()
     assert 'pt interaction' not in [a.act for a in person.activities]
@@ -83,7 +83,7 @@ test_bad_attributes_path = os.path.abspath(
 
 
 def test_read_plan_with_negative_durations():
-    population = read_matsim(test_bad_trips_path, test_bad_attributes_path)
+    population = read_matsim(test_bad_trips_path, test_bad_attributes_path, version=11)
     population['test']['test'].print()
 
 
@@ -94,7 +94,7 @@ def test_parse_v12_matsim():
     assert person.has_valid_plan
     assert person.attributes == {'subpopulation': 'rich', 'age': 'yes'}
     legs = list(person.plan.legs)
-    assert legs[0].mode == "car" 
+    assert legs[0].mode == "car"
     assert legs[1].mode == "car"
     assert legs[1].distance == 10300
     assert legs[1].service_id == None
@@ -110,7 +110,7 @@ def test_parse_transit_v12_matsim():
     assert person.has_valid_plan
     assert person.attributes == {'subpopulation': 'poor', 'age': 'no'}
     legs = list(person.plan.legs)
-    assert legs[0].mode == "walk" 
+    assert legs[0].mode == "walk"
     assert legs[1].mode == "bus"
     assert legs[1].distance == 10100
     assert legs[1].service_id == 'city_line'
@@ -130,7 +130,7 @@ def test_fail_bad_version():
         population = read_matsim(test_tripsv12_path, version=1)
 
 def test_parse_simple_matsim_non_selected():
-   population = read_matsim(test_trips_path, test_attributes_path, keep_non_selected=True)
+   population = read_matsim(test_trips_path, test_attributes_path, keep_non_selected=True, version=11)
    person1 = population['census_1']['census_1']
    person2 = population['census_2']['census_2']
    assert person1.has_valid_plan
