@@ -16,10 +16,10 @@ from .utils import write_xml, create_local_dir
 
 
 def write_od_matrices(
-        population, 
-        path : str, 
-        leg_filter : Optional[str] = None, 
-        person_filter : Optional[str] = None, 
+        population,
+        path : str,
+        leg_filter : Optional[str] = None,
+        person_filter : Optional[str] = None,
         time_minutes_filter : Optional[List[Tuple[int]]] = None
         ) -> None:
 
@@ -33,13 +33,13 @@ def write_od_matrices(
     :param path: directory to write OD matrix files
     :param leg_filter: select between 'Mode', 'Purpose'
     :param person_filter: select between given attribute categories (column names) from person attribute data
-    :param time_minutes_filter: a list of tuples to slice times, 
+    :param time_minutes_filter: a list of tuples to slice times,
     e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
     """
     create_local_dir(path)
 
     legs = []
-    
+
     for hid, household in population.households.items():
         for pid, person in household.people.items():
             for leg in person.legs:
@@ -58,14 +58,14 @@ def write_od_matrices(
                 if person_filter:
                     legs.append({**data, **person.attributes})
                 else:
-                    legs.append(data)         
-        
+                    legs.append(data)
+
     df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')
     matrix = df_total.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
     matrix.to_csv(os.path.join(path, 'total_od.csv'))
 
     data_legs = pd.DataFrame(data=legs)
-    
+
     if leg_filter:
         data_legs_grouped=data_legs.groupby(leg_filter)
         for filter, leg in data_legs_grouped:
@@ -81,20 +81,20 @@ def write_od_matrices(
             matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
             matrix.to_csv(os.path.join(path, filter+'_od.csv'))
         return None
-        
+
     elif time_minutes_filter:
         periods = []
         for time in time_minutes_filter:
-            periods.append(time)               
+            periods.append(time)
         for start_time, end_time in periods:
             file_name = str(start_time) +'_to_'+ str(end_time)
             start_time = mtdt(start_time)
             end_time = mtdt(end_time)
             data_time = data_legs[(data_legs['Start time']>= start_time)&(data_legs['Start time']< end_time)]
-            df = pd.DataFrame(data=data_time, columns = ['Origin','Destination']).set_index('Origin')        
+            df = pd.DataFrame(data=data_time, columns = ['Origin','Destination']).set_index('Origin')
             matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
             matrix.to_csv(os.path.join(path, 'time_'+file_name+'_od.csv'))
-        return None        
+        return None
 
 
 def write_matsim(
@@ -102,12 +102,12 @@ def write_matsim(
         plans_path : str,
         attributes_path : Optional[str] = None,
         vehicles_dir : Optional[str] = None,
-        version : int = 11,
+        version : int = 12,
         comment : Optional[str] = None,
         household_key : Optional[str] = 'hid'
     ) -> None:
     """
-    Write a core population object to matsim xml formats (either version 11 or 12). 
+    Write a core population object to matsim xml formats (either version 11 or 12).
     Note that this requires activity locs to be set (shapely.geometry.Point).
     TODO add support for PathLib?
 
@@ -115,7 +115,7 @@ def write_matsim(
     :param plans_path: str, output path (.xml or .xml.gz)
     :param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
     :param vehicles_dir: {str,None}, default None, path to output directory for vehicle files
-    :param version: int {11,12}, matsim version, default 11
+    :param version: int {11,12}, matsim version, default 12
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
     :return: None
@@ -405,7 +405,7 @@ def to_csv(
                         leg_data['geometry'] = LineString((component.start_location.loc, component.end_location.loc))
 
                     legs.append(leg_data)
-                
+
                 if isinstance(component, Activity):
                     act_data = {
                         'pid': pid,
@@ -543,10 +543,10 @@ def write_benchmarks(
     :params list data_fields: The data to summarise. If None, simply count the instances of each group
     :params list of functions aggfunc: A set of functions to apply to each data_field, after grouping by the specified dimensions. For example: [len, sum], [sum, np.mean], [np.sum], etc
     :params list normalise_by: convert calculated values to percentages across the specified -by this field- dimension(s).
-    :params list colnames: if different to None, rename the columns of the returned dataset  
+    :params list colnames: if different to None, rename the columns of the returned dataset
     :param str path: directory to write the benchmarks. If None, the functions returns the dataframe instead.
 
-    :return: None if an export path is provided, otherwise Pandas DataFrame 
+    :return: None if an export path is provided, otherwise Pandas DataFrame
     """
     ## collect data
     df = []
@@ -565,52 +565,52 @@ def write_benchmarks(
                     'mode': leg.mode,
                     'tst': leg.start_time.time(),
                     'tet': leg.end_time.time(),
-                    'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes                    
+                    'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
                     'euclidean_distance': leg.euclidean_distance,
                     'freq': person.freq,
                 }
             record = {**record, **dict(person.attributes)} # add person attributes
             df.append(record)
     df = pd.DataFrame(df)
-    
+
     ## add extra fields used for benchmarking
     df['personhrs'] = df['freq'] * df['duration'] / 60
     df['departure_hour'] = df.tst.apply(lambda x:x.hour)
     df['arrival_hour'] = df.tet.apply(lambda x:x.hour)
     df['euclidean_distance_category'] = pd.cut(
-        df.euclidean_distance, 
+        df.euclidean_distance,
         bins =[0,1,5,10,25,50,100,200,999999],
         labels = ['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km', '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
-    )    
+    )
     df['duration_category'] = pd.cut(
-        df.duration, 
+        df.duration,
         bins =[0,5,10,15,30,45,60,90,120,999999],
         labels = ['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min', '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
     )
-    
+
     ## aggregate across specified dimensions
     if dimensions != None:
         if data_fields != None:
             df = df.groupby(dimensions)[data_fields].agg(aggfunc).fillna(0)
         else:
             df = df.value_counts(dimensions)
-            
+
     ## show as percentages
     if normalise_by != None:
         if normalise_by == 'total':
             df = df / df.sum(axis = 0)
         else:
-            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())     
+            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())
     df = df.sort_index().reset_index()
-    
+
     ## flatten column MultiIndex
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.map('_'.join).str.strip('_')
-    
+
     ## rename columns
     if colnames != None:
         df.columns = colnames
-        
+
     ## export or return dataframe
     if path != None:
         if path.lower().endswith('.csv'):
@@ -619,7 +619,7 @@ def write_benchmarks(
             df.to_json(path, orient='records')
         else:
             raise ValueError('Please specify a valid csv or json file path.')
-    
+
     return df
 
 
@@ -709,7 +709,7 @@ def write_benchmarks_batch(population, path):
     """
     if not os.path.exists(path):
         os.mkdir(path)
-    
+
     bms = [
         (write_distance_benchmark, "distance_benchmark.csv"),
         (write_mode_distance_benchmark, "mode_distance_benchmark.csv"),
