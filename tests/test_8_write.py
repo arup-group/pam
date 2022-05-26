@@ -113,7 +113,7 @@ def test_write_read_continuity_xml(tmp_path, population_heh):
     attributes_location = str(tmp_path / "test_attributes.xml")
     write_matsim_attributes(population_heh, location=attributes_location, comment="test", household_key=None)
     population = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid'
+        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
     )
     assert population_heh['0']['1'].plan == population['0']['1'].plan
     assert population_heh == population
@@ -125,7 +125,7 @@ def test_write_read_continuity_gzip(tmp_path, population_heh):
     attributes_location = str(tmp_path / "test_attributes.xml.gz")
     write_matsim_attributes(population_heh, location=attributes_location, comment="test")
     population = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid'
+        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
     )
     assert population_heh['0']['1'].plan == population['0']['1'].plan
     assert population_heh == population
@@ -135,14 +135,14 @@ def test_read_write_read_continuity_complex_xml(tmp_path):
     test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
     test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                         "test_data/test_matsim_attributes.xml"))
-    population_in = read_matsim(test_trips_path, test_attributes_path)
+    population_in = read_matsim(test_trips_path, test_attributes_path, version=11)
     complex_plan_in = population_in['census_1']['census_1'].plan
     plans_location = str(tmp_path / "test_plans.xml")
     write_matsim_plans(population_in, path=plans_location, comment="test")
     attributes_location = str(tmp_path / "test_attributes.xml")
     write_matsim_attributes(population_in, location=attributes_location, comment="test")
     population_out = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid'
+        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
     )
     complex_plan_out = population_out['census_1']['census_1'].plan
     assert complex_plan_in == complex_plan_out
@@ -259,7 +259,7 @@ def test_read_write_v12_consistent(tmp_path):
 
 def test_writes_od_matrix_to_expected_file(tmpdir):
     population = Population()
-    
+
     household = Household(hid = '0')
     person = Person(pid='0',  home_area='Barnet', attributes = {'occ':'white'})
     person.add(Activity(1, 'home','Barnet', start_time=mtdt(0)))
@@ -267,7 +267,7 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(2,'work', 'Southwark', start_time=mtdt(420)))
     person.add(Leg(2,'car', start_area='Southwark', end_area='Barnet', start_time=mtdt(1020), purp='work'))
     person.add(Activity(3,'home','Barnet',start_time=mtdt(1040), end_time=mtdt(1439)))
-    household.add(person)  
+    household.add(person)
     population.add(household)
 
     household = Household(hid = '1')
@@ -277,7 +277,7 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(2,'education', 'Westminster,City of London',start_time=mtdt(550)))
     person.add(Leg(2,'cycle', start_area='Westminster,City of London', end_area='Ealing', start_time=mtdt(700), purp='education'))
     person.add(Activity(3,'home','Ealing',start_time=mtdt(750), end_time=mtdt(1439)))
-    household.add(person)  
+    household.add(person)
     population.add(household)
 
     household = Household(hid = '2')
@@ -287,7 +287,7 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(2,'work', 'Westminster,City of London',start_time=mtdt(480)))
     person.add(Leg(2,'car', start_area='Westminster,City of London', end_area='Ealing', start_time=mtdt(1050), purp='work'))
     person.add(Activity(3,'home','Ealing',start_time=mtdt(1080), end_time=mtdt(1439)))
-    household.add(person)  
+    household.add(person)
     population.add(household)
 
     household = Household(hid = '3')
@@ -297,7 +297,7 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(2,'shop', 'Barnet',start_time=mtdt(470)))
     person.add(Leg(2,'walk', start_area='Barnet', end_area='Barnet', start_time=mtdt(600), purp='shop'))
     person.add(Activity(3,'home','Barnet',start_time=mtdt(620), end_time=mtdt(1439)))
-    household.add(person)  
+    household.add(person)
     population.add(household)
 
     household = Household(hid = '4')
@@ -307,90 +307,90 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(2,'work', 'Ealing',start_time=mtdt(420)))
     person.add(Leg(2,'cycle', start_area='Ealing', end_area='Ealing', start_time=mtdt(1030), purp='work'))
     person.add(Activity(3,'home','Ealing',start_time=mtdt(1050), end_time=mtdt(1439)))
-    household.add(person)  
+    household.add(person)
     population.add(household)
 
     attribute_list = ['white', 'blue', 'total']
     mode_list = ['car', 'cycle','walk', 'total']
     time_slice = [(400, 500), (1020, 1060)]
-    
-    write_od_matrices(population, tmpdir, leg_filter = 'Mode')   
+
+    write_od_matrices(population, tmpdir, leg_filter = 'Mode')
     for m in mode_list:
         od_matrix_file = os.path.join(tmpdir, m+"_od.csv")
-        od_matrix_csv_string = open(od_matrix_file).read()       
-        if m == 'car':          
+        od_matrix_csv_string = open(od_matrix_file).read()
+        if m == 'car':
             expected_od_matrix = \
                     'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
                     'Barnet,0,0,1,0\n' \
                     'Ealing,0,0,0,1\n' \
                     'Southwark,1,0,0,0\n' \
-                    '"Westminster,City of London",0,1,0,0\n'        
-            assert od_matrix_csv_string == expected_od_matrix           
-        if m == 'cycle':          
+                    '"Westminster,City of London",0,1,0,0\n'
+            assert od_matrix_csv_string == expected_od_matrix
+        if m == 'cycle':
             expected_od_matrix = \
                     'Origin,Ealing,"Westminster,City of London"\n' \
                     'Ealing,2,1\n' \
-                    '"Westminster,City of London",1,0\n'        
-            assert od_matrix_csv_string == expected_od_matrix       
-        if m == 'walk':          
+                    '"Westminster,City of London",1,0\n'
+            assert od_matrix_csv_string == expected_od_matrix
+        if m == 'walk':
             expected_od_matrix = \
                     'Origin,Barnet\n' \
                     'Barnet,2\n'
-            assert od_matrix_csv_string == expected_od_matrix           
+            assert od_matrix_csv_string == expected_od_matrix
         if m == 'total':
             expected_od_matrix = \
                     'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
                     'Barnet,2,0,1,0\n' \
                     'Ealing,0,2,0,2\n' \
                     'Southwark,1,0,0,0\n' \
-                    '"Westminster,City of London",0,2,0,0\n'        
-            assert od_matrix_csv_string == expected_od_matrix        
-                        
-    write_od_matrices(population, tmpdir, person_filter = 'occ')   
+                    '"Westminster,City of London",0,2,0,0\n'
+            assert od_matrix_csv_string == expected_od_matrix
+
+    write_od_matrices(population, tmpdir, person_filter = 'occ')
     for a in attribute_list:
         od_matrix_file = os.path.join(tmpdir, a+"_od.csv")
-        od_matrix_csv_string = open(od_matrix_file).read()      
-        if a == 'white':          
+        od_matrix_csv_string = open(od_matrix_file).read()
+        if a == 'white':
             expected_od_matrix = \
                     'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
                     'Barnet,0,0,1,0\n' \
                     'Ealing,0,0,0,2\n' \
                     'Southwark,1,0,0,0\n' \
-                    '"Westminster,City of London",0,2,0,0\n'        
-            assert od_matrix_csv_string == expected_od_matrix          
-        if a == 'blue':          
+                    '"Westminster,City of London",0,2,0,0\n'
+            assert od_matrix_csv_string == expected_od_matrix
+        if a == 'blue':
             expected_od_matrix = \
                     'Origin,Barnet,Ealing\n' \
                     'Barnet,2,0\n' \
-                    'Ealing,0,2\n'      
-            assert od_matrix_csv_string == expected_od_matrix         
-        if a == 'total':          
+                    'Ealing,0,2\n'
+            assert od_matrix_csv_string == expected_od_matrix
+        if a == 'total':
             expected_od_matrix = \
                     'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
                     'Barnet,2,0,1,0\n' \
                     'Ealing,0,2,0,2\n' \
                     'Southwark,1,0,0,0\n' \
-                    '"Westminster,City of London",0,2,0,0\n'        
-            assert od_matrix_csv_string == expected_od_matrix          
-         
-    write_od_matrices(population, tmpdir, time_minutes_filter = [(400,500),(1020,1060)])   
+                    '"Westminster,City of London",0,2,0,0\n'
+            assert od_matrix_csv_string == expected_od_matrix
+
+    write_od_matrices(population, tmpdir, time_minutes_filter = [(400,500),(1020,1060)])
     for start_time, end_time in time_slice:
         file_name = str(start_time) +'_to_'+ str(end_time)
         od_matrix_file = os.path.join(tmpdir,'time_'+file_name+'_od.csv' )
-        od_matrix_csv_string = open(od_matrix_file).read()       
+        od_matrix_csv_string = open(od_matrix_file).read()
         if (start_time, end_time) == (400, 500):
             expected_od_matrix = \
                     'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' \
                     'Barnet,1,0,1,0\n' \
-                    'Ealing,0,1,0,1\n'       
-            assert od_matrix_csv_string == expected_od_matrix               
+                    'Ealing,0,1,0,1\n'
+            assert od_matrix_csv_string == expected_od_matrix
         if (start_time, end_time) == (1020, 1060):
             expected_od_matrix = \
                     'Origin,Barnet,Ealing\n' \
                     'Ealing,0,1\n' \
                     'Southwark,1,0\n' \
-                    '"Westminster,City of London",0,1\n'     
-            assert od_matrix_csv_string == expected_od_matrix     
+                    '"Westminster,City of London",0,1\n'
+            assert od_matrix_csv_string == expected_od_matrix
 
 
 def test_write_to_csv_no_locs(population_heh, tmpdir):
@@ -539,7 +539,7 @@ def test_write_to_csv_some_locs(population_heh, tmpdir):
 
     hh_df = gp.read_file(os.path.join(tmpdir, "households.geojson"))
     assert list(hh_df.columns) == ['hid', 'freq', 'hzone', 'geometry']
-    assert len(hh_df) == 2  
+    assert len(hh_df) == 2
 
     people_df = gp.read_file(os.path.join(tmpdir, "people.geojson"))
     assert list(people_df.columns) == ['pid', 'hid', 'freq', 'hzone', 'hh_size', 'inc', 'geometry']
@@ -563,7 +563,7 @@ def test_write_to_csv_some_locs(population_heh, tmpdir):
 
 def test_write_to_csv_convert_locs(population_heh, tmpdir):
     population_heh.to_csv(tmpdir, crs="EPSG:27700")
-    
+
     # check csvs
     for name in ['households', 'people', 'legs', 'activities']:
         assert os.path.exists(os.path.join(tmpdir, f"{name}.csv"))
@@ -624,7 +624,7 @@ def test_benchmark_trips_hour(tmp_path):
     test_attributes_path = os.path.abspath(os.path.join(
         os.path.dirname(__file__), "test_data/test_matsim_attributes.xml"
         ))
-    population = read_matsim(test_trips_path, test_attributes_path, weight=1000)
+    population = read_matsim(test_trips_path, test_attributes_path, weight=1000, version=11)
     benchmark = write_benchmarks(
         population,
         dimensions=['departure_hour'],
@@ -637,13 +637,13 @@ def test_benchmark_trips_hour(tmp_path):
         'freq_sum': {0: 1000, 1: 2000, 2: 2000, 3: 2000, 4: 5000}}
         )
 
-    assert benchmark.equals(expected_benchmark)   
+    assert benchmark.equals(expected_benchmark)
 
 def test_write_benchmarks_multiple(tmpdir):
     test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
     test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                         "test_data/test_matsim_attributes.xml"))
-    population = read_matsim(test_trips_path, test_attributes_path, weight=1000)
+    population = read_matsim(test_trips_path, test_attributes_path, weight=1000, version=11)
 
     assert list(write_distance_benchmark(population).trips) == [2000, 3000, 1000, 5000, 0, 0, 0, 0]
     assert list(write_mode_distance_benchmark(population).trips) == [2000.0, 3000.0, 1000.0, 5000.0, 0.0, 0.0, 0.0, 0.0]

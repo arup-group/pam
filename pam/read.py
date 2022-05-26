@@ -803,7 +803,7 @@ def read_matsim(
         all_vehicles_path = None,
         electric_vehicles_path = None,
         weight : int = 100,
-        version : int = 11,
+        version : int = 12,
         household_key : Union[str, None] = None,
         simplify_pt_trips : bool = False,
         autocomplete : bool = True,
@@ -820,7 +820,7 @@ def read_matsim(
     :param all_vehicles_path: path to matsim all_vehicles xml file
     :param electric_vehicles_path: path to matsim electric_vehicles xml
     :param weight: int
-    :param version: int {11,12}, default = 11
+    :param version: int {11,12}, default = 12
     :param household_key: {str, None}
     :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected).
     :return: Population

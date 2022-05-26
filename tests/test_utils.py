@@ -17,7 +17,7 @@ test_trips_path = os.path.abspath(
 
 @pytest.fixture()
 def pt_person():
-    return read.read_matsim(test_trips_path)['census_1']['census_1']
+    return read.read_matsim(test_trips_path, version=11)['census_1']['census_1']
 
 
 @pytest.fixture()
