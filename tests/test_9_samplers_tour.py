@@ -10,7 +10,7 @@ from pam.samplers import tour
 from pam.samplers.facility import FacilitySampler
 from pam.variables import END_OF_DAY
 
-# Test input data
+#### Test input data
 facility_df = pd.DataFrame({'id':[1,2,3,4], 'activity': ['home','delivery','home','depot']})
 points = [Point((1,1)), Point((1,1)), Point((3,3)), Point((3,3))]
 facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
@@ -41,6 +41,13 @@ facility_sampler = FacilitySampler(
     random_default=True
 )
 
+depot_density = tour.create_density_gdf(facility_zone=facility_zone, zone=zones_gdf, activity=['depot'])
+delivery_density = tour.create_density_gdf(facility_zone=facility_zone, zone=zones_gdf, activity=['delivery'])
+
+depot_sampler = tour.FrequencySampler(depot_density.index, depot_density.density)
+hour_sampler = tour.FrequencySampler(range(24))
+minute_sampler = tour.FrequencySampler(range(60))
+
 trips = pd.DataFrame({'Unnamed: 0':[0, 1, 2, 3, 4],
                       'pid':['LGV_0', 'LGV_0', 'LGV_0', 'LGV_0', 'LGV_1'],
                       'ozone':[1,2,3,4,5],
@@ -48,24 +55,59 @@ trips = pd.DataFrame({'Unnamed: 0':[0, 1, 2, 3, 4],
                       'origin activity':['depot', 'delivery', 'delivery', 'delivery', 'depot'],
                       'destination activity':['delivery', 'delivery', 'delivery', 'depot', 'delivery'],
                       'start_hour':[2, 3, 3, 3, 9]})
+###
+
 
 def test_model_distance_value():
     assert tour.ActivityDuration().model_distance(Point((0,0)), Point((3,4)), scale=1) == 5
+
 
 def test_model_journey_time_value():
     assert tour.ActivityDuration().model_journey_time(1000, 10) == 100
     assert tour.ActivityDuration().model_journey_time(50000, 40000/3600) == 4500
 
 
-def test_distribution_type():
-    bins = range(0,24)
-    pivots = {1: 0, 2: 1, 8: 2, 15: 3}
-    total = 100
-
-    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total)
-    print(dist.demand)
+def test_distribution_uniform():
+    bins = range(0,3)
+    pivots = {0:1, 2:1}
+    total = 30
+    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total).demand
     
-    assert isinstance(dist.demand, dict)
+    assert dist[0]==10
+    assert dist[1]==10
+    assert dist[2]==10
+
+
+def test_distribution_triangle():
+    bins = range(0,3)
+    pivots = {0:0, 2:1}
+    total = 30
+    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total).demand
+
+    assert dist[0] == 0
+    assert dist[1] == 10
+    assert dist[2] == 20
+
+
+def test_distribution_pivot_start_one():
+    bins = range(0,3)
+    pivots = {1:1, 2:1}
+    total = 30
+    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total).demand
+
+    assert dist[0] == 0
+    assert dist[1] == 15
+    assert dist[2] == 15
+
+
+def test_distribution_pivot_empty():
+    bins = range(0,3)
+    pivots = {}
+    total = 30
+
+    with pytest.raises(ZeroDivisionError, match='float division by zero'):
+        dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total).demand
+
 
 def test_frequency_sampler_type():
     sampler = tour.FrequencySampler(range(60))
@@ -73,39 +115,50 @@ def test_frequency_sampler_type():
 
 
 def test_facility_density_missing_activity():
-    o_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'depot')
-    d_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'delivery')
 
-    assert len(o_density.density) > 0
-    assert len(d_density.density) > 0
+    assert len(depot_density.density) > 0
+    assert len(delivery_density.density) > 0
+
 
 def test_dzone_sampler_dzone_d_density_zero():
-    d_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'delivery')
-    o_zone = 3
-    dist_threshold = df_od.median().agg('median')
 
-    with pytest.raises(UserWarning, match='No destinations within this distance'):
-        d_zone = d_density.dzone_sample(o_zone=o_zone, df_od=df_od, dist_threshold=dist_threshold)
+    o_zone = 3
+    threshold_value = df_od.median().agg('median')
+
+    with pytest.raises(UserWarning, match='No destinations within this threshold value'):
+        d_zone = tour.FrequencySampler(dist=delivery_density,
+                                       freq='density',
+                                       threshold_matrix=df_od[o_zone],
+                                       threshold_value=threshold_value
+                                       ).threshold_sample()
+
+
+# Tests to validate stop sequencing and activity modeller based on below parameters
+stops=2
+threshold_value = 6
+
 
 def test_sequence_stops_length():
-    stops=2
-    o_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'depot')
-    d_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'delivery')
-    dist_threshold = 6
+    
+    agent_plan = tour.TourPlanner(stops=stops,
+                                  hour_sampler=hour_sampler,
+                                  minute_sampler=minute_sampler,
+                                  o_start='depot',
+                                  o_sampler=depot_sampler,
+                                  threshold_matrix=df_od,
+                                  d_dist=delivery_density,
+                                  d_freq='density', 
+                                  threshold_value=threshold_value, 
+                                  facility_sampler=facility_sampler,
+                                  activity_params={'o_activity':'depot', 'd_activity':'delivery'})
 
-    o_zone, o_loc, d_zone, d_loc = tour.TourPlan().sequence_stops(stops=stops,
-                                                                ozone_sampler=o_density,
-                                                                dzone_sampler=d_density,
-                                                                df_od=df_od,
-                                                                dist_threshold=dist_threshold,
-                                                                dist_id='distance',
-                                                                facility_sampler=facility_sampler,
-                                                                o_activity='depot',
-                                                                d_activity='delivery')
-    assert print(len(d_loc)) == print(stops)
+    o_zone, o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+
+    assert len(d_locs) == stops
 
 
-def test_activity_endtm_endofday():
+def test_activity_endtm_depot():
+    
     agent_id = 'LGV_1'
     agent = Person(
             agent_id,
@@ -115,24 +168,124 @@ def test_activity_endtm_endofday():
                 'CarCO2': 'lgv'
             }
         )
-    o_zone = random.choice(zones_gdf.index)
-    o_loc = facility_sampler.sample(o_zone, 'depot')
+    agent_plan = tour.TourPlanner(stops=stops,
+                                  hour_sampler=hour_sampler.sample(),
+                                  minute_sampler=minute_sampler.sample(),
+                                  o_start='depot',
+                                  o_sampler=depot_sampler,
+                                  threshold_matrix=df_od,
+                                  d_dist=delivery_density,
+                                  d_freq='density', 
+                                  threshold_value=threshold_value, 
+                                  facility_sampler=facility_sampler,
+                                  activity_params={'o_activity':'depot', 'd_activity':'delivery'})
 
-    time_params = {'hour':tour.FrequencySampler(range(22)).sample(), 'minute':tour.FrequencySampler(range(60)).sample()}
-    end_tm = tour.TourPlan().add_tour_activity(agent=agent, k=1, zone=o_zone, loc=o_loc, activity_type='depot', time_params=time_params)
+    o_zone, o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+    time_params = {'hour': hour_sampler.sample(), 'minute': minute_sampler.sample()}
+    end_tm = agent_plan.add_tour_activity(agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type='depot', time_params=time_params)
+
+    assert end_tm == ((time_params['hour']*60) + time_params['minute'])
+
+
+def test_activity_endtm_notdepot():
+    # ensure end_tm is calculated for the instance where tour is neither to depot or origin.
+    agent_id = 'LGV_1'
+    agent = Person(
+            agent_id,
+            attributes={
+                'subpopulation': 'lgv',
+                'CarType': 'lgv',
+                'CarCO2': 'lgv'
+            }
+        )
+    agent_plan = tour.TourPlanner(stops=stops,
+                                  hour_sampler=hour_sampler.sample(),
+                                  minute_sampler=minute_sampler.sample(),
+                                  o_start='depot',
+                                  o_sampler=depot_sampler,
+                                  threshold_matrix=df_od,
+                                  d_dist=delivery_density,
+                                  d_freq='density', 
+                                  threshold_value=threshold_value, 
+                                  facility_sampler=facility_sampler,
+                                  activity_params={'o_activity':'depot', 'd_activity':'delivery'})
+
+    o_zone, o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+    time_params = {'end_tm': hour_sampler.sample(), 'stop_duration': minute_sampler.sample()}
+    end_tm = agent_plan.add_tour_activity(agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type='not_depot', time_params=time_params)
+
+    assert end_tm == (time_params['end_tm'] + int(time_params['stop_duration']/60))
+
+
+def test_activity_endtm_returnorigin():
     
-    assert end_tm != END_OF_DAY
+    agent_id = 'LGV_1'
+    agent = Person(
+            agent_id,
+            attributes={
+                'subpopulation': 'lgv',
+                'CarType': 'lgv',
+                'CarCO2': 'lgv'
+            }
+        )
+    agent_plan = tour.TourPlanner(stops=stops,
+                                  hour_sampler=hour_sampler.sample(),
+                                  minute_sampler=minute_sampler.sample(),
+                                  o_start='depot',
+                                  o_sampler=depot_sampler,
+                                  threshold_matrix=df_od,
+                                  d_dist=delivery_density,
+                                  d_freq='density', 
+                                  threshold_value=threshold_value, 
+                                  facility_sampler=facility_sampler,
+                                  activity_params={'o_activity':'depot', 'd_activity':'delivery'})
+
+    o_zone, o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+    time_params = {'start_tm':0, 'end_tm': END_OF_DAY}
+    end_tm = agent_plan.add_tour_activity(agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type='return_origin', time_params=time_params)
+
+    assert end_tm == END_OF_DAY
+
+
+def test_final_activity_return_depot():
+    
+    agent_id = 'LGV_1'
+    agent = Person(
+            agent_id,
+            attributes={
+                'subpopulation': 'lgv',
+                'CarType': 'lgv',
+                'CarCO2': 'lgv'
+            }
+        )
+    agent_plan = tour.TourPlanner(stops=stops,
+                                  hour_sampler=hour_sampler.sample(),
+                                  minute_sampler=minute_sampler.sample(),
+                                  o_start='depot',
+                                  o_sampler=depot_sampler,
+                                  threshold_matrix=df_od,
+                                  d_dist=delivery_density,
+                                  d_freq='density', 
+                                  threshold_value=threshold_value, 
+                                  facility_sampler=facility_sampler,
+                                  activity_params={'o_activity':'depot', 'd_activity':'delivery'})
+
+    o_zone, o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+    agent_plan.apply(agent=agent, o_zone=o_zone, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    assert agent.plan[len(agent.plan)-1].act == 'depot'
+
 
 def test_validatetourod_no_duplicates():
-    o_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'depot')
-    d_density = tour.FacilityDensitySampler(facility_zone=facility_zone, zone=zones_gdf, activity = 'delivery')
     od_density = tour.ValidateTourOD(trips=trips,
                                       zone=zones_gdf,
-                                      ozone_sampler=o_density,
-                                      dzone_sampler=d_density,
+                                      o_dist=depot_density,
+                                      d_dist=delivery_density,
                                       o_activity='depot',
-                                      d_activity='delivery'
+                                      d_activity='delivery',
+                                      o_freq='density',
+                                      d_freq='density'
                                       )
     
-    assert o_density.density.density.sum() == od_density.od_density.depot_density.sum()
-    assert d_density.density.density.sum() == od_density.od_density.delivery_density.sum()
+    assert depot_density.density.sum() == od_density.od_density.depot_density.sum()
+    assert delivery_density.density.sum() == od_density.od_density.delivery_density.sum()
