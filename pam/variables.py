@@ -1,8 +1,8 @@
 from datetime import datetime
 
 
-# End Of Day
-# END_OF_DAY = datetime(year=1900, month=1, day=1, hour=23, minute=59, second=59)
+# default datetimes for plan start and end (24 hours)
+START_OF_DAY = datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0)
 END_OF_DAY = datetime(year=1900, month=1, day=2, hour=0, minute=0, second=0)
 
 
@@ -10,13 +10,13 @@ END_OF_DAY = datetime(year=1900, month=1, day=2, hour=0, minute=0, second=0)
 EXPECTED_EUCLIDEAN_SPEEDS = {
     'average':10*1000/3600,
     'car':20*1000/3600,
-    'bus':10*1000/3600, 
-    'rail':15*1000/3600, 
-    'pt':15*1000/3600, 
-    'subway':15*1000/3600, 
-    'walk':5*1000/3600, 
+    'bus':10*1000/3600,
+    'rail':15*1000/3600,
+    'pt':15*1000/3600,
+    'subway':15*1000/3600,
+    'walk':5*1000/3600,
     'cycle':15*1000/3600
-} # mode speeds expressed as *euclidean* meters per second 
+} # mode speeds expressed as *euclidean* meters per second
 
 TRANSIT_MODES = ['bus','rail','pt', 'subway'] # modes for which the maximum walk distance applies
 SMALL_VALUE = 0.000001
