@@ -17,7 +17,7 @@ def one_hot_to_plan(
     default_activity:str="other"
     ) -> Plan:
     """
-    Decode a one-hot encoded plan array for a given mapping. Attempts to create a valida plan sequence
+    Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
     by assuming obviously missing components. Does not support locations, these must be created
     manually.
 
@@ -55,7 +55,6 @@ def one_hot_to_plan(
             proposed_plan.append(Activity(act=act, start_time=start_time))
 
     add_end_times(proposed_plan, end_of_day)
-    print(proposed_plan)
     fix_missing_start_activity(proposed_plan, start_of_day, bin_size)
     fix_missing_end_activity(proposed_plan, end_of_day, bin_size)
     fix_missing_components(proposed_plan, default_leg_mode, default_activity)
