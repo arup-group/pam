@@ -82,9 +82,7 @@ def td_to_s(td):
     """
     Convert timedelta to seconds since start of day.
     """
-    # if not td.seconds and td.days:
-    #     return 24*60*60
-    return td.seconds
+    return (td.days * 86400) + td.seconds
 
 
 def get_linestring(from_point, to_point):
