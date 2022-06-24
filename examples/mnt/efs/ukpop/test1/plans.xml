@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd"><population>
+  <!--test-->
+  <!--Created 2022-06-23 13:39:26.127550-->
+  <person id="11">
+    <attributes>
+      <attribute class="java.lang.String" name="hid">1</attribute>
+    </attributes>
+    <plan selected="yes">
+      <activity type="home" x="0.5388075503503134" y="0.6860129330945592" end_time="07:00:00"/>
+      <leg mode="car" trav_time="01:00:00"/>
+      <activity type="shop" x="0.6712976284620411" y="1.798629546894246" end_time="08:30:00"/>
+      <leg mode="car" trav_time="00:30:00"/>
+      <activity type="work" x="0.17405898987267643" y="2.0561252729359945" end_time="13:20:00"/>
+      <leg mode="walk" trav_time="01:40:00"/>
+      <activity type="medical" x="1.7343533153512545" y="0.24915918977318718" end_time="16:00:00"/>
+      <leg mode="walk" trav_time="00:30:00"/>
+      <activity type="other" x="2.479110763936159" y="0.6438603502405451" end_time="16:50:00"/>
+      <leg mode="walk" trav_time="00:20:00"/>
+      <activity type="other" x="2.5508812451108183" y="1.0564269781686577" end_time="17:40:00"/>
+      <leg mode="walk" trav_time="00:40:00"/>
+      <activity type="other" x="1.0526027847743729" y="1.7555643840413502" end_time="20:00:00"/>
+      <leg mode="car" trav_time="00:10:00"/>
+      <activity type="other" x="0.8394919717243418" y="0.5976376976914043"/>
+    </plan>
+  </person>
+</population>
