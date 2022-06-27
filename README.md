@@ -606,3 +606,13 @@ We have encountered many variations of sequences for plans, including wrapping a
 Although they are generally edge cases, they exists and generally represent real people. We are
 therefore endeavoring to support all these cases in our plan modifiers. This is resulting some
 difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
+
+#### Plan cropping
+The `pam.cropping` module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area. Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population. Examples of using the module can be found in the `18_plan_cropping.ipynb` notebook.
+
+#### Using the CLI
+Some of PAM's functionality can be invoked via its Command Line Interface (CLI). The currently supported methods are: 
+
+* plan cropping: `pam crop <path_population_xml> <path_core_area_geojson> <path_output_directory>`.
+
+To further explore the CLI commands, start by typing `pam --help` in a terminal.

@@ -2,20 +2,15 @@
 Methods for cropping plans outside core areas
 """
 from shapely.geometry import Polygon, LineString
-import matplotlib.pyplot as plt
 import geopandas as gp
 import pam
 from pam.activity import Leg, Activity, Plan
 from pam.variables import END_OF_DAY, START_OF_DAY
-from pam.utils import minutes_to_datetime as mtdt
 from pam.core import Population
-from typing import List, Optional
-from copy import deepcopy
-from datetime import datetime
+from typing import List
 from pam.core import Population, Household, Person
 import os
 from pam import read, write
-from shapely.geometry import Point
 
 
 def crop_xml(
@@ -52,8 +47,6 @@ def crop_xml(
         version=version,
         comment=comment
     )
-
-    # population_out.to_csv(dir_population_output, crs='EPSG:27700', to_crs='EPSG:4326')
 
 
 def simplify_external_plans(plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False) -> None:
@@ -134,7 +127,12 @@ def crop_leg(leg: Leg, boundary: Polygon) -> None:
     """
     path = get_leg_path(leg)
     path_cropped = path.intersection(boundary)
-    leg.start_location.loc, leg.end_location.loc = path_cropped.boundary.geoms
+    start_location, end_location = path_cropped.boundary.geoms
+    leg.start_location.loc = start_location
+    leg.previous.location.loc = start_location
+    leg.end_location.loc = end_location
+    leg.next.location.loc = end_location
+
 
 
 def get_kept_activities(plan: Plan, boundary: Polygon) -> list:
@@ -204,7 +202,7 @@ def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = 'c
     return leg
 
 
-def infill_legs(plan: Plan):
+def infill_legs(plan: Plan) -> None:
     """
     Infill missing legs.
     If there is no leg between two activities, a new one is created linking them.
@@ -220,7 +218,7 @@ def infill_legs(plan: Plan):
         i += 1
 
 
-def stretch_times(plan: Plan):
+def stretch_times(plan: Plan) -> None:
     """
     Extend start/end activity times to the start/end of day.
     """
@@ -228,7 +226,7 @@ def stretch_times(plan: Plan):
     plan.day[-1].end_time = END_OF_DAY
 
 
-def rename_external(plan: Plan, boundary: Polygon):
+def rename_external(plan: Plan, boundary: Polygon) -> None:
     """
     Rename all external-area activities as "external"
     """
@@ -270,7 +268,7 @@ def link_plan(plan: Plan) -> None:
         p.end_location = p.next.location
 
 
-def link_population(population: Population):
+def link_population(population: Population) -> None:
     """
     Link the plan components of every agent in the population.
     """

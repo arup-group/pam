@@ -9,6 +9,7 @@ from shapely.geometry import Point, Polygon
 import geopandas as gp
 from copy import deepcopy
 from pam import cropping
+import os
 
 
 @pytest.fixture
@@ -16,37 +17,38 @@ def test_plan() -> Plan:
     plan = Plan()
     plan.day = [
         Activity(seq=1, act='home', loc=Point(0.31, 0.81),
-                start_time=mtdt(0), end_time=mtdt(420)),
+                 start_time=mtdt(0), end_time=mtdt(420)),
         Leg(seq=1, mode='car', start_loc=Point(0.31, 0.81), end_loc=Point(0.12, 1.45),
             start_time=mtdt(420), end_time=mtdt(480), distance=1000),
         Activity(seq=2, act='shop', loc=Point(0.12, 1.45),
-                start_time=mtdt(480), end_time=mtdt(510)),
+                 start_time=mtdt(480), end_time=mtdt(510)),
         Leg(seq=2, mode='car', start_loc=Point(0.12, 1.45), end_loc=Point(0.84, 2.12),
             start_time=mtdt(510), end_time=mtdt(540), distance=1000),
         Activity(seq=3, act='work', loc=Point(0.84, 2.12),
-                start_time=mtdt(540), end_time=mtdt(800)),
+                 start_time=mtdt(540), end_time=mtdt(800)),
         Leg(seq=3, mode='walk', start_loc=Point(0.84, 2.12), end_loc=Point(1.90, 0.23),
             start_time=mtdt(800), end_time=mtdt(900), distance=1000),
         Activity(seq=4, act='medical', loc=Point(1.90, 0.23),
-                start_time=mtdt(900), end_time=mtdt(960)),
+                 start_time=mtdt(900), end_time=mtdt(960)),
         Leg(seq=4, mode='walk', start_loc=Point(1.90, 0.23), end_loc=Point(2.26, 0.24),
             start_time=mtdt(960), end_time=mtdt(990), distance=1000),
         Activity(seq=5, act='other', loc=Point(2.26, 0.24),
-                start_time=mtdt(990), end_time=mtdt(1010)),
+                 start_time=mtdt(990), end_time=mtdt(1010)),
         Leg(seq=5, mode='walk', start_loc=Point(2.26, 0.24), end_loc=Point(2.77, 1.82),
             start_time=mtdt(1010), end_time=mtdt(1030), distance=1000),
         Activity(seq=6, act='other', loc=Point(2.77, 1.82),
-                start_time=mtdt(1030), end_time=mtdt(1060)),
+                 start_time=mtdt(1030), end_time=mtdt(1060)),
         Leg(seq=6, mode='walk', start_loc=Point(2.77, 1.82), end_loc=Point(1.88, 1.72),
             start_time=mtdt(1060), end_time=mtdt(1100), distance=1000),
         Activity(seq=7, act='other', loc=Point(1.88, 1.72),
-                start_time=mtdt(1100), end_time=mtdt(1200)),
+                 start_time=mtdt(1100), end_time=mtdt(1200)),
         Leg(seq=7, mode='car', start_loc=Point(1.88, 1.72), end_loc=Point(0.23, 0.10),
             start_time=mtdt(1200), end_time=mtdt(1210), distance=1000),
         Activity(seq=8, act='home', loc=Point(0.23, 0.10),
-                start_time=mtdt(1210), end_time=END_OF_DAY)
+                 start_time=mtdt(1210), end_time=END_OF_DAY)
     ]
     return plan
+
 
 @pytest.fixture
 def test_population(test_plan) -> Population:
@@ -56,8 +58,9 @@ def test_population(test_plan) -> Population:
     person.plan = test_plan
     hh.add(person)
     population.add(hh)
-    
+
     return population
+
 
 @pytest.fixture
 def test_zoning_system() -> gp.GeoDataFrame:
@@ -76,10 +79,27 @@ def test_zoning_system() -> gp.GeoDataFrame:
 
     return zones_gdf
 
+
+@pytest.fixture
+def path_test_plan():
+    return os.path.join('tests', 'test_data', 'test_matsim_plansv12.xml')
+
+
+@pytest.fixture
+def path_boundary():
+    return os.path.join('tests', 'test_data', 'test_geometry.geojson')
+
+
+@pytest.fixture
+def path_output_dir():
+    return os.path.join('tests', 'test_data', 'output', 'cropped')
+
+
 def get_activity_zones(plan: Plan, zoning_system: gp.GeoDataFrame) -> set:
     """ Return the activity location zones """
     locs = gp.GeoDataFrame(geometry=[x.location.loc for x in plan.activities])
-    return list(locs.sjoin(zoning_system).zone)    
+    return list(locs.sjoin(zoning_system).zone)
+
 
 def test_simple_cropping(test_plan, test_zoning_system):
     """ Only keep legs entering/exiting zone h """
@@ -87,7 +107,8 @@ def test_simple_cropping(test_plan, test_zoning_system):
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
     activity_zones = get_activity_zones(plan_cropped, test_zoning_system)
-    assert activity_zones == ['g','h','e']
+    assert activity_zones == ['g', 'h', 'e']
+
 
 def test_complex_cropping(test_plan, test_zoning_system):
     """ 
@@ -97,7 +118,8 @@ def test_complex_cropping(test_plan, test_zoning_system):
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
     activity_zones = get_activity_zones(plan_cropped, test_zoning_system)
-    assert activity_zones == ['c','d','h','e','a']
+    assert activity_zones == ['c', 'd', 'h', 'e', 'a']
+
 
 def test_fully_external(test_plan, test_zoning_system, test_population):
     """ 
@@ -115,6 +137,7 @@ def test_fully_external(test_plan, test_zoning_system, test_population):
     cropping.simplify_population(population_cropped, boundary)
     assert len(population_cropped) == 0
 
+
 def test_fully_internal_plan(test_plan, test_zoning_system):
     """
     All activities in spatial scope -> no change of agent plans
@@ -123,3 +146,14 @@ def test_fully_internal_plan(test_plan, test_zoning_system):
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
     assert len(test_plan) == len(plan_cropped)
+
+
+def test_crop_xml(path_test_plan, path_boundary, tmp_path):
+    """ Crop and export an xml population """
+    path_output_dir = str(tmp_path)
+    cropping.crop_xml(
+        path_test_plan,
+        path_boundary,
+        path_output_dir
+    )
+    assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))

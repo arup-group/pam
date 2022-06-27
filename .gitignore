@@ -19,6 +19,7 @@ scratch/
 tests/.DS_Store
 tests/__pycache__/
 tests/test_data/.DS_Store
+tests/test_data/output
 .vscode/
 .python-version
 .coverage
