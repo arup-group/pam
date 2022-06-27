@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import geopandas as gp
 import pam
 from pam.activity import Leg, Activity, Plan
-from pam.variables import END_OF_DAY
+from pam.variables import END_OF_DAY, START_OF_DAY
 from pam.utils import minutes_to_datetime as mtdt
 from pam.core import Population
 from typing import List, Optional
@@ -17,15 +17,13 @@ import os
 from pam import read, write
 from shapely.geometry import Point
 
-START_OF_DAY = datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0)
-
 
 def crop_xml(
-    path_population_input, 
-    path_boundary, 
+    path_population_input,
+    path_boundary,
     dir_population_output,
-    version = 12,
-    comment = ''
+    version=12,
+    comment=''
 ):
     """
     Crop an xml population and export to a new one.
@@ -51,11 +49,12 @@ def crop_xml(
         population,
         plans_path=os.path.join(dir_population_output, 'plans.xml'),
         attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-        version = version,
+        version=version,
         comment=comment
     )
 
     # population_out.to_csv(dir_population_output, crs='EPSG:27700', to_crs='EPSG:4326')
+
 
 def simplify_external_plans(plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False) -> None:
     """
