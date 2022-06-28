@@ -14,11 +14,12 @@ from pam import read, write
 
 
 def crop_xml(
-    path_population_input,
-    path_boundary,
-    dir_population_output,
-    version=12,
-    comment=''
+    path_population_input: str,
+    path_boundary: str,
+    dir_population_output: str,
+    version: int = 12,
+    comment: str = '',
+    buffer: float = 0
 ):
     """
     Crop an xml population and export to a new one.
@@ -27,6 +28,8 @@ def crop_xml(
     # core area geometry
     boundary = gp.read_file(path_boundary)
     boundary = boundary.dissolve().geometry[0]
+    if buffer:
+        boundary = boundary.buffer(buffer)
 
     # crop population
     population = read.read_matsim(
@@ -49,7 +52,12 @@ def crop_xml(
     )
 
 
-def simplify_external_plans(plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False) -> None:
+def simplify_external_plans(
+    plan: Plan,
+    boundary: Polygon,
+    snap_to_boundary=False,
+    rename_external_activities=False
+) -> None:
     """
     Simplify any activities happening outside the boundary area.
 
@@ -132,7 +140,6 @@ def crop_leg(leg: Leg, boundary: Polygon) -> None:
     leg.previous.location.loc = start_location
     leg.end_location.loc = end_location
     leg.next.location.loc = end_location
-
 
 
 def get_kept_activities(plan: Plan, boundary: Polygon) -> list:
