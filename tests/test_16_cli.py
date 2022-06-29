@@ -1,7 +1,8 @@
 from click.testing import CliRunner
 import click
 import pytest
-from pam.cli import crop
+from pam.cli import crop, sample
+from pam import read
 import os
 
 
@@ -28,3 +29,19 @@ def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
                            path_boundary, path_output_dir])
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
+
+
+def test_cli_sample(path_test_plan, tmp_path):
+    """ Double the population of 5 agents """
+    path_output_dir = str(tmp_path)
+    runner = CliRunner()
+    result = runner.invoke(sample, [path_test_plan, path_output_dir, '-s' '2'])
+    assert result.exit_code == 0
+    assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
+
+    population = read.read_matsim(
+        os.path.join(path_output_dir, 'plans.xml'),
+        household_key="hid",
+        version=12
+    )
+    assert len(population) == 10

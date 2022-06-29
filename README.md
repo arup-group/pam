@@ -614,5 +614,6 @@ The `pam.cropping` module allows to spatially subset populations, by simplifying
 Some of PAM's functionality can be invoked via its Command Line Interface (CLI). The currently supported methods are: 
 
 * plan cropping: `pam crop <path_population_xml> <path_core_area_geojson> <path_output_directory>`.
+* down/up-sampling an xml population: `pam sample <path_population_xml> <path_core_area_geojson> <path_output_directory> -s <sample_percentage> -v <matsim_version>`. For example, you can use: `pam sample tests/test_data/test_matsim_plansv12.xml tests/test_data/output/sampled -s 0.1` to create a downsampled (to 10%) version of the input (`test_matsim_plansv12.xml`) population.
 
 To further explore the CLI commands, start by typing `pam --help` in a terminal.
