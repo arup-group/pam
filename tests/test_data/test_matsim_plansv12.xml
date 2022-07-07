@@ -12,6 +12,7 @@
 
 	<person id="chris">
 		<attributes>
+			<attribute name="hid" class="java.lang.String">A</attribute>
 			<attribute name="subpopulation" class="java.lang.String">rich</attribute>
 			<attribute name="age" class="java.lang.String">yes</attribute>
 		</attributes>
@@ -42,6 +43,7 @@
 
 	<person id="fatema">
 		<attributes>
+			<attribute name="hid" class="java.lang.String">B</attribute>
 			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
 			<attribute name="age" class="java.lang.String">no</attribute>
 		</attributes>
@@ -72,6 +74,7 @@
 
 	<person id="fred">
 		<attributes>
+			<attribute name="hid" class="java.lang.String">B</attribute>
 			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
 			<attribute name="age" class="java.lang.String">no</attribute>
 		</attributes>
@@ -138,6 +141,7 @@
 
 	<person id="gerry">
 		<attributes>
+			<attribute name="hid" class="java.lang.String">B</attribute>
 			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
 			<attribute name="age" class="java.lang.String">no</attribute>
 		</attributes>
@@ -204,7 +208,8 @@
 
 	<person id="nick">
 		<attributes>
-			<attribute name="subpopulation" class="java.lang.String">poor</attribute>
+			<attribute name="hid" class="java.lang.String">A</attribute>
+			<attribute name="subpopulation" class="java.lang.String">rich</attribute>
 			<attribute name="age" class="java.lang.String">no</attribute>
 		</attributes>
 		<plan score="129.592238766919" selected="yes">

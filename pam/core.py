@@ -1,8 +1,10 @@
+from curses import KEY_A1
 import logging
 import random
 import pickle
 import copy
 from collections import defaultdict
+from sys import hash_info
 from typing import Optional
 
 from pam.location import Location
@@ -121,18 +123,22 @@ class Population:
     def subpopulations(self):
         subpopulations = set()
         for _, _, p in self.people():
-            subpopulations.add(p.attributes.get("subpopulation"))
+            subpopulations.add(p.subpopulation)
         return subpopulations
 
     @property
-    def attributes(self):
+    def attributes(self, show:int = 10) -> dict:
         attributes = defaultdict(set)
-        for _, _, p in self.people():
-            for k, v in p.attributes.items():
+        for _, hh in self.households.items():
+
+            for k, v in hh.attributes.items():
                 attributes[k].add(v)
+            for _, p in hh.people.items():
+                for k, v in p.attributes.items():
+                    attributes[k].add(v)
         for k, v in attributes.items():
-            if len(v) > 25:
-                attributes[k] = None
+            if len(v) > show:
+                attributes[k] = set(list(attributes[k])[:show])
         return dict(attributes)
 
     @property
@@ -578,18 +584,41 @@ class Household:
             person.set_loc(loc)
 
     @property
-    def activity_classes(self):
-        acts = set()
+    def activities(self):
         for _, p in self:
-            acts.update(p.activity_classes)
-        return acts
+            if p.plan:
+                for act in p.plan.activities:
+                    yield act
+
+    @property
+    def activity_classes(self):
+        return set(a.act for a in self.activities)
+
+    @property
+    def legs(self):
+        for _, p in self:
+            if p.plan:
+                for leg in p.plan.legs:
+                    yield leg
 
     @property
     def mode_classes(self):
-        modes = set()
-        for _, p in self:
-            modes.update(p.mode_classes)
-        return modes
+        return set(l.mode for l in self.legs)
+
+    def get_attribute(self, key):
+        if key in self.attributes:
+            return self.attributes[key]
+        attributes = set()
+        for _, person in self:
+            attributes.add(person.attributes.get(key))
+        attributes = list(attributes)
+        if len(attributes) > 1:
+            self.logger.warning(f"Found inconsistent '{key}' attributes for occupants of hh {self.hid}")
+        return attributes[0]
+
+    @property
+    def subpopulation(self):
+        return self.get_attribute("subpopulation")
 
     @property
     def freq(self):
@@ -602,7 +631,9 @@ class Household:
             return self.hh_freq
 
         if not self.people:
+            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
+
         return self.av_person_freq
 
     def set_freq(self, freq):
@@ -611,9 +642,11 @@ class Household:
     @property
     def av_person_freq(self):
         if not self.people:
+            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
         frequencies = [person.freq for person in self.people.values()]
         if None in frequencies:
+            self.logger.warning(f"Missing person weight in hh {self.hid}, returning None.")
             return None
         return sum(frequencies) / len(frequencies)
 
@@ -801,6 +834,10 @@ class Person:
             return self.home_location
         if self.plan:
             return self.plan.home
+
+    @property
+    def subpopulation(self):
+        return self.attributes.get("subpopulation")
 
     def set_location(self, location:Location):
         self.home_location = location

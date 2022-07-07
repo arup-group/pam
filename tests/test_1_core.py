@@ -304,8 +304,8 @@ def test_extract_person_mode_classes():
     person.add(Activity(seq=3, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
 
     assert person.mode_classes == set(['bike', 'pt'])
-    
-    
+
+
 def test_extract_household_activity_classes():
     household = Household(hid='1')
     for i, (act, mode) in enumerate(zip(['work', 'school'], ['car', 'pt'])):
@@ -431,7 +431,7 @@ def test_population_fix_plans_wrapper(person_heh):
 
 def test_hh_fix_plans_wrapper(person_heh):
     population = Population()
-    population.add(Household('1'))  
+    population.add(Household('1'))
     population['1'].add(person_heh)
     population['1'].fix_plans()
 
@@ -495,7 +495,7 @@ def test_av_activity_freq():
     person.add(Leg())
     person.add(Activity(freq=3))
     assert person.av_activity_freq == 2
-    
+
 
 def test_population_sample_locs_complex(person_heh):
     population = Population()

@@ -924,7 +924,7 @@ def parse_matsim_plan(plan_xml, person_id : str, version : int, simplify_pt_trip
                 )
 
             if departure_dt < arrival_dt:
-                logger.warning(f"Negative duration activity found at pid={person_id}")
+                logger.debug(f"Negative duration activity found at pid={person_id}")
 
             plan.add(
                 activity.Activity(

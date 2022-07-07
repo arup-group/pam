@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 import click
 import pytest
-from pam.cli import crop, sample
+from pam.cli import cli
 from pam import read
 import os
 
@@ -21,12 +21,23 @@ def path_output_dir():
     return os.path.join('tests', 'test_data', 'output', 'cropped')
 
 
+def test_test_cli_summary(path_test_plan):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["report", "summary", path_test_plan, "-k", "subpopulations", "-s", "0.1"]
+        )
+    assert result.exit_code == 0
+
+
 def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
     """ Plan cropping CLI """
     path_output_dir = str(tmp_path)
     runner = CliRunner()
-    result = runner.invoke(crop, [path_test_plan,
-                           path_boundary, path_output_dir])
+    result = runner.invoke(
+        cli,
+        ["crop", path_test_plan, path_boundary, path_output_dir]
+        )
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
 
@@ -36,7 +47,10 @@ def test_cli_sample(path_test_plan, tmp_path, sample_percentage):
     """ Double the population of 5 agents """
     path_output_dir = str(tmp_path)
     runner = CliRunner()
-    result = runner.invoke(sample, [path_test_plan, path_output_dir, '-s', sample_percentage])
+    result = runner.invoke(
+        cli,
+        ["sample", path_test_plan, path_output_dir, '-s', sample_percentage]
+        )
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
 
