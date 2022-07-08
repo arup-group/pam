@@ -890,7 +890,66 @@ def read_matsim(
 
     return population
 
-def parse_matsim_plan(plan_xml, person_id : str, version : int, simplify_pt_trips : bool, crop : bool, autocomplete : bool) -> activity.Plan:
+
+def stream_matsim_persons(
+    plans_path,
+    weight : int = 100,
+    simplify_pt_trips : bool = False,
+    autocomplete : bool = True,
+    crop : bool = True,
+    keep_non_selected : bool = False
+):
+    """
+    Stream a MATSim format population into core.Person objects.
+    Does not support pre version 12 attributes inputs.
+    :param plans: path to matsim format xml
+    :param attributes: path to matsim format xml
+    :param all_vehicles_path: path to matsim all_vehicles xml file
+    :param electric_vehicles_path: path to matsim electric_vehicles xml
+    :param weight: int
+    :param version: int {11,12}, default = 12
+    :param household_key: {str, None}
+    :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected).
+    :return: Population
+    """
+
+    for person_xml in utils.get_elems(plans_path, "person"):
+        person_id, attributes = get_attributes_from_plans(person_xml)
+        person = core.Person(person_id, attributes=attributes, freq=weight)
+
+        for plan_xml in person_xml:
+            if plan_xml.get('selected') == 'yes':
+                person.plan = parse_matsim_plan(
+                    plan_xml=plan_xml,
+                    person_id=person_id,
+                    version=12,
+                    simplify_pt_trips=simplify_pt_trips,
+                    crop=crop,
+                    autocomplete=autocomplete
+                    )
+            elif keep_non_selected and plan_xml.get('selected') == 'no':
+                person.plans_non_selected.append(
+                    parse_matsim_plan(
+                        plan_xml=plan_xml,
+                        person_id=person_id,
+                        version=12,
+                        simplify_pt_trips=simplify_pt_trips,
+                        crop=crop,
+                        autocomplete=autocomplete
+                        )
+                    )
+        yield person
+
+
+
+def parse_matsim_plan(
+    plan_xml,
+    person_id : str,
+    version : int,
+    simplify_pt_trips : bool,
+    crop : bool,
+    autocomplete : bool
+    ) -> activity.Plan:
     """
     Parse a MATSim plan.
     """
