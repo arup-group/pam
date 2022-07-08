@@ -1,10 +1,8 @@
-from curses import KEY_A1
 import logging
 import random
 import pickle
 import copy
 from collections import defaultdict
-from sys import hash_info
 from typing import Optional
 
 from pam.location import Location
@@ -605,16 +603,16 @@ class Household:
     def mode_classes(self):
         return set(l.mode for l in self.legs)
 
-    def get_attribute(self, key):
+    def get_attribute(self, key) -> set:
+        """
+        Get set of attribute values for given key, First searches hh attributes then occupants.
+        """
         if key in self.attributes:
-            return self.attributes[key]
+            return {self.attributes[key]}
         attributes = set()
         for _, person in self:
             attributes.add(person.attributes.get(key))
-        attributes = list(attributes)
-        if len(attributes) > 1:
-            self.logger.warning(f"Found inconsistent '{key}' attributes for occupants of hh {self.hid}")
-        return attributes[0]
+        return attributes
 
     @property
     def subpopulation(self):

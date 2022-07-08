@@ -25,7 +25,7 @@ def test_test_cli_summary(path_test_plan):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["report", "summary", path_test_plan, "-k", "subpopulations", "-s", "0.1"]
+        ["report", "summary", path_test_plan, "-k", "subpopulations", "-s", "0.1", "-d", "--text", "--no-crop", "-h", "hid"]
         )
     assert result.exit_code == 0
 
