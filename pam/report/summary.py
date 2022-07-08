@@ -4,6 +4,7 @@ from enum import Enum
 
 from pam.core import Population
 
+
 class TEXT(Enum):
     TITLE = '\n\033[95m\033[4m\033[1m'
     HEADER = '\033[95m'
@@ -17,18 +18,6 @@ class TEXT(Enum):
     UNDERLINE = '\033[4m'
 
 
-def yellow(string: str):
-    print(f"{TEXT.WARNING.value}{string}{TEXT.END.value}")
-
-
-def red(string: str):
-    print(f"{TEXT.FAIL.value}{string}{TEXT.END.value}")
-
-
-def blue(string: str):
-    print(f"{TEXT.OKBLUE.value}{string}{TEXT.END.value}")
-
-
 def header(head: str):
     print(f"{TEXT.HEADER.value}{head}{TEXT.END.value}")
 
@@ -39,12 +28,6 @@ def header_and_text(head: str, text: str):
 
 def subheader_and_text(head: str, text: str):
     print(f"{TEXT.OKBLUE.value}{head}{TEXT.END.value} {text}")
-
-
-def fnumber(n: int):
-    if n == 0:
-        return red(n)
-    return str(n)
 
 
 def pretty_print_summary(population: Population, key="subpopulation"):
@@ -122,7 +105,7 @@ def stats_summary(population: Population, key="subpopulation") -> PrettyTable:
     for stat, total_value in summary["total"].items():
         row = [stat, total_value]
         for k in slices:
-            row.append(fnumber(summary[k].get(stat)))
+            row.append(summary[k].get(stat))
         table.add_row(row)
 
     table.align["stat"] = "r"
