@@ -228,6 +228,30 @@ Logic also be added to apply:
 - times
 - durations
 
+## CLI
+
+Some common functionality, for MATSim formatted populations, can be accessed via the command line. Once pam is installed, start by typing in `pam --help` to your command line:
+
+```
+Usage: pam [OPTIONS] COMMAND [ARGS]...
+
+  Population Activity Modeller (PAM) Command Line Tool
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  crop    Crop a population's plans outside a core area.
+  report  Various reporting for MATSim formatted plans.
+  sample  Down- or up-sample a PAM population.
+```
+
+For example:
+* to get a summary or a MATSim plans file: `pam report summary tests/test_data/test_matsim_plansv12.xml`.
+* plan cropping: `pam crop <path_population_xml> <path_core_area_geojson> <path_output_directory>`.
+* down/up-sampling an xml population: `pam sample <path_population_xml> <path_output_directory> -s <sample_percentage> -v <matsim_version>`. For example, you can use: `pam sample tests/test_data/test_matsim_plansv12.xml tests/test_data/output/sampled -s 0.1` to create a downsampled (to 10%) version of the input (`test_matsim_plansv12.xml`) population.
+
+
 ## Populations
 
 We have some read methods for common input data formats - but first let's take a quick
@@ -610,10 +634,3 @@ difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
 #### Plan cropping
 The `pam.cropping` module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area. Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population. Examples of using the module can be found in the `18_plan_cropping.ipynb` notebook.
 
-#### Using the CLI
-Some of PAM's functionality can be invoked via its Command Line Interface (CLI). The currently supported methods are: 
-
-* plan cropping: `pam crop <path_population_xml> <path_core_area_geojson> <path_output_directory>`.
-* down/up-sampling an xml population: `pam sample <path_population_xml> <path_output_directory> -s <sample_percentage> -v <matsim_version>`. For example, you can use: `pam sample tests/test_data/test_matsim_plansv12.xml tests/test_data/output/sampled -s 0.1` to create a downsampled (to 10%) version of the input (`test_matsim_plansv12.xml`) population.
-
-To further explore the CLI commands, start by typing `pam --help` in a terminal.

@@ -303,18 +303,18 @@ class Plan:
         # crop plan beyond end of day
         for idx, component in list(self.reversed()):
             if component.start_time > pam.variables.END_OF_DAY:
-                self.logger.warning(f"Cropping plan components")
+                self.logger.debug(f"Cropping plan components")
                 self.day = self.day[:idx]
                 break
 
         # crop plan that is out of sequence
         for idx in range(1, self.length):
             if self[idx].start_time < self[idx-1].end_time:
-                self.logger.warning(f"Cropping plan components")
+                self.logger.debug(f"Cropping plan components")
                 self.day = self.day[:idx]
                 break
             if self[idx].start_time > self[idx].end_time:
-                self.logger.warning(f"Cropping plan components")
+                self.logger.debug(f"Cropping plan components")
                 self.day = self.day[:idx+1]
                 break
 
@@ -322,7 +322,7 @@ class Plan:
         if isinstance(self.day[-1], Activity):
             self.day[-1].end_time = pam.variables.END_OF_DAY
         else:
-            self.logger.warning(f"Cropping plan ending in Leg")
+            self.logger.debug(f"Cropping plan ending in Leg")
             self.day.pop(-1)
             self.day[-1].end_time = pam.variables.END_OF_DAY
 

@@ -18,6 +18,7 @@ def crop_xml(
     path_boundary: str,
     dir_population_output: str,
     version: int = 12,
+    household_key: str = "hid",
     comment: str = '',
     buffer: float = 0
 ):
@@ -34,7 +35,7 @@ def crop_xml(
     # crop population
     population = read.read_matsim(
         path_population_input,
-        household_key="hid",
+        household_key=household_key,
         version=version
     )
     simplify_population(population, boundary)
@@ -67,7 +68,7 @@ def simplify_external_plans(
      3: Infill: create any new legs between external activities as necessary
      4: Ensure plan consistency: start/end times, sequences, etc
      5 (optional) : Rename activities to "external"
-     6 (optional) : Crop the leg geometries to start/stop at the core area boundaries 
+     6 (optional) : Crop the leg geometries to start/stop at the core area boundaries
 
     :param plan: a PAM plan
     :param boundary: the geometry of the core modelled area

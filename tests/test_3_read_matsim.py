@@ -92,7 +92,23 @@ def test_parse_v12_matsim():
     population = read_matsim(test_tripsv12_path, version=12)
     person = population['chris']['chris']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes'}
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
+    legs = list(person.plan.legs)
+    assert legs[0].mode == "car"
+    assert legs[1].mode == "car"
+    assert legs[1].distance == 10300
+    assert legs[1].service_id == None
+    assert legs[1].route_id == None
+    assert legs[1].o_stop == None
+    assert legs[1].d_stop == None
+    assert legs[1].network_route == ['3-4', '4-3', '3-2', '2-1', '1-2']
+
+
+def test_parse_v12_matsim_with_hh_ids():
+    population = read_matsim(test_tripsv12_path, version=12, household_key="hid")
+    person = population['A']['chris']
+    assert person.has_valid_plan
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
@@ -108,7 +124,7 @@ def test_parse_transit_v12_matsim():
     population = read_matsim(test_tripsv12_path, version=12)
     person = population['fred']['fred']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'poor', 'age': 'no'}
+    assert person.attributes == {'subpopulation': 'poor', 'age': 'no', 'hid': 'B'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "walk"
     assert legs[1].mode == "bus"
