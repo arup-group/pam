@@ -26,7 +26,16 @@ def test_test_cli_summary(path_test_plan):
     result = runner.invoke(
         cli,
         ["report", "summary", path_test_plan, "-k", "subpopulations", "-s", "0.1"]
-        )
+    )
+    assert result.exit_code == 0
+
+
+def test_stringify(path_test_plan):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["report", "stringify", path_test_plan, "-w", "144", "--bw"]
+    )
     assert result.exit_code == 0
 
 

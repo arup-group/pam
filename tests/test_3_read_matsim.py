@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from pam.read import load_attributes_map, read_matsim
+from pam.read import load_attributes_map, read_matsim, stream_matsim_persons
 from pam.activity import Plan
 
 
@@ -145,6 +145,7 @@ def test_fail_bad_version():
     with pytest.raises(UserWarning):
         population = read_matsim(test_tripsv12_path, version=1)
 
+
 def test_parse_simple_matsim_non_selected():
    population = read_matsim(test_trips_path, test_attributes_path, keep_non_selected=True, version=11)
    person1 = population['census_1']['census_1']
@@ -154,3 +155,23 @@ def test_parse_simple_matsim_non_selected():
    assert len(person1.plans_non_selected) == 1
    assert len(person2.plans_non_selected) == 0
    assert isinstance(person1.plans_non_selected[0], Plan)
+
+
+# test stream matsim
+
+def test_stream_transit_v12_matsim():
+    population = {
+        person.pid: person for person in stream_matsim_persons(test_tripsv12_path)
+    }
+    person = population['fred']
+    assert person.has_valid_plan
+    assert person.attributes == {'subpopulation': 'poor', 'age': 'no', 'hid': 'B'}
+    legs = list(person.plan.legs)
+    assert legs[0].mode == "walk"
+    assert legs[1].mode == "bus"
+    assert legs[1].distance == 10100
+    assert legs[1].service_id == 'city_line'
+    assert legs[1].route_id == 'work_bound'
+    assert legs[1].o_stop == 'home_stop_out'
+    assert legs[1].d_stop == 'work_stop_in'
+    assert legs[1].network_route == None

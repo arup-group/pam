@@ -8,7 +8,7 @@ from pam.cropping import crop_xml
 from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import print_summary
-from pam.report.stream import print_plans
+from pam.report.stringify import stringify_plans
 
 @click.group()
 def cli():
@@ -64,29 +64,23 @@ def summary(
 
 @report.command()
 @click.argument("path_population_input", type=click.Path(exists=True))
-@click.option("--sample_size", "-s", type=float, default=1)
-@click.option("--matsim_version", "-v", type=int, default=12)
-@click.option("--attribute_key", "-k")
-@click.option("--household_key", "-h", type=str, default="hid")
-def stream(
+@click.option(
+    "--colour/--bw", default=True,
+    help="Choose a colour or grey-scale (bw) output, default 'colour'"
+    )
+@click.option(
+    "--width", "-w", type=int, default=72,
+    help="Target character width for plot, default 72"
+    )
+def stringify(
     path_population_input: str,
-    sample_size: float,
-    matsim_version: int,
-    attribute_key: str,
-    household_key: str
+    colour: bool,
+    width: int,
     ):
     """
-    Summarise a population.
-
-    :param path_population_input: Path to a MATSim population (xml)
-    :param sample_size: The sample size.
-        For example, use 0.1 to produce a 10% version of the input population
-    :param matsim_version: MATSim version
-    :param attribute_key: A random seed.
-    :param household_key: Household key, defaults to 'hid'.
-
+    ASCII plot activity plans to terminal.
     """
-    print_plans(path_population_input)
+    stringify_plans(path_population_input, colour, width)
 
 
 

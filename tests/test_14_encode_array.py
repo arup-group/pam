@@ -7,6 +7,8 @@ from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
 
+# One hot
+
 def test_home_plan_to_array():
     plan = Plan()
     plan.add(Activity(
@@ -470,3 +472,38 @@ def test_one_hot_cross_entropy():
     assert 0 < distance.cross_entropy(a, a) < 1e-3
     assert 0 < distance.cross_entropy(b, b) < 1e-3
     assert distance.cross_entropy(a, b) - 22.1048168 < 1e-3
+
+
+# Categorical
+
+def test_plans_to_cat():
+    plan = Plan()
+    plan.add(Activity(
+        act = "home",
+        area = "A",
+        start_time=mtdt(0),
+        end_time=mtdt(600),
+        ))
+    plan.add(Leg(
+        mode = "walk",
+        start_area = "A",
+        end_area = "B",
+        start_time=mtdt(600),
+        end_time=mtdt(660),
+        ))
+    plan.add(Activity(
+        act = "work",
+        area = "B",
+        start_time=mtdt(660),
+        end_time=END_OF_DAY,
+        ))
+    encoder = encode.PlansToCategorical(
+        bin_size=3600,
+        duration=86400
+        )
+    encoded = encoder.encode(plan)
+    np.testing.assert_array_equal(
+        encoded,
+        np.array([0]*10 + [1] + [2]*13)
+    )
+    assert encoder.get_act(0) == "home"

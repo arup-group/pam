@@ -1,8 +1,9 @@
 import os
 import pytest
+import numpy as np
 
 from pam.read import read_matsim
-from pam.report import summary
+from pam.report import summary, stringify
 
 
 @pytest.fixture
@@ -99,3 +100,29 @@ def test_count_modes_by_slice(population):
     )
     assert report["car"] == 4
     assert report["bus"] == 0
+
+
+def test_inf_yield():
+    infy = stringify.inf_yield([0,1,2])
+    y = [next(infy) for i in range(6)]
+    assert y == [0,1,2,0,1,2]
+
+
+def test_stringify_colourer():
+    colour = stringify.ActColour()
+    assert colour.paint("travel", "travel") == f"\033[38;5;232mtravel\033[0m"
+    assert colour.paint("A", "A") == f"\033[38;5;21mA\033[0m"
+
+
+def test_stringify_colourer_bw():
+    colour = stringify.ActColour(colour=False)
+    assert colour.paint("travel", "travel") == f"\033[38;5;232mtravel\033[0m"
+    assert colour.paint("B", "B") == f"\033[38;5;255mB\033[0m"
+
+
+def test_stringify_plan():
+    assert stringify.stringify_plan(
+        plan_array = np.array((0,1)),
+        mapping = {0: "travel", 1: "act"},
+        colourer = stringify.ActColour(colour=True)
+    ) == f"\033[38;5;232m▇\033[0m\033[38;5;21m▇\033[0m"
