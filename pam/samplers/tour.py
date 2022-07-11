@@ -1,4 +1,3 @@
-#from pkg_resources import DEVELOP_DIST
 import geopandas as gp
 import matplotlib
 from matplotlib import pyplot as plt
@@ -198,7 +197,7 @@ class TourPlanner:
     Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method.
     """
     
-    def __init__(self, stops, hour_sampler, minute_sampler, o_start, o_sampler, d_dist, d_freq, threshold_matrix, threshold_value, facility_sampler, activity_params):
+    def __init__(self, stops, hour, minute, o_zone, d_dist, d_freq, threshold_matrix, threshold_value, facility_sampler, activity_params):
         """
         :params stops: # of stops
         :params hour_sampler: sample of hourly demand distribution
@@ -211,13 +210,15 @@ class TourPlanner:
         :params threshold_value: maximum threshold value allowed between origin and destination in threshold_matrix.
         :params facility_sampler: returned object from FacilitySampler
         :params activity_params: dictionary of str of origin activity (str) and destination activity (str)
+        :params type: str, code considers density or flows. 
         """
 
         self.stops = stops
-        self.hour_sampler = hour_sampler
-        self.minute_sampler = minute_sampler
-        self.o_start = o_start
-        self.o_sampler = o_sampler
+        self.hour = hour
+        self.minute = minute
+        #self.o_sampler = o_sampler
+        self.o_zone = o_zone
+        #self.o_index = self.o_sampler.distribution.name
         self.threshold_matrix = threshold_matrix
         self.d_dist = d_dist
         self.d_freq = d_freq
@@ -225,6 +226,7 @@ class TourPlanner:
         self.facility_sampler = facility_sampler
         self.o_activity = activity_params['o_activity']
         self.d_activity = activity_params['d_activity']
+        #self.sample_type = sample_type
 
     def sequence_stops(self):
         """
@@ -234,8 +236,8 @@ class TourPlanner:
         TODO - Method to sequence stops with different logic (i.e, minimise distance between stops). 
         """
 
-        o_zone = self.o_sampler.sample()
-        o_loc = self.facility_sampler.sample(o_zone, self.o_activity)
+        #o_zone = self.o_sampler.sample()
+        o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
 
         d_seq = []
 
@@ -243,7 +245,7 @@ class TourPlanner:
             # select a d_zone within threshold distance
             d_zone = FrequencySampler(dist=self.d_dist,
                                       freq=self.d_freq,
-                                      threshold_matrix=self.threshold_matrix.loc[o_zone],
+                                      threshold_matrix=self.threshold_matrix.loc[self.o_zone],
                                       threshold_value = self.threshold_value
                                       ).threshold_sample()
             # once d_zone is selected, select a specific point location for d_activity                          
@@ -262,7 +264,7 @@ class TourPlanner:
         d_zones = [item.get('destination_zone') for item in d_seq]
         d_locs = [item.get('destination_facility') for item in d_seq]
 
-        return o_zone, o_loc, d_zones, d_locs
+        return o_loc, d_zones, d_locs
 
     def add_tour_activity(self, agent, k, zone, loc, activity_type, time_params):
         """
@@ -276,7 +278,7 @@ class TourPlanner:
         :return: end_tm of activity
         """
 
-        if activity_type == self.o_start:
+        if activity_type == self.o_activity:
             start_tm = 0
             end_tm = (time_params['hour']*60) + time_params['minute']
             seq = 1
@@ -285,7 +287,7 @@ class TourPlanner:
             start_tm = time_params['start_tm'] # end_tm
             end_tm = time_params['end_tm']  # END_OF_DAY we'll let pam trim this to 24 hours later
             seq = k+2
-            act = self.o_start
+            act = self.o_activity
         else:
             start_tm = time_params['end_tm']
             end_tm = time_params['end_tm'] + int(time_params['stop_duration']/60)
@@ -336,7 +338,7 @@ class TourPlanner:
 
         return end_tm
 
-    def add_return_origin(self, agent, k, o_zone, o_loc, d_zone, d_loc, end_tm, speed=50000/3600):
+    def add_return_origin(self, agent, k, o_loc, d_zone, d_loc, end_tm, speed=50000/3600):
         """ 
         Driver returns to origin, from their most recent stop to the origin location.
         :params agent: agent for which the leg & activity will be added to Plan
@@ -356,14 +358,14 @@ class TourPlanner:
         start_tm = end_tm
         end_tm = end_tm + int(trip_duration/60)
 
-        end_tm = self.add_tour_leg(agent=agent, k=k, o_zone=d_zone, o_loc=d_loc, d_zone=o_zone, d_loc=o_loc, start_tm=start_tm, end_tm=end_tm)
+        end_tm = self.add_tour_leg(agent=agent, k=k, o_zone=d_zone, o_loc=d_loc, d_zone=self.o_zone, d_loc=o_loc, start_tm=start_tm, end_tm=end_tm)
 
         time_params = {'start_tm':end_tm, 'end_tm':END_OF_DAY}
-        end_tm = self.add_tour_activity(agent=agent, k=k, zone=o_zone,loc=o_loc, activity_type='return_origin',time_params=time_params)
+        end_tm = self.add_tour_activity(agent=agent, k=k, zone=self.o_zone,loc=o_loc, activity_type='return_origin',time_params=time_params)
 
         return end_tm
 
-    def apply(self, agent, o_zone, o_loc, d_zones, d_locs):
+    def apply(self, agent, o_loc, d_zones, d_locs):
         """
         Apply the above functions to the agent to build a plan. 
         :params agent: agent to build a plan for
@@ -373,15 +375,15 @@ class TourPlanner:
         :params d_locs: destination facilities of leg & activity
         """
         
-        time_params = {'hour':self.hour_sampler, 'minute':self.minute_sampler}
-        end_tm = self.add_tour_activity(agent=agent, k=1, zone=o_zone, loc=o_loc, activity_type=self.o_start, time_params=time_params)
+        time_params = {'hour':self.hour, 'minute':self.minute}
+        end_tm = self.add_tour_activity(agent=agent, k=1, zone=self.o_zone, loc=o_loc, activity_type=self.o_activity, time_params=time_params)
 
         for k in range(self.stops):
             stop_duration, start_tm, end_tm = ActivityDuration().model_activity_duration(o_loc, d_locs[k], end_tm)
             if (mtdt(end_tm) >= END_OF_DAY) | (mtdt(end_tm + int(stop_duration/60)) >= END_OF_DAY):
                 break               
             elif k == 0:
-                end_tm = self.add_tour_leg(agent=agent, k=k, o_zone=o_zone, o_loc=o_loc, d_zone=d_zones[k], d_loc=d_locs[k], start_tm=start_tm, end_tm=end_tm)
+                end_tm = self.add_tour_leg(agent=agent, k=k, o_zone=self.o_zone, o_loc=o_loc, d_zone=d_zones[k], d_loc=d_locs[k], start_tm=start_tm, end_tm=end_tm)
 
                 time_params = {'end_tm':end_tm, 'stop_duration':stop_duration}
                 end_tm = self.add_tour_activity(agent=agent, k=k, zone=d_zones[k], loc=d_locs[k], activity_type=self.d_activity, time_params=time_params)
@@ -391,7 +393,7 @@ class TourPlanner:
                 time_params = {'end_tm':end_tm, 'stop_duration':stop_duration}
                 end_tm = self.add_tour_activity(agent=agent, k=k, zone=d_zones[k], loc=d_locs[k], activity_type=self.d_activity, time_params=time_params)
         
-        end_tm = self.add_return_origin(agent=agent, k=self.stops, o_zone=o_zone, o_loc=o_loc, d_zone=d_zones[self.stops-1], d_loc=d_locs[self.stops-1], end_tm=end_tm)
+        end_tm = self.add_return_origin(agent=agent, k=self.stops, o_loc=o_loc, d_zone=d_zones[self.stops-1], d_loc=d_locs[self.stops-1], end_tm=end_tm)
 
 
 class ValidateTourOD:
