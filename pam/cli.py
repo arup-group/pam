@@ -177,7 +177,7 @@ def crop(
     logger.info(f'Output saved at {dir_population_output}/plan.xml')
 
 
-
+# avoid_override() is not wokring correctly - expecting a prompt to appear only when the outpath already exists
 def avoid_override(
     population_output: str
     ):
