@@ -72,7 +72,7 @@ def test_distribution_uniform():
     pivots = {0:1, 2:1}
     total = 30
     dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total).demand
-    
+
     assert dist[0]==10
     assert dist[1]==10
     assert dist[2]==10
@@ -133,6 +133,42 @@ def test_dzone_sampler_dzone_d_density_zero():
                                        ).threshold_sample()
 
 
+def test_frequency_sampler_with_density():
+    zone_densities = pd.DataFrame({"zone": ["A", "B"], "density":[1, 0]}).set_index("zone")
+    """
+        density
+    A   1
+    B   0
+    """
+    assert tour.FrequencySampler(
+        dist = zone_densities.index,
+        freq = zone_densities.density,
+        threshold_matrix = None,
+        threshold_value = None
+    ).sample() == "A"
+
+
+def test_frequency_sampler_with_threshold():
+    zone_densities = pd.DataFrame({"zone": ["A", "B"], "density":[1, 1]}).set_index("zone")
+    """
+        density
+    A   1
+    B   1
+    """
+    threshold_matrix = pd.DataFrame({"zone": ["A", "B"], "A":[0, 1000], "B":[1000, 0]}).set_index("zone")
+    """
+        A   B
+    A   0   100
+    B   100 0
+    """
+    assert tour.FrequencySampler(
+        dist = zone_densities,
+        freq = 'density',
+        threshold_matrix = threshold_matrix["A"],
+        threshold_value = 50
+    ).threshold_sample() == "A"
+
+
 ### Set parameters to validate Tour Planner
 stops = 2
 threshold_value = 6
@@ -154,8 +190,8 @@ agent_plan = tour.TourPlanner(stops=stops,
                               o_zone=o_zone,
                               d_dist=delivery_density,
                                   d_freq='density',
-                                  threshold_matrix=df_od, 
-                                  threshold_value=threshold_value, 
+                                  threshold_matrix=df_od,
+                                  threshold_value=threshold_value,
                                   facility_sampler=facility_sampler,
                                   activity_params={'o_activity':'depot', 'd_activity':'delivery'})
 
@@ -189,7 +225,7 @@ def test_activity_endtm_notdepot():
                 'CarCO2': 'lgv'
             }
         )
-    
+
     agent_test = agent
     agent_plan_test = agent_plan
 
@@ -248,6 +284,6 @@ def test_validatetourod_no_duplicates():
                                       o_freq='density',
                                       d_freq='density'
                                       )
-    
+
     assert depot_density.density.sum() == od_density.od_density.depot_density.sum()
     assert delivery_density.density.sum() == od_density.od_density.delivery_density.sum()
