@@ -3,7 +3,7 @@ import shutil
 from pam import read, write, core
 import os
 
-def pop_combine(inpaths):
+def pop_combine(inpaths, matsim_version):
 
     """
     Combine two or more populations (e.g. household, freight... etc).
@@ -20,7 +20,7 @@ def pop_combine(inpaths):
             os.path.join(inpath, "plans.xml"),
             household_key="hid",
             weight=1,
-            version=12
+            version=matsim_version
             )
         print(f"population: {population.stats}") 
         
