@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Optional
 import os
 
+from pam.operations.population_combiner import pop_combine
 from pam.cropping import crop_xml
 from pam.samplers import population as population_sampler
 from pam import read, write
@@ -174,6 +175,61 @@ def crop(
     )
     logger.info('Population cropping complete')
     logger.info(f'Output saved at {dir_population_output}/plan.xml')
+
+
+
+def avoid_override(
+    population_output: str
+    ):
+    if os.path.exists(population_output) == True:
+        population_output.abort()
+
+@cli.command()
+@common_options
+@click.argument(
+    "population_paths", type=click.Path(exists=True), nargs=-1
+    )
+@click.option(
+    "--population_output", "-o", type=click.Path(exists=False, writable=True), default=os.getcwd()+"\combined_population.xml",
+    help="Specify outpath for combined_population.xml, default is cwd", callback=avoid_override, prompt='Are you sure you want to override this file?'
+    )
+@click.option(
+    "--comment", "-m", type=str, default="",
+    help="A short comment included in the output population."
+    )
+
+def combine(
+    population_paths: str,
+    population_output: str,
+    matsim_version: int,
+    comment: str,
+    debug
+    ):
+    """
+    Combine multiple populations (e.g. household, freight.. etc).
+    """
+    if debug:
+        logger.setLevel(logging.DEBUG)
+
+    logger.info('Starting population combiner')
+    logger.debug(f"Loading plans from {population_paths}.")
+    logger.debug(f"Writing combinined population to {population_output}.")
+    logger.debug(f"MATSim version set to {matsim_version}.")
+
+    combined_population = pop_combine(
+        inpaths=population_paths,
+    )
+
+    write.write_matsim(
+        population = combined_population,
+        version=matsim_version,
+        plans_path=population_output,
+        comment=comment
+    )
+    logger.info('Population combiner complete')
+    logger.info(f'Output saved at {population_output}')
+
+
 
 
 @cli.command()
