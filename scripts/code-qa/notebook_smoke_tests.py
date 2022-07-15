@@ -2,24 +2,29 @@ import argparse
 import glob
 import subprocess
 import sys
-
 from datetime import datetime
 from pprint import pprint
 
 from colorama import Fore, Style
+from rich.console import Console
+from rich.table import Table
 
 
 def parse_args(cmd_args):
     arg_parser = argparse.ArgumentParser(description='Smoke test a set of Jupyter notebook files')
     arg_parser.add_argument('-d',
                             '--notebook-directory',
-                            help='the path to the directory containing the notebooks to test',
-                            required=True)
+                            help='the path to the directory containing the notebooks to test')
     arg_parser.add_argument('-k',
                             '--kernel-name',
                             action='append',
                             help='the name of an iPython kernel to install',
                             required=True)
+    arg_parser.add_argument('-n',
+                            '--notebook',
+                            action='append',
+                            help='an iPython notebook to execute - takes precedence over '
+                                 '--notebook-directory if both are set')
     return vars(arg_parser.parse_args(cmd_args))
 
 
@@ -102,25 +107,31 @@ def trim_time_delta(time_delta):
 
 
 def print_summary(notebook_results_dict):
-    print("\n-------------------------------------------------------------")
-    print("                        Summary")
-    print("-------------------------------------------------------------")
+    console = Console()
+    console.print("")
+    passes = [ret_code for ret_code, time in notebook_results.values() if ret_code == 0]
+    failures = [ret_code for ret_code, time in notebook_results.values() if ret_code != 0]
+    table_caption = "{} failed, {} passed in [yellow bold]{}[/yellow bold]" \
+        .format(len(failures),
+                len(passes),
+                trim_time_delta(datetime.now() - start))
+    results_table = Table(show_header=True,
+                          header_style="bold magenta",
+                          title="Smoke Test Summary",
+                          caption=table_caption)
+    results_table.add_column("Notebook", justify="left")
+    results_table.add_column("Result", justify="left")
+    results_table.add_column("Time", style="dim")
     for notebook_file, result in notebook_results_dict.items():
         short_name = notebook_file.split('/')[-1]
         exit_code, duration = result
-        colour = Fore.GREEN if exit_code == 0 else Fore.RED
+        colour = "green" if exit_code == 0 else "red"
         outcome = "PASSED" if exit_code == 0 else "FAILED"
-        print("{}: {}{} in {}{}".format(short_name,
-                                        colour, outcome,
-                                        trim_time_delta(duration), Style.RESET_ALL))
-    passes = [ret_code for ret_code, time in notebook_results.values() if ret_code == 0]
-    failures = [ret_code for ret_code, time in notebook_results.values() if ret_code != 0]
-    print("\n{} failed, {} passed in {}{}{}".format(len(failures),
-                                                    len(passes),
-                                                    Fore.YELLOW,
-                                                    trim_time_delta(datetime.now() - start),
-                                                    Style.RESET_ALL))
-    print("-------------------------------------------------------------\n")
+        results_table.add_row(short_name,
+                              "[{}]{}[/{}]".format(colour, outcome, colour),
+                              trim_time_delta(duration))
+    console.print(results_table)
+    console.print("")
 
 
 def install_kernels(kernel_list):
@@ -135,12 +146,19 @@ if __name__ == '__main__':
     start = datetime.now()
     command_args = parse_args(sys.argv[1:])
     print_banner()
-    print("Smoke testing Jupyter notebooks in {}'{}'{} directory".format(Fore.YELLOW,
-                                                                         command_args['notebook_directory'],
-                                                                         Style.RESET_ALL))
+    if command_args['notebook']:
+        notebooks = command_args['notebook']
+        notebooks.sort()
+        print("Executing notebooks files {}{}{}".format(Fore.YELLOW,
+                                                        notebooks,
+                                                        Style.RESET_ALL))
+    elif command_args['notebook_directory']:
+        print("Smoke testing Jupyter notebooks in {}'{}'{} directory".format(Fore.YELLOW,
+                                                                             command_args['notebook_directory'],
+                                                                             Style.RESET_ALL))
 
-    notebooks = find_notebooks(command_args['notebook_directory'])
-    pprint(notebooks, width=120)
+        notebooks = find_notebooks(command_args['notebook_directory'])
+        pprint(notebooks, width=120)
     print("")
     install_kernels(command_args['kernel_name'])
     print("")
