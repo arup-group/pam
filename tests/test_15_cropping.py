@@ -8,7 +8,7 @@ from pam.variables import END_OF_DAY
 from shapely.geometry import Point, Polygon
 import geopandas as gp
 from copy import deepcopy
-from pam import cropping
+from pam.operations import cropping
 import os
 
 
