@@ -185,7 +185,6 @@ def crop(
 @click.option(
     "--population_output", "-o", type=click.Path(exists=False, writable=True), default=os.getcwd()+"\combined_population.xml",
     help="Specify outpath for combined_population.xml, default is cwd"
-    #, callback=avoid_override, prompt='Are you sure you want to override this file?'
     )
 @click.option(
     "--comment", "-m", type=str, default="",
