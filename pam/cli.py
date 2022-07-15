@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Optional
 import os
 
-from pam.operations.population_combiner import pop_combine
-from pam.cropping import crop_xml
+from pam.operations.combine import pop_combine
+from pam.operations.cropping import crop_xml
 from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import pretty_print_summary, print_summary

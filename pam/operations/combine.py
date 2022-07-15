@@ -17,7 +17,7 @@ def pop_combine(inpaths, matsim_version):
     for inpath in inpaths:
      
         population = read.read_matsim(
-            os.path.join(inpath, "plans.xml"),
+            inpath,
             household_key="hid",
             weight=1,
             version=matsim_version
