@@ -13,8 +13,7 @@ from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam import write
 from pam.write import write_matsim, write_matsim_v12,  \
-    write_matsim_plans, write_matsim_attributes, write_od_matrices, write_benchmarks, \
-    write_distance_benchmark, write_mode_distance_benchmark, write_mode_duration_benchmark, write_duration_benchmark, write_departure_time_benchmark
+    write_matsim_plans, write_matsim_attributes, write_od_matrices
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
@@ -618,38 +617,6 @@ def test_write_to_csv_convert_locs(population_heh, tmpdir):
        ]
     assert len(acts_df) == 3
 
-
-def test_benchmark_trips_hour(tmp_path):
-    test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
-    test_attributes_path = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), "test_data/test_matsim_attributes.xml"
-        ))
-    population = read_matsim(test_trips_path, test_attributes_path, weight=1000, version=11)
-    benchmark = write_benchmarks(
-        population,
-        dimensions=['departure_hour'],
-        data_fields=['freq'],
-        aggfunc=[sum],
-        path=None
-    )
-    expected_benchmark = pd.DataFrame(
-        {'departure_hour': {0: 6, 1: 7, 2: 14, 3: 20, 4: 21},
-        'freq_sum': {0: 1000, 1: 2000, 2: 2000, 3: 2000, 4: 5000}}
-        )
-
-    assert benchmark.equals(expected_benchmark)
-
-def test_write_benchmarks_multiple(tmpdir):
-    test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
-    test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                        "test_data/test_matsim_attributes.xml"))
-    population = read_matsim(test_trips_path, test_attributes_path, weight=1000, version=11)
-
-    assert list(write_distance_benchmark(population).trips) == [2000, 3000, 1000, 5000, 0, 0, 0, 0]
-    assert list(write_mode_distance_benchmark(population).trips) == [2000.0, 3000.0, 1000.0, 5000.0, 0.0, 0.0, 0.0, 0.0]
-    assert list(write_mode_duration_benchmark(population).trips) == [2000.0, 0.0, 0.0, 3000.0, 2000.0, 1000.0, 0.0, 0.0, 1000.0]
-    assert list(write_duration_benchmark(population).trips) == [2000, 0, 0, 3000, 2000, 1000, 0, 0, 1000]
-    assert list(write_departure_time_benchmark(population).trips) == [1000, 2000, 2000, 2000, 5000]
 
 ###########################################################
 # helper functions

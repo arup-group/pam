@@ -2,6 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 import logging
 from copy import copy
+from turtle import distance
 from typing import Optional
 
 from pam.location import Location
@@ -56,6 +57,41 @@ class Plan:
         for p in self.day:
             if isinstance(p, Leg):
                 yield p
+
+    def trips(self, ignore=["pt interaction", "pt_interaction"]) -> str:
+        """
+        Yield plan trips based on ignoring certain activities.
+        """
+        if self.day:
+            seq = 0
+            modes = {}
+            start_location = self.day[0].location
+            start_time = self.day[0].end_time
+            distance = 0
+            for component in self[1:]:
+                if isinstance(component, Leg):
+                    modes[component.mode] = modes.get(component.mode, 0) + component.distance
+                    distance += component.distance
+                elif component.act not in ignore:
+                    yield Trip(
+                        seq = seq,
+                        mode = max(modes, key=modes.get),
+                        start_area = start_location.area,
+                        end_area = component.location.area,
+                        start_link = start_location.link,
+                        end_link = component.location.link,
+                        start_loc = start_location.loc,
+                        end_loc = component.location.loc,
+                        start_time = start_time,
+                        end_time = component.start_time,
+                        distance = distance,
+                        purp = component.act,
+                    )
+                    modes = {}
+                    start_location = component.location
+                    start_time = component.end_time
+                    distance = 0
+                    seq += 1
 
     @property
     def activity_classes(self):
@@ -968,7 +1004,7 @@ class Leg(PlanComponent):
         self.end_time = end_time
         self._distance = distance
         self.freq = freq
-        # relevant for simulated plans
+        # relevant for (MATSim) simulated plans
         self.service_id = service_id
         self.route_id = route_id
         self.o_stop = o_stop
@@ -998,3 +1034,7 @@ class Leg(PlanComponent):
         # calculate leg euclidean distance in km:
         # assumes grid definition of Location class
         return ((self.end_location.loc.x-self.start_location.loc.x)**2 + (self.end_location.loc.y-self.start_location.loc.y)**2)**0.5 / 1000
+
+
+class Trip(Leg):
+    pass

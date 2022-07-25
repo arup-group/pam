@@ -35,6 +35,17 @@ def test_test_cli_summary(path_test_plan):
     assert result.exit_code == 0
 
 
+def test_benchmarking(path_test_plan, tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["report", "benchmarks", str(path_test_plan), str(tmp_path)]
+    )
+    assert result.exit_code == 0
+    assert os.path.exists(tmp_path)
+    assert os.path.exists(os.path.join(tmp_path, "mode_counts.csv"))
+
+
 def test_stringify(path_test_plan):
     runner = CliRunner()
     result = runner.invoke(

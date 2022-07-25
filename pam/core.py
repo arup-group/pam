@@ -4,6 +4,7 @@ import pickle
 import copy
 from collections import defaultdict
 from typing import Optional
+import pandas as pd
 
 from pam.location import Location
 import pam.activity as activity
@@ -202,6 +203,87 @@ class Population:
             'num_activities': num_activities,
             'num_legs': num_legs,
         }
+
+    def legs_df(self) -> pd.DataFrame:
+        """
+        Extract tabular record of population legs.
+        :return pd.DataFrame: record of legs
+        """
+        df = []
+        for hid, pid, person in self.people():
+            for seq, leg in enumerate(person.legs):
+                record = {
+                        'pid': pid,
+                        'hid': hid,
+                        'hzone': person.home,
+                        'ozone': leg.start_location.area,
+                        'dzone': leg.end_location.area,
+                        'oloc': leg.start_location,
+                        'dloc': leg.end_location,
+                        'seq': seq,
+                        'purp': leg.purp,
+                        'mode': leg.mode,
+                        'tst': leg.start_time.time(),
+                        'tet': leg.end_time.time(),
+                        'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
+                        'euclidean_distance': leg.euclidean_distance,
+                        'freq': person.freq,
+                    }
+                record = {**record, **dict(person.attributes)} # add person attributes
+                df.append(record)
+        df = pd.DataFrame(df)
+        self.add_fields(df)
+        return df
+
+
+    def trips_df(self) -> pd.DataFrame:
+        """
+        Extract tabular record of population legs.
+        :return pd.DataFrame: record of legs
+        """
+        df = []
+        for hid, pid, person in self.people():
+            for seq, trip in enumerate(person.plan.trips()):
+                record = {
+                        'pid': pid,
+                        'hid': hid,
+                        'hzone': person.home,
+                        'ozone': trip.start_location.area,
+                        'dzone': trip.end_location.area,
+                        'oloc': trip.start_location,
+                        'dloc': trip.end_location,
+                        'seq': seq,
+                        'purp': trip.purp,
+                        'mode': trip.mode,
+                        'tst': trip.start_time.time(),
+                        'tet': trip.end_time.time(),
+                        'duration': trip.duration / pd.Timedelta(minutes = 1), #duration in minutes
+                        'euclidean_distance': trip.euclidean_distance,
+                        'freq': person.freq,
+                    }
+                record = {**record, **dict(person.attributes)} # add person attributes
+                df.append(record)
+
+        df = pd.DataFrame(df)
+        self.add_fields(df)
+        return df
+
+    @staticmethod
+    def add_fields(df):
+        ## add extra fields used for benchmarking
+        df['personhrs'] = df['freq'] * df['duration'] / 60
+        df['departure_hour'] = df.tst.apply(lambda x:x.hour)
+        df['arrival_hour'] = df.tet.apply(lambda x:x.hour)
+        df['euclidean_distance_category'] = pd.cut(
+            df.euclidean_distance,
+            bins =[0,1,5,10,25,50,100,200,999999],
+            labels = ['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km', '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
+        )
+        df['duration_category'] = pd.cut(
+            df.duration,
+            bins =[0,5,10,15,30,45,60,90,120,999999],
+            labels = ['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min', '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
+        )
 
     def build_travel_geodataframe(self, **kwargs):
         """

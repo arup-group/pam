@@ -9,6 +9,7 @@ from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import pretty_print_summary, print_summary
 from pam.report.stringify import stringify_plans
+from pam.report.benchmarks import benchmarks as bms
 
 
 logging.basicConfig(
@@ -115,6 +116,49 @@ def summary(
         pretty_print_summary(population, attribute_key)
     else:
         print_summary(population, attribute_key)
+
+
+@report.command()
+@click.argument("population_input_path", type=click.Path(exists=True))
+@click.argument("output_directory", type=click.Path(exists=False, writable=True))
+@common_options
+def benchmarks(
+    population_input_path: str,
+    output_directory: str,
+    matsim_version: int,
+    debug: bool,
+    ):
+    """
+    Write batch of benchmarks to directory
+    """
+    if debug:
+        logger.setLevel(logging.DEBUG)
+
+    # read
+    logger.info(f"Loading plans from {population_input_path}.")
+    logger.debug(f"MATSim version set to {matsim_version}.")
+
+    population = read.read_matsim(
+        population_input_path,
+        version=matsim_version,
+    )
+    logger.info("Loading complete, creating benchmarks...")
+
+    # export
+    if not os.path.exists(output_directory):
+        logger.debug(f"Creating output directory: {output_directory}")
+        os.makedirs(output_directory)
+
+    for name, bm in bms(population):
+        path = os.path.join(output_directory, name)
+        logger.debug(f"Writing benchmark to {path}.")
+        if name.lower().endswith('.csv'):
+            bm.to_csv(path, index=False)
+        elif name.lower().endswith('.json'):
+            bm.to_json(path, orient='records')
+        else:
+            raise UserWarning('Please specify a valid csv or json file path.')
+    logger.info("Done.")
 
 
 @report.command()
