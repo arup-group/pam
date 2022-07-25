@@ -8,6 +8,7 @@ from pam.cropping import crop_xml
 from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import pretty_print_summary, print_summary
+from pam.report.stringify import stringify_plans
 
 
 logging.basicConfig(
@@ -114,6 +115,28 @@ def summary(
         pretty_print_summary(population, attribute_key)
     else:
         print_summary(population, attribute_key)
+
+
+@report.command()
+@click.argument("path_population_input", type=click.Path(exists=True))
+@click.option(
+    "--colour/--bw", default=True,
+    help="Choose a colour or grey-scale (bw) output, default 'colour'"
+    )
+@click.option(
+    "--width", "-w", type=int, default=72,
+    help="Target character width for plot, default 72"
+    )
+def stringify(
+    path_population_input: str,
+    colour: bool,
+    width: int,
+    ):
+    """
+    ASCII plot activity plans to terminal.
+    """
+    stringify_plans(path_population_input, colour, width)
+
 
 
 @cli.command()

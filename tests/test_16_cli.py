@@ -35,6 +35,15 @@ def test_test_cli_summary(path_test_plan):
     assert result.exit_code == 0
 
 
+def test_stringify(path_test_plan):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["report", "stringify", path_test_plan, "-w", "144", "--bw"]
+    )
+    assert result.exit_code == 0
+
+
 def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
     """ Plan cropping CLI """
     path_output_dir = str(tmp_path)

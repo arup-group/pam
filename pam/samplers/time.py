@@ -57,7 +57,7 @@ def jitter_activity(
         allowance =- min_duration
 
     max_end = min(plan[-1].end_time - allowance, act.end_time + jitter)
-    jitter_range = (max_end - min_end).seconds
+    jitter_range = max((max_end - min_end).seconds,1)
 
     jitter = timedelta(seconds=randrange(jitter_range))
     new_duration = min_end - act.start_time + jitter
