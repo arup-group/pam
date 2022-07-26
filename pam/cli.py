@@ -3,8 +3,11 @@ import logging
 from pathlib import Path
 from typing import Optional
 import os
+from rich.progress import track
+from rich.console import Console
+import geopandas as gp
 
-from pam.cropping import crop_xml
+from pam.cropping import simplify_population
 from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import pretty_print_summary, print_summary
@@ -104,13 +107,14 @@ def summary(
     logger.debug(f"'household_key' set to {household_key}.")
     logger.debug(f"Crop = {crop}")
 
-    population = read.read_matsim(
-        path_population_input,
-        household_key=household_key,
-        weight=int(1/sample_size),
-        version=matsim_version,
-        crop=crop,
-    )
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            weight=int(1/sample_size),
+            version=matsim_version,
+            crop=crop,
+        )
     logger.info("Loading complete.")
     if rich:
         pretty_print_summary(population, attribute_key)
@@ -121,12 +125,20 @@ def summary(
 @report.command()
 @click.argument("population_input_path", type=click.Path(exists=True))
 @click.argument("output_directory", type=click.Path(exists=False, writable=True))
+@click.option(
+    "--sample_size",
+    "-s",
+    type=float,
+    default=1,
+    help="Input sample size. Default 1. Required for downsampled populations. eg, use 0.1 for a 10% input population."
+    )
 @common_options
 def benchmarks(
     population_input_path: str,
     output_directory: str,
-    matsim_version: int,
-    debug: bool,
+    sample_size: float = 1.,
+    matsim_version: int = 12,
+    debug: bool = False,
     ):
     """
     Write batch of benchmarks to directory
@@ -136,12 +148,15 @@ def benchmarks(
 
     # read
     logger.info(f"Loading plans from {population_input_path}.")
+    logger.debug(f"Sample size = {sample_size}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
 
-    population = read.read_matsim(
-        population_input_path,
-        version=matsim_version,
-    )
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            population_input_path,
+            version=matsim_version,
+            weight=int(1/sample_size),
+        )
     logger.info("Loading complete, creating benchmarks...")
 
     # export
@@ -149,15 +164,18 @@ def benchmarks(
         logger.debug(f"Creating output directory: {output_directory}")
         os.makedirs(output_directory)
 
-    for name, bm in bms(population):
-        path = os.path.join(output_directory, name)
-        logger.debug(f"Writing benchmark to {path}.")
-        if name.lower().endswith('.csv'):
-            bm.to_csv(path, index=False)
-        elif name.lower().endswith('.json'):
-            bm.to_json(path, orient='records')
-        else:
-            raise UserWarning('Please specify a valid csv or json file path.')
+    console = Console()
+    with console.status("[bold green]Building benchmarks...", spinner='aesthetic') as _:
+        for name, bm in bms(population):
+            path = os.path.join(output_directory, name)
+            logger.debug(f"Writing benchmark to {path}.")
+            if name.lower().endswith('.csv'):
+                bm.to_csv(path, index=False)
+            elif name.lower().endswith('.json'):
+                bm.to_json(path, orient='records')
+            else:
+                raise UserWarning('Please specify a valid csv or json file path.')
+            console.log(f"{name} written to disk.")
     logger.info("Done.")
 
 
@@ -230,16 +248,37 @@ def crop(
     logger.debug(f"MATSim version set to {matsim_version}.")
     logger.debug(f"'household_key' set to {household_key}.")
 
-    crop_xml(
-        path_population_input=path_population_input,
-        path_boundary=path_boundary,
-        dir_population_output=dir_population_output,
-        version=matsim_version,
-        household_key=household_key,
-        comment=comment,
-        buffer=buffer
-    )
+    # core area geometry
+    with Console().status("[bold green]Loading boundary...", spinner='aesthetic') as _:
+        boundary = gp.read_file(path_boundary)
+        boundary = boundary.dissolve().geometry[0]
+    if buffer:
+        with Console().status("[bold green]Buffering boundary...", spinner='aesthetic') as _:
+            boundary = boundary.buffer(buffer)
+
+    # crop population
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            version=matsim_version
+        )
+
+    with Console().status("[bold green]Applying simplification...", spinner='aesthetic') as _:
+        simplify_population(population, boundary)
     logger.info('Population cropping complete')
+
+    if not os.path.exists(dir_population_output):
+        os.makedirs(dir_population_output)
+
+    with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
+        write.write_matsim(
+            population,
+            plans_path=os.path.join(dir_population_output, 'plans.xml'),
+            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
+            version=matsim_version,
+            comment=comment
+        )
     logger.info(f'Output saved at {dir_population_output}/plan.xml')
 
 
@@ -292,13 +331,13 @@ def sample(
     logger.debug(f"'household_key' set to {household_key}.")
 
     # read
-    population_input = read.read_matsim(
-        path_population_input,
-        household_key=household_key,
-        weight=1,
-        version=matsim_version
-    )
-    print(population_input)
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population_input = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            weight=1,
+            version=matsim_version
+        )
     logger.info(f'Initial population size (number of agents): {len(population_input)}')
 
     # sample
@@ -314,13 +353,14 @@ def sample(
     if not os.path.exists(dir_population_output):
         os.makedirs(dir_population_output)
 
-    write.write_matsim(
-        population_output,
-        plans_path=os.path.join(dir_population_output, 'plans.xml'),
-        attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-        version=matsim_version,
-        comment=comment
-    )
+    with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
+        write.write_matsim(
+            population_output,
+            plans_path=os.path.join(dir_population_output, 'plans.xml'),
+            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
+            version=matsim_version,
+            comment=comment
+        )
 
     logger.info('Population sampling complete')
     logger.info(f'Output population size (number of agents): {len(population_output)}')
