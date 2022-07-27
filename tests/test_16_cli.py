@@ -12,6 +12,16 @@ def path_test_plan():
 
 
 @pytest.fixture
+def path_test_plans_A():
+    return os.path.join('tests', 'test_data', 'test_matsim_population_A.xml')
+
+
+@pytest.fixture
+def path_test_plans_B():
+    return os.path.join('tests', 'test_data', 'test_matsim_population_B.xml')
+
+
+@pytest.fixture
 def path_boundary():
     return os.path.join('tests', 'test_data', 'test_geometry.geojson')
 
@@ -56,7 +66,6 @@ def test_stringify(path_test_plan):
 
 
 def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
-    """ Plan cropping CLI """
     path_output_dir = str(tmp_path)
     runner = CliRunner()
     result = runner.invoke(
@@ -65,6 +74,17 @@ def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
         )
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
+
+
+def test_combine(path_test_plans_A, path_test_plans_B, tmp_path):
+    path_output_dir = str(os.path.join(tmp_path, "plans.xml"))
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["combine", path_test_plans_A, path_test_plans_B, "-o", path_output_dir]
+        )
+    assert result.exit_code == 0
+    assert os.path.exists(path_output_dir)
 
 
 @pytest.mark.parametrize('sample_percentage', ['1','2'])
