@@ -213,7 +213,6 @@ def write_matsim_v12(
                             attribute.text = str(v)
 
                     if component.route is not None:
-                        print("ADDING ROUTE")
                         leg.append(component.route)
 
             component = person[-1]  # write the last activity without an end time
