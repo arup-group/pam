@@ -172,10 +172,17 @@ def write_matsim_v12(
                 person.attributes[household_key] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
 
-            attributes_xml = et.SubElement(person_xml, 'attributes', {})
+            attributes = et.SubElement(person_xml, 'attributes', {})
             for k, v in person.attributes.items():
-                attribute_xml = et.SubElement(attributes_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
-                attribute_xml.text = str(v)
+                if k == "vehicles":  # todo make something more robust for future 'special' classes
+                    attribute = et.SubElement(
+                        attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
+                        )
+                else:
+                    attribute = et.SubElement(
+                        attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                        )
+                attribute.text = str(v)
 
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
@@ -188,9 +195,26 @@ def write_matsim_v12(
                     }
                                   )
                 if isinstance(component, Leg):
-                    et.SubElement(plan_xml, 'leg', {
+                    leg = et.SubElement(plan_xml, 'leg', {
                         'mode': component.mode,
                         'trav_time': tdtm(component.duration)})
+
+                    if component.attributes:
+                        attributes = et.SubElement(leg, 'attributes')
+                        for k, v in component.attributes.items():
+                            if k == 'enterVehicleTime':  # todo make something more robust for future 'special' classes
+                                attribute = et.SubElement(
+                                attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
+                                )
+                            else:
+                                attribute = et.SubElement(
+                                    attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                                    )
+                            attribute.text = str(v)
+
+                    if component.route is not None:
+                        print("ADDING ROUTE")
+                        leg.append(component.route)
 
             component = person[-1]  # write the last activity without an end time
             et.SubElement(plan_xml, 'activity', {

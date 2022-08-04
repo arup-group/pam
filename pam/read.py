@@ -999,7 +999,7 @@ def parse_matsim_plan(
 
         if stage.tag == 'leg':
 
-            route, mode, network_route, transit_route = \
+            route, mode, network_route, transit_route, attributes = \
                 extract_route_attributes(stage, version)
             leg_seq += 1
             trav_time = stage.get('trav_time')
@@ -1018,6 +1018,7 @@ def parse_matsim_plan(
             if boarding_time is not None:
                 boarding_time = utils.matsim_time_to_datetime(boarding_time)
 
+
             plan.add(
                 activity.Leg(
                     seq=leg_seq,
@@ -1027,12 +1028,14 @@ def parse_matsim_plan(
                     start_time=departure_dt,
                     end_time=arrival_dt,
                     distance=distance,
-                    service_id = transit_route.get("transitLineId"),
-                    route_id = transit_route.get("transitRouteId"),
-                    o_stop = transit_route.get("accessFacilityId"),
-                    d_stop = transit_route.get("egressFacilityId"),
-                    boarding_time = boarding_time,
-                    network_route=network_route,
+                    service_id = transit_route.get("transitLineId"),  # todo remove all these gets
+                    route_id = transit_route.get("transitRouteId"),  # we are now handing the whole route
+                    o_stop = transit_route.get("accessFacilityId"),  # so can lazily look for these as required
+                    d_stop = transit_route.get("egressFacilityId"),  # ...
+                    boarding_time = boarding_time,  # ...
+                    network_route=network_route,  # ...
+                    attributes = attributes,
+                    route = route
                 )
             )
 
@@ -1056,11 +1059,11 @@ def parse_matsim_plan(
 
 def extract_route_attributes(leg, version):
     if version == 12:
-        return extract_route_v12(leg)
-    return extract_route_v11(leg)
+        return unpack_route_v12(leg)
+    return unpack_route_v11(leg)
 
 
-def extract_route_v11(leg):
+def unpack_route_v11(leg):
     """
     Extract mode, network route and transit route as available.
 
@@ -1068,22 +1071,22 @@ def extract_route_v11(leg):
         leg (xml_leg_element)
 
     Returns:
-        (xml_elem, string, list, dict): (route, mode, network route, transit route)
+        (xml_elem, string, list, dict, dict): (route, mode, network route, transit route, attributes)
     """
     route = leg.xpath("route")
     mode = leg.get("mode")
     if not route:
-        return {}, mode, None, {}
+        return {}, mode, None, {}, {}
     route = route[0]
     if mode == "pt":
-        return route, mode, None, v11_transit_route(route)
+        return route, mode, None, v11_transit_route(route), {}
     network_route = route.text
     if network_route is not None:
-        return route, mode, network_route.split(" "), {}
-    return route, mode, None, {}
+        return route, mode, network_route.split(" "), {}, {}
+    return route, mode, None, {}, {}
 
 
-def extract_route_v12(leg):
+def unpack_route_v12(leg):
     """
     Extract route_element, mode, network route and transit route as available.
 
@@ -1091,19 +1094,20 @@ def extract_route_v12(leg):
         leg (xml_leg_element)
 
     Returns:
-        (xml_element, string, list, dict): (route, mode, network route, transit route)
+        (xml_element, string, list, dict, dict): (route, mode, network route, transit route, attributes)
     """
     route = leg.xpath("route")
+    attributes = get_attributes_from_legs(leg)
     mode = leg.get("mode")
     if not route:
-        return {}, mode, None, {}
+        return {}, mode, None, {}, attributes
     route = route[0]
     if route.get("type") == "default_pt":
-        return route, mode, None, v12_transit_route(route)
+        return route, mode, None, v12_transit_route(route), attributes
     network_route = route.text
     if network_route is not None:
-        return route, mode, network_route.split(" "), {}
-    return route, mode, None, {}
+        return route, mode, network_route.split(" "), {}, attributes
+    return route, mode, None, {}, attributes
 
 
 def v12_transit_route(route):
@@ -1134,6 +1138,13 @@ def get_attributes_from_plans(elem):
     for attr in elem.xpath('./attributes/attribute'):
         attributes[attr.get('name')] = attr.text
     return ident, attributes
+
+
+def get_attributes_from_legs(elem):
+    attributes = {}
+    for attr in elem.xpath('./attributes/attribute'):
+        attributes[attr.get('name')] = attr.text
+    return attributes
 
 
 def load_attributes_map(attributes_path):

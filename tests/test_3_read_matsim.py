@@ -92,7 +92,7 @@ def test_parse_v12_matsim():
     population = read_matsim(test_tripsv12_path, version=12)
     person = population['chris']['chris']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A', 'vehicles': '{"car":"chris"}'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
@@ -108,7 +108,7 @@ def test_parse_v12_matsim_with_hh_ids():
     population = read_matsim(test_tripsv12_path, version=12, household_key="hid")
     person = population['A']['chris']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A', 'vehicles': '{"car":"chris"}'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"

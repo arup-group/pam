@@ -15,6 +15,7 @@
 			<attribute name="hid" class="java.lang.String">A</attribute>
 			<attribute name="subpopulation" class="java.lang.String">rich</attribute>
 			<attribute name="age" class="java.lang.String">yes</attribute>
+			<attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car":"chris"}</attribute>
 		</attributes>
 		<plan score="129.464432800573" selected="yes">
 			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="07:00:00" >
@@ -211,6 +212,7 @@
 			<attribute name="hid" class="java.lang.String">A</attribute>
 			<attribute name="subpopulation" class="java.lang.String">rich</attribute>
 			<attribute name="age" class="java.lang.String">no</attribute>
+			<attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car":"chris"}</attribute>
 		</attributes>
 		<plan score="129.592238766919" selected="yes">
 			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="08:00:00" >
