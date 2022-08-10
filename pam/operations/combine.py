@@ -1,7 +1,4 @@
-from datetime import datetime
-import shutil
-from pam import read, write, core
-import os
+from pam import read, core
 
 def pop_combine(inpaths, matsim_version):
 
@@ -15,15 +12,15 @@ def pop_combine(inpaths, matsim_version):
     combined_population = core.Population()
 
     for inpath in inpaths:
-     
+
         population = read.read_matsim(
             inpath,
             household_key="hid",
             weight=1,
             version=matsim_version
             )
-        print(f"population: {population.stats}") 
-        
+        print(f"population: {population.stats}")
+
         combined_population += population
 
     return combined_population

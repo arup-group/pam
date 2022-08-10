@@ -111,8 +111,8 @@ def test_simple_cropping(test_plan, test_zoning_system):
 
 
 def test_complex_cropping(test_plan, test_zoning_system):
-    """ 
-    Through-trips and multiple entries to the core area (e) 
+    """
+    Through-trips and multiple entries to the core area (e)
     """
     boundary = test_zoning_system.loc['e'].geometry
     plan_cropped = deepcopy(test_plan)
@@ -122,7 +122,7 @@ def test_complex_cropping(test_plan, test_zoning_system):
 
 
 def test_fully_external(test_plan, test_zoning_system, test_population):
-    """ 
+    """
     All activities happen outside the core area (i)
 
     """
@@ -146,14 +146,3 @@ def test_fully_internal_plan(test_plan, test_zoning_system):
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
     assert len(test_plan) == len(plan_cropped)
-
-
-def test_crop_xml(path_test_plan, path_boundary, tmp_path):
-    """ Crop and export an xml population """
-    path_output_dir = str(tmp_path)
-    cropping.crop_xml(
-        path_test_plan,
-        path_boundary,
-        path_output_dir
-    )
-    assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
