@@ -93,13 +93,30 @@ def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
     df = pd.DataFrame()
     for leg in person.legs:
         if (leg.start_location.loc is None) or (leg.end_location.loc is None):
-            raise AttributeError('To create a geopandas.DataFrame you need specific locations. Make sure Legs have'
-                                 'loc attribute defined with a shapely.Point or s2sphere.CellId.')
-        _leg_dict = leg.__dict__.copy()
-        _leg_dict['geometry'] = utils.get_linestring(leg.start_location.loc, leg.end_location.loc)
-        coords = list(_leg_dict['geometry'].coords)
-        _leg_dict['start_location'] = coords[0]
-        _leg_dict['end_location'] = coords[-1]
+            raise AttributeError(
+"""
+To create a geopandas.DataFrame you need specific locations. Make sure Legs have
+loc attribute defined with a shapely.Point or s2sphere.CellId.
+"""
+)
+        geometry = utils.get_linestring(leg.start_location.loc, leg.end_location.loc)
+        _leg_dict = {
+            'mode': leg.mode,
+            'purp': leg.purp,
+            'seq': leg.seq,
+            'freq': leg.freq,
+            'start_time': leg.start_time,
+            'end_time': leg.end_time,
+            'start_location': geometry.coords[0],
+            'end_location': geometry.coords[1],
+            'geometry': geometry,
+            'distance': leg.distance,
+            'service_id': leg.route.transit.get('transitLineId'),
+            'route_id': leg.route.transit.get('transitRouteId'),
+            'o_stop': leg.route.transit.get('accessFacilityId'),
+            'd_stop': leg.route.transit.get('egressFacilityId'),
+            'network_route': leg.route.network_route,
+        }
         df = df.append(pd.Series(_leg_dict), ignore_index=True)
 
     df['pid'] = person.pid
@@ -164,8 +181,8 @@ def plot_activities(df, **kwargs):
         for i in range(len(person_data)):
             y = 1
             data = person_data.iloc[i]
-            ax.barh(y, 
-                    width='dur', 
+            ax.barh(y,
+                    width='dur',
                     data=data,
                     left='start_time',
                     label='act',
@@ -173,12 +190,12 @@ def plot_activities(df, **kwargs):
                     edgecolor='black',
                     linewidth=2
                 )
-            
+
             #Populate Labelling Params
             label_x.append(data['start_time'] + data['dur'] / 2)
             label_y.append(y)
             labels.append(data.act)
-    
+
         # Labels
         rects = ax.patches
         for x, y, rect, label in zip(label_x, label_y, rects, labels):
@@ -217,7 +234,7 @@ def plot_activities(df, **kwargs):
             prop={'size':12}, frameon=False,
             bbox_to_anchor=(.5, -.5), loc='upper center', borderaxespad=0.
             )
-            
+
     plt.xticks(range(25))
     plt.xlim(right=24)
 

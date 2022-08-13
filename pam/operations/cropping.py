@@ -20,7 +20,12 @@ def crop_xml(
     version: int = 12,
     household_key: str = "hid",
     comment: str = '',
-    buffer: float = 0
+    buffer: float = 0,
+    simplify_pt_trips: bool = False,
+    autocomplete : bool = True,
+    crop: bool = False,
+    leg_attributes: bool = True,
+    leg_route: bool = True,
 ):
     """
     Crop an xml population and export to a new one.
@@ -36,7 +41,12 @@ def crop_xml(
     population = read.read_matsim(
         path_population_input,
         household_key=household_key,
-        version=version
+        version=version,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
+        crop=crop,
+        leg_attributes=leg_attributes,
+        leg_route=leg_route,
     )
     simplify_population(population, boundary)
 

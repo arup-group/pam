@@ -23,7 +23,7 @@ def pt_person():
 @pytest.fixture()
 def correct_pt_person_geodataframe():
     return GeoDataFrame({
-                         '_distance': {0: 6412.774690, 1: 1290.851862,
+                         'distance': {0: 6412.774690, 1: 1290.851862,
                                           2: 5952.837241,
                                           3: 13.313250, 4: 12049.487855,
                                           5: 0.000000,
@@ -63,14 +63,14 @@ def correct_pt_person_geodataframe():
                                       7: LineString([(548976.0, 182980.0), (547360.0, 184166.0)])},
                          'mode': {0: 'transit_walk', 1: 'transit_walk', 2: 'pt', 3: 'transit_walk', 4: 'pt',
                                   5: 'transit_walk', 6: 'pt', 7: 'transit_walk'},
-                         'network_route': {0: None,
-                                           1: None,
-                                           2: None,
-                                           3: None,
-                                           4: None,
-                                           5: None,
-                                           6: None,
-                                           7: None
+                         'network_route': {0: [],
+                                           1: [],
+                                           2: [],
+                                           3: [],
+                                           4: [],
+                                           5: [],
+                                           6: [],
+                                           7: []
                                            },
                          'o_stop': {0: None,
                                     1: None,
@@ -123,7 +123,7 @@ def cyclist():
 @pytest.fixture()
 def correct_cyclist_geodataframe():
     return GeoDataFrame(
-        {'_distance': {0: 9647.24116945626, 1: 9647.241169456261},
+        {'distance': {0: 9647.24116945626, 1: 9647.241169456261},
         'd_stop': {0: None, 1: None},
          'end_location': {0: (529652.0, 183897.0), 1: (515226.0, 188222.0)},
          'end_time': {0: Timestamp('1900-01-01 08:07:08'), 1: Timestamp('1900-01-01 15:33:08')},

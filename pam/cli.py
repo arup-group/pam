@@ -23,8 +23,55 @@ def common_options(func):
     func = click.option(
         '-d', '--debug', is_flag=True, help="Switch on debug verbosity."
     )(func)
+    return func
+
+
+def common_matsim_options(func):
     func = click.option(
-        "--matsim_version", "-v", type=int, default=12, help="MATSim plan format, default 12."
+        "--matsim_version", "-v",
+        type=int, default=12,
+        help="MATSim plan format, default 12."
+    )(func)
+    func = click.option(
+        "--household_key",
+        "-h",
+        type=str,
+        default="hid",
+        help="Household key, default 'hid'."
+    )(func)
+    func = click.option(
+        "--simplify_pt_trips",
+        is_flag=True,
+        default=False,
+        help="Optionally simplify transit legs into single trip."
+    )(func)
+    func = click.option(
+        "--autocomplete/--no_autocomplete",
+        default=True,
+        help="Optionally turn off autocomplete, not recommended."
+    )(func)
+    func = click.option(
+        "--crop/--no_crop",
+        default=False,
+        help="Crop or don't crop plans to 24 hours, defaults to crop."
+    )(func)
+    func = click.option(
+        "--leg_attributes/--no_leg_attributes",
+        default=True,
+        help="Optionally turn of reading of leg_attributes."
+    )(func)
+    func = click.option(
+        "--leg_route/--no_leg_route",
+        default=True,
+        help="Optionally turn off reading of leg_route."
+    )(func)
+    return func
+
+
+def comment_option(func):
+    func = click.option(
+        "--comment", "-c", default="",
+        help="A comment included in the output population."
     )(func)
     return func
 
@@ -47,6 +94,7 @@ def report():
 
 @report.command()
 @common_options
+@common_matsim_options
 @click.argument(
     "path_population_input",
     type=click.Path(exists=True)
@@ -64,29 +112,21 @@ def report():
     help="Optional population attribute key to segment output, eg 'subpopulation'."
     )
 @click.option(
-    "--household_key",
-    "-h",
-    type=str,
-    default="hid",
-    help="Household key, default 'hid'."
-    )
-@click.option(
-    "--crop/--no-crop",
-    default=True,
-    help="Crop or don't crop plans to 24 hours, defaults to crop."
-)
-@click.option(
     "--rich/--text",
     default=True,
     help="Formatted (for terminal) or regular text output (for .txt)."
-)
+    )
 def summary(
     path_population_input: str,
     sample_size: float,
     matsim_version: int,
     attribute_key: str,
     household_key: str,
+    simplify_pt_trips: bool,
+    autocomplete : bool,
     crop: bool,
+    leg_attributes: bool,
+    leg_route: bool,
     debug: bool,
     rich: bool,
     ):
@@ -102,14 +142,23 @@ def summary(
     logger.debug(f"Sample size = {sample_size}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
     logger.debug(f"'household_key' set to {household_key}.")
+    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
+    print(f"Simplif PT trips = {simplify_pt_trips}")
+    logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
     logger.debug(f"Crop = {crop}")
+    logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
+    logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
     population = read.read_matsim(
         path_population_input,
         household_key=household_key,
         weight=int(1/sample_size),
         version=matsim_version,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
         crop=crop,
+        leg_attributes=leg_attributes,
+        leg_route=leg_route,
     )
     logger.info("Loading complete.")
     if rich:
@@ -128,20 +177,42 @@ def summary(
     "--width", "-w", type=int, default=72,
     help="Target character width for plot, default 72"
     )
+@click.option(
+    "--simplify_pt_trips",
+    is_flag=True,
+    default=False,
+    help="Optionally simplify transit legs into single trip."
+    )
+@click.option(
+    "--crop/--no_crop",
+    default=True,
+    help="Crop or don't crop plans to 24 hours, defaults to crop."
+    )
 def stringify(
     path_population_input: str,
     colour: bool,
     width: int,
+    simplify_pt_trips: bool,
+    crop: bool,
     ):
     """
     ASCII plot activity plans to terminal.
     """
-    stringify_plans(path_population_input, colour, width)
+    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
+    logger.debug(f"Crop = {crop}")
+
+    stringify_plans(
+        path_population_input,
+        colour,
+        width
+        )
 
 
 
 @cli.command()
 @common_options
+@common_matsim_options
+@comment_option
 @click.argument(
     "path_population_input", type=click.Path(exists=True),
     )
@@ -150,14 +221,6 @@ def stringify(
     )
 @click.argument(
     "dir_population_output", type=click.Path(exists=False, writable=True),
-    )
-@click.option(
-    "--household_key", "-h", type=str, default="hid",
-    help="Household key, defaults to 'hid'."
-    )
-@click.option(
-    "--comment", "-c", default="cropped population",
-    help="A short comment included in the output population."
     )
 @click.option(
     "--buffer", "-b", default=0,
@@ -169,6 +232,11 @@ def crop(
     dir_population_output,
     matsim_version,
     household_key,
+    simplify_pt_trips: bool,
+    autocomplete : bool,
+    crop: bool,
+    leg_attributes: bool,
+    leg_route: bool,
     comment,
     buffer,
     debug
@@ -186,6 +254,11 @@ def crop(
     logger.debug(f"Writing cropped plans to {dir_population_output}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
     logger.debug(f"'household_key' set to {household_key}.")
+    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
+    logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
+    logger.debug(f"Crop = {crop}")
+    logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
+    logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
     crop_xml(
         path_population_input=path_population_input,
@@ -193,6 +266,11 @@ def crop(
         dir_population_output=dir_population_output,
         version=matsim_version,
         household_key=household_key,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
+        crop=crop,
+        leg_attributes=leg_attributes,
+        leg_route=leg_route,
         comment=comment,
         buffer=buffer
     )
@@ -202,6 +280,8 @@ def crop(
 
 @cli.command()
 @common_options
+@common_matsim_options
+@comment_option
 @click.argument(
     "population_paths", type=click.Path(exists=True), nargs=-1
     )
@@ -209,15 +289,16 @@ def crop(
     "--population_output", "-o", type=click.Path(exists=False, writable=True), default=os.getcwd()+"\combined_population.xml",
     help="Specify outpath for combined_population.xml, default is cwd"
     )
-@click.option(
-    "--comment", "-m", type=str, default="",
-    help="A short comment included in the output population."
-    )
 
 def combine(
     population_paths: str,
     population_output: str,
     matsim_version: int,
+    simplify_pt_trips: bool,
+    autocomplete : bool,
+    crop: bool,
+    leg_attributes: bool,
+    leg_route: bool,
     comment: str,
     debug
     ):
@@ -229,17 +310,27 @@ def combine(
            pass
         else:
             raise UserWarning(f"Aborting to avoid overwrite of {population_output}")
-    
+
     if debug:
         logger.setLevel(logging.DEBUG)
 
     logger.info('Starting population combiner')
     logger.debug(f"Loading plans from {population_paths}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
+    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
+    logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
+    logger.debug(f"Crop = {crop}")
+    logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
+    logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
     combined_population = pop_combine(
         inpaths=population_paths,
-        matsim_version=matsim_version
+        matsim_version=matsim_version,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
+        crop=crop,
+        leg_attributes=leg_attributes,
+        leg_route=leg_route,
         )
 
     logger.debug(f"Writing combinined population to {population_output}.")
@@ -256,6 +347,8 @@ def combine(
 
 @cli.command()
 @common_options
+@common_matsim_options
+@comment_option
 @click.argument(
     "path_population_input", type=click.Path(exists=True),
     )
@@ -271,10 +364,6 @@ def combine(
     help="Household key, defaults to 'hid'."
     )
 @click.option(
-    "--comment", "-c", default="cropped population",
-    help="A short comment included in the output population"
-    )
-@click.option(
     "--seed", default=None,
     help="Random seed."
     )
@@ -284,6 +373,11 @@ def sample(
     sample_size: str,
     matsim_version: int,
     household_key: str,
+    simplify_pt_trips: bool,
+    autocomplete : bool,
+    crop: bool,
+    leg_attributes: bool,
+    leg_route: bool,
     comment: str,
     seed: Optional[int],
     debug: bool,
@@ -301,15 +395,24 @@ def sample(
     logger.debug(f"Writing cropped plans to {dir_population_output}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
     logger.debug(f"'household_key' set to {household_key}.")
+    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
+    logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
+    logger.debug(f"Crop = {crop}")
+    logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
+    logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
     # read
     population_input = read.read_matsim(
         path_population_input,
         household_key=household_key,
         weight=1,
-        version=matsim_version
+        version=matsim_version,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
+        crop=crop,
+        leg_attributes=leg_attributes,
+        leg_route=leg_route,
     )
-    print(population_input)
     logger.info(f'Initial population size (number of agents): {len(population_input)}')
 
     # sample

@@ -25,13 +25,17 @@ def test_test_cli_summary(path_test_plan):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["report", "summary", path_test_plan, "-k", "subpopulation", "-s", "0.1", "-d", "--no-crop", "-h", "hid"]
+        ["report", "summary", path_test_plan, "-k", "subpopulation", "-s", "0.1", "-d", "--no_crop", "-h", "hid", "--simplify_pt_trips"]
         )
+    if result.exit_code != 0:
+        print(result.output)
     assert result.exit_code == 0
     result = runner.invoke(
         cli,
-        ["report", "summary", path_test_plan, "-k", "subpopulation", "-s", "0.1", "-d", "--text", "--no-crop", "-h", "hid"]
+        ["report", "summary", path_test_plan, "-k", "subpopulation", "-s", "0.1", "-d", "--text", "--no_crop", "-h", "hid"]
         )
+    if result.exit_code != 0:
+        print(result.output)
     assert result.exit_code == 0
 
 
@@ -41,6 +45,8 @@ def test_stringify(path_test_plan):
         cli,
         ["report", "stringify", path_test_plan, "-w", "144", "--bw"]
     )
+    if result.exit_code != 0:
+        print(result.output)
     assert result.exit_code == 0
 
 
@@ -52,6 +58,8 @@ def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
         cli,
         ["crop", path_test_plan, path_boundary, path_output_dir]
         )
+    if result.exit_code != 0:
+        print(result.output)
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
 
@@ -65,6 +73,8 @@ def test_cli_sample(path_test_plan, tmp_path, sample_percentage):
         cli,
         ["sample", path_test_plan, path_output_dir, '-s', sample_percentage]
         )
+    if result.exit_code != 0:
+        print(result.output)
     assert result.exit_code == 0
     assert os.path.exists(os.path.join(path_output_dir, 'plans.xml'))
 
