@@ -2,65 +2,40 @@
 Methods for cropping plans outside core areas
 """
 from shapely.geometry import Polygon, LineString
-import geopandas as gp
 import pam
 from pam.activity import Leg, Activity, Plan
 from pam.variables import END_OF_DAY, START_OF_DAY
 from pam.core import Population
 from typing import List
-from pam.core import Population, Household, Person
-import os
-from pam import read, write
+from pam.core import Population
 
 
-def crop_xml(
-    path_population_input: str,
-    path_boundary: str,
-    dir_population_output: str,
-    version: int = 12,
-    household_key: str = "hid",
-    comment: str = '',
-    buffer: float = 0,
-    simplify_pt_trips: bool = False,
-    autocomplete : bool = True,
-    crop: bool = False,
-    leg_attributes: bool = True,
-    leg_route: bool = True,
-):
+def simplify_population(
+    population: str,
+    boundary: str,
+    snap_to_boundary: bool = False,
+    rename_external_activities: bool = False,
+) -> None:
     """
-    Crop an xml population and export to a new one.
+    Simplify external plans across a population
     """
+    # simplify plans
+    for hid, pid, person in population.people():
+        simplify_external_plans(
+            person.plan, boundary, snap_to_boundary, rename_external_activities)
 
-    # core area geometry
-    boundary = gp.read_file(path_boundary)
-    boundary = boundary.dissolve().geometry[0]
-    if buffer:
-        boundary = boundary.buffer(buffer)
+    # remove empty person-plans and households
+    remove_persons = []
+    for hid, pid, person in population.people():
+        if len(person.plan) == 1 and person.plan.day[0].act == 'external':
+            remove_persons.append((hid, pid))
+    for hid, pid in remove_persons:
+        del population[hid].people[pid]
 
-    # crop population
-    population = read.read_matsim(
-        path_population_input,
-        household_key=household_key,
-        version=version,
-        simplify_pt_trips=simplify_pt_trips,
-        autocomplete=autocomplete,
-        crop=crop,
-        leg_attributes=leg_attributes,
-        leg_route=leg_route,
-    )
-    simplify_population(population, boundary)
-
-    # export
-    if not os.path.exists(dir_population_output):
-        os.makedirs(dir_population_output)
-
-    write.write_matsim(
-        population,
-        plans_path=os.path.join(dir_population_output, 'plans.xml'),
-        attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-        version=version,
-        comment=comment
-    )
+    remove_hhs = [hid for hid in population.households if len(
+        population.households[hid].people) == 0]
+    for hid in remove_hhs:
+        del population.households[hid]
 
 
 def simplify_external_plans(
@@ -99,29 +74,6 @@ def simplify_external_plans(
     if snap_to_boundary:
         for leg in plan.legs:
             crop_leg(leg, boundary)  # crop leg geometry
-
-
-def simplify_population(population: Population, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False) -> None:
-    """
-    Simplify external plans across a population
-    """
-    # simplify plans
-    for hid, pid, person in population.people():
-        simplify_external_plans(
-            person.plan, boundary, snap_to_boundary, rename_external_activities)
-
-    # remove empty person-plans and households
-    remove_persons = []
-    for hid, pid, person in population.people():
-        if len(person.plan) == 1 and person.plan.day[0].act == 'external':
-            remove_persons.append((hid, pid))
-    for hid, pid in remove_persons:
-        del population[hid].people[pid]
-
-    remove_hhs = [hid for hid in population.households if len(
-        population.households[hid].people) == 0]
-    for hid in remove_hhs:
-        del population.households[hid]
 
 
 def get_leg_path(leg: Leg) -> LineString:

@@ -1,11 +1,9 @@
-from datetime import datetime
-import shutil
-from pam import read, write, core
-import os
+from pam import read, core
 
 def pop_combine(
     inpaths: str,
     matsim_version: int,
+    household_key: str = "hid",
     simplify_pt_trips: bool = False,
     autocomplete : bool = True,
     crop: bool = False,
@@ -26,9 +24,9 @@ def pop_combine(
 
         population = read.read_matsim(
             inpath,
-            household_key="hid",
             weight=1,
             version=matsim_version,
+            household_key=household_key,
             simplify_pt_trips=simplify_pt_trips,
             autocomplete=autocomplete,
             crop=crop,

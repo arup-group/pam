@@ -3,13 +3,17 @@ import logging
 from pathlib import Path
 from typing import Optional
 import os
+from rich.progress import track
+from rich.console import Console
+import geopandas as gp
 
+from pam.operations.cropping import simplify_population
 from pam.operations.combine import pop_combine
-from pam.operations.cropping import crop_xml
 from pam.samplers import population as population_sampler
 from pam import read, write
 from pam.report.summary import pretty_print_summary, print_summary
 from pam.report.stringify import stringify_plans
+from pam.report.benchmarks import benchmarks as bms
 
 
 logging.basicConfig(
@@ -36,8 +40,8 @@ def common_matsim_options(func):
         "--household_key",
         "-h",
         type=str,
-        default="hid",
-        help="Household key, default 'hid'."
+        default=None,
+        help="Household key, such as 'hid', default None."
     )(func)
     func = click.option(
         "--simplify_pt_trips",
@@ -149,22 +153,80 @@ def summary(
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
-    population = read.read_matsim(
-        path_population_input,
-        household_key=household_key,
-        weight=int(1/sample_size),
-        version=matsim_version,
-        simplify_pt_trips=simplify_pt_trips,
-        autocomplete=autocomplete,
-        crop=crop,
-        leg_attributes=leg_attributes,
-        leg_route=leg_route,
-    )
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            weight=int(1/sample_size),
+            version=matsim_version,
+            simplify_pt_trips=simplify_pt_trips,
+            autocomplete=autocomplete,
+            crop=crop,
+            leg_attributes=leg_attributes,
+            leg_route=leg_route,
+        )
     logger.info("Loading complete.")
     if rich:
         pretty_print_summary(population, attribute_key)
     else:
         print_summary(population, attribute_key)
+
+
+@report.command()
+@click.argument("population_input_path", type=click.Path(exists=True))
+@click.argument("output_directory", type=click.Path(exists=False, writable=True))
+@click.option(
+    "--sample_size",
+    "-s",
+    type=float,
+    default=1,
+    help="Input sample size. Default 1. Required for downsampled populations. eg, use 0.1 for a 10% input population."
+    )
+@common_options
+def benchmarks(
+    population_input_path: str,
+    output_directory: str,
+    sample_size: float = 1.,
+    matsim_version: int = 12,
+    debug: bool = False,
+    ):
+    """
+    Write batch of benchmarks to directory
+    """
+    if debug:
+        logger.setLevel(logging.DEBUG)
+
+    # read
+    logger.info(f"Loading plans from {population_input_path}.")
+    logger.debug(f"Sample size = {sample_size}.")
+    logger.debug(f"MATSim version set to {matsim_version}.")
+
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            population_input_path,
+            version=matsim_version,
+            weight=int(1/sample_size),
+        )
+    logger.info("Loading complete, creating benchmarks...")
+
+    # export
+    if not os.path.exists(output_directory):
+        logger.debug(f"Creating output directory: {output_directory}")
+        os.makedirs(output_directory)
+
+    console = Console()
+    with console.status("[bold green]Building benchmarks...", spinner='aesthetic') as _:
+        for name, bm in bms(population):
+            path = os.path.join(output_directory, name)
+            logger.debug(f"Writing benchmark to {path}.")
+            if name.lower().endswith('.csv'):
+                bm.to_csv(path, index=False)
+            elif name.lower().endswith('.json'):
+                bm.to_json(path, orient='records')
+            else:
+                raise UserWarning('Please specify a valid csv or json file path.')
+            console.log(f"{name} written to disk.")
+    logger.info("Done.")
 
 
 @report.command()
@@ -260,21 +322,42 @@ def crop(
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
-    crop_xml(
-        path_population_input=path_population_input,
-        path_boundary=path_boundary,
-        dir_population_output=dir_population_output,
-        version=matsim_version,
-        household_key=household_key,
-        simplify_pt_trips=simplify_pt_trips,
-        autocomplete=autocomplete,
-        crop=crop,
-        leg_attributes=leg_attributes,
-        leg_route=leg_route,
-        comment=comment,
-        buffer=buffer
-    )
+    # core area geometry
+    with Console().status("[bold green]Loading boundary...", spinner='aesthetic') as _:
+        boundary = gp.read_file(path_boundary)
+        boundary = boundary.dissolve().geometry[0]
+    if buffer:
+        with Console().status("[bold green]Buffering boundary...", spinner='aesthetic') as _:
+            boundary = boundary.buffer(buffer)
+
+    # crop population
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            version=matsim_version,
+            simplify_pt_trips=simplify_pt_trips,
+            autocomplete=autocomplete,
+            crop=crop,
+            leg_attributes=leg_attributes,
+            leg_route=leg_route,
+        )
+
+    with Console().status("[bold green]Applying simplification...", spinner='aesthetic') as _:
+        simplify_population(population, boundary)
     logger.info('Population cropping complete')
+
+    if not os.path.exists(dir_population_output):
+        os.makedirs(dir_population_output)
+
+    with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
+        write.write_matsim(
+            population,
+            plans_path=os.path.join(dir_population_output, 'plans.xml'),
+            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
+            version=matsim_version,
+            comment=comment
+        )
     logger.info(f'Output saved at {dir_population_output}/plan.xml')
 
 
@@ -289,58 +372,67 @@ def crop(
     "--population_output", "-o", type=click.Path(exists=False, writable=True), default=os.getcwd()+"\combined_population.xml",
     help="Specify outpath for combined_population.xml, default is cwd"
     )
-
+@click.option(
+    "--force", "-f", is_flag=True,
+    help="Forces overwrite of existing file."
+    )
 def combine(
     population_paths: str,
     population_output: str,
     matsim_version: int,
+    household_key,
     simplify_pt_trips: bool,
     autocomplete : bool,
     crop: bool,
     leg_attributes: bool,
     leg_route: bool,
     comment: str,
-    debug
+    force: bool,
+    debug: bool
     ):
     """
     Combine multiple populations (e.g. household, freight.. etc).
     """
-    if os.path.exists(population_output) == True:
-        if input(f"{population_output} exists, overwrite? [y/n]:") .lower() in ["y", "yes", "ok"]:
-           pass
-        else:
-            raise UserWarning(f"Aborting to avoid overwrite of {population_output}")
-
     if debug:
         logger.setLevel(logging.DEBUG)
 
     logger.info('Starting population combiner')
     logger.debug(f"Loading plans from {population_paths}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
+    logger.debug(f"'household_key' set to {household_key}.")
     logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
     logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
-    combined_population = pop_combine(
-        inpaths=population_paths,
-        matsim_version=matsim_version,
-        simplify_pt_trips=simplify_pt_trips,
-        autocomplete=autocomplete,
-        crop=crop,
-        leg_attributes=leg_attributes,
-        leg_route=leg_route,
-        )
+    if not force and os.path.exists(population_output):
+        if input(f"{population_output} exists, overwrite? [y/n]:") .lower() in ["y", "yes", "ok"]:
+           pass
+        else:
+            raise UserWarning(f"Aborting to avoid overwrite of {population_output}")
+
+    with Console().status("[bold green]Loading and combining populations...", spinner='aesthetic') as _:
+        combined_population = pop_combine(
+            inpaths=population_paths,
+            matsim_version=matsim_version,
+            household_key=household_key,
+            simplify_pt_trips=simplify_pt_trips,
+            autocomplete=autocomplete,
+            crop=crop,
+            leg_attributes=leg_attributes,
+            leg_route=leg_route,
+            )
 
     logger.debug(f"Writing combinined population to {population_output}.")
 
-    write.write_matsim(
-        population = combined_population,
-        version=matsim_version,
-        plans_path=population_output,
-        comment=comment
-    )
+    with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
+        write.write_matsim(
+            population = combined_population,
+            version=matsim_version,
+            plans_path=population_output,
+            comment=comment
+        )
     logger.info('Population combiner complete')
     logger.info(f'Output saved at {population_output}')
 
@@ -402,17 +494,18 @@ def sample(
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
 
     # read
-    population_input = read.read_matsim(
-        path_population_input,
-        household_key=household_key,
-        weight=1,
-        version=matsim_version,
-        simplify_pt_trips=simplify_pt_trips,
-        autocomplete=autocomplete,
-        crop=crop,
-        leg_attributes=leg_attributes,
-        leg_route=leg_route,
-    )
+    with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
+        population_input = read.read_matsim(
+            path_population_input,
+            household_key=household_key,
+            weight=1,
+            version=matsim_version,
+            simplify_pt_trips=simplify_pt_trips,
+            autocomplete=autocomplete,
+            crop=crop,
+            leg_attributes=leg_attributes,
+            leg_route=leg_route,
+        )
     logger.info(f'Initial population size (number of agents): {len(population_input)}')
 
     # sample
@@ -428,13 +521,14 @@ def sample(
     if not os.path.exists(dir_population_output):
         os.makedirs(dir_population_output)
 
-    write.write_matsim(
-        population_output,
-        plans_path=os.path.join(dir_population_output, 'plans.xml'),
-        attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-        version=matsim_version,
-        comment=comment
-    )
+    with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
+        write.write_matsim(
+            population_output,
+            plans_path=os.path.join(dir_population_output, 'plans.xml'),
+            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
+            version=matsim_version,
+            comment=comment
+        )
 
     logger.info('Population sampling complete')
     logger.info(f'Output population size (number of agents): {len(population_output)}')
