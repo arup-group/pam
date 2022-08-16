@@ -94,6 +94,19 @@ class Plan:
                     distance = 0
                     seq += 1
 
+    def trip_legs(self, ignore=["pt interaction", "pt_interaction"]) -> str:
+        """
+        Yield plan trips as lists of legs based on ignoring certain activities.
+        """
+        if self.day:
+            legs = []
+            for component in self[1:]:
+                if isinstance(component, Leg):
+                    legs.append(component)
+                elif component.act not in ignore:
+                    yield legs
+                    legs = []
+
     @property
     def activity_classes(self):
         return set([a.act for a in self.activities])

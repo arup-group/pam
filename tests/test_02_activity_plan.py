@@ -238,9 +238,62 @@ def test_yield_trips_from_legs_with_complex_transit():
     assert [t.end_location.area for t in trips] == ['B', 'A']
     assert [t.distance for t in trips] == [1000, 1000]
 
+
 def test_yield_trips_from_legs_empty():
     plan = Plan()
     assert list(plan.trips()) == []
+
+
+# trip leg yields
+def test_yield_trip_legs_from_legs_simple():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='car', start_area='A', end_area='B', start_time=mtdt(600), end_time=mtdt(620), distance = 1000))
+    plan.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    plan.add(Leg(seq=4, mode='bike', start_area='B', end_area='A', start_time=mtdt(1200), end_time=mtdt(1220), distance=1000))
+    plan.add(Activity(seq=5, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
+    trips = list(plan.trip_legs())
+    assert [len(t) for t in trips] == [1, 1]
+    assert [l.mode for t in trips for l in t] == ["car", "bike"]
+
+
+def test_yield_trip_legs_from_legs_with_transit():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='walk', start_area='A', end_area='A', start_time=mtdt(600), end_time=mtdt(602), distance = 100))
+    plan.add(Activity(seq=1, act='pt interaction', area='A', start_time=mtdt(602), end_time=mtdt(602)))
+    plan.add(Leg(seq=2, mode='bus', start_area='A', end_area='B', start_time=mtdt(602), end_time=mtdt(618), distance = 800))
+    plan.add(Activity(seq=1, act='pt interaction', area='B', start_time=mtdt(618), end_time=mtdt(618)))
+    plan.add(Leg(seq=2, mode='walk', start_area='B', end_area='B', start_time=mtdt(618), end_time=mtdt(620), distance = 100))
+    plan.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    plan.add(Leg(seq=4, mode='bike', start_area='B', end_area='A', start_time=mtdt(1200), end_time=mtdt(1220), distance=1000))
+    plan.add(Activity(seq=5, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
+    trips = list(plan.trip_legs())
+    assert [len(t) for t in trips] == [3, 1]
+    assert [l.mode for t in trips for l in t] == ["walk", "bus", "walk", "bike"]
+
+
+def test_yield_trip_legs_from_legs_with_complex_transit():
+    plan = Plan()
+    plan.add(Activity(seq=1, act='home', area='A', start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(Leg(seq=2, mode='walk', start_area='A', end_area='A', start_time=mtdt(600), end_time=mtdt(602), distance = 100))
+    plan.add(Activity(seq=1, act='pt interaction', area='A', start_time=mtdt(602), end_time=mtdt(602)))
+    plan.add(Leg(seq=2, mode='bus', start_area='A', end_area='B', start_time=mtdt(602), end_time=mtdt(610), distance = 300))
+    plan.add(Activity(seq=1, act='pt interaction', area='A', start_time=mtdt(610), end_time=mtdt(610)))
+    plan.add(Leg(seq=2, mode='rail', start_area='A', end_area='B', start_time=mtdt(610), end_time=mtdt(618), distance = 500))
+    plan.add(Activity(seq=1, act='pt interaction', area='B', start_time=mtdt(618), end_time=mtdt(618)))
+    plan.add(Leg(seq=2, mode='walk', start_area='B', end_area='B', start_time=mtdt(618), end_time=mtdt(620), distance = 100))
+    plan.add(Activity(seq=3, act='shop', area='B', start_time=mtdt(620), end_time=mtdt(1200)))
+    plan.add(Leg(seq=4, mode='bike', start_area='B', end_area='A', start_time=mtdt(1200), end_time=mtdt(1220), distance=1000))
+    plan.add(Activity(seq=5, act='home', area='A', start_time=mtdt(1220), end_time=mtdt(1500)))
+    trips = list(plan.trip_legs())
+    assert [len(t) for t in trips] == [4, 1]
+    assert [l.mode for t in trips for l in t] == ["walk", "bus", "rail", "walk", "bike"]
+
+
+def test_yield_trip_legs_from_legs_empty():
+    plan = Plan()
+    assert list(plan.trip_legs()) == []
 
 
 def test_move_activity_with_home_default():
