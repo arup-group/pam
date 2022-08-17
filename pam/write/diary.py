@@ -58,8 +58,6 @@ def to_csv(
             }
             if isinstance(person.attributes, dict):
                 people_data.update(person.attributes)
-            # if hh.location.area is not None:
-            #     people_data['area'] = hh.location.area
             if hh.location.loc is not None:
                 people_data['geometry'] = hh.location.loc
 
@@ -82,10 +80,6 @@ def to_csv(
                         'tet': component.end_time,
                         'duration': str(component.duration),
                     }
-                    # if component.start_location.area is not None:
-                    #     leg_data['start_area'] = component.start_location.area
-                    # if component.end_location.area is not None:
-                    #     leg_data['end_area'] = component.end_location.area
                     if component.start_location.loc is not None and component.end_location.loc is not None:
                         leg_data['geometry'] = LineString((component.start_location.loc, component.end_location.loc))
 
@@ -103,8 +97,6 @@ def to_csv(
                         'duration': str(component.duration),
                         'zone': component.location.area,
                     }
-                    # if component.location.area is not None:
-                    #     act_data['area'] = component.location.area
                     if component.location.loc is not None:
                         act_data['geometry'] = component.location.loc
 

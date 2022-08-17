@@ -77,10 +77,10 @@ def load_travel_diary(
             logger.warning("Using tour based purpose parser (recommended)")
         else:
             logger.warning(
-                """
-                Using simple trip based purpose parser using, this assumes first activity is 'home'.
-                If you do not wish to assume this, try setting 'tour_based' = True (default).
-                """
+"""
+Using simple trip based purpose parser using, this assumes first activity is 'home'.
+If you do not wish to assume this, try setting 'tour_based' = True (default).
+"""
                 )
 
         # check that trips diary has required fields

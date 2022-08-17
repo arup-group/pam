@@ -52,11 +52,11 @@ def read_matsim(
 
     if attributes_path is not None and version == 12:
         raise UserWarning(
-    """
-    You have provided an attributes_path and enables matsim version 12, but
-    v12 does not require an attributes input:
-    Either remove the attributes_path arg, or enable version 11.
-    """
+"""
+You have provided an attributes_path and enabled matsim version 12, but
+v12 does not require an attributes input:
+Either remove the attributes_path arg, or enable version 11.
+"""
     )
 
     if version not in [11, 12]:
@@ -128,16 +128,16 @@ def stream_matsim_persons(
     ) -> core.Person:
     """
     Stream a MATSim format population into core.Person objects.
-    Expects agent attributes (an vehicles) to be supplie as optional dictionaries, this allows this
+    Expects agent attributes (and vehicles) to be supplied as optional dictionaries, this allows this
     function to support 'version 11' plans.
-    todo: a v12 only method could also stream attributes and woul use less memory
+    todo: a v12 only method could also stream attributes and would use less memory
     :param plans: path to matsim format xml
     :param attributes: {}, map of person attributes, only required for v11
     :param vehicles: {}, map of vehciles
     :param electric_vehicles_path: path to matsim electric_vehicles xml
     :param weight: int
     :param version: int {11,12}, default = 12
-    :param simplify_pt_trips: bool, simplify legs in multi-leg trips, defaul t= True
+    :param simplify_pt_trips: bool, simplify legs in multi-leg trips, default = True
     :param autocomplete: bool, fills missing leg and activity attributes, default = True
     :param crop: bool, crop plans that go beyond 24 hours, default = False
     :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected).
@@ -333,7 +333,7 @@ def unpack_leg_v12(leg):
 
     === Unrouted ===
 
-    For example a leg missing both attributes and route elements, this is the case for non experiences or route plans:
+    For example a leg missing both attributes and route elements, this is the case for non experienced or route plans:
         <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
         </leg>
 
