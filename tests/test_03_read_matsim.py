@@ -49,11 +49,15 @@ def test_parsing_complex_person_results_in_valid_pt_leg():
 
     pt_leg = person.plan.day[5]
     assert pt_leg.mode == 'pt'
-    assert pt_leg.service_id == '25239'
-    assert pt_leg.route_id == 'VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf'
-    assert pt_leg.o_stop == '9100ROMFORD.link:25821'
-    assert pt_leg.d_stop == '9100UPMNSP6.link:302438'
-    assert pt_leg.network_route == None
+    assert pt_leg.route.exists
+    assert pt_leg.route.is_transit
+    assert not pt_leg.route.is_routed
+    assert not pt_leg.route.is_teleported
+    assert pt_leg.route.transit.get("transitLineId") == '25239'
+    assert pt_leg.route.transit.get("transitRouteId") == 'VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf'
+    assert pt_leg.route.transit.get("accessFacilityId") == '9100ROMFORD.link:25821'
+    assert pt_leg.route.transit.get("egressFacilityId") == '9100UPMNSP6.link:302438'
+    assert pt_leg.route.network_route == []
 
 
 def test_parsing_person_with_network_route():
@@ -62,8 +66,11 @@ def test_parsing_person_with_network_route():
 
     bike_trip = person.plan.day[1]
     assert bike_trip.mode == 'bike'
-    assert bike_trip.network_route == ['link_1', 'link_2', 'link_3']
-    assert bike_trip.route_id is None
+    assert bike_trip.route.exists
+    assert bike_trip.route.is_routed
+    assert not bike_trip.route.is_transit
+    assert not bike_trip.route.is_teleported
+    assert bike_trip.route.network_route == ['link_1', 'link_2', 'link_3']
 
 
 def test_remove_pt_interactions():
@@ -84,7 +91,7 @@ test_bad_attributes_path = os.path.abspath(
 
 def test_read_plan_with_negative_durations():
     population = read_matsim(test_bad_trips_path, test_bad_attributes_path, version=11)
-    population['test']['test'].print()
+    assert population['test']['test'].plan.is_valid
 
 
 # v12
@@ -92,7 +99,7 @@ def test_parse_v12_matsim():
     population = read_matsim(test_tripsv12_path, version=12)
     person = population['chris']['chris']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A', 'vehicles': '{"car":"chris"}'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
@@ -108,7 +115,7 @@ def test_parse_v12_matsim_with_hh_ids():
     population = read_matsim(test_tripsv12_path, version=12, household_key="hid")
     person = population['A']['chris']
     assert person.has_valid_plan
-    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A'}
+    assert person.attributes == {'subpopulation': 'rich', 'age': 'yes', 'hid': 'A', 'vehicles': '{"car":"chris"}'}
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
@@ -129,11 +136,11 @@ def test_parse_transit_v12_matsim():
     assert legs[0].mode == "walk"
     assert legs[1].mode == "bus"
     assert legs[1].distance == 10100
-    assert legs[1].service_id == 'city_line'
-    assert legs[1].route_id == 'work_bound'
-    assert legs[1].o_stop == 'home_stop_out'
-    assert legs[1].d_stop == 'work_stop_in'
-    assert legs[1].network_route == None
+    assert legs[1].route.transit.get("transitLineId") == 'city_line'
+    assert legs[1].route.transit.get("transitRouteId") == 'work_bound'
+    assert legs[1].route.transit.get("accessFacilityId") == 'home_stop_out'
+    assert legs[1].route.transit.get("egressFacilityId") == 'work_stop_in'
+    assert legs[1].route.network_route == []
 
 
 def test_fail_v12_plus_attributes():
@@ -170,8 +177,8 @@ def test_stream_transit_v12_matsim():
     assert legs[0].mode == "walk"
     assert legs[1].mode == "bus"
     assert legs[1].distance == 10100
-    assert legs[1].service_id == 'city_line'
-    assert legs[1].route_id == 'work_bound'
-    assert legs[1].o_stop == 'home_stop_out'
-    assert legs[1].d_stop == 'work_stop_in'
-    assert legs[1].network_route == None
+    assert legs[1].route.transit.get("transitLineId") == 'city_line'
+    assert legs[1].route.transit.get("transitRouteId") == 'work_bound'
+    assert legs[1].route.transit.get("accessFacilityId") == 'home_stop_out'
+    assert legs[1].route.transit.get("egressFacilityId") == 'work_stop_in'
+    assert legs[1].route.network_route == []

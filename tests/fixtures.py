@@ -1,3 +1,4 @@
+from xml.dom import NotFoundErr
 import pytest
 from shapely.geometry import Point
 
@@ -1295,16 +1296,40 @@ def config_complex():
         }
     }
 
+
+class FakeRoute:
+    def __init__(self, btime=None):
+        if btime is not None:
+            self.transit = {'boardingTime': btime}
+        else:
+            self.transit = {}
+
+
 @pytest.fixture()
 def default_leg():
-    default_leg = Leg(1, 'walk', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5)
+    default_leg = Leg(
+        1, 'walk', 'a', 'b',
+        start_time=mtdt(8 * 60),
+        end_time=mtdt(8 * 60 + 5),
+        distance=5,
+        route=FakeRoute()
+        )
     return default_leg
 
 
 @pytest.fixture()
 def pt_wait_leg():
-    pt_wait_leg = Leg(1, 'bus', 'a', 'b', start_time=mtdt(8 * 60), boarding_time=mtdt(8 * 60 + 5),
-                      end_time=mtdt(8 * 60 + 15), distance=5)
+    class FakeRoute:
+        def __init__(self, btime):
+            self.transit = {'boardingTime': btime}
+
+    pt_wait_leg = Leg(
+        1, 'bus', 'a', 'b',
+        start_time=mtdt(8 * 60),
+        end_time=mtdt(8 * 60 + 15),
+        distance=5,
+        route=FakeRoute('08:05:00')
+        )
     return pt_wait_leg
 
 

@@ -2,18 +2,20 @@
 Methods for cropping plans outside core areas
 """
 from shapely.geometry import Polygon, LineString
-import geopandas as gp
 import pam
 from pam.activity import Leg, Activity, Plan
 from pam.variables import END_OF_DAY, START_OF_DAY
 from pam.core import Population
 from typing import List
-from pam.core import Population, Household, Person
-import os
-from pam import read, write
+from pam.core import Population
 
 
-def simplify_population(population: Population, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False) -> None:
+def simplify_population(
+    population: str,
+    boundary: str,
+    snap_to_boundary: bool = False,
+    rename_external_activities: bool = False,
+) -> None:
     """
     Simplify external plans across a population
     """

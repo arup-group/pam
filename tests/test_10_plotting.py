@@ -12,7 +12,7 @@ from .fixtures import person_heh, Steve, Hilda, instantiate_household_with
 from pam.core import Household, Population
 from copy import deepcopy
 from pam.policy import policies
-from tests.test_utils import cyclist, pt_person
+from tests.test_00_utils import cyclist, pt_person
 
 
 def test_build_person_dataframe(person_heh):

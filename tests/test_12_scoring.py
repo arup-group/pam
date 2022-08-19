@@ -116,7 +116,7 @@ def test_score_plan_activities(Anna, default_config):
 def test_score_small_plan_activity(small_plan, default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
     result = scorer.score_plan_activities(small_plan, default_config)
-    # 24-hr home activity 
+    # 24-hr home activity
     assert result == 121.90659700031607
 
 
@@ -139,7 +139,7 @@ def test_score_pt_interchanges(AnnaPT, default_config):
 
 def test_scores_experienced(config_complex):
     """ Test calculated scores against MATSim experienced plan scores. """
-    population = read_matsim(test_experienced_plans_path, version = 12, crop = False) 
+    population = read_matsim(test_experienced_plans_path, version = 12, crop = False)
     scorer = CharyparNagelPlanScorer(config_complex)
     for hid, pid, person in population.people():
         if 'subpopulation' not in person.attributes:

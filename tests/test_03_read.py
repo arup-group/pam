@@ -72,7 +72,6 @@ def test_agent_pid_2_simple_tour(test_trips, test_attributes):
 def test_agent_pid_3_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[1].people[3].activities]
-    print(acts)
     assert acts == ['home', 'work', 'shop', 'work', 'home']
 
 

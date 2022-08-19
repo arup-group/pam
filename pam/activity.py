@@ -4,10 +4,11 @@ import logging
 from copy import copy
 from turtle import distance
 from typing import Optional
+import json
 
 from pam.location import Location
 from pam.plot import plans as plot
-import pam.utils
+import pam.utils as utils
 import pam.variables
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.variables import END_OF_DAY
@@ -1001,12 +1002,8 @@ class Leg(PlanComponent):
             distance=None,
             purp=None,
             freq=None,
-            o_stop=None,
-            d_stop=None,
-            boarding_time=None,
-            service_id=None,
-            route_id=None,
-            network_route=None,
+            attributes={},
+            route=None,
     ):
         self.seq = seq
         self.purp = purp
@@ -1015,15 +1012,14 @@ class Leg(PlanComponent):
         self.end_location = Location(loc=end_loc, link=end_link, area=end_area)
         self.start_time = start_time
         self.end_time = end_time
-        self._distance = distance
         self.freq = freq
-        # relevant for (MATSim) simulated plans
-        self.service_id = service_id
-        self.route_id = route_id
-        self.o_stop = o_stop
-        self.d_stop = d_stop
-        self.boarding_time = boarding_time
-        self.network_route = network_route
+        self._distance = distance
+        # relevant for simulated plans
+        self.attributes = attributes
+        if route is not None:
+            self.route = route
+        else:
+            self.route = Route()
 
     def __str__(self):
         return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
@@ -1038,6 +1034,9 @@ class Leg(PlanComponent):
 
     @property
     def distance(self):
+        """
+        Distance, assumed to be in m in either case
+        """
         if self._distance is not None:
             return self._distance
         return self.euclidean_distance * 1000
@@ -1045,8 +1044,117 @@ class Leg(PlanComponent):
     @property
     def euclidean_distance(self):
         # calculate leg euclidean distance in km:
+        # todo prefer this be in m, not km, (see above) but unsure of implications elsewhere
         # assumes grid definition of Location class
         return ((self.end_location.loc.x-self.start_location.loc.x)**2 + (self.end_location.loc.y-self.start_location.loc.y)**2)**0.5 / 1000
+
+    @property
+    def service_id(self):
+        return self.route.transit.get("service_id")
+
+    @property
+    def route_id(self):
+        return self.route.transit.get("route_id")
+
+    @property
+    def o_stop(self):
+        return self.route.transit.get("o_stop")
+
+    @property
+    def d_stop(self):
+        return self.route.transit.get("d_stop")
+
+    @property
+    def boarding_time(self):
+        time = self.route.transit.get("boardingTime")
+        if time is not None:
+            return utils.matsim_time_to_datetime(time)
+        return None
+
+    @property
+    def network_route(self):
+        return self.route.network_route
+
+
+class Route:
+    """
+    xml element wrapper for leg routes, in the simplest case of a leg with no route, this will behave as an empty dictionary.
+    For routed legs this provides some convenience properties such as is_transit, and transit_route.
+    """
+
+    def __init__(self, xml_elem=None) -> None:
+        if xml_elem:
+            self.xml = xml_elem[0]
+        else:
+            self.xml = {}  # this allows an empty route to behave as an empty dict
+
+    @property
+    def exists(self) -> bool:
+        return not isinstance(self.xml, dict)
+
+    @property
+    def type(self):
+        return self.xml.get("type", None)
+
+    @property
+    def is_transit(self) -> bool:
+        return self.type == "default_pt"
+
+    @property
+    def is_routed(self) -> bool:
+        return self.type == "links"
+
+    @property
+    def is_teleported(self) -> bool:
+        return self.type == "generic"
+
+    @property
+    def network_route(self) -> list:
+        if self.is_routed:
+            return self.xml.text.split(" ")
+        return []
+
+    @property
+    def transit(self) -> dict:
+        if self.is_transit:
+            return json.loads(self.xml.text.strip())
+        return {}
+
+    def get(self, key, default=None) -> str:
+        return self.xml.get(key, default)
+
+    def __getitem__(self, key):
+        return self.xml[key]
+
+    @property
+    def distance(self) -> float:
+        distance = self.get("distance")
+        if distance is not None:
+            return float(distance)
+        return None
+
+
+class RouteV11(Route):
+
+    def __init__(self, xml_elem) -> None:
+        super().__init__(xml_elem)
+
+    @property
+    def is_transit(self) -> bool:
+        return self.type == "experimentalPt1"
+
+
+    @property
+    def transit(self) -> dict:
+        if self.is_transit:
+            pt_details = self.xml.text.split('===')
+            return {
+                "accessFacilityId": pt_details[1],
+                "transitLineId": pt_details[2],
+                "transitRouteId": pt_details[3],
+                "egressFacilityId": pt_details[4]
+            }
+        return {}
 
 
 class Trip(Leg):

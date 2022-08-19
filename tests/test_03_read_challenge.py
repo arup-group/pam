@@ -42,8 +42,6 @@ def test_agent_pid_6_not_return_home(test_trips, test_attributes):
 def test_agent_pid_7_not_start_and_return_home_night_worker(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     person = population[4][7]
-    person.print()
-    print(person.home)
     acts = [a.act for a in population.households[4].people[7].activities]
     assert acts == ['work', 'home', 'work']
 
@@ -87,7 +85,6 @@ def test_agent_pid_12_not_start_and_return_home_night_worker_complex_chain_type1
 ):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[9].people[12].activities]
-    print(acts)
     assert acts == ['work', 'shop', 'home', 'work']
 
 

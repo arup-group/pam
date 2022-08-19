@@ -1,100 +1,14 @@
 import os
 from datetime import datetime
 import logging
-import pandas as pd
-import geopandas as gp
 from lxml import etree as et
-from shapely.geometry import Point, LineString
-from typing import Tuple, Optional, Callable, List, Set
+from typing import Optional, Set
 
 from pam.activity import Activity, Leg
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam.utils import datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam.utils import minutes_to_datetime as mtdt
-from pam.utils import write_xml, create_local_dir
-
-
-def write_od_matrices(
-        population,
-        path : str,
-        leg_filter : Optional[str] = None,
-        person_filter : Optional[str] = None,
-        time_minutes_filter : Optional[List[Tuple[int]]] = None
-        ) -> None:
-
-    """
-    Write a core population object to tabular O-D weighted matrices.
-    Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
-    A single filter can be applied each time.
-    TODO include freq (assume hh)
-
-    :param population: core.Population
-    :param path: directory to write OD matrix files
-    :param leg_filter: select between 'Mode', 'Purpose'
-    :param person_filter: select between given attribute categories (column names) from person attribute data
-    :param time_minutes_filter: a list of tuples to slice times,
-    e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
-    """
-    create_local_dir(path)
-
-    legs = []
-
-    for hid, household in population.households.items():
-        for pid, person in household.people.items():
-            for leg in person.legs:
-                data = {
-                    'Household ID': hid,
-                    'Person ID': pid,
-                    'Origin':leg.start_location.area,
-                    'Destination': leg.end_location.area,
-                    'Purpose': leg.purp,
-                    'Mode': leg.mode,
-                    'Sequence': leg.seq,
-                    'Start time': leg.start_time,
-                    'End time': leg.end_time,
-                    'Freq': household.freq,
-                    }
-                if person_filter:
-                    legs.append({**data, **person.attributes})
-                else:
-                    legs.append(data)
-
-    df_total = pd.DataFrame(data=legs, columns = ['Origin','Destination']).set_index('Origin')
-    matrix = df_total.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
-    matrix.to_csv(os.path.join(path, 'total_od.csv'))
-
-    data_legs = pd.DataFrame(data=legs)
-
-    if leg_filter:
-        data_legs_grouped=data_legs.groupby(leg_filter)
-        for filter, leg in data_legs_grouped:
-            df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
-            matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
-            matrix.to_csv(os.path.join(path, filter+'_od.csv'))
-        return None
-
-    elif person_filter:
-        data_legs_grouped=data_legs.groupby(person_filter)
-        for filter, leg in data_legs_grouped:
-            df = pd.DataFrame(data=leg, columns = ['Origin','Destination']).set_index('Origin')
-            matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
-            matrix.to_csv(os.path.join(path, filter+'_od.csv'))
-        return None
-
-    elif time_minutes_filter:
-        periods = []
-        for time in time_minutes_filter:
-            periods.append(time)
-        for start_time, end_time in periods:
-            file_name = str(start_time) +'_to_'+ str(end_time)
-            start_time = mtdt(start_time)
-            end_time = mtdt(end_time)
-            data_time = data_legs[(data_legs['Start time']>= start_time)&(data_legs['Start time']< end_time)]
-            df = pd.DataFrame(data=data_time, columns = ['Origin','Destination']).set_index('Origin')
-            matrix = df.pivot_table(values='Destination', index='Origin', columns='Destination', fill_value=0, aggfunc=len)
-            matrix.to_csv(os.path.join(path, 'time_'+file_name+'_od.csv'))
-        return None
+from pam.utils import write_xml
 
 
 def write_matsim(
@@ -172,10 +86,17 @@ def write_matsim_v12(
                 person.attributes[household_key] = hid  # force add hid as an attribute
             person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
 
-            attributes_xml = et.SubElement(person_xml, 'attributes', {})
+            attributes = et.SubElement(person_xml, 'attributes', {})
             for k, v in person.attributes.items():
-                attribute_xml = et.SubElement(attributes_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
-                attribute_xml.text = str(v)
+                if k == "vehicles":  # todo make something more robust for future 'special' classes
+                    attribute = et.SubElement(
+                        attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
+                        )
+                else:
+                    attribute = et.SubElement(
+                        attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                        )
+                attribute.text = str(v)
 
             plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
             for component in person[:-1]:
@@ -188,9 +109,25 @@ def write_matsim_v12(
                     }
                                   )
                 if isinstance(component, Leg):
-                    et.SubElement(plan_xml, 'leg', {
+                    leg = et.SubElement(plan_xml, 'leg', {
                         'mode': component.mode,
                         'trav_time': tdtm(component.duration)})
+
+                    if component.attributes:
+                        attributes = et.SubElement(leg, 'attributes')
+                        for k, v in component.attributes.items():
+                            if k == 'enterVehicleTime':  # todo make something more robust for future 'special' classes
+                                attribute = et.SubElement(
+                                attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
+                                )
+                            else:
+                                attribute = et.SubElement(
+                                    attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                                    )
+                            attribute.text = str(v)
+
+                    if component.route.exists:
+                        leg.append(component.route.xml)
 
             component = person[-1]  # write the last activity without an end time
             et.SubElement(plan_xml, 'activity', {
@@ -297,7 +234,7 @@ def v11_plans_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "fixtures", "dtd", "population_v5.dtd"
+            "..", "fixtures", "dtd", "population_v5.dtd"
             )
         )
     return et.DTD(dtd_path)
@@ -307,7 +244,7 @@ def object_attributes_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "fixtures", "dtd", "objectattributes_v1.dtd"
+            "..", "fixtures", "dtd", "objectattributes_v1.dtd"
             )
         )
     return et.DTD(dtd_path)
@@ -317,214 +254,10 @@ def v12_plans_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "fixtures", "dtd", "population_v6.dtd"
+            "..", "fixtures", "dtd", "population_v6.dtd"
             )
         )
     return et.DTD(dtd_path)
-
-
-def to_csv(
-    population,
-    dir : str,
-    crs : Optional[str] = None,
-    to_crs : Optional[str] = "EPSG:4326"
-    ) -> None:
-    """
-    Write a population to disk as tabular data in csv format. Outputs are:
-    - households.csv: household ids and attributes
-    - people.csv: agent ids and attributes
-    - legs.csv: activity plan trip records
-    - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
-    """
-
-    create_local_dir(dir)
-
-    hhs = []
-    people = []
-    acts = []
-    legs = []
-
-    for hid, hh in population.households.items():
-        hh_data = {
-            'hid': hid,
-            'freq': hh.freq,
-            'hzone': hh.location.area,
-        }
-        if isinstance(hh.attributes, dict):
-            hh_data.update(hh.attributes)
-        # if hh.location.area is not None:
-        #     hh_data['area'] = hh.location.area
-        if hh.location.loc is not None:
-            hh_data['geometry'] = hh.location.loc
-
-        hhs.append(hh_data)
-
-        for pid, person in hh.people.items():
-            people_data = {
-                'pid': pid,
-                'hid': hid,
-                'freq': person.freq,
-                'hzone': hh.location.area,
-            }
-            if isinstance(person.attributes, dict):
-                people_data.update(person.attributes)
-            # if hh.location.area is not None:
-            #     people_data['area'] = hh.location.area
-            if hh.location.loc is not None:
-                people_data['geometry'] = hh.location.loc
-
-            people.append(people_data)
-
-            for seq, component in enumerate(person.plan):
-                if isinstance(component, Leg):
-                    leg_data = {
-                        'pid': pid,
-                        'hid': hid,
-                        'freq': component.freq,
-                        'ozone': component.start_location.area,
-                        'dzone': component.end_location.area,
-                        'purp': component.purp,
-                        'origin activity': person.plan[seq-1].act,
-                        'destination activity': person.plan[seq+1].act,
-                        'mode': component.mode,
-                        'seq': component.seq,
-                        'tst': component.start_time,
-                        'tet': component.end_time,
-                        'duration': str(component.duration),
-                    }
-                    # if component.start_location.area is not None:
-                    #     leg_data['start_area'] = component.start_location.area
-                    # if component.end_location.area is not None:
-                    #     leg_data['end_area'] = component.end_location.area
-                    if component.start_location.loc is not None and component.end_location.loc is not None:
-                        leg_data['geometry'] = LineString((component.start_location.loc, component.end_location.loc))
-
-                    legs.append(leg_data)
-
-                if isinstance(component, Activity):
-                    act_data = {
-                        'pid': pid,
-                        'hid': hid,
-                        'freq': component.freq,
-                        'activity': component.act,
-                        'seq': component.seq,
-                        'start time': component.start_time,
-                        'end time': component.end_time,
-                        'duration': str(component.duration),
-                        'zone': component.location.area,
-                    }
-                    # if component.location.area is not None:
-                    #     act_data['area'] = component.location.area
-                    if component.location.loc is not None:
-                        act_data['geometry'] = component.location.loc
-
-                    acts.append(act_data)
-
-    hhs = pd.DataFrame(hhs).set_index('hid')
-    save_geojson(hhs, crs, to_crs, os.path.join(dir, 'households.geojson'))
-    save_csv(hhs, os.path.join(dir, 'households.csv'))
-
-    people = pd.DataFrame(people).set_index('pid')
-    save_geojson(people, crs, to_crs, os.path.join(dir, 'people.geojson'))
-    save_csv(people, os.path.join(dir, 'people.csv'))
-
-    legs = pd.DataFrame(legs)
-    save_geojson(legs, crs, to_crs, os.path.join(dir, 'legs.geojson'))
-    save_csv(legs, os.path.join(dir, 'legs.csv'))
-
-    acts = pd.DataFrame(acts)
-    save_geojson(acts, crs, to_crs, os.path.join(dir, 'activities.geojson'))
-    save_csv(acts, os.path.join(dir, 'activities.csv'))
-
-
-
-def dump(
-    population,
-    dir : str,
-    crs : Optional[str] = None,
-    to_crs : Optional[str] = "EPSG:4326"
-    ) -> None:
-    """
-    Write a population to disk as tabular data in csv format. Outputs are:
-    - households.csv: household ids and attributes
-    - people.csv: agent ids and attributes
-    - legs.csv: activity plan trip records
-    - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
-    """
-    to_csv(
-        population = population,
-        dir = dir,
-        crs = crs,
-        to_crs = to_crs
-    )
-
-
-def save_geojson(df, crs, to_crs, path):
-    if 'geometry' in df.columns:
-        df = gp.GeoDataFrame(df, geometry='geometry')
-        if crs is not None:
-            df.crs = crs
-            df.to_crs(to_crs, inplace=True)
-        df.to_file(path, driver='GeoJSON')
-
-
-def save_csv(df, path):
-    """Write GeoDataFrame as csv by droppoing geometry column"""
-    if 'geometry' in df.columns:
-        df = df.drop('geometry', axis=1)
-    df.to_csv(path)
-
-
-def write_population_csvs(
-    list_of_populations : list,
-    dir : str,
-    crs : Optional[str] = None,
-    to_crs : Optional[str] = "EPSG:4326"
-    ) -> None:
-    """"
-    Write a list of populations to disk as tabular data in csv format. Outputs are:
-    - populations.csv: summary of populations
-    - households.csv: household ids and attributes
-    - people.csv: agent ids and attributes
-    - legs.csv: activity plan trip records
-    - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
-    """
-    create_local_dir(dir)
-
-    populations = []
-    for idx, population in enumerate(list_of_populations):
-        if population.name is None:
-            population.name = idx
-        populations.append({
-                'population_id': idx,
-                'population_name': population.name
-            })
-        to_csv(
-            population=population,
-            dir= os.path.join(dir, population.name),
-            crs=crs,
-            to_crs=to_crs
-            )
-
-    pd.DataFrame(populations).to_csv(
-        os.path.join(dir, 'populations.csv'),
-        index=False
-        )
 
 
 def write_vehicles(output_dir,

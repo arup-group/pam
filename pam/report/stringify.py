@@ -33,14 +33,24 @@ class ActColour():
         return f"\033[38;5;{self.mapping[act]}m{text}\033[0m"
 
 
-def stringify_plans(plans_path, colour=True, width=101):
+def stringify_plans(
+    plans_path,
+    simplify_pt_trips : bool = False,
+    crop : bool = False,
+    colour=True,
+    width=101
+    ):
     print(f"Loading plan sequences from {plans_path}.")
     encoder = PlansToCategorical(
         bin_size=int(86400/width),
         duration=86400
     )
     colourer = ActColour(colour=colour)
-    for person in stream_matsim_persons(plans_path):
+    for person in stream_matsim_persons(
+        plans_path,
+        simplify_pt_trips = simplify_pt_trips,
+        crop = crop,
+        ):
         apply_jitter_to_plan(
             plan=person.plan,
             jitter=timedelta(minutes=30),
