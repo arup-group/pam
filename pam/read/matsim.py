@@ -29,7 +29,7 @@ def read_matsim(
     """
     Load a MATSim format population into core population format.
     It is possible to maintain the unity of housholds using a household uid in
-    the attributes input, ie:
+    the attributes input, i.e.:
     <attribute class="java.lang.String" name="hid">hh_0001</attribute>
     :param plans: path to matsim format xml
     :param attributes: path to matsim format xml
@@ -348,7 +348,7 @@ def unpack_leg_v12(leg):
             {"transitRouteId":"work_bound","boardingTime":"07:30:00","transitLineId":"city_line","accessFacilityId":"home_stop_out","egressFacilityId":"work_stop_in"}
             </route>
         </leg>
-    Route must be transit ie there will not be a network route.
+    Route must be transit i.e. there will not be a network route.
     Route attributes include:
         - type = "default_pt"
         - start_link

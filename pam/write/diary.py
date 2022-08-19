@@ -156,7 +156,7 @@ def save_geojson(df, crs, to_crs, path):
 
 
 def save_csv(df, path):
-    """Write GeoDataFrame as csv by droppoing geometry column"""
+    """Write GeoDataFrame as csv by dropping geometry column"""
     if 'geometry' in df.columns:
         df = df.drop('geometry', axis=1)
     df.to_csv(path)

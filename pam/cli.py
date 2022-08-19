@@ -147,7 +147,7 @@ def summary(
     logger.debug(f"MATSim version set to {matsim_version}.")
     logger.debug(f"'household_key' set to {household_key}.")
     logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
-    print(f"Simplif PT trips = {simplify_pt_trips}")
+    print(f"Simplify PT trips = {simplify_pt_trips}")
     logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")

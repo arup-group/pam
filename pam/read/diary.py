@@ -78,7 +78,7 @@ def load_travel_diary(
         else:
             logger.warning(
 """
-Using simple trip based purpose parser using, this assumes first activity is 'home'.
+Using simple trip based purpose parser, this assumes first activity is 'home'.
 If you do not wish to assume this, try setting 'tour_based' = True (default).
 """
                 )
