@@ -101,7 +101,7 @@
 				</attributes>
 				<route type="generic" start_link="5221366343808222067_5221366343808222067" end_link="4155" trav_time="00:02:00" distance="101.14333765284941"></route>
 			</leg>
-			<activity type="home" link="4155" x="528634.2579046559" y="176896.66392752415" start_time="14:56:01" >
+			<activity type="home" link="4155" x="528634.2579046559" y="176896.66392752415" start_time="24:56:01" >
 			</activity>
 		</plan>
 
@@ -1542,7 +1542,7 @@
 		</plan>
 
 	</person>
-	
+
 	<person id="Jim" selected = "yes">
 		<attributes>
 			<attribute name="subpopulation" class="java.lang.String">electric</attribute>

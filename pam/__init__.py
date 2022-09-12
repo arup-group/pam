@@ -36,3 +36,10 @@ class PAMVehicleIdError(PAMValidationError):
     """
 
     pass
+
+class InvalidMATSimError(PAMValidationError):
+    """
+    Custom exception raised for invalid MATSim
+    """
+
+    pass

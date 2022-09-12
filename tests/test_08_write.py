@@ -256,6 +256,28 @@ def test_read_write_v12_consistent(tmp_path):
     assert population == population2
 
 
+def test_read_write_v12_non_selected_plans_consistently(tmp_path):
+    test_tripsv12_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_experienced_plans_v12.xml")
+    )
+    population = read_matsim(
+        test_tripsv12_path,
+        version=12,
+        keep_non_selected=True
+        )
+    location = str(tmp_path / "test.xml.gz")
+    write_matsim(
+        population=population,
+        version=12,
+        plans_path=location,
+        comment="test",
+        household_key=None,
+        )
+    expected_file = "{}/test.xml.gz".format(tmp_path)
+    population2 = read_matsim(expected_file, version=12)
+    assert population == population2
+
+
 def test_writes_od_matrix_to_expected_file(tmpdir):
     population = Population()
 

@@ -69,6 +69,11 @@ def common_matsim_options(func):
         default=True,
         help="Optionally turn off reading of leg_route."
     )(func)
+    func = click.option(
+        "--keep_non_selected/--selected_only",
+        default=False,
+        help="Optionally keep (read and write) non selected plans."
+    )(func)
     return func
 
 
@@ -131,6 +136,7 @@ def summary(
     crop: bool,
     leg_attributes: bool,
     leg_route: bool,
+    keep_non_selected: bool,
     debug: bool,
     rich: bool,
     ):
@@ -152,6 +158,7 @@ def summary(
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
+    logger.debug(f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
     with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
         population = read.read_matsim(
@@ -164,6 +171,7 @@ def summary(
             crop=crop,
             leg_attributes=leg_attributes,
             leg_route=leg_route,
+            keep_non_selected=keep_non_selected,
         )
     logger.info("Loading complete.")
     if rich:
@@ -299,6 +307,7 @@ def crop(
     crop: bool,
     leg_attributes: bool,
     leg_route: bool,
+    keep_non_selected: bool,
     comment,
     buffer,
     debug
@@ -321,6 +330,7 @@ def crop(
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
+    logger.debug(f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
     # core area geometry
     with Console().status("[bold green]Loading boundary...", spinner='aesthetic') as _:
@@ -341,6 +351,7 @@ def crop(
             crop=crop,
             leg_attributes=leg_attributes,
             leg_route=leg_route,
+            keep_non_selected=keep_non_selected,
         )
 
     with Console().status("[bold green]Applying simplification...", spinner='aesthetic') as _:
@@ -386,6 +397,7 @@ def combine(
     crop: bool,
     leg_attributes: bool,
     leg_route: bool,
+    keep_non_selected: bool,
     comment: str,
     force: bool,
     debug: bool
@@ -405,6 +417,7 @@ def combine(
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
+    logger.debug(f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
     if not force and os.path.exists(population_output):
         if input(f"{population_output} exists, overwrite? [y/n]:") .lower() in ["y", "yes", "ok"]:
@@ -422,6 +435,7 @@ def combine(
             crop=crop,
             leg_attributes=leg_attributes,
             leg_route=leg_route,
+            keep_non_selected=keep_non_selected,
             )
 
     logger.debug(f"Writing combinined population to {population_output}.")
@@ -470,6 +484,7 @@ def sample(
     crop: bool,
     leg_attributes: bool,
     leg_route: bool,
+    keep_non_selected: bool,
     comment: str,
     seed: Optional[int],
     debug: bool,
@@ -492,6 +507,7 @@ def sample(
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (required for warm starting) = {leg_attributes}")
     logger.debug(f"Leg route (required for warm starting) = {leg_route}")
+    logger.debug(f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
     # read
     with Console().status("[bold green]Loading population...", spinner='aesthetic') as _:
@@ -505,6 +521,7 @@ def sample(
             crop=crop,
             leg_attributes=leg_attributes,
             leg_route=leg_route,
+            keep_non_selected=keep_non_selected,
         )
     logger.info(f'Initial population size (number of agents): {len(population_input)}')
 

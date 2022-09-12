@@ -64,7 +64,7 @@ def test_activity_with_different_times_not_in_list_exact(list_of_acts):
     assert not different_times_act.isin_exact(list_of_acts)
 
 
-def test_activity_with_different_times_not_in_list(list_of_acts):
+def test_activity_with_different_times_in_list(list_of_acts):
     different_times_act = Activity(2, 'act_2', 'loc', start_time=mtdt(18 * 60 + 999), end_time=mtdt(19 * 60 + 999))
     assert different_times_act in list_of_acts
 

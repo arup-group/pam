@@ -4,7 +4,7 @@ import logging
 from lxml import etree as et
 from typing import Optional, Set
 
-from pam.activity import Activity, Leg
+from pam.activity import Plan, Activity, Leg
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam.utils import datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
@@ -62,7 +62,8 @@ def write_matsim_v12(
     population,
     path : str,
     household_key : Optional[str] = 'hid',
-    comment : Optional[str] = None
+    comment : Optional[str] = None,
+    keep_non_selected: bool = False,
     ) -> None:
     """
     Write a matsim version 12 output (persons plans and attributes combined).
@@ -71,6 +72,7 @@ def write_matsim_v12(
     :param path: str, output path (.xml or .xml.gz)
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, default 'hid'
+    :param keep_non_selected: bool, default False
     """
 
     population_xml = et.Element('population')
@@ -98,47 +100,72 @@ def write_matsim_v12(
                         )
                 attribute.text = str(v)
 
-            plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
-            for component in person[:-1]:
-                if isinstance(component, Activity):
-                    et.SubElement(plan_xml, 'activity', {
-                        'type': component.act,
-                        'x': str(float(component.location.loc.x)),
-                        'y': str(float(component.location.loc.y)),
-                        'end_time': dttm(component.end_time)
-                    }
-                                  )
-                if isinstance(component, Leg):
-                    leg = et.SubElement(plan_xml, 'leg', {
-                        'mode': component.mode,
-                        'trav_time': tdtm(component.duration)})
-
-                    if component.attributes:
-                        attributes = et.SubElement(leg, 'attributes')
-                        for k, v in component.attributes.items():
-                            if k == 'enterVehicleTime':  # todo make something more robust for future 'special' classes
-                                attribute = et.SubElement(
-                                attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
-                                )
-                            else:
-                                attribute = et.SubElement(
-                                    attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                                    )
-                            attribute.text = str(v)
-
-                    if component.route.exists:
-                        leg.append(component.route.xml)
-
-            component = person[-1]  # write the last activity without an end time
-            et.SubElement(plan_xml, 'activity', {
-                'type': component.act,
-                'x': str(float(component.location.loc.x)),
-                'y': str(float(component.location.loc.y)),
-                }
+            write_plan(
+                person_xml,
+                person.plan,
+                selected=True,
             )
-
+            if keep_non_selected:
+                for plan in person.plans_non_selected:
+                    write_plan(
+                        person_xml,
+                        plan,
+                        selected=False,
+                    )
     write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v6')
     # todo assuming v5?
+
+
+def write_plan(
+    person_xml: et.SubElement,
+    plan: Plan,
+    selected: Optional[bool] = None,
+):
+    plan_attributes = {}
+    if selected is not None:
+        plan_attributes['selected'] = {True:'yes', False:'no'}[selected]
+    if plan.score is not None:
+        plan_attributes['score'] = str(plan.score)
+
+    plan_xml = et.SubElement(person_xml, 'plan', plan_attributes)
+    for component in plan:
+        if isinstance(component, Activity):
+            component.validate_matsim()
+            act_data = {
+                'type': component.act,
+            }
+            if component.start_time is not None:
+                act_data['start_time'] = dttm(component.start_time)
+            if component.end_time is not None:
+                act_data['end_time'] = dttm(component.end_time)
+            if component.location.link is not None:
+                act_data['link'] = str(component.location.link)
+            if component.location.x is not None:
+                act_data['x'] = str(component.location.x)
+            if component.location.y is not None:
+                act_data['y'] = str(component.location.y)
+            et.SubElement(plan_xml, 'activity', act_data)
+
+        if isinstance(component, Leg):
+            leg = et.SubElement(plan_xml, 'leg', {
+                'mode': component.mode,
+                'trav_time': tdtm(component.duration)})
+
+            if component.attributes:
+                attributes = et.SubElement(leg, 'attributes')
+                for k, v in component.attributes.items():
+                    if k == 'enterVehicleTime':  # todo make something more robust for future 'special' classes
+                        attribute = et.SubElement(
+                        attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
+                        )
+                    else:
+                        attribute = et.SubElement(
+                            attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                            )
+                    attribute.text = str(v)
+
+            if component.route.exists:
+                leg.append(component.route.xml)
 
 
 def write_matsim_plans(

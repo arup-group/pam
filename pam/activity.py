@@ -10,7 +10,7 @@ from pam.location import Location
 from pam.plot import plans as plot
 import pam.utils as utils
 import pam.variables
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, InvalidMATSimError
 from pam.variables import END_OF_DAY
 
 
@@ -971,7 +971,10 @@ class Activity(PlanComponent):
                f"duration:{self.duration})"
 
     def __eq__(self, other):
-        return (self.location == other.location) and (self.act == other.act)
+        """
+        Check for equality with activity type and location. Ignoring times and duration.
+        """
+        return (self.location == other.location) and (self.act == other.act) \
 
     def is_exact(self, other):
         return (self.location == other.location) and (self.act == other.act) \
@@ -982,6 +985,15 @@ class Activity(PlanComponent):
             if self.is_exact(other):
                 return True
         return False
+
+    def validate_matsim(self) -> None:
+        """Checks if activity has required fields for a valid matsim plan."""
+        if self.act is None:
+            raise InvalidMATSimError("Activity requires a type.")
+        if self.start_time is None and self.end_time is None:
+            raise InvalidMATSimError("Activity requires either start time or end_time.")
+        if self.location.loc is None and self.location.link is None:
+            raise InvalidMATSimError("Activity requires link id or x,y coordinates.")
 
 
 class Leg(PlanComponent):
