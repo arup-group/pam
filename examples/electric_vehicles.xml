@@ -1,3 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">
-<vehicles><vehicle id="census_35" battery_capacity="60" initial_soc="60" charger_types="default" vehicle_type="default_EV"/><vehicle id="census_39" battery_capacity="60" initial_soc="60" charger_types="default" vehicle_type="default_EV"/></vehicles>

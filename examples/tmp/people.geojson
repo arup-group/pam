@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"features": [
-{ "type": "Feature", "properties": { "pid": "Tom", "hid": "Smiths", "freq": null, "hzone": "A", "age": "low", "bot": null, "electric vehicle": null }, "geometry": { "type": "Point", "coordinates": [ 0.0, 0.0 ] } },
-{ "type": "Feature", "properties": { "pid": "Tammy", "hid": "Smiths", "freq": null, "hzone": "A", "age": "low", "bot": null, "electric vehicle": null }, "geometry": { "type": "Point", "coordinates": [ 0.0, 0.0 ] } },
-{ "type": "Feature", "properties": { "pid": "0", "hid": "0", "freq": null, "hzone": "A", "age": null, "bot": "yes", "electric vehicle": "yes" }, "geometry": { "type": "Point", "coordinates": [ 0.0, 0.0 ] } }
-]
-}
