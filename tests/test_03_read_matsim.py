@@ -162,6 +162,7 @@ def test_parse_simple_matsim_non_selected():
    assert len(person1.plans_non_selected) == 1
    assert len(person2.plans_non_selected) == 0
    assert isinstance(person1.plans_non_selected[0], Plan)
+   assert person1.plans_non_selected[0].score == 0
 
 
 # test stream matsim

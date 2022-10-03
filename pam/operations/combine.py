@@ -9,6 +9,7 @@ def pop_combine(
     crop: bool = False,
     leg_attributes: bool = True,
     leg_route: bool = True,
+    keep_non_selected = True,
     ):
 
     """
@@ -32,6 +33,7 @@ def pop_combine(
             crop=crop,
             leg_attributes=leg_attributes,
             leg_route=leg_route,
+            keep_non_selected=keep_non_selected
             )
         print(f"population: {population.stats}")
 

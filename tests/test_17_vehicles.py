@@ -185,7 +185,7 @@ def test_writing_all_vehicles_results_in_valid_xml_file(tmpdir, population_with_
 
     generated_file_path = os.path.join(tmpdir, 'all_vehicles.xml')
     xml_obj = lxml.etree.parse(generated_file_path)
-    vehicles_v2_xsd.assertValid(xml_obj)
+    vehicles_v2_xsd.assertValid(xml_obj)  # this needs internet?    
 
 
 def test_generates_matsim_vehicles_xml_file_containing_expected_vehicle_types(tmpdir,

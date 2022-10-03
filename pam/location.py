@@ -5,6 +5,18 @@ class Location:
         self.area = area
 
     @property
+    def x(self):
+        if self.loc:
+            return self.loc.x
+        return None
+
+    @property
+    def y(self):
+        if self.loc:
+            return self.loc.y
+        return None
+
+    @property
     def min(self):
         if self.loc is not None:
             return self.loc

@@ -37,6 +37,27 @@
 			<activity type="home" link="1-2" x="0.0" y="0.0" >
 			</activity>
 		</plan>
+		<plan score="130" selected="no">
+			<activity type="home" link="1-2" x="0.0" y="0.0" end_time="07:00:00" >
+			</activity>
+			<leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="1-2" end_link="3-4" trav_time="00:07:34" distance="10100.0" vehicleRefId="chris">1-2 2-3 3-4</route>
+			</leg>
+			<activity type="work" link="3-4" x="10100.0" y="0.0" end_time="16:30:00" >
+			</activity>
+			<leg mode="car" dep_time="16:30:00" trav_time="00:07:43">
+				<attributes>
+					<attribute name="routingMode" class="java.lang.String">car</attribute>
+				</attributes>
+				<route type="links" start_link="3-4" end_link="1-2" trav_time="00:07:43" distance="10300.0" vehicleRefId="chris">3-4 4-3 3-2 2-1 1-2</route>
+			</leg>
+			<activity type="home" link="1-2" x="0.0" y="0.0" >
+			</activity>
+		</plan>
+
 
 	</person>
 

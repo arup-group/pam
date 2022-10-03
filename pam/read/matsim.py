@@ -9,6 +9,7 @@ import pam.activity as activity
 from pam.activity import Route, RouteV11
 import pam.utils as utils
 from pam.vehicle import VehicleType, Vehicle, ElectricVehicle
+from pam.variables import START_OF_DAY
 
 
 def read_matsim(
@@ -204,7 +205,7 @@ def parse_matsim_plan(
     logger = logging.getLogger(__name__)
     act_seq = 0
     leg_seq = 0
-    arrival_dt = datetime(1900, 1, 1)
+    arrival_dt = START_OF_DAY
     departure_dt = None
     plan = activity.Plan()
 
@@ -222,7 +223,11 @@ def parse_matsim_plan(
                 loc = Point(int(float(x)), int(float(y)))
 
             if act_type == 'pt interaction':
-                departure_dt = arrival_dt + timedelta(seconds=0.)
+                departure = stage.get('end_time')
+                if departure is not None:
+                    departure_dt = utils.safe_strptime(departure)
+                else:
+                    departure_dt = arrival_dt + timedelta(seconds=0.)
 
             else:
                 departure_dt = utils.safe_strptime(
@@ -238,7 +243,6 @@ def parse_matsim_plan(
                     act=act_type,
                     loc=loc,
                     link=stage.get('link'),
-                    area=None,  # todo
                     start_time=arrival_dt,
                     end_time=departure_dt
                 )
@@ -333,7 +337,7 @@ def unpack_leg_v12(leg):
 
     === Unrouted ===
 
-    For example a leg missing both attributes and route elements, this is the case for non experienced or route plans:
+    For example a leg missing both attributes and route elements, this is the case for non experienced or non routed plans:
         <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
         </leg>
 

@@ -7,6 +7,8 @@ import os
 from shapely.geometry import Point, LineString
 from s2sphere import CellId
 
+from pam.variables import START_OF_DAY
+
 
 def parse_time(time):
     if isinstance(time, int) or isinstance(time, np.int64):
@@ -48,8 +50,10 @@ def datetime_string_to_datetime(string: str):
 def datetime_to_matsim_time(dt):
     """
     Convert datetime to matsim format time (08:27:33)
-    """
+    Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
     return dt.strftime("%H:%M:%S")
+    """
+    return timedelta_to_matsim_time(dt - START_OF_DAY)
 
 
 def matsim_time_to_datetime(string : str) -> datetime:
@@ -83,6 +87,24 @@ def td_to_s(td):
     Convert timedelta to seconds since start of day.
     """
     return (td.days * 86400) + td.seconds
+
+
+def safe_strptime(mt):
+    """
+    safely parse string into datetime, can cope with time strings in format hh:mm:ss
+    if hh > 23 then adds a day
+    """
+    h, m, s = mt.split(":")
+    return START_OF_DAY + timedelta(hours = int(h), minutes = int(m), seconds = int(s))
+
+
+def timedelta_to_hours(td):
+    return td.total_seconds() / 3600
+
+
+def matsim_duration_to_hours(mt):
+    mt = mt.split(":")
+    return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())
 
 
 def get_linestring(from_point, to_point):
@@ -233,24 +255,3 @@ def xml_content(content, matsim_DOCTYPE, matsim_filename):
     doc_type = f'<!DOCTYPE {matsim_DOCTYPE} SYSTEM "http://matsim.org/files/dtd/{matsim_filename}.dtd">'.encode()
     tree = xml_tree(content)
     return xml_version+doc_type+tree
-
-
-def safe_strptime(s):
-    """
-    safely parse string into datatime, can cope with time strings in format hh:mm:ss
-    if hh > 23 then adds a day
-    """
-    if int(s.split(':')[0]) > 23:
-        days, hours = divmod(int(s.split(':')[0]),24)
-        string = f"{days+1}-{hours:02d}" + s[-6:]
-        return datetime.strptime(string, '%d-%H:%M:%S')
-    return datetime.strptime(s, '%H:%M:%S')
-
-
-def timedelta_to_hours(td):
-    return td.total_seconds() / 3600
-
-
-def matsim_duration_to_hours(mt):
-    mt = mt.split(":")
-    return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())

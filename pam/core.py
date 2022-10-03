@@ -992,7 +992,6 @@ class Person:
     def __eq__(self, other):
         """
         Check for equality of two persons, equality is based on equal attributes and activity plans.
-        Identifiers (eg pid) are disregarded unless they are included in attributes.
         """
         if not isinstance(other, Person):
             self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
@@ -1001,6 +1000,11 @@ class Person:
             return False
         if not self.plan == other.plan:
             return False
+        if not len(self.plans_non_selected) == len(other.plans_non_selected):
+            return False
+        for plana, planb in zip(self.plans_non_selected, other.plans_non_selected):
+            if not plana == planb:
+                return False
         return True
 
     @property
