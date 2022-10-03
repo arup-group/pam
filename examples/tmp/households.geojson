@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"features": [
+{ "type": "Feature", "properties": { "hid": "Smiths", "freq": null, "hzone": "A" }, "geometry": { "type": "Point", "coordinates": [ 0.0, 0.0 ] } },
+{ "type": "Feature", "properties": { "hid": "0", "freq": null, "hzone": "A" }, "geometry": { "type": "Point", "coordinates": [ 0.0, 0.0 ] } }
+]
+}

@@ -9,10 +9,6 @@ from pam.variables import END_OF_DAY
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
-def test_person_heh_valid(person_heh):
-    assert person_heh.has_valid_plan
-
-
 def test_person_heh_valid_plan(person_heh):
     assert person_heh.plan.is_valid
 
@@ -59,7 +55,7 @@ def act_act_sequence():
     return person
 
 
-def test_act_act_sequence_not_valid(act_act_sequence):   
+def test_act_act_sequence_not_valid(act_act_sequence):
     with pytest.raises(PAMSequenceValidationError):
         act_act_sequence.plan.validate_sequence()
 
@@ -198,7 +194,7 @@ def test_invalid_times_not_start_at_zero():
             end_time=mtdt(180)
         )
     )
-    assert not plan.valid_times
+    assert not plan.valid_start_of_day_time
 
 
 def test_invalid_times_not_end_at_end_of_day():
@@ -212,7 +208,7 @@ def test_invalid_times_not_end_at_end_of_day():
             end_time=mtdt(180)
         )
     )
-    assert not plan.valid_times
+    assert not plan.valid_end_of_day_time
 
 
 @pytest.fixture
