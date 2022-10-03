@@ -9,7 +9,7 @@ import pandas as pd
 from pam.location import Location
 import pam.activity as activity
 import pam.plot as plot
-from pam import write
+from pam import PAMInvalidTimeSequenceError, write
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, PAMVehicleIdError
 from pam import variables
 from pam.vehicle import Vehicle, ElectricVehicle
@@ -22,10 +22,21 @@ class Population:
         self.logger = logging.getLogger(__name__)
         self.households = {}
 
-    def add(self, household):
-        if not isinstance(household, Household):
-            raise UserWarning(f"Expected instance of Household, not: {type(household)}")
-        self.households[household.hid] = household
+    def add(self, target):
+        if isinstance(target, list):
+            for hh in target:
+                self.add(hh)
+        elif isinstance(target, Household):
+            self.households[target.hid] = target
+        elif isinstance(target, Person):
+            self.logger.warning((
+                "Directly adding a Person to a Population requires a Household.",
+                f"Auto creating a household {target.pid} for person {target.pid}, check this is intended."
+            ))
+            self.add(Household(hid=target.pid))
+            self.households[target.pid].add(target)
+        else:
+            raise UserWarning(f"Expected instance of Household, list or Person, not: {type(target)}")
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -581,10 +592,13 @@ class Household:
             self._location.loc = loc
 
     def add(self, person):
-        if not isinstance(person, Person):
+        if isinstance(person, list):
+            for p in person:
+                self.add(p)
+        elif isinstance(person, Person):
+            self.people[person.pid] = person
+        else:
             raise UserWarning(f"Expected instance of Person, not: {type(person)}")
-        # person.finalise()
-        self.people[person.pid] = person
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -1045,8 +1059,8 @@ class Person:
         Check sequence of Activity and Leg times.
         :return: True
         """
-        if not self.plan.valid_times:
-            raise PAMTimesValidationError(f"Person {self.pid} has invalid plan times")
+        if not self.plan.valid_time_sequence:
+            raise PAMInvalidTimeSequenceError(f"Person {self.pid} has invalid plan times")
 
         return True
 

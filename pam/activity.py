@@ -10,7 +10,7 @@ from pam.location import Location
 from pam.plot import plans as plot
 import pam.utils as utils
 import pam.variables
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, InvalidMATSimError
+from pam import PAMInvalidStartTimeError, PAMInvalidTimeSequenceError, PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, InvalidMATSimError
 from pam.variables import END_OF_DAY
 
 
@@ -202,12 +202,16 @@ class Plan:
         :param p:
         :return:
         """
-        if isinstance(p, Activity):
-            if self.day and not isinstance(self.day[-1], Leg):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be Leg instance.")
+        if isinstance(p, list):
+            for c in p:
+                self.add(c)
+
+        elif isinstance(p, Activity):
+            if self.day and isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
+                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be a Trip or Leg.")
             self.day.append(p)
 
-        elif isinstance(p, Leg):
+        elif isinstance(p, Leg) or isinstance(p, Trip):
             if not self.day:
                 raise PAMSequenceValidationError(f"Failed to add to plan, first component must be Activity instance.")
             if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
@@ -242,21 +246,34 @@ class Plan:
         return True
 
     @property
-    def valid_times(self):
+    def valid_start_of_day_time(self):
         """
         Check that start and end time of Activities and Legs are consistent.
         :return: bool
         """
-        if not self.day[0].start_time == pam.utils.minutes_to_datetime(0):
+        if not self.day[0].start_time == pam.variables.START_OF_DAY:
             return False
+        return True
 
+    @property
+    def valid_time_sequence(self):
+        """
+        Check that start and end time of Activities and Legs are consistent.
+        :return: bool
+        """
         for i in range(self.length - 1):
             if not self.day[i].end_time == self.day[i+1].start_time:
                 return False
+        return True
 
+    @property
+    def valid_end_of_day_time(self):
+        """
+        Check that start and end time of Activities and Legs are consistent.
+        :return: bool
+        """
         if not self.day[-1].end_time == pam.variables.END_OF_DAY:
             return False
-
         return True
 
     @property
@@ -285,7 +302,7 @@ class Plan:
         Note that this also checks that plan ends at END_OF_DAY.
         :return: bool
         """
-        if self.valid_sequence and self.valid_times and self.valid_locations:
+        if self.valid_sequence and self.valid_time_sequence and self.valid_locations:
             return True
         else:
             return False
@@ -302,8 +319,8 @@ class Plan:
         return True
 
     def validate_times(self):
-        if not self.valid_times:
-            raise PAMTimesValidationError()
+        if not self.valid_time_sequence:
+            raise PAMInvalidTimeSequenceError("Plan activity and trips times are not consistent")
         return True
 
     def validate_locations(self):
@@ -966,7 +983,7 @@ class Activity(PlanComponent):
         self.freq=freq
 
     def __str__(self):
-        return f"Activity({self.seq} act:{self.act}, location:{self.location}, " \
+        return f"Activity(act:{self.act}, location:{self.location}, " \
                f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
 
@@ -1034,7 +1051,7 @@ class Leg(PlanComponent):
             self.route = Route()
 
     def __str__(self):
-        return f"Leg({self.seq} mode:{self.mode}, area:{self.start_location} --> " \
+        return f"Leg(mode:{self.mode}, area:{self.start_location} --> " \
                f"{self.end_location}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
                f"duration:{self.duration})"
 
