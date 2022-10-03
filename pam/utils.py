@@ -50,8 +50,8 @@ def datetime_string_to_datetime(string: str):
 def datetime_to_matsim_time(dt):
     """
     Convert datetime to matsim format time (08:27:33)
+    Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
     return dt.strftime("%H:%M:%S")
-    # todo how does this deal with times greater than 24 hours?
     """
     return timedelta_to_matsim_time(dt - START_OF_DAY)
 

@@ -974,7 +974,7 @@ class Activity(PlanComponent):
         """
         Check for equality with activity type and location. Ignoring times and duration.
         """
-        return (self.location == other.location) and (self.act == other.act) \
+        return (self.location == other.location) and (self.act == other.act)
 
     def is_exact(self, other):
         return (self.location == other.location) and (self.act == other.act) \

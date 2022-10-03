@@ -367,7 +367,8 @@ def crop(
             plans_path=os.path.join(dir_population_output, 'plans.xml'),
             attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
             version=matsim_version,
-            comment=comment
+            comment=comment,
+            keep_non_selected=keep_non_selected,
         )
     logger.info(f'Output saved at {dir_population_output}/plan.xml')
 
@@ -445,7 +446,8 @@ def combine(
             population = combined_population,
             version=matsim_version,
             plans_path=population_output,
-            comment=comment
+            comment=comment,
+            keep_non_selected=keep_non_selected,
         )
     logger.info('Population combiner complete')
     logger.info(f'Output saved at {population_output}')
@@ -544,7 +546,8 @@ def sample(
             plans_path=os.path.join(dir_population_output, 'plans.xml'),
             attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
             version=matsim_version,
-            comment=comment
+            comment=comment,
+            keep_non_selected=keep_non_selected
         )
 
     logger.info('Population sampling complete')

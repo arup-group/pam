@@ -18,7 +18,8 @@ def write_matsim(
         vehicles_dir : Optional[str] = None,
         version : int = 12,
         comment : Optional[str] = None,
-        household_key : Optional[str] = 'hid'
+        household_key : Optional[str] = 'hid',
+        keep_non_selected : bool = False,
     ) -> None:
     """
     Write a core population object to matsim xml formats (either version 11 or 12).
@@ -32,6 +33,7 @@ def write_matsim(
     :param version: int {11,12}, matsim version, default 12
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
+    :param keep_non_selected: bool, default False
     :return: None
     """
     if version == 12:
@@ -39,13 +41,20 @@ def write_matsim(
             population=population,
             path=plans_path,
             comment=comment,
-            household_key=household_key
+            household_key=household_key,
+            keep_non_selected=keep_non_selected,
             )
     elif version == 11:
+        logging.info(
+            """Support for old format plans (pre MATSim version 12) will not be maintained.
+            Please consider moving to the latest format (version = 12)."""
+            )
         if attributes_path is None:
             raise UserWarning("Please provide an attributes_path for a (default) v11 write.")
-        write_matsim_plans(population, plans_path, comment)
-        write_matsim_attributes(population, attributes_path, comment, household_key=household_key)
+        if keep_non_selected:
+            raise UserWarning("Read write of non selected plans is not supported for old formats (pre 12).")
+        write_v11_matsim_plans(population, plans_path, comment)
+        write_matsim_v11_attributes(population, attributes_path, comment, household_key=household_key)
     else:
         raise UserWarning("Version must be 11 or 12.")
     # write vehicles
@@ -168,7 +177,7 @@ def write_plan(
                 leg.append(component.route.xml)
 
 
-def write_matsim_plans(
+def write_v11_matsim_plans(
     population,
     path : str,
     comment : Optional[str] = None
@@ -218,7 +227,7 @@ def write_matsim_plans(
     # todo assuming v5?
 
 
-def write_matsim_attributes(
+def write_matsim_v11_attributes(
     population,
     location : str,
     comment : Optional[str] = None,
