@@ -119,7 +119,7 @@ class RandomPointSampler:
     def sample_point_from_multipolygon(self, geom):
         # Fix random seed
         random.seed(self.seed)
-        poly = random.choices(geom, weights=[poly.area for poly in geom])[0]
+        poly = random.choices(geom.geoms, weights=[poly.area for poly in geom.geoms])[0]
         return self.sample_point_from_polygon(poly)
 
 

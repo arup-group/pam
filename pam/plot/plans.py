@@ -7,6 +7,9 @@ from plotly.offline import offline
 import pam.activity as activity
 import pam.utils as utils
 
+import warnings
+from shapely.errors import ShapelyDeprecationWarning
+
 
 def plot_person(person, **kwargs):
     df = build_person_df(person)
@@ -108,7 +111,7 @@ loc attribute defined with a shapely.Point or s2sphere.CellId.
             'start_time': leg.start_time,
             'end_time': leg.end_time,
             'start_location': geometry.coords[0],
-            'end_location': geometry.coords[1],
+            'end_location': geometry.coords[-1],
             'geometry': geometry,
             'distance': leg.distance,
             'service_id': leg.route.transit.get('transitLineId'),
@@ -117,7 +120,9 @@ loc attribute defined with a shapely.Point or s2sphere.CellId.
             'd_stop': leg.route.transit.get('egressFacilityId'),
             'network_route': leg.route.network_route,
         }
-        df = df.append(pd.Series(_leg_dict), ignore_index=True)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
+            df = df.append(pd.Series(_leg_dict), ignore_index=True)
 
     df['pid'] = person.pid
     df = GeoDataFrame(df, geometry='geometry')
