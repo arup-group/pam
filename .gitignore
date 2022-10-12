@@ -44,3 +44,6 @@ outputs/
 michael-local-requirements.txt
 dev
 venv
+examples/all_vehicles.xml
+examples/electric_vehicles.xml
+examples/plans.xml

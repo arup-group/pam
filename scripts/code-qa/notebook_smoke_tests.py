@@ -1,8 +1,11 @@
 import argparse
 import glob
+import multiprocessing
 import subprocess
 import sys
 from datetime import datetime
+from itertools import repeat
+from multiprocessing import Manager
 from pprint import pprint
 
 from colorama import Fore, Style
@@ -65,7 +68,7 @@ def install_ipython_kernel(kernel_name):
     return run_shell_command(kernel_install_cmd)
 
 
-def execute_notebook(notebook_path):
+def execute_notebook(notebook_path, notebook_results_dict):
     print("Executing notebook '{}{}{}'...".format(Fore.YELLOW, notebook_path, Style.RESET_ALL))
     execute_notebook_cmd = [
         'jupyter', 'nbconvert',
@@ -74,7 +77,8 @@ def execute_notebook(notebook_path):
         '--execute', '"{}"'.format(notebook_path),
         '--output-dir=/tmp'
     ]
-    return run_shell_command(execute_notebook_cmd)
+    return_code, cmd, run_time = run_shell_command(execute_notebook_cmd)
+    notebook_results_dict[notebook_path] = (return_code, run_time)
 
 
 def run_shell_command(shell_cmd):
@@ -82,7 +86,13 @@ def run_shell_command(shell_cmd):
     start_time = datetime.now()
     rc = subprocess.call(' '.join(shell_cmd), shell=True)
     running_time = datetime.now() - start_time
-    print("{}Shell process return value was {}{}{}".format(Style.RESET_ALL, Fore.YELLOW, rc, Style.RESET_ALL))
+    print("{}Shell process return value for {}{}{} was {}{}{}".format(Style.RESET_ALL,
+                                                                      Fore.YELLOW,
+                                                                      shell_cmd,
+                                                                      Style.RESET_ALL,
+                                                                      Fore.YELLOW,
+                                                                      rc,
+                                                                      Style.RESET_ALL))
     return rc, ' '.join(shell_cmd), running_time
 
 
@@ -163,11 +173,8 @@ if __name__ == '__main__':
     install_kernels(command_args['kernel_name'])
     print("")
 
-    notebook_results = {}
-    for notebook in notebooks:
-        print('------------------------------------------------------')
-        return_code, cmd, run_time = execute_notebook(notebook)
-        notebook_results[notebook] = (return_code, run_time)
-
+    notebook_results = Manager().dict()
+    with multiprocessing.Pool() as pool:
+        pool.starmap(execute_notebook, zip(notebooks, repeat(notebook_results)))
     print_summary(notebook_results)
     sys.exit(sum(ret_code for ret_code, time in notebook_results.values()))
