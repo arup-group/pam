@@ -86,7 +86,7 @@ class RandomPointSampler:
     def sample_point_from_multipoint(self, geom):
         # Fix random seed
         random.seed(self.seed)
-        return random.choice(list(geom))
+        return random.choice(list(geom.geoms))
 
     def sample_point_from_linestring(self, geom):
         """
@@ -99,7 +99,7 @@ class RandomPointSampler:
     def sample_point_from_multilinestring(self, geom):
         # Fix random seed
         random.seed(self.seed)
-        line = random.choice(list(geom))
+        line = random.choice(list(geom.geoms))
         return self.sample_point_from_linestring(line)
 
     def sample_point_from_polygon(self, geom):

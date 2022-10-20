@@ -148,7 +148,7 @@ class FacilitySampler:
         Spatially join facility and zone data
         """
         self.logger.warning("Joining facilities data to zones, this may take a while.")
-        activity_areas = gp.sjoin(facilities, zones, how='inner', op='intersects')
+        activity_areas = gp.sjoin(facilities, zones, how='inner', predicate='intersects')
         return activity_areas
 
     def activity_areas_indexing(self, activity_areas):
@@ -159,7 +159,7 @@ class FacilitySampler:
         activity_areas_dict = {x:{} for x in activity_areas['index_right'].unique()}
         for (zone, act), facility_data in activity_areas.groupby(['index_right', 'activity']):
             activity_areas_dict[zone][act] = facility_data
-       
+
         return activity_areas_dict
 
     def export_activity_areas(self, filepath):
