@@ -457,7 +457,13 @@ class Population:
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
 
+        count = 0
+        next_log = 1
         for _, household in self.households.items():
+            count += 1
+            if count == next_log:
+                self.logger.info(f"sampling household {count}/{len(self.households)}..")
+                next_log *= 2
 
             home_loc = activity.Location(
                 area=household.location.area,
@@ -510,8 +516,14 @@ class Population:
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
 
-
+        count = 0
+        next_log = 1
         for _, household in self.households.items():
+            count += 1
+            if count == next_log:
+                self.logger.info(f"sampling household {count}/{len(self.households)}..")
+                next_log *= 2
+
             home_loc = activity.Location(
                 area=household.location.area,
                 loc=sampler.sample(household.location.area, 'home', mode = None, previous_duration=None, previous_loc = None)
