@@ -3,9 +3,9 @@ FROM python:3.7-slim-stretch
 RUN apt-get update \
 && apt-get upgrade -y \
 && apt-get -y install libspatialindex-dev --no-install-recommends \
+&& apt-get -y install tk-dev \
 && rm -rf /var/lib/apt/lists/* \
-&& /usr/local/bin/python -m pip install --upgrade pip \
-&& apt-get install python3-tk
+&& /usr/local/bin/python -m pip install --upgrade pip
 
 COPY . .
 
