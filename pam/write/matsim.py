@@ -24,14 +24,13 @@ def write_matsim(
     """
     Write a core population to matsim population v6 xml format.
     Note that this requires activity locs to be set (shapely.geometry.Point).
-    TODO add support for PathLib?
 
     :param population: core.Population, population to be writen to disk
-    :param plans_path: str, output path (.xml or .xml.gz)
-    :param vehicles_dir: {str,None}, default None, path to output directory for vehicle files
+    :param plans_path: {str, Path}, output path (.xml or .xml.gz)
+    :param vehicles_dir: {str, None}, default None, path to output directory for vehicle files
     :param version: int {12}, legacy parameter, does not have an effect
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
+    :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
     :param keep_non_selected: bool, default False
     :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
@@ -275,7 +274,7 @@ def write_all_vehicles(
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing all vehicles to {path}')
 
-    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+    with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration()
         vehicleDefinitions_attribs = {
             'xmlns': "http://www.matsim.org/files/dtd",
@@ -306,7 +305,7 @@ def write_electric_vehicles(
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing electric vehicles to {path}')
 
-    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+    with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration(
             doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">')
         with xf.element("vehicles"):

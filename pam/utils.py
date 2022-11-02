@@ -6,6 +6,7 @@ from io import BytesIO
 import os
 from shapely.geometry import Point, LineString
 from s2sphere import CellId
+from pathlib import Path
 
 from pam.variables import START_OF_DAY
 
@@ -232,11 +233,12 @@ def write_xml(population_xml, location, matsim_DOCTYPE, matsim_filename):
 
 
 def is_xml(location):
-    return location.lower().endswith(".xml")
+    return Path(location).suffix.lower() == ".xml"
 
 
 def is_gzip(location):
-    return location.lower().endswith(".gz") or location.lower().endswith(".gzip")
+    suffix = Path(location).suffix.lower()
+    return suffix == ".gz" or suffix == ".gzip"
 
 
 def create_local_dir(directory):
