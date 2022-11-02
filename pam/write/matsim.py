@@ -6,7 +6,7 @@ from typing import Optional, Set
 
 from pam.activity import Plan, Activity, Leg
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
-from pam.utils import datetime_to_matsim_time as dttm
+from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
 from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
 
@@ -81,17 +81,12 @@ def write_matsim_population_v6(
         )
 
         with xf.element("population"):
-            # Add some useful comments
             if comment:
                 xf.write(et.Comment(comment), pretty_print=True)
             xf.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
 
-            # see MATSim's ProjectionUtils.getCRS
             if coordinate_reference_system is not None:
-                attributes_element = et.Element('attributes')
-                crs_attribute = et.SubElement(attributes_element, 'attribute', {'class': 'java.lang.String', 'name': 'coordinateReferenceSystem'})
-                crs_attribute.text = str(coordinate_reference_system)
-                xf.write(attributes_element, pretty_print=True)
+                xf.write(create_crs_attribute(coordinate_reference_system), pretty_print=True)
 
             for hid, household in population:
                 for pid, person in household:

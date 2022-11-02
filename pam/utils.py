@@ -7,6 +7,7 @@ import os
 from shapely.geometry import Point, LineString
 from s2sphere import CellId
 from pathlib import Path
+from lxml import etree as et
 
 from pam.variables import START_OF_DAY
 
@@ -213,23 +214,12 @@ def strip_namespace(elem):
         strip_namespace(child)
 
 
-def write_xml(population_xml, location, matsim_DOCTYPE, matsim_filename):
-
-    create_local_dir(os.path.dirname(location))
-
-    content = xml_content(
-        population_xml,
-        matsim_DOCTYPE=matsim_DOCTYPE,
-        matsim_filename=matsim_filename
-    )
-
-    if is_gzip(location):
-        file = gzip.open(location, "w")
-    else:
-        file = open(location, "wb")
-
-    file.write(content)
-    file.close()
+def create_crs_attribute(coordinate_reference_system):
+    """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS"""
+    attributes_element = et.Element('attributes')
+    crs_attribute = et.SubElement(attributes_element, 'attribute', {'class': 'java.lang.String', 'name': 'coordinateReferenceSystem'})
+    crs_attribute.text = str(coordinate_reference_system)
+    return attributes_element
 
 
 def is_xml(location):
@@ -253,9 +243,3 @@ def xml_tree(content):
                        encoding='UTF-8')
     return tree
 
-
-def xml_content(content, matsim_DOCTYPE, matsim_filename):
-    xml_version = b'<?xml version="1.0" encoding="UTF-8"?>'
-    doc_type = f'<!DOCTYPE {matsim_DOCTYPE} SYSTEM "http://matsim.org/files/dtd/{matsim_filename}.dtd">'.encode()
-    tree = xml_tree(content)
-    return xml_version+doc_type+tree
