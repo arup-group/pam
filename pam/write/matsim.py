@@ -78,7 +78,7 @@ def write_matsim_population_v6(
     with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
         xf.write_declaration()
         xf.write_doctype(
-            '<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
+            '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
         )
 
         with xf.element("population"):
