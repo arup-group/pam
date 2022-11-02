@@ -734,7 +734,7 @@ def from_to_travel_diary_read(
 
             first_act = person_trips.iloc[0].oact.lower()
             if not first_act == "home":
-                logger.warning(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity: {first_act}")
+                logger.debug(f" Person pid:{pid} hid:{hid} plan does not start with 'home' activity: {first_act}")
 
             loc = None
             if include_loc:

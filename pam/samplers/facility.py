@@ -109,7 +109,7 @@ class FacilitySampler:
         """
         if location_idx not in self.samplers:
             if self.random_default:
-                self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
+                self.logger.debug(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
                 self.index_counter += 1
                 return idx, self.random_sampler.sample(location_idx, activity)
@@ -125,7 +125,7 @@ class FacilitySampler:
             if self.error_counter >= patience:
                 raise UserWarning(f"Failures to sample, exceeded patience of {patience}.")
             if self.random_default:
-                self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
+                self.logger.debug(f"Using random sample for zone:{location_idx}:{activity}")
                 idx = f"_{self.index_counter}"
                 self.index_counter += 1
                 return idx, self.random_sampler.sample(location_idx, activity)
