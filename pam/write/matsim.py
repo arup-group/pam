@@ -34,13 +34,13 @@ def write_matsim(
     :param keep_non_selected: bool, default False
     :return: None
     """
-    write_matsim_population(
+    write_matsim_population_v6(
         population=population,
         path=plans_path,
         comment=comment,
         household_key=household_key,
         keep_non_selected=keep_non_selected,
-        )
+    )
     
     # write vehicles
     if population.has_vehicles:
@@ -52,7 +52,7 @@ def write_matsim(
             write_vehicles(output_dir=vehicles_dir, population=population)
 
 
-def write_matsim_population(
+def write_matsim_population_v6(
     population,
     path : str,
     household_key : Optional[str] = 'hid',
@@ -61,7 +61,6 @@ def write_matsim_population(
     ) -> None:
     """
     Write matsim population v6 xml (persons plans and attributes combined).
-    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
     :param population: core.Population, population to be writen to disk
     :param path: str, output path (.xml or .xml.gz)
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
@@ -69,45 +68,56 @@ def write_matsim_population(
     :param keep_non_selected: bool, default False
     """
 
-    population_xml = et.Element('population')
+    with et.xmlfile(path, encoding="utf-8") as xf:
+        xf.write_declaration()
+        xf.write_doctype(
+            '<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
+        )
 
-    # Add some useful comments
-    if comment:
-        population_xml.append(et.Comment(comment))
-    population_xml.append(et.Comment(f"Created {datetime.today()}"))
+        with xf.element("population"):
+            # Add some useful comments
+            if comment:
+                xf.write(et.Comment(comment), pretty_print=True)
+            xf.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
 
-    for hid, household in population:
-        for pid, person in household:
-            if household_key is not None:
-                person.attributes[household_key] = hid  # force add hid as an attribute
-            person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
+            for hid, household in population:
+                for pid, person in household:
+                    if household_key is not None:
+                        person.attributes[
+                            household_key
+                        ] = hid  # force add hid as an attribute
+                    e = create_person_element(pid, person, keep_non_selected)
+                    xf.write(e, pretty_print=True)
 
-            attributes = et.SubElement(person_xml, 'attributes', {})
-            for k, v in person.attributes.items():
-                if k == "vehicles":  # todo make something more robust for future 'special' classes
-                    attribute = et.SubElement(
-                        attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
-                        )
-                else:
-                    attribute = et.SubElement(
-                        attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                        )
-                attribute.text = str(v)
 
+def create_person_element(pid, person, keep_non_selected: bool = False):
+    person_xml = et.Element('person', {'id': str(pid)})
+
+    attributes = et.SubElement(person_xml, 'attributes', {})
+    for k, v in person.attributes.items():
+        if k == "vehicles":  # todo make something more robust for future 'special' classes
+            attribute = et.SubElement(
+                attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
+                )
+        else:
+            attribute = et.SubElement(
+                attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
+                )
+        attribute.text = str(v)
+
+    write_plan(
+        person_xml,
+        person.plan,
+        selected=True,
+    )
+    if keep_non_selected:
+        for plan in person.plans_non_selected:
             write_plan(
                 person_xml,
-                person.plan,
-                selected=True,
+                plan,
+                selected=False,
             )
-            if keep_non_selected:
-                for plan in person.plans_non_selected:
-                    write_plan(
-                        person_xml,
-                        plan,
-                        selected=False,
-                    )
-    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v6')
-    # todo assuming v5?
+    return person_xml
 
 
 def write_plan(
