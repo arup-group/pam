@@ -113,11 +113,9 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
             attribute = et.SubElement(
                 attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
                 )
+            attribute.text = str(v)
         else:
-            attribute = et.SubElement(
-                attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                )
-        attribute.text = str(v)
+            add_attribute(attributes, k, v)
 
     write_plan(
         person_xml,
@@ -176,14 +174,24 @@ def write_plan(
                         attribute = et.SubElement(
                         attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
                         )
+                        attribute.text = str(v)
                     else:
-                        attribute = et.SubElement(
-                            attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                            )
-                    attribute.text = str(v)
+                        add_attribute(attributes, k, v)
 
             if component.route.exists:
                 leg.append(component.route.xml)
+
+
+def add_attribute(attributes, k, v):
+    if type(v) == bool:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Boolean', 'name': str(k)})
+    elif type(v) == int:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Integer', 'name': str(k)})
+    elif type(v) == float:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)})
+    else:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
+    attribute.text = str(v)
 
 
 def object_attributes_dtd():
