@@ -9,6 +9,8 @@ from s2sphere import CellId
 
 from pam.variables import START_OF_DAY
 
+# according to gzip manpage
+DEFAULT_GZIP_COMPRESSION = 6
 
 def parse_time(time):
     if isinstance(time, int) or isinstance(time, np.int64):

@@ -8,7 +8,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
 from pam.utils import datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam.utils import write_xml
+from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
 
 
 def write_matsim(
@@ -68,7 +68,10 @@ def write_matsim_population_v6(
     :param keep_non_selected: bool, default False
     """
 
-    with et.xmlfile(path, encoding="utf-8") as xf:
+    create_local_dir(os.path.dirname(path))
+    
+    compression = DEFAULT_GZIP_COMPRESSION if is_gzip(path) else 0
+    with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
         xf.write_declaration()
         xf.write_doctype(
             '<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
