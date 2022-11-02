@@ -19,6 +19,7 @@ def write_matsim(
         comment : Optional[str] = None,
         household_key : Optional[str] = 'hid',
         keep_non_selected : bool = False,
+        coordinate_reference_system: str = None,
     ) -> None:
     """
     Write a core population to matsim population v6 xml format.
@@ -32,6 +33,7 @@ def write_matsim(
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
     :param keep_non_selected: bool, default False
+    :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
     """
     write_matsim_population_v6(
@@ -40,6 +42,7 @@ def write_matsim(
         comment=comment,
         household_key=household_key,
         keep_non_selected=keep_non_selected,
+        coordinate_reference_system = coordinate_reference_system,
     )
     
     # write vehicles
@@ -58,6 +61,7 @@ def write_matsim_population_v6(
     household_key : Optional[str] = 'hid',
     comment : Optional[str] = None,
     keep_non_selected: bool = False,
+    coordinate_reference_system: str = None,
     ) -> None:
     """
     Write matsim population v6 xml (persons plans and attributes combined).
@@ -82,6 +86,13 @@ def write_matsim_population_v6(
             if comment:
                 xf.write(et.Comment(comment), pretty_print=True)
             xf.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
+
+            # see MATSim's ProjectionUtils.getCRS
+            if coordinate_reference_system is not None:
+                attributes_element = et.Element('attributes')
+                crs_attribute = et.SubElement(attributes_element, 'attribute', {'class': 'java.lang.String', 'name': 'coordinateReferenceSystem'})
+                crs_attribute.text = str(coordinate_reference_system)
+                xf.write(attributes_element, pretty_print=True)
 
             for hid, household in population:
                 for pid, person in household:
