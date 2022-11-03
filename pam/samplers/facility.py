@@ -1,3 +1,4 @@
+import os
 from typing import Union
 import geopandas as gp
 from shapely.geometry import Point
@@ -6,7 +7,7 @@ from lxml import etree as et
 import logging
 
 from pam.samplers.spatial import RandomPointSampler
-from pam.utils import write_xml
+from pam.utils import DEFAULT_GZIP_COMPRESSION, create_crs_attribute, create_local_dir, is_gzip
 from pam import variables
 
 import pandas as pd
@@ -207,34 +208,36 @@ class FacilitySampler:
                     sampler_dict[zone][act] = None
         return sampler_dict
 
-    def write_facilities_xml(self, path, comment=None):
+    def write_facilities_xml(self, path, comment=None, coordinate_reference_system=None):
 
-        facilities_xml = et.Element('facilities')
-
-        # Add some useful comments
-        if comment:
-            facilities_xml.append(et.Comment(comment))
-        # facilities_xml.append(et.Comment(f"Created {datetime.today()}"))
-
-        for i, data in self.facilities.items():
-
-            facility_xml = et.SubElement(
-                facilities_xml,
-                'facility',
-                {'id':str(i), "x" : str(data['loc'].x), "y" : str(data['loc'].y)}
-                )
-
-            act_xml = et.SubElement(
-                facility_xml,
-                'activity',
-                {"type" : data['act']})
-
-        write_xml(
-            facilities_xml,
-            location=path,
-            matsim_DOCTYPE='facilities',
-            matsim_filename='facilities_v1'
+        create_local_dir(os.path.dirname(path))
+    
+        compression = DEFAULT_GZIP_COMPRESSION if is_gzip(path) else 0
+        with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
+            xf.write_declaration()
+            xf.write_doctype(
+                '<!DOCTYPE facilities SYSTEM "http://matsim.org/files/dtd/facilities_v1.dtd">'
             )
+
+            with xf.element("facilities"):
+                if comment:
+                    xf.write(et.Comment(comment), pretty_print=True)
+                # xf.write(et.Comment(f"Created {datetime.today()}"))
+
+                if coordinate_reference_system is not None:
+                    xf.write(create_crs_attribute(coordinate_reference_system), pretty_print=True)
+
+                for i, data in self.facilities.items():
+                    facility_xml = et.Element(
+                        'facility',
+                        {'id':str(i), "x" : str(data['loc'].x), "y" : str(data['loc'].y)}
+                        )
+                    act_xml = et.SubElement(
+                        facility_xml,
+                        'activity',
+                        {"type" : data['act']})
+                    xf.write(facility_xml, pretty_print=True)
+
 
 def euclidean_distance(p1, p2):
     """
