@@ -39,7 +39,7 @@ def test_write_plans_xml_gzip(tmp_path, population_heh):
 
 def test_write_matsim_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
-    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
+    write_matsim(population=population_heh, plans_path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     xml_obj = lxml.etree.parse(expected_file)
@@ -49,7 +49,7 @@ def test_write_matsim_xml(tmp_path, population_heh):
 
 def test_write_matsim_xml_pathlib_path(tmp_path, population_heh):
     location = tmp_path / "test.xml"
-    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
+    write_matsim(population=population_heh, plans_path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     xml_obj = lxml.etree.parse(expected_file)
@@ -59,7 +59,7 @@ def test_write_matsim_xml_pathlib_path(tmp_path, population_heh):
 
 def test_write_matsim_xml_gzip(tmp_path, population_heh):
     location = str(tmp_path / "test.xml.gz")
-    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
+    write_matsim(population=population_heh, plans_path=location, comment="test")
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
@@ -108,7 +108,6 @@ def test_write_plans_xml_assert_contents(tmp_path):
         population,
         plans_path=plans_location,
         comment="test",
-        version=12,
         household_key=None
         )
     new = read_matsim(
@@ -128,7 +127,6 @@ def test_read_write_consistent(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,
@@ -151,7 +149,6 @@ def test_read_write_non_selected_plans_inconsistently(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,
@@ -175,7 +172,6 @@ def test_read_write_non_selected_plans_consistently(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,

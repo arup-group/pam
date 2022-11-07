@@ -14,8 +14,9 @@ from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
 def write_matsim(
         population,
         plans_path : str,
+        attributes_path : Optional[str] = None,
         vehicles_dir : Optional[str] = None,
-        version : int = 12, # TODO remove parameter
+        version : int = None,
         comment : Optional[str] = None,
         household_key : Optional[str] = 'hid',
         keep_non_selected : bool = False,
@@ -27,14 +28,21 @@ def write_matsim(
 
     :param population: core.Population, population to be writen to disk
     :param plans_path: {str, Path}, output path (.xml or .xml.gz)
+    :param attributes_path: legacy parameter, does not have an effect
     :param vehicles_dir: {str, None}, default None, path to output directory for vehicle files
-    :param version: int {12}, legacy parameter, does not have an effect
+    :param version: legacy parameter, does not have an effect
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
     :param keep_non_selected: bool, default False
     :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
     """
+
+    if version is not None:
+        logging.warning('parameter "version" is no longer supported by write_matsim()')
+    if attributes_path is not None:
+        logging.warning('parameter "attributes_path" is no longer supported by write_matsim()')
+
     write_matsim_population_v6(
         population=population,
         path=plans_path,
