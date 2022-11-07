@@ -12,182 +12,60 @@ from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam import write
-from pam.write import write_matsim, write_matsim_v12,  \
-    write_v11_matsim_plans, write_matsim_v11_attributes, write_od_matrices
+from pam.write import write_matsim, write_matsim_population_v6, write_od_matrices
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
 
+
 def test_write_plans_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
-    write_v11_matsim_plans(population_heh, path=location, comment="test")
+    write_matsim_population_v6(population=population_heh, path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     xml_obj = lxml.etree.parse(expected_file)
-    dtd = write.v11_plans_dtd()
+    dtd = write.population_v6_dtd()
     assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
 
 
-def test_write_plans_gzip(tmp_path, population_heh):
+def test_write_plans_xml_gzip(tmp_path, population_heh):
     location = str(tmp_path / "test.xml.gz")
-    write_v11_matsim_plans(population_heh, path=location, comment="test")
+    write_matsim_population_v6(population=population_heh, path=location, comment="test")
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
 
 
-def test_write_attributes_xml(tmp_path, population_heh):
+def test_write_matsim_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
-    write_matsim_v11_attributes(population_heh, location=location, comment="test")
+    write_matsim(population=population_heh, plans_path=location, comment="test")
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     xml_obj = lxml.etree.parse(expected_file)
-    dtd = write.object_attributes_dtd()
+    dtd = write.population_v6_dtd()
     assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
 
 
-def test_write_attributes_gzip(tmp_path, population_heh):
-    location = str(tmp_path / "test.xml.gz")
-    write_matsim_v11_attributes(population_heh, location=location, comment="test")
+def test_write_matsim_xml_pathlib_path(tmp_path, population_heh):
+    location = tmp_path / "test.xml"
+    write_matsim(population=population_heh, plans_path=location, comment="test")
+    expected_file = "{}/test.xml".format(tmp_path)
+    assert os.path.exists(expected_file)
+    xml_obj = lxml.etree.parse(expected_file)
+    dtd = write.population_v6_dtd()
+    assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
 
+
+def test_write_matsim_xml_gzip(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml.gz")
+    write_matsim(population=population_heh, plans_path=location, comment="test")
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
+    # TODO make assertions about the content of the created file
 
 
 def test_write_plans_xml_assert_contents(tmp_path):
-    population = Population()
-    hh = Household('a')
-    p = Person('a', attributes={'1':'1'})
-    p.add(Activity(
-        act="home",
-        loc=Point((0,0)),
-        start_time=datetime(1900,1,1,0,0,0),
-        end_time=datetime(1900,1,1,8,0,0)
-        ))
-    p.add(Leg(
-        mode='car',
-        start_loc=Point((0,0)),
-        end_loc=Point((0,1000)),
-        start_time=datetime(1900,1,1,8,0,0),
-        end_time=datetime(1900,1,1,9,0,0)
-    ))
-    p.add(Activity(
-        act="work",
-        loc=Point((0,1000)),
-        start_time=datetime(1900,1,1,9,0,0),
-        end_time=datetime(1900,1,1,18,0,0)
-        ))
-    p.add(Leg(
-        mode='car',
-        start_loc=Point((0,1000)),
-        end_loc=Point((0,0)),
-        start_time=datetime(1900,1,1,18,0,0),
-        end_time=datetime(1900,1,1,19,0,0)
-    ))
-    p.add(Activity(
-        act="home",
-        loc=Point((0,0)),
-        start_time=datetime(1900,1,1,19,0,0),
-        end_time=END_OF_DAY
-        ))
-    hh.add(p)
-    population.add(hh)
-    plans_location = str(tmp_path / "test_plans.xml")
-    write_v11_matsim_plans(population, path=plans_location, comment="test")
-    attributes_location = str(tmp_path / "test_attributes.xml")
-    write_matsim_v11_attributes(population, location=attributes_location, comment="test", household_key=None)
-    new = read_matsim(
-        plans_location,
-        attributes_path=attributes_location,
-        version=11
-        )
-    for hid, pid, person in population.people():
-        person.plan.print()
-        new[hid][pid].print()
-        assert new[hid][pid].plan == person.plan
-    assert new == population
-    assert new['a']['a'].attributes == {'1':'1'}
-    assert new['a']['a'].plan.day[1].distance == 1000
-
-
-def test_write_read_continuity_xml(tmp_path, population_heh):
-    plans_location = str(tmp_path / "test_plans.xml")
-    write_v11_matsim_plans(population_heh, path=plans_location, comment="test")
-    attributes_location = str(tmp_path / "test_attributes.xml")
-    write_matsim_v11_attributes(population_heh, location=attributes_location, comment="test", household_key=None)
-    population = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
-    )
-    assert population_heh['0']['1'].plan == population['0']['1'].plan
-    assert population_heh == population
-
-
-def test_write_read_continuity_gzip(tmp_path, population_heh):
-    plans_location = str(tmp_path / "test_plans.xml.gz")
-    write_v11_matsim_plans(population_heh, path=plans_location, comment="test")
-    attributes_location = str(tmp_path / "test_attributes.xml.gz")
-    write_matsim_v11_attributes(population_heh, location=attributes_location, comment="test")
-    population = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
-    )
-    assert population_heh['0']['1'].plan == population['0']['1'].plan
-    assert population_heh == population
-
-
-def test_read_write_read_continuity_complex_xml(tmp_path):
-    test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
-    test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                        "test_data/test_matsim_attributes.xml"))
-    population_in = read_matsim(test_trips_path, test_attributes_path, version=11)
-    complex_plan_in = population_in['census_1']['census_1'].plan
-    plans_location = str(tmp_path / "test_plans.xml")
-    write_v11_matsim_plans(population_in, path=plans_location, comment="test")
-    attributes_location = str(tmp_path / "test_attributes.xml")
-    write_matsim_v11_attributes(population_in, location=attributes_location, comment="test")
-    population_out = read_matsim(
-        plans_path=plans_location, attributes_path=attributes_location, household_key='hid', version=11
-    )
-    complex_plan_out = population_out['census_1']['census_1'].plan
-    assert complex_plan_in == complex_plan_out
-    assert population_in == population_out
-
-
-def test_write_plans_xml_v12(tmp_path, population_heh):
-    location = str(tmp_path / "test.xml")
-    write_matsim_v12(population=population_heh, path=location, comment="test")
-    expected_file = "{}/test.xml".format(tmp_path)
-    assert os.path.exists(expected_file)
-    xml_obj = lxml.etree.parse(expected_file)
-    dtd = write.v12_plans_dtd()
-    assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
-
-
-def test_write_plans_xml_v12_gzip(tmp_path, population_heh):
-    location = str(tmp_path / "test.xml.gz")
-    write_matsim_v12(population=population_heh, path=location, comment="test")
-    expected_file = "{}/test.xml.gz".format(tmp_path)
-    assert os.path.exists(expected_file)
-    # TODO make assertions about the content of the created file
-
-def test_write_matsim_xml_v12(tmp_path, population_heh):
-    location = str(tmp_path / "test.xml")
-    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
-    expected_file = "{}/test.xml".format(tmp_path)
-    assert os.path.exists(expected_file)
-    xml_obj = lxml.etree.parse(expected_file)
-    dtd = write.v12_plans_dtd()
-    assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
-
-
-def test_write_matsim_xml_v12_gzip(tmp_path, population_heh):
-    location = str(tmp_path / "test.xml.gz")
-    write_matsim(population=population_heh, version=12, plans_path=location, comment="test")
-    expected_file = "{}/test.xml.gz".format(tmp_path)
-    assert os.path.exists(expected_file)
-    # TODO make assertions about the content of the created file
-
-
-def test_write_plans_xml_v12_assert_contents(tmp_path):
     population = Population()
     hh = Household('a')
     p = Person('a', attributes={'1':'1'})
@@ -230,7 +108,6 @@ def test_write_plans_xml_v12_assert_contents(tmp_path):
         population,
         plans_path=plans_location,
         comment="test",
-        version=12,
         household_key=None
         )
     new = read_matsim(
@@ -242,7 +119,7 @@ def test_write_plans_xml_v12_assert_contents(tmp_path):
     assert new['a']['a'].plan.day[1].distance == 1000
 
 
-def test_read_write_v12_consistent(tmp_path):
+def test_read_write_consistent(tmp_path):
     test_tripsv12_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
     )
@@ -250,7 +127,6 @@ def test_read_write_v12_consistent(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,
@@ -260,7 +136,7 @@ def test_read_write_v12_consistent(tmp_path):
     assert population == population2
 
 
-def test_read_write_v12_non_selected_plans_inconsistently(tmp_path):
+def test_read_write_non_selected_plans_inconsistently(tmp_path):
     test_tripsv12_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
     )
@@ -273,7 +149,6 @@ def test_read_write_v12_non_selected_plans_inconsistently(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,
@@ -284,7 +159,7 @@ def test_read_write_v12_non_selected_plans_inconsistently(tmp_path):
     assert not population == population2
 
 
-def test_read_write_v12_non_selected_plans_consistently(tmp_path):
+def test_read_write_non_selected_plans_consistently(tmp_path):
     test_tripsv12_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
     )
@@ -297,7 +172,6 @@ def test_read_write_v12_non_selected_plans_consistently(tmp_path):
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
         population=population,
-        version=12,
         plans_path=location,
         comment="test",
         household_key=None,

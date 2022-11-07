@@ -365,8 +365,6 @@ def crop(
         write.write_matsim(
             population,
             plans_path=os.path.join(dir_population_output, 'plans.xml'),
-            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-            version=matsim_version,
             comment=comment,
             keep_non_selected=keep_non_selected,
         )
@@ -444,7 +442,6 @@ def combine(
     with Console().status("[bold green]Writing population...", spinner='aesthetic') as _:
         write.write_matsim(
             population = combined_population,
-            version=matsim_version,
             plans_path=population_output,
             comment=comment,
             keep_non_selected=keep_non_selected,
@@ -544,8 +541,6 @@ def sample(
         write.write_matsim(
             population_output,
             plans_path=os.path.join(dir_population_output, 'plans.xml'),
-            attributes_path=os.path.join(dir_population_output, 'attributes.xml'),
-            version=matsim_version,
             comment=comment,
             keep_non_selected=keep_non_selected
         )

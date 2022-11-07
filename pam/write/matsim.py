@@ -6,9 +6,9 @@ from typing import Optional, Set
 
 from pam.activity import Plan, Activity, Leg
 from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
-from pam.utils import datetime_to_matsim_time as dttm
+from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam.utils import write_xml
+from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
 
 
 def write_matsim(
@@ -16,47 +16,42 @@ def write_matsim(
         plans_path : str,
         attributes_path : Optional[str] = None,
         vehicles_dir : Optional[str] = None,
-        version : int = 12,
+        version : int = None,
         comment : Optional[str] = None,
         household_key : Optional[str] = 'hid',
         keep_non_selected : bool = False,
+        coordinate_reference_system: str = None,
     ) -> None:
     """
-    Write a core population object to matsim xml formats (either version 11 or 12).
+    Write a core population to matsim population v6 xml format.
     Note that this requires activity locs to be set (shapely.geometry.Point).
-    TODO add support for PathLib?
 
     :param population: core.Population, population to be writen to disk
-    :param plans_path: str, output path (.xml or .xml.gz)
-    :param attributes_path: {str,None}, default None, output_path (.xml and .xml.gz)
-    :param vehicles_dir: {str,None}, default None, path to output directory for vehicle files
-    :param version: int {11,12}, matsim version, default 12
+    :param plans_path: {str, Path}, output path (.xml or .xml.gz)
+    :param attributes_path: legacy parameter, does not have an effect
+    :param vehicles_dir: {str, None}, default None, path to output directory for vehicle files
+    :param version: legacy parameter, does not have an effect
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str,None}, optionally add household id to person attributes, default 'hid'
+    :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
     :param keep_non_selected: bool, default False
+    :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
     """
-    if version == 12:
-        write_matsim_v12(
-            population=population,
-            path=plans_path,
-            comment=comment,
-            household_key=household_key,
-            keep_non_selected=keep_non_selected,
-            )
-    elif version == 11:
-        logging.info(
-            """Support for old format plans (pre MATSim version 12) will not be maintained.
-            Please consider moving to the latest format (version = 12)."""
-            )
-        if attributes_path is None:
-            raise UserWarning("Please provide an attributes_path for a (default) v11 write.")
-        if keep_non_selected:
-            raise UserWarning("Read write of non selected plans is not supported for old formats (pre 12).")
-        write_v11_matsim_plans(population, plans_path, comment)
-        write_matsim_v11_attributes(population, attributes_path, comment, household_key=household_key)
-    else:
-        raise UserWarning("Version must be 11 or 12.")
+
+    if version is not None:
+        logging.warning('parameter "version" is no longer supported by write_matsim()')
+    if attributes_path is not None:
+        logging.warning('parameter "attributes_path" is no longer supported by write_matsim()')
+
+    write_matsim_population_v6(
+        population=population,
+        path=plans_path,
+        comment=comment,
+        household_key=household_key,
+        keep_non_selected=keep_non_selected,
+        coordinate_reference_system = coordinate_reference_system,
+    )
+    
     # write vehicles
     if population.has_vehicles:
         logging.info('Population includes vehicles')
@@ -67,16 +62,16 @@ def write_matsim(
             write_vehicles(output_dir=vehicles_dir, population=population)
 
 
-def write_matsim_v12(
+def write_matsim_population_v6(
     population,
     path : str,
     household_key : Optional[str] = 'hid',
     comment : Optional[str] = None,
     keep_non_selected: bool = False,
+    coordinate_reference_system: str = None,
     ) -> None:
     """
-    Write a matsim version 12 output (persons plans and attributes combined).
-    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
+    Write matsim population v6 xml (persons plans and attributes combined).
     :param population: core.Population, population to be writen to disk
     :param path: str, output path (.xml or .xml.gz)
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
@@ -84,45 +79,59 @@ def write_matsim_v12(
     :param keep_non_selected: bool, default False
     """
 
-    population_xml = et.Element('population')
+    create_local_dir(os.path.dirname(path))
+    
+    compression = DEFAULT_GZIP_COMPRESSION if is_gzip(path) else 0
+    with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
+        xf.write_declaration()
+        xf.write_doctype(
+            '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
+        )
 
-    # Add some useful comments
-    if comment:
-        population_xml.append(et.Comment(comment))
-    population_xml.append(et.Comment(f"Created {datetime.today()}"))
+        with xf.element("population"):
+            if comment:
+                xf.write(et.Comment(comment), pretty_print=True)
+            xf.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
 
-    for hid, household in population:
-        for pid, person in household:
-            if household_key is not None:
-                person.attributes[household_key] = hid  # force add hid as an attribute
-            person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
+            if coordinate_reference_system is not None:
+                xf.write(create_crs_attribute(coordinate_reference_system), pretty_print=True)
 
-            attributes = et.SubElement(person_xml, 'attributes', {})
-            for k, v in person.attributes.items():
-                if k == "vehicles":  # todo make something more robust for future 'special' classes
-                    attribute = et.SubElement(
-                        attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
-                        )
-                else:
-                    attribute = et.SubElement(
-                        attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                        )
-                attribute.text = str(v)
+            for hid, household in population:
+                for pid, person in household:
+                    if household_key is not None:
+                        person.attributes[
+                            household_key
+                        ] = hid  # force add hid as an attribute
+                    e = create_person_element(pid, person, keep_non_selected)
+                    xf.write(e, pretty_print=True)
 
+
+def create_person_element(pid, person, keep_non_selected: bool = False):
+    person_xml = et.Element('person', {'id': str(pid)})
+
+    attributes = et.SubElement(person_xml, 'attributes', {})
+    for k, v in person.attributes.items():
+        if k == "vehicles":  # todo make something more robust for future 'special' classes
+            attribute = et.SubElement(
+                attributes, 'attribute', {'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
+                )
+            attribute.text = str(v)
+        else:
+            add_attribute(attributes, k, v)
+
+    write_plan(
+        person_xml,
+        person.plan,
+        selected=True,
+    )
+    if keep_non_selected:
+        for plan in person.plans_non_selected:
             write_plan(
                 person_xml,
-                person.plan,
-                selected=True,
+                plan,
+                selected=False,
             )
-            if keep_non_selected:
-                for plan in person.plans_non_selected:
-                    write_plan(
-                        person_xml,
-                        plan,
-                        selected=False,
-                    )
-    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v6')
-    # todo assuming v5?
+    return person_xml
 
 
 def write_plan(
@@ -167,113 +176,24 @@ def write_plan(
                         attribute = et.SubElement(
                         attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)}
                         )
+                        attribute.text = str(v)
                     else:
-                        attribute = et.SubElement(
-                            attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)}
-                            )
-                    attribute.text = str(v)
+                        add_attribute(attributes, k, v)
 
             if component.route.exists:
                 leg.append(component.route.xml)
 
 
-def write_v11_matsim_plans(
-    population,
-    path : str,
-    comment : Optional[str] = None
-    ) -> None:
-    """
-    Write a matsim version 11 plan output (persons plans only).
-    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
-    :param population: core.Population, population to be writen to disk
-    :param path: str, output path (.xml or .xml.gz)
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    """
-
-    population_xml = et.Element('population')
-
-    # Add some useful comments
-    if comment:
-        population_xml.append(et.Comment(comment))
-    population_xml.append(et.Comment(f"Created {datetime.today()}"))
-
-    for hid, household in population:
-        for pid, person in household:
-            person_xml = et.SubElement(population_xml, 'person', {'id': str(pid)})
-            plan_xml = et.SubElement(person_xml, 'plan', {'selected': 'yes'})
-            for component in person[:-1]:
-                if isinstance(component, Activity):
-                    et.SubElement(plan_xml, 'act', {
-                        'type': component.act,
-                        'x': str(float(component.location.loc.x)),
-                        'y': str(float(component.location.loc.y)),
-                        'end_time': dttm(component.end_time)
-                    }
-                                  )
-                if isinstance(component, Leg):
-                    et.SubElement(plan_xml, 'leg', {
-                        'mode': component.mode,
-                        'trav_time': tdtm(component.duration)})
-
-            component = person[-1]  # write the last activity without an end time
-            et.SubElement(plan_xml, 'act', {
-                'type': component.act,
-                'x': str(float(component.location.loc.x)),
-                'y': str(float(component.location.loc.y)),
-            }
-            )
-
-    write_xml(population_xml, path, matsim_DOCTYPE='population', matsim_filename='population_v5')
-    # todo assuming v5?
-
-
-def write_matsim_v11_attributes(
-    population,
-    location : str,
-    comment : Optional[str] = None,
-    household_key : Optional[str] = 'hid'
-    ) -> None:
-    """
-    Write a matsim version 11 attributes output (persons attributes only).
-    TODO write this incrementally: https://lxml.de/api.html#incremental-xml-generation
-    :param population: core.Population, population to be writen to disk
-    :param path: str, output path (.xml or .xml.gz)
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, default 'hid', optionally include the hh ID with given key
-    """
-
-    attributes_xml = et.Element('objectAttributes')  # start forming xml
-
-    if comment:
-        attributes_xml.append(et.Comment(comment))
-    attributes_xml.append(et.Comment(f"Created {datetime.today()}"))
-
-    for hid, household in population:
-        for pid, person in household:
-            person_xml = et.SubElement(attributes_xml, 'object', {'id': str(pid)})
-
-            attributes = person.attributes
-            if household_key:  # add hid to household_key if using household key
-                attributes[household_key] = hid
-                # TODO write hh attributes or add hh output
-
-            for k, v in attributes.items():
-                attribute_xml = et.SubElement(person_xml, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
-                attribute_xml.text = str(v)
-
-    write_xml(attributes_xml, location, matsim_DOCTYPE='objectAttributes', matsim_filename='objectattributes_v1')
-
-    # todo assuming v1?
-
-
-def v11_plans_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            "..", "fixtures", "dtd", "population_v5.dtd"
-            )
-        )
-    return et.DTD(dtd_path)
+def add_attribute(attributes, k, v):
+    if type(v) == bool:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Boolean', 'name': str(k)})
+    elif type(v) == int:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Integer', 'name': str(k)})
+    elif type(v) == float:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.Double', 'name': str(k)})
+    else:
+        attribute = et.SubElement(attributes, 'attribute', {'class': 'java.lang.String', 'name': str(k)})
+    attribute.text = str(v)
 
 
 def object_attributes_dtd():
@@ -286,7 +206,7 @@ def object_attributes_dtd():
     return et.DTD(dtd_path)
 
 
-def v12_plans_dtd():
+def population_v6_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
@@ -357,7 +277,7 @@ def write_all_vehicles(
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing all vehicles to {path}')
 
-    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+    with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration()
         vehicleDefinitions_attribs = {
             'xmlns': "http://www.matsim.org/files/dtd",
@@ -388,7 +308,7 @@ def write_electric_vehicles(
     path = os.path.join(output_dir, file_name)
     logging.info(f'Writing electric vehicles to {path}')
 
-    with open(path, "wb") as f, et.xmlfile(f, encoding='utf-8') as xf:
+    with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration(
             doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">')
         with xf.element("vehicles"):
