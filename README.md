@@ -103,8 +103,8 @@ pip install -e .
 ```
 
 ### Developing PAM
-If you plan to make changes to the code then please make use of the following tools to verify the codebase while you
-make changes:
+If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
+while you work:
 
 - `scripts/code-qa/qa-checks.sh` - run a sensible combination of all the following
 - `pytest` - run the unit test suite
