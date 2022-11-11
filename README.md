@@ -70,7 +70,7 @@ pip install -e .
 PAM uses some Python libraries that rely on underlying native geospatial libraries. If you are missing these libraries,
 `pip install` will fail, most likely with errors about `GDAL`
 (e.g. `Failed to get options via gdal-config: [Errno 2] No such file or directory: 'gdal-config': 'gdal-config'`) or
-`PROJ`. Installation of these dependencies varies according to your operating system:
+`PROJ`. Installation of these dependencies varies according to your operating system, for example:
 
 | OS       | Commands |
 |----------|----------|
