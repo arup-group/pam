@@ -77,7 +77,8 @@ PAM uses some Python libraries that rely on underlying native geospatial librari
 |Mac OS    | `brew install spatialindex` <br/> `brew install gdal --HEAD` <br/> `brew install gdal` 
 |Ubuntu    | `sudo apt install libspatialindex-dev` <br/> `sudo apt install libgdal-dev`|
 
-If you are using Anaconda to manage your environment, it will discover and install these native dependencies for you.
+If you are using Anaconda to manage your environment, it will discover and install these native dependencies for you, as
+described [below](#windows-installation).
 
 
 ### Windows installation
