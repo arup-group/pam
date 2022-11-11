@@ -12,16 +12,30 @@ from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam import write
-from pam.write import write_matsim, write_matsim_population_v6, write_od_matrices
+from pam.write import write_matsim, write_matsim_population_v6, write_od_matrices, Writer
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
 
-
 def test_write_plans_xml(tmp_path, population_heh):
     location = str(tmp_path / "test.xml")
     write_matsim_population_v6(population=population_heh, path=location, comment="test")
+    expected_file = "{}/test.xml".format(tmp_path)
+    assert os.path.exists(expected_file)
+    xml_obj = lxml.etree.parse(expected_file)
+    dtd = write.population_v6_dtd()
+    assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
+
+
+def test_context_write_xml(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml")
+    with Writer(
+        location,
+        comment="test"
+        ) as w:
+        for _, hh in population_heh:
+            w.add_hh(hh)
     expected_file = "{}/test.xml".format(tmp_path)
     assert os.path.exists(expected_file)
     xml_obj = lxml.etree.parse(expected_file)
@@ -35,6 +49,21 @@ def test_write_plans_xml_gzip(tmp_path, population_heh):
     expected_file = "{}/test.xml.gz".format(tmp_path)
     assert os.path.exists(expected_file)
     # TODO make assertions about the content of the created file
+
+
+def test_context_write_gzip(tmp_path, population_heh):
+    location = str(tmp_path / "test.xml.gz")
+    with Writer(
+        location,
+        comment="test"
+    ) as w:
+        for _, hh in population_heh:
+            w.add_hh(hh)
+    expected_file = "{}/test.xml.gz".format(tmp_path)
+    assert os.path.exists(expected_file)
+    xml_obj = lxml.etree.parse(expected_file)
+    dtd = write.population_v6_dtd()
+    assert dtd.validate(xml_obj), dtd.error_log.filter_from_errors()
 
 
 def test_write_matsim_xml(tmp_path, population_heh):
