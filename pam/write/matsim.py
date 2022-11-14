@@ -91,7 +91,8 @@ class Writer:
         coordinate_reference_system: str = None
     ) -> None:
 
-        create_local_dir(os.path.dirname(path))
+        if os.path.dirname(path):
+            create_local_dir(os.path.dirname(path))
         self.path = path
         self.household_key = household_key
         self.comment = comment
