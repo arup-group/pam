@@ -42,16 +42,16 @@ supply or utility demand.
 
 ## Contents
 
-- Installation
-- Why Activity Plans?
-- Modelling the pandemic
-- Example modifiers/policies
-- Populations
-- Input/output data formats
-- Read/Write/Other formats
-- Activity Plans
-- Get involved
-- Technical notes
+- [Installation](#installation)
+- [Why Activity Plans?](#why-activity-plans)
+- [Modelling the pandemic](#modelling-the-pandemic)
+- [Example modifiers/policies](#example-modifierspolicies)
+- [Populations](#populations)
+- [Read methods](#read-methods)
+- [Read/Write/Other formats](#readwriteother-formats)
+- [Activity Plans](#activity-plans)
+- [Get involved](#get-involved)
+- [Technical notes](#technical-notes)
 
 ## Installation
 
@@ -65,10 +65,23 @@ source venv/bin/activate
 pip install -e .
 ```
 
-Requirements are already available in a up to date Anaconda installation.
-If you're not using Anaconda, sometimes the above will fail due to spatial library dependencies not being properly installed using pip. If you see any errors relating to fiona or rtree this is likely the case. To fix it, wipe the virtual environment and recreate, `brew install spatialindex` (Mac) then install everything else in the `venv` using `pip install -e .` again.
+### Underlying native dependencies
 
-**Windows installation** </br>
+PAM uses some Python libraries that rely on underlying native geospatial libraries. If you are missing these libraries,
+`pip install` will fail, most likely with errors about `GDAL`
+(e.g. `Failed to get options via gdal-config: [Errno 2] No such file or directory: 'gdal-config': 'gdal-config'`) or
+`PROJ`. Installation of these dependencies varies according to your operating system, for example:
+
+| OS       | Commands |
+|----------|----------|
+|Mac OS    | `brew install spatialindex` <br/> `brew install gdal --HEAD` <br/> `brew install gdal` 
+|Ubuntu    | `sudo apt install libspatialindex-dev` <br/> `sudo apt install libgdal-dev`|
+
+If you are using Anaconda to manage your environment, it will discover and install these native dependencies for you, as
+described [below](#windows-installation).
+
+
+### Windows installation
 We strongly recommend using a virtual environment.
 
 If installation fails, we recommend to try the following code **using the Anaconda Powershell Prompt**:
@@ -89,22 +102,28 @@ cd pam
 pip install -e .
 ```
 
-**Devs** </br>
-If you plan to make changes to the code then please make use of the following tools:
+### Developing PAM
+If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
+while you work:
 
 - `scripts/code-qa/qa-checks.sh` - run a sensible combination of all the following
-- `pytest` - run the test suite
-- `scripts/code-qa/code-coverage.sh` - run tests and check code coverage
-- `scripts/code-qa/notebooks-smoke-test.sh` - smoke test all notebooks found in the `examples` directory
+- `pytest` - run the unit test suite
+- `scripts/code-qa/code-coverage.sh` - run unit tests and verify the code coverage threshold
+- `scripts/code-qa/notebooks-smoke-test.sh` - smoke test all Jupyter notebooks found in the `examples` directory
 - `scripts/code-qa/check-staged-file-sizes.sh` - check for large file sizes that have been git staged
 - `scripts/code-qa/check-all-file-sizes.sh` - check for large file sizes
 
-**Git Commit Hook** </br>
-You can automate the above checks using our git commit hook. To implement this automation simply copy `scripts/git-hooks/pre-commit` to `.git/hooks/pre-commit`. eg for OSX:
+#### Git Commit Hook
+You can automate the above checks using our [git commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
+so that they will all run when you `git commit`; the commit will be rejected if any of the checks fail.
+To implement this automation simply copy `scripts/git-hooks/pre-commit` to `.git/hooks/pre-commit`. eg for MacOS/Linux:
 
 ```sh
 cp scripts/git-hooks/pre-commit .git/hooks/
 ```
+
+If for some reason you want to bypass the commit hook for a given commit, you can do so via
+`git commit --no-verify`. Best not to make a habit of that though :-).
 
 ## Why Activity Plans?
 
