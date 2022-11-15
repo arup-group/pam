@@ -708,6 +708,9 @@ def wipe_all_links(
             ):
                 for activity in person.activities:
                     activity.location.link = None
+                for plan in person.plans_non_selected:
+                    for activity in plan.activities:
+                        activity.location.link = None
                 outfile.add_person(person)
 
     logger.info('Population wipe complete')
@@ -770,8 +773,8 @@ def wipe_links(
         logger.debug(f"Loading attributes from {path_population_input}")
         attributes = read.matsim.load_attributes_map(path_population_input)
 
-    def link_filter(person):
-        for leg in person.legs:
+    def link_filter(plan):
+        for leg in plan.legs:
             for link in links:
                 if link in leg.route.network_route:
                     return True
@@ -795,11 +798,17 @@ def wipe_links(
                 leg_attributes=leg_attributes,
                 leg_route=True,
             ):
-                if link_filter(person):
+                if link_filter(person.plan):
                     for leg in person.legs:
                         leg.route.xml = {}
                     for activity in person.activities:
                         activity.location.link = None
+                    for plan in person.plans_non_selected:
+                        if link_filter(plan):
+                            for leg in plan.legs:
+                                leg.route.xml = {}
+                            for activity in plan.activities:
+                                activity.location.link = None
                 outfile.add_person(person)
 
     logger.info('Population wipe complete')

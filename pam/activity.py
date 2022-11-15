@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 import logging
 from copy import copy
-from turtle import distance
 from typing import Optional
 import json
 

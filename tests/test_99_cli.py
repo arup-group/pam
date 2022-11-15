@@ -133,7 +133,8 @@ def test_cli_route_wipe(path_test_plan, tmp_path):
         version=12
     )
     path_output_dir = str(tmp_path)
-    path_output = os.path.join(path_output_dir, "test_out.xml")
+    path_output = os.path.join(
+        path_output_dir, "test_out.xml", "--keep_non_selected")
     runner = CliRunner()
     result = runner.invoke(
         cli,
@@ -159,7 +160,8 @@ def test_cli_wipe_all_links(path_test_plan, tmp_path):
         version=12
     )
     path_output_dir = str(tmp_path)
-    path_output = os.path.join(path_output_dir, "test_out.xml")
+    path_output = os.path.join(
+        path_output_dir, "test_out.xml", "--keep_non_selected")
     runner = CliRunner()
     result = runner.invoke(
         cli,
@@ -193,7 +195,7 @@ def test_cli_link_wipe_selected_only(path_test_plan, tmp_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["wipe-links", path_test_plan, path_output, "1-5"]
+        ["wipe-links", path_test_plan, path_output, "1-5", "--keep_non_selected"]
     )
     if result.exit_code != 0:
         print(result.output)
@@ -204,7 +206,8 @@ def test_cli_link_wipe_selected_only(path_test_plan, tmp_path):
         path_output,
         household_key="hid",
         version=12,
-        leg_route=True
+        leg_route=True,
+        keep_non_selected=True
     )
     assert len(population) == len(population_input)
     for leg in population["A"]["nick"].legs:
