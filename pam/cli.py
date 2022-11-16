@@ -773,11 +773,24 @@ def wipe_links(
         logger.debug(f"Loading attributes from {path_population_input}")
         attributes = read.matsim.load_attributes_map(path_population_input)
 
-    def link_filter(plan):
+    def leg_filter(leg):
+        for link in links:
+            if link in leg.route.network_route:
+                return True
+            if leg.route.get("start_link") in links:
+                return True
+            if leg.route.get("end_link") in links:
+                return True
+
+    def plan_filter(plan):
         for leg in plan.legs:
-            for link in links:
-                if link in leg.route.network_route:
-                    return True
+            if leg_filter(leg):
+                return True
+
+        for act in plan.activities:
+            if act.location.link in links:
+                return True
+
 
     with Console().status("[bold orange]Wiping selected links from population...", spinner='aesthetic') as _:
         with write.Writer(
@@ -798,17 +811,19 @@ def wipe_links(
                 leg_attributes=leg_attributes,
                 leg_route=True,
             ):
-                if link_filter(person.plan):
+                if plan_filter(person.plan):
                     for leg in person.legs:
                         leg.route.xml = {}
                     for activity in person.activities:
                         activity.location.link = None
-                    for plan in person.plans_non_selected:
-                        if link_filter(plan):
-                            for leg in plan.legs:
-                                leg.route.xml = {}
-                            for activity in plan.activities:
-                                activity.location.link = None
+
+                for plan in person.plans_non_selected:
+                    if plan_filter(plan):
+                        for leg in plan.legs:
+                            leg.route.xml = {}
+                        for activity in plan.activities:
+                            activity.location.link = None
+
                 outfile.add_person(person)
 
     logger.info('Population wipe complete')

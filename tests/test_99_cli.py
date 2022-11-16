@@ -195,7 +195,7 @@ def test_cli_link_wipe_selected_only(path_test_plan, tmp_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["wipe-links", path_test_plan, path_output, "1-5", "--keep_non_selected"]
+        ["wipe-links", path_test_plan, path_output, "3-4", "--keep_non_selected"]
     )
     if result.exit_code != 0:
         print(result.output)
@@ -210,11 +210,50 @@ def test_cli_link_wipe_selected_only(path_test_plan, tmp_path):
         keep_non_selected=True
     )
     assert len(population) == len(population_input)
+
+    # nick
     for leg in population["A"]["nick"].legs:
-        assert not leg.route.exists
-    for act in population["A"]["nick"].activities:
-        assert act.location.link is None
-    for leg in population["A"]["chris"].legs:
         assert leg.route.exists
-    for act in population["A"]["chris"].activities:
+    for act in population["A"]["nick"].activities:
         assert act.location.link is not None
+
+    for plan in population["A"]["nick"].plans_non_selected:
+        for leg in plan.legs:
+            assert not leg.route.exists
+        for act in plan.activities:
+            assert act.location.link is None
+    # chris
+    for leg in population["A"]["chris"].legs:
+        assert not leg.route.exists
+    for act in population["A"]["chris"].activities:
+        assert act.location.link is None
+
+    for plan in population["A"]["chris"].plans_non_selected:
+        for leg in plan.legs:
+            assert not leg.route.exists
+        for act in plan.activities:
+            assert act.location.link is None
+
+    # fatema
+    for leg in population["B"]["fatema"].legs:
+        assert not leg.route.exists
+    for act in population["B"]["fatema"].activities:
+        assert act.location.link is None
+
+    for plan in population["B"]["fatema"].plans_non_selected:
+        for leg in plan.legs:
+            assert not leg.route.exists
+        for act in plan.activities:
+            assert act.location.link is None
+
+    # fred
+    for leg in population["B"]["fred"].legs:
+        assert not leg.route.exists
+    for act in population["B"]["fred"].activities:
+        assert act.location.link is None
+
+    for plan in population["B"]["fred"].plans_non_selected:
+        for leg in plan.legs:
+            assert not leg.route.exists
+        for act in plan.activities:
+            assert act.location.link is None
