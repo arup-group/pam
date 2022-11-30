@@ -4,7 +4,7 @@
 
 PAM is a python API for activity sequence modelling. Primary features:
 
-- common format read/write inccluding MATSim xml
+- common format read/write including MATSim xml
 - sequence inference from travel diary data
 - rules based sequence modification
 - sequence visualisation
