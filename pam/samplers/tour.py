@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import random
 import pandas as pd
 import numpy as np
+import warnings
 
 import pam
 from pam.activity import Activity, Leg
@@ -16,26 +17,38 @@ def interpolate(i, ai, a, bi, b):
     """
     return a + (i-ai) * (b-a) / (bi-ai)
 
-def create_density_gdf(facility_zone, zone, activity):
+def create_density_gdf(facility_zone, zone, activity, normalise=None):
     """
-    Returns a geodataframe that calculates the spatial density of input activity.
+    Returns a geodataframe that calculates the spatial density of input activity. The normalise flag
+    allows for the user to decide what variable to normalise density against.
     :param facility_zone: a geodataframe that is the spatial join between facility and zone information
     :param zone: a geodataframe with zones information
     :param activity: a list of activities (in string format) that are within facility data
     :return: a geodataframe that measures the density of activities in each zone. 
     """
     
-    density = facility_zone.groupby([facility_zone.index, facility_zone.activity]).agg({'id':'count'}).reset_index()    
-    density.set_index(facility_zone.index.name, inplace=True)
-    density = density[density['activity'].isin(activity)]
-    density['density'] = density['id']/density['id'].sum()
+    if normalise is not None:
+        density = facility_zone.groupby([facility_zone.index, 'activity', normalise]).agg({'id':'count'}).reset_index()    
+        density.set_index(facility_zone.index.name, inplace=True)
+        density = density[density['activity'].isin(activity)]
+        density['density'] = density['id']/density[normalise]
+        total_density = density[~(density[normalise]==0)]['density'].sum()
+        density['density'] = density['density']/total_density
+    else:
+        density = facility_zone.groupby([facility_zone.index, 'activity']).agg({'id':'count'}).reset_index()    
+        density.set_index(facility_zone.index.name, inplace=True)
+        density = density[density['activity'].isin(activity)]
+        density['density'] = density['id']/density['id'].sum()
 
     # Convert back to geodataframe for merging.
-    density = pd.merge(density, zone, left_on = density.index, right_on=zone.index, how='left')
+    density = pd.merge(density, zone['geometry'], left_on = density.index, right_on=zone.index, how='left')
     density.rename(columns={'key_0':facility_zone.index.name}, inplace=True)
     density = gp.GeoDataFrame(data=density, geometry='geometry')
     density.set_index(facility_zone.index.name, inplace=True)
 
+    if np.isinf(density['density']).sum()>=1:
+        warnings.warn('Your density gdf has infinite values')
+    
     return density 
 
 
@@ -89,6 +102,8 @@ class PivotDistributionSampler:
         ax.set_title(plot_title)
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
+
+        return fig
     
     def sample(self):
         return random.choices(list(self.demand.keys()), list(self.demand.values()), k=1)[0]
@@ -135,9 +150,10 @@ class FrequencySampler:
         d_threshold = self.distribution[self.distribution.index.isin(d_list)]
         
         if len(d_threshold) == 0:
-            raise UserWarning('No destinations within this threshold value')
-
-        return random.choices(list(d_threshold.index), weights=list(d_threshold[self.frequency]), k=1)[0]        
+            warnings.warn('No destinations within this threshold value, change threshold')
+            return None
+        else:
+            return random.choices(list(d_threshold.index), weights=list(d_threshold[self.frequency]), k=1)[0]        
     
 
 class ActivityDuration: 
@@ -434,6 +450,13 @@ class ValidateTourOD:
         self.od_density.rename(columns={'key_0':zone.index.name}, inplace=True)
         self.od_density.set_index(zone.index.name, inplace=True)
 
+        # Add in features for analysis
+        self.od_density = self.od_density.fillna(0)
+        self.od_density['origin_trip_density'] = self.od_density.origin_trips/self.od_density.origin_trips.sum()
+        self.od_density['destination_trip_density'] = self.od_density.destination_trips/self.od_density.destination_trips.sum()
+        self.od_density['origin_diff'] = self.od_density['origin_trip_density'] - self.od_density[f'{o_activity}_density']
+        self.od_density['destination_diff'] = self.od_density['destination_trip_density'] - self.od_density[f'{d_activity}_density']
+
 
     def plot_validate_spatial_density(self, title_1, title_2, density_metric, density_trips, cmap='coolwarm'):
         """
@@ -457,6 +480,8 @@ class ValidateTourOD:
         cax = fig.add_axes([1,0.2,0.03,0.6]) 
         plt.colorbar(im, cax=cax)
 
+        return fig
+
     def plot_compare_density(self, title_1, title_2, o_activity, d_activity):
         """
         Compares density of input origin/destination activities and trips. As density of locations increases, so should trips.
@@ -466,17 +491,43 @@ class ValidateTourOD:
         
         fig, ax = plt.subplots(1, 2, figsize=(15,7))
 
-        self.od_density = self.od_density.fillna(0)
+        m1,b1 = np.polyfit(self.od_density[o_activity], self.od_density.origin_trip_density, 1)
+        m2,b2 = np.polyfit(self.od_density[d_activity], self.od_density.destination_trip_density, 1)
 
-        m1,b1 = np.polyfit(self.od_density[o_activity], self.od_density.origin_trips, 1)
-        m2,b2 = np.polyfit(self.od_density[d_activity], self.od_density.destination_trips, 1)
-
-        ax[0].scatter(x=o_activity, y='origin_trips', data=self.od_density)
+        ax[0].scatter(x=o_activity, y='origin_trip_density', data=self.od_density)
         ax[0].plot(self.od_density[o_activity], (m1*self.od_density[o_activity] + b1), label = 'y = {:.2f} + {:.2f}*x'.format(m1, b1))
         ax[0].legend(loc='lower right') 
         ax[0].set_title(title_1)
 
-        ax[1].scatter(x=d_activity, y='destination_trips', data=self.od_density)
+        ax[1].scatter(x=d_activity, y='destination_trip_density', data=self.od_density)
         ax[1].plot(self.od_density[o_activity], (m2*self.od_density[o_activity] + b2), label = 'y = {:.2f} + {:.2f}*x'.format(m2, b2))
         ax[1].legend(loc='lower right') 
         ax[1].set_title(title_2)
+
+        return fig
+
+
+    def plot_density_difference(self, title_1, title_2, cmap='coolwarm'):
+        """
+        Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.
+        :params title_1, title_2: str input for plot title names.
+        :params density_metric: the measure for density output from the above dataframe, in the format of 'activity_density'
+        :params density_trips: the measure of trips that require validation, either 'origin_trips' or 'destination_trips'.
+        """
+        
+        fig, ax = plt.subplots(1, 2, figsize=(20,10))
+
+        self.od_density.plot('origin_diff', ax=ax[0], cmap=cmap)
+        ax[0].axis('off')
+        ax[0].set_title(title_1)
+
+        self.od_density.plot('destination_diff', ax=ax[1], cmap=cmap)
+        ax[1].axis('off')
+        ax[1].set_title(title_2)
+
+        im = plt.gca().get_children()[0]
+        cax = fig.add_axes([1,0.2,0.03,0.6]) 
+        plt.colorbar(im, cax=cax)
+
+        return fig
+
