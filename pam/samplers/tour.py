@@ -112,7 +112,8 @@ class PivotDistributionSampler:
 class FrequencySampler: 
     """
     Object for initiating and sampling from frequency weighted distributing. 
-    This object includes three samplers: a single sample, multiple samples, or sample based on a threshold value (requires a threshold matrix).
+    This object includes three samplers: a single sample, multiple samples, or sample based on a threshold value 
+    (requires a threshold matrix).
     """
     def __init__(self, dist, freq=None, threshold_matrix=None, threshold_value=None):
         """
@@ -188,7 +189,8 @@ class ActivityDuration:
 
     def model_activity_duration(self, o_loc, d_loc, end_tm, speed=50000/3600, maxi=3600, mini=600):
         """ 
-        Returns estimated Activity Duration, which is combination of previous three functions to return parameters for next activity in Plan.
+        Returns estimated Activity Duration, which is combination of previous three functions to return parameters 
+        for next activity in Plan.
         :param o_loc: origin facility
         :param d_loc: destination facility
         :param end_tm: most recent end time of previous leg
@@ -351,7 +353,7 @@ class TourPlanner:
 
         return end_tm
 
-    def add_return_origin(self, agent, k, o_loc, d_zone, d_loc, end_tm, speed=50000/3600):
+    def add_return_origin(self, agent, k, o_loc, d_zone, d_loc, end_tm):
         """ 
         Driver returns to origin, from their most recent stop to the origin location.
         :params agent: agent for which the leg & activity will be added to Plan
@@ -409,7 +411,8 @@ class TourPlanner:
 
 class ValidateTourOD:
     """
-    Object to build a dataframe that produces both spatial and statistical plots to validate the tour origin and destinations align with input data.
+    Object to build a dataframe that produces both spatial and statistical plots to validate the tour origin and 
+    destinations align with input data.
     """
 
     def __init__(self, trips, zone, o_dist, d_dist, o_activity, d_activity, o_freq, d_freq):
@@ -506,13 +509,10 @@ class ValidateTourOD:
 
         return fig
 
-
     def plot_density_difference(self, title_1, title_2, cmap='coolwarm'):
         """
-        Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.
+        Creates a spatial plot of the difference between input and output densities.
         :params title_1, title_2: str input for plot title names.
-        :params density_metric: the measure for density output from the above dataframe, in the format of 'activity_density'
-        :params density_trips: the measure of trips that require validation, either 'origin_trips' or 'destination_trips'.
         """
         
         fig, ax = plt.subplots(1, 2, figsize=(20,10))
