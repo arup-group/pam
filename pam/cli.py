@@ -570,7 +570,7 @@ def sample(
 @click.argument(
     "path_population_output", type=click.Path(exists=False, writable=True),
 )
-def wipe_routes(
+def wipe_all_routes(
     path_population_input: str,
     path_population_output: str,
     matsim_version: int,

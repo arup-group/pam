@@ -138,7 +138,7 @@ def test_cli_route_wipe(path_test_plan, tmp_path):
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        ["wipe-routes", path_test_plan, path_output]
+        ["wipe-all-routes", path_test_plan, path_output]
     )
     if result.exit_code != 0:
         print(result.output)
