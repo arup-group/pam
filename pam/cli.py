@@ -761,7 +761,6 @@ def wipe_links(
     logger.debug(f"Crop = {crop}")
     logger.debug(
         f"Leg attributes (recommended for warm starting) = {leg_attributes}")
-    logger.debug(f"Leg routes will be removed")
     logger.debug(
         f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
@@ -790,7 +789,6 @@ def wipe_links(
         for act in plan.activities:
             if act.location.link in links:
                 return True
-
 
     with Console().status("[bold orange]Wiping selected links from population...", spinner='aesthetic') as _:
         with write.Writer(
