@@ -36,7 +36,8 @@ class Population:
             self.add(Household(hid=target.pid))
             self.households[target.pid].add(target)
         else:
-            raise UserWarning(f"Expected instance of Household, list or Person, not: {type(target)}")
+            raise UserWarning(
+                f"Expected instance of Household, list or Person, not: {type(target)}")
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -75,7 +76,8 @@ class Population:
                 if other == person:
                     return True
             return False
-        raise UserWarning(f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person.")
+        raise UserWarning(
+            f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person.")
 
     def __eq__(self, other):
         """
@@ -83,7 +85,8 @@ class Population:
         of all household and household members. Identifiers (eg hid and pid) are disregarded.
         """
         if not isinstance(other, Population):
-            self.logger.warning(f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
+            self.logger.warning(
+                f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
             return False
         if not len(self) == len(other):
             return False
@@ -137,7 +140,7 @@ class Population:
         return subpopulations
 
     @property
-    def attributes(self, show:int = 10) -> dict:
+    def attributes(self, show: int = 10) -> dict:
         attributes = defaultdict(set)
         for _, hh in self.households.items():
 
@@ -179,7 +182,8 @@ class Population:
                 yield v
 
     def vehicle_types(self):
-        v_types = {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
+        v_types = {p.vehicle.vehicle_type for _, _,
+                   p in self.people() if p.vehicle is not None}
         for vt in v_types:
             yield vt
 
@@ -224,28 +228,29 @@ class Population:
         for hid, pid, person in self.people():
             for seq, leg in enumerate(person.legs):
                 record = {
-                        'pid': pid,
-                        'hid': hid,
-                        'hzone': person.home,
-                        'ozone': leg.start_location.area,
-                        'dzone': leg.end_location.area,
-                        'oloc': leg.start_location,
-                        'dloc': leg.end_location,
-                        'seq': seq,
-                        'purp': leg.purp,
-                        'mode': leg.mode,
-                        'tst': leg.start_time.time(),
-                        'tet': leg.end_time.time(),
-                        'duration': leg.duration / pd.Timedelta(minutes = 1), #duration in minutes
-                        'euclidean_distance': leg.euclidean_distance,
-                        'freq': person.freq,
-                    }
-                record = {**record, **dict(person.attributes)} # add person attributes
+                    'pid': pid,
+                    'hid': hid,
+                    'hzone': person.home,
+                    'ozone': leg.start_location.area,
+                    'dzone': leg.end_location.area,
+                    'oloc': leg.start_location,
+                    'dloc': leg.end_location,
+                    'seq': seq,
+                    'purp': leg.purp,
+                    'mode': leg.mode,
+                    'tst': leg.start_time.time(),
+                    'tet': leg.end_time.time(),
+                    # duration in minutes
+                    'duration': leg.duration / pd.Timedelta(minutes=1),
+                    'euclidean_distance': leg.euclidean_distance,
+                    'freq': person.freq,
+                }
+                # add person attributes
+                record = {**record, **dict(person.attributes)}
                 df.append(record)
         df = pd.DataFrame(df)
         self.add_fields(df)
         return df
-
 
     def trips_df(self) -> pd.DataFrame:
         """
@@ -256,23 +261,25 @@ class Population:
         for hid, pid, person in self.people():
             for seq, trip in enumerate(person.plan.trips()):
                 record = {
-                        'pid': pid,
-                        'hid': hid,
-                        'hzone': person.home,
-                        'ozone': trip.start_location.area,
-                        'dzone': trip.end_location.area,
-                        'oloc': trip.start_location,
-                        'dloc': trip.end_location,
-                        'seq': seq,
-                        'purp': trip.purp,
-                        'mode': trip.mode,
-                        'tst': trip.start_time.time(),
-                        'tet': trip.end_time.time(),
-                        'duration': trip.duration / pd.Timedelta(minutes = 1), #duration in minutes
-                        'euclidean_distance': trip.euclidean_distance,
-                        'freq': person.freq,
-                    }
-                record = {**record, **dict(person.attributes)} # add person attributes
+                    'pid': pid,
+                    'hid': hid,
+                    'hzone': person.home,
+                    'ozone': trip.start_location.area,
+                    'dzone': trip.end_location.area,
+                    'oloc': trip.start_location,
+                    'dloc': trip.end_location,
+                    'seq': seq,
+                    'purp': trip.purp,
+                    'mode': trip.mode,
+                    'tst': trip.start_time.time(),
+                    'tet': trip.end_time.time(),
+                    # duration in minutes
+                    'duration': trip.duration / pd.Timedelta(minutes=1),
+                    'euclidean_distance': trip.euclidean_distance,
+                    'freq': person.freq,
+                }
+                # add person attributes
+                record = {**record, **dict(person.attributes)}
                 df.append(record)
 
         df = pd.DataFrame(df)
@@ -281,19 +288,21 @@ class Population:
 
     @staticmethod
     def add_fields(df):
-        ## add extra fields used for benchmarking
+        # add extra fields used for benchmarking
         df['personhrs'] = df['freq'] * df['duration'] / 60
-        df['departure_hour'] = df.tst.apply(lambda x:x.hour)
-        df['arrival_hour'] = df.tet.apply(lambda x:x.hour)
+        df['departure_hour'] = df.tst.apply(lambda x: x.hour)
+        df['arrival_hour'] = df.tet.apply(lambda x: x.hour)
         df['euclidean_distance_category'] = pd.cut(
             df.euclidean_distance,
-            bins =[0,1,5,10,25,50,100,200,999999],
-            labels = ['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km', '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
+            bins=[0, 1, 5, 10, 25, 50, 100, 200, 999999],
+            labels=['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km',
+                    '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
         )
         df['duration_category'] = pd.cut(
             df.duration,
-            bins =[0,5,10,15,30,45,60,90,120,999999],
-            labels = ['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min', '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
+            bins=[0, 5, 10, 15, 30, 45, 60, 90, 120, 999999],
+            labels=['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min',
+                    '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
         )
 
     def build_travel_geodataframe(self, **kwargs):
@@ -332,16 +341,17 @@ class Population:
         :return:
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            gdf=self.build_travel_geodataframe(
+                from_epsg=epsg, to_epsg="epsg:4326"),
             **kwargs
         )
 
     def fix_plans(
         self,
         crop: bool = True,
-        times = True,
-        locations = True
-        ):
+        times=True,
+        locations=True
+    ):
         for _, _, person in self.people():
             if crop:
                 person.plan.crop()
@@ -366,9 +376,9 @@ class Population:
     def to_csv(
         self,
         dir: str,
-        crs = None,
+        crs=None,
         to_crs: str = "EPSG:4326"
-        ):
+    ):
         write.to_csv(self, dir, crs, to_crs)
 
     def __str__(self):
@@ -378,7 +388,8 @@ class Population:
         """
         Unsafe addition with assignment (no guarantee of unique ids).
         """
-        self.logger.debug("Note that this method requires all identifiers from populations being combined to be unique.")
+        self.logger.debug(
+            "Note that this method requires all identifiers from populations being combined to be unique.")
         if isinstance(other, Population):
             for hid, hh in other.households.items():
                 self.households[hid] = copy.deepcopy(hh)
@@ -390,7 +401,8 @@ class Population:
             self.households[other.pid] = Household(other.pid)
             self.households[other.pid].people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
     def reindex(self, prefix: str):
         """
@@ -400,7 +412,8 @@ class Population:
             hh = self.households[hid]
             new_hid = prefix + str(hid)
             if new_hid in self.households:
-                raise KeyError(f"Duplicate household identifier (hid): {new_hid}")
+                raise KeyError(
+                    f"Duplicate household identifier (hid): {new_hid}")
 
             hh.reindex(prefix)
 
@@ -422,15 +435,15 @@ class Population:
             self += other
             return None
         if isinstance(other, Person):
-            hh = Household(other.pid) # we create a new hh for single person
+            hh = Household(other.pid)  # we create a new hh for single person
             hh.add(other)
             hh.reindex(prefix)
             self += hh
             return None
-        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
-
-    def sample_locs(self, sampler, long_term_activities = None, joint_trips_prefix = 'escort_'):
+    def sample_locs(self, sampler, long_term_activities=None, joint_trips_prefix='escort_'):
         """
         WIP Sample household plan locs using a sampler.
 
@@ -477,7 +490,8 @@ class Population:
                         target_act = act.act
 
                     if (act.location.area, target_act) in unique_locations:
-                        location = unique_locations[(act.location.area, target_act)]
+                        location = unique_locations[(
+                            act.location.area, target_act)]
                         act.location = location
 
                     else:
@@ -488,7 +502,8 @@ class Population:
                         if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
                             # short-term activities, such as shopping can visit multiple locations in the same zone
-                            unique_locations[(act.location.area, target_act)] = location
+                            unique_locations[(
+                                act.location.area, target_act)] = location
                         act.location = location
 
                 # complete the alotting activity locations to the trip starts and ends.
@@ -498,8 +513,7 @@ class Population:
                         component.start_location = person.plan[idx-1].location
                         component.end_location = person.plan[idx+1].location
 
-
-    def sample_locs_complex(self, sampler, long_term_activities = None, joint_trips_prefix = 'escort_'):
+    def sample_locs_complex(self, sampler, long_term_activities=None, joint_trips_prefix='escort_'):
         """
         Extends sample_locs method to enable more complex and rules-based sampling.
         Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
@@ -510,11 +524,11 @@ class Population:
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
 
-
         for _, household in self.households.items():
             home_loc = activity.Location(
                 area=household.location.area,
-                loc=sampler.sample(household.location.area, 'home', mode = None, previous_duration=None, previous_loc = None)
+                loc=sampler.sample(household.location.area, 'home',
+                                   mode=None, previous_duration=None, previous_loc=None)
             )
             mode = None
 
@@ -529,7 +543,7 @@ class Population:
                     # loop through all plan elements
 
                     if isinstance(component, activity.Leg):
-                        mode = component.mode # keep track of last mode
+                        mode = component.mode  # keep track of last mode
                         previous_duration = component.duration
 
                     elif isinstance(component, activity.Activity):
@@ -543,19 +557,22 @@ class Population:
                             target_act = act.act
 
                         if (act.location.area, target_act) in unique_locations:
-                            location = unique_locations[(act.location.area, target_act)]
+                            location = unique_locations[(
+                                act.location.area, target_act)]
                             act.location = location
 
                         else:
                             location = activity.Location(
                                 area=act.location.area,
-                                loc=sampler.sample(act.location.area, target_act, mode = mode, previous_duration = previous_duration, previous_loc = previous_loc)
+                                loc=sampler.sample(act.location.area, target_act, mode=mode,
+                                                   previous_duration=previous_duration, previous_loc=previous_loc)
                             )
                             if target_act in long_term_activities:
-                                unique_locations[(act.location.area, target_act)] = location
+                                unique_locations[(
+                                    act.location.area, target_act)] = location
                             act.location = location
 
-                        previous_loc = location.loc # keep track of previous location
+                        previous_loc = location.loc  # keep track of previous location
 
                 # complete the alotting activity locations to the trip starts and ends.
                 for idx in range(person.plan.length):
@@ -563,7 +580,6 @@ class Population:
                     if isinstance(component, activity.Leg):
                         component.start_location = person.plan[idx-1].location
                         component.end_location = person.plan[idx+1].location
-
 
 
 class Household:
@@ -577,11 +593,11 @@ class Household:
         location: Optional[Location] = None,
         area=None,
         loc=None
-        ):
+    ):
         self.hid = hid
         self.people = {}
         self.attributes = attributes
-        self.hh_freq=freq
+        self.hh_freq = freq
         if location:
             self._location = location
         else:
@@ -598,7 +614,8 @@ class Household:
         elif isinstance(person, Person):
             self.people[person.pid] = person
         else:
-            raise UserWarning(f"Expected instance of Person, not: {type(person)}")
+            raise UserWarning(
+                f"Expected instance of Person, not: {type(person)}")
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -618,7 +635,8 @@ class Household:
 
     def __contains__(self, other_person):
         if not isinstance(other_person, Person):
-            raise UserWarning(f"Cannot check if household contains object type: {type(other_person)}, please provide Person.")
+            raise UserWarning(
+                f"Cannot check if household contains object type: {type(other_person)}, please provide Person.")
         for _, person in self:
             if other_person == person:
                 return True
@@ -631,7 +649,8 @@ class Household:
         are included in attributes.
         """
         if not isinstance(other, Household):
-            self.logger.warning(f"Cannot compare household to non household: ({type(other)}).")
+            self.logger.warning(
+                f"Cannot compare household to non household: ({type(other)}).")
             return False
         if not self.attributes == other.attributes:
             return False
@@ -655,10 +674,11 @@ class Household:
         for person in self.people.values():
             if person.home.exists:
                 return person.home
-        self.logger.warning(f"Failed to find location for household: {self.hid}")
+        self.logger.warning(
+            f"Failed to find location for household: {self.hid}")
         return self._location
 
-    def set_location(self, location:Location):
+    def set_location(self, location: Location):
         """
         Set both hh and person home_location, but note that hhs and
         their persons do not share location object.
@@ -725,7 +745,8 @@ class Household:
             return self.hh_freq
 
         if not self.people:
-            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
+            self.logger.warning(
+                f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
 
         return self.av_person_freq
@@ -736,11 +757,13 @@ class Household:
     @property
     def av_person_freq(self):
         if not self.people:
-            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
+            self.logger.warning(
+                f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
         frequencies = [person.freq for person in self.people.values()]
         if None in frequencies:
-            self.logger.warning(f"Missing person weight in hh {self.hid}, returning None.")
+            self.logger.warning(
+                f"Missing person weight in hh {self.hid}, returning None.")
             return None
         return sum(frequencies) / len(frequencies)
 
@@ -813,7 +836,8 @@ class Household:
         :return:
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            gdf=self.build_travel_geodataframe(
+                from_epsg=epsg, to_epsg="epsg:4326"),
             **kwargs
         )
 
@@ -824,7 +848,8 @@ class Household:
         """
         Unsafe addition with assignment (no guarantee of unique ids).
         """
-        self.logger.debug("Note that this method requires all identifiers from populations being combined to be unique.")
+        self.logger.debug(
+            "Note that this method requires all identifiers from populations being combined to be unique.")
         if isinstance(other, Household):
             for pid, person in other.people.items():
                 self.people[pid] = copy.deepcopy(person)
@@ -832,7 +857,8 @@ class Household:
         if isinstance(other, Person):
             self.people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(f"Object for addition must be a Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Household or Person object, not {type(other)}")
 
     def reindex(self, prefix: str):
         """
@@ -865,7 +891,7 @@ class Person:
         home_area=None,
         home_loc=None,
         vehicle: Vehicle = None
-        ):
+    ):
         self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
@@ -877,7 +903,8 @@ class Person:
             self.home_location.area = home_area
         if home_loc:
             self.home_location.loc = home_loc
-        self.plan = activity.Plan(home_location=self.home_location)  # person and their plan share Location
+        # person and their plan share Location
+        self.plan = activity.Plan(home_location=self.home_location)
         self.plans_non_selected = []
         self.vehicle = None
         if vehicle:
@@ -903,7 +930,8 @@ class Person:
         :return:
         """
         if vehicle.id != self.pid:
-            raise PAMVehicleIdError(f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
+            raise PAMVehicleIdError(
+                f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
         self.vehicle = vehicle
 
     @property
@@ -933,7 +961,7 @@ class Person:
     def subpopulation(self):
         return self.attributes.get("subpopulation")
 
-    def set_location(self, location:Location):
+    def set_location(self, location: Location):
         self.home_location = location
         self.plan.home_location = location
 
@@ -947,6 +975,12 @@ class Person:
 
     @property
     def activities(self):
+        if self.plan:
+            for act in self.plan.activities:
+                yield act
+
+    @property
+    def acts(self):
         if self.plan:
             for act in self.plan.activities:
                 yield act
@@ -1008,7 +1042,8 @@ class Person:
         Check for equality of two persons, equality is based on equal attributes and activity plans.
         """
         if not isinstance(other, Person):
-            self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
+            self.logger.warning(
+                f"Cannot compare person to non person: ({type(other)})")
             return False
         if not self.attributes == other.attributes:
             return False
@@ -1050,7 +1085,8 @@ class Person:
         :return: True
         """
         if not self.plan.valid_sequence:
-            raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
+            raise PAMSequenceValidationError(
+                f"Person {self.pid} has invalid plan sequence")
 
         return True
 
@@ -1060,7 +1096,8 @@ class Person:
         :return: True
         """
         if not self.plan.valid_time_sequence:
-            raise PAMInvalidTimeSequenceError(f"Person {self.pid} has invalid plan times")
+            raise PAMInvalidTimeSequenceError(
+                f"Person {self.pid} has invalid plan times")
 
         return True
 
@@ -1070,7 +1107,8 @@ class Person:
         :return: True
         """
         if not self.plan.valid_locations:
-            raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
+            raise PAMValidationLocationsError(
+                f"Person {self.pid} has invalid plan locations")
 
         return True
 
@@ -1154,7 +1192,8 @@ class Person:
         :return:
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            gdf=self.build_travel_geodataframe(
+                from_epsg=epsg, to_epsg="epsg:4326"),
             **kwargs
         )
 

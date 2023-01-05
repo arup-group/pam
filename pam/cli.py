@@ -1,7 +1,7 @@
 import click
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 import os
 from rich.progress import track
 from rich.console import Console
@@ -570,82 +570,6 @@ def sample(
 @click.argument(
     "path_population_output", type=click.Path(exists=False, writable=True),
 )
-def wipe_all_routes(
-    path_population_input: str,
-    path_population_output: str,
-    matsim_version: int,
-    household_key: str,
-    simplify_pt_trips: bool,
-    autocomplete: bool,
-    crop: bool,
-    leg_attributes: bool,
-    leg_route: bool,
-    keep_non_selected: bool,
-    comment: str,
-    debug: bool,
-):
-    """
-    Clear all network route information from agent plans. Required for significant network changes.
-    """
-    if debug:
-        logger.setLevel(logging.DEBUG)
-
-    logger.info('Starting wipe')
-    logger.debug(f"Loading plans from {path_population_input}.")
-    logger.debug(f"Writing wiped plans to {path_population_output}.")
-    logger.debug(f"MATSim version set to {matsim_version}.")
-    logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
-    logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
-    logger.debug(f"Crop = {crop}")
-    logger.debug(
-        f"Leg attributes (recommended for warm starting) = {leg_attributes}")
-    logger.debug(f"Leg routes will be removed")
-    logger.debug(
-        f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
-
-    with Console().status("[bold green]Loading population attributes...", spinner='aesthetic') as _:
-
-        if not matsim_version == 12:
-            logger.warning(
-                "This handler is not intended to work with v11 plans")
-        logger.debug(f"Loading attributes from {path_population_input}")
-        attributes = read.matsim.load_attributes_map(path_population_input)
-
-    with Console().status("[bold orange]Wiping population routes...", spinner='aesthetic') as _:
-        with write.Writer(
-            path=path_population_output,
-            household_key=None,
-            comment=comment,
-            keep_non_selected=keep_non_selected,
-        ) as outfile:
-            for person in read.matsim.stream_matsim_persons(
-                path_population_input,
-                attributes=attributes,
-                weight=1,
-                version=matsim_version,
-                simplify_pt_trips=simplify_pt_trips,
-                autocomplete=autocomplete,
-                crop=crop,
-                keep_non_selected=keep_non_selected,
-                leg_attributes=leg_attributes,
-                leg_route=False,
-            ):
-                outfile.add_person(person)
-
-    logger.info('Population wipe complete')
-    logger.info(f'Output saved at {path_population_output}')
-
-
-@cli.command()
-@common_options
-@common_matsim_options
-@comment_option
-@click.argument(
-    "path_population_input", type=click.Path(exists=True),
-)
-@click.argument(
-    "path_population_output", type=click.Path(exists=False, writable=True),
-)
 def wipe_all_links(
     path_population_input: str,
     path_population_output: str,
@@ -661,7 +585,7 @@ def wipe_all_links(
     debug: bool,
 ):
     """
-    Clear all link information from agent plans.
+    Clear all link information from agent plans. Including routes and activity locations.
     """
     if debug:
         logger.setLevel(logging.DEBUG)
@@ -733,7 +657,7 @@ def wipe_all_links(
 def wipe_links(
     path_population_input: str,
     path_population_output: str,
-    links,
+    links: List[str],
     matsim_version: int,
     household_key: str,
     simplify_pt_trips: bool,
@@ -746,7 +670,10 @@ def wipe_links(
     debug: bool,
 ):
     """
-    Clear selected link information from agent plans.
+    Clear selected link information from agent plans. Includes routes and activity locations.
+
+    eg: `pam wipe-links INPUT_PLANS.xml OUTPUT_PLANS.xml link_a link_b link_c`
+
     """
     if debug:
         logger.setLevel(logging.DEBUG)
