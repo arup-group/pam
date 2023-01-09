@@ -21,9 +21,9 @@ if __name__ == '__main__':
     print("Building PAM population from travel diaries {} and person attributes {}"
           .format(travel_diary, person_attributes))
 
-    trips = pd.read_csv(travel_diary)
-    attributes = pd.read_csv(person_attributes)
-    attributes.set_index('pid', inplace=True)
-    population = read.load_travel_diary(trips, attributes)
+trips = pd.read_csv(travel_diary)
+attributes = pd.read_csv(person_attributes)
+attributes.set_index('pid', inplace=True)
+population = read.load_travel_diary(trips, attributes)
 
-    print("Created population '{}'".format(population))
+print("Created population '{}'".format(population))
