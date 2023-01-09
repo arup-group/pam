@@ -1,6 +1,6 @@
 colorama>=0.4.4
 descartes>=1.1.0
-geopandas>=0.7.0
+geopandas>=0.10.0
 ipykernel>=5.2.1
 jupyter-contrib-nbextensions>=0.5.1
 jupyter>=1.0.0
