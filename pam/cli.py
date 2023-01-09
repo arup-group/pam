@@ -84,7 +84,7 @@ def comment_option(func):
     )(func)
     return func
 
-
+@click.version_option()
 @click.group()
 def cli():
     """
