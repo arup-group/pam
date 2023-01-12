@@ -7,7 +7,7 @@ import logging
 
 class RandomPointSampler:
 
-    def __init__(self, geoms: Union[gp.GeoSeries, gp.GeoDataFrame], patience=100, fail=True, seed:int=None):
+    def __init__(self, geoms: Union[gp.GeoSeries, gp.GeoDataFrame], patience=100, fail=True, seed: int = None):
         """
         Returns randomly placed point within given geometries, as defined by geoms. Note that it uses
         random sampling within the shape's bounding box then checks if point is within given geometry.
@@ -29,7 +29,8 @@ class RandomPointSampler:
             self.geoms = geoms.geometry
 
         else:
-            raise UserWarning(f"Unknown datatype: {type(geoms)}, please use GeoSeries or GeoDataFrame")
+            raise UserWarning(
+                f"Unknown datatype: {type(geoms)}, please use GeoSeries or GeoDataFrame")
 
         self.patience = patience
         self.fail = fail
@@ -48,7 +49,7 @@ class RandomPointSampler:
             self.logger.warning(f'Cannot find idx:{idx}, returning None')
             return None
 
-        geom = self.geoms[idx]
+        geom = self.sample_geom_from_series(idx)
 
         if not geom.is_valid:
             geom.buffer(0)
@@ -71,7 +72,8 @@ class RandomPointSampler:
         if geom.geom_type == "MultiPoint":
             return self.validate_return(self.sample_point_from_multipoint(geom), idx)
 
-        self.logger.warning(f"Unknown geom type {geom.geom_type}, attempting to sample.")
+        self.logger.warning(
+            f"Unknown geom type {geom.geom_type}, attempting to sample.")
 
         return self.validate_return(self.sample_point_from_polygon(geom), idx)
 
@@ -110,7 +112,8 @@ class RandomPointSampler:
         random.seed(self.seed)
         min_x, min_y, max_x, max_y = geom.bounds
         for _ in range(self.patience):
-            random_point = Point(random.uniform(min_x, max_x), random.uniform(min_y, max_y))
+            random_point = Point(random.uniform(
+                min_x, max_x), random.uniform(min_y, max_y))
             if random_point.within(geom):
                 return random_point
 
@@ -119,12 +122,18 @@ class RandomPointSampler:
     def sample_point_from_multipolygon(self, geom):
         # Fix random seed
         random.seed(self.seed)
-        poly = random.choices(geom.geoms, weights=[poly.area for poly in geom.geoms])[0]
+        poly = random.choices(geom.geoms, weights=[
+                              poly.area for poly in geom.geoms])[0]
         return self.sample_point_from_polygon(poly)
+
+    def sample_geom_from_series(self, idx):
+        random.seed(self.seed)
+        geoms = list(self.geoms[[idx]])
+        return random.choices(geoms, weights=[geom.area for geom in geoms])[0]
 
 
 class GeometryRandomSampler:
-    def __init__(self, geo_df_file, geometry_name_column, default_region, seed:int=None):
+    def __init__(self, geo_df_file, geometry_name_column, default_region, seed: int = None):
         '''
         :params int seed: seed number for reproducible results (None default - does not fix seed)
         '''
@@ -133,9 +142,10 @@ class GeometryRandomSampler:
         self.geometry_name_column = geometry_name_column
         self.default_region = default_region
 
-        self.geo_df_loc_lookup = {value: key for (key, value) in self.geo_df[geometry_name_column].to_dict().items()}
+        self.geo_df_loc_lookup = {value: key for (
+            key, value) in self.geo_df[geometry_name_column].to_dict().items()}
 
-        #Throws exception if default_region is invalid
+        # Throws exception if default_region is invalid
         default_id = self.geo_df_loc_lookup[default_region]
         self.default_geom = self.geo_df.geometry.loc[default_id]
 
@@ -156,7 +166,8 @@ class GeometryRandomSampler:
             geo_id = self.geo_df_loc_lookup[geo_region]
             geom = self.geo_df.geometry.loc[geo_id]
         except KeyError:
-            print('Unknown region: {}, sampling from {}'.format(geo_region, self.default_region))
+            print('Unknown region: {}, sampling from {}'.format(
+                geo_region, self.default_region))
             geom = self.default_geom
 
         # Fix random seed
@@ -164,7 +175,8 @@ class GeometryRandomSampler:
 
         min_x, min_y, max_x, max_y = geom.bounds
         for attempt in range(patience):
-            random_point = Point(random.uniform(min_x, max_x), random.uniform(min_y, max_y))
+            random_point = Point(random.uniform(
+                min_x, max_x), random.uniform(min_y, max_y))
             if geom.is_valid:
                 if random_point.within(geom):
                     return random_point
@@ -172,4 +184,5 @@ class GeometryRandomSampler:
                 if random_point.within(geom.buffer(0)):
                     return random_point
 
-        raise RuntimeWarning(f'unable to sample point from geometry:{geo_region} with {patience} attempts')
+        raise RuntimeWarning(
+            f'unable to sample point from geometry:{geo_region} with {patience} attempts')
