@@ -3,12 +3,6 @@
 
 <population>
 
-	<attributes>
-		<attribute name="coordinateReferenceSystem" class="java.lang.String">EPSG:27700</attribute>
-	</attributes>
-
-
-<!-- ====================================================================== -->
 
 	<person id="chris">
 		<attributes>
@@ -61,7 +55,6 @@
 
 	</person>
 
-<!-- ====================================================================== -->
 
 	<person id="fatema">
 		<attributes>
@@ -92,7 +85,6 @@
 
 	</person>
 
-<!-- ====================================================================== -->
 
 	<person id="fred">
 		<attributes>
@@ -159,7 +151,6 @@
 
 	</person>
 
-<!-- ====================================================================== -->
 
 	<person id="gerry">
 		<attributes>
@@ -226,7 +217,6 @@
 
 	</person>
 
-<!-- ====================================================================== -->
 
 	<person id="nick">
 		<attributes>
@@ -258,6 +248,10 @@
 
 	</person>
 
-<!-- ====================================================================== -->
+
+	<attributes>
+		<attribute name="coordinateReferenceSystem" class="java.lang.String">EPSG:27700</attribute>
+	</attributes>
+
 
 </population>
