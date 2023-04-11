@@ -1,12 +1,20 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING, Union, List, Dict, Optional
+if TYPE_CHECKING:
+    from pam.activity import Plan
+
 import pandas as pd
+import numpy as np
 from geopandas import GeoDataFrame
 from matplotlib import pyplot as plt
+from matplotlib import cm
 from matplotlib.patches import Patch
+import matplotlib.ticker as mtick
 import plotly.graph_objs as go
 from plotly.offline import offline
 import pam.activity as activity
 import pam.utils as utils
-
+from pam.planner import encoder
 import warnings
 from shapely.errors import ShapelyDeprecationWarning
 
@@ -38,7 +46,7 @@ def build_plan_df(plan, pid='sample'):
     }
     for component in plan.day:
         data["act"].append(component.act.lower().title())
-        if isinstance(component, activity.Leg):
+        if isinstance(component, activity.Leg) and component.mode is not None:
             data["modes"].append(component.mode.lower().title())
         else:
             data["modes"].append(None)
@@ -341,3 +349,76 @@ def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: 
     )
     fig = go.Figure(data=data, layout=layout)
     return fig
+
+
+def plot_activity_breakdown_area(
+        plans: List[Plan],
+        activity_classes: List[str],
+        normalize: bool = False,
+        legend: bool = True,
+        ax = None,
+        colormap = 'tab20'
+):
+    """
+    Area plot of the breakdown of activities taking place every minute.
+    """
+    plans_encoder = encoder.PlansOneHotEncoder(
+        activity_classes=activity_classes)
+    freqs = plans_encoder.encode(plans).\
+        sum(axis=0)
+
+    if normalize:
+        freqs = freqs.astype(float) / freqs.sum(0)
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    n_labels = len(activity_classes)
+    cmap = cm.get_cmap(colormap, n_labels)
+    colors = [cmap(x) for x in range(n_labels)]
+
+    ax.stackplot(range(freqs.shape[1]), *freqs, colors=colors)
+
+    if legend:
+        ax.legend(activity_classes, loc='lower left',
+                    bbox_to_anchor=(1.0, 0), frameon=False)
+        
+    if normalize:
+        ax.yaxis.set_major_formatter(
+            mtick.FuncFormatter(lambda x, _: '{:.0%}'.format(x))
+        )
+        
+    ax.set_xlim(0, freqs.shape[1])
+    ax.set_ylim(0, freqs.sum(0).max())
+
+    return ax
+
+def plot_activity_breakdown_area_tiles(
+        plans: Dict[List[Plan]],
+        activity_classes: List[str],
+        figsize=(10, 8)
+    ):
+    """
+    Tiled area plot of the breakdown of activities taking place every minute.
+    """
+    nrows = int(np.ceil(len(plans)/2))
+    irow = 0
+    icol = 0
+    fig, axs = plt.subplots(nrows, 2, figsize=figsize,
+                            sharex=True, sharey=True)
+    fig.tight_layout(pad=2)
+    for k, v in plans.items():
+        n = len(v)
+        ax = axs[irow, icol]
+        print(ax)
+        plot_activity_breakdown_area(
+            plans=v, ax=ax, legend=False, normalize=True, 
+            activity_classes=activity_classes)
+        ax.set_title(f'Cluster {k} - {n} plans')
+        irow += icol
+        icol = (icol+1) % 2
+
+    ax.legend(activity_classes, loc='lower left',
+                bbox_to_anchor=(1.0, 0), frameon=False)
+
+    return ax

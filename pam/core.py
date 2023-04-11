@@ -3,7 +3,7 @@ import random
 import pickle
 import copy
 from collections import defaultdict
-from typing import Optional
+from typing import Optional, Generator
 import pandas as pd
 
 from pam.location import Location
@@ -56,6 +56,14 @@ class Population:
         for hid, household in self.households.items():
             for pid, person in household.people.items():
                 yield hid, pid, person
+
+    def plans(self) -> Generator[activity.Plan, None, None]:
+        """
+        Iterator for plans in poulation
+        """
+        for hid, household in self.households.items():
+            for pid, person in household.people.items():
+                yield person.plan
 
     @property
     def population(self):

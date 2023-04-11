@@ -102,6 +102,10 @@ cd pam
 pip install -e .
 ```
 
+### Optional dependencies
+We have kept some of the dependencies (such as scikit-learn) optional. 
+To install the full version use `pip install -e .[full]` instead.
+
 ### Developing PAM
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
 while you work:
