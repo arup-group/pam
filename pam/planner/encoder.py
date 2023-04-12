@@ -12,9 +12,13 @@ from itertools import groupby
 
 
 class Encoder:
-    labels = None
-    label_code = None
-    code_label = None
+
+    def __init__(self, labels: List[str], travel_act='travel') -> None:
+        self.labels = set(labels)
+        if travel_act not in self.labels:
+            self.labels.add(travel_act)
+        self.label_code = self.get_mapping(self.labels)
+        self.code_label = {v: k for k, v in self.label_code.items()}
 
     def encode(self, label: str) -> Union[int, str]:
         return self.label_code[label]
@@ -22,16 +26,15 @@ class Encoder:
     def decode(self, code: Union[int, str]) -> str:
         return self.code_label[code]
 
+    @staticmethod
+    def get_mapping(labels: List[str]):
+        raise NotImplementedError
+
 
 class StringCharacterEncoder(Encoder):
     """
     Encodes strings as single characters.
     """
-
-    def __init__(self, labels: List[str]) -> None:
-        self.labels = set(labels)
-        self.label_code = self.get_mapping(self.labels)
-        self.code_label = {v: k for k, v in self.label_code.items()}
 
     @staticmethod
     def get_mapping(labels: List[str]) -> dict:
@@ -46,10 +49,10 @@ class StringIntEncoder(Encoder):
     Encodes strings as integers.
     """
 
-    def __init__(self, labels: List[str]) -> None:
-        self.labels = set(labels)
-        self.label_code = {label: i for i, label in enumerate(labels)}
-        self.code_label = {i: label for i, label in enumerate(labels)}
+    @staticmethod
+    def get_mapping(labels: List[str]) -> dict:
+        encoded = {label: i for i, label in enumerate(labels)}
+        return encoded
 
 
 class PlanEncoder:
@@ -96,7 +99,7 @@ class PlanEncoder:
         Decode a sequence to a new PAM plan.
         """
         start_time = START_OF_DAY
-        plan = Plan()
+        plan = activity.Plan()
         # for every activity/leg:
         for seq, (k, g) in enumerate(groupby(self.get_seq(encoded_plan))):
             duration = td(minutes=len(list(g)))
@@ -123,7 +126,8 @@ class PlanCharacterEncoder(PlanEncoder):
         encoded = ''
         for act in plan.day:
             duration = int(act.duration / td(minutes=1))
-            encoded = encoded + (self.activity_encoder.encode(act.act)*duration)
+            encoded = encoded + \
+                (self.activity_encoder.encode(act.act)*duration)
 
         return encoded
 
@@ -158,13 +162,12 @@ class PlanOneHotEncoder(PlanEncoder):
         return x.argmax(axis=0)
 
 
-class PlansEncoder(Encoder):
+class PlansEncoder:
     plans_encoder_class = None
     dtype = None
 
     def __init__(self, activity_classes: set) -> None:
         self.plan_encoder = self.plans_encoder_class(labels=activity_classes)
-        super().__init__()
 
     def encode(self, plans: List[Plan]) -> np.ndarray:
         """

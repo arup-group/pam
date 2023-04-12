@@ -409,7 +409,10 @@ def plot_activity_breakdown_area_tiles(
     fig.tight_layout(pad=2)
     for k, v in plans.items():
         n = len(v)
-        ax = axs[irow, icol]
+        if nrows>1:
+            ax = axs[irow, icol]
+        else:
+            ax = axs[icol]
         print(ax)
         plot_activity_breakdown_area(
             plans=v, ax=ax, legend=False, normalize=True, 

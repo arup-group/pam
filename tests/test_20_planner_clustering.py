@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 from pam.planner import clustering
 from pam.read import read_matsim
-from tests.fixtures import population_heh
 import os
 
 test_plans = os.path.abspath(
@@ -16,6 +15,12 @@ def population():
     population = read_matsim(test_plans, version=12)
     return population
 
+@pytest.fixture
+def clusters(population):
+    clusters = clustering.PlanClusters(population)
+    n_clusters = 2
+    clusters.fit(n_clusters=n_clusters)
+    return clusters
 
 def test_identical_stings_have_zero_distance():
     assert clustering._levenshtein_distance('aa', 'aa') == 0
@@ -74,19 +79,24 @@ def test_closest_matches_are_ordered_by_distance(population):
         dist = dist_match
 
 
-def test_cluster_plans_match_cluster_sizes(population):
-    clusters = clustering.PlanClusters(population)
-    n_clusters = 2
-    clusters.fit(n_clusters=n_clusters)
+def test_cluster_plans_match_cluster_sizes(clusters):
     cluster_sizes = clusters.get_cluster_sizes()
     for cluster, size in cluster_sizes.items():
         assert len(clusters.get_cluster_plans(cluster)) == size
     assert cluster_sizes.sum() == len(clusters.plans)
 
 
-def test_cluster_membership_includes_everyone(population):
-    clusters = clustering.PlanClusters(population)
-    n_clusters = 2
-    clusters.fit(n_clusters=n_clusters)
+def test_cluster_membership_includes_everyone(clusters, population):
     membership = clusters.get_cluster_membership()
     assert len(membership) == len(population)
+
+
+def test_clustering_plot_calls_function(clusters, mocker):
+    mocker.patch.object(clustering, 'plot_activity_breakdown_area')
+    clusters.plot_plan_breakdowns()
+    clustering.plot_activity_breakdown_area.assert_called_once()
+
+
+    mocker.patch.object(clustering, 'plot_activity_breakdown_area_tiles')
+    clusters.plot_plan_breakdowns_tiles()
+    clustering.plot_activity_breakdown_area_tiles.assert_called_once()
