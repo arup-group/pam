@@ -61,16 +61,17 @@ def test_closest_matches_return_different_plan(population):
 def test_closest_matches_are_ordered_by_distance(population):
     clusters = clustering.PlanClusters(population)
     plan = population['chris']['chris'].plan
-    plan_encoded = clusters.plan_encoder.encode(plan)
+    encode = clusters.plans_encoder.plan_encoder.encode
+    plan_encoded = encode(plan)
     closest_plans = clusters.get_closest_matches(plan, 3)
     dist = 1
     for closest_plan in closest_plans[::-1]:
         dist_match = clustering._levenshtein_distance(
             plan_encoded,
-            clusters.plan_encoder.encode(closest_plan)
+            encode(closest_plan)
         )
         assert dist_match <= dist
-        dist = dist_match 
+        dist = dist_match
 
 
 def test_cluster_plans_match_cluster_sizes(population):
@@ -81,6 +82,7 @@ def test_cluster_plans_match_cluster_sizes(population):
     for cluster, size in cluster_sizes.items():
         assert len(clusters.get_cluster_plans(cluster)) == size
     assert cluster_sizes.sum() == len(clusters.plans)
+
 
 def test_cluster_membership_includes_everyone(population):
     clusters = clustering.PlanClusters(population)

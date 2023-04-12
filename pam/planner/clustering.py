@@ -5,7 +5,7 @@ from typing import List, Optional
 from pam.core import Population
 from pam.activity import Plan
 import pandas as pd
-from functools import cached_property
+from functools import lru_cache
 from pam.planner.encoder import PlansCharacterEncoder
 from pam.plot.plans import plot_activity_breakdown_area, plot_activity_breakdown_area_tiles
 import itertools
@@ -41,14 +41,16 @@ class PlanClusters:
         self.activity_classes = sorted(
             list(population.activity_classes) + ['travel']
         )
-        self.plan_encoder = PlansCharacterEncoder(
+        self.plans_encoder = PlansCharacterEncoder(
             activity_classes=self.activity_classes)
 
-    @cached_property
+    @property
+    @lru_cache()
     def plans_encoded(self) -> List[str]:
-        return self.plan_encoder.encode(self.plans)
+        return self.plans_encoder.encode(self.plans)
 
-    @cached_property
+    @property
+    @lru_cache()
     def distances(self) -> np.array:
         """
         Levenshtein distances between activity plans.
@@ -57,7 +59,8 @@ class PlanClusters:
             self.plans_encoded, self.plans_encoded)
         return dist
 
-    @cached_property
+    @property
+    @lru_cache()
     def distances_no_diagonal(self) -> np.array:
         dist = self.distances.copy()
         np.fill_diagonal(dist, 1)
