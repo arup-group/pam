@@ -172,13 +172,12 @@ class PlansEncoder(Encoder):
         """
         plans_encoded = np.stack([
             self.plan_encoder.encode(x) for x in plans
-        ], dtype=self.dtype)
+        ])
         return plans_encoded
 
 
 class PlansCharacterEncoder(PlansEncoder):
     plans_encoder_class = PlanCharacterEncoder
-    dtype = str
 
 
 class PlansOneHotEncoder(PlansEncoder):
@@ -189,4 +188,3 @@ class PlansOneHotEncoder(PlansEncoder):
         and the third indicates the minute of the day.
     """
     plans_encoder_class = PlanOneHotEncoder
-    dtype = bool

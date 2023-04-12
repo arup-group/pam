@@ -80,7 +80,8 @@ class PlanClusters:
         model = AgglomerativeClustering(
             n_clusters=n_clusters,
             linkage=linkage,
-            metric='precomputed'
+            # metric='precomputed', 
+            affinity='precomputed' # change to metric for sklearn version>=1.4
         )
         model.fit((self.distances))
 
