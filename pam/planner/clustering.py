@@ -1,11 +1,11 @@
-from Levenshtein import ratio, hamming
+from Levenshtein import ratio
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from typing import List, Optional
-from pam.core import Population, Household, Person
+from pam.core import Population
 from pam.activity import Plan
 import pandas as pd
-from functools import lru_cache, cached_property
+from functools import cached_property
 from pam.planner.encoder import PlansCharacterEncoder
 from pam.plot.plans import plot_activity_breakdown_area, plot_activity_breakdown_area_tiles
 import itertools
@@ -21,7 +21,7 @@ def _levenshtein_distance(a: str, b: str) -> float:
 
 def calc_levenshtein_matrix(x: List[str], y: List[str]) -> np.array:
     """
-    Create a levenshtein distance matrix from two lists of strings
+    Create a levenshtein distance matrix from two lists of strings.
     """
     levenshtein_distance = np.vectorize(_levenshtein_distance)
     distances = levenshtein_distance(np.array(x).reshape(-1, 1), np.array(y))
@@ -51,7 +51,7 @@ class PlanClusters:
     @cached_property
     def distances(self) -> np.array:
         """
-        Levenshtein distances between activity plans
+        Levenshtein distances between activity plans.
         """
         dist = calc_levenshtein_matrix(
             self.plans_encoded, self.plans_encoded)
@@ -69,8 +69,10 @@ class PlanClusters:
             linkage: str = 'complete',
     ) -> None:
         """
+        Fit an agglomerative clustering model.
+
         :param n_clusters: The number of clusters to use.
-        :param linkage: Linkage criterion
+        :param linkage: Linkage criterion.
         """
         model = AgglomerativeClustering(
             n_clusters=n_clusters,

@@ -81,3 +81,10 @@ def test_cluster_plans_match_cluster_sizes(population):
     for cluster, size in cluster_sizes.items():
         assert len(clusters.get_cluster_plans(cluster)) == size
     assert cluster_sizes.sum() == len(clusters.plans)
+
+def test_cluster_membership_includes_everyone(population):
+    clusters = clustering.PlanClusters(population)
+    n_clusters = 2
+    clusters.fit(n_clusters=n_clusters)
+    membership = clusters.get_cluster_membership()
+    assert len(membership) == len(population)

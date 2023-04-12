@@ -6,7 +6,6 @@ if TYPE_CHECKING:
 from typing import List, Optional, Union
 import numpy as np
 from pam import activity
-from pam.utils import minutes_to_datetime
 from pam.variables import START_OF_DAY, END_OF_DAY
 from datetime import timedelta as td
 from itertools import groupby
