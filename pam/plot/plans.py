@@ -353,7 +353,8 @@ def plot_travel_plans(gdf, groupby: list = None, colour_by: str = 'mode', cmap: 
 
 def plot_activity_breakdown_area(
         plans: List[Plan],
-        activity_classes: List[str],
+        activity_classes: Optional[List[str]] = None,
+        plans_encoder = None,
         normalize: bool = False,
         legend: bool = True,
         ax = None,
@@ -361,9 +362,24 @@ def plot_activity_breakdown_area(
 ):
     """
     Area plot of the breakdown of activities taking place every minute.
+
+    :param plans: A list of PAM plans
+    :param activity_classes: A list of the activity labels.
+    :param encoder: Alternative to passing activity_classes: 
+        a PlansEncoder from pam.planner.encode.
+    :param normalize: Whether to convert the y-axis to perncentages.
+    :param legend: Whether to include the legend of activities in the plot:
+    :param ax: A matplotlib axis.
+    :param colormap: The colormap to use in the plot. 
+
     """
-    plans_encoder = encoder.PlansOneHotEncoder(
-        activity_classes=activity_classes)
+    if activity_classes is not None:
+        plans_encoder = encoder.PlansOneHotEncoder(
+            activity_classes=activity_classes)
+    elif plans_encoder is None:
+        raise ValueError('Please provide a list of activity classes or a plans encoder.')
+    
+    labels = plans_encoder.plan_encoder.activity_encoder.labels
     freqs = plans_encoder.encode(plans).\
         sum(axis=0)
 
@@ -373,14 +389,14 @@ def plot_activity_breakdown_area(
     if ax is None:
         fig, ax = plt.subplots(1, 1)
 
-    n_labels = len(activity_classes)
+    n_labels = len(labels)
     cmap = cm.get_cmap(colormap, n_labels)
     colors = [cmap(x) for x in range(n_labels)]
 
     ax.stackplot(range(freqs.shape[1]), *freqs, colors=colors)
 
     if legend:
-        ax.legend(activity_classes, loc='lower left',
+        ax.legend(labels, loc='lower left',
                     bbox_to_anchor=(1.0, 0), frameon=False)
         
     if normalize:
@@ -396,11 +412,15 @@ def plot_activity_breakdown_area(
 def plot_activity_breakdown_area_tiles(
         plans: Dict[List[Plan]],
         activity_classes: List[str],
-        figsize=(10, 8)
+        figsize=(10, 8),
+        **kwargs
     ):
     """
     Tiled area plot of the breakdown of activities taking place every minute.
     """
+    plans_encoder = encoder.PlansOneHotEncoder(
+        activity_classes=activity_classes)
+    labels = plans_encoder.plan_encoder.activity_encoder.labels
     nrows = int(np.ceil(len(plans)/2))
     irow = 0
     icol = 0
@@ -416,12 +436,12 @@ def plot_activity_breakdown_area_tiles(
         print(ax)
         plot_activity_breakdown_area(
             plans=v, ax=ax, legend=False, normalize=True, 
-            activity_classes=activity_classes)
+            plans_encoder=plans_encoder, **kwargs)
         ax.set_title(f'Cluster {k} - {n} plans')
         irow += icol
         icol = (icol+1) % 2
 
-    ax.legend(activity_classes, loc='lower left',
+    ax.legend(labels, loc='lower left',
                 bbox_to_anchor=(1.0, 0), frameon=False)
 
-    return ax
+    return axs

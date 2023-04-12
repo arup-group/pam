@@ -1,18 +1,20 @@
 import pytest
 import pandas as pd
+import numpy as np
+import matplotlib
 from matplotlib.figure import Figure
-from shapely.geometry import Point, LineString
+from shapely.geometry import Point
 from plotly.graph_objs import Scattermapbox
 
-from pam.plot.plans import build_person_df, build_cmap, build_person_travel_geodataframe, build_rgb_travel_cmap, \
-    plot_travel_plans, plot_activities
-from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, plot_leg_times, \
-    plot_population_comparisons, calculate_leg_duration_by_mode
-from .fixtures import person_heh, Steve, Hilda, instantiate_household_with
+from pam.plot.plans import build_person_df, build_cmap, build_person_travel_geodataframe, \
+    build_rgb_travel_cmap, plot_travel_plans, plot_activities, plot_activity_breakdown_area, \
+    plot_activity_breakdown_area_tiles
+from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, \
+      plot_leg_times, plot_population_comparisons, calculate_leg_duration_by_mode
+from .fixtures import person_heh, Steve, Hilda, instantiate_household_with, population_heh
 from pam.core import Household, Population
 from copy import deepcopy
 from pam.policy import policies
-from tests.test_00_utils import cyclist, pt_person
 
 
 def test_build_person_dataframe(person_heh):
@@ -162,3 +164,13 @@ def test_plot_activities(person_heh):
         fig = plot_activities(df)
     except (RuntimeError, TypeError, NameError, OSError, ValueError):
         pytest.fail("Error")
+
+def test_plot_activity_breakdown_returns_axis(population_heh):
+    ax = plot_activity_breakdown_area(list(population_heh.plans()), population_heh.activity_classes)
+    assert isinstance(ax, matplotlib.axes._axes.Axes)
+
+def test_plot_activity_breakdown_tiles_shape(population_heh):
+    plans = {i: list(population_heh.plans()) for i in range(4)}
+    axs = plot_activity_breakdown_area_tiles(plans, population_heh.activity_classes)
+    assert isinstance(axs, np.ndarray)
+    assert axs.shape == (2, 2)

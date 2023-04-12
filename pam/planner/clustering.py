@@ -80,8 +80,7 @@ class PlanClusters:
         model = AgglomerativeClustering(
             n_clusters=n_clusters,
             linkage=linkage,
-            # metric='precomputed', 
-            affinity='precomputed' # change to metric for sklearn version>=1.4
+            affinity='precomputed' # change argument to "metric" for sklearn version>=1.4
         )
         model.fit((self.distances))
 
@@ -137,7 +136,7 @@ class PlanClusters:
             **kwargs
         )
 
-    def plot_plan_breakdowns_tiles(self, n: Optional[int] = None):
+    def plot_plan_breakdowns_tiles(self, n: Optional[int] = None, **kwargs):
         """
         Tiled area plot of the breakdown of activities taking place every minute,
             for the clusters with the top n number of plans.
@@ -152,5 +151,6 @@ class PlanClusters:
 
         return plot_activity_breakdown_area_tiles(
             plans=plans,
-            activity_classes=self.activity_classes
+            activity_classes=self.activity_classes,
+            **kwargs
         )

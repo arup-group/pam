@@ -78,3 +78,22 @@ def test_all_plans_are_encoded(population, encoder_class):
     plans_encoded = encoder.encode(population.plans())
     assert plans_encoded.shape[0] == len(population)
 
+def test_one_hot_encoder_shape(Steve):
+    plan = Steve.plan
+    labels = plan.activity_classes
+    encoder = PlanOneHotEncoder(labels=labels)
+    plan_encoded = encoder.encode(plan)
+    
+    assert plan_encoded.shape == (len(labels)+1, 24*60)
+    assert plan_encoded.dtype == bool
+    assert (plan_encoded.sum(axis=0) == 1).all()
+
+
+def test_character_encoder_shape(Steve):
+    plan = Steve.plan
+    labels = plan.activity_classes
+    encoder = PlanCharacterEncoder(labels=labels)
+    plan_encoded = encoder.encode(plan)
+
+    assert len(plan_encoded) == 24*60
+    assert type(plan_encoded) == str

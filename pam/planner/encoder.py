@@ -6,10 +6,9 @@ if TYPE_CHECKING:
 from typing import List, Optional, Union
 import numpy as np
 from pam import activity
-from pam.variables import START_OF_DAY, END_OF_DAY
+from pam.variables import START_OF_DAY
 from datetime import timedelta as td
 from itertools import groupby
-
 
 class Encoder:
 
@@ -144,9 +143,10 @@ class PlanOneHotEncoder(PlanEncoder):
         Encode a PAM plan into a 2D numpy boolean array, 
             where the row indicates the activity
             and the column indicates the minute of the day.
-        """
+        """    
+        duration = int((plan.day[-1].end_time - START_OF_DAY) / td(minutes=1))
         encoded = np.zeros(
-            shape=(len(self.activity_encoder.labels), 24*60),
+            shape=(len(self.activity_encoder.labels), duration),
             dtype=bool
         )
         for act in plan.day:
