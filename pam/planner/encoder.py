@@ -121,12 +121,12 @@ class PlanCharacterEncoder(PlanEncoder):
         """
         Convert a pam plan to a character sequence
         """
-        seq = ''
+        encoded = ''
         for act in plan.day:
             duration = int(act.duration / td(minutes=1))
-            seq = seq + (self.activity_encoder.encode(act.act)*duration)
+            encoded = encoded + (self.activity_encoder.encode(act.act)*duration)
 
-        return seq
+        return encoded
 
     @staticmethod
     def get_seq(x):
