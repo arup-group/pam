@@ -80,7 +80,7 @@ class PlanClusters:
         model = AgglomerativeClustering(
             n_clusters=n_clusters,
             linkage=linkage,
-            affinity='precomputed' # change argument to "metric" for sklearn version>=1.4
+            affinity='precomputed'  # change argument to "metric" for sklearn version>=1.4
         )
         model.fit((self.distances))
 
@@ -109,7 +109,7 @@ class PlanClusters:
         Get the number of plans in each cluster.
         """
         return pd.Series(self.model.labels_).value_counts()
-    
+
     def get_cluster_membership(self) -> dict:
         """
         Get the cluster membership of each person in the population.
@@ -119,7 +119,13 @@ class PlanClusters:
         ids = [(hid, pid) for hid, pid, person in self.population.people()]
         return dict(zip(ids, self.model.labels_))
 
-    def plot_plan_breakdowns(self, ax=None, cluster=None, **kwargs):
+    def plot_plan_breakdowns(
+            self,
+            ax=None,
+            cluster=None,
+            activity_classes: Optional[List[str]] = None,
+            **kwargs
+    ):
         """
         Area plot of the breakdown of activities taking place every minute
             for a specific cluster.
@@ -128,6 +134,9 @@ class PlanClusters:
             plans = self.get_cluster_plans(cluster)
         else:
             plans = self.plans
+
+        if activity_classes is None:
+            activity_classes = self.activity_classes
 
         return plot_activity_breakdown_area(
             plans=plans,
@@ -151,6 +160,5 @@ class PlanClusters:
 
         return plot_activity_breakdown_area_tiles(
             plans=plans,
-            activity_classes=self.activity_classes,
             **kwargs
         )

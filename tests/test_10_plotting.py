@@ -12,6 +12,7 @@ from pam.plot.plans import build_person_df, build_cmap, build_person_travel_geod
 from pam.plot.stats import extract_activity_log, extract_leg_log, time_binner, plot_activity_times, \
       plot_leg_times, plot_population_comparisons, calculate_leg_duration_by_mode
 from .fixtures import person_heh, Steve, Hilda, instantiate_household_with, population_heh
+from tests.test_00_utils import cyclist, pt_person
 from pam.core import Household, Population
 from copy import deepcopy
 from pam.policy import policies
