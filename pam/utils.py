@@ -154,7 +154,8 @@ def parse_elems(target, tag):
     for _, element in doc:
         yield element
         element.clear()
-        del element.getparent()[0]
+        while element.getprevious() is not None:
+            del element.getparent()[0]
     del doc
 
 

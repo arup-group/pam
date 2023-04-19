@@ -13,6 +13,9 @@ from datetime import datetime
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
 )
+test_tripsv12_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+)
 
 
 @pytest.fixture()
@@ -221,3 +224,15 @@ def test_matsim_time_day_three():
     """ Day-three matsim timestamp """
     dt = utils.matsim_time_to_datetime('49:01:02')
     assert dt == datetime(1900, 1, 3, 1, 1, 2)
+
+def test_parser_does_not_delete_current_element():
+    """
+    The xml iterparse should not delete the current element, 
+        as this leads to memory errors.
+    See https://lxml.de/3.2/parsing.html#iterparse-and-iterwalk , 
+        section 'Modifying the tree'
+    """
+    elements = utils.parse_elems(test_tripsv12_path, 'person')
+    for i, element in enumerate(elements):
+        if i > 0: 
+            assert element.getparent()[0] != element
