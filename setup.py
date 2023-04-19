@@ -25,7 +25,7 @@ setup(
     python_requires='>=3.7',
     entry_points={"console_scripts": ["pam = pam.cli:cli"]},
     extras_require = {
-        'full': ['scikit-learn', 'python-Levenshtein']
+        'planner': ['scikit-learn', 'python-Levenshtein']
     },
     install_requires=install_requires,
 )

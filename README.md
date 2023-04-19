@@ -104,7 +104,7 @@ pip install -e .
 
 ### Optional dependencies
 We have kept some of the dependencies (such as scikit-learn) optional. 
-To install the full version use `pip install -e .[full]` instead.
+To install the full version use `pip install -e .[planner]` instead.
 
 ### Developing PAM
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase

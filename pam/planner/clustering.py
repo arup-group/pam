@@ -1,6 +1,4 @@
-from Levenshtein import ratio
 import numpy as np
-from sklearn.cluster import AgglomerativeClustering
 from typing import List, Optional
 from pam.core import Population
 from pam.activity import Plan
@@ -10,6 +8,15 @@ from pam.planner.encoder import PlansCharacterEncoder
 from pam.plot.plans import plot_activity_breakdown_area, plot_activity_breakdown_area_tiles
 import itertools
 from datetime import timedelta as td
+from multiprocessing import Pool
+from functools import partial
+
+try:
+    from sklearn.cluster import AgglomerativeClustering
+    from Levenshtein import ratio
+except:
+    raise ImportError(
+        "To use the pam.planner module, please install the full PAM version with pip install -e .[planner] .")
 
 
 def _levenshtein_distance(a: str, b: str) -> float:
@@ -19,22 +26,40 @@ def _levenshtein_distance(a: str, b: str) -> float:
     return 1 - ratio(a, b)
 
 
-def calc_levenshtein_matrix(x: List[str], y: List[str]) -> np.array:
+def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
     """
     Create a levenshtein distance matrix from two lists of strings.
     """
     levenshtein_distance = np.vectorize(_levenshtein_distance)
-    distances = levenshtein_distance(np.array(x).reshape(-1, 1), np.array(y))
+    if n_cores == 1:
+        distances = levenshtein_distance(
+            np.array(x).reshape(-1, 1), np.array(y))
+    else:
+        xs = np.array_split(x, n_cores)
+        xs = [x.reshape(-1, 1) for x in xs]
+        calc_levenshtein_matrix_partial = partial(levenshtein_distance, b=y)
+        with Pool(n_cores) as p:
+            distances = np.concatenate(
+                p.map(calc_levenshtein_matrix_partial, xs))
+
     return distances
 
 
 class PlanClusters:
+    """
+    Groups activity plans into clusters.
+    Plan similarity is defined using the edit distance 
+        of character-encoded plan sequences.
+    """
     def __init__(
         self,
-        population: Population
+        population: Population,
+        n_cores: int = 1
     ) -> None:
         self.population = population
         self.plans = list(population.plans())
+        self.n_cores = n_cores
+        self._distances = None
         self.model = None
 
         # encodings
@@ -50,17 +75,16 @@ class PlanClusters:
         return self.plans_encoder.encode(self.plans)
 
     @property
-    @lru_cache()
     def distances(self) -> np.array:
         """
         Levenshtein distances between activity plans.
         """
-        dist = calc_levenshtein_matrix(
-            self.plans_encoded, self.plans_encoded)
-        return dist
+        if self._distances is None:
+            self._distances = calc_levenshtein_matrix(
+                self.plans_encoded, self.plans_encoded, n_cores=self.n_cores)
+        return self._distances
 
     @property
-    @lru_cache()
     def distances_no_diagonal(self) -> np.array:
         dist = self.distances.copy()
         np.fill_diagonal(dist, 1)
@@ -160,5 +184,6 @@ class PlanClusters:
 
         return plot_activity_breakdown_area_tiles(
             plans=plans,
+            activity_classes=self.activity_classes,
             **kwargs
         )
