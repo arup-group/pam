@@ -100,3 +100,25 @@ def test_clustering_plot_calls_function(clusters, mocker):
     mocker.patch.object(clustering, 'plot_activity_breakdown_area_tiles')
     clusters.plot_plan_breakdowns_tiles()
     clustering.plot_activity_breakdown_area_tiles.assert_called_once()
+
+
+def test_clustering_method_calls_correct_model(clusters, mocker):
+    mocker.patch.object(clustering, 'AgglomerativeClustering')
+    clusters.fit(n_clusters=2, clustering_method = 'agglomerative')
+    clustering.AgglomerativeClustering.assert_called_once()
+
+    mocker.patch.object(clustering, 'SpectralClustering')
+    clusters.fit(n_clusters=2, clustering_method = 'spectral')
+    clustering.SpectralClustering.assert_called_once()
+
+    with pytest.raises(ValueError):
+        clusters.fit(n_clusters=2, clustering_method = 'invalid_method')
+
+
+def test_clustering_method_uses_correct_affinity_matrix(clusters):
+        clusters.fit(n_clusters=2, clustering_method = 'agglomerative')
+        clusters.model.affinity_matrix_ = clusters.distances
+
+        # spectral clustering uses similarity instead of distnace
+        clusters.fit(n_clusters=2, clustering_method = 'spectral')
+        clusters.model.affinity_matrix_ = 1 - clusters.distances
