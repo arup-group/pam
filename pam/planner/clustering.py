@@ -12,7 +12,7 @@ from multiprocessing import Pool
 from functools import partial
 
 try:
-    from sklearn.cluster import AgglomerativeClustering
+    from sklearn.cluster import AgglomerativeClustering, SpectralClustering
     from Levenshtein import ratio
 except:
     raise ImportError(
@@ -93,20 +93,32 @@ class PlanClusters:
     def fit(
             self,
             n_clusters: int,
-            linkage: str = 'complete',
+            clustering_method: str = 'agglomerative',
+            linkage: Optional[str] = 'complete',
     ) -> None:
         """
         Fit an agglomerative clustering model.
 
         :param n_clusters: The number of clusters to use.
         :param linkage: Linkage criterion.
+        :param clustering_method: The clustering method to use.
+            The currently-supported methods are 'agglomerative' and 'spectral'.
         """
-        model = AgglomerativeClustering(
-            n_clusters=n_clusters,
-            linkage=linkage,
-            affinity='precomputed'  # change argument to "metric" for sklearn version>=1.4
-        )
-        model.fit((self.distances))
+        if clustering_method == 'agglomerative':
+            model = AgglomerativeClustering(
+                n_clusters=n_clusters,
+                linkage=linkage,
+                affinity='precomputed'  # change argument to "metric" for sklearn version>=1.4
+            )
+            model.fit((self.distances))
+        elif clustering_method == 'spectral':
+            model = SpectralClustering(
+                n_clusters=n_clusters,
+                affinity='precomputed'
+            )
+            model.fit((1-self.distances))
+        else:
+            raise ValueError("Please select a valid clustering_method ('agglomerative' or 'spectral')")
 
         self.model = model
 
