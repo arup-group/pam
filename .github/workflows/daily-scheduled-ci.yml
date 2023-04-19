@@ -34,7 +34,7 @@ jobs:
         export C_INCLUDE_PATH=/usr/include/gdal
         sudo apt-get install ca-certificates
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        pip install GDAL==3.0.2
+        pip install GDAL==3.4.1
         pip install -e .
 
     - name: Run tests
