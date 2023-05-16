@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # exit script if any step returns a non-0 code
 set -e
