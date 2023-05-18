@@ -1,12 +1,54 @@
 """
 Choice models for activity synthesis
 """
-from typing import Optional
+from dataclasses import dataclass
+from functools import lru_cache, cached_property
+import itertools
+from typing import Optional, List, NamedTuple, Callable
 import pandas as pd
+import numpy as np
 from pam.planner.od import OD
+from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted
 from pam.core import Population
 from pam.operations.cropping import link_population
 from copy import deepcopy
+
+
+class ChoiceSet(NamedTuple):
+    """ MNL Choice set  """
+    idxs: List
+    u_choices: np.array
+    choice_labels: List[tuple]
+
+
+@dataclass
+class SelectionSet:
+    choice_set: ChoiceSet
+    func_probabilities: Callable
+    func_selection: Callable
+    selections = None
+
+    @cached_property
+    def probabilities(self) -> np.array:
+        """
+        Probabilities for each alternative.
+        """
+        return np.apply_along_axis(
+            func1d=self.func_probabilities,
+            axis=1,
+            arr=self.choice_set.u_choices
+        )
+
+    def sample(self):
+        sampled = np.apply_along_axis(
+            func1d=self.func_selection,
+            axis=1,
+            arr=self.probabilities
+        )
+        sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
+        self.selections = sampled_labels
+        return sampled_labels
+
 
 class ChoiceModel:
     def __init__(
@@ -30,8 +72,76 @@ class ChoiceModel:
     def configure():
         raise NotImplementedError
 
-    def apply():
-        raise NotImplementedError
+    def get_choice_set(
+        self,
+        u: str,
+        scope: str,
+        **kwargs
+    ) -> ChoiceSet:
+        """
+        Construct an agent's choice set for each activity/leg within scope.
+
+        :param u: The utility function specification, defined as a string. 
+            The string may point to household, person, act, leg, 
+                od, or zone data. 
+            It can also include values and/or mathematical operations.
+            Parameters may be passed as single values, or as lists 
+                (with each element in the list corresponding to one of the modes in the OD object)
+            For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
+        :param scope: The scope of the function (for example, work activities).
+        """
+        od = self.od
+        zones = self.zones
+
+        idxs = []
+        u_choices = []
+        choice_labels = list(itertools.product(
+            od.labels.destination_zones,
+            od.labels.mode
+        ))
+
+        # iterate across activities
+        for hid, hh in self.population:
+            for pid, person in hh:
+                for i, act in enumerate(person.activities):
+                    if eval(scope):
+                        idx_act = {
+                            'pid': pid,
+                            'hid': hid,
+                            'seq': i,
+                            'act': act
+                        }
+                        # calculate utilities for each alternative
+                        u_act = eval(u)
+                        # flatten location-mode combinations
+                        u_act = u_act.flatten()
+
+                        u_choices.append(u_act)
+                        idxs.append(idx_act)
+
+        u_choices = np.array(u_choices)
+        # check dimensions
+        assert u_choices.shape[1] == len(choice_labels)
+        assert u_choices.shape[0] == len(idxs)
+
+        return ChoiceSet(idxs=idxs, u_choices=u_choices, choice_labels=choice_labels)
+
+    def get_selections(self, u, scope) -> SelectionSet:
+        selections = SelectionSet(
+            choice_set=self.get_choice_set(u, scope),
+            func_probabilities=calculate_mnl_probabilities,
+            func_selection=sample_weighted
+        )
+        selections.sample()
+        return selections
+
+    def apply(self, u, scope, apply_location=True, apply_mode=True):
+        selections = self.get_selections(u, scope)
+        for (pid, hid, seq, act), s in zip(selections.choice_set.idxs, selections.selections):
+            if apply_location:
+                act.location.area = s[0]
+            if apply_mode:
+                act.previous.mode = s[1]
 
 
 class ChoiceMNL(ChoiceModel):
@@ -41,5 +151,11 @@ class ChoiceMNL(ChoiceModel):
     def configure():
         pass
 
-    def apply():
-        pass
+    def apply(self, u, scope, apply_location=True, apply_mode=True):
+        selections = self.get_selections(u, scope)
+        for idx, s in zip(selections.choice_set.idxs, selections.selections):
+            act = idx['act']
+            if apply_location:
+                act.location.area = s[0]
+            if apply_mode:
+                act.previous.mode = s[1]

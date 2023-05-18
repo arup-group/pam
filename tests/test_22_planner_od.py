@@ -8,16 +8,8 @@ from copy import deepcopy
 @pytest.fixture
 def data_od():
     matrices = np.array(
-        [
-            [
-                [[20, 40], [40, 20]],
-                [[5, 8], [8, 5]]
-            ],
-            [
-                [[30, 45], [45, 30]],
-                [[5, 8], [8, 5]]
-            ]
-        ]
+        [[[[20, 30], [40, 45]], [[40, 45], [20, 30]]],
+         [[[5,  5], [8,  9]], [[8,  9], [5,  5]]]]
     )
     return matrices
 
@@ -56,3 +48,17 @@ def test_inconsistent_labels_raise_error(data_od, labels):
                 data=data_od,
                 labels=_labels
             )
+
+
+def test_od_slicing_is_correctly_encoded(od):
+    np.testing.assert_equal(od[0], od['time'])
+    np.testing.assert_equal(od[1], od['distance'])
+    np.testing.assert_equal(od[1, 0], od['distance', 'a'])
+    np.testing.assert_equal(od[:], od.data)
+    np.testing.assert_equal(od[:, :, :, :], od.data)
+    np.testing.assert_equal(od['time', 'a', 'b', :], np.array([40, 45]))
+    with pytest.raises(IndexError):
+        od['_']
+
+def test_class_represantation_is_string(od):
+    assert type(od.__repr__()) == str

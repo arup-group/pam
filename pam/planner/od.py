@@ -6,11 +6,11 @@ from typing import Union, Optional, List, NamedTuple
 
 
 class Labels(NamedTuple):
-    """ Data labels for the  """
-    mode: List
+    """ Data labels for the origin-destination dataset """
     vars: List
     origin_zones: List
     destination_zones: List
+    mode: List
 
 
 class OD:
@@ -43,8 +43,9 @@ class OD:
             "The number of matrix dimensions should be 4 (mode, variable, origin, destination)"
         for i, (key, labels) in enumerate(zip(self.labels._fields, self.labels)):
             assert len(labels) == self.data.shape[i], \
-                f"The number of {key} labels should match the first dimension of the OD dataset"
-            
+                f"The number of {key} labels should match the number of elements" \
+                f"in dimension {i} of the OD dataset"
+
     @staticmethod
     def parse_labels(labels: Union[Labels, List, dict]) -> Labels:
         """
@@ -58,7 +59,7 @@ class OD:
             else:
                 raise ValueError('Please provide a valid label type')
         return labels
-    
+
     def __getitem__(self, args):
         _args = args if isinstance(args, tuple) else tuple([args])
         _args_encoded = tuple()
@@ -72,3 +73,12 @@ class OD:
 
         return self.data.__getitem__(_args_encoded)
 
+    def __repr__(self) -> str:
+        divider = '-'*50 + '\n'
+        r = f'Origin-destination dataset \n{divider}'
+        r += f'{self.labels.__str__()}\n{divider}'
+        for var in self.labels.vars:
+            for trmode in self.labels.mode:
+                r += f'{var} - {trmode}:\n'
+                r += f'{self[var, :, :, trmode].__str__()}\n{divider}'
+        return r
