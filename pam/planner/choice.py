@@ -4,6 +4,7 @@ Choice models for activity synthesis
 from dataclasses import dataclass
 from functools import lru_cache, cached_property
 import itertools
+import logging
 from typing import Optional, List, NamedTuple, Callable
 import pandas as pd
 import numpy as np
@@ -23,10 +24,11 @@ class ChoiceSet(NamedTuple):
 
 @dataclass
 class SelectionSet:
+    """ Calculate probabilities and select alternative """
     choice_set: ChoiceSet
     func_probabilities: Callable
     func_selection: Callable
-    selections = None
+    _selections = None
 
     @cached_property
     def probabilities(self) -> np.array:
@@ -46,11 +48,18 @@ class SelectionSet:
             arr=self.probabilities
         )
         sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
-        self.selections = sampled_labels
+        self._selections = sampled_labels
         return sampled_labels
+
+    @property
+    def selections(self):
+        if self._selections is None:
+            self.sample()
+        return self._selections
 
 
 class ChoiceModel:
+
     def __init__(
             self,
             population: Population,
@@ -64,22 +73,26 @@ class ChoiceModel:
         :param od: An object holding origin-destination.
         :param zones: Zone-level data.
         """
+        self.logger = logging.getLogger(__name__)
         self.population = population
         link_population(self.population)
         self.od = od
         self.zones = zones.loc[od.labels.destination_zones].copy()
 
-    def configure():
-        raise NotImplementedError
+        self.u = None
+        self.scope = None
+        self.func_probabilities = None
+        self.func_selection = None
 
-    def get_choice_set(
-        self,
-        u: str,
-        scope: str,
-        **kwargs
-    ) -> ChoiceSet:
+    def configure(
+            self,
+            u: str,
+            scope: str,
+            func_probabilities: Optional[Callable] = None,
+            func_selection: Optional[Callable] = None
+    ):
         """
-        Construct an agent's choice set for each activity/leg within scope.
+        Specify the model. 
 
         :param u: The utility function specification, defined as a string. 
             The string may point to household, person, act, leg, 
@@ -90,8 +103,36 @@ class ChoiceModel:
             For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
         :param scope: The scope of the function (for example, work activities).
         """
+        self.u = u
+        self.scope = scope
+        if func_probabilities is not None:
+            self.func_probabilities = func_probabilities
+        if func_selection is not None:
+            self.func_selection = func_selection
+
+    def apply(self, apply_location=True, apply_mode=True):
+        """
+        Apply the choice model to the PAM population, 
+            updating the activity locations and mode choices in scope.
+        """
+        self.logger.info('Applying choice model...')
+        
+        selections = self.get_selections()
+        for idx, s in zip(selections.choice_set.idxs, selections.selections):
+            act = idx['act']
+            if apply_location:
+                act.location.area = s[0]
+            if apply_mode and (act.previous is not None):
+                act.previous.mode = s[1]
+
+    def get_choice_set(self) -> ChoiceSet:
+        """
+        Construct an agent's choice set for each activity/leg within scope.
+        """
         od = self.od
         zones = self.zones
+        u = self.u
+        scope = self.scope
 
         idxs = []
         u_choices = []
@@ -126,36 +167,21 @@ class ChoiceModel:
 
         return ChoiceSet(idxs=idxs, u_choices=u_choices, choice_labels=choice_labels)
 
-    def get_selections(self, u, scope) -> SelectionSet:
+    def get_selections(self) -> SelectionSet:
         selections = SelectionSet(
-            choice_set=self.get_choice_set(u, scope),
-            func_probabilities=calculate_mnl_probabilities,
-            func_selection=sample_weighted
+            choice_set=self.get_choice_set(),
+            func_probabilities=self.func_probabilities,
+            func_selection=self.func_selection
         )
-        selections.sample()
         return selections
-
-    def apply(self, u, scope, apply_location=True, apply_mode=True):
-        selections = self.get_selections(u, scope)
-        for (pid, hid, seq, act), s in zip(selections.choice_set.idxs, selections.selections):
-            if apply_location:
-                act.location.area = s[0]
-            if apply_mode:
-                act.previous.mode = s[1]
 
 
 class ChoiceMNL(ChoiceModel):
     """
     Implements a Multinomial Logit Choice model
     """
-    def configure():
-        pass
 
-    def apply(self, u, scope, apply_location=True, apply_mode=True):
-        selections = self.get_selections(u, scope)
-        for idx, s in zip(selections.choice_set.idxs, selections.selections):
-            act = idx['act']
-            if apply_location:
-                act.location.area = s[0]
-            if apply_mode:
-                act.previous.mode = s[1]
+    def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
+        super().__init__(population, od, zones)
+        self.func_probabilities = calculate_mnl_probabilities
+        self.func_selection = sample_weighted
