@@ -81,14 +81,15 @@ def test_list_parameters_correspond_to_modes(choice_model):
     )
 
 
-def test_get_probabilities(choice_model):
+def test_get_probabilities_simple_scaling(choice_model):
     choice_model.configure(
         u = f"""1 / od['time', 'b']""",
         scope = """True""",
-        func_probabilities = lambda x: x
+        func_probabilities = lambda x: x / sum(x)
     )
     choices = choice_model.get_choice_set().u_choices
     probs = choice_model.get_selections().probabilities
     np.testing.assert_almost_equal(
-        choices, probs
+        choices / choices.sum(1).reshape(-1, 1), 
+        probs
     )

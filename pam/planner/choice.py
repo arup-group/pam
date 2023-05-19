@@ -2,7 +2,6 @@
 Choice models for activity synthesis
 """
 from dataclasses import dataclass
-from functools import lru_cache, cached_property
 import itertools
 import logging
 from typing import Optional, List, NamedTuple, Callable
@@ -30,7 +29,7 @@ class SelectionSet:
     func_selection: Callable
     _selections = None
 
-    @cached_property
+    @property
     def probabilities(self) -> np.array:
         """
         Probabilities for each alternative.
