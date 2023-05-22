@@ -3,7 +3,7 @@ import random
 from typing import Union, List
 
 
-def calculate_mnl_probabilities(x: Union[np.array, List]):
+def calculate_mnl_probabilities(x: Union[np.array, List]) -> np.array:
     """
     Calculates MNL probabilities from a set of alternatives.
     """

@@ -16,7 +16,7 @@ from copy import deepcopy
 
 class ChoiceSet(NamedTuple):
     """ MNL Choice set  """
-    idxs: List
+    idxs: List[dict]
     u_choices: np.array
     choice_labels: List[tuple]
 
@@ -26,7 +26,7 @@ class SelectionSet:
     """ Calculate probabilities and select alternative """
     choice_set: ChoiceSet
     func_probabilities: Callable
-    func_selection: Callable
+    func_sampling: Optional[Callable] = None
     _selections = None
 
     @property
@@ -41,8 +41,11 @@ class SelectionSet:
         )
 
     def sample(self):
+        """
+        Sample from a set of alternative options.
+        """
         sampled = np.apply_along_axis(
-            func1d=self.func_selection,
+            func1d=self.func_sampling,
             axis=1,
             arr=self.probabilities
         )
@@ -81,14 +84,15 @@ class ChoiceModel:
         self.u = None
         self.scope = None
         self.func_probabilities = None
-        self.func_selection = None
+        self.func_sampling = None
+        self._selections = None
 
     def configure(
             self,
             u: str,
             scope: str,
             func_probabilities: Optional[Callable] = None,
-            func_selection: Optional[Callable] = None
+            func_sampling: Optional[Callable] = None
     ):
         """
         Specify the model. 
@@ -102,27 +106,40 @@ class ChoiceModel:
             For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
         :param scope: The scope of the function (for example, work activities).
         """
-        self.u = u
+        self.u = u.replace(' ', '')
         self.scope = scope
         if func_probabilities is not None:
             self.func_probabilities = func_probabilities
-        if func_selection is not None:
-            self.func_selection = func_selection
+        if func_sampling is not None:
+            self.func_sampling = func_sampling
 
-    def apply(self, apply_location=True, apply_mode=True):
+    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True):
         """
-        Apply the choice model to the PAM population, 
+        Apply the choice model to the PAM population,
             updating the activity locations and mode choices in scope.
         """
         self.logger.info('Applying choice model...')
-        
+
+        # sample choices
         selections = self.get_selections()
-        for idx, s in zip(selections.choice_set.idxs, selections.selections):
+        self._selections = selections
+
+        pid = None
+        destination = None
+        trmode = None
+
+        # update location and mode
+        for idx, selection in zip(selections.choice_set.idxs, selections.selections):
+            if not (once_per_agent and (pid == idx['pid'])):
+                destination = selection[0]
+                trmode = selection[1]
+
+            pid = idx['pid']
             act = idx['act']
             if apply_location:
-                act.location.area = s[0]
+                act.location.area = destination
             if apply_mode and (act.previous is not None):
-                act.previous.mode = s[1]
+                act.previous.mode = trmode
 
     def get_choice_set(self) -> ChoiceSet:
         """
@@ -170,7 +187,7 @@ class ChoiceModel:
         selections = SelectionSet(
             choice_set=self.get_choice_set(),
             func_probabilities=self.func_probabilities,
-            func_selection=self.func_selection
+            func_sampling=self.func_sampling
         )
         return selections
 
@@ -183,4 +200,4 @@ class ChoiceMNL(ChoiceModel):
     def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
         super().__init__(population, od, zones)
         self.func_probabilities = calculate_mnl_probabilities
-        self.func_selection = sample_weighted
+        self.func_sampling = sample_weighted
