@@ -24,6 +24,18 @@ def population():
     return population
 
 
+test_plans_experienced = os.path.abspath(
+    os.path.join(os.path.dirname(__file__),
+                 "test_data/test_matsim_experienced_plans_v12.xml")
+)
+
+
+@pytest.fixture
+def population_experienced():
+    population = read_matsim(test_plans_experienced, version=12)
+    return population
+
+
 @pytest.fixture
 def choice_model(population, od, data_zones) -> ChoiceModel:
     return ChoiceModel(population, od, data_zones)

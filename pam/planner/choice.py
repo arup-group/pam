@@ -1,6 +1,7 @@
 """
 Choice models for activity synthesis
 """
+from copy import deepcopy
 from dataclasses import dataclass
 import itertools
 import logging
@@ -8,8 +9,10 @@ from typing import Optional, List, NamedTuple, Callable
 import pandas as pd
 import numpy as np
 from pam.planner.od import OD
-from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted
+from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted, \
+    get_trip_chains, apply_mode_to_home_chain
 from pam.core import Population
+from pam.activity import Activity, Leg
 from pam.operations.cropping import link_population
 from copy import deepcopy
 
@@ -113,10 +116,20 @@ class ChoiceModel:
         if func_sampling is not None:
             self.func_sampling = func_sampling
 
-    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True):
+    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True, 
+              apply_mode_to='chain'):
         """
         Apply the choice model to the PAM population,
             updating the activity locations and mode choices in scope.
+
+        :param apply_location: Whether to update activities' location
+        :param apply_mode: Whether to update travel modes
+        :param once_per_agent: If True, the same selected option
+            is applied to all activities within scope of an agent. 
+        :param apply_mode_to: `chain` or `previous`:
+            Whether to apply the mode to the entire trip chain 
+            that contains the activity,
+            or the trip preceding the activity.
         """
         self.logger.info('Applying choice model...')
 
@@ -139,7 +152,10 @@ class ChoiceModel:
             if apply_location:
                 act.location.area = destination
             if apply_mode and (act.previous is not None):
-                act.previous.mode = trmode
+                if apply_mode_to == 'chain':
+                    apply_mode_to_home_chain(act, trmode)
+                elif apply_mode_to == 'previous_leg':
+                    act.previous.mode = trmode
 
     def get_choice_set(self) -> ChoiceSet:
         """
