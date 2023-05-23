@@ -160,3 +160,28 @@ def test_model_checks_config_requirements(mocker, choice_model_mnl):
 
     choice_model_mnl.get_choice_set()
     ChoiceConfiguration.validate.assert_called_once_with(['u', 'scope'])
+
+def test_utility_calculation(choice_model_mnl):
+    scope = "act.act=='work'"
+    asc = [0, -1] 
+    asc_shift_poor = [0, 2] 
+    beta_time = [-0.05, -0.07] 
+    beta_zones = 0.4
+    u = f""" \
+        {asc} + \
+        (np.array({asc_shift_poor}) * (person.attributes['subpopulation']=='poor')) + \
+        ({beta_time} * od['time', person.home.area]) + \
+        ({beta_zones} * np.log(zones.jobs))
+    """
+    # ({beta_zones} * np.log(zones['jobs'].values[:, np.newaxis]))
+    choice_model_mnl.configure(u=u, scope=scope)
+
+    np.testing.assert_almost_equal(
+        np.array([
+            0.8420680743952365,
+            -1.2579319256047636,
+            0.11932694661921461,
+            -2.0306730533807857
+        ]),
+        choice_model_mnl.get_choice_set().u_choices[0],
+    )
