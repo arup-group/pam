@@ -1,7 +1,6 @@
 """
 Choice models for activity synthesis
 """
-from copy import deepcopy
 from dataclasses import dataclass
 import itertools
 import logging
@@ -10,18 +9,31 @@ import pandas as pd
 import numpy as np
 from pam.planner.od import OD
 from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted, \
-    get_trip_chains, apply_mode_to_home_chain
+    apply_mode_to_home_chain
 from pam.core import Population
 from pam.activity import Activity, Leg
 from pam.operations.cropping import link_population
-from copy import deepcopy
+
+
+class ChoiceLabel(NamedTuple):
+    """ Destination and mode choice labels of a selected option """
+    destination: str
+    mode: str
+
+
+class ChoiceIdx(NamedTuple):
+    """ Choice set index """
+    pid: str
+    hid: str
+    seq: int
+    act: Activity
 
 
 class ChoiceSet(NamedTuple):
     """ MNL Choice set  """
-    idxs: List[dict]
+    idxs: List[ChoiceIdx]
     u_choices: np.array
-    choice_labels: List[tuple]
+    choice_labels: List[ChoiceLabel]
 
 
 @dataclass
@@ -43,7 +55,7 @@ class SelectionSet:
             arr=self.choice_set.u_choices
         )
 
-    def sample(self):
+    def sample(self) -> List:
         """
         Sample from a set of alternative options.
         """
@@ -57,10 +69,38 @@ class SelectionSet:
         return sampled_labels
 
     @property
-    def selections(self):
+    def selections(self) -> List[ChoiceLabel]:
         if self._selections is None:
             self.sample()
         return self._selections
+
+
+@dataclass
+class ChoiceConfiguration:
+    """
+    :param u: The utility function specification, defined as a string. 
+        The string may point to household, person, act, leg, 
+            od, or zone data. 
+        It can also include values and/or mathematical operations.
+        Parameters may be passed as single values, or as lists 
+            (with each element in the list corresponding to one of the modes in the OD object)
+        For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
+    :param scope: The scope of the function (for example, work activities).
+    :param func_probabilities: The function for calculating the probability of each alternative
+    :param func_sampling: The function for sampling across alternatives, ie softmax
+    """
+    u: Optional[str] = None
+    scope: Optional[str] = None
+    func_probabilities: Optional[Callable] = None
+    func_sampling: Optional[Callable] = None
+
+    def validate(self, vars:List[str]) -> None:
+        """
+        Return an error if a value has not been set
+        """
+        for var in vars:
+            if getattr(self, var) is None:
+                raise ValueError(f'Setting {var} has not been set yet')
 
 
 class ChoiceModel:
@@ -69,7 +109,7 @@ class ChoiceModel:
             self,
             population: Population,
             od: OD,
-            zones: pd.DataFrame
+            zones: pd.DataFrame  # TODO: switch to pam.planner.zones.Zones object
     ) -> None:
         """
         Choice model interface.
@@ -83,40 +123,24 @@ class ChoiceModel:
         link_population(self.population)
         self.od = od
         self.zones = zones.loc[od.labels.destination_zones].copy()
-
-        self.u = None
-        self.scope = None
-        self.func_probabilities = None
-        self.func_sampling = None
+        self.configuration = ChoiceConfiguration()
         self._selections = None
 
-    def configure(
-            self,
-            u: str,
-            scope: str,
-            func_probabilities: Optional[Callable] = None,
-            func_sampling: Optional[Callable] = None
-    ):
+    def configure(self, **kwargs) -> None:
         """
-        Specify the model. 
+        Specify the model.
 
-        :param u: The utility function specification, defined as a string. 
-            The string may point to household, person, act, leg, 
-                od, or zone data. 
-            It can also include values and/or mathematical operations.
-            Parameters may be passed as single values, or as lists 
-                (with each element in the list corresponding to one of the modes in the OD object)
-            For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
-        :param scope: The scope of the function (for example, work activities).
+        :Keyword Arguments: Parameters of the ChoiceConfiguration class.
         """
-        self.u = u.replace(' ', '')
-        self.scope = scope
-        if func_probabilities is not None:
-            self.func_probabilities = func_probabilities
-        if func_sampling is not None:
-            self.func_sampling = func_sampling
+        for k, v in kwargs.items():
+            if type(v) == str:
+                v = v.replace(' ', '')
+            setattr(self.configuration, k, v)
+        self.logger.info('Updated model configuration')
+        self.logger.info(self.configuration)
 
-    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True, 
+
+    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True,
               apply_mode_to='chain'):
         """
         Apply the choice model to the PAM population,
@@ -126,45 +150,49 @@ class ChoiceModel:
         :param apply_mode: Whether to update travel modes
         :param once_per_agent: If True, the same selected option
             is applied to all activities within scope of an agent. 
-        :param apply_mode_to: `chain` or `previous`:
+        :param apply_mode_to: `chain` or `previous_leg`:
             Whether to apply the mode to the entire trip chain 
             that contains the activity,
-            or the trip preceding the activity.
+            or the leg preceding the activity.
         """
         self.logger.info('Applying choice model...')
-
-        # sample choices
-        selections = self.get_selections()
-        self._selections = selections
+        self.logger.info(f'Configuration: \n{self.configuration}')
 
         pid = None
         destination = None
         trmode = None
 
         # update location and mode
-        for idx, selection in zip(selections.choice_set.idxs, selections.selections):
-            if not (once_per_agent and (pid == idx['pid'])):
-                destination = selection[0]
-                trmode = selection[1]
+        for idx, selection in zip(self.selections.choice_set.idxs, self.selections.selections):
+            if not (once_per_agent and (pid == idx.pid)):
+                destination = selection.destination
+                trmode = selection.mode
 
-            pid = idx['pid']
-            act = idx['act']
+            pid = idx.pid
+            act = idx.act
+
             if apply_location:
                 act.location.area = destination
+
             if apply_mode and (act.previous is not None):
                 if apply_mode_to == 'chain':
                     apply_mode_to_home_chain(act, trmode)
                 elif apply_mode_to == 'previous_leg':
                     act.previous.mode = trmode
+                else:
+                    raise ValueError(f'Invalid option {apply_mode_to}')
+
+        self.logger.info('Choice model application complete.')
 
     def get_choice_set(self) -> ChoiceSet:
         """
         Construct an agent's choice set for each activity/leg within scope.
         """
+        self.configuration.validate(['u', 'scope'])
         od = self.od
         zones = self.zones
-        u = self.u
-        scope = self.scope
+        u = self.configuration.u
+        scope = self.configuration.scope
 
         idxs = []
         u_choices = []
@@ -172,18 +200,19 @@ class ChoiceModel:
             od.labels.destination_zones,
             od.labels.mode
         ))
+        choice_labels = [ChoiceLabel(*x) for x in choice_labels]
 
         # iterate across activities
         for hid, hh in self.population:
             for pid, person in hh:
                 for i, act in enumerate(person.activities):
                     if eval(scope):
-                        idx_act = {
-                            'pid': pid,
-                            'hid': hid,
-                            'seq': i,
-                            'act': act
-                        }
+                        idx_act = ChoiceIdx(
+                            pid=pid,
+                            hid=hid,
+                            seq=i,
+                            act=act
+                        )
                         # calculate utilities for each alternative
                         u_act = eval(u)
                         # flatten location-mode combinations
@@ -193,27 +222,33 @@ class ChoiceModel:
                         idxs.append(idx_act)
 
         u_choices = np.array(u_choices)
+
         # check dimensions
         assert u_choices.shape[1] == len(choice_labels)
         assert u_choices.shape[0] == len(idxs)
 
         return ChoiceSet(idxs=idxs, u_choices=u_choices, choice_labels=choice_labels)
 
-    def get_selections(self) -> SelectionSet:
-        selections = SelectionSet(
-            choice_set=self.get_choice_set(),
-            func_probabilities=self.func_probabilities,
-            func_sampling=self.func_sampling
-        )
-        return selections
+    @property
+    def selections(self) -> SelectionSet:
+        self.configuration.validate(['func_probabilities', 'func_sampling'])
+        if self._selections is None:
+            self._selections = SelectionSet(
+                choice_set=self.get_choice_set(),
+                func_probabilities=self.configuration.func_probabilities,
+                func_sampling=self.configuration.func_sampling
+            )
+        return self._selections
 
 
 class ChoiceMNL(ChoiceModel):
     """
-    Implements a Multinomial Logit Choice model
+    Applies a Multinomial Logit Choice model.
     """
 
     def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
         super().__init__(population, od, zones)
-        self.func_probabilities = calculate_mnl_probabilities
-        self.func_sampling = sample_weighted
+        self.configure(
+            func_probabilities = calculate_mnl_probabilities,
+            func_sampling = sample_weighted
+        )

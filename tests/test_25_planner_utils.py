@@ -7,7 +7,8 @@ from pam.activity import Leg
 from pam.operations.cropping import link_population
 
 from pam.planner.utils_planner import calculate_mnl_probabilities, \
-    sample_weighted, get_trip_chains, apply_mode_to_home_chain
+    sample_weighted, get_trip_chains, apply_mode_to_home_chain, \
+    get_validate
 
 test_plans_experienced = os.path.abspath(
     os.path.join(os.path.dirname(__file__),
@@ -71,3 +72,12 @@ def test_apply_mode_to_chain(population_experienced):
     legs = [elem for elem in chains[1] if isinstance(elem, Leg)]
     assert all([leg.mode!='gondola' for leg in legs]) 
 
+
+def test_nonset_attribute_raises_error():
+    class A:
+        a = 'b'
+        b = None
+
+    a = A()
+    with pytest.raises(ValueError):
+        get_validate(a, 'b')

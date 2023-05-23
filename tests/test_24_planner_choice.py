@@ -3,7 +3,8 @@ import numpy as np
 import random
 from tests.test_22_planner_od import data_od, labels, od
 from tests.test_23_planner_zones import data_zones
-from pam.planner.choice import ChoiceModel, ChoiceMNL, ChoiceSet
+from pam.planner.choice import ChoiceModel, ChoiceMNL, ChoiceSet, \
+    ChoiceConfiguration
 from pam.planner.utils_planner import sample_weighted
 import os
 from pam.read import read_matsim
@@ -106,7 +107,7 @@ def test_get_probabilities_along_dimension(choice_model):
         func_probabilities=lambda x: x / sum(x)
     )
     choices = choice_model.get_choice_set().u_choices
-    probs = choice_model.get_selections().probabilities
+    probs = choice_model.selections.probabilities
     assert (probs.sum(axis=1) == 1).all()
     np.testing.assert_almost_equal(
         choices / choices.sum(1).reshape(-1, 1),
@@ -136,3 +137,25 @@ def test_apply_once_per_agent_same_locations(choice_model_mnl):
     # now all locations should be in the same zone
     # for each agent
     assert_single_location(choice_model_mnl.population)
+
+
+def test_nonset_config_attribute_valitation_raise_error():
+    config = ChoiceConfiguration()
+
+    with pytest.raises(ValueError):
+        config.validate(['u', 'scope'])
+
+    config.u = '1'
+    config.scope = 'True'
+    config.validate(['u', 'scope'])
+
+
+def test_model_checks_config_requirements(mocker, choice_model_mnl):
+    mocker.patch.object(ChoiceConfiguration, 'validate')
+    choice_model_mnl.configure(
+        u=f"""1 / od['time', 'a']""",
+        scope="""act.act=='work'"""
+    )
+
+    choice_model_mnl.get_choice_set()
+    ChoiceConfiguration.validate.assert_called_once_with(['u', 'scope'])

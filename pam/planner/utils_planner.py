@@ -1,4 +1,3 @@
-from copy import deepcopy
 import numpy as np
 import random
 from typing import Union, List
@@ -25,7 +24,7 @@ def get_trip_chains(
     act: str = 'home'
 ) -> List[List[Union[Activity, Leg]]]:
     """
-    Get trip chains starting and/OR ending at a long-term activity 
+    Get trip chains starting and/or ending at a long-term activity 
     """
     chains = []
     chain = []
@@ -44,11 +43,14 @@ def get_trip_chains(
 def apply_mode_to_home_chain(act: Activity, trmode: str):
     """
     Apply a transport mode across a home-based trip chain,
-    which comprises a specified activity.
+    which comprises the specified activity.
     
-    :param act: The activity that is used part of the trip chain.
+    :param act: The activity that is part of the trip chain.
     :param trmode: The mode to apply to each leg of the chain.
     """
+    if not 'next' in act.__dict__:
+        raise KeyError('Plan is not linked. Please use `pam.operations.cropping.link_plan` to link activities and legs.')
+
     # apply forwards
     elem = act.next
     while (elem is not None) and (elem.act != 'home'):
@@ -62,3 +64,12 @@ def apply_mode_to_home_chain(act: Activity, trmode: str):
         if isinstance(elem, Leg):
             elem.mode = trmode            
         elem = elem.previous
+
+def get_validate(obj, name: str):
+    """
+    Get an object's attribute, or raise an error if its value is None.
+    """
+    attr = getattr(obj, name)
+    if attr is None:
+        raise ValueError(f'Attribute {name} has not been set yet')
+    return attr
