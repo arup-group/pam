@@ -104,7 +104,8 @@ def test_get_probabilities_along_dimension(choice_model):
     choice_model.configure(
         u=f"""1 / od['time', 'b']""",
         scope="""True""",
-        func_probabilities=lambda x: x / sum(x)
+        func_probabilities=lambda x: x / sum(x),
+        func_sampling=sample_weighted
     )
     choices = choice_model.get_choice_set().u_choices
     probs = choice_model.selections.probabilities
