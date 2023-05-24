@@ -50,7 +50,7 @@ def choice_model_mnl(population, od, data_zones) -> ChoiceModel:
 def test_zones_are_aligned(population, od, data_zones):
     choice_model = ChoiceModel(population, od, data_zones.loc[['b', 'a']])
     zones_destination = choice_model.od.labels.destination_zones
-    zones_index = list(choice_model.zones.index)
+    zones_index = list(choice_model.zones.data.index)
     assert zones_destination == zones_index
 
 

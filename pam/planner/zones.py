@@ -16,7 +16,7 @@ class Zones:
         self.data = data
 
     def __getattr__(self, __name: str) -> np.array:
-        return self.data[__name].values
+        return self.data[__name].values[:, np.newaxis]
     
     def __getitem__(self, __name: str) -> np.array:
         return self.__getattr__(__name)

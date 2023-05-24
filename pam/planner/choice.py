@@ -1,19 +1,22 @@
 """
 Choice models for activity synthesis
 """
+from copy import deepcopy
 from dataclasses import dataclass
 import itertools
 import logging
-from typing import Optional, List, NamedTuple, Callable
-import pandas as pd
+from typing import Optional, List, NamedTuple, Callable, Union
+
 import numpy as np
+import pandas as pd
+
+from pam.activity import Activity, Leg
+from pam.core import Population
+from pam.operations.cropping import link_population
 from pam.planner.od import OD
+from pam.planner.zones import Zones
 from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted, \
     apply_mode_to_home_chain
-from pam.core import Population
-from pam.activity import Activity, Leg
-from pam.operations.cropping import link_population
-
 
 class ChoiceLabel(NamedTuple):
     """ Destination and mode choice labels of a selected option """
@@ -94,7 +97,7 @@ class ChoiceConfiguration:
     func_probabilities: Optional[Callable] = None
     func_sampling: Optional[Callable] = None
 
-    def validate(self, vars:List[str]) -> None:
+    def validate(self, vars: List[str]) -> None:
         """
         Return an error if a value has not been set
         """
@@ -109,7 +112,7 @@ class ChoiceModel:
             self,
             population: Population,
             od: OD,
-            zones: pd.DataFrame  # TODO: switch to pam.planner.zones.Zones object
+            zones: Union[pd.DataFrame, Zones]
     ) -> None:
         """
         Choice model interface.
@@ -122,9 +125,17 @@ class ChoiceModel:
         self.population = population
         link_population(self.population)
         self.od = od
-        self.zones = zones.loc[od.labels.destination_zones].copy()
+        self.zones = self.parse_zone_data(zones)
+        self.zones.data = self.zones.data.loc[od.labels.destination_zones]
         self.configuration = ChoiceConfiguration()
         self._selections = None
+
+    @staticmethod
+    def parse_zone_data(zones: Union[pd.DataFrame, Zones]) -> Zones:
+        if isinstance(zones, Zones):
+            return deepcopy(zones)
+        elif isinstance(zones, pd.DataFrame):
+            return Zones(data=zones.copy())
 
     def configure(self, **kwargs) -> None:
         """
@@ -138,7 +149,6 @@ class ChoiceModel:
             setattr(self.configuration, k, v)
         self.logger.info('Updated model configuration')
         self.logger.info(self.configuration)
-
 
     def apply(self, apply_location=True, apply_mode=True, once_per_agent=True,
               apply_mode_to='chain'):
@@ -249,6 +259,6 @@ class ChoiceMNL(ChoiceModel):
     def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
         super().__init__(population, od, zones)
         self.configure(
-            func_probabilities = calculate_mnl_probabilities,
-            func_sampling = sample_weighted
+            func_probabilities=calculate_mnl_probabilities,
+            func_sampling=sample_weighted
         )
