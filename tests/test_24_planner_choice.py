@@ -161,11 +161,12 @@ def test_model_checks_config_requirements(mocker, choice_model_mnl):
     choice_model_mnl.get_choice_set()
     ChoiceConfiguration.validate.assert_called_once_with(['u', 'scope'])
 
+
 def test_utility_calculation(choice_model_mnl):
     scope = "act.act=='work'"
-    asc = [0, -1] 
-    asc_shift_poor = [0, 2] 
-    beta_time = [-0.05, -0.07] 
+    asc = [0, -1]
+    asc_shift_poor = [0, 2]
+    beta_time = [-0.05, -0.07]
     beta_zones = 0.4
     u = f""" \
         {asc} + \

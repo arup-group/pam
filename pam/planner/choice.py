@@ -126,7 +126,7 @@ class ChoiceModel:
         link_population(self.population)
         self.od = od
         self.zones = self.parse_zone_data(zones)
-        self.zones.data = self.zones.data.loc[od.labels.destination_zones]
+        self.zones.data = self.zones.data.loc[list(od.labels.destination_zones)]
         self.configuration = ChoiceConfiguration()
         self._selections = None
 

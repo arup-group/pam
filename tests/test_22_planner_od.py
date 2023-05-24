@@ -1,5 +1,5 @@
 import pytest
-from pam.planner.od import OD, Labels
+from pam.planner.od import OD, Labels, ODMatrix, ODFactory
 import pandas as pd
 import numpy as np
 from copy import deepcopy
@@ -33,6 +33,16 @@ def od(data_od, labels):
     )
     return od
 
+@pytest.fixture
+def od_matrices():
+    zone_labels = ['a', 'b']
+    matrices = [
+        ODMatrix('time', 'car', zone_labels, zone_labels, np.array([[20, 40], [40, 20]])),
+        ODMatrix('time', 'bus', zone_labels, zone_labels, np.array([[30, 45], [45, 30]])),
+        ODMatrix('distance', 'car', zone_labels, zone_labels, np.array([[5, 8], [8, 5]])),
+        ODMatrix('distance', 'bus', zone_labels, zone_labels, np.array([[5, 9], [9, 5]]))    
+    ]
+    return matrices
 
 def test_label_type_is_parsed_correctly(labels):
     assert type(OD.parse_labels(labels)) is Labels
@@ -76,3 +86,29 @@ def test_matrix_dimensions_stay_the_same(od):
     """
     assert od.labels._fields == tuple(
         ['vars', 'origin_zones', 'destination_zones', 'mode'])
+
+
+def test_create_od_from_matrices(od_matrices, od):
+    od_from_matrices = ODFactory.from_matrices(od_matrices)
+    np.testing.assert_equal(od_from_matrices.data, od.data)
+    assert od_from_matrices.labels == od.labels
+
+
+def test_od_factory_inconsistent_inputs_raise_error(od_matrices):
+    labels = Labels(
+        vars=['time', 'distance'], 
+        origin_zones=('a', 'b'), 
+        destination_zones=('a', 'b'),
+        mode=['car', 'bus']
+    )
+    # duplicate key
+    with pytest.raises(AssertionError):
+        ODFactory.check(od_matrices+[od_matrices[0]], labels)
+
+    # combination missing
+    with pytest.raises(AssertionError):
+        ODFactory.check(od_matrices[:-1], labels)
+    
+    # inconsistent zoning
+    with pytest.raises(AssertionError):
+        ODFactory.check(od_matrices[:-1], labels)

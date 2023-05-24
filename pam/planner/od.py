@@ -1,8 +1,11 @@
 """
 Manages origin-destination data required by the planner module.
 """
-import numpy as np
+import itertools
 from typing import Union, Optional, List, NamedTuple
+
+import numpy as np
+import pandas as pd
 
 
 class Labels(NamedTuple):
@@ -17,7 +20,6 @@ class OD:
     """
     Holds origin-destination matrices for a number of modes and variables.
     """
-    dimensions = ['mode', 'variable', 'origin', 'destination']
 
     def __init__(
         self,
@@ -26,10 +28,10 @@ class OD:
     ) -> None:
         """
         :param data: A multi-dimensional numpy array of the origin-destination data.
-            - First dimension: mode (ie car, bus, etc)
-            - Second dimension: variable (ie travel time, distance, etc)
-            - Third dimension: origin zone
-            - Fourth dimension: destination zone
+            - First dimension: variable (ie travel time, distance, etc)
+            - Second dimension: origin zone
+            - Third dimension: destination zone
+            - Fourth dimension: mode (ie car, bus, etc)
         """
         self.data = data
         self.labels = self.parse_labels(labels)
@@ -82,3 +84,70 @@ class OD:
                 r += f'{var} - {trmode}:\n'
                 r += f'{self[var, :, :, trmode].__str__()}\n{divider}'
         return r
+
+
+class ODMatrix(NamedTuple):
+    var: str
+    mode: str
+    origin_zones: tuple
+    destination_zones: tuple
+    matrix: np.array
+
+
+class ODFactory:
+
+    @classmethod
+    def from_matrices(cls, matrices: List[ODMatrix]) -> OD:
+        """
+        Creates an OD instance from a list of ODMatrices
+        """
+        # collect dimensions
+        labels = cls.prepare_labels(matrices)
+
+        cls.check(matrices, labels)
+
+        # create ndarray
+        od = np.zeros(shape=[len(x) for x in labels])
+        for mat in matrices:
+            od[
+                labels.vars.index(mat.var),
+                labels.mode.index(mat.mode)
+            ] = mat.matrix
+
+        # move mode to last dimension
+        od = np.moveaxis(od, 1, 3)
+
+        return OD(data=od, labels=labels)
+
+    @staticmethod
+    def prepare_labels(matrices: List[ODMatrix]) -> Labels:
+        labels = Labels(
+            vars=list(pd.unique([mat.var for mat in matrices])),
+            origin_zones=matrices[0].origin_zones,
+            destination_zones=matrices[0].destination_zones,
+            mode=list(pd.unique([mat.mode for mat in matrices])),
+        )
+        return labels
+
+    @staticmethod
+    def check(matrices: List[ODMatrix], labels: Labels) -> None:
+        # all matrices follow the same zoning system and are equal size
+        for mat in matrices:
+            assert mat.origin_zones == labels.origin_zones, \
+                'Please check zone labels'
+            assert mat.destination_zones == labels.destination_zones, \
+                'Please check zone labels'
+            assert mat.matrix.shape == matrices[0].matrix.shape, \
+                'Please check matrix dimensions'
+
+        # all possible combinations are provided
+        combinations_matrices = [(var, trmode)
+                                 for (var, trmode, *others) in matrices]
+        combinations_labels = list(itertools.product(labels.vars, labels.mode))
+        for combination in combinations_labels:
+            assert combination in combinations_matrices, \
+                f'Combination {combination} missing from the input matrices'
+
+        # no duplicate combinations
+        assert len(combinations_matrices) == len(set(combinations_matrices)), \
+            'No duplicate keys are allowed'
