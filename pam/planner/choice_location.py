@@ -1,5 +1,5 @@
 """
-Choice models for activity synthesis
+Location and mode choice models for activity modelling
 """
 from copy import deepcopy
 from dataclasses import dataclass

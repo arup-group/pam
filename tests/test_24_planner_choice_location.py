@@ -3,7 +3,7 @@ import numpy as np
 import random
 from tests.test_22_planner_od import data_od, labels, od
 from tests.test_23_planner_zones import data_zones
-from pam.planner.choice import ChoiceModel, ChoiceMNL, ChoiceSet, \
+from pam.planner.choice_location import ChoiceModel, ChoiceMNL, ChoiceSet, \
     ChoiceConfiguration
 from pam.planner.utils_planner import sample_weighted
 import os
