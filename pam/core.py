@@ -451,7 +451,8 @@ class Population:
         raise TypeError(
             f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
-    def sample_locs(self, sampler, long_term_activities=None, joint_trips_prefix='escort_'):
+    def sample_locs(self, sampler, long_term_activities=None, joint_trips_prefix='escort_',
+                    location_override=True):
         """
         WIP Sample household plan locs using a sampler.
 
@@ -472,8 +473,10 @@ class Population:
         persons and home activities are impacted.
 
         TODO - add method to all core classes
-        :params list long_term activities: a list of activities for which location is only assigned once (per zone)
-        :params str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
+        :param list long_term activities: a list of activities for which location is only assigned once (per zone)
+        :param str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
+        :param bool location_override: if False, the facility sampler will retain any 
+            already-existing locations in the population.
         """
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
@@ -496,13 +499,14 @@ class Population:
                         target_act = act.act[(len(joint_trips_prefix)):]
                     else:
                         target_act = act.act
-
+                    
+                    # assign any unique locations
                     if (act.location.area, target_act) in unique_locations:
                         location = unique_locations[(
                             act.location.area, target_act)]
                         act.location = location
-
-                    else:
+                    # sample facility
+                    elif location_override or act.location.loc is None:
                         location = activity.Location(
                             area=act.location.area,
                             loc=sampler.sample(act.location.area, target_act)
