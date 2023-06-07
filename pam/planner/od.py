@@ -110,12 +110,9 @@ class ODFactory:
         od = np.zeros(shape=[len(x) for x in labels])
         for mat in matrices:
             od[
-                labels.vars.index(mat.var),
+                labels.vars.index(mat.var), :, :,
                 labels.mode.index(mat.mode)
             ] = mat.matrix
-
-        # move mode to last dimension
-        od = np.moveaxis(od, 1, 3)
 
         return OD(data=od, labels=labels)
 
