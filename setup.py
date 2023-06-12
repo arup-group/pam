@@ -1,14 +1,15 @@
-from setuptools import setup, find_packages
+from pathlib import Path
+
+from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("requirements.txt") as f:
-    install_requires = f.read().splitlines()
+requirements = {file.stem: file.read_text().splitlines() for file in Path(".").glob("requirements/*.txt")}
 
 setup(
     name="pam",
-    version="0.0.1",
+    version="0.2.4",
     author="Fred Shone",
     author_email="",
     description="Pandemic Activity Modeller/Modifier",
@@ -22,10 +23,11 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires=">=3.7",
     entry_points={"console_scripts": ["pam = pam.cli:cli"]},
-    extras_require = {
-        'planner': ['scikit-learn', 'python-Levenshtein']
+    extras_require={
+        "docs": requirements["docs"],
+        "tests": requirements["docs"] + requirements["tests"],
     },
-    install_requires=install_requires,
+    install_requires=requirements["base"],
 )
