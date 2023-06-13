@@ -24,8 +24,10 @@ jobs:
         post-cleanup: all
         cache-environment: true
 
-    - name: install PAM
-      run: pip install --no-deps .
+    - name: Install PAM
+      run: |
+        pip install --no-deps .
+        python -m ipykernel install --user --name pam
   
     - name: Run tests
       run: pytest
