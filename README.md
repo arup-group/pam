@@ -79,29 +79,15 @@ If you choose to install into a virtual environment, ensure you have `libgdal` a
 ### Developing PAM
 
 If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed. 
-If installing directly with pip, you can install these libraries using the `tests` option, i.e., `pip install -e ./pam[tests]`
+If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`
 
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
 while you work:
 
-- `scripts/code-qa/qa-checks.sh` - run a sensible combination of all the following
-- `pytest` - run the unit test suite
-- `scripts/code-qa/code-coverage.sh` - run unit tests and verify the code coverage threshold
-- `scripts/code-qa/notebooks-smoke-test.sh` - smoke test all Jupyter notebooks found in the `examples` directory
-- `scripts/code-qa/check-staged-file-sizes.sh` - check for large file sizes that have been git staged
-- `scripts/code-qa/check-all-file-sizes.sh` - check for large file sizes
-
-#### Git Commit Hook
-You can automate the above checks using our [git commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
-so that they will all run when you `git commit`; the commit will be rejected if any of the checks fail.
-To implement this automation simply copy `scripts/git-hooks/pre-commit` to `.git/hooks/pre-commit`. eg for MacOS/Linux:
-
-```sh
-cp scripts/git-hooks/pre-commit .git/hooks/
-```
-
-If for some reason you want to bypass the commit hook for a given commit, you can do so via
-`git commit --no-verify`. Best not to make a habit of that though :-).
+- `pre-commit`: run `pre-commit install` in your command line to load inbuilt checks that will run every time you commit your changes. 
+The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the [pep8 standard](https://peps.python.org/pep-0008/). 
+You can also run these checks yourself at any time to ensure staged changes are clean by simple calling `pre-commit`.
+- `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
 
 ## Why Activity Plans?
 
