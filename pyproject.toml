@@ -1,0 +1,28 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-rav -n2 --nbmake --nbmake-kernel=pam --cov=. --cov-report=html --cov-report=xml"
+testpaths = ["tests", "examples"]
+
+[tool.coverage.run]
+branch = true
+source = ["pam/"]
+omit = ["__init__.py"]
+
+[tool.coverage.report]
+fail_under = 89
+
+[tool.coverage.html]
+directory = "reports/coverage"
+
+[tool.coverage.xml]
+output = "reports/coverage/coverage.xml"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+select = ["E9", "F63", "F7", "F82"]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"

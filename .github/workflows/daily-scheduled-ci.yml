@@ -28,9 +28,7 @@ jobs:
       run: pip install --no-deps .
   
     - name: Run tests
-      run: |
-        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-qa/code-coverage.sh
+      run: pytest
 
     - name: Send build success notification
       if: success()

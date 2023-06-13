@@ -30,27 +30,15 @@ jobs:
       with:
         micromamba-version: latest
         environment-file: environment.yml
-        create-args: flake8
         post-cleanup: all
         cache-environment: true
-      
+
     - name: install PAM
       run: pip install --no-dependencies .
 
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
     - name: Run tests
-      run: |
-        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-qa/code-coverage.sh
-    - name: Smoke test notebooks
-      run: |
-        ./scripts/code-qa/notebooks-smoke-test.sh
-    - name: Check for large files
-      run: |
-        ./scripts/code-qa/check-all-file-sizes.sh
+      run: pytest 
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
