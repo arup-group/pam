@@ -1,0 +1,36 @@
+site_name: Population Activity Modeller (PAM)
+nav:
+    - Home: index.md
+    - Examples:
+      - "1: PAM Getting Started": examples/01_PAM_Getting_Started.ipynb
+      - "2: Population Basics": examples/02_Population_Basics.ipynb
+      - "3: Example Generate Random Population": examples/03_Example_Generate_Random_Population.ipynb
+      - "4: Example Ingest NTS Diaries": examples/04_Example_Ingest_NTS_Diaries.ipynb
+      - "5: PAM Policies Walk Through": examples/05_PAM_Policies_Walk_Through.ipynb
+      - "6: PAM Complex Policies": examples/06_PAM_Complex_Policies.ipynb
+      - "7: PAM Point Sampling": examples/07_PAM_Point_Sampling.ipynb
+      - "8: PAM Population Activity Plots": examples/08_PAM_Population_Activity_Plots.ipynb
+      - "9: Travel Plots": examples/09_Travel_Plots.ipynb
+      - "10: Advanced Spatial-Sampling Demo": examples/10_Advanced_Spatial-Sampling_Demo.ipynb
+      - "11: Advanced Plan Rescheduling": examples/11_Advanced_Plan_Rescheduling.ipynb
+      - "12: Advanced Adding Vehicles": examples/12_Advanced_Adding_Vehicles.ipynb
+      - "13: Advanced Freight Synthesis": examples/13_Advanced_Freight_Synthesis.ipynb
+      - "14: Advanced Plan Cropping": examples/14_Advanced_Plan_Cropping.ipynb
+      - "15: Advanced Choice": examples/15_Advanced_Choice.ipynb
+theme: material
+repo_url: https://github.com/arup-project/pam/
+site_dir: .docs
+markdown_extensions:
+    - admonition
+    - attr_list
+    - toc:
+        permalink: "#"
+hooks:
+  - docs/hooks.py
+plugins:
+    - search
+    - mkdocs-jupyter:
+        include: ["examples/*.ipynb"]
+        execute: true
+        allow_errors: false
+        kernel_name: pam

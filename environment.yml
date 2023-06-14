@@ -28,6 +28,9 @@ dependencies:
     - pytest-mock
     - pytest-xdist
     - pytest
+    - nbmake
+    - mkdocs
+    - mkdocs-jupyter
     - pip
     - pip:
       - s2sphere < 0.3
