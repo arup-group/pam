@@ -5,6 +5,7 @@ channels:
 dependencies:
     - python >=3.7, <3.12
     - click >= 8.1, < 9
+    - gdal < 3.6
     - geopandas >= 0.13, < 0.14
     - ipykernel >= 5.2, < 6
     - lxml >= 4.6, < 5
@@ -27,7 +28,6 @@ dependencies:
     - pytest-mock
     - pytest-xdist
     - pytest
-    - nbmake
     - pip
     - pip:
       - s2sphere < 0.3

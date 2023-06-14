@@ -7,6 +7,21 @@ defaults:
     shell: bash -l {0}
 
 jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: mamba-org/setup-micromamba@v1
+      with:
+        micromamba-version: latest
+        environment-file: environment.yml
+        post-cleanup: all
+        cache-environment: true
+    - name: install PAM
+      run: pip install --no-dependencies .
+    - name: run tests
+      run: pytest -v
+      
   build:
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +35,7 @@ jobs:
         cache-environment: true
       
     - name: install PAM
-      run: pip install .
+      run: pip install --no-dependencies .
 
     - name: Lint with flake8
       run: |
