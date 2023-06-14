@@ -19,7 +19,7 @@ jobs:
         post-cleanup: all
         cache-environment: true
     - name: install PAM
-      run: pip install .
+      run: pip install --no-dependencies .
     - name: run tests
       run: pytest -v
       
@@ -36,7 +36,7 @@ jobs:
         cache-environment: true
       
     - name: install PAM
-      run: pip install .
+      run: pip install --no-dependencies .
 
     - name: Lint with flake8
       run: |
