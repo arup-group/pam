@@ -1,6 +1,0 @@
-memory_profiler
-pytest-cov
-pytest-mock
-pytest-xdist
-pytest
-nbmake

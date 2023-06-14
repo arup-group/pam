@@ -27,8 +27,7 @@ setup(
     entry_points={"console_scripts": ["pam = pam.cli:cli"]},
     extras_require={
         "docs": requirements["docs"],
-        "tests": requirements["docs"] + requirements["tests"],
-        "dev": requirements["docs"] + requirements["tests"] + requirements["dev"],
+        "dev": requirements["docs"] + requirements["dev"],
     },
     install_requires=requirements["base"],
 )
