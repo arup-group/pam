@@ -18,9 +18,11 @@ jobs:
         post-cleanup: all
         cache-environment: true
     - name: install PAM
-      run: pip install --no-dependencies .
+      run: |
+        pip install --no-dependencies .
+        python -m ipykernel install --user --name pam
     - name: run tests
-      run: pytest -v
+      run: pytest
       
   build:
     runs-on: ubuntu-latest
@@ -39,7 +41,7 @@ jobs:
         python -m ipykernel install --user --name pam
 
     - name: Run tests
-      run: pytest 
+      run: pytest
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
