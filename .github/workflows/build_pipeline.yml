@@ -7,6 +7,22 @@ defaults:
     shell: bash -l {0}
 
 jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: mamba-org/setup-micromamba@v1
+      with:
+        micromamba-version: latest
+        environment-file: environment.yml
+        init-shell: powershell
+        post-cleanup: all
+        cache-environment: true
+    - name: install PAM
+      run: pip install .
+    - name: run tests
+      run: pytest -v
+      
   build:
     runs-on: ubuntu-latest
     steps:
