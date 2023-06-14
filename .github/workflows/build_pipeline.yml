@@ -15,7 +15,6 @@ jobs:
       with:
         micromamba-version: latest
         environment-file: environment.yml
-        init-shell: powershell
         post-cleanup: all
         cache-environment: true
     - name: install PAM
