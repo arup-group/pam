@@ -1,9 +1,10 @@
-import pytest
 import random
-import pandas as pd
-import geopandas as gp
-from shapely.geometry import Polygon, Point, LinearRing, LineString, MultiLineString, MultiPolygon, MultiPoint
 from types import GeneratorType
+
+import geopandas as gp
+import pandas as pd
+import pytest
+from shapely.geometry import LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon
 
 from pam.samplers import attributes, basic, facility, spatial
 
@@ -220,7 +221,7 @@ def test_random_sample_point_from_multilinestring_random_seed(fixed_seed):
     poly = MultiLineString([p1, p2])
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
-    assert list(sampler.sample_point_from_multipolygon(gdf.geometry[0]).coords[0]) == [10.134364244112401, 10.847433736937234]
+    assert list(sampler.sample_point_from_multilinestring(gdf.geometry[0]).coords[0]) == [0.5374569764496049, 0.0]
 
 
 def test_random_sample_point_from_multipoint():
@@ -239,7 +240,7 @@ def test_random_sample_point_from_multipoint_random_seed(fixed_seed):
     poly = MultiPoint([p1, p2])
     gdf = gp.GeoDataFrame(df, geometry=[poly]*3)
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
-    assert list(sampler.sample_point_from_multipolygon(gdf.geometry[0]).coords[0]) == [10.0, 10.0]
+    assert list(sampler.sample_point_from_multipoint(gdf.geometry[0]).coords[0]) == [0.0, 0.0]
 
 
 def test_random_point_from_geoseries_of_polygons():

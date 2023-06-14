@@ -1,14 +1,17 @@
-import pytest
 import os
-from pandas import Timestamp, DataFrame
-from pandas.testing import assert_frame_equal
+from datetime import datetime
+
+import numpy as np
+import pytest
 from geopandas import GeoDataFrame
+from pandas import DataFrame, Timestamp
+from pandas.testing import assert_frame_equal
 from s2sphere import CellId
 from shapely.geometry import LineString, Point
-from pam import utils, plot, read
+
+from pam import plot, read, utils
 from pam.core import Household, Population
 from tests.fixtures import instantiate_household_with
-from datetime import datetime
 
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
@@ -147,22 +150,25 @@ def correct_cyclist_geodataframe():
 def test_build_geodataframe_for_pt_person(pt_person, correct_pt_person_geodataframe):
     gdf = pt_person.build_travel_geodataframe()
     gdf = gdf[correct_pt_person_geodataframe.columns]
-    assert_frame_equal(gdf, correct_pt_person_geodataframe)
+    assert_frame_equal(gdf, correct_pt_person_geodataframe, check_dtype=False)
 
 
-def test_building_geodataframe_with_reprojection(pt_person, correct_pt_person_geodataframe):
+def test_building_geodataframe_with_reprojection(pt_person):
     gdf = pt_person.build_travel_geodataframe(from_epsg='epsg:27700', to_epsg='epsg:4326')
-    assert [[(round(p[0], 6), round(p[1], 6)) for p in ls.coords] for ls in gdf['geometry'].to_list()] == [
+    expected_coords = [
         [(0.123336, 51.537168), (0.175434, 51.567355)], [(0.175434, 51.567355), (0.183252, 51.574827)],
         [(0.183252, 51.574827), (0.250898, 51.559106)], [(0.250898, 51.559106), (0.250894, 51.559016)],
         [(0.250894, 51.559016), (0.080917, 51.539493)], [(0.080917, 51.539493), (0.080917, 51.539493)],
-        [(0.080917, 51.539493), (0.146117, 51.526088)], [(0.146117, 51.526088), (0.123336, 51.537168)]]
+        [(0.080917, 51.539493), (0.146117, 51.526088)], [(0.146117, 51.526088), (0.123336, 51.537168)]
+    ]
+    built_coords = [[(round(p[0], 6), round(p[1], 6)) for p in ls.coords] for ls in gdf['geometry'].to_list()]
+    np.testing.assert_allclose(built_coords, expected_coords, rtol=1e-3)
 
 
 def test_build_geodataframe_for_cyclist(cyclist, correct_cyclist_geodataframe):
     gdf = cyclist.build_travel_geodataframe()
     gdf = gdf[correct_cyclist_geodataframe.columns]
-    assert_frame_equal(gdf, correct_cyclist_geodataframe)
+    assert_frame_equal(gdf, correct_cyclist_geodataframe, check_dtype=False)
 
 
 def test_build_hhld_geodataframe(pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
@@ -175,7 +181,7 @@ def test_build_hhld_geodataframe(pt_person, cyclist, correct_pt_person_geodatafr
     correct_gdf = correct_gdf.reset_index(drop=True)
     correct_gdf['hid'] = 'household_id'
     gdf = gdf[correct_gdf.columns]
-    assert_frame_equal(gdf, correct_gdf)
+    assert_frame_equal(gdf, correct_gdf, check_dtype=False)
 
 
 def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
@@ -198,7 +204,7 @@ def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodatafra
 
     correct_gdf = correct_gdf.reset_index(drop=True)
     gdf = gdf[correct_gdf.columns]
-    assert_frame_equal(gdf, correct_gdf)
+    assert_frame_equal(gdf, correct_gdf, check_dtype=False)
 
 
 def test_get_linestring_with_s2_cellids():

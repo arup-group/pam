@@ -55,58 +55,32 @@ supply or utility demand.
 
 ## Installation
 
-Assuming python ~3.7 and using git:
+It is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
+
+1. Install mamba with the [Mambaforge] executable for your operating system.
+2. Open the command line (or the "miniforge prompt" in Windows).
+3. Download (a.k.a., clone) the PAM respository: `git clone git@github.com:arup-group/pam.git`
+4. Create the PAM mamba environment: `mamba env create -f pam/environment.yml`
+5. Activate the PAM mamba environment: `mamba activate pam`
+6. Install the PAM package into the environment, in editible mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e ./pam`
+
+All together:
 
 ```
 git clone git@github.com:arup-group/pam.git
-cd pam
-python3 -m venv venv #intall into virtual environment
-source venv/bin/activate
-pip install -e .
+mamba env create -f pam/environment.yml
+mamba activate pam
+pip install --no-deps -e ./pam
 ```
 
-### Underlying native dependencies
-
-PAM uses some Python libraries that rely on underlying native geospatial libraries. If you are missing these libraries,
-`pip install` will fail, most likely with errors about `GDAL`
-(e.g. `Failed to get options via gdal-config: [Errno 2] No such file or directory: 'gdal-config': 'gdal-config'`) or
-`PROJ`. Installation of these dependencies varies according to your operating system, for example:
-
-| OS       | Commands |
-|----------|----------|
-|Mac OS    | `brew install spatialindex` <br/> `brew install gdal --HEAD` <br/> `brew install gdal` 
-|Ubuntu    | `sudo apt install libspatialindex-dev` <br/> `sudo apt install libgdal-dev`|
-
-If you are using Anaconda to manage your environment, it will discover and install these native dependencies for you, as
-described [below](#windows-installation).
-
-
-### Windows installation
-We strongly recommend using a virtual environment.
-
-If installation fails, we recommend to try the following code **using the Anaconda Powershell Prompt**:
-
-```
-# Clone the folders into the CD
-git clone git@github.com:arup-group/pam.git
-
-# Create a conda environment
-conda create -n venv python=3.7
-
-# Check your Python version running python in your terminal
-conda activate venv
-conda install geopandas
-# change directory to pam
-cd pam
-# install the current directory (your project) in editable mode (-e .)
-pip install -e .
-```
-
-### Optional dependencies
-We have kept some of the dependencies (such as scikit-learn) optional. 
-To install the full version use `pip install -e .[planner]` instead.
+We do not recommend trying to install PAM directly with pip (e.g. in a virtual environment) as you need to first install underlying native geospatial libraries, the method for which differs by operating system.
+If you choose to install into a virtual environment, ensure you have `libgdal` and `libspatialindex` installed on your device before installing with pip. 
 
 ### Developing PAM
+
+If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed. 
+If installing directly with pip, you can install these libraries using the `tests` option, i.e., `pip install -e ./pam[tests]`
+
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
 while you work:
 

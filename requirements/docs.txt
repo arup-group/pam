@@ -1,0 +1,4 @@
+colorama
+jupyter_contrib_nbextensions < 0.6
+jupyter < 2
+tabulate < 1

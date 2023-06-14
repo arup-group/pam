@@ -1,14 +1,9 @@
-FROM python:3.7.16-bullseye
+FROM mambaorg/micromamba:1.4.3-bullseye-slim
+COPY --chown=$MAMBA_USER:$MAMBA_USER . . 
+RUN micromamba install -y -n base -f environment.yml && \
+    micromamba clean --all --yes
+ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-RUN apt-get update \
-&& apt-get upgrade -y \
-&& apt-get -y install libspatialindex-dev libgdal-dev tk-dev --no-install-recommends \
-&& rm -rf /var/lib/apt/lists/* \
-&& /usr/local/bin/python -m pip install --upgrade pip
+RUN pip install --no-deps -e .
 
-COPY . .
-
-RUN pip install -e .[planner]
-ENV PYTHONPATH=./scripts:${PYTHONPATH}
-
-ENTRYPOINT ["python3"]
+ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "ipython"]
