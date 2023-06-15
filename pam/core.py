@@ -18,6 +18,11 @@ from pam.vehicle import Vehicle, ElectricVehicle
 class Population:
 
     def __init__(self, name: str = None):
+        """
+
+        Args:
+            name (str, optional): my_description. Defaults to None.
+        """
         self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
@@ -229,8 +234,10 @@ class Population:
 
     def legs_df(self) -> pd.DataFrame:
         """
+
         Extract tabular record of population legs.
-        :return pd.DataFrame: record of legs
+
+        Returns: record of legs
         """
         df = []
         for hid, pid, person in self.people():

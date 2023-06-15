@@ -31,6 +31,9 @@ dependencies:
     - nbmake
     - mkdocs
     - mkdocs-jupyter
+    - mkdocstrings
+    - mkdocstrings-python
+    - mkdocs-click
     - pip
     - pip:
       - s2sphere < 0.3
