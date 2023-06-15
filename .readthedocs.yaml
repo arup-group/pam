@@ -10,4 +10,4 @@ build:
 mkdocs:
   configuration: mkdocs.yaml
 conda:
-  environment: environment.yaml
+  environment: environment.yml

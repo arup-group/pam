@@ -14,14 +14,6 @@ This page provides documentation for our command line tools.
 
 ::: mkdocs-click
     :module: pam.cli
-    :command: summary
-
-
-::: mkdocs-click
-    :module: pam.cli
-    :command: benchmarks
-    
-
-::: mkdocs-click
-    :module: pam.cli
     :command: cli
+    :prog_name: pam
+
