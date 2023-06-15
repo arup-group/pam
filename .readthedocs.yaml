@@ -10,4 +10,4 @@ build:
 mkdocs:
   configuration: mkdocs.yaml
 conda:
-  environment: requirements-docs.yaml
+  environment: environment.yaml
