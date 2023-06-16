@@ -12,7 +12,7 @@ It is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/lat
 
 All together:
 
-```
+``` shell
 git clone git@github.com:arup-group/pam.git
 mamba env create -f pam/environment.yml
 mamba activate pam

@@ -28,6 +28,8 @@ repo_url: https://github.com/arup-project/pam/
 site_dir: .docs
 markdown_extensions:
     - admonition
+    - pymdownx.highlight
+    - pymdownx.superfences
     - attr_list
     - toc:
         permalink: "#"

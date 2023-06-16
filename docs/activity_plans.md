@@ -2,7 +2,7 @@
 
 PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips'). The main rules are (i) that plans must consist of sequences of alternate `pam.activity.Activity` and `pam.activity.Leg` objects and (ii) that a plan must start and end with an `Activity`:
 
-```
+``` python
 from pam.core import Person
 from pam.activity import Leg, Activity
 from pam
@@ -98,7 +98,7 @@ Activity Plans are represented in this project as regular python `lists()`, cont
 Plans belong to `core.People` which belong to
 `core.Households` which belong to a `core.Population`. For example:
 
-```
+``` python
 from pam.core import Population, Household, Person
 from pam.activity import Activity, Leg
 

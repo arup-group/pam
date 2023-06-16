@@ -5,7 +5,7 @@
 We have some read methods for common input data formats - but first let's take a quick
 look at the core pam data structure for populations:
 
-```
+``` python
 from pam.core import Population, Household, Person
 
 population = Population()  # initialise an empty population
@@ -33,7 +33,7 @@ travel diary can be composed of three tables:
 - `households_attributes` (optional) - optionally include households attributes (eg: `hh number of cars`)
 
 The input tables are expected as pandas.DataFrame, eg:
-```
+``` python
 import pandas as pd
 import pam
 
@@ -63,6 +63,7 @@ named `pid` (person ID) and `hid` (household ID) are used to provide unique iden
 **Trips Input:**
 
 eg:
+
 | pid | hid | seq | hzone | ozone | dzone | purp | mode | tst | tet | freq |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 | 0 | 0 | Harrow | Harrow | Camden | work | pt | 444 | 473 | 4.54 |
@@ -103,20 +104,22 @@ We've encountered a few different ways that trip purpose can be encoded. The pre
 **Using persons_attributes and /or households_attributes**
 
 eg:
-```
-# persons.csv
+
+`persons.csv`
+
 | pid | hid | hzone | freq | income| age | driver | cats or dogs |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 | 0 | Harrow | 10.47 | high | high | yes | dogs |
 | 1 | 0 | Harrow | 0.034 | low | medium | no | dogs |
 | 2 | 1 | Islington | 8.9 | medium | low | yes | dogs |
 
-# households.csv
+`households.csv`
+
 | hid | hzone | freq | persons | cars |
 | --- | --- | --- | --- | --- |
 | 0 | Harrow | 10.47 | 2 | 1 |
 | 1 | Islington | 0.034 | 1 | 1 |
-```
+
 
 If you are using persons_attributes (`persons_attributes`) this table must contain a `pid` field (person ID). If you are using persons_attributes (`households_attributes`) this table must contain a `hid` field (household ID). In both cases, the frequency field `freq` may be used. All other attributes can be included with column names to suit the attribute. Note that `hzone` (home zone) can optionally be provided in the attribute tables.
 
@@ -129,7 +132,7 @@ Because it is quite common to provide a person or household `freq` in the trips 
 Generally PAM will assume when you want some weighted output, that it should use household frequencies. If these have not been set then PAM will assume that the household frequency is the average
 frequency of persons within the household. If person frequencies are not set the PAM will assume that the person frequency is the average frequency of legs within the persons plan. If you wish to adjust frequencies of a population then you should use the `set_freq()` method, eg:
 
-```
+``` python
 factor = 1.2
 household.set_freq(household.freq * factor)
 for pid, person in household:
