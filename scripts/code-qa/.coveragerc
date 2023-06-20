@@ -1,6 +1,6 @@
 [run]
 branch = True
-omit = venv/*, tests/*, notebooks/*, scripts/*, setup.py, pam/__init__.py, pam/*/__init__.py
+omit = venv/*, tests/*, notebooks/*, scripts/*, setup.py, pam/__init__.py, pam/*/__init__.py, requirements/*, environment.yml
 
 [report]
 fail_under = 89
