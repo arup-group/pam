@@ -1,5 +1,4 @@
 from datetime import timedelta
-from tests.fixtures import Steve
 from pam.samplers.time import jitter_activity, apply_jitter_to_plan
 
 

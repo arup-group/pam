@@ -1,7 +1,10 @@
 import random
+import pytest
 from pam.policy import modifiers
-from tests.fixtures import *
-
+from pam.activity import Activity, Leg
+from pam.core import Person
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 @pytest.fixture()
 def Bobber():
@@ -43,20 +46,20 @@ def Betty():
     return Betty
 
 
-def test_remove_activities_removes_single_activity(Betty):
+def test_remove_activities_removes_single_activity(assert_correct_activities, Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
     modifiers.ReduceSharedActivity(['shop_1']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12]])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_2', 'home'])
 
 
-def test_remove_activities_removes_adjoining_activities(Betty):
+def test_remove_activities_removes_adjoining_activities(assert_correct_activities, Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
     modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).remove_activities(Betty, shared_activities_for_removal=[Betty.plan[12], Betty.plan[14]])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home'])
 
 
 @pytest.mark.xfail() # fails because of the bug
-def test_remove_activities_removes_relevant_shared_activities(Betty):
+def test_remove_activities_removes_relevant_shared_activities(assert_correct_activities, Betty):
     Betty.plan[6].act = 'shop_1'
     Betty.plan[6].location = Betty.plan[12].location
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'shop_1', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
@@ -64,7 +67,7 @@ def test_remove_activities_removes_relevant_shared_activities(Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'shop_1', 'escort', 'home'])
 
 
-def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_acts(SmithHousehold):
+def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_acts(assert_correct_activities, SmithHousehold):
     household = SmithHousehold
     steve = household.people[1]
     hilda = household.people[2]
@@ -86,7 +89,7 @@ def test_remove_household_activities_does_nothing_if_people_in_hhld_dont_share_a
     assert_correct_activities(person=bobby, ordered_activities_list=['home', 'education', 'home'])
 
 
-def test_remove_household_activities_does_nothing_if_one_person_in_hhld(Betty):
+def test_remove_household_activities_does_nothing_if_one_person_in_hhld(assert_correct_activities, instantiate_household_with, Betty):
     household = instantiate_household_with([Betty])
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
 
@@ -98,7 +101,7 @@ def test_remove_household_activities_does_nothing_if_one_person_in_hhld(Betty):
     assert_correct_activities(person=Betty, ordered_activities_list=['home', 'escort', 'work', 'leisure', 'escort', 'home', 'shop_1', 'shop_2', 'home'])
 
 
-def test_remove_household_activities_removes_Bettys_shopping_shared_activities(mocker, Betty, Bobber):
+def test_remove_household_activities_removes_Bettys_shopping_shared_activities(instantiate_household_with, assert_correct_activities, mocker, Betty, Bobber):
     mocker.patch.object(random, 'choice', return_value=Betty)
     hhld = instantiate_household_with([Betty, Bobber])
     policy = modifiers.ReduceSharedActivity(['shop_1', 'shop_2'])
@@ -112,7 +115,7 @@ def test_remove_household_activities_removes_Bettys_shopping_shared_activities(m
     assert_correct_activities(person=Bobber, ordered_activities_list=['home', 'education', 'home'])
 
 
-def test_shared_activities_for_removal_finds_shared_activities(Betty, Bobber):
+def test_shared_activities_for_removal_finds_shared_activities(instantiate_household_with, Betty, Bobber):
     hhld = instantiate_household_with([Betty, Bobber])
     act_1 = Activity(8, 'shop_2', 'b', start_time=mtdt(19 * 60), end_time=mtdt(19 * 60 + 50))
     act_2 = Activity(7, 'shop_1', 'b', start_time=mtdt(18 * 60 + 20), end_time=mtdt(18 * 60 + 50))
@@ -124,7 +127,7 @@ def test_shared_activities_for_removal_finds_shared_activities(Betty, Bobber):
     assert act_2.isin_exact(shared_acts)
 
 
-def test_people_who_share_activities_for_removal_identifies_both_people_as_sharing_activities(Betty, Bobber):
+def test_people_who_share_activities_for_removal_identifies_both_people_as_sharing_activities(instantiate_household_with, Betty, Bobber):
     hhld = instantiate_household_with([Betty, Bobber])
 
     ppl = modifiers.ReduceSharedActivity(['shop_1', 'shop_2']).people_who_share_activities_for_removal(hhld)

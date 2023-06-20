@@ -1,7 +1,5 @@
 import pytest
-import os
-from tests.fixtures import Steve
-from pam.read import read_matsim
+
 from pam.planner.encoder import StringCharacterEncoder, \
     StringIntEncoder, PlanCharacterEncoder, PlanOneHotEncoder, \
     PlansCharacterEncoder, PlansOneHotEncoder
@@ -10,18 +8,6 @@ from pam.planner.encoder import StringCharacterEncoder, \
 @pytest.fixture
 def acts():
     return ['work', 'home', 'shop']
-
-
-test_plans = os.path.abspath(
-    os.path.join(os.path.dirname(__file__),
-                 "test_data/test_matsim_plansv12.xml")
-)
-
-
-@pytest.fixture
-def population():
-    population = read_matsim(test_plans, version=12)
-    return population
 
 
 def test_strings_encoded_to_single_characters(acts):
@@ -73,10 +59,10 @@ def test_plan_encoding_works_two_way(Steve, encoder_class):
 
 
 @pytest.mark.parametrize('encoder_class', [PlansCharacterEncoder, PlansOneHotEncoder])
-def test_all_plans_are_encoded(population, encoder_class):
-    encoder = encoder_class(population.activity_classes)
-    plans_encoded = encoder.encode(population.plans())
-    assert plans_encoded.shape[0] == len(population)
+def test_all_plans_are_encoded(population_no_args, encoder_class):
+    encoder = encoder_class(population_no_args.activity_classes)
+    plans_encoded = encoder.encode(population_no_args.plans())
+    assert plans_encoded.shape[0] == len(population_no_args)
 
 def test_one_hot_encoder_shape(Steve):
     plan = Steve.plan

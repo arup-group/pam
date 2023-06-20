@@ -2,12 +2,11 @@ import pytest
 from datetime import datetime, timedelta
 
 from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
+from pam.activity import Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.variables import END_OF_DAY
-from .fixtures import person_heh
 
 
 testdata = [

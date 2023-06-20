@@ -1,4 +1,3 @@
-from .fixtures import population_heh
 from pam.samplers.population import sample
 
 

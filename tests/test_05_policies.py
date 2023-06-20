@@ -1,9 +1,14 @@
 import random
+import pytest
 from pam.policy import modifiers
 from pam.policy import filters
 from pam.policy import probability_samplers
 from pam.policy import policies
-from tests.fixtures import *
+from pam.activity import Activity, Leg
+from pam.core import Person
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
+
 
 
 def assert_correct_activities_locations(person, ordered_activities_locations_list):
@@ -15,7 +20,7 @@ def assert_correct_activities_locations(person, ordered_activities_locations_lis
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
-def test_Policy_throws_exception_when_used():
+def test_Policy_throws_exception_when_used(Bobby):
     policy = policies.Policy()
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)
@@ -166,7 +171,7 @@ def home_education_shop_education_home():
     return person
 
 
-def test_home_education_home_removal_of_education_act(person_home_education_home):
+def test_home_education_home_removal_of_education_act(instantiate_household_with, assert_correct_activities, person_home_education_home):
     household = instantiate_household_with([person_home_education_home])
     assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
 
@@ -175,7 +180,7 @@ def test_home_education_home_removal_of_education_act(person_home_education_home
     assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
-def test_home_education_home_education_home_removal_of_education_act():
+def test_home_education_home_education_home_removal_of_education_act(instantiate_household_with, assert_correct_activities):
     person = Person(1)
     person.add(Activity(seq=1, act='home', area='a', start_time=mtdt(0), end_time=mtdt(60)))
     person.add(Leg(seq=1, mode='car', start_area='a', end_area='b', start_time=mtdt(60), end_time=mtdt(90)))
@@ -195,7 +200,7 @@ def test_home_education_home_education_home_removal_of_education_act():
     assert_correct_activities(person=household.people[1], ordered_activities_list=['home'])
 
 
-def test_home_work_home_education_home_removal_of_education_act():
+def test_home_work_home_education_home_removal_of_education_act(instantiate_household_with, assert_correct_activities):
     person = Person(1)
     person.add(
         Activity(
@@ -291,7 +296,7 @@ def test_home_work_home_education_home_removal_of_education_act():
 
 
 def test_attribute_based_remove_activity_policy_removes_all_matching_activities_from_strictly_relevant_people(
-        home_education_home_university_student):
+        instantiate_household_with, assert_correct_activities, home_education_home_university_student):
     household = instantiate_household_with([home_education_home_university_student])
 
     def age_condition_over_17(attribute_value):
@@ -315,7 +320,7 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
 
 
 def test_attribute_based_remove_activity_policy_does_not_remove_matching_activities_from_strictly_irrelevant_people(
-        home_education_home_university_student):
+        instantiate_household_with, assert_correct_activities, home_education_home_university_student):
     household = instantiate_household_with([home_education_home_university_student])
 
     def age_condition_over_17(attribute_value):
@@ -341,7 +346,7 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
 
 
 def test_attribute_based_remove_activity_policy_removes_all_matching_activities_from_non_strictly_relevant_people(
-        home_education_home_university_student):
+        instantiate_household_with, assert_correct_activities, home_education_home_university_student):
     household = instantiate_household_with([home_education_home_university_student])
 
     def age_condition_over_17(attribute_value):
@@ -367,7 +372,7 @@ def test_attribute_based_remove_activity_policy_removes_all_matching_activities_
 
 
 def test_attribute_based_remove_activity_policy_does_not_remove_matching_activities_from_non_strictly_irrelevant_people(
-        home_education_home_university_student):
+        instantiate_household_with, assert_correct_activities, home_education_home_university_student):
     household = instantiate_household_with([home_education_home_university_student])
 
     def age_condition_under_0(attribute_value):
@@ -392,7 +397,7 @@ def test_attribute_based_remove_activity_policy_does_not_remove_matching_activit
     assert_correct_activities(person=household.people[1], ordered_activities_list=['home', 'education', 'home'])
 
 
-def test_remove_activity_policy_only_removes_individual_activities(mocker, home_education_shop_education_home):
+def test_remove_activity_policy_only_removes_individual_activities(assert_correct_activities, home_education_shop_education_home):
     person = home_education_shop_education_home
     assert_correct_activities(person=person, ordered_activities_list=['home', 'education', 'shop', 'education', 'home'])
     act_to_remove = list(person.activities)[3]
@@ -403,7 +408,7 @@ def test_remove_activity_policy_only_removes_individual_activities(mocker, home_
     assert_correct_activities(person=person, ordered_activities_list=['home', 'education', 'shop', 'home'])
 
 
-def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(mocker, SmithHousehold):
+def test_evaluate_activity_policy_selects_steve_for_individual_activity_removal(assert_correct_activities, mocker, SmithHousehold):
     mocker.patch.object(random, 'random', side_effect=[1] + [0] + [1] * 18)
     household = SmithHousehold
     steve = household.people[1]
@@ -674,7 +679,7 @@ def test_person_policy_with_activity_based_probability_with_a_satisfied_person_a
 ##### MoveActivityToHomeLocation
 
 
-def test_MoveActivityToHomeLocation_moves_shop_to_home_location():
+def test_MoveActivityToHomeLocation_moves_shop_to_home_location(instantiate_household_with):
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -693,7 +698,7 @@ def test_MoveActivityToHomeLocation_moves_shop_to_home_location():
     assert Hilda.plan[2].is_exact(Activity(2, 'shop', 'a', start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60 + 30)))
 
 
-def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
+def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip(instantiate_household_with):
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'car', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -712,7 +717,7 @@ def test_MoveActivityToHomeLocation_updates_Legs_after_moving_shopping_trip():
     assert Hilda.plan.validate_locations()
 
 
-def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_trip():
+def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_trip(instantiate_household_with):
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -730,7 +735,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_after_moving_shopping_tr
     assert Hilda.plan[3].mode != 'pt'
 
 
-def test_MoveActivityToHomeLocation_performs_mode_shift_to_car():
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_car(instantiate_household_with):
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': True})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -749,7 +754,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_car():
     assert Hilda.plan[3].mode == 'car'
 
 
-def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk():
+def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk(instantiate_household_with):
     Hilda = Person(1, attributes={'age': 45, 'job': 'influencer', 'gender': 'female', 'driving_licence': False})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, 'pt', 'a', 'b', start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
@@ -768,7 +773,7 @@ def test_MoveActivityToHomeLocation_performs_mode_shift_to_walk():
     assert Hilda.plan[3].mode == 'walk'
 
 
-def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHousehold):
+def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(assert_correct_activities, SmithHousehold):
     household = SmithHousehold
     Steve = household.people[1]
     Timmy = household.people[3]
@@ -810,7 +815,7 @@ def test_MoveActivityToHomeLocation_moves_shopping_tour_to_home_location(SmithHo
     assert_correct_activities_locations(person=Bobby, ordered_activities_locations_list=['a', 'b', 'a'])
 
 
-def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(SmithHousehold):
+def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(assert_correct_activities, SmithHousehold):
     household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))
@@ -837,7 +842,7 @@ def test_MoveActivityToHomeLocation_moves_partial_fit_shopping_tours(SmithHouseh
     assert_correct_activities_locations(person=Hilda, ordered_activities_locations_list=['a', 'a', 'a', 'a', 'a'])
 
 
-def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(SmithHousehold):
+def test_MoveActivityToHomeLocation_does_moves_only_valid_shopping_tour(assert_correct_activities, SmithHousehold):
     household = SmithHousehold
     Hilda = Person(2, attributes={'age': 45, 'job': 'influencer', 'gender': 'female'})
     Hilda.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(8 * 60)))

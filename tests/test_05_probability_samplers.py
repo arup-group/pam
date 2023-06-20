@@ -1,17 +1,12 @@
 import random
+import pytest
 from pam.policy import probability_samplers
-from tests.fixtures import *
-
-
-def instantiate_household_with(persons: list):
-    household = Household(1)
-    for person in persons:
-        household.add(person)
-    return household
+from pam.activity import Activity
+from pam.core import Person, Household
 
 
 @pytest.fixture()
-def SmithHousehold_alt(Steve, Hilda):
+def SmithHousehold_alt(instantiate_household_with, Steve, Hilda):
     return instantiate_household_with([Steve, Hilda])
 
 
