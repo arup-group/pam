@@ -24,7 +24,7 @@ nav:
   - Get involved: get_involved.md
   - CLI Reference: api/cli.md
 theme: material
-repo_url: https://github.com/arup-project/pam/
+repo_url: https://github.com/arup-group/pam/
 site_dir: .docs
 markdown_extensions:
   - admonition
