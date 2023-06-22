@@ -1,7 +1,3 @@
-import pytest
-
-from .fixtures import *
-
 
 def test_home_education_home_remove_activity_education(person_home_education_home):
 

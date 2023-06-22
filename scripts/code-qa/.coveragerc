@@ -1,6 +1,6 @@
 [run]
 branch = True
-omit = venv/*, tests/*, notebooks/*, scripts/*, setup.py, pam/__init__.py, pam/*/__init__.py
+source = pam/
 
 [report]
 fail_under = 89

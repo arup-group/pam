@@ -1,4 +1,3 @@
-from logging import error
 import os
 from io import StringIO
 from pam.core import Person

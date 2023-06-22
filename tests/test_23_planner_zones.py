@@ -1,19 +1,8 @@
 import pytest
 from pam.planner.zones import Zones
-import pandas as pd
+
 import numpy as np
 
-
-@pytest.fixture
-def data_zones():
-    df = pd.DataFrame(
-        {
-            'zone': ['a', 'b'],
-            'jobs': [100, 200],
-            'schools': [3, 1]
-        }
-    ).set_index('zone')
-    return df
 
 @pytest.fixture
 def zones(data_zones):

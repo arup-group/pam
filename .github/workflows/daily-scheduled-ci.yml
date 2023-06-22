@@ -25,7 +25,7 @@ jobs:
         cache-environment: true
 
     - name: install PAM
-      run: pip install --no-deps .
+      run: pip install --no-deps -e .
   
     - name: Run tests
       run: |

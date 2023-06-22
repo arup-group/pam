@@ -3,10 +3,9 @@ import pytest
 import pandas as pd
 from datetime import datetime
 
-from pam.core import Population, Household, Person
+from pam.core import Population, Household
 from pam.read import load_travel_diary, load_pickle
 from pam.utils import parse_time
-from .fixtures import person_crop_last_act, person_crop_last_leg
 
 test_trips_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")

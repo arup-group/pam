@@ -4,26 +4,14 @@ from datetime import datetime
 import numpy as np
 import pytest
 from geopandas import GeoDataFrame
-from pandas import DataFrame, Timestamp
+from pandas import Timestamp
 from pandas.testing import assert_frame_equal
 from s2sphere import CellId
-from shapely.geometry import LineString, Point
+from shapely.geometry import LineString
+import pandas as pd
 
-from pam import plot, read, utils
-from pam.core import Household, Population
-from tests.fixtures import instantiate_household_with
-
-test_trips_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
-)
-test_tripsv12_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-)
-
-
-@pytest.fixture()
-def pt_person():
-    return read.read_matsim(test_trips_path, version=11)['census_1']['census_1']
+from pam import utils
+from pam.core import Population
 
 
 @pytest.fixture()
@@ -122,11 +110,6 @@ def correct_pt_person_geodataframe():
 
 
 @pytest.fixture()
-def cyclist():
-    return read.read_matsim(test_trips_path)['census_2']['census_2']
-
-
-@pytest.fixture()
 def correct_cyclist_geodataframe():
     return GeoDataFrame(
         {'distance': {0: 9647.24116945626, 1: 9647.241169456261},
@@ -171,20 +154,20 @@ def test_build_geodataframe_for_cyclist(cyclist, correct_cyclist_geodataframe):
     assert_frame_equal(gdf, correct_cyclist_geodataframe, check_dtype=False)
 
 
-def test_build_hhld_geodataframe(pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
+def test_build_hhld_geodataframe(instantiate_household_with, pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
     hhld = instantiate_household_with([pt_person, cyclist], hid='household_id')
     gdf = hhld.build_travel_geodataframe()
     assert 'hid' in gdf.columns
 
     correct_gdf = correct_pt_person_geodataframe
-    correct_gdf = correct_gdf.append(correct_cyclist_geodataframe)
+    correct_gdf = pd.concat([correct_gdf, correct_cyclist_geodataframe])
     correct_gdf = correct_gdf.reset_index(drop=True)
     correct_gdf['hid'] = 'household_id'
     gdf = gdf[correct_gdf.columns]
     assert_frame_equal(gdf, correct_gdf, check_dtype=False)
 
 
-def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
+def test_build_pop_geodataframe(instantiate_household_with, pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe):
     pop = Population()
     pop.add(instantiate_household_with([pt_person, cyclist], hid='1'))
     pop.add(instantiate_household_with([pt_person], hid='2'))
@@ -193,14 +176,14 @@ def test_build_pop_geodataframe(pt_person, cyclist, correct_pt_person_geodatafra
     assert 'hid' in gdf.columns
 
     correct_gdf = correct_pt_person_geodataframe
-    correct_gdf = correct_gdf.append(correct_cyclist_geodataframe)
+    correct_gdf = pd.concat([correct_gdf, correct_cyclist_geodataframe])
     correct_gdf['hid'] = '1'
 
     correct_pt_person_geodataframe['hid'] = '2'
-    correct_gdf = correct_gdf.append(correct_pt_person_geodataframe)
+    correct_gdf = pd.concat([correct_gdf, correct_pt_person_geodataframe])
 
     correct_cyclist_geodataframe['hid'] = '3'
-    correct_gdf = correct_gdf.append(correct_cyclist_geodataframe)
+    correct_gdf = pd.concat([correct_gdf, correct_cyclist_geodataframe])
 
     correct_gdf = correct_gdf.reset_index(drop=True)
     gdf = gdf[correct_gdf.columns]
@@ -231,14 +214,15 @@ def test_matsim_time_day_three():
     dt = utils.matsim_time_to_datetime('49:01:02')
     assert dt == datetime(1900, 1, 3, 1, 1, 2)
 
-def test_parser_does_not_delete_current_element():
+
+def test_parser_does_not_delete_current_element(test_trips_pathv12):
     """
     The xml iterparse should not delete the current element, 
         as this leads to memory errors.
     See https://lxml.de/3.2/parsing.html#iterparse-and-iterwalk , 
         section 'Modifying the tree'
     """
-    elements = utils.parse_elems(test_tripsv12_path, 'person')
+    elements = utils.parse_elems(test_trips_pathv12, "person")
     for i, element in enumerate(elements):
         if i > 0: 
             assert element.getparent()[0] != element

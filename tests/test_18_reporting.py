@@ -1,23 +1,6 @@
-import os
-import pytest
 import numpy as np
 
-from pam.read import read_matsim
 from pam.report import summary, stringify
-
-
-@pytest.fixture
-def population():
-    path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-    )
-    return read_matsim(
-        path,
-        household_key="hid",
-        weight=1,
-        version=12
-    )
-
 
 # summary
 
