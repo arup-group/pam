@@ -26,7 +26,7 @@ jobs:
 
     - name: Install PAM
       run: |
-        pip install --no-deps .
+        pip install --no-deps -e .
         python -m ipykernel install --user --name pam
   
     - name: Run tests

@@ -19,7 +19,7 @@ jobs:
         cache-environment: true
     - name: install PAM
       run: |
-        pip install --no-dependencies .
+        pip install --no-dependencies -e .
         python -m ipykernel install --user --name pam
     - name: run tests
       run: pytest
@@ -37,7 +37,7 @@ jobs:
 
     - name: install PAM
       run: |
-        pip install --no-dependencies .
+        pip install --no-dependencies -e .
         python -m ipykernel install --user --name pam
 
     - name: Run tests

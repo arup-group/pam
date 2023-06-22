@@ -1,15 +1,10 @@
 import pytest
-from pam.activity import Activity, Leg
-from pam.core import Person
-from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
+
 from pam.scoring import CharyparNagelPlanScorer
-from .fixtures import default_config, config, default_leg, pt_wait_leg, car_leg, short_activity, late_activity, Anna, \
-    AnnaPT, early_activity, small_plan, config_complex
 import os
 from pam.read import read_matsim
 
-test_experienced_plans_path = os.path.abspath(
+TEST_EXPERIENCED_PLANS_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data", "test_matsim_experienced_plans_v12.xml")
 )
 
@@ -139,7 +134,7 @@ def test_score_pt_interchanges(AnnaPT, default_config):
 
 def test_scores_experienced(config_complex):
     """ Test calculated scores against MATSim experienced plan scores. """
-    population = read_matsim(test_experienced_plans_path, version = 12, crop = False)
+    population = read_matsim(TEST_EXPERIENCED_PLANS_PATH, version = 12, crop = False)
     scorer = CharyparNagelPlanScorer(config_complex)
     for hid, pid, person in population.people():
         if 'subpopulation' not in person.attributes:

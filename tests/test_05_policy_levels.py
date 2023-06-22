@@ -1,9 +1,13 @@
+import pytest
+import random
+
 from pam.policy import modifiers
 from pam.policy import probability_samplers
 from pam.policy import policies
 from pam.policy import filters
-from tests.fixtures import *
-import random
+from pam.activity import Activity
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 
 def assert_correct_activities(person, ordered_activities_list):
@@ -15,7 +19,7 @@ def assert_correct_activities(person, ordered_activities_list):
     assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
 
 
-def test_Policy_throws_exception_when_used():
+def test_Policy_throws_exception_when_used(Bobby):
     policy = policies.PolicyLevel(modifiers.Modifier())
     with pytest.raises(NotImplementedError) as e:
         policy.apply_to(Bobby)

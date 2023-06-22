@@ -1,21 +1,11 @@
 import pytest
 import numpy as np
 from pam.planner import clustering
-from pam.read import read_matsim
-import os
-
-test_plans = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml"))
 
 
 @pytest.fixture
-def population():
-    population = read_matsim(test_plans, version=12)
-    return population
-
-
-@pytest.fixture
-def clusters(population):
-    clusters = clustering.PlanClusters(population)
+def clusters(population_no_args):
+    clusters = clustering.PlanClusters(population_no_args)
     n_clusters = 2
     clusters.fit(n_clusters=n_clusters)
     return clusters
@@ -43,25 +33,25 @@ def test_distance_matrix_is_summetrical():
     np.testing.assert_array_almost_equal(dist_matrix.T, dist_matrix)
 
 
-def test_clustering_create_model(population):
-    clusters = clustering.PlanClusters(population)
+def test_clustering_create_model(population_no_args):
+    clusters = clustering.PlanClusters(population_no_args)
     n_clusters = 2
     assert clusters.model is None
     clusters.fit(n_clusters=n_clusters)
     assert set(clusters.model.labels_) == set([0, 1])
 
 
-def test_closest_matches_return_different_plan(population):
-    clusters = clustering.PlanClusters(population)
-    plan = population["chris"]["chris"].plan
+def test_closest_matches_return_different_plan(population_no_args):
+    clusters = clustering.PlanClusters(population_no_args)
+    plan = population_no_args["chris"]["chris"].plan
     closest_plans = clusters.get_closest_matches(plan, 3)
     for closest_plan in closest_plans:
         assert plan != closest_plan
 
 
-def test_closest_matches_are_ordered_by_distance(population):
-    clusters = clustering.PlanClusters(population)
-    plan = population["chris"]["chris"].plan
+def test_closest_matches_are_ordered_by_distance(population_no_args):
+    clusters = clustering.PlanClusters(population_no_args)
+    plan = population_no_args["chris"]["chris"].plan
     encode = clusters.plans_encoder.plan_encoder.encode
     plan_encoded = encode(plan)
     closest_plans = clusters.get_closest_matches(plan, 3)
@@ -79,9 +69,9 @@ def test_cluster_plans_match_cluster_sizes(clusters):
     assert cluster_sizes.sum() == len(clusters.plans)
 
 
-def test_cluster_membership_includes_everyone(clusters, population):
+def test_cluster_membership_includes_everyone(clusters, population_no_args):
     membership = clusters.get_cluster_membership()
-    assert len(membership) == len(population)
+    assert len(membership) == len(population_no_args)
 
 
 def test_clustering_plot_calls_function(clusters, mocker):

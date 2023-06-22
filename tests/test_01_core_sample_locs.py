@@ -1,11 +1,8 @@
-import pytest
 from random import random
 from shapely.geometry import Point
 
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
+from pam.core import Population
 from pam.location import Location
-from .fixtures import *
 
 
 def test_assign_same_locs_to_household(SmithHousehold):
