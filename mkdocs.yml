@@ -66,4 +66,7 @@ watch:
   - pam
 extra_css:
   - static/extras.css
+extra:
+  version:
+    provider: mike
  

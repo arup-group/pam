@@ -32,6 +32,7 @@ dependencies:
     - mkdocs-jupyter ~= 0.24.1
     - mkdocstrings-python ~= 1.1
     - mkdocs-click ~= 0.6.0
+    - mike ~= 1.1
     - pip
     - pip:
       - s2sphere < 0.3

@@ -6,6 +6,9 @@ defaults:
   run:
     shell: bash -l {0}
 
+permissions:
+  contents: write
+
 jobs:
   windows-build:
     runs-on: windows-latest
@@ -41,22 +44,29 @@ jobs:
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
+
     - name: Run tests
       run: |
         export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
         ./scripts/code-qa/code-coverage.sh
+
     - name: Smoke test notebooks
-      run: |
-        ./scripts/code-qa/notebooks-smoke-test.sh
+      run: ./scripts/code-qa/notebooks-smoke-test.sh
+
     - name: Check for large files
-      run: |
-        ./scripts/code-qa/check-all-file-sizes.sh
+      run: ./scripts/code-qa/check-all-file-sizes.sh
+
+    - name: Build docs
+      if: github.ref == 'refs/heads/main'
+      run: mike deploy --push --force 0.2
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
+
     - name: Push zip to S3
       env:
         AWS_S3_CODE_BUCKET: ${{ secrets.AWS_S3_CODE_BUCKET }}
@@ -77,6 +87,7 @@ jobs:
         repo_slug=`echo $GITHUB_REPOSITORY | awk -F '/' '{print $2}'`
         echo $repo_slug
         aws s3 cp app.zip "s3://$AWS_S3_CODE_BUCKET/$repo_slug.zip"
+
     - name: Send build success notification
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.0
@@ -87,6 +98,7 @@ jobs:
         SLACK_USERNAME: GitHub Build Bot
         SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
     - name: Send build failure notification
       if: failure()
       uses: rtCamp/action-slack-notify@v2.0.0
