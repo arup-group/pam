@@ -4,12 +4,12 @@ set -e
 
 pushd "${0%/*}/../.."
 
-python3 -m pytest -vv \
+pytest -vv \
 --cov=. \
 --cov-report=html:reports/coverage \
 --cov-report=xml:reports/coverage/coverage.xml \
 --cov-config=scripts/code-qa/.coveragerc \
-tests/
+tests/ mkdocs_plugins/
 return_code=$?
 
 popd
