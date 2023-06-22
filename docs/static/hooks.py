@@ -2,10 +2,9 @@ from mkdocs.structure.files import File
 import mkdocs.plugins
 from pathlib import Path
 
-
 # Bump priority to ensure files are moved before jupyter notebook conversion takes place
 @mkdocs.plugins.event_priority(50)
-def on_files(files, config, **kwargs):
+def on_files(files: list, config: dict, **kwargs):
     """Link top-level files to mkdocs files."""
     for file in Path("./examples").glob("*.ipynb"):
         files.append(_new_file(file, config))
@@ -14,8 +13,7 @@ def on_files(files, config, **kwargs):
 
     return files
 
-
-def _new_file(path, config):
+def _new_file(path: Path, config: str) -> File:
     return File(
         path=path,
         src_dir=".",
