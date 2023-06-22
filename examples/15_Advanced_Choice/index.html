@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#applying-a-location-and-mode-choice-model-to-populations" class="md-skip">
+        <a href="#introduction" class="md-skip">
           Skip to content
         </a>
       
@@ -144,7 +144,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -189,7 +189,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -271,7 +271,7 @@
   
     <li class="md-nav__item">
       <a href="../../modelling_policy_impact/" class="md-nav__link">
-        Modelling the imapct of policies on populations
+        Modelling the impact of policies on populations
       </a>
     </li>
   
@@ -2572,14 +2572,48 @@ Licensed under the Apache License, Version 2.0.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="applying-a-location-and-mode-choice-model-to-populations">Applying a location and mode choice model to populations<a class="anchor-link" href="#applying-a-location-and-mode-choice-model-to-populations">&#182;</a></h1><p>This notebook applies a simple location and mode choice model to a PAM population.</p>
+<h1 id="introduction">Introduction<a class="anchor-link" href="#introduction">&#182;</a></h1>
+</div>
+</div>
+</div>
+</div>
+<div id="cell-id=eaa3f397" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>This notebook applies a simple location and mode choice model to a PAM population.</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id="cell-id=d8729af8" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The <code>pam.planner.choice.ChoiceMNL</code> class allows the user to apply an MNL specification for selecting the location of activities and the mode for accessing them, given person characteristics, network conditions and/or zone attraction data.</p>
 <p>The typical workflow goes as follows:</p>
-<div class="highlight"><pre><span></span><span class="n">choice_model</span> <span class="o">=</span> <span class="n">ChoiceMNL</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span> <span class="c1"># initialize the model and point to the data objects </span>
-<span class="n">choice_model</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span> <span class="c1"># configure the model by specifying a utility function and the scope of application.</span>
-<span class="n">choice_model</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span> <span class="c1"># apply the model and update the population with the results.</span>
-</pre></div>
+<pre><code>choice_model = ChoiceMNL(population, od, zones) # initialize the model and point to the data objects 
+choice_model.configure(u, scope) # configure the model by specifying a utility function and the scope of application.
+choice_model.apply() # apply the model and update the population with the results.
 
+</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+<div id="cell-id=8a484a5b" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="dependencies">Dependencies<a class="anchor-link" href="#dependencies">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -2604,39 +2638,67 @@ Licensed under the Apache License, Version 2.0.
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">pam.read</span> <span class="kn">import</span> <span class="n">read_matsim</span>
 <span class="kn">from</span> <span class="nn">pam.planner</span> <span class="kn">import</span> <span class="n">choice_location</span> <span class="k">as</span> <span class="n">choice</span>
 <span class="kn">from</span> <span class="nn">pam.operations.cropping</span> <span class="kn">import</span> <span class="n">link_population</span>
-<span class="kn">from</span> <span class="nn">pam.planner.od</span> <span class="kn">import</span> <span class="n">ODMatrix</span><span class="p">,</span> <span class="n">ODFactory</span>
+<span class="kn">from</span> <span class="nn">pam.planner.od</span> <span class="kn">import</span> <span class="n">OD</span><span class="p">,</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">ODMatrix</span><span class="p">,</span> <span class="n">ODFactory</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
 
-
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
-<div id="cell-1" class="clipboard-copy-txt">import os
-import logging
-
-import pandas as pd
+<div id="cell-1" class="clipboard-copy-txt">import pandas as pd
 from pam.read import read_matsim
 from pam.planner import choice_location as choice
 from pam.operations.cropping import link_population
-from pam.planner.od import ODMatrix, ODFactory
+from pam.planner.od import OD, Labels, ODMatrix, ODFactory
 import random
 import numpy as np
-
+import os
 from prettytable import PrettyTable
 
-
+import logging
 logging.basicConfig(level=logging.DEBUG)
 random.seed(0)</div>
+        
+        </div>
+    </div>
+
+</div>
+</div>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div id="cell-id=4154e47e" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+        
+        
+        <div class="CodeMirror cm-s-jupyter">
+            <div class="zeroclipboard-container">
+                <clipboard-copy for="cell-2">
+                <div>
+                    <span class="notice" hidden>Copied!</span>
+                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
+                        <path fill="currentColor" fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path>
+                        <path fill="currentColor" fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
+                    </svg>
+                    </div>
+                </clipboard-copy>
+            </div>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
+</pre></div>
+<div id="cell-2" class="clipboard-copy-txt">%load_ext autoreload
+%autoreload 2</div>
         
         </div>
     </div>
@@ -2674,12 +2736,12 @@ random.seed(0)</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-2">
+                <clipboard-copy for="cell-3">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2695,7 +2757,7 @@ random.seed(0)</div>
     <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">activities</span><span class="p">:</span>
         <span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
 </pre></div>
-<div id="cell-2" class="clipboard-copy-txt">population = read_matsim(os.path.join('..', 'tests', 'test_data', 'test_matsim_plansv12.xml'))
+<div id="cell-3" class="clipboard-copy-txt">population = read_matsim(os.path.join('..', 'tests', 'test_data', 'test_matsim_plansv12.xml'))
 link_population(population)
 for hid, pid, person in population.people():
     for act in person.activities:
@@ -2714,12 +2776,12 @@ for hid, pid, person in population.people():
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-3">
+                <clipboard-copy for="cell-4">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2742,7 +2804,7 @@ for hid, pid, person in population.people():
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Work locations and travel modes:&#39;</span><span class="p">)</span>
 <span class="n">print_activity_locs</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">act_scope</span><span class="o">=</span><span class="s1">&#39;work&#39;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-3" class="clipboard-copy-txt">def print_activity_locs(population, act_scope='work'):
+<div id="cell-4" class="clipboard-copy-txt">def print_activity_locs(population, act_scope='work'):
     summary = PrettyTable(['pid', 'seq', 'location', 'mode'])
     for hid, pid, person in population.people():
         for seq, act in enumerate(person.plan.activities):
@@ -2810,12 +2872,12 @@ print_activity_locs(population, act_scope='work')</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-4">
+                <clipboard-copy for="cell-5">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2834,7 +2896,7 @@ print_activity_locs(population, act_scope='work')</div>
 <span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;zone&#39;</span><span class="p">)</span>
 <span class="n">data_zones</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">data_zones = pd.DataFrame(
+<div id="cell-5" class="clipboard-copy-txt">data_zones = pd.DataFrame(
     {
         'zone': ['a', 'b'],
         'jobs': [100, 200],
@@ -2857,7 +2919,7 @@ data_zones</div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -2930,12 +2992,12 @@ data_zones</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-5">
+                <clipboard-copy for="cell-6">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2954,7 +3016,7 @@ data_zones</div>
 <span class="p">])</span>
 <span class="n">od</span>
 </pre></div>
-<div id="cell-5" class="clipboard-copy-txt">zone_labels = ('a', 'b')
+<div id="cell-6" class="clipboard-copy-txt">zone_labels = ('a', 'b')
 od = ODFactory.from_matrices([
     ODMatrix('time', 'car', zone_labels, zone_labels, np.array([[20, 40], [40, 20]])),
     ODMatrix('time', 'bus', zone_labels, zone_labels, np.array([[30, 45], [45, 30]])),
@@ -2977,7 +3039,7 @@ od</div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 
 
 
@@ -3030,12 +3092,12 @@ distance - bus:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-6">
+                <clipboard-copy for="cell-7">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3047,7 +3109,7 @@ distance - bus:
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">od</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;bus&#39;</span><span class="p">]</span>
 </pre></div>
-<div id="cell-6" class="clipboard-copy-txt">od['time', 'a', 'b', 'bus']</div>
+<div id="cell-7" class="clipboard-copy-txt">od['time', 'a', 'b', 'bus']</div>
         
         </div>
     </div>
@@ -3063,7 +3125,7 @@ distance - bus:
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 
 
 
@@ -3096,12 +3158,12 @@ distance - bus:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-7">
+                <clipboard-copy for="cell-8">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3113,7 +3175,7 @@ distance - bus:
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">planner</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">ChoiceMNL</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">data_zones</span><span class="p">)</span>
 </pre></div>
-<div id="cell-7" class="clipboard-copy-txt">planner = choice.ChoiceMNL(population, od, data_zones)</div>
+<div id="cell-8" class="clipboard-copy-txt">planner = choice.ChoiceMNL(population, od, data_zones)</div>
         
         </div>
     </div>
@@ -3134,7 +3196,7 @@ distance - bus:
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x147dc45e0&gt;, func_sampling=&lt;function sample_weighted at 0x147dc4790&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x7f7a192acca0&gt;, func_sampling=&lt;function sample_weighted at 0x7f7a192acd30&gt;)
 </pre>
 </div>
 </div>
@@ -3168,12 +3230,12 @@ INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_pr
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-8">
+                <clipboard-copy for="cell-9">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3198,7 +3260,7 @@ INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_pr
 <span class="n">planner</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">)</span>
 <span class="c1"># print(&#39;Utility specification: \n&#39;, planner.u)</span>
 </pre></div>
-<div id="cell-8" class="clipboard-copy-txt">scope = "act.act=='work'"
+<div id="cell-9" class="clipboard-copy-txt">scope = "act.act=='work'"
 asc = [0, -1] # one value for each mode, 0->car, -1->
 asc_shift_poor = [0, 2] # one value for each mode
 beta_time = [-0.05, -0.07] # one value for each mode
@@ -3232,7 +3294,7 @@ planner.configure(u=u, scope=scope)
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x147dc45e0&gt;, func_sampling=&lt;function sample_weighted at 0x147dc4790&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x7f7a192acca0&gt;, func_sampling=&lt;function sample_weighted at 0x7f7a192acd30&gt;)
 </pre>
 </div>
 </div>
@@ -3260,12 +3322,12 @@ INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-9">
+                <clipboard-copy for="cell-10">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3280,7 +3342,7 @@ INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Alternatives: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">choice_set</span><span class="o">.</span><span class="n">choice_labels</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Choice set utilities: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">choice_set</span><span class="o">.</span><span class="n">u_choices</span><span class="p">)</span>
 </pre></div>
-<div id="cell-9" class="clipboard-copy-txt">choice_set = planner.get_choice_set()
+<div id="cell-10" class="clipboard-copy-txt">choice_set = planner.get_choice_set()
 print('Activities in scope: \n', choice_set.idxs)
 print('\nAlternatives: \n', choice_set.choice_labels)
 print('\nChoice set utilities: \n', choice_set.u_choices)</div>
@@ -3304,7 +3366,7 @@ print('\nChoice set utilities: \n', choice_set.u_choices)</div>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Activities in scope: 
- [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x147fa6d30&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x147fa6e80&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x147fc7910&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x156000520&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x156000250&gt;)]
+ [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x7f7a193248b0&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x7f7a19324f40&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x7f7a1926c8e0&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x7f7a19270520&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x7f7a192702b0&gt;)]
 
 Alternatives: 
  [ChoiceLabel(destination=&#39;a&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;a&#39;, mode=&#39;bus&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;bus&#39;)]
@@ -3342,12 +3404,12 @@ Choice set utilities:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-10">
+                <clipboard-copy for="cell-11">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3360,7 +3422,7 @@ Choice set utilities:
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">planner</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sampled choices: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">planner</span><span class="o">.</span><span class="n">_selections</span><span class="o">.</span><span class="n">selections</span><span class="p">)</span>
 </pre></div>
-<div id="cell-10" class="clipboard-copy-txt">planner.apply()
+<div id="cell-11" class="clipboard-copy-txt">planner.apply()
 print('Sampled choices: \n', planner._selections.selections)</div>
         
         </div>
@@ -3383,7 +3445,7 @@ print('Sampled choices: \n', planner._selections.selections)</div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Applying choice model...
 INFO:pam.planner.choice_location:Configuration: 
-ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x147dc45e0&gt;, func_sampling=&lt;function sample_weighted at 0x147dc4790&gt;)
+ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x7f7a192acca0&gt;, func_sampling=&lt;function sample_weighted at 0x7f7a192acd30&gt;)
 INFO:pam.planner.choice_location:Choice model application complete.
 </pre>
 </div>
@@ -3423,12 +3485,12 @@ INFO:pam.planner.choice_location:Choice model application complete.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-11">
+                <clipboard-copy for="cell-12">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3440,7 +3502,7 @@ INFO:pam.planner.choice_location:Choice model application complete.
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">print_activity_locs</span><span class="p">(</span><span class="n">planner</span><span class="o">.</span><span class="n">population</span><span class="p">)</span>
 </pre></div>
-<div id="cell-11" class="clipboard-copy-txt">print_activity_locs(planner.population)</div>
+<div id="cell-12" class="clipboard-copy-txt">print_activity_locs(planner.population)</div>
         
         </div>
     </div>

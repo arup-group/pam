@@ -144,7 +144,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -189,7 +189,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -271,7 +271,7 @@
   
     <li class="md-nav__item">
       <a href="../../../modelling_policy_impact/" class="md-nav__link">
-        Modelling the imapct of policies on populations
+        Modelling the impact of policies on populations
       </a>
     </li>
   
@@ -1793,20 +1793,20 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">159</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
 <span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_cmap</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="normal">161</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_cmap</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3</span><span class="o">.</span><span class="n">colors</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">activities_unique</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;act&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">activities_unique</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
     <span class="c1"># repeat colours if unique items &gt; 1</span>
     <span class="n">len_factor</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">activities_unique</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">d_color</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">activities_unique</span><span class="p">,</span> <span class="n">colors</span> <span class="o">*</span> <span class="n">len_factor</span><span class="p">))</span>
-    <span class="n">d_color</span><span class="p">[</span><span class="s2">&quot;Travel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">d_color</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">activities_unique</span><span class="p">,</span> <span class="n">colors</span><span class="o">*</span><span class="n">len_factor</span><span class="p">))</span>
+    <span class="n">d_color</span><span class="p">[</span><span class="s1">&#39;Travel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.3</span><span class="p">,</span><span class="mf">.3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">d_color</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -1830,7 +1830,11 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
 <span class="normal">76</span>
@@ -1849,16 +1853,12 @@
 <span class="normal">89</span>
 <span class="normal">90</span>
 <span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span>
-<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_person_df</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_person_df</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loop through a persons plan, creating a pandas dataframe defining activities for plotting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;act&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;act&quot;</span> <span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;modes&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1870,11 +1870,11 @@
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;modes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;modes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dur&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">minute</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">minute</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dur&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span><span class="o">/</span><span class="mi">3600</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">pid</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">pid</span>
 
     <span class="k">return</span> <span class="n">df</span>
 </code></pre></div></td></tr></table></div>
@@ -1904,7 +1904,11 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
@@ -1947,12 +1951,7 @@ from_epsg as well to use this.
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_person_travel_geodataframe</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">from_epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_person_travel_geodataframe</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">from_epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loop through a persons legs, creating a geopandas GeoDataFrame defining travel for plotting.</span>
 <span class="sd">    :param person: pam.core.Person object</span>
@@ -1965,36 +1964,35 @@ from_epsg as well to use this.
     <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">legs</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">start_location</span><span class="o">.</span><span class="n">loc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">end_location</span><span class="o">.</span><span class="n">loc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">To create a geopandas.DataFrame you need specific locations. Make sure Legs have</span>
 <span class="sd">loc attribute defined with a shapely.Point or s2sphere.CellId.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-            <span class="p">)</span>
+<span class="p">)</span>
         <span class="n">geometry</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_linestring</span><span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">start_location</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">leg</span><span class="o">.</span><span class="n">end_location</span><span class="o">.</span><span class="n">loc</span><span class="p">)</span>
         <span class="n">_leg_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-            <span class="s2">&quot;purp&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">purp</span><span class="p">,</span>
-            <span class="s2">&quot;seq&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span>
-            <span class="s2">&quot;freq&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span>
-            <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
-            <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
-            <span class="s2">&quot;start_location&quot;</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="s2">&quot;end_location&quot;</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span>
-            <span class="s2">&quot;distance&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">distance</span><span class="p">,</span>
-            <span class="s2">&quot;service_id&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transitLineId&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;route_id&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transitRouteId&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;o_stop&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accessFacilityId&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;d_stop&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;egressFacilityId&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;network_route&quot;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">network_route</span><span class="p">,</span>
+            <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+            <span class="s1">&#39;purp&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">purp</span><span class="p">,</span>
+            <span class="s1">&#39;seq&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span>
+            <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span>
+            <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+            <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
+            <span class="s1">&#39;start_location&#39;</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;end_location&#39;</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span>
+            <span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">distance</span><span class="p">,</span>
+            <span class="s1">&#39;service_id&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transitLineId&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;route_id&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transitRouteId&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;o_stop&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;accessFacilityId&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;d_stop&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">transit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;egressFacilityId&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;network_route&#39;</span><span class="p">:</span> <span class="n">leg</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">network_route</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ShapelyDeprecationWarning</span><span class="p">)</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_leg_dict</span><span class="p">)],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_leg_dict</span><span class="p">),</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">pid</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">pid</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">from_epsg</span><span class="p">:</span>
         <span class="n">df</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">from_epsg</span>
         <span class="k">if</span> <span class="n">to_epsg</span><span class="p">:</span>
@@ -2023,7 +2021,10 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
 <span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
@@ -2043,15 +2044,12 @@ from_epsg as well to use this.
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_plan_df</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="s2">&quot;sample&quot;</span><span class="p">):</span>
+<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_plan_df</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="s1">&#39;sample&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loop through a plan, creating a pandas dataframe defining activities for plotting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;act&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;act&quot;</span> <span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;modes&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -2063,11 +2061,11 @@ from_epsg as well to use this.
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;modes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;modes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">minute</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dur&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">minute</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">+</span> <span class="n">component</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">minute</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dur&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span><span class="o">/</span><span class="mi">3600</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
 
     <span class="k">return</span> <span class="n">df</span>
 </code></pre></div></td></tr></table></div>
@@ -2090,18 +2088,18 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_rgb_travel_cmap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">colour_by</span><span class="p">):</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">255</span><span class="p">))</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3</span><span class="o">.</span><span class="n">colors</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_rgb_travel_cmap</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">colour_by</span><span class="p">):</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">255</span><span class="p">))</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Set3</span><span class="o">.</span><span class="n">colors</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
     <span class="n">colour_by_unique</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">colour_by</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
     <span class="c1"># repeat colours if unique items &gt; 12</span>
     <span class="n">len_factor</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">colour_by_unique</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">d_color</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">colour_by_unique</span><span class="p">,</span> <span class="n">colors</span> <span class="o">*</span> <span class="n">len_factor</span><span class="p">))</span>
+    <span class="n">d_color</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">colour_by_unique</span><span class="p">,</span> <span class="n">colors</span><span class="o">*</span><span class="n">len_factor</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">d_color</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2125,7 +2123,12 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">169</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
 <span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
@@ -2210,21 +2213,29 @@ from_epsg as well to use this.
 <span class="normal">251</span>
 <span class="normal">252</span>
 <span class="normal">253</span>
-<span class="normal">254</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot activity plans from pandas dataframe.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;cmap&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">build_cmap</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span>
 
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;act&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
-    <span class="n">pids</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">pids</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># fudge to keep proportions about right</span>
-    <span class="p">)</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span>
+            <span class="mi">16</span><span class="p">,</span>
+            <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># fudge to keep proportions about right</span>
+            <span class="p">),</span>
+        <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pids</span><span class="p">):</span>
         <span class="n">person_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="n">pid</span><span class="p">]</span>
@@ -2238,56 +2249,59 @@ from_epsg as well to use this.
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">person_data</span><span class="p">)):</span>
             <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">person_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span>
-                <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;dur&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="s2">&quot;start_time&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
-            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">width</span><span class="o">=</span><span class="s1">&#39;dur&#39;</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">left</span><span class="o">=</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;act&#39;</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span class="p">,</span>
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+                <span class="p">)</span>
 
-            <span class="c1"># Populate Labelling Params</span>
-            <span class="n">label_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dur&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="c1">#Populate Labelling Params</span>
+            <span class="n">label_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;start_time&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;dur&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">label_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">act</span><span class="p">)</span>
 
         <span class="c1"># Labels</span>
         <span class="n">rects</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">patches</span>
         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">label_x</span><span class="p">,</span> <span class="n">label_y</span><span class="p">,</span> <span class="n">rects</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;Travel&quot;</span><span class="p">:</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Travel&#39;</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
 
             <span class="k">if</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;regular&quot;</span><span class="p">}</span>
-                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                        <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">color</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span><span class="s1">&#39;regular&#39;</span>
+                            <span class="p">}</span>
+                            <span class="p">)</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">,</span>
-                    <span class="n">y</span><span class="p">,</span>
-                    <span class="n">label</span><span class="p">,</span>
-                    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                    <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                    <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;regular&quot;</span><span class="p">,</span> <span class="s2">&quot;rotation&quot;</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
-                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">.5</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                        <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">color</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span><span class="s1">&#39;regular&#39;</span><span class="p">,</span> <span class="s1">&#39;rotation&#39;</span><span class="p">:</span><span class="mi">90</span>
+                            <span class="p">}</span>
+                            <span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Person ID: </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">side</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;legend&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">act</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">cmap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">legend_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">act</span><span class="p">))</span>
+            <span class="n">legend_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">act</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
-            <span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span>
-            <span class="n">ncol</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">legend_elements</span><span class="p">),</span>
-            <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
-            <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span>
-            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper center&quot;</span><span class="p">,</span>
-            <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-        <span class="p">)</span>
+            <span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">legend_elements</span><span class="p">),</span>
+            <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">},</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">.5</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.</span>
+            <span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
@@ -2317,7 +2331,7 @@ from_epsg as well to use this.
       <p>Area plot of the breakdown of activities taking place every minute.</p>
 <p>:param plans: A list of PAM plans
 :param activity_classes: A list of the activity labels.
-:param encoder: Alternative to passing activity_classes:
+:param encoder: Alternative to passing activity_classes: 
     a PlansEncoder from pam.planner.encode.
 :param normalize: Whether to convert the y-axis to perncentages.
 :param legend: Whether to include the legend of activities in the plot:
@@ -2326,11 +2340,7 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">354</span>
 <span class="normal">355</span>
 <span class="normal">356</span>
 <span class="normal">357</span>
@@ -2377,35 +2387,46 @@ from_epsg as well to use this.
 <span class="normal">398</span>
 <span class="normal">399</span>
 <span class="normal">400</span>
-<span class="normal">401</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activity_breakdown_area</span><span class="p">(</span>
-    <span class="n">plans</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">],</span>
-    <span class="n">activity_classes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">plans_encoder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">legend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activity_breakdown_area</span><span class="p">(</span>
+        <span class="n">plans</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">],</span>
+        <span class="n">activity_classes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">plans_encoder</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">legend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">colormap</span> <span class="o">=</span> <span class="s1">&#39;tab20&#39;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Area plot of the breakdown of activities taking place every minute.</span>
 
 <span class="sd">    :param plans: A list of PAM plans</span>
 <span class="sd">    :param activity_classes: A list of the activity labels.</span>
-<span class="sd">    :param encoder: Alternative to passing activity_classes:</span>
+<span class="sd">    :param encoder: Alternative to passing activity_classes: </span>
 <span class="sd">        a PlansEncoder from pam.planner.encode.</span>
 <span class="sd">    :param normalize: Whether to convert the y-axis to perncentages.</span>
 <span class="sd">    :param legend: Whether to include the legend of activities in the plot:</span>
 <span class="sd">    :param ax: A matplotlib axis.</span>
-<span class="sd">    :param colormap: The colormap to use in the plot.</span>
+<span class="sd">    :param colormap: The colormap to use in the plot. </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">activity_classes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">plans_encoder</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">PlansOneHotEncoder</span><span class="p">(</span><span class="n">activity_classes</span><span class="o">=</span><span class="n">activity_classes</span><span class="p">)</span>
+        <span class="n">plans_encoder</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">PlansOneHotEncoder</span><span class="p">(</span>
+            <span class="n">activity_classes</span><span class="o">=</span><span class="n">activity_classes</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">plans_encoder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please provide a list of activity classes or a plans encoder.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please provide a list of activity classes or a plans encoder.&#39;</span><span class="p">)</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="n">plans_encoder</span><span class="o">.</span><span class="n">plan_encoder</span><span class="o">.</span><span class="n">activity_encoder</span><span class="o">.</span><span class="n">labels</span>
-    <span class="n">freqs</span> <span class="o">=</span> <span class="n">plans_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">freqs</span> <span class="o">=</span> <span class="n">plans_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span><span class="o">.</span>\
+        <span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
         <span class="n">freqs</span> <span class="o">=</span> <span class="n">freqs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="n">freqs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -2414,16 +2435,19 @@ from_epsg as well to use this.
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">n_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">colormap</span><span class="p">]</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colormap</span><span class="p">,</span> <span class="n">n_labels</span><span class="p">)</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_labels</span><span class="p">)]</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">freqs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="o">*</span><span class="n">freqs</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span>
+                    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mtick</span><span class="o">.</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:.0%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+            <span class="n">mtick</span><span class="o">.</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:.0%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">freqs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">freqs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
@@ -2451,15 +2475,7 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">412</span>
 <span class="normal">413</span>
 <span class="normal">414</span>
 <span class="normal">415</span>
@@ -2478,32 +2494,56 @@ from_epsg as well to use this.
 <span class="normal">428</span>
 <span class="normal">429</span>
 <span class="normal">430</span>
-<span class="normal">431</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activity_breakdown_area_tiles</span><span class="p">(</span><span class="n">plans</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">]],</span> <span class="n">activity_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_activity_breakdown_area_tiles</span><span class="p">(</span>
+        <span class="n">plans</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">]],</span>
+        <span class="n">activity_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tiled area plot of the breakdown of activities taking place every minute.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">plans_encoder</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">PlansOneHotEncoder</span><span class="p">(</span><span class="n">activity_classes</span><span class="o">=</span><span class="n">activity_classes</span><span class="p">)</span>
+    <span class="n">plans_encoder</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">PlansOneHotEncoder</span><span class="p">(</span>
+        <span class="n">activity_classes</span><span class="o">=</span><span class="n">activity_classes</span><span class="p">)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">plans_encoder</span><span class="o">.</span><span class="n">plan_encoder</span><span class="o">.</span><span class="n">activity_encoder</span><span class="o">.</span><span class="n">labels</span>
-    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">irow</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">icol</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+                            <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">plans</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">nrows</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nrows</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">irow</span><span class="p">,</span> <span class="n">icol</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">icol</span><span class="p">]</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">plot_activity_breakdown_area</span><span class="p">(</span>
-            <span class="n">plans</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plans_encoder</span><span class="o">=</span><span class="n">plans_encoder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cluster </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> plans&quot;</span><span class="p">)</span>
+            <span class="n">plans</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+            <span class="n">plans_encoder</span><span class="o">=</span><span class="n">plans_encoder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cluster </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> plans&#39;</span><span class="p">)</span>
         <span class="n">irow</span> <span class="o">+=</span> <span class="n">icol</span>
-        <span class="n">icol</span> <span class="o">=</span> <span class="p">(</span><span class="n">icol</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="n">icol</span> <span class="o">=</span> <span class="p">(</span><span class="n">icol</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span>
+                <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">axs</span>
 </code></pre></div></td></tr></table></div>
@@ -2526,9 +2566,9 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_household</span><span class="p">(</span><span class="n">household</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_household</span><span class="p">(</span><span class="n">household</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">build_person_df</span><span class="p">(</span><span class="n">person</span><span class="p">)</span> <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">household</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
     <span class="n">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2551,9 +2591,9 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_person</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_person</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">build_person_df</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
     <span class="n">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2576,9 +2616,9 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_persons</span><span class="p">(</span><span class="n">persons</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_persons</span><span class="p">(</span><span class="n">persons</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">build_person_df</span><span class="p">(</span><span class="n">person</span><span class="p">)</span> <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">persons</span><span class="p">])</span>
     <span class="n">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -2601,12 +2641,12 @@ from_epsg as well to use this.
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_plan</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_plan</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">build_plan_df</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">plot_activities</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2642,10 +2682,7 @@ https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
 
       <details class="quote">
         <summary>Source code in <code>pam/plot/plans.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">260</span>
 <span class="normal">261</span>
 <span class="normal">262</span>
 <span class="normal">263</span>
@@ -2732,9 +2769,12 @@ https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
 <span class="normal">344</span>
 <span class="normal">345</span>
 <span class="normal">346</span>
-<span class="normal">347</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plans</span><span class="p">(</span>
-    <span class="n">gdf</span><span class="p">,</span> <span class="n">groupby</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colour_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mapbox_access_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="p">):</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plans</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">groupby</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colour_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">mapbox_access_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uses plotly&#39;s Scattermapbox to plot travel GeoDataFrame</span>
 <span class="sd">    :param gdf: geopandas.GeoDataFrame generated by build_person_travel_geodataframe</span>
@@ -2747,11 +2787,11 @@ https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">mapbox_access_token</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;You need to pass `mapbox_access_token` for the plot to appear.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s1">&#39;You need to pass `mapbox_access_token` for the plot to appear.&#39;</span><span class="p">)</span>
     <span class="n">_gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span>
-    <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;end_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span>
-    <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;seq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s2">&quot;seq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;start_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;start_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;end_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;end_time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;seq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gdf</span><span class="p">[</span><span class="s1">&#39;seq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">build_rgb_travel_cmap</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">colour_by</span><span class="p">)</span>
@@ -2761,45 +2801,44 @@ https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
 
     <span class="k">if</span> <span class="n">groupby</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">groupby</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">to_group</span> <span class="o">=</span> <span class="n">colour_by</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">to_group</span> <span class="o">=</span> <span class="p">[</span><span class="n">colour_by</span><span class="p">]</span> <span class="o">+</span> <span class="n">groupby</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">_gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">to_group</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">_gdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">colour_by</span><span class="p">]</span> <span class="o">+</span> <span class="n">groupby</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groupby</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">colour_by_item</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">colour_by_item</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="n">colour</span> <span class="o">=</span> <span class="s2">&quot;rgb(</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">colour</span> <span class="o">=</span> <span class="s1">&#39;rgb(</span><span class="si">{}</span><span class="s1">,</span><span class="si">{}</span><span class="s1">,</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="p">[</span><span class="n">colour_by_item</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
 
         <span class="n">lat</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">lon</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">hovertext</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
-            <span class="n">coords</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span>
             <span class="n">all_coords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
-            <span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span> <span class="o">+</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)]</span>
-            <span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span> <span class="o">+</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)]</span>
-            <span class="n">_hovertext</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">_hovertext</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pid: </span><span class="si">{}</span><span class="s2">&lt;br&gt;start time: </span><span class="si">{}</span><span class="s2">&lt;br&gt;trip seq: </span><span class="si">{}</span><span class="s2">&lt;br&gt;mode: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;pid&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;start_time&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;seq&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="n">_hovertext</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pid: </span><span class="si">{}</span><span class="s2">&lt;br&gt;end time: </span><span class="si">{}</span><span class="s2">&lt;br&gt;trip seq: </span><span class="si">{}</span><span class="s2">&lt;br&gt;mode: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;pid&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;end_time&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;seq&quot;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span> <span class="o">+</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)]</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span> <span class="o">+</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)]</span>
+            <span class="n">_hovertext</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">_hovertext</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pid: </span><span class="si">{}</span><span class="s1">&lt;br&gt;start time: </span><span class="si">{}</span><span class="s1">&lt;br&gt;trip seq: </span><span class="si">{}</span><span class="s1">&lt;br&gt;mode: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;start_time&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;seq&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">])</span>
+            <span class="n">_hovertext</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pid: </span><span class="si">{}</span><span class="s1">&lt;br&gt;end time: </span><span class="si">{}</span><span class="s1">&lt;br&gt;trip seq: </span><span class="si">{}</span><span class="s1">&lt;br&gt;mode: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;seq&#39;</span><span class="p">],</span> <span class="n">group</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">])</span>
             <span class="n">hovertext</span> <span class="o">=</span> <span class="n">hovertext</span> <span class="o">+</span> <span class="n">_hovertext</span>
 
-        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">go</span><span class="o">.</span><span class="n">Scattermapbox</span><span class="p">(</span>
-                <span class="n">lat</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span>
-                <span class="n">lon</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span>
-                <span class="n">hovertext</span><span class="o">=</span><span class="n">hovertext</span><span class="p">,</span>
-                <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
-                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">),</span>
-                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">),</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scattermapbox</span><span class="p">(</span>
+            <span class="n">lat</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span>
+            <span class="n">lon</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span>
+            <span class="n">hovertext</span><span class="o">=</span><span class="n">hovertext</span><span class="p">,</span>
+            <span class="n">hoverinfo</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines+markers&#39;</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
+                <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span>
+            <span class="p">),</span>
+            <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">colour</span>
+            <span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">))</span>
 
     <span class="k">if</span> <span class="n">all_coords</span><span class="p">:</span>
         <span class="n">c_lat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">all_coords</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_coords</span><span class="p">)</span>
@@ -2809,17 +2848,20 @@ https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
         <span class="n">c_lon</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
         <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;closest&quot;</span><span class="p">,</span>
+        <span class="n">hovermode</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span>
         <span class="n">mapbox</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">Mapbox</span><span class="p">(</span>
             <span class="n">accesstoken</span><span class="o">=</span><span class="n">mapbox_access_token</span><span class="p">,</span>
             <span class="n">bearing</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">center</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">mapbox</span><span class="o">.</span><span class="n">Center</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">c_lat</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">c_lon</span><span class="p">),</span>
+            <span class="n">center</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">mapbox</span><span class="o">.</span><span class="n">Center</span><span class="p">(</span>
+                <span class="n">lat</span><span class="o">=</span><span class="n">c_lat</span><span class="p">,</span>
+                <span class="n">lon</span><span class="o">=</span><span class="n">c_lon</span>
+            <span class="p">),</span>
             <span class="n">pitch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">zoom</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="p">,</span>
-        <span class="p">),</span>
+            <span class="n">style</span><span class="o">=</span><span class="s1">&#39;dark&#39;</span>
+        <span class="p">)</span>
     <span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fig</span>

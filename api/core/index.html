@@ -144,7 +144,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -189,7 +189,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/arup-project/pam/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
@@ -271,7 +271,7 @@
   
     <li class="md-nav__item">
       <a href="../../modelling_policy_impact/" class="md-nav__link">
-        Modelling the imapct of policies on populations
+        Modelling the impact of policies on populations
       </a>
     </li>
   
@@ -3368,19 +3368,35 @@
 
           <details class="quote">
             <summary>Source code in <code>pam/core.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">629</span>
-<span class="normal">630</span>
-<span class="normal">631</span>
-<span class="normal">632</span>
-<span class="normal">633</span>
-<span class="normal">634</span>
-<span class="normal">635</span>
-<span class="normal">636</span>
-<span class="normal">637</span>
-<span class="normal">638</span>
-<span class="normal">639</span>
-<span class="normal">640</span>
-<span class="normal">641</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hid</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">{},</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Location</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">665</span>
+<span class="normal">666</span>
+<span class="normal">667</span>
+<span class="normal">668</span>
+<span class="normal">669</span>
+<span class="normal">670</span>
+<span class="normal">671</span>
+<span class="normal">672</span>
+<span class="normal">673</span>
+<span class="normal">674</span>
+<span class="normal">675</span>
+<span class="normal">676</span>
+<span class="normal">677</span>
+<span class="normal">678</span>
+<span class="normal">679</span>
+<span class="normal">680</span>
+<span class="normal">681</span>
+<span class="normal">682</span>
+<span class="normal">683</span>
+<span class="normal">684</span>
+<span class="normal">685</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">hid</span><span class="p">,</span>
+    <span class="n">attributes</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Location</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">loc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">hid</span> <span class="o">=</span> <span class="n">hid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">people</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
@@ -3674,14 +3690,14 @@ TODO: replace this with something better.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">643</span>
-<span class="normal">644</span>
-<span class="normal">645</span>
-<span class="normal">646</span>
-<span class="normal">647</span>
-<span class="normal">648</span>
-<span class="normal">649</span>
-<span class="normal">650</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">687</span>
+<span class="normal">688</span>
+<span class="normal">689</span>
+<span class="normal">690</span>
+<span class="normal">691</span>
+<span class="normal">692</span>
+<span class="normal">693</span>
+<span class="normal">694</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">person</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
@@ -3769,26 +3785,26 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">830</span>
-<span class="normal">831</span>
-<span class="normal">832</span>
-<span class="normal">833</span>
-<span class="normal">834</span>
-<span class="normal">835</span>
-<span class="normal">836</span>
-<span class="normal">837</span>
-<span class="normal">838</span>
-<span class="normal">839</span>
-<span class="normal">840</span>
-<span class="normal">841</span>
-<span class="normal">842</span>
-<span class="normal">843</span>
-<span class="normal">844</span>
-<span class="normal">845</span>
-<span class="normal">846</span>
-<span class="normal">847</span>
-<span class="normal">848</span>
-<span class="normal">849</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">882</span>
+<span class="normal">883</span>
+<span class="normal">884</span>
+<span class="normal">885</span>
+<span class="normal">886</span>
+<span class="normal">887</span>
+<span class="normal">888</span>
+<span class="normal">889</span>
+<span class="normal">890</span>
+<span class="normal">891</span>
+<span class="normal">892</span>
+<span class="normal">893</span>
+<span class="normal">894</span>
+<span class="normal">895</span>
+<span class="normal">896</span>
+<span class="normal">897</span>
+<span class="normal">898</span>
+<span class="normal">899</span>
+<span class="normal">900</span>
+<span class="normal">901</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household</span>
 <span class="sd">    Keyword Args: Keyword arguments for pam.plot.plans.build_person_travel_geodataframe</span>
@@ -3805,7 +3821,7 @@ from_epsg as well to use this.</p>
         <span class="k">if</span> <span class="n">gdf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gdf</span> <span class="o">=</span> <span class="n">_gdf</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gdf</span><span class="p">,</span> <span class="n">_gdf</span><span class="p">])</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_gdf</span><span class="p">)</span>
     <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="s2">&quot;seq&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">gdf</span>
 </code></pre></div></td></tr></table></div>
@@ -3828,14 +3844,14 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">798</span>
-<span class="normal">799</span>
-<span class="normal">800</span>
-<span class="normal">801</span>
-<span class="normal">802</span>
-<span class="normal">803</span>
-<span class="normal">804</span>
-<span class="normal">805</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">850</span>
+<span class="normal">851</span>
+<span class="normal">852</span>
+<span class="normal">853</span>
+<span class="normal">854</span>
+<span class="normal">855</span>
+<span class="normal">856</span>
+<span class="normal">857</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">crop</span><span class="p">:</span>
             <span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
@@ -3863,8 +3879,8 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">652</span>
-<span class="normal">653</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">696</span>
+<span class="normal">697</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -3888,16 +3904,16 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">753</span>
-<span class="normal">754</span>
-<span class="normal">755</span>
-<span class="normal">756</span>
-<span class="normal">757</span>
-<span class="normal">758</span>
-<span class="normal">759</span>
-<span class="normal">760</span>
-<span class="normal">761</span>
-<span class="normal">762</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">799</span>
+<span class="normal">800</span>
+<span class="normal">801</span>
+<span class="normal">802</span>
+<span class="normal">803</span>
+<span class="normal">804</span>
+<span class="normal">805</span>
+<span class="normal">806</span>
+<span class="normal">807</span>
+<span class="normal">808</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get set of attribute values for given key, First searches hh attributes then occupants.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3927,9 +3943,9 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">901</span>
-<span class="normal">902</span>
-<span class="normal">903</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">958</span>
+<span class="normal">959</span>
+<span class="normal">960</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -3952,8 +3968,8 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">827</span>
-<span class="normal">828</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">879</span>
+<span class="normal">880</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">plot</span><span class="o">.</span><span class="n">plot_household</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -4069,20 +4085,23 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">851</span>
-<span class="normal">852</span>
-<span class="normal">853</span>
-<span class="normal">854</span>
-<span class="normal">855</span>
-<span class="normal">856</span>
-<span class="normal">857</span>
-<span class="normal">858</span>
-<span class="normal">859</span>
-<span class="normal">860</span>
-<span class="normal">861</span>
-<span class="normal">862</span>
-<span class="normal">863</span>
-<span class="normal">864</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">903</span>
+<span class="normal">904</span>
+<span class="normal">905</span>
+<span class="normal">906</span>
+<span class="normal">907</span>
+<span class="normal">908</span>
+<span class="normal">909</span>
+<span class="normal">910</span>
+<span class="normal">911</span>
+<span class="normal">912</span>
+<span class="normal">913</span>
+<span class="normal">914</span>
+<span class="normal">915</span>
+<span class="normal">916</span>
+<span class="normal">917</span>
+<span class="normal">918</span>
+<span class="normal">919</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uses plotly&#39;s Scattermapbox to plot agents&#39; travel</span>
 <span class="sd">    Args:</span>
@@ -4095,7 +4114,10 @@ from_epsg as well to use this.</p>
 <span class="sd">        consistent</span>
 <span class="sd">        mapbox_access_token: required to generate the plot https://docs.mapbox.com/help/how-mapbox-works/access-tokens/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span><span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span>
+        <span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -4116,11 +4138,11 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">818</span>
-<span class="normal">819</span>
-<span class="normal">820</span>
-<span class="normal">821</span>
-<span class="normal">822</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">870</span>
+<span class="normal">871</span>
+<span class="normal">872</span>
+<span class="normal">873</span>
+<span class="normal">874</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
@@ -4145,8 +4167,8 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">655</span>
-<span class="normal">656</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">699</span>
+<span class="normal">700</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">))]</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -4198,21 +4220,21 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">885</span>
-<span class="normal">886</span>
-<span class="normal">887</span>
-<span class="normal">888</span>
-<span class="normal">889</span>
-<span class="normal">890</span>
-<span class="normal">891</span>
-<span class="normal">892</span>
-<span class="normal">893</span>
-<span class="normal">894</span>
-<span class="normal">895</span>
-<span class="normal">896</span>
-<span class="normal">897</span>
-<span class="normal">898</span>
-<span class="normal">899</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">942</span>
+<span class="normal">943</span>
+<span class="normal">944</span>
+<span class="normal">945</span>
+<span class="normal">946</span>
+<span class="normal">947</span>
+<span class="normal">948</span>
+<span class="normal">949</span>
+<span class="normal">950</span>
+<span class="normal">951</span>
+<span class="normal">952</span>
+<span class="normal">953</span>
+<span class="normal">954</span>
+<span class="normal">955</span>
+<span class="normal">956</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Safely reindex all person identifiers in household using a prefix.</span>
 <span class="sd">    Args:</span>
@@ -4247,10 +4269,10 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">721</span>
-<span class="normal">722</span>
-<span class="normal">723</span>
-<span class="normal">724</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">767</span>
+<span class="normal">768</span>
+<span class="normal">769</span>
+<span class="normal">770</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">person</span><span class="o">.</span><span class="n">set_area</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
@@ -4274,8 +4296,8 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">784</span>
-<span class="normal">785</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">832</span>
+<span class="normal">833</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">hh_freq</span> <span class="o">=</span> <span class="n">freq</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -4297,10 +4319,10 @@ from_epsg as well to use this.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">726</span>
-<span class="normal">727</span>
-<span class="normal">728</span>
-<span class="normal">729</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">772</span>
+<span class="normal">773</span>
+<span class="normal">774</span>
+<span class="normal">775</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">person</span><span class="o">.</span><span class="n">set_loc</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
@@ -4327,14 +4349,14 @@ their persons do not share location object.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">712</span>
-<span class="normal">713</span>
-<span class="normal">714</span>
-<span class="normal">715</span>
-<span class="normal">716</span>
-<span class="normal">717</span>
-<span class="normal">718</span>
-<span class="normal">719</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Location</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">758</span>
+<span class="normal">759</span>
+<span class="normal">760</span>
+<span class="normal">761</span>
+<span class="normal">762</span>
+<span class="normal">763</span>
+<span class="normal">764</span>
+<span class="normal">765</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Location</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set both hh and person home_location, but note that hhs and</span>
 <span class="sd">    their persons do not share location object.</span>
@@ -4362,16 +4384,16 @@ their persons do not share location object.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">807</span>
-<span class="normal">808</span>
-<span class="normal">809</span>
-<span class="normal">810</span>
-<span class="normal">811</span>
-<span class="normal">812</span>
-<span class="normal">813</span>
-<span class="normal">814</span>
-<span class="normal">815</span>
-<span class="normal">816</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">shared_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">859</span>
+<span class="normal">860</span>
+<span class="normal">861</span>
+<span class="normal">862</span>
+<span class="normal">863</span>
+<span class="normal">864</span>
+<span class="normal">865</span>
+<span class="normal">866</span>
+<span class="normal">867</span>
+<span class="normal">868</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">shared_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">shared_activities</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">household_activities</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -4401,8 +4423,8 @@ their persons do not share location object.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">824</span>
-<span class="normal">825</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">876</span>
+<span class="normal">877</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -4434,33 +4456,33 @@ their persons do not share location object.</p>
 
           <details class="quote">
             <summary>Source code in <code>pam/core.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">909</span>
-<span class="normal">910</span>
-<span class="normal">911</span>
-<span class="normal">912</span>
-<span class="normal">913</span>
-<span class="normal">914</span>
-<span class="normal">915</span>
-<span class="normal">916</span>
-<span class="normal">917</span>
-<span class="normal">918</span>
-<span class="normal">919</span>
-<span class="normal">920</span>
-<span class="normal">921</span>
-<span class="normal">922</span>
-<span class="normal">923</span>
-<span class="normal">924</span>
-<span class="normal">925</span>
-<span class="normal">926</span>
-<span class="normal">927</span>
-<span class="normal">928</span>
-<span class="normal">929</span>
-<span class="normal">930</span>
-<span class="normal">931</span>
-<span class="normal">932</span>
-<span class="normal">933</span>
-<span class="normal">934</span>
-<span class="normal">935</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">966</span>
+<span class="normal">967</span>
+<span class="normal">968</span>
+<span class="normal">969</span>
+<span class="normal">970</span>
+<span class="normal">971</span>
+<span class="normal">972</span>
+<span class="normal">973</span>
+<span class="normal">974</span>
+<span class="normal">975</span>
+<span class="normal">976</span>
+<span class="normal">977</span>
+<span class="normal">978</span>
+<span class="normal">979</span>
+<span class="normal">980</span>
+<span class="normal">981</span>
+<span class="normal">982</span>
+<span class="normal">983</span>
+<span class="normal">984</span>
+<span class="normal">985</span>
+<span class="normal">986</span>
+<span class="normal">987</span>
+<span class="normal">988</span>
+<span class="normal">989</span>
+<span class="normal">990</span>
+<span class="normal">991</span>
+<span class="normal">992</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">pid</span><span class="p">,</span>
     <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -5087,13 +5109,13 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1150</span>
-<span class="normal">1151</span>
-<span class="normal">1152</span>
-<span class="normal">1153</span>
-<span class="normal">1154</span>
-<span class="normal">1155</span>
-<span class="normal">1156</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1215</span>
+<span class="normal">1216</span>
+<span class="normal">1217</span>
+<span class="normal">1218</span>
+<span class="normal">1219</span>
+<span class="normal">1220</span>
+<span class="normal">1221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Safely add a new component to the plan.</span>
 <span class="sd">    Args:</span>
@@ -5150,22 +5172,26 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">950</span>
-<span class="normal">951</span>
-<span class="normal">952</span>
-<span class="normal">953</span>
-<span class="normal">954</span>
-<span class="normal">955</span>
-<span class="normal">956</span>
-<span class="normal">957</span>
-<span class="normal">958</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">assign_vehicle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vehicle</span><span class="p">:</span> <span class="n">Vehicle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1007</span>
+<span class="normal">1008</span>
+<span class="normal">1009</span>
+<span class="normal">1010</span>
+<span class="normal">1011</span>
+<span class="normal">1012</span>
+<span class="normal">1013</span>
+<span class="normal">1014</span>
+<span class="normal">1015</span>
+<span class="normal">1016</span>
+<span class="normal">1017</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">assign_vehicle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vehicle</span><span class="p">:</span> <span class="n">Vehicle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Give a Vehicle or ElectricVehicle to an agent.</span>
 <span class="sd">    Args:</span>
-<span class="sd">        vehicle (Vehicle): </span>
+<span class="sd">        vehicle (Vehicle):</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">vehicle</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">PAMVehicleIdError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vehicle with ID: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> does not match Person ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PAMVehicleIdError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Vehicle with ID: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> does not match Person ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">vehicle</span> <span class="o">=</span> <span class="n">vehicle</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -5244,16 +5270,16 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1186</span>
-<span class="normal">1187</span>
-<span class="normal">1188</span>
-<span class="normal">1189</span>
-<span class="normal">1190</span>
-<span class="normal">1191</span>
-<span class="normal">1192</span>
-<span class="normal">1193</span>
-<span class="normal">1194</span>
-<span class="normal">1195</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1251</span>
+<span class="normal">1252</span>
+<span class="normal">1253</span>
+<span class="normal">1254</span>
+<span class="normal">1255</span>
+<span class="normal">1256</span>
+<span class="normal">1257</span>
+<span class="normal">1258</span>
+<span class="normal">1259</span>
+<span class="normal">1260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Builds geopandas.GeoDataFrame for Person&#39;s Legs</span>
 <span class="sd">    Keyword Args: Keyword arguments for plot.build_person_travel_geodataframe,</span>
@@ -5283,8 +5309,8 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1172</span>
-<span class="normal">1173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clear_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1237</span>
+<span class="normal">1238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">clear_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -5384,17 +5410,17 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1243</span>
-<span class="normal">1244</span>
-<span class="normal">1245</span>
-<span class="normal">1246</span>
-<span class="normal">1247</span>
-<span class="normal">1248</span>
-<span class="normal">1249</span>
-<span class="normal">1250</span>
-<span class="normal">1251</span>
-<span class="normal">1252</span>
-<span class="normal">1253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fill_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_idx</span><span class="p">,</span> <span class="n">s_idx</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;home&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1311</span>
+<span class="normal">1312</span>
+<span class="normal">1313</span>
+<span class="normal">1314</span>
+<span class="normal">1315</span>
+<span class="normal">1316</span>
+<span class="normal">1317</span>
+<span class="normal">1318</span>
+<span class="normal">1319</span>
+<span class="normal">1320</span>
+<span class="normal">1321</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fill_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_idx</span><span class="p">,</span> <span class="n">s_idx</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;home&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fill a plan after Activity has been removed.</span>
 <span class="sd">    Args:</span>
@@ -5427,11 +5453,11 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1158</span>
-<span class="normal">1159</span>
-<span class="normal">1160</span>
-<span class="normal">1161</span>
-<span class="normal">1162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finalise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1223</span>
+<span class="normal">1224</span>
+<span class="normal">1225</span>
+<span class="normal">1226</span>
+<span class="normal">1227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finalise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add activity end times based on start time of next activity.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -5456,13 +5482,13 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1164</span>
-<span class="normal">1165</span>
-<span class="normal">1166</span>
-<span class="normal">1167</span>
-<span class="normal">1168</span>
-<span class="normal">1169</span>
-<span class="normal">1170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1229</span>
+<span class="normal">1230</span>
+<span class="normal">1231</span>
+<span class="normal">1232</span>
+<span class="normal">1233</span>
+<span class="normal">1234</span>
+<span class="normal">1235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">crop</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">times</span><span class="p">:</span>
@@ -5520,7 +5546,7 @@ TODO consider passing parent hh on creation so that we can retrieve hh freq if r
           </td>
           <td>
             <div class="doc-md-description">
-              <p>'home' or pam.activity.Location. 
+              <p>'home' or pam.activity.Location.
 Defaults to "home".</p>
             </div>
           </td>
@@ -5535,7 +5561,7 @@ Defaults to "home".</p>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>access/egress journey switching to this mode. Ie 'walk'. 
+              <p>access/egress journey switching to this mode. Ie 'walk'.
 Defaults to "walk".</p>
             </div>
           </td>
@@ -5548,28 +5574,28 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1229</span>
-<span class="normal">1230</span>
-<span class="normal">1231</span>
-<span class="normal">1232</span>
-<span class="normal">1233</span>
-<span class="normal">1234</span>
-<span class="normal">1235</span>
-<span class="normal">1236</span>
-<span class="normal">1237</span>
-<span class="normal">1238</span>
-<span class="normal">1239</span>
-<span class="normal">1240</span>
-<span class="normal">1241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">move_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">new_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;walk&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1297</span>
+<span class="normal">1298</span>
+<span class="normal">1299</span>
+<span class="normal">1300</span>
+<span class="normal">1301</span>
+<span class="normal">1302</span>
+<span class="normal">1303</span>
+<span class="normal">1304</span>
+<span class="normal">1305</span>
+<span class="normal">1306</span>
+<span class="normal">1307</span>
+<span class="normal">1308</span>
+<span class="normal">1309</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">move_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">new_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;walk&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Move an activity from plan at given seq to default location.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        seq:</span>
-<span class="sd">        default (str, optional): </span>
-<span class="sd">            &#39;home&#39; or pam.activity.Location. </span>
+<span class="sd">        default (str, optional):</span>
+<span class="sd">            &#39;home&#39; or pam.activity.Location.</span>
 <span class="sd">            Defaults to &quot;home&quot;.</span>
-<span class="sd">        new_mode (str, optional): </span>
-<span class="sd">            access/egress journey switching to this mode. Ie &#39;walk&#39;. </span>
+<span class="sd">        new_mode (str, optional):</span>
+<span class="sd">            access/egress journey switching to this mode. Ie &#39;walk&#39;.</span>
 <span class="sd">            Defaults to &quot;walk&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">move_activity</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">new_mode</span><span class="p">)</span>
@@ -5593,9 +5619,9 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1258</span>
-<span class="normal">1259</span>
-<span class="normal">1260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1326</span>
+<span class="normal">1327</span>
+<span class="normal">1328</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -5618,8 +5644,8 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1180</span>
-<span class="normal">1181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1245</span>
+<span class="normal">1246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">plot</span><span class="o">.</span><span class="n">plot_person</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -5767,22 +5793,25 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1197</span>
-<span class="normal">1198</span>
-<span class="normal">1199</span>
-<span class="normal">1200</span>
-<span class="normal">1201</span>
-<span class="normal">1202</span>
-<span class="normal">1203</span>
-<span class="normal">1204</span>
-<span class="normal">1205</span>
-<span class="normal">1206</span>
-<span class="normal">1207</span>
-<span class="normal">1208</span>
-<span class="normal">1209</span>
-<span class="normal">1210</span>
-<span class="normal">1211</span>
-<span class="normal">1212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1262</span>
+<span class="normal">1263</span>
+<span class="normal">1264</span>
+<span class="normal">1265</span>
+<span class="normal">1266</span>
+<span class="normal">1267</span>
+<span class="normal">1268</span>
+<span class="normal">1269</span>
+<span class="normal">1270</span>
+<span class="normal">1271</span>
+<span class="normal">1272</span>
+<span class="normal">1273</span>
+<span class="normal">1274</span>
+<span class="normal">1275</span>
+<span class="normal">1276</span>
+<span class="normal">1277</span>
+<span class="normal">1278</span>
+<span class="normal">1279</span>
+<span class="normal">1280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Uses plotly&#39;s Scattermapbox to plot agents&#39; travel</span>
 <span class="sd">    Args:</span>
@@ -5797,7 +5826,10 @@ Defaults to "walk".</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        go.Figure: Plotly figure object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span><span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span>
+        <span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -5818,10 +5850,10 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1175</span>
-<span class="normal">1176</span>
-<span class="normal">1177</span>
-<span class="normal">1178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1240</span>
+<span class="normal">1241</span>
+<span class="normal">1242</span>
+<span class="normal">1243</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
@@ -5845,8 +5877,8 @@ Defaults to "walk".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1183</span>
-<span class="normal">1184</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1248</span>
+<span class="normal">1249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -5920,17 +5952,17 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1217</span>
-<span class="normal">1218</span>
-<span class="normal">1219</span>
-<span class="normal">1220</span>
-<span class="normal">1221</span>
-<span class="normal">1222</span>
-<span class="normal">1223</span>
-<span class="normal">1224</span>
-<span class="normal">1225</span>
-<span class="normal">1226</span>
-<span class="normal">1227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1285</span>
+<span class="normal">1286</span>
+<span class="normal">1287</span>
+<span class="normal">1288</span>
+<span class="normal">1289</span>
+<span class="normal">1290</span>
+<span class="normal">1291</span>
+<span class="normal">1292</span>
+<span class="normal">1293</span>
+<span class="normal">1294</span>
+<span class="normal">1295</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove an activity from plan at given seq.</span>
 <span class="sd">    Check for wrapped removal.</span>
@@ -5961,9 +5993,9 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">991</span>
-<span class="normal">992</span>
-<span class="normal">993</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1050</span>
+<span class="normal">1051</span>
+<span class="normal">1052</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">home_location</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">home_location</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
 </code></pre></div></td></tr></table></div>
@@ -5986,8 +6018,8 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">947</span>
-<span class="normal">948</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1004</span>
+<span class="normal">1005</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">person_freq</span> <span class="o">=</span> <span class="n">freq</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -6009,9 +6041,9 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">995</span>
-<span class="normal">996</span>
-<span class="normal">997</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1054</span>
+<span class="normal">1055</span>
+<span class="normal">1056</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">home_location</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">home_location</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
 </code></pre></div></td></tr></table></div>
@@ -6034,9 +6066,9 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">987</span>
-<span class="normal">988</span>
-<span class="normal">989</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Location</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1046</span>
+<span class="normal">1047</span>
+<span class="normal">1048</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Location</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">home_location</span> <span class="o">=</span> <span class="n">location</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">home_location</span> <span class="o">=</span> <span class="n">location</span>
 </code></pre></div></td></tr></table></div>
@@ -6059,8 +6091,8 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1255</span>
-<span class="normal">1256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">stay_at_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1323</span>
+<span class="normal">1324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">stay_at_home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">stay_at_home</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -6084,12 +6116,12 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1097</span>
-<span class="normal">1098</span>
-<span class="normal">1099</span>
-<span class="normal">1100</span>
-<span class="normal">1101</span>
-<span class="normal">1102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1156</span>
+<span class="normal">1157</span>
+<span class="normal">1158</span>
+<span class="normal">1159</span>
+<span class="normal">1160</span>
+<span class="normal">1161</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate plan.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6118,21 +6150,25 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1124</span>
-<span class="normal">1125</span>
-<span class="normal">1126</span>
-<span class="normal">1127</span>
-<span class="normal">1128</span>
-<span class="normal">1129</span>
-<span class="normal">1130</span>
-<span class="normal">1131</span>
-<span class="normal">1132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1187</span>
+<span class="normal">1188</span>
+<span class="normal">1189</span>
+<span class="normal">1190</span>
+<span class="normal">1191</span>
+<span class="normal">1192</span>
+<span class="normal">1193</span>
+<span class="normal">1194</span>
+<span class="normal">1195</span>
+<span class="normal">1196</span>
+<span class="normal">1197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check sequence of Activity and Leg locations.</span>
 <span class="sd">    :return: True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">valid_locations</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">PAMValidationLocationsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan locations&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PAMValidationLocationsError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan locations&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
@@ -6158,21 +6194,25 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1104</span>
-<span class="normal">1105</span>
-<span class="normal">1106</span>
-<span class="normal">1107</span>
-<span class="normal">1108</span>
-<span class="normal">1109</span>
-<span class="normal">1110</span>
-<span class="normal">1111</span>
-<span class="normal">1112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1163</span>
+<span class="normal">1164</span>
+<span class="normal">1165</span>
+<span class="normal">1166</span>
+<span class="normal">1167</span>
+<span class="normal">1168</span>
+<span class="normal">1169</span>
+<span class="normal">1170</span>
+<span class="normal">1171</span>
+<span class="normal">1172</span>
+<span class="normal">1173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check sequence of Activities and Legs.</span>
 <span class="sd">    :return: True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">valid_sequence</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">PAMSequenceValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan sequence&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PAMSequenceValidationError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan sequence&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
@@ -6198,21 +6238,25 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1114</span>
-<span class="normal">1115</span>
-<span class="normal">1116</span>
-<span class="normal">1117</span>
-<span class="normal">1118</span>
-<span class="normal">1119</span>
-<span class="normal">1120</span>
-<span class="normal">1121</span>
-<span class="normal">1122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1175</span>
+<span class="normal">1176</span>
+<span class="normal">1177</span>
+<span class="normal">1178</span>
+<span class="normal">1179</span>
+<span class="normal">1180</span>
+<span class="normal">1181</span>
+<span class="normal">1182</span>
+<span class="normal">1183</span>
+<span class="normal">1184</span>
+<span class="normal">1185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check sequence of Activity and Leg times.</span>
 <span class="sd">    :return: True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">valid_time_sequence</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">PAMInvalidTimeSequenceError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan times&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PAMInvalidTimeSequenceError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Person </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> has invalid plan times&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
@@ -6274,15 +6318,15 @@ Check for wrapped removal.</p>
 
           <details class="quote">
             <summary>Source code in <code>pam/core.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Args:</span>
@@ -6657,11 +6701,7 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
@@ -6683,12 +6723,18 @@ Check for wrapped removal.</p>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
-<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Household</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="nb">list</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Household</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="nb">list</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add houeshold/person, or a list of households/persons to the population</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        target (list[Union[Household, Person, list]]): </span>
+<span class="sd">        target (list[Union[Household, Person, list]]):</span>
 <span class="sd">            Can be any arbitrary nesting of lists, as long as the deepest nesting includes only Houeshold and Person objects</span>
 
 <span class="sd">    Raises:</span>
@@ -6709,7 +6755,9 @@ Check for wrapped removal.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Household</span><span class="p">(</span><span class="n">hid</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">households</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected instance of Household, list or Person, not: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected instance of Household, list or Person, not: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -6764,15 +6812,7 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">328</span>
 <span class="normal">329</span>
 <span class="normal">330</span>
 <span class="normal">331</span>
@@ -6803,12 +6843,20 @@ Check for wrapped removal.</p>
 <span class="normal">356</span>
 <span class="normal">357</span>
 <span class="normal">358</span>
-<span class="normal">359</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">add_fields</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;add extra fields used for benchmarking in place.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        df (pd.DataFrame): </span>
+<span class="sd">        df (pd.DataFrame):</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;personhrs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">60</span>
@@ -6922,15 +6970,7 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
-<span class="normal">369</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">369</span>
 <span class="normal">370</span>
 <span class="normal">371</span>
 <span class="normal">372</span>
@@ -6942,7 +6982,15 @@ Check for wrapped removal.</p>
 <span class="normal">378</span>
 <span class="normal">379</span>
 <span class="normal">380</span>
-<span class="normal">381</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>        
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_travel_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Builds geopandas.GeoDataFrame for travel Legs found for all agents in the Population.</span>
 
@@ -6960,7 +7008,7 @@ Check for wrapped removal.</p>
         <span class="k">if</span> <span class="n">gdf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gdf</span> <span class="o">=</span> <span class="n">_gdf</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gdf</span><span class="p">,</span> <span class="n">_gdf</span><span class="p">])</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_gdf</span><span class="p">)</span>
     <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;hid&quot;</span><span class="p">,</span> <span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="s2">&quot;seq&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">gdf</span>
 </code></pre></div></td></tr></table></div>
@@ -6985,27 +7033,29 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">461</span>
-<span class="normal">462</span>
-<span class="normal">463</span>
-<span class="normal">464</span>
-<span class="normal">465</span>
-<span class="normal">466</span>
-<span class="normal">467</span>
-<span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
-<span class="normal">471</span>
-<span class="normal">472</span>
-<span class="normal">473</span>
-<span class="normal">474</span>
-<span class="normal">475</span>
-<span class="normal">476</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">476</span>
 <span class="normal">477</span>
 <span class="normal">478</span>
 <span class="normal">479</span>
 <span class="normal">480</span>
-<span class="normal">481</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Safe addition with assignment by adding a prefix to create unique pids and hids.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7025,7 +7075,9 @@ Check for wrapped removal.</p>
         <span class="n">hh</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
         <span class="bp">self</span> <span class="o">+=</span> <span class="n">hh</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Object for addition must be a Population Household or Person object, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Object for addition must be a Population Household or Person object, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -7046,11 +7098,11 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">electric_vehicle_charger_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">electric_vehicle_charger_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">chargers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">electric_vehicles</span><span class="p">():</span>
         <span class="n">chargers</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">charger_types</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
@@ -7075,10 +7127,10 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">electric_vehicles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">electric_vehicles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ElectricVehicle</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">v</span>
@@ -7102,14 +7154,14 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">fix_plans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">crop</span><span class="p">:</span>
             <span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="o">.</span><span class="n">crop</span><span class="p">()</span>
@@ -7137,8 +7189,8 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
-<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hid</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hid</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -7162,15 +7214,7 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">257</span>
 <span class="normal">258</span>
 <span class="normal">259</span>
 <span class="normal">260</span>
@@ -7195,7 +7239,15 @@ Check for wrapped removal.</p>
 <span class="normal">279</span>
 <span class="normal">280</span>
 <span class="normal">281</span>
-<span class="normal">282</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">legs_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">legs_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Extract tabular record of population legs.</span>
@@ -7251,13 +7303,13 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">people</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">people</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Iterator for people in poulation, returns hid, pid and Person</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7284,9 +7336,9 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">416</span>
-<span class="normal">417</span>
-<span class="normal">418</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -7311,13 +7363,13 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plans</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">Plan</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plans</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">Plan</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Iterator for plans in poulation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7371,7 +7423,7 @@ Check for wrapped removal.</p>
     </tbody>
   </table>
 
-  <p><strong>Keyword arguments for plot.plot_travel_plans </strong></p>
+  <p><strong>Keyword arguments for plot.plot_travel_plans</strong></p>
   <table>
     <thead>
       <tr>
@@ -7459,24 +7511,27 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">383</span>
-<span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
-<span class="normal">391</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">391</span>
 <span class="normal">392</span>
 <span class="normal">393</span>
 <span class="normal">394</span>
 <span class="normal">395</span>
-<span class="normal">396</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">plot_travel_plotly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        epsg (str, optional): coordinate system the plans spatial information is in, e.g. &#39;epsg:27700&#39;. Defaults to &quot;epsg:4326&quot;.</span>
-<span class="sd">    Keyword Args: Keyword arguments for plot.plot_travel_plans </span>
+<span class="sd">    Keyword Args: Keyword arguments for plot.plot_travel_plans</span>
 <span class="sd">        gdf (geopandas.GeoDataFrame): geopandas.GeoDataFrame generated by build_person_travel_geodataframe</span>
 <span class="sd">        groupby: optional argument for splitting traces in the plot</span>
 <span class="sd">        colour_by: argument for specifying what the colour should correspond to in the plot, travel mode by default</span>
@@ -7485,7 +7540,10 @@ Check for wrapped removal.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        go.Figure: Plotly figure object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span><span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">plot_travel_plans</span><span class="p">(</span>
+        <span class="n">gdf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -7506,10 +7564,10 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">household</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
         <span class="n">household</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
@@ -7533,8 +7591,8 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">223</span>
-<span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_household</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
+<span class="normal">232</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_household</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">households</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">households</span><span class="p">))]</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -7556,9 +7614,9 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">hh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_household</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">hh</span><span class="o">.</span><span class="n">random_person</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -7583,20 +7641,20 @@ Check for wrapped removal.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span>
-<span class="normal">452</span>
-<span class="normal">453</span>
-<span class="normal">454</span>
-<span class="normal">455</span>
-<span class="normal">456</span>
-<span class="normal">457</span>
-<span class="normal">458</span>
-<span class="normal">459</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Safely reindex all household and person identifiers in population using a prefix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7701,24 +7759,7 @@ persons and home activities are impacted.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">483</span>
-<span class="normal">484</span>
-<span class="normal">485</span>
-<span class="normal">486</span>
-<span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
-<span class="normal">495</span>
-<span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">500</span>
 <span class="normal">501</span>
 <span class="normal">502</span>
 <span class="normal">503</span>
@@ -7764,7 +7805,38 @@ persons and home activities are impacted.</p>
 <span class="normal">543</span>
 <span class="normal">544</span>
 <span class="normal">545</span>
-<span class="normal">546</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sample_locs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">long_term_activities</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">joint_trips_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;escort_&quot;</span><span class="p">,</span> <span class="n">location_override</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sample_locs</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">sampler</span><span class="p">,</span>
+    <span class="n">long_term_activities</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">joint_trips_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;escort_&quot;</span><span class="p">,</span>
+    <span class="n">location_override</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    WIP Sample household plan locs using a sampler.</span>
 
@@ -7794,7 +7866,8 @@ persons and home activities are impacted.</p>
 
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">household</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">home_loc</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span>
-            <span class="n">area</span><span class="o">=</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="s2">&quot;home&quot;</span><span class="p">)</span>
+            <span class="n">area</span><span class="o">=</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="s2">&quot;home&quot;</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">unique_locations</span> <span class="o">=</span> <span class="p">{(</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="s2">&quot;home&quot;</span><span class="p">):</span> <span class="n">home_loc</span><span class="p">}</span>
@@ -7814,7 +7887,8 @@ persons and home activities are impacted.</p>
                 <span class="c1"># sample facility</span>
                 <span class="k">elif</span> <span class="n">location_override</span> <span class="ow">or</span> <span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">loc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">location</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span>
-                        <span class="n">area</span><span class="o">=</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">target_act</span><span class="p">)</span>
+                        <span class="n">area</span><span class="o">=</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
+                        <span class="n">loc</span><span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">target_act</span><span class="p">),</span>
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">target_act</span> <span class="ow">in</span> <span class="n">long_term_activities</span><span class="p">:</span>
                         <span class="c1"># one location per zone for long-term choices (only)</span>
@@ -7896,32 +7970,7 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">548</span>
-<span class="normal">549</span>
-<span class="normal">550</span>
-<span class="normal">551</span>
-<span class="normal">552</span>
-<span class="normal">553</span>
-<span class="normal">554</span>
-<span class="normal">555</span>
-<span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
-<span class="normal">559</span>
-<span class="normal">560</span>
-<span class="normal">561</span>
-<span class="normal">562</span>
-<span class="normal">563</span>
-<span class="normal">564</span>
-<span class="normal">565</span>
-<span class="normal">566</span>
-<span class="normal">567</span>
-<span class="normal">568</span>
-<span class="normal">569</span>
-<span class="normal">570</span>
-<span class="normal">571</span>
-<span class="normal">572</span>
-<span class="normal">573</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">573</span>
 <span class="normal">574</span>
 <span class="normal">575</span>
 <span class="normal">576</span>
@@ -7971,16 +8020,57 @@ Defaults to "escort_".</p>
 <span class="normal">620</span>
 <span class="normal">621</span>
 <span class="normal">622</span>
-<span class="normal">623</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sample_locs_complex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">long_term_activities</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">joint_trips_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;escort_&quot;</span><span class="p">):</span>
+<span class="normal">623</span>
+<span class="normal">624</span>
+<span class="normal">625</span>
+<span class="normal">626</span>
+<span class="normal">627</span>
+<span class="normal">628</span>
+<span class="normal">629</span>
+<span class="normal">630</span>
+<span class="normal">631</span>
+<span class="normal">632</span>
+<span class="normal">633</span>
+<span class="normal">634</span>
+<span class="normal">635</span>
+<span class="normal">636</span>
+<span class="normal">637</span>
+<span class="normal">638</span>
+<span class="normal">639</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span>
+<span class="normal">644</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span>
+<span class="normal">648</span>
+<span class="normal">649</span>
+<span class="normal">650</span>
+<span class="normal">651</span>
+<span class="normal">652</span>
+<span class="normal">653</span>
+<span class="normal">654</span>
+<span class="normal">655</span>
+<span class="normal">656</span>
+<span class="normal">657</span>
+<span class="normal">658</span>
+<span class="normal">659</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">sample_locs_complex</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">sampler</span><span class="p">,</span>
+    <span class="n">long_term_activities</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">joint_trips_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;escort_&quot;</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extends sample_locs method to enable more complex and rules-based sampling.</span>
 <span class="sd">    Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.</span>
 <span class="sd">    It is generally slower than sample_locs, as it loops through both activities and legs.</span>
 <span class="sd">    Args:</span>
-<span class="sd">        long_term_activities (list, optional): </span>
+<span class="sd">        long_term_activities (list, optional):</span>
 <span class="sd">            a list of activities for which location is only assigned once (per zone).</span>
 <span class="sd">            Defaults to None.</span>
-<span class="sd">        joint_trips_prefix (str, optional): </span>
+<span class="sd">        joint_trips_prefix (str, optional):</span>
 <span class="sd">            a purpose prefix used to identify escort/joint trips.</span>
 <span class="sd">            Defaults to &quot;escort_&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -7991,7 +8081,11 @@ Defaults to "escort_".</p>
         <span class="n">home_loc</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span>
             <span class="n">area</span><span class="o">=</span><span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
             <span class="n">loc</span><span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
-                <span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">previous_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">previous_loc</span><span class="o">=</span><span class="kc">None</span>
+                <span class="n">household</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
+                <span class="s2">&quot;home&quot;</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">previous_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">previous_loc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="kc">None</span>
@@ -8036,7 +8130,9 @@ Defaults to "escort_".</p>
                             <span class="p">),</span>
                         <span class="p">)</span>
                         <span class="k">if</span> <span class="n">target_act</span> <span class="ow">in</span> <span class="n">long_term_activities</span><span class="p">:</span>
-                            <span class="n">unique_locations</span><span class="p">[(</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">target_act</span><span class="p">)]</span> <span class="o">=</span> <span class="n">location</span>
+                            <span class="n">unique_locations</span><span class="p">[</span>
+                                <span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="n">target_act</span><span class="p">)</span>
+                            <span class="p">]</span> <span class="o">=</span> <span class="n">location</span>
                         <span class="n">act</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>
 
                     <span class="n">previous_loc</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">loc</span>  <span class="c1"># keep track of previous location</span>
@@ -8067,8 +8163,8 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">420</span>
-<span class="normal">421</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_crs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">431</span>
+<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_crs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">):</span>
     <span class="n">write</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">to_crs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -8114,15 +8210,7 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">284</span>
-<span class="normal">285</span>
-<span class="normal">286</span>
-<span class="normal">287</span>
-<span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span>
-<span class="normal">291</span>
-<span class="normal">292</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
 <span class="normal">293</span>
 <span class="normal">294</span>
 <span class="normal">295</span>
@@ -8148,7 +8236,15 @@ Defaults to "escort_".</p>
 <span class="normal">315</span>
 <span class="normal">316</span>
 <span class="normal">317</span>
-<span class="normal">318</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">trips_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">trips_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract tabular record of population legs.</span>
 
@@ -8203,9 +8299,9 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
         <span class="n">person</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -8228,11 +8324,15 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vehicle_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">v_types</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">vehicle_type</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">vehicle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vehicle_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">v_types</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">vehicle_type</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">vehicle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">}</span>
     <span class="k">for</span> <span class="n">vt</span> <span class="ow">in</span> <span class="n">v_types</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">vt</span>
 </code></pre></div></td></tr></table></div>
@@ -8255,11 +8355,11 @@ Defaults to "escort_".</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/core.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vehicles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">vehicles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">vehicle</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
