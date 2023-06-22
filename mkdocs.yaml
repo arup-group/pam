@@ -4,7 +4,7 @@ nav:
   - Installation: installation.md
   - Reading data: read_data.md
   - Activity plans: activity_plans.md
-  - Modelling the imapct of policies on populations: modelling_policy_impact.md
+  - Modelling the impact of policies on populations: modelling_policy_impact.md
   - Examples:
     - PAM Getting Started: examples/01_PAM_Getting_Started.ipynb
     - Population Basics: examples/02_Population_Basics.ipynb

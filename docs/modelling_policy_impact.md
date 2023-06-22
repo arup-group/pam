@@ -1,4 +1,4 @@
-# Modelling the imapct of policies on populations
+# Modelling the impact of policies on populations
 
 PAM uses **policies** to model change to a population. For example, based on social distancing requirements we might
 want to reflect that people are expected to make less shared shopping trips or tours. We can do this using the
