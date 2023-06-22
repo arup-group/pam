@@ -1,0 +1,3112 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../cli/">
+      
+      
+        <link rel="next" href="../vehicle/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+    
+    
+      
+        <title>pam.scoring - Population Activity Modeller (PAM)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../static/extras.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pam.scoring" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Population Activity Modeller (PAM)" class="md-header__button md-logo" aria-label="Population Activity Modeller (PAM)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Population Activity Modeller (PAM)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              pam.scoring
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Population Activity Modeller (PAM)" class="md-nav__button md-logo" aria-label="Population Activity Modeller (PAM)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Population Activity Modeller (PAM)
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../read_data/" class="md-nav__link">
+        Reading data
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../activity_plans/" class="md-nav__link">
+        Activity plans
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelling_policy_impact/" class="md-nav__link">
+        Modelling the impact of policies on populations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/01_PAM_Getting_Started/" class="md-nav__link">
+        PAM Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/02_Population_Basics/" class="md-nav__link">
+        Population Basics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/03_Example_Generate_Random_Population/" class="md-nav__link">
+        Example Generate Random Population
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/04_Example_Ingest_NTS_Diaries/" class="md-nav__link">
+        Example Ingest NTS Diaries
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/05_PAM_Policies_Walk_Through/" class="md-nav__link">
+        PAM Policies Walk Through
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/06_PAM_Complex_Policies/" class="md-nav__link">
+        PAM Complex Policies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/07_PAM_Point_Sampling/" class="md-nav__link">
+        PAM Point Sampling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/08_PAM_Population_Activity_Plots/" class="md-nav__link">
+        PAM Population Activity Plots
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/09_Travel_Plots/" class="md-nav__link">
+        Travel Plots
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/10_Advanced_Spatial-Sampling_Demo/" class="md-nav__link">
+        Advanced Spatial-Sampling Demo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/11_Advanced_Plan_Rescheduling/" class="md-nav__link">
+        Advanced Plan Rescheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/12_Advanced_Adding_Vehicles/" class="md-nav__link">
+        Advanced Adding Vehicles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/13_Advanced_Freight_Synthesis/" class="md-nav__link">
+        Advanced Freight Synthesis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/14_Advanced_Plan_Cropping/" class="md-nav__link">
+        Advanced Plan Cropping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/15_Advanced_Choice/" class="md-nav__link">
+        Advanced Choice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../get_involved/" class="md-nav__link">
+        Get involved
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        CLI Reference
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          pam.scoring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        pam.scoring
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pam.scoring" class="md-nav__link">
+    pam.scoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer" class="md-nav__link">
+    CharyparNagelPlanScorer
+  </a>
+  
+    <nav class="md-nav" aria-label="CharyparNagelPlanScorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.cnfg" class="md-nav__link">
+    cnfg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.example_config" class="md-nav__link">
+    example_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.logger" class="md-nav__link">
+    logger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.activities_wrapper" class="md-nav__link">
+    activities_wrapper()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.duration_score" class="md-nav__link">
+    duration_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.early_departure_score" class="md-nav__link">
+    early_departure_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.late_arrival_score" class="md-nav__link">
+    late_arrival_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.mode_constant_score" class="md-nav__link">
+    mode_constant_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.pt_waiting_time_score" class="md-nav__link">
+    pt_waiting_time_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_activity" class="md-nav__link">
+    score_activity()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_day_mode_use" class="md-nav__link">
+    score_day_mode_use()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_leg" class="md-nav__link">
+    score_leg()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_person" class="md-nav__link">
+    score_person()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan" class="md-nav__link">
+    score_plan()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_activities" class="md-nav__link">
+    score_plan_activities()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_daily" class="md-nav__link">
+    score_plan_daily()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_legs" class="md-nav__link">
+    score_plan_legs()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_monetary_cost" class="md-nav__link">
+    score_plan_monetary_cost()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_pt_interchanges" class="md-nav__link">
+    score_pt_interchanges()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.summary" class="md-nav__link">
+    summary()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.too_short_score" class="md-nav__link">
+    too_short_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.travel_distance_score" class="md-nav__link">
+    travel_distance_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.travel_time_score" class="md-nav__link">
+    travel_time_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.waiting_score" class="md-nav__link">
+    waiting_score()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vehicle/" class="md-nav__link">
+        pam.vehicle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../activity/" class="md-nav__link">
+        pam.activity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        pam.core
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../location/" class="md-nav__link">
+        pam.location
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        pam.utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_7" id="__nav_9_7_label" tabindex="0">
+          pam.write
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_7">
+          <span class="md-nav__icon md-icon"></span>
+          pam.write
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/matrices/" class="md-nav__link">
+        pam.write.matrices
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/diary/" class="md-nav__link">
+        pam.write.diary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/matsim/" class="md-nav__link">
+        pam.write.matsim
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_8" id="__nav_9_8_label" tabindex="0">
+          pam.plot
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_8">
+          <span class="md-nav__icon md-icon"></span>
+          pam.plot
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/stats/" class="md-nav__link">
+        pam.plot.stats
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/plans/" class="md-nav__link">
+        pam.plot.plans
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_9" id="__nav_9_9_label" tabindex="0">
+          pam.optimise
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_9">
+          <span class="md-nav__icon md-icon"></span>
+          pam.optimise
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimise/grid/" class="md-nav__link">
+        pam.optimise.grid
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimise/random/" class="md-nav__link">
+        pam.optimise.random
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_10" id="__nav_9_10_label" tabindex="0">
+          pam.array
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_10">
+          <span class="md-nav__icon md-icon"></span>
+          pam.array
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/encode/" class="md-nav__link">
+        pam.array.encode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/distance/" class="md-nav__link">
+        pam.array.distance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/decode/" class="md-nav__link">
+        pam.array.decode
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_11" id="__nav_9_11_label" tabindex="0">
+          pam.planner
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_11">
+          <span class="md-nav__icon md-icon"></span>
+          pam.planner
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/od/" class="md-nav__link">
+        pam.planner.od
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/clustering/" class="md-nav__link">
+        pam.planner.clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/encoder/" class="md-nav__link">
+        pam.planner.encoder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/utils_planner/" class="md-nav__link">
+        pam.planner.utils_planner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/choice_location/" class="md-nav__link">
+        pam.planner.choice_location
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/zones/" class="md-nav__link">
+        pam.planner.zones
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_12" id="__nav_9_12_label" tabindex="0">
+          pam.read
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_12">
+          <span class="md-nav__icon md-icon"></span>
+          pam.read
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../read/diary/" class="md-nav__link">
+        pam.read.diary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../read/matsim/" class="md-nav__link">
+        pam.read.matsim
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_13" id="__nav_9_13_label" tabindex="0">
+          pam.operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_13">
+          <span class="md-nav__icon md-icon"></span>
+          pam.operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/cropping/" class="md-nav__link">
+        pam.operations.cropping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/combine/" class="md-nav__link">
+        pam.operations.combine
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_14" id="__nav_9_14_label" tabindex="0">
+          pam.samplers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_14">
+          <span class="md-nav__icon md-icon"></span>
+          pam.samplers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/time/" class="md-nav__link">
+        pam.samplers.time
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/attributes/" class="md-nav__link">
+        pam.samplers.attributes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/population/" class="md-nav__link">
+        pam.samplers.population
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/spatial/" class="md-nav__link">
+        pam.samplers.spatial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/facility/" class="md-nav__link">
+        pam.samplers.facility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/basic/" class="md-nav__link">
+        pam.samplers.basic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/tour/" class="md-nav__link">
+        pam.samplers.tour
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_15" id="__nav_9_15_label" tabindex="0">
+          pam.report
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_15">
+          <span class="md-nav__icon md-icon"></span>
+          pam.report
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/stringify/" class="md-nav__link">
+        pam.report.stringify
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/summary/" class="md-nav__link">
+        pam.report.summary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/benchmarks/" class="md-nav__link">
+        pam.report.benchmarks
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9_16" id="__nav_9_16_label" tabindex="0">
+          pam.policy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_16">
+          <span class="md-nav__icon md-icon"></span>
+          pam.policy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/probability_samplers/" class="md-nav__link">
+        pam.policy.probability_samplers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/modifiers/" class="md-nav__link">
+        pam.policy.modifiers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/policies/" class="md-nav__link">
+        pam.policy.policies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/filters/" class="md-nav__link">
+        pam.policy.filters
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pam.scoring" class="md-nav__link">
+    pam.scoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer" class="md-nav__link">
+    CharyparNagelPlanScorer
+  </a>
+  
+    <nav class="md-nav" aria-label="CharyparNagelPlanScorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.cnfg" class="md-nav__link">
+    cnfg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.example_config" class="md-nav__link">
+    example_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.logger" class="md-nav__link">
+    logger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.activities_wrapper" class="md-nav__link">
+    activities_wrapper()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.duration_score" class="md-nav__link">
+    duration_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.early_departure_score" class="md-nav__link">
+    early_departure_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.late_arrival_score" class="md-nav__link">
+    late_arrival_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.mode_constant_score" class="md-nav__link">
+    mode_constant_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.pt_waiting_time_score" class="md-nav__link">
+    pt_waiting_time_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_activity" class="md-nav__link">
+    score_activity()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_day_mode_use" class="md-nav__link">
+    score_day_mode_use()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_leg" class="md-nav__link">
+    score_leg()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_person" class="md-nav__link">
+    score_person()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan" class="md-nav__link">
+    score_plan()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_activities" class="md-nav__link">
+    score_plan_activities()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_daily" class="md-nav__link">
+    score_plan_daily()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_legs" class="md-nav__link">
+    score_plan_legs()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_monetary_cost" class="md-nav__link">
+    score_plan_monetary_cost()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.score_pt_interchanges" class="md-nav__link">
+    score_pt_interchanges()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.summary" class="md-nav__link">
+    summary()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.too_short_score" class="md-nav__link">
+    too_short_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.travel_distance_score" class="md-nav__link">
+    travel_distance_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.travel_time_score" class="md-nav__link">
+    travel_time_score()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.scoring.CharyparNagelPlanScorer.waiting_score" class="md-nav__link">
+    waiting_score()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>pam.scoring</h1>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="pam.scoring"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="pam.scoring.CharyparNagelPlanScorer" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">CharyparNagelPlanScorer</span><span class="p">(</span><span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer" class="headerlink" title="Permanent link">#</a></h2>
+
+
+  <div class="doc doc-contents ">
+
+
+  
+      <p>Charypar-Nagel plan scorer.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/scoring.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Charypar-Nagel plan scorer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span> <span class="o">=</span> <span class="n">cnfg</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.cnfg" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">cnfg</span> <span class="o">=</span> <span class="n">cnfg</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.cnfg" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.example_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">example_config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mUM&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;utilityOfLineSwitch&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;performing&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;waiting&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;waitingPt&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;lateArrival&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;earlyDeparture&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;work&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;08:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;latestStartTime&#39;</span><span class="p">:</span> <span class="s1">&#39;09:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;earliestEndTime&#39;</span><span class="p">:</span> <span class="s1">&#39;16:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;01:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;home&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;12:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;05:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;shop&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;00:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;car&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;dailyMonetaryConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;dailyUtilityConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfDistance&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfTravelling&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;monetaryDistanceRate&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.0001</span><span class="p">},</span> <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">}}}</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.example_config" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.logger" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.logger" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.activities_wrapper" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">activities_wrapper</span><span class="p">(</span><span class="n">activities</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.activities_wrapper" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">activities_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activities</span><span class="p">):</span>
+    <span class="n">non_wrapped</span> <span class="o">=</span> <span class="n">activities</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">wrapped_act</span> <span class="o">=</span> <span class="n">Activity</span><span class="p">(</span>
+        <span class="n">act</span><span class="o">=</span><span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="o">=</span><span class="n">activities</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+        <span class="n">end_time</span><span class="o">=</span><span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">+</span> <span class="n">td</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapped_act</span><span class="p">,</span> <span class="n">non_wrapped</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.duration_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">duration_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.duration_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">duration_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">prio</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">performing</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;performing&quot;</span><span class="p">]</span>
+    <span class="n">typical_dur</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_duration_to_hours</span><span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;typicalDuration&quot;</span><span class="p">])</span>
+
+    <span class="n">opening_time</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;openingTime&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">opening_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opening_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span><span class="n">opening_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opening_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">activity</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">time</span><span class="p">():</span>
+            <span class="n">actual_start_time</span> <span class="o">=</span> <span class="n">opening_time</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actual_start_time</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">start_time</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">actual_start_time</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">start_time</span>
+
+    <span class="n">closing_time</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;closingTime&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">closing_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">closing_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span><span class="n">closing_time</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">closing_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">activity</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">time</span><span class="p">():</span>
+            <span class="n">actual_end_time</span> <span class="o">=</span> <span class="n">closing_time</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actual_end_time</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">end_time</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">actual_end_time</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">end_time</span>
+
+    <span class="k">if</span> <span class="n">actual_end_time</span> <span class="o">&lt;</span> <span class="n">actual_start_time</span> <span class="ow">or</span> <span class="n">actual_start_time</span> <span class="o">&gt;</span> <span class="n">actual_end_time</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="p">(</span><span class="n">actual_end_time</span> <span class="o">-</span> <span class="n">actual_start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;</span> <span class="n">typical_dur</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span> <span class="o">-</span> <span class="n">typical_dur</span><span class="p">)</span> <span class="o">*</span> <span class="n">performing</span>
+
+    <span class="k">return</span> <span class="n">performing</span> <span class="o">*</span> <span class="n">typical_dur</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="n">typical_dur</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">prio</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.early_departure_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">early_departure_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.early_departure_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">early_departure_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earliestEndTime&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+    <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">):</span>
+        <span class="n">earliest_end_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span>
+            <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;earliestEndTime&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">activity</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">earliest_end_time</span><span class="o">.</span><span class="n">time</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">]</span> \
+                <span class="o">*</span> <span class="p">((</span><span class="n">earliest_end_time</span> <span class="o">-</span> <span class="n">activity</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.late_arrival_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">late_arrival_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.late_arrival_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">late_arrival_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latestStartTime&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lateArrival&quot;</span><span class="p">):</span>
+        <span class="n">latest_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span>
+            <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;latestStartTime&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">activity</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">latest_start_time</span><span class="o">.</span><span class="n">time</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;lateArrival&quot;</span><span class="p">]</span> \
+                <span class="o">*</span> <span class="p">((</span><span class="n">activity</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="n">latest_start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.mode_constant_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">mode_constant_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.mode_constant_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">300</span>
+<span class="normal">301</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">mode_constant_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.pt_waiting_time_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">pt_waiting_time_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.pt_waiting_time_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pt_waiting_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">:</span>
+        <span class="n">waiting</span> <span class="o">=</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span> <span class="o">-</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">waiting</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">waiting</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_activity" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_activity</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_activity" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waiting_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">late_arrival_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_departure_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span>
+    <span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_day_mode_use" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_day_mode_use</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_day_mode_use" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_day_mode_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dailyUtilityConstant&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> \
+        <span class="o">+</span> <span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dailyMonetaryConstant&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_leg" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_leg" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_leg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt_waiting_time_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode_constant_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">travel_time_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">travel_distance_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span>
+    <span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_person" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_person</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">Person</span><span class="p">,</span> <span class="n">subpopulation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;subpopulation&#39;</span><span class="p">,</span> <span class="n">plan_costs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_person" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Score a pam.core.Person Plan</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>subpopulation</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>person attribute name for subpopulation, Defalts to "subpopulation".</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;subpopulation&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>plan_costs</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[float]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optionally add monetary costs such as tolls. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_person</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">person</span> <span class="p">:</span> <span class="n">Person</span><span class="p">,</span>
+    <span class="n">subpopulation</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;subpopulation&quot;</span><span class="p">,</span>
+    <span class="n">plan_costs</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Score a pam.core.Person Plan</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        person (Person).</span>
+<span class="sd">        subpopulation (str): person attribute name for subpopulation, Defalts to &quot;subpopulation&quot;.</span>
+<span class="sd">        plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subpop</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">subpopulation</span><span class="p">]</span>
+    <span class="n">cnfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span><span class="p">[</span><span class="n">subpop</span><span class="p">]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span> <span class="n">plan_cost</span><span class="o">=</span><span class="n">plan_costs</span><span class="p">,</span> <span class="n">cnfg</span><span class="o">=</span><span class="n">cnfg</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_plan" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_plan</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">plan_cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_plan" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Score a pam.activity.Plan</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>plan</code></td>
+          <td>
+                <code>pam.<a class="autorefs autorefs-internal" title="pam.activity" href="../activity/#pam.activity">activity</a>.<a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../activity/#pam.activity.Plan">Plan</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>activity plan to be scored.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cnfg</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>configuration for plan scoring, refer to self.example_config for example.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>plan_cost</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optionally add a plan monetary cost. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>float</code></td>          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Charypar-Nagel score</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span>
+    <span class="n">cnfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">plan_cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Score a pam.activity.Plan</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        plan (pam.activity.Plan): activity plan to be scored.</span>
+<span class="sd">        cnfg (dict): configuration for plan scoring, refer to self.example_config for example.</span>
+<span class="sd">        plan_cost (float, optional): Optionally add a plan monetary cost. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Charypar-Nagel score</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan_activities</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
+        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan_legs</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
+        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan_monetary_cost</span><span class="p">(</span><span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
+        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan_daily</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_plan_activities" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_plan_activities</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_activities" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="n">activities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">plan</span><span class="o">.</span><span class="n">activities</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">activities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cnfg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">act</span> <span class="o">!=</span> <span class="n">activities</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">:</span>
+        <span class="c1"># if the first and last activity are not of the same type</span>
+        <span class="c1"># then the activities are not wrapped</span>
+        <span class="c1"># see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">activities</span> <span class="k">if</span> <span class="n">act</span><span class="o">.</span><span class="n">act</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pt interaction&quot;</span><span class="p">,</span> <span class="s2">&quot;pt_interaction&quot;</span><span class="p">]])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrapped_activity</span><span class="p">,</span> <span class="n">other_activities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activities_wrapper</span><span class="p">(</span><span class="n">activities</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">wrapped_activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
+            <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">other_activities</span> <span class="k">if</span> <span class="n">act</span><span class="o">.</span><span class="n">act</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pt interaction&quot;</span><span class="p">,</span> <span class="s2">&quot;pt_interaction&quot;</span><span class="p">]])</span>
+
+    <span class="k">return</span> <span class="n">score</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_plan_daily" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_plan_daily</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_daily" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_daily</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="n">plan</span><span class="o">.</span><span class="n">mode_classes</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_day_mode_use</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_plan_legs" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_plan_legs</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_legs" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_legs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_pt_interchanges</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
+         <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">legs</span><span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_plan_monetary_cost" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_plan_monetary_cost</span><span class="p">(</span><span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_plan_monetary_cost" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_monetary_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">plan_cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">plan_cost</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.score_pt_interchanges" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">score_pt_interchanges</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.score_pt_interchanges" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Calculates utility of line switch.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_pt_interchanges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span> <span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">cnfg</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates utility of line switch.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utilityOfLineSwitch&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">transits</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">in_transit</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plan</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Activity</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">act</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pt interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_interaction&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">in_transit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">in_transit</span> <span class="o">-=</span> <span class="mi">1</span> <span class="c1"># the first PT vehicle does not incur a line switch penalty</span>
+                <span class="n">transits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">in_transit</span><span class="p">)</span>
+                <span class="n">in_transit</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="n">TRANSIT_MODES</span><span class="p">:</span>
+                <span class="c1"># number of PT modes used in each trip</span>
+                <span class="n">in_transit</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">transits</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utilityOfLineSwitch&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cost</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.summary" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">summary</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">subpopulation</span> <span class="o">=</span> <span class="s1">&#39;subpopulation&#39;</span><span class="p">)</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.summary" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">,</span> <span class="n">subpopulation</span><span class="o">=</span><span class="s1">&#39;subpopulation&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total plan score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_person</span><span class="p">(</span><span class="n">person</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span><span class="p">[</span><span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">subpopulation</span><span class="p">]]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total activities score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_plan_activities</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total legs score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_plan_legs</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pt interchanges score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_pt_interchanges</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Day score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_plan_daily</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">Activity</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">) Activity: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">act</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Duration: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component</span><span class="o">.</span><span class="n">act</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pt interaction&#39;</span><span class="p">,</span> <span class="s1">&#39;pt_interaction&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Duration_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">duration_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Waiting_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">waiting_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Late_arrival_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">late_arrival_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Early_departure_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">early_departure_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Too_short_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">too_short_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">) Leg: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Distance: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">distance</span><span class="si">}</span><span class="s2"> Duration: </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_leg</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Pt_waiting_time_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pt_waiting_time_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Constant: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode_constant_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Travel_time_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">travel_time_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Travel_distance_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">travel_distance_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.too_short_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">too_short_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.too_short_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">too_short_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;minimalDuration&quot;</span><span class="p">)</span> \
+        <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">):</span>
+        <span class="n">minimal_duration</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_duration_to_hours</span><span class="p">(</span>
+            <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;minimalDuration&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">activity</span><span class="o">.</span><span class="n">hours</span> <span class="o">&lt;</span> <span class="n">minimal_duration</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s1">&#39;earlyDeparture&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">minimal_duration</span> <span class="o">-</span> <span class="n">activity</span><span class="o">.</span><span class="n">hours</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.travel_distance_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">travel_distance_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.travel_distance_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_distance_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">leg</span><span class="o">.</span><span class="n">distance</span> <span class="o">*</span> <span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marginalUtilityOfDistance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> \
+         <span class="o">+</span> <span class="p">(</span><span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;monetaryDistanceRate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.travel_time_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">travel_time_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.travel_time_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">hours</span>
+    <span class="k">if</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">-=</span> <span class="p">((</span><span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span> <span class="o">-</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marginalUtilityOfTravelling&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="pam.scoring.CharyparNagelPlanScorer.waiting_score" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">waiting_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span></code>
+
+<a href="#pam.scoring.CharyparNagelPlanScorer.waiting_score" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">waiting_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">waiting</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;waiting&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">waiting</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">opening_time</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;openingTime&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">opening_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">opening_dt</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span><span class="n">opening_time</span><span class="p">)</span>
+    <span class="n">start_dt</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">start_time</span>
+    <span class="k">if</span> <span class="n">start_dt</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">opening_dt</span><span class="o">.</span><span class="n">time</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">waiting</span> <span class="o">*</span> <span class="p">((</span><span class="n">opening_dt</span> <span class="o">-</span> <span class="n">start_dt</span><span class="p">)</span>  <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mf">0.0</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+    
+  </body>
+</html>
