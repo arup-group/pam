@@ -1,54 +1,32 @@
 import pytest
 import numpy as np
 import random
-from tests.test_22_planner_od import data_od, labels, od
-from tests.test_23_planner_zones import data_zones
-from pam.planner.choice_location import ChoiceModel, ChoiceMNL, ChoiceSet, \
-    ChoiceConfiguration
-from pam.planner.utils_planner import sample_weighted
-import os
-from pam.read import read_matsim
-from pam.planner.od import OD
 
-test_plans = os.path.abspath(
-    os.path.join(os.path.dirname(__file__),
-                 "test_data/test_matsim_plansv12.xml")
-)
+from pam.planner.choice_location import ChoiceModel, ChoiceMNL, ChoiceConfiguration
+from pam.planner.utils_planner import sample_weighted
 
 
 @pytest.fixture
-def population():
-    population = read_matsim(test_plans, version=12)
-    for hid, pid, person in population.people():
+def population_planner_choice(population_no_args):
+    for hid, pid, person in population_no_args.people():
         for act in person.activities:
             act.location.area = 'a'
-    return population
+    return population_no_args
 
-
-test_plans_experienced = os.path.abspath(
-    os.path.join(os.path.dirname(__file__),
-                 "test_data/test_matsim_experienced_plans_v12.xml")
-)
 
 
 @pytest.fixture
-def population_experienced():
-    population = read_matsim(test_plans_experienced, version=12)
-    return population
+def choice_model(population_planner_choice, od, data_zones) -> ChoiceModel:
+    return ChoiceModel(population_planner_choice, od, data_zones)
 
 
 @pytest.fixture
-def choice_model(population, od, data_zones) -> ChoiceModel:
-    return ChoiceModel(population, od, data_zones)
+def choice_model_mnl(population_planner_choice, od, data_zones) -> ChoiceModel:
+    return ChoiceMNL(population_planner_choice, od, data_zones)
 
 
-@pytest.fixture
-def choice_model_mnl(population, od, data_zones) -> ChoiceModel:
-    return ChoiceMNL(population, od, data_zones)
-
-
-def test_zones_are_aligned(population, od, data_zones):
-    choice_model = ChoiceModel(population, od, data_zones.loc[['b', 'a']])
+def test_zones_are_aligned(population_planner_choice, od, data_zones):
+    choice_model = ChoiceModel(population_planner_choice, od, data_zones.loc[['b', 'a']])
     zones_destination = choice_model.od.labels.destination_zones
     zones_index = list(choice_model.zones.data.index)
     assert zones_destination == zones_index
@@ -123,8 +101,8 @@ def test_apply_once_per_agent_same_locations(choice_model_mnl):
         func_probabilities=lambda x: x / sum(x)
     )
 
-    def assert_single_location(population):
-        for hid, pid, person in population.people():
+    def assert_single_location(population_planner_choice):
+        for hid, pid, person in population_planner_choice.people():
             locs = [act.location.area for act in person.plan.activities]
             assert len(set(locs)) == 1
 

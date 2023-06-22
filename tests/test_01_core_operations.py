@@ -1,12 +1,7 @@
 import pytest
-from datetime import datetime, timedelta
 
 from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.utils import timedelta_to_matsim_time as tdtm
-from pam import PAMSequenceValidationError
-from .fixtures import person_heh
+from pam.activity import Activity, Leg
 
 
 def test_get_last_component_activity():

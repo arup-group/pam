@@ -1,6 +1,5 @@
-from pam.activity import Plan, Activity, Leg, Location
+from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
 import pytest
 
 

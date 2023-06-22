@@ -1,10 +1,8 @@
 import pytest
-from datetime import datetime
 from datetime import timedelta
 
 from pam.activity import Plan, Activity, Leg, Location
 from pam.utils import minutes_to_datetime as mtdt
-from .fixtures import person_heh, person_heh_open1, person_hew_open2, person_whw, person_whshw
 from pam.variables import END_OF_DAY
 from pam import PAMSequenceValidationError
 

@@ -1,14 +1,11 @@
-import csv
 import os
-import pytest
 from datetime import datetime
-from shapely.geometry import Point, LineString
+from shapely.geometry import Point
 from copy import deepcopy
 import pandas as pd
 import geopandas as gp
 import lxml
 
-from .fixtures import population_heh
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 from pam import write

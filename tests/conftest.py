@@ -1,27 +1,54 @@
-from xml.dom import NotFoundErr
+from pathlib import Path
 import pytest
 from shapely.geometry import Point
-
+import pandas as pd
+import numpy as np
+from pam import read
 from pam.activity import Activity, Leg
 from pam.core import Population, Household, Person
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
+from pam.planner.od import OD
 
 
-def instantiate_household_with(persons: list, hid=1):
-    household = Household(hid)
-    for person in persons:
-        household.add(person)
-    return household
+TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 
-def assert_correct_activities(person, ordered_activities_list):
-    assert len(person.plan) % 2 == 1
-    for i in range(0, len(person.plan), 2):
-        assert isinstance(person.plan.day[i], Activity)
-    assert [a.act for a in person.plan.activities] == ordered_activities_list, [a.act for a in person.plan.activities]
-    assert person.plan[0].start_time == mtdt(0)
-    assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
+@pytest.fixture(scope="session")
+def test_trips_path():
+    return TEST_DATA_DIR / "test_matsim_plans.xml"
+
+
+@pytest.fixture(scope="session")
+def test_trips_pathv12():
+    return TEST_DATA_DIR / "test_matsim_plansv12.xml"
+
+
+@pytest.fixture(scope="session")
+def test_experienced_pathv12():
+    return TEST_DATA_DIR / "test_matsim_experienced_plans_v12.xml"
+
+
+@pytest.fixture(scope="session")
+def instantiate_household_with():
+    def _instantiate_household_with(persons: list, hid=1):
+        household = Household(hid)
+        for person in persons:
+            household.add(person)
+        return household
+    return _instantiate_household_with
+
+
+@pytest.fixture(scope="session")
+def assert_correct_activities():
+    def _assert_correct_activities(person, ordered_activities_list):
+        assert len(person.plan) % 2 == 1
+        for i in range(0, len(person.plan), 2):
+            assert isinstance(person.plan.day[i], Activity)
+        assert [a.act for a in person.plan.activities] == ordered_activities_list, [a.act for a in person.plan.activities]
+        assert person.plan[0].start_time == mtdt(0)
+        assert person.plan[len(person.plan)-1].end_time == END_OF_DAY
+    return _assert_correct_activities
 
 
 @pytest.fixture()
@@ -85,7 +112,7 @@ def Bobby():
 
 
 @pytest.fixture()
-def SmithHousehold(Steve, Hilda, Timmy, Bobby):
+def SmithHousehold(instantiate_household_with, Steve, Hilda, Timmy, Bobby):
     return instantiate_household_with([Steve, Hilda, Timmy, Bobby])
 
 
@@ -1391,3 +1418,69 @@ def small_plan():
     Henry.add(Activity(1, 'home', 'a', start_time=mtdt(0), end_time=mtdt(24 * 60)))
     small_plan = Henry.plan
     return small_plan
+
+
+@pytest.fixture()
+def pt_person(test_trips_path):
+    return read.read_matsim(test_trips_path, version=11)["census_1"]["census_1"]
+
+
+@pytest.fixture()
+def cyclist(test_trips_path):
+    return read.read_matsim(test_trips_path)["census_2"]["census_2"]
+
+
+@pytest.fixture
+def population(test_trips_pathv12):
+    return read.read_matsim(test_trips_pathv12, household_key="hid", weight=1, version=12)
+
+
+@pytest.fixture(scope="module")
+def population_no_args(test_trips_pathv12):
+    return read.read_matsim(test_trips_pathv12, version=12)
+
+
+@pytest.fixture
+def population_experienced(test_experienced_pathv12):
+    return read.read_matsim(test_experienced_pathv12, version=12)
+
+
+@pytest.fixture
+def data_zones():
+    df = pd.DataFrame(
+        {
+            'zone': ['a', 'b'],
+            'jobs': [100, 200],
+            'schools': [3, 1]
+        }
+    ).set_index('zone')
+    return df
+
+
+@pytest.fixture
+def data_od():
+    matrices = np.array(
+        [[[[20, 30], [40, 45]], [[40, 45], [20, 30]]],
+         [[[5,  5], [8,  9]], [[8,  9], [5,  5]]]]
+    )
+    return matrices
+
+
+@pytest.fixture
+def labels():
+    labels = {
+        'mode': ['car', 'bus'],
+        'vars': ['time', 'distance'],
+        'origin_zones': ['a', 'b'],
+        'destination_zones': ['a', 'b']
+    }
+    return labels
+
+
+@pytest.fixture
+def od(data_od, labels):
+    od = OD(
+        data=data_od,
+        labels=labels
+    )
+    return od

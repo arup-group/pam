@@ -1,6 +1,7 @@
-from pam.policy import modifiers
-from tests.fixtures import *
+import pytest
 
+from pam.policy import modifiers
+from pam.activity import Activity
 
 def test_RemoveActivity_apply_to_delegates_to_remove_individual_activities_when_given_person_and_activities(mocker, SmithHousehold):
     mocker.patch.object(modifiers.RemoveActivity, 'remove_individual_activities')
@@ -37,7 +38,7 @@ def test_RemoveActivity_throws_exception_if_apply_to_given_wrong_input(Bobby):
            in str(e.value)
 
 
-def test_remove_activities_removes_Bobbys_education(Bobby):
+def test_remove_activities_removes_Bobbys_education(assert_correct_activities, Bobby):
     policy = modifiers.RemoveActivity(['education'])
     def fnc(act): return True
     policy.remove_activities(Bobby, fnc)

@@ -1,9 +1,11 @@
+import pytest
 from random import choice
-from tests.fixtures import *
 from pam.policy.filters import PersonAttributeFilter, Filter
+from pam.activity import Activity
+from pam.core import Household, Person
 
 
-def test_Filter_throws_exception_when_used():
+def test_Filter_throws_exception_when_used(Bobby):
     attrib_filter = Filter()
     with pytest.raises(NotImplementedError) as e:
         attrib_filter.satisfies_conditions(Bobby)

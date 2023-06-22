@@ -6,34 +6,6 @@ from copy import deepcopy
 
 
 @pytest.fixture
-def data_od():
-    matrices = np.array(
-        [[[[20, 30], [40, 45]], [[40, 45], [20, 30]]],
-         [[[5,  5], [8,  9]], [[8,  9], [5,  5]]]]
-    )
-    return matrices
-
-
-@pytest.fixture
-def labels():
-    labels = {
-        'mode': ['car', 'bus'],
-        'vars': ['time', 'distance'],
-        'origin_zones': ['a', 'b'],
-        'destination_zones': ['a', 'b']
-    }
-    return labels
-
-
-@pytest.fixture
-def od(data_od, labels):
-    od = OD(
-        data=data_od,
-        labels=labels
-    )
-    return od
-
-@pytest.fixture
 def od_matrices():
     zone_labels = ['a', 'b']
     matrices = [
