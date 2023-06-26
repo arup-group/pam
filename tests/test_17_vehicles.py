@@ -3,7 +3,7 @@ import lxml
 import os
 import logging
 from pam.core import Person, Population, Household
-from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
+from pam.vehicles import Vehicle, ElectricVehicle, VehicleType
 from pam import PAMVehicleIdError
 from pam.write import write_vehicles, write_all_vehicles, write_electric_vehicles
 from pam.read import read_matsim, read_all_vehicles_file, read_electric_vehicles_file

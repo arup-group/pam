@@ -2,11 +2,12 @@ from __future__ import annotations
 import os
 from datetime import datetime
 import logging
+from pathlib import Path
 from lxml import etree as et
-from typing import Optional, Set
+from typing import Optional, Set, Union
 
 from pam.activity import Plan, Activity, Leg
-from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
+from pam.vehicles import Vehicle, ElectricVehicle, VehicleType
 from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
 from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
@@ -14,12 +15,13 @@ from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
 
 def write_matsim(
     population,
-    plans_path: str,
-    attributes_path: Optional[str] = None,
-    vehicles_dir: Optional[str] = None,
+    plans_path: Union[Path, str],
+    attributes_path: Union[Path, str, None] = None,
+    vehs_path: Union[Path, str, None] = None,
+    evs_path: Union[Path, str, None] = None,
     version: int = None,
     comment: Optional[str] = None,
-    household_key: Optional[str] = 'hid',
+    household_key: Optional[str] = "hid",
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
 ) -> None:
@@ -30,7 +32,8 @@ def write_matsim(
     :param population: core.Population, population to be writen to disk
     :param plans_path: {str, Path}, output path (.xml or .xml.gz)
     :param attributes_path: legacy parameter, does not have an effect
-    :param vehicles_dir: {str, None}, default None, path to output directory for vehicle files
+    :param vehs_path: {str, Path, None}, default None, path to output vehicle file
+    :param evs_path: {str, Path, None}, default None, path to output ev file
     :param version: legacy parameter, does not have an effect
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
@@ -40,11 +43,13 @@ def write_matsim(
     """
 
     if version is not None:
-        logging.warning(
-            'parameter "version" is no longer supported by write_matsim()')
+        logging.warning('parameter "version" is no longer supported by write_matsim()')
     if attributes_path is not None:
         logging.warning(
-            'parameter "attributes_path" is no longer supported by write_matsim()')
+            'parameter "attributes_path" is no longer supported by write_matsim()'
+        )
+    if vehs_path is None and evs_path is not None:
+        raise UserWarning("You must provide a vehs_path in addition to evs_path.")
 
     write_matsim_population_v6(
         population=population,
@@ -56,14 +61,11 @@ def write_matsim(
     )
 
     # write vehicles
-    if population.has_vehicles:
-        logging.info('Population includes vehicles')
-        if vehicles_dir is None:
-            raise UserWarning(
-                "Please provide a vehicles_dir to write vehicle files")
-        else:
-            logging.info(f'Saving vehicles to {vehicles_dir}')
-            write_vehicles(output_dir=vehicles_dir, population=population)
+    if vehs_path is not None:
+        logging.info("Building population vehicles output.")
+        # rebuild vehicles output from population
+        population.vehicle_types.from_population(population)
+        population.vehicle_types.to_xml(vehs_path, evs_path)
 
 
 class Writer:
@@ -85,12 +87,11 @@ class Writer:
     def __init__(
         self,
         path: str,
-        household_key: Optional[str] = 'hid',
+        household_key: Optional[str] = "hid",
         comment: Optional[str] = None,
         keep_non_selected: bool = False,
-        coordinate_reference_system: str = None
+        coordinate_reference_system: str = None,
     ) -> None:
-
         if os.path.dirname(path):
             create_local_dir(os.path.dirname(path))
         self.path = path
@@ -113,16 +114,16 @@ class Writer:
             '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
         )
         if self.comment:
-            self.writer.write(
-                et.Comment(self.comment), pretty_print=True)
-        self.writer.write(et.Comment(
-            f"Created {datetime.today()}"), pretty_print=True)
+            self.writer.write(et.Comment(self.comment), pretty_print=True)
+        self.writer.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
 
         self.population_writer = self.writer.element("population")
-        self.population_writer.__enter__()   # enter into lxml element writer
+        self.population_writer.__enter__()  # enter into lxml element writer
         if self.coordinate_reference_system is not None:
-            self.writer.write(create_crs_attribute(
-                self.coordinate_reference_system), pretty_print=True)
+            self.writer.write(
+                create_crs_attribute(self.coordinate_reference_system),
+                pretty_print=True,
+            )
         return self
 
     def add_hh(self, household) -> None:
@@ -145,7 +146,7 @@ class Writer:
 def write_matsim_population_v6(
     population,
     path: str,
-    household_key: Optional[str] = 'hid',
+    household_key: Optional[str] = "hid",
     comment: Optional[str] = None,
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
@@ -171,18 +172,19 @@ def write_matsim_population_v6(
 
 
 def create_person_element(pid, person, keep_non_selected: bool = False):
-    person_xml = et.Element('person', {'id': str(pid)})
+    person_xml = et.Element("person", {"id": str(pid)})
 
-    attributes = et.SubElement(person_xml, 'attributes', {})
+    attributes = et.SubElement(person_xml, "attributes", {})
+    if person.vehicles:
+        attribute = et.SubElement(
+            attributes,
+            "attribute",
+            {"class": "org.matsim.vehicles.PersonVehicles", "name": str(k)},
+        )
+        attribute.text = str(v)
+
     for k, v in person.attributes.items():
-        if k == "vehicles":  # todo make something more robust for future 'special' classes
-            attribute = et.SubElement(
-                attributes, 'attribute', {
-                    'class': 'org.matsim.vehicles.PersonVehicles', 'name': str(k)}
-            )
-            attribute.text = str(v)
-        else:
-            add_attribute(attributes, k, v)
+        add_attribute(attributes, k, v)
 
     write_plan(
         person_xml,
@@ -206,41 +208,46 @@ def write_plan(
 ):
     plan_attributes = {}
     if selected is not None:
-        plan_attributes['selected'] = {True: 'yes', False: 'no'}[selected]
+        plan_attributes["selected"] = {True: "yes", False: "no"}[selected]
     if plan.score is not None:
-        plan_attributes['score'] = str(plan.score)
+        plan_attributes["score"] = str(plan.score)
 
-    plan_xml = et.SubElement(person_xml, 'plan', plan_attributes)
+    plan_xml = et.SubElement(person_xml, "plan", plan_attributes)
     for component in plan:
         if isinstance(component, Activity):
             component.validate_matsim()
             act_data = {
-                'type': component.act,
+                "type": component.act,
             }
             if component.start_time is not None:
-                act_data['start_time'] = dttm(component.start_time)
+                act_data["start_time"] = dttm(component.start_time)
             if component.end_time is not None:
-                act_data['end_time'] = dttm(component.end_time)
+                act_data["end_time"] = dttm(component.end_time)
             if component.location.link is not None:
-                act_data['link'] = str(component.location.link)
+                act_data["link"] = str(component.location.link)
             if component.location.x is not None:
-                act_data['x'] = str(component.location.x)
+                act_data["x"] = str(component.location.x)
             if component.location.y is not None:
-                act_data['y'] = str(component.location.y)
-            et.SubElement(plan_xml, 'activity', act_data)
+                act_data["y"] = str(component.location.y)
+            et.SubElement(plan_xml, "activity", act_data)
 
         if isinstance(component, Leg):
-            leg = et.SubElement(plan_xml, 'leg', {
-                'mode': component.mode,
-                'trav_time': tdtm(component.duration)})
+            leg = et.SubElement(
+                plan_xml,
+                "leg",
+                {"mode": component.mode, "trav_time": tdtm(component.duration)},
+            )
 
             if component.attributes:
-                attributes = et.SubElement(leg, 'attributes')
+                attributes = et.SubElement(leg, "attributes")
                 for k, v in component.attributes.items():
-                    if k == 'enterVehicleTime':  # todo make something more robust for future 'special' classes
+                    if (
+                        k == "enterVehicleTime"
+                    ):  # todo make something more robust for future 'special' classes
                         attribute = et.SubElement(
-                            attributes, 'attribute', {
-                                'class': 'java.lang.Double', 'name': str(k)}
+                            attributes,
+                            "attribute",
+                            {"class": "java.lang.Double", "name": str(k)},
                         )
                         attribute.text = str(v)
                     else:
@@ -252,17 +259,21 @@ def write_plan(
 
 def add_attribute(attributes, k, v):
     if type(v) == bool:
-        attribute = et.SubElement(attributes, 'attribute', {
-                                  'class': 'java.lang.Boolean', 'name': str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)}
+        )
     elif type(v) == int:
-        attribute = et.SubElement(attributes, 'attribute', {
-                                  'class': 'java.lang.Integer', 'name': str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)}
+        )
     elif type(v) == float:
-        attribute = et.SubElement(attributes, 'attribute', {
-                                  'class': 'java.lang.Double', 'name': str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
+        )
     else:
-        attribute = et.SubElement(attributes, 'attribute', {
-                                  'class': 'java.lang.String', 'name': str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.String", "name": str(k)}
+        )
     attribute.text = str(v)
 
 
@@ -270,7 +281,10 @@ def object_attributes_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "..", "fixtures", "dtd", "objectattributes_v1.dtd"
+            "..",
+            "fixtures",
+            "dtd",
+            "objectattributes_v1.dtd",
         )
     )
     return et.DTD(dtd_path)
@@ -279,17 +293,18 @@ def object_attributes_dtd():
 def population_v6_dtd():
     dtd_path = os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__),
-            "..", "fixtures", "dtd", "population_v6.dtd"
+            os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd"
         )
     )
     return et.DTD(dtd_path)
 
 
-def write_vehicles(output_dir,
-                   population,
-                   all_vehicles_filename="all_vehicles.xml",
-                   electric_vehicles_filename="electric_vehicles.xml"):
+def write_vehicles(
+    output_dir,
+    population,
+    all_vehicles_filename="all_vehicles.xml",
+    electric_vehicles_filename="electric_vehicles.xml",
+):
     """
     Writes:
         - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
@@ -302,40 +317,53 @@ def write_vehicles(output_dir,
     :return:
     """
     if population.has_vehicles:
+        vehs_path = os.path.join(output_dir, file_name)
+        path = os.path.join(output_dir, file_name)
+        population.vehicle_types.to_xml(
+            output_dir, vehs_path="all_vehicles.xml", evs_path="electric_vehicles.xml"
+        )
+
         if population.has_uniquely_indexed_vehicle_types:
             write_all_vehicles(
                 output_dir,
                 vehicles=population.vehicles(),
                 vehicle_types=population.vehicle_types(),
-                file_name=all_vehicles_filename)
+                file_name=all_vehicles_filename,
+            )
             if population.has_electric_vehicles:
-                logging.info('Population includes electric vehicles')
+                logging.info("Population includes electric vehicles")
                 electric_vehicles = set(population.electric_vehicles())
                 write_electric_vehicles(
                     output_dir,
                     vehicles=electric_vehicles,
-                    file_name=electric_vehicles_filename
+                    file_name=electric_vehicles_filename,
                 )
-                electric_vehicle_charger_types = population.electric_vehicle_charger_types()
-                logging.info(f'Found {len(electric_vehicles)} electric vehicles '
-                             f'with unique charger types: {electric_vehicle_charger_types}. '
-                             "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
-                             "if you're running a simulation using org.matsim.contrib.ev")
-            else:
+                electric_vehicle_charger_types = (
+                    population.electric_vehicle_charger_types()
+                )
                 logging.info(
-                    'Provided population does not have electric vehicles')
+                    f"Found {len(electric_vehicles)} electric vehicles "
+                    f"with unique charger types: {electric_vehicle_charger_types}. "
+                    "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
+                    "if you're running a simulation using org.matsim.contrib.ev"
+                )
+            else:
+                logging.info("Provided population does not have electric vehicles")
         else:
-            logging.warning('The vehicle types in provided population do not have unique indices. Current Vehicle '
-                            f'Type IDs: {[vt.id for vt in population.vehicle_types()]}')
+            logging.warning(
+                "The vehicle types in provided population do not have unique indices. Current Vehicle "
+                f"Type IDs: {[vt.id for vt in population.vehicle_types()]}"
+            )
     else:
-        logging.warning('Provided population does not have vehicles')
+        logging.warning("Provided population does not have vehicles")
 
 
 def write_all_vehicles(
-        output_dir,
-        vehicles: Set[Vehicle],
-        vehicle_types: Set[VehicleType],
-        file_name="all_vehicles.xml"):
+    output_dir,
+    vehicles: Set[Vehicle],
+    vehicle_types: Set[VehicleType],
+    file_name="all_vehicles.xml",
+):
     """
     Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
     for MATSim
@@ -346,15 +374,16 @@ def write_all_vehicles(
     :return: None
     """
     path = os.path.join(output_dir, file_name)
-    logging.info(f'Writing all vehicles to {path}')
+    logging.info(f"Writing all vehicles to {path}")
 
     with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration()
         vehicleDefinitions_attribs = {
-            'xmlns': "http://www.matsim.org/files/dtd",
-            'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance",
-            'xsi:schemaLocation': "http://www.matsim.org/files/dtd "
-                                  "http://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd"}
+            "xmlns": "http://www.matsim.org/files/dtd",
+            "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "xsi:schemaLocation": "http://www.matsim.org/files/dtd "
+            "http://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd",
+        }
         with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
             for vehicle_type in set(vehicle_types):
                 vehicle_type.to_xml(xf)
@@ -365,9 +394,8 @@ def write_all_vehicles(
 
 
 def write_electric_vehicles(
-        output_dir,
-        vehicles: Set[ElectricVehicle],
-        file_name="electric_vehicles.xml"):
+    output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"
+):
     """
     Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     for MATSim
@@ -377,11 +405,12 @@ def write_electric_vehicles(
     :return: None
     """
     path = os.path.join(output_dir, file_name)
-    logging.info(f'Writing electric vehicles to {path}')
+    logging.info(f"Writing electric vehicles to {path}")
 
     with et.xmlfile(path, encoding="utf-8") as xf:
         xf.write_declaration(
-            doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">')
+            doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">'
+        )
         with xf.element("vehicles"):
             vehicles = list(vehicles)
             vehicles.sort()
