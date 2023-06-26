@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 from lxml import etree as et
+from typing import Optional, Union
+import logging
+from enum import Enum
 
 
 # Vehicle classes to represent Vehicles based on MATSim DTD files:
@@ -62,28 +65,88 @@ class VehicleType:
 
 @dataclass(frozen=True)
 class Vehicle:
-    id: str
-    vehicle_type: VehicleType = VehicleType()
+    type_id: str
 
-    def __lt__(self, other):
-        return self.id < other.id
-
-    def to_xml(self, xf):
-        xf.write(et.Element("vehicle", {'id': str(self.id), 'type': str(self.vehicle_type.id)}))
+    def to_xml(self, xf, vid):
+        xf.write(et.Element("vehicle", {'id': str(vid), 'type': str(self.type_id)}))
 
 
 @dataclass(frozen=True)
 class ElectricVehicle(Vehicle):
-    vehicle_type: VehicleType = VehicleType(id='defaultElectricVehicleType')
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = 'default'  # supported charger types; comma-separated list: 'default,other'
 
-    def to_e_xml(self, xf):
+    def to_xml(self, xf, vid):
         xf.write(
             et.Element("vehicle",
-                       {'id': str(self.id), 'battery_capacity': str(self.battery_capacity),
+                       {'id': str(vid), 'battery_capacity': str(self.battery_capacity),
                         'initial_soc': str(self.initial_soc), 'charger_types': str(self.charger_types),
-                        'vehicle_type': str(self.vehicle_type.id)}
+                        'vehicle_type': str(self.type_id)}
                        )
         )
+
+
+class VehicleTypes:
+    veh_types: dict
+    mapping: dict
+
+    def get(self, key, default:Optional[VehicleType]=None):
+        return self.veh_types.get(self.mapping[key], default)
+    
+    def add_type(self, vehicle_type: VehicleType) -> bool:
+
+        if vehicle_type.id not in self.veh_types:
+            self.veh_types[vehicle_type.id] = vehicle_type
+            return True
+        return False
+    
+    def __additem__(self, key: str, value: Union[Vehicle, ElectricVehicle, VehicleType]):
+        if isinstance(value, Vehicle) or isinstance(value, ElectricVehicle):
+            if not value.type_id in self.veh_types:
+                logging.info(f"Failed to add vehicle, the vehicle type '{value.type_id}' is an unknown veh type.")
+            self.mapping[key] = value
+        elif isinstance(value, VehicleType):
+            self.add_type(value)
+            self.mapping[key] = Vehicle(value.id)
+        else:
+            raise UserWarning(f"Unsupported type {type(value)}, please use 'Union[Vehicle, ElectricVehicle, VehicleType]'.")
+    
+    def __getitem__(self, veh_id) -> str:
+        return self.mapping[veh_id]
+
+    def __iter__(self):
+        for veh_id, type_id in self.mapping.items():
+            yield veh_id, self.veh_types[type_id]
+    
+    def is_consistent(self):
+        for k, v in self.mapping.items():
+            if v not in self.veh_types:
+                logging.info(f"Failed to find veh type of id '{v}', specified for veh id '{k}'.")
+                return False
+        return True
+            
+    def to_xml(
+        self,
+        path,
+        ):
+        """
+        Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+        for MATSim
+        :param path: name of output file, defaults to 'all_vehicles.xml`
+        :return: None
+        """
+        logging.info(f'Writing vehicle types to {path}')
+
+        with et.xmlfile(path, encoding="utf-8") as xf:
+            xf.write_declaration()
+            vehicleDefinitions_attribs = {
+                'xmlns': "http://www.matsim.org/files/dtd",
+                'xmlns:xsi': "http://www.w3.org/2001/XMLSchema-instance",
+                'xsi:schemaLocation': "http://www.matsim.org/files/dtd "
+                                    "http://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd"}
+            with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
+                for vehicle_type in self.veh_types.values():
+                    vehicle_type.to_xml(xf)
+                for vid, veh in self.mapping.sort().items():
+                    veh.to_xml(xf, vid)

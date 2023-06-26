@@ -386,4 +386,4 @@ def write_electric_vehicles(
             vehicles = list(vehicles)
             vehicles.sort()
             for vehicle in vehicles:
-                vehicle.to_e_xml(xf)
+                vehicle.to_xml(xf)

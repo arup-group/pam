@@ -74,8 +74,10 @@ have attributes or be able to use a household attribute id. Check this is intend
     vehicles = {}
     if all_vehicles_path:
         logger.debug(f"Loading vehicles from {all_vehicles_path}")
-        vehicles = read_vehicles(all_vehicles_path, electric_vehicles_path)
+        vehicles = add_vehicles(all_vehicles_path, electric_vehicles_path)
         # todo what if we only supply electric vehicles path?
+    
+    vehicles
 
     attributes = {}
     if attributes_path:
@@ -459,37 +461,42 @@ def selected_plans(plans_path):
                 yield person.get('id'), plan
 
 
-
-
-def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
+def add_vehicles(vehicles: dict, all_vehicles_path=None, electric_vehicles_path=None):
     """
     Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and
     electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    :param vehicles: dict of vehicles
     :param all_vehicles_path: path to matsim all_vehicles xml file
     :param electric_vehicles_path: path to matsim electric_vehicles xml (optional)
     :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
-    vehicles = read_all_vehicles_file(all_vehicles_path)
-    if electric_vehicles_path:
-        vehicles = read_electric_vehicles_file(electric_vehicles_path, vehicles)
-    return vehicles
+    if all_vehicles_path is not None:
+        add_all_vehicles_file(vehicles, all_vehicles_path)
+    if electric_vehicles_path is not None:
+        add_electric_vehicles_file(vehicles, electric_vehicles_path)
 
 
-def read_all_vehicles_file(path):
+def read_veh_types(path):
     """
     Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
     :param path: path to matsim all_vehicles xml file
+    :return: dictionary of all vehicle types: {mode: pam.vehicle.VehicleType class object}
+    """
+    return {elem.get('id'): VehicleType.from_xml_elem(elem) for elem in utils.get_elems(path, "vehicleType")}
+
+
+def add_all_vehicles_file(vehicles: dict, path):
+    """
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    :param vehicles: dict of vehicles
+    :param path: path to matsim all_vehicles xml file
     :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
     """
-    vehicles = {}
-    vehicle_types = {}
 
-    for vehicle_type_elem in utils.get_elems(path, "vehicleType"):
-        vehicle_types[vehicle_type_elem.get('id')] = VehicleType.from_xml_elem(vehicle_type_elem)
 
     for vehicle_elem in utils.get_elems(path, "vehicle"):
         vehicles[vehicle_elem.get('id')] = Vehicle(id=vehicle_elem.get('id'),
-                                                   vehicle_type=vehicle_types[vehicle_elem.get('type')])
+                                                   type_id=vehicle_types[vehicle_elem.get('type')])
 
     return vehicles
 
@@ -497,10 +504,10 @@ def read_all_vehicles_file(path):
 def read_electric_vehicles_file(path, vehicles: dict = None):
     """
     Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    :param path: path to matsim electric_vehicles xml
     :param vehicles: dictionary of {ID: pam.vehicle.Vehicle} objects, some of which may need to be updated to ElectricVehicle
         based on contents of the electric_vehicles xml file. Optional, if not passed, vehicles will default to the
         VehicleType defaults.
+    :param path: path to matsim electric_vehicles xml
     :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
     if vehicles is None:
@@ -520,5 +527,5 @@ def read_electric_vehicles_file(path, vehicles: dict = None):
                                    f'defined: {elem_vehicle_type} != {vehicle_type.id}')
         else:
             vehicle_type = VehicleType(id=attribs.pop('vehicle_type'))
-        vehicles[id] = ElectricVehicle(id=id, vehicle_type=vehicle_type, **attribs)
+        vehicles[id] = ElectricVehicle(id=id, type_id=vehicle_type, **attribs)
     return vehicles

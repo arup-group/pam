@@ -144,7 +144,7 @@ def test_population_with_non_uniquely_defined_vehicle_types(population_with_elec
     hhld = Household(hid='4')
     hhld.add(Person('Micky Faraday',
                     vehicle=ElectricVehicle(charger_types='other,tesla', id='Micky Faraday',
-                                            vehicle_type=VehicleType('defaultElectricVehicleType', networkMode='e_car')
+                                            type_id=VehicleType('defaultElectricVehicleType', networkMode='e_car')
                                             )))
     population_with_electric_vehicles.add(hhld)
     assert set(population_with_electric_vehicles.vehicle_types()) == {
