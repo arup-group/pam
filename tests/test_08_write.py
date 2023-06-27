@@ -1,30 +1,31 @@
 import os
-from datetime import datetime
-from shapely.geometry import Point
 from copy import deepcopy
-import pandas as pd
+from datetime import datetime
+
 import geopandas as gp
 import lxml
+import pandas as pd
+from shapely.geometry import Point
 
+from pam import write
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
-from pam import write
-from pam.write import write_matsim, write_matsim_population_v6, write_od_matrices, Writer
 from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
+from pam.write import Writer, write_matsim, write_matsim_population_v6, write_od_matrices
 
 
 def test_writer_enters(tmp_path):
     path = str(tmp_path / "test.xml")
-    with Writer(path) as writer:
+    with Writer(path):
         assert os.path.exists(os.path.dirname(path))
         assert os.path.exists(path)
 
 
 def test_writer_closes(tmp_path):
     path = str(tmp_path / "test.xml")
-    with Writer(path) as writer:
+    with Writer(path):
         assert os.path.exists(path)
     xml_obj = lxml.etree.parse(path)
     dtd = write.population_v6_dtd()

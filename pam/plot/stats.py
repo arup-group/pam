@@ -1,9 +1,10 @@
+from datetime import timedelta
+
+import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-import numpy as np
 
 from pam.utils import dt_to_s, td_to_s
-from datetime import timedelta
 
 
 def extract_activity_log(population):
@@ -111,7 +112,7 @@ def calculate_activity_duration_by_act(population, exclude=None):
     all_activities_df = pd.DataFrame(all_activities)
     outputs_df = all_activities_df.groupby("act", as_index=False).agg({"duration_hours": "sum"})
     outputs_df.insert(0, "scenario", population.name, True)
-    if exclude != None:
+    if exclude is not None:
         outputs_df = outputs_df[outputs_df.act != exclude]
     return outputs_df
 
@@ -144,12 +145,12 @@ def plot_activity_duration(list_of_populations, exclude=None, axis=None):
 
     outputs_df = pd.DataFrame({"scenario": x, "activity duration (hours)": y})
     x_label_rotation = 90
-    if exclude != None:
+    if exclude is not None:
         title = "activities (excl " + exclude + ")"
     else:
         title = "activities"
 
-    if axis == None:
+    if axis is None:
         plt.bar(x, y)
         plt.xticks(rotation=x_label_rotation)
         plt.ylabel("duration (hours)")
@@ -176,7 +177,7 @@ def plot_leg_duration(list_of_populations, axis=None):
     outputs_df = pd.DataFrame({"scenario": x, "leg duration (hours)": y})
     title = "legs"
     x_label_rotation = 90
-    if axis == None:
+    if axis is None:
         plt.bar(x, y)
         plt.xticks(rotation=x_label_rotation)
         plt.ylabel("duration (hours)")
@@ -199,12 +200,12 @@ def plot_activity_duration_by_act(list_of_populations, exclude=None, axis=None):
         )
     pivot_for_chart = population_act_df.pivot(index="scenario", columns="act", values="duration_hours")
 
-    if exclude != None:
+    if exclude is not None:
         title = "activities by type (excl " + exclude + ")"
     else:
         title = "activities by type"
 
-    if axis == None:
+    if axis is None:
         pivot_for_chart.plot.bar(stacked=True)
         plt.ylabel("duration (hours)")
         plt.title(title)
@@ -225,7 +226,7 @@ def plot_leg_duration_by_mode(list_of_populations, axis=None):
     pivot_for_chart = population_mode_df.pivot(index="scenario", columns="leg mode", values="duration_hours")
     title = "legs by mode"
 
-    if axis == None:
+    if axis is None:
         pivot_for_chart.plot.bar(stacked=True)
         plt.title(title)
         plt.ylabel("duration (hours)")
@@ -238,12 +239,12 @@ def plot_leg_duration_by_mode(list_of_populations, axis=None):
 
 def plot_population_comparisons(list_of_populations, activity_to_exclude=None):
     fig1, ax = plt.subplots(nrows=1, ncols=2, tight_layout=True, sharey=True)
-    legs = plot_leg_duration(list_of_populations, ax[0])
+    plot_leg_duration(list_of_populations, ax[0])
     leg_modes = plot_leg_duration_by_mode(list_of_populations, ax[1])
     ax[0].set_ylabel("duration (hours)")
 
     fig2, ax2 = plt.subplots(nrows=1, ncols=2, tight_layout=True, sharey=True)
-    activities = plot_activity_duration(list_of_populations, activity_to_exclude, ax2[0])
+    plot_activity_duration(list_of_populations, activity_to_exclude, ax2[0])
     activity_types = plot_activity_duration_by_act(list_of_populations, activity_to_exclude, ax2[1])
     ax2[0].set_ylabel("duration (hours)")
 

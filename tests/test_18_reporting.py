@@ -1,6 +1,6 @@
 import numpy as np
 
-from pam.report import summary, stringify
+from pam.report import stringify, summary
 
 # summary
 
@@ -62,14 +62,14 @@ def test_inf_yield():
 
 def test_stringify_colourer():
     colour = stringify.ActColour()
-    assert colour.paint("travel", "travel") == f"\033[38;5;232mtravel\033[0m"
-    assert colour.paint("A", "A") == f"\033[38;5;21mA\033[0m"
+    assert colour.paint("travel", "travel") == "\033[38;5;232mtravel\033[0m"
+    assert colour.paint("A", "A") == "\033[38;5;21mA\033[0m"
 
 
 def test_stringify_colourer_bw():
     colour = stringify.ActColour(colour=False)
-    assert colour.paint("travel", "travel") == f"\033[38;5;232mtravel\033[0m"
-    assert colour.paint("B", "B") == f"\033[38;5;255mB\033[0m"
+    assert colour.paint("travel", "travel") == "\033[38;5;232mtravel\033[0m"
+    assert colour.paint("B", "B") == "\033[38;5;255mB\033[0m"
 
 
 def test_stringify_plan():
@@ -77,5 +77,5 @@ def test_stringify_plan():
         stringify.stringify_plan(
             plan_array=np.array((0, 1)), mapping={0: "travel", 1: "act"}, colourer=stringify.ActColour(colour=True)
         )
-        == f"\033[38;5;232m▇\033[0m\033[38;5;21m▇\033[0m"
+        == "\033[38;5;232m▇\033[0m\033[38;5;21m▇\033[0m"
     )

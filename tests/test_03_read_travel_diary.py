@@ -1,11 +1,12 @@
 import os
 from io import StringIO
-from pam.core import Person
+
 import pandas as pd
 import pytest
 
-from pam.read import build_population, load_travel_diary
 from pam import PAMValidationLocationsError
+from pam.core import Person
+from pam.read import build_population, load_travel_diary
 
 
 @pytest.fixture
@@ -128,13 +129,13 @@ def test_read_trips_only(trips):
 
 def test_read_fail_with_no_trips_input():
     with pytest.raises(UserWarning):
-        population = load_travel_diary(trips=None)
+        load_travel_diary(trips=None)
 
 
 def test_trips_read_fail_with_no_pid_field(trips):
     trips_no_pid = trips.drop("pid", axis=1)
     with pytest.raises(UserWarning):
-        population = load_travel_diary(trips=trips_no_pid)
+        load_travel_diary(trips=trips_no_pid)
 
 
 def test_read_trips_from_path():
@@ -164,7 +165,7 @@ def test_read_trips_and_persons_no_index(trips, persons_attributes):
 
 def test_read_fail_with_bad_trips_input():
     with pytest.raises(UserWarning):
-        population = load_travel_diary(trips=None, persons_attributes=True)
+        load_travel_diary(trips=None, persons_attributes=True)
 
 
 def test_read_trips_and_persons_from_path():
@@ -175,7 +176,7 @@ def test_read_trips_and_persons_from_path():
 def test_persons_read_fail_with_no_pid_field(trips, persons_attributes):
     persons_no_pid = persons_attributes.reset_index().drop("pid", axis=1)
     with pytest.raises(UserWarning):
-        population = load_travel_diary(trips=trips, persons_attributes=persons_no_pid)
+        load_travel_diary(trips=trips, persons_attributes=persons_no_pid)
 
 
 def test_persons_read_with_pid_not_as_index(trips, persons_attributes):
@@ -205,7 +206,7 @@ def test_read_trips_and_persons_and_hhs(trips, persons_attributes, hhs_attribute
 
 
 def test_read_trips_and_persons_and_hhs_no_index(trips, persons_attributes, hhs_attributes):
-    hhs_attributes_ = hhs_attributes.reset_index()
+    hhs_attributes.reset_index()
     population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
     assert len(population) == 3
 
@@ -219,7 +220,7 @@ def test_read_trips_and_persons_and_hhs_from_paths():
 
 def test_read_fail_with_bad_hhs_input(trips, persons_attributes, hhs_attributes):
     with pytest.raises(UserWarning):
-        population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=True)
+        load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=True)
 
 
 def test_read_hhs_with_missing_persons_input(trips, persons_attributes, hhs_attributes):
@@ -289,7 +290,7 @@ def test_use_trips_freq_as_hhs_freq_no_persons_attributes(trips):
 
 def test_use_trips_freq_as_persons_and_hhs_freq_overwrite(trips, persons_attributes, hhs_attributes):
     with pytest.raises(UserWarning):
-        population = load_travel_diary(
+        load_travel_diary(
             trips=trips,
             persons_attributes=persons_attributes,
             hhs_attributes=hhs_attributes,
@@ -300,7 +301,7 @@ def test_use_trips_freq_as_persons_and_hhs_freq_overwrite(trips, persons_attribu
 
 def test_use_trips_freq_as_persons_and_hhs_freq_no_persons_attributes(trips):
     with pytest.raises(UserWarning):
-        population = load_travel_diary(
+        load_travel_diary(
             trips=trips,
             persons_attributes=None,
             hhs_attributes=None,

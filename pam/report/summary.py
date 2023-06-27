@@ -1,6 +1,7 @@
 from collections import defaultdict
-from prettytable import PrettyTable
 from enum import Enum
+
+from prettytable import PrettyTable
 
 from pam.core import Population
 

@@ -1,7 +1,7 @@
-import pytest
-from pam.planner.zones import Zones
-
 import numpy as np
+import pytest
+
+from pam.planner.zones import Zones
 
 
 @pytest.fixture

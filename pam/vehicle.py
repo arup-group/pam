@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from lxml import etree as et
 
+from lxml import etree as et
 
 # Vehicle classes to represent Vehicles based on MATSim DTD files:
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd

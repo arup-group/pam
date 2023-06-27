@@ -1,9 +1,10 @@
-from click.testing import CliRunner
-import click
-import pytest
-from pam.cli import cli
-from pam import read
 import os
+
+import pytest
+from click.testing import CliRunner
+
+from pam import read
+from pam.cli import cli
 
 
 @pytest.fixture

@@ -1,10 +1,7 @@
-from datetime import timedelta
-from numpy import random
 from copy import deepcopy
 from datetime import timedelta
 
-from pam.activity import Plan, Leg, Activity
-from pam.variables import END_OF_DAY
+from pam.activity import Plan
 from pam.scoring import CharyparNagelPlanScorer
 
 

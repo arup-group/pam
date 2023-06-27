@@ -1,8 +1,9 @@
-import pytest
-from pam.planner.od import OD, Labels, ODMatrix, ODFactory
-import pandas as pd
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
+import pytest
+
+from pam.planner.od import OD, Labels, ODFactory, ODMatrix
 
 
 @pytest.fixture

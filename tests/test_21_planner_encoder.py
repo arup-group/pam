@@ -1,12 +1,12 @@
 import pytest
 
 from pam.planner.encoder import (
-    StringCharacterEncoder,
-    StringIntEncoder,
     PlanCharacterEncoder,
     PlanOneHotEncoder,
     PlansCharacterEncoder,
     PlansOneHotEncoder,
+    StringCharacterEncoder,
+    StringIntEncoder,
 )
 
 

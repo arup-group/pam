@@ -1,26 +1,28 @@
 from __future__ import annotations
 
-import logging
-import random
-import pickle
 import copy
+import logging
+import pickle
+import random
 from collections import defaultdict
-from typing import Optional, Generator, Union, Any
-import pandas as pd
+from typing import Any, Generator, Optional, Union
+
 import geopandas as gpd
+import pandas as pd
 import plotly.graph_objs as go
 
-from pam.location import Location
 import pam.activity as activity
 import pam.plot as plot
-from pam import PAMInvalidTimeSequenceError, write
 from pam import (
+    PAMInvalidTimeSequenceError,
     PAMSequenceValidationError,
     PAMValidationLocationsError,
     PAMVehicleIdError,
+    variables,
+    write,
 )
-from pam import variables
-from pam.vehicle import Vehicle, ElectricVehicle
+from pam.location import Location
+from pam.vehicle import ElectricVehicle, Vehicle
 
 
 class Population:

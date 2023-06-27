@@ -1,8 +1,10 @@
 import random
+
 import pytest
-from pam.policy import probability_samplers
+
 from pam.activity import Activity
-from pam.core import Person, Household
+from pam.core import Household, Person
+from pam.policy import probability_samplers
 
 
 @pytest.fixture()
@@ -90,19 +92,19 @@ def test_HouseholdProbability_p_delegates_to_compute_probability_for_household_f
 
 def test_HouseholdProbability_p_throws_exception_when_given_Person():
     prob = probability_samplers.HouseholdProbability(0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         prob.p(Person(1))
 
 
 def test_HouseholdProbability_p_throws_exception_when_given_Activity():
     prob = probability_samplers.HouseholdProbability(0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         prob.p(Activity(1))
 
 
 def test_HouseholdProbability_p_throws_exception_when_given_whatever():
     prob = probability_samplers.HouseholdProbability(0.5)
-    with pytest.raises(TypeError) as e:
+    with pytest.raises(TypeError):
         prob.p(None)
 
 
@@ -176,13 +178,13 @@ def test_PersonProbability_p_delegates_to_compute_probability_for_person_for_Per
 
 def test_PersonProbability_p_throws_exception_when_given_Activity():
     prob = probability_samplers.PersonProbability(0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         prob.p(Activity(1))
 
 
 def test_PersonProbability_p_throws_exception_when_given_whatever():
     prob = probability_samplers.PersonProbability(0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         prob.p(None)
 
 
@@ -277,7 +279,7 @@ def test_ActivityProbability_p_returns_0_for_activity_for_irrelevant_Activity(mo
 
 def test_ActivityProbability_p_throws_exception_when_given_whatever():
     prob = probability_samplers.ActivityProbability([""], 0.5)
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         prob.p(None)
 
 

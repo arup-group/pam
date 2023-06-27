@@ -2,7 +2,7 @@
 Manages origin-destination data required by the planner module.
 """
 import itertools
-from typing import Union, Optional, List, NamedTuple
+from typing import List, NamedTuple, Union
 
 import numpy as np
 import pandas as pd

@@ -1,15 +1,18 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pam.activity import Plan
 
-from typing import List, Optional, Union
-import numpy as np
-from pam import activity
-from pam.variables import START_OF_DAY
 from datetime import timedelta as td
 from itertools import groupby
+from typing import List, Optional, Union
+
+import numpy as np
+
+from pam import activity
+from pam.variables import START_OF_DAY
 
 
 class Encoder:

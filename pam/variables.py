@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 # default datetimes for plan start and end (24 hours)
 START_OF_DAY = datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0)
 END_OF_DAY = datetime(year=1900, month=1, day=2, hour=0, minute=0, second=0)

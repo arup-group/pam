@@ -1,10 +1,10 @@
 import pytest
 
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
+from pam.activity import Activity, Leg, Plan
 from pam.core import Person
-from pam.activity import Plan, Activity, Leg
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 
 
 def test_person_heh_valid_plan(person_heh):

@@ -1,15 +1,15 @@
-import pytest
-
+import os
 from copy import deepcopy
-from pam.core import Population, Household, Person
+
+import geopandas as gp
+import pytest
+from shapely.geometry import Point, Polygon
+
 from pam.activity import Activity, Leg, Plan
+from pam.core import Household, Person, Population
+from pam.operations import cropping
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from shapely.geometry import Point, Polygon
-import geopandas as gp
-from copy import deepcopy
-from pam.operations import cropping
-import os
 
 
 @pytest.fixture

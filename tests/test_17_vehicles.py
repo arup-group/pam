@@ -1,29 +1,31 @@
-import pytest
-import lxml
-import os
 import logging
-from pam.core import Person, Population, Household
-from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
+import os
+
+import lxml
+import pytest
+
 from pam import PAMVehicleIdError
-from pam.write import write_vehicles, write_all_vehicles, write_electric_vehicles
-from pam.read import read_matsim, read_all_vehicles_file, read_electric_vehicles_file
+from pam.core import Household, Person, Population
+from pam.read import read_all_vehicles_file, read_electric_vehicles_file, read_matsim
+from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
+from pam.write import write_all_vehicles, write_electric_vehicles, write_vehicles
 
 
 def test_instantiating_vehicle_without_id_fails():
     with pytest.raises(TypeError) as error_info:
-        default_vehicle = Vehicle()
+        Vehicle()
     assert "required positional argument: 'id'" in str(error_info.value)
 
 
 def test_instantiating_electric_vehicle_without_id_fails():
     with pytest.raises(TypeError) as error_info:
-        e_vehicle = ElectricVehicle()
+        ElectricVehicle()
     assert "required positional argument: 'id'" in str(error_info.value)
 
 
 def test_instantiating_person_with_vehicle_without_matching_id_fails():
     with pytest.raises(PAMVehicleIdError) as error_info:
-        p = Person(pid="1", vehicle=Vehicle(id="2"))
+        Person(pid="1", vehicle=Vehicle(id="2"))
     assert "does not match Person ID" in str(error_info.value)
 
 

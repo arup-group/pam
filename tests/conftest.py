@@ -1,15 +1,16 @@
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
 import pytest
 from shapely.geometry import Point
-import pandas as pd
-import numpy as np
+
 from pam import read
 from pam.activity import Activity, Leg
-from pam.core import Population, Household, Person
+from pam.core import Household, Person, Population
+from pam.planner.od import OD
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.planner.od import OD
-
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 

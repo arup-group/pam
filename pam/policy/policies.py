@@ -1,9 +1,10 @@
 import random
-from typing import Union, List
 from copy import deepcopy
+from typing import List, Union
+
+import pam.policy.filters as filters
 import pam.policy.modifiers as modifiers
 import pam.policy.probability_samplers as probability_samplers
-import pam.policy.filters as filters
 
 
 class Policy:

@@ -63,12 +63,12 @@ def test_apply_bin_integer_transformer_with_missing_bin(fred, bins):
 
 def test_apply_discrete_joint_distribution_sampler_to_michael(michael, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist) == False
+    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist) is False
 
 
 def test_applt_discrete_joint_distribution_sampler_to_kasia(kasia, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist) == True
+    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist) is True
 
 
 def test_applt_discrete_joint_distribution_sampler_to_fred_carefully(fred, cat_joint_distribution):
@@ -79,7 +79,7 @@ def test_applt_discrete_joint_distribution_sampler_to_fred_carefully(fred, cat_j
 
 def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(fred, cat_joint_distribution):
     mapping, dist = cat_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) == False
+    assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) is False
 
 
 def test_random_seed_1(fixed_seed):
@@ -96,14 +96,14 @@ def test_applt_discrete_joint_distribution_sampler_reproducibility_to_michael_ca
     michael, dog_joint_distribution, fixed_seed
 ):
     mapping, dist = dog_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist, careful=True, seed=fixed_seed) == True
+    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist, careful=True, seed=fixed_seed) is True
 
 
 def test_applt_discrete_joint_distribution_sampler_reproducibility_to_kasia_carefully(
     kasia, dog_joint_distribution, fixed_seed2
 ):
     mapping, dist = dog_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist, careful=True, seed=fixed_seed2) == False
+    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist, careful=True, seed=fixed_seed2) is False
 
 
 testdata = [
@@ -353,7 +353,7 @@ def test_facility_dict_build():
 
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ["home", "work", "education"])
     assert len(sampler.samplers) == 2
-    assert sampler.samplers[0]["education"] == None
+    assert sampler.samplers[0]["education"] is None
     assert isinstance(sampler.samplers[0]["work"], GeneratorType)
 
 

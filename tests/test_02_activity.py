@@ -1,6 +1,7 @@
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
 import pytest
+
+from pam.activity import Activity, Leg, Plan
+from pam.utils import minutes_to_datetime as mtdt
 
 
 @pytest.fixture()
@@ -131,7 +132,7 @@ def test_compare_plans_not_equal_types():
     plana.add(Activity(seq=3, act="shop", area="B", start_time=mtdt(620), end_time=mtdt(1200)))
 
     with pytest.raises(UserWarning):
-        assert not plana == None
+        assert plana is not None
 
 
 def test_add_wrong_type():

@@ -1,15 +1,17 @@
 from __future__ import annotations
+
+import logging
 import os
 from datetime import datetime
-import logging
-from lxml import etree as et
 from typing import Optional, Set
 
-from pam.activity import Plan, Activity, Leg
-from pam.vehicle import Vehicle, ElectricVehicle, VehicleType
-from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
+from lxml import etree as et
+
+from pam.activity import Activity, Leg, Plan
+from pam.utils import DEFAULT_GZIP_COMPRESSION, create_crs_attribute, create_local_dir, is_gzip
+from pam.utils import datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
+from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
 
 
 def write_matsim(

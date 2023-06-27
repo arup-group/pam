@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from pam.read import stream_matsim_persons
 from pam.array.encode import PlansToCategorical
+from pam.read import stream_matsim_persons
 from pam.samplers.time import apply_jitter_to_plan
 
 
@@ -25,7 +25,7 @@ class ActColour:
             self._queue = inf_yield(self._bw_queue)
 
     def paint(self, act, text):
-        if not act in self.mapping:
+        if act not in self.mapping:
             self.mapping[act] = next(self._queue)
         return f"\033[38;5;{self.mapping[act]}m{text}\033[0m"
 

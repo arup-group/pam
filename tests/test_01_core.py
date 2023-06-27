@@ -1,13 +1,13 @@
-import pytest
 from datetime import datetime, timedelta
 
-from pam.core import Population, Household, Person
+import pytest
+
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.activity import Activity, Leg
+from pam.core import Household, Person, Population
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.variables import END_OF_DAY
-
 
 testdata = [
     (0, datetime(1900, 1, 1, 0, 0)),

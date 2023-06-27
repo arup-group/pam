@@ -1,6 +1,6 @@
-from pam.policy.policies import *
 import pam.policy.modifiers as modifiers
 import pam.policy.probability_samplers as probability_samplers
+from pam.policy.policies import *
 
 
 def test_RemoveHouseholdActivities_initiates_correct_policy():

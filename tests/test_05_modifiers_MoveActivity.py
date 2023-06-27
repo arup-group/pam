@@ -1,7 +1,7 @@
-from pam.activity import Plan
-from pam.policy.modifiers import MoveActivityTourToHomeLocation
 import pytest
-from pam.activity import Activity
+
+from pam.activity import Activity, Plan
+from pam.policy.modifiers import MoveActivityTourToHomeLocation
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 

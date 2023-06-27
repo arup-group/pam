@@ -1,33 +1,32 @@
-import pytest
-import pandas as pd
-import numpy as np
-import matplotlib
-from matplotlib.figure import Figure
-from shapely.geometry import Point
-from plotly.graph_objs import Scattermapbox
+from copy import deepcopy
 
+import matplotlib
+import numpy as np
+import pandas as pd
+import pytest
+from matplotlib.figure import Figure
+from plotly.graph_objs import Scattermapbox
+from shapely.geometry import Point
+
+from pam.core import Household, Population
 from pam.plot.plans import (
-    build_person_df,
     build_cmap,
+    build_person_df,
     build_person_travel_geodataframe,
     build_rgb_travel_cmap,
-    plot_travel_plans,
     plot_activities,
     plot_activity_breakdown_area,
     plot_activity_breakdown_area_tiles,
 )
 from pam.plot.stats import (
+    calculate_leg_duration_by_mode,
     extract_activity_log,
     extract_leg_log,
-    time_binner,
     plot_activity_times,
     plot_leg_times,
     plot_population_comparisons,
-    calculate_leg_duration_by_mode,
+    time_binner,
 )
-
-from pam.core import Household, Population
-from copy import deepcopy
 from pam.policy import policies
 
 
@@ -132,7 +131,7 @@ def test_plot_population_comparisons(Steve, Hilda):
     list_of_populations = [population_1, population_2]
     outputs = plot_population_comparisons(list_of_populations, "home")
     legs = outputs[2]
-    activities = outputs[3]
+    outputs[3]
     check = calculate_leg_duration_by_mode(population_2)
     assert isinstance(outputs[0], Figure)
     assert isinstance(outputs[1], Figure)
@@ -179,7 +178,7 @@ def test_plot_travel_plans_for_household(instantiate_household_with, cyclist, pt
 def test_plot_activities(person_heh):
     df = build_person_df(person_heh)
     try:
-        fig = plot_activities(df)
+        plot_activities(df)
     except (RuntimeError, TypeError, NameError, OSError, ValueError):
         pytest.fail("Error")
 

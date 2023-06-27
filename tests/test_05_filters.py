@@ -1,8 +1,10 @@
-import pytest
 from random import choice
-from pam.policy.filters import PersonAttributeFilter, Filter
+
+import pytest
+
 from pam.activity import Activity
 from pam.core import Household, Person
+from pam.policy.filters import Filter, PersonAttributeFilter
 
 
 def test_Filter_throws_exception_when_used(Bobby):
@@ -41,12 +43,12 @@ def test_PersonAttributeFilter_satisfies_conditions_delegates_to_person_satisfie
 
 
 def test_PersonAttributeFilter_satisfies_conditions_throws_exception_when_given_activity():
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         PersonAttributeFilter({}).satisfies_conditions(Activity(1))
 
 
 def test_PersonAttributeFilter_satisfies_conditions_throws_exception_when_given_whatever():
-    with pytest.raises(NotImplementedError) as e:
+    with pytest.raises(NotImplementedError):
         PersonAttributeFilter({}).satisfies_conditions("whatever")
 
 

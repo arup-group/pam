@@ -1,4 +1,5 @@
 import os
+
 import pytest
 
 from pam.samplers import spatial
@@ -15,7 +16,7 @@ def geo_sampler():
 
 def test_constructor_throws_exception_for_bad_default_region():
     with pytest.raises(KeyError):
-        test = spatial.GeometryRandomSampler(
+        spatial.GeometryRandomSampler(
             geo_df_file=geojson_path, geometry_name_column="NAME", default_region="non_region"
         )
 
@@ -40,4 +41,4 @@ def test_sample_point_fallback_default_region(geo_sampler):
 
 def test_sample_point_patience_exhausted(geo_sampler):
     with pytest.raises(RuntimeWarning):
-        test = geo_sampler.sample_point("dummy_region", patience=0)
+        geo_sampler.sample_point("dummy_region", patience=0)

@@ -1,13 +1,14 @@
 """
 Methods for cropping plans outside core areas
 """
-from shapely.geometry import Polygon, LineString
-import pam
-from pam.activity import Leg, Activity, Plan
-from pam.variables import END_OF_DAY, START_OF_DAY
-from pam.core import Population
 from typing import List
+
+from shapely.geometry import LineString, Polygon
+
+import pam
+from pam.activity import Activity, Leg, Plan
 from pam.core import Population
+from pam.variables import END_OF_DAY, START_OF_DAY
 
 
 def simplify_population(

@@ -1,11 +1,7 @@
-from random import randrange
 from datetime import timedelta
-from copy import deepcopy
+from random import randrange
 
-from pam.core import Population, Person, Household
-from pam.activity import Plan, Activity, Leg
-from pam.utils import minutes_to_datetime as mtdt
-from pam.utils import td_to_s, minutes_to_timedelta
+from pam.activity import Activity, Plan
 from pam.variables import END_OF_DAY
 
 

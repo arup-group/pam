@@ -1,6 +1,7 @@
-import pam.core
+from typing import Callable, Dict
+
 import pam.activity
-from typing import Dict, Callable
+import pam.core
 
 
 class Filter:

@@ -2,8 +2,8 @@
 Manages zone-level data required by the planner module.
 """
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 class Zones:

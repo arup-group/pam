@@ -1,14 +1,15 @@
-from shapely.geometry import Point
-from datetime import timedelta
 import logging
-from typing import Union, Literal, Optional
+from datetime import timedelta
+from typing import Literal, Optional
 
-import pam.core as core
+from shapely.geometry import Point
+
 import pam.activity as activity
-from pam.activity import Route, RouteV11
+import pam.core as core
 import pam.utils as utils
-from pam.vehicle import VehicleType, Vehicle, ElectricVehicle
+from pam.activity import Route, RouteV11
 from pam.variables import START_OF_DAY
+from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
 
 
 def read_matsim(

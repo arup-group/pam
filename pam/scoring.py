@@ -1,12 +1,13 @@
-from typing import Optional
-import numpy as np
-from datetime import timedelta as td
 import logging
+from datetime import timedelta as td
+from typing import Optional
 
-from pam.core import Person
-from pam.activity import Activity, Leg, Plan
-from pam.variables import TRANSIT_MODES
+import numpy as np
+
 from pam import utils
+from pam.activity import Activity, Leg, Plan
+from pam.core import Person
+from pam.variables import TRANSIT_MODES
 
 
 class CharyparNagelPlanScorer:

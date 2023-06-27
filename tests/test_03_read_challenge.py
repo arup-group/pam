@@ -1,9 +1,9 @@
 import os
-import pytest
+
 import pandas as pd
+import pytest
 
 from pam.read import load_travel_diary
-
 
 test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))
 test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv"))
@@ -37,7 +37,7 @@ def test_agent_pid_6_not_return_home(test_trips, test_attributes):
 
 def test_agent_pid_7_not_start_and_return_home_night_worker(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
-    person = population[4][7]
+    population[4][7]
     acts = [a.act for a in population.households[4].people[7].activities]
     assert acts == ["work", "home", "work"]
 

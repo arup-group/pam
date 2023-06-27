@@ -1,22 +1,19 @@
-from datetime import datetime
-from datetime import timedelta
+import json
 import logging
 from copy import copy
+from datetime import timedelta
 from typing import Optional
-import json
 
-from pam.location import Location
-from pam.plot import plans as plot
 import pam.utils as utils
 import pam.variables
 from pam import (
-    PAMInvalidStartTimeError,
+    InvalidMATSimError,
     PAMInvalidTimeSequenceError,
     PAMSequenceValidationError,
-    PAMTimesValidationError,
     PAMValidationLocationsError,
-    InvalidMATSimError,
 )
+from pam.location import Location
+from pam.plot import plans as plot
 from pam.variables import END_OF_DAY
 
 
@@ -207,14 +204,14 @@ class Plan:
 
         elif isinstance(p, Activity):
             if self.day and isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be a Trip or Leg.")
+                raise PAMSequenceValidationError("Failed to add to plan, next component must be a Trip or Leg.")
             self.day.append(p)
 
         elif isinstance(p, Leg) or isinstance(p, Trip):
             if not self.day:
-                raise PAMSequenceValidationError(f"Failed to add to plan, first component must be Activity instance.")
+                raise PAMSequenceValidationError("Failed to add to plan, first component must be Activity instance.")
             if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError(f"Failed to add to plan, next component must be Activity instance.")
+                raise PAMSequenceValidationError("Failed to add to plan, next component must be Activity instance.")
             self.day.append(p)
 
         else:
@@ -369,18 +366,18 @@ class Plan:
         # crop plan beyond end of day
         for idx, component in list(self.reversed()):
             if component.start_time > pam.variables.END_OF_DAY:
-                self.logger.debug(f"Cropping plan components")
+                self.logger.debug("Cropping plan components")
                 self.day = self.day[:idx]
                 break
 
         # crop plan that is out of sequence
         for idx in range(1, self.length):
             if self[idx].start_time < self[idx - 1].end_time:
-                self.logger.debug(f"Cropping plan components")
+                self.logger.debug("Cropping plan components")
                 self.day = self.day[:idx]
                 break
             if self[idx].start_time > self[idx].end_time:
-                self.logger.debug(f"Cropping plan components")
+                self.logger.debug("Cropping plan components")
                 self.day = self.day[: idx + 1]
                 break
 
@@ -388,7 +385,7 @@ class Plan:
         if isinstance(self.day[-1], Activity):
             self.day[-1].end_time = pam.variables.END_OF_DAY
         else:
-            self.logger.debug(f"Cropping plan ending in Leg")
+            self.logger.debug("Cropping plan ending in Leg")
             self.day.pop(-1)
             self.day[-1].end_time = pam.variables.END_OF_DAY
 
@@ -706,7 +703,7 @@ class Plan:
 
             pivot_idx = self.position_of(target="home")
             if pivot_idx is None:
-                self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
+                self.logger.warning("Unable to find home activity, changing plan to stay at home")
                 self.stay_at_home()
                 return True
 
@@ -751,7 +748,7 @@ class Plan:
         # press plans away from pivoting activity
         pivot_idx = self.position_of(target="home")
         if pivot_idx is None:
-            self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
+            self.logger.warning("Unable to find home activity, changing plan to stay at home")
             self.stay_at_home()
             return None
 

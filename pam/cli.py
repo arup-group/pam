@@ -1,20 +1,18 @@
-import click
 import logging
-from pathlib import Path
-from typing import Optional, List
 import os
-from rich.progress import track
-from rich.console import Console
+from typing import List, Optional
+
+import click
 import geopandas as gp
+from rich.console import Console
 
-from pam.operations.cropping import simplify_population
-from pam.operations.combine import pop_combine
-from pam.samplers import population as population_sampler
 from pam import read, write
-from pam.report.summary import pretty_print_summary, print_summary
-from pam.report.stringify import stringify_plans
+from pam.operations.combine import pop_combine
+from pam.operations.cropping import simplify_population
 from pam.report.benchmarks import benchmarks as bms
-
+from pam.report.stringify import stringify_plans
+from pam.report.summary import pretty_print_summary, print_summary
+from pam.samplers import population as population_sampler
 
 logging.basicConfig(
     level=logging.INFO,
@@ -519,7 +517,7 @@ def wipe_all_links(
     if debug:
         logger.setLevel(logging.DEBUG)
 
-    logger.warning(f"Clearing links from all plans.")
+    logger.warning("Clearing links from all plans.")
     logger.debug(f"Loading plans from {path_population_input}.")
     logger.debug(f"Writing wiped plans to {path_population_output}.")
     logger.debug(f"MATSim version set to {matsim_version}.")
@@ -527,7 +525,7 @@ def wipe_all_links(
     logger.debug(f"Autocomplete MATSim plans (recommended) = {autocomplete}")
     logger.debug(f"Crop = {crop}")
     logger.debug(f"Leg attributes (recommended for warm starting) = {leg_attributes}")
-    logger.debug(f"Leg routes will be removed")
+    logger.debug("Leg routes will be removed")
     logger.debug(f"Keep non selected plans (recommended for warm starting) = {keep_non_selected}")
 
     with Console().status("[bold green]Loading population attributes...", spinner="aesthetic") as _:

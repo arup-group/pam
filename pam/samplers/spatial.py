@@ -1,8 +1,9 @@
+import logging
+import random
 from typing import Union
+
 import geopandas as gp
 from shapely.geometry import Point
-import random
-import logging
 
 
 class RandomPointSampler:
@@ -41,7 +42,7 @@ class RandomPointSampler:
         :return: Point object or None
         """
 
-        if not idx in self.index:
+        if idx not in self.index:
             if self.fail:
                 raise IndexError(f"Cannot find idx: {idx} in geoms index")
             self.logger.warning(f"Cannot find idx:{idx}, returning None")

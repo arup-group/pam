@@ -1,19 +1,19 @@
-import numpy as np
+import itertools
+from functools import lru_cache, partial
+from multiprocessing import Pool
 from typing import List, Optional
-from pam.core import Population
-from pam.activity import Plan
+
+import numpy as np
 import pandas as pd
-from functools import lru_cache
+
+from pam.activity import Plan
+from pam.core import Population
 from pam.planner.encoder import PlansCharacterEncoder
 from pam.plot.plans import plot_activity_breakdown_area, plot_activity_breakdown_area_tiles
-import itertools
-from datetime import timedelta as td
-from multiprocessing import Pool
-from functools import partial
 
 try:
-    from sklearn.cluster import AgglomerativeClustering, SpectralClustering
     from Levenshtein import ratio
+    from sklearn.cluster import AgglomerativeClustering, SpectralClustering
 except:
     raise ImportError(
         "To use the pam.planner module, please install the full PAM version with pip install -e .[planner] ."

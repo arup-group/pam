@@ -1,10 +1,11 @@
 import os
-import pytest
-import pandas as pd
 from datetime import datetime
 
-from pam.core import Population, Household
-from pam.read import load_travel_diary, load_pickle
+import pandas as pd
+import pytest
+
+from pam.core import Household, Population
+from pam.read import load_pickle, load_travel_diary
 from pam.utils import parse_time
 
 test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))

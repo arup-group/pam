@@ -1,7 +1,7 @@
 import pytest
 
-from pam.core import Population, Household, Person
 from pam.activity import Activity, Leg
+from pam.core import Household, Person, Population
 
 
 def test_get_last_component_activity():
@@ -423,7 +423,7 @@ def test_persons_not_equal_with_diff_attributes():
 
 def test_persons_not_equal_with_wrong_type():
     p1 = Person(1, attributes={1: 1})
-    assert not p1 == None
+    assert p1 is not None
 
 
 def test_persons_equal_with_plans_same_person():
@@ -509,7 +509,7 @@ def test_hhs_not_equal_with_diff_attributes():
 
 def test_hhs_not_equal_with_diff_type():
     hh1 = Household("1", attributes={1: 1})
-    assert not hh1 == None
+    assert hh1 is not None
 
 
 def test_hhs_equal_with_persons():
@@ -671,4 +671,4 @@ def test_populations_not_equal_given_diff_type():
     hh1.add(p1)
     pop1.add(hh1)
 
-    assert not pop1 == None
+    assert pop1 is not None

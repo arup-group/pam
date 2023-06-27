@@ -1,4 +1,5 @@
 from random import random
+
 from shapely.geometry import Point
 
 from pam.core import Population

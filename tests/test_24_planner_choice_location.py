@@ -1,8 +1,9 @@
-import pytest
-import numpy as np
 import random
 
-from pam.planner.choice_location import ChoiceModel, ChoiceMNL, ChoiceConfiguration
+import numpy as np
+import pytest
+
+from pam.planner.choice_location import ChoiceConfiguration, ChoiceMNL, ChoiceModel
 from pam.planner.utils_planner import sample_weighted
 
 
@@ -60,7 +61,7 @@ def test_list_parameters_correspond_to_modes(choice_model):
 
 def test_get_probabilities_along_dimension(choice_model):
     choice_model.configure(
-        u=f"""1 / od['time', 'b']""",
+        u="""1 / od['time', 'b']""",
         scope="""True""",
         func_probabilities=lambda x: x / sum(x),
         func_sampling=sample_weighted,
@@ -72,7 +73,7 @@ def test_get_probabilities_along_dimension(choice_model):
 
 
 def test_apply_once_per_agent_same_locations(choice_model_mnl):
-    choice_model_mnl.configure(u=f"""1 / od['time', 'b']""", scope="""True""", func_probabilities=lambda x: x / sum(x))
+    choice_model_mnl.configure(u="""1 / od['time', 'b']""", scope="""True""", func_probabilities=lambda x: x / sum(x))
 
     def assert_single_location(population_planner_choice):
         for hid, pid, person in population_planner_choice.people():
@@ -104,7 +105,7 @@ def test_nonset_config_attribute_valitation_raise_error():
 
 def test_model_checks_config_requirements(mocker, choice_model_mnl):
     mocker.patch.object(ChoiceConfiguration, "validate")
-    choice_model_mnl.configure(u=f"""1 / od['time', 'a']""", scope="""act.act=='work'""")
+    choice_model_mnl.configure(u="""1 / od['time', 'a']""", scope="""act.act=='work'""")
 
     choice_model_mnl.get_choice_set()
     ChoiceConfiguration.validate.assert_called_once_with(["u", "scope"])

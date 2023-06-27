@@ -1,8 +1,9 @@
+import os
+
 import pytest
 
-from pam.scoring import CharyparNagelPlanScorer
-import os
 from pam.read import read_matsim
+from pam.scoring import CharyparNagelPlanScorer
 
 TEST_EXPERIENCED_PLANS_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data", "test_matsim_experienced_plans_v12.xml")

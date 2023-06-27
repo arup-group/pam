@@ -1,13 +1,14 @@
-from datetime import datetime, timedelta
-import numpy as np
 import gzip
-from lxml import etree
-from io import BytesIO
 import os
-from shapely.geometry import Point, LineString
-from s2sphere import CellId
+from datetime import datetime, timedelta
+from io import BytesIO
 from pathlib import Path
+
+import numpy as np
+from lxml import etree
 from lxml import etree as et
+from s2sphere import CellId
+from shapely.geometry import LineString, Point
 
 from pam.variables import START_OF_DAY
 

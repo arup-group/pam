@@ -1,9 +1,10 @@
 import os
-import pandas as pd
-from typing import Tuple, Optional, List
+from typing import List, Optional, Tuple
 
-from pam.utils import minutes_to_datetime as mtdt
+import pandas as pd
+
 from pam.utils import create_local_dir
+from pam.utils import minutes_to_datetime as mtdt
 
 
 def write_od_matrices(

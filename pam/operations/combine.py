@@ -1,4 +1,4 @@
-from pam import read, core
+from pam import core, read
 
 
 def pop_combine(
@@ -17,7 +17,7 @@ def pop_combine(
 
     """
     print("==================================================")
-    print(f"Combining input populations")
+    print("Combining input populations")
 
     combined_population = core.Population()
 

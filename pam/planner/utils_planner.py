@@ -1,7 +1,9 @@
-import numpy as np
 import random
-from typing import Union, List
-from pam.activity import Plan, Activity, Leg
+from typing import List, Union
+
+import numpy as np
+
+from pam.activity import Activity, Leg, Plan
 
 
 def calculate_mnl_probabilities(x: Union[np.array, List]) -> np.array:
@@ -46,7 +48,7 @@ def apply_mode_to_home_chain(act: Activity, trmode: str):
     :param act: The activity that is part of the trip chain.
     :param trmode: The mode to apply to each leg of the chain.
     """
-    if not "next" in act.__dict__:
+    if "next" not in act.__dict__:
         raise KeyError(
             "Plan is not linked. Please use `pam.operations.cropping.link_plan` to link activities and legs."
         )

@@ -1,15 +1,14 @@
-import geopandas as gp
-import matplotlib
-from matplotlib import pyplot as plt
 import random
-import pandas as pd
-import numpy as np
 import warnings
 
-import pam
+import geopandas as gp
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+
 from pam.activity import Activity, Leg
-from pam.variables import END_OF_DAY
 from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 
 def interpolate(i, ai, a, bi, b):

@@ -1,8 +1,9 @@
 import os
-import pandas as pd
-import geopandas as gp
-from shapely.geometry import LineString
 from typing import Optional
+
+import geopandas as gp
+import pandas as pd
+from shapely.geometry import LineString
 
 from pam.activity import Activity, Leg
 from pam.utils import create_local_dir

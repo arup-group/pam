@@ -1,5 +1,6 @@
 from datetime import timedelta
-from pam.samplers.time import jitter_activity, apply_jitter_to_plan
+
+from pam.samplers.time import apply_jitter_to_plan, jitter_activity
 
 
 def test_jitter_activity(Steve):

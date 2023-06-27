@@ -1,24 +1,25 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Union, List, Dict, Optional
+
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 if TYPE_CHECKING:
     from pam.activity import Plan
 
-import pandas as pd
-import numpy as np
-from geopandas import GeoDataFrame
+import warnings
+
 import matplotlib
-from matplotlib import pyplot as plt
-from matplotlib import cm
-from matplotlib.patches import Patch
 import matplotlib.ticker as mtick
+import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
-from plotly.offline import offline
+from geopandas import GeoDataFrame
+from matplotlib import pyplot as plt
+from matplotlib.patches import Patch
+from shapely.errors import ShapelyDeprecationWarning
+
 import pam.activity as activity
 import pam.utils as utils
 from pam.planner import encoder
-import warnings
-from shapely.errors import ShapelyDeprecationWarning
 
 
 def plot_person(person, **kwargs):
@@ -231,7 +232,7 @@ def plot_activities(df, **kwargs):
         for side in ["top", "right", "bottom", "left"]:
             ax.spines[side].set_visible(False)
 
-    if kwargs.get("legend", True) == True:
+    if kwargs.get("legend", True) is True:
         legend_elements = []
         for act, color in cmap.items():
             legend_elements.append(Patch(facecolor=color, edgecolor="black", label=act))

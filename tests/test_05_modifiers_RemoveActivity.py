@@ -1,7 +1,7 @@
 import pytest
 
-from pam.policy import modifiers
 from pam.activity import Activity
+from pam.policy import modifiers
 
 
 def test_RemoveActivity_apply_to_delegates_to_remove_individual_activities_when_given_person_and_activities(

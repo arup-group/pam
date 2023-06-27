@@ -1,11 +1,10 @@
 import random
+
 import pytest
-from pam.policy import modifiers
-from pam.policy import filters
-from pam.policy import probability_samplers
-from pam.policy import policies
+
 from pam.activity import Activity, Leg
 from pam.core import Person
+from pam.policy import filters, modifiers, policies, probability_samplers
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 

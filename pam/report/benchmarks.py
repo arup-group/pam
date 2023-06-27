@@ -1,5 +1,6 @@
+from typing import Callable, List, Optional
+
 import pandas as pd
-from typing import Optional, Callable, List
 
 
 def benchmarks(population):
@@ -96,14 +97,14 @@ def create_benchmark(
     df = data.copy()
 
     ## aggregate across specified dimensions
-    if dimensions != None:
-        if data_fields != None:
+    if dimensions is not None:
+        if data_fields is not None:
             df = df.groupby(dimensions)[data_fields].agg(aggfunc).fillna(0)
         else:
             df = df.value_counts(dimensions)
 
     ## show as percentages
-    if normalise_by != None:
+    if normalise_by is not None:
         if normalise_by == "total":
             df = df / df.sum(axis=0)
         else:
@@ -115,7 +116,7 @@ def create_benchmark(
         df.columns = df.columns.map("_".join).str.strip("_")
 
     ## rename columns
-    if colnames != None:
+    if colnames is not None:
         df.columns = colnames
 
     return df

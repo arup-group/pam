@@ -1,8 +1,9 @@
-import numpy as np
 from datetime import datetime, timedelta
 
-from pam.activity import Plan, Activity, Leg
-from pam.variables import START_OF_DAY, END_OF_DAY
+import numpy as np
+
+from pam.activity import Activity, Leg, Plan
+from pam.variables import END_OF_DAY, START_OF_DAY
 
 
 def one_hot_to_plan(

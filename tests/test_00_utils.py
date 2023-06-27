@@ -1,14 +1,13 @@
-import os
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
 import pytest
 from geopandas import GeoDataFrame
 from pandas import Timestamp
 from pandas.testing import assert_frame_equal
 from s2sphere import CellId
 from shapely.geometry import LineString
-import pandas as pd
 
 from pam import utils
 from pam.core import Population

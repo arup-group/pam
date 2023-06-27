@@ -1,5 +1,6 @@
-from pam.core import Population
 from copy import deepcopy
+
+from pam.core import Population
 from pam.samplers.basic import freq_sample
 
 

@@ -31,7 +31,7 @@ line-length = 120
 
 [tool.ruff]
 line-length = 120
-select = ["E9", "F63", "F7", "F82"]
+select = ["E", "W", "F", "I"]
 
 [tool.ruff.pydocstyle]
 convention = "numpy"

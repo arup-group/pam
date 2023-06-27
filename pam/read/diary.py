@@ -1,9 +1,10 @@
-import pandas as pd
 import logging
-from typing import Union, Optional
+from typing import Optional, Union
 
-import pam.core as core
+import pandas as pd
+
 import pam.activity as activity
+import pam.core as core
 import pam.utils as utils
 
 
@@ -90,7 +91,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
 
     if sort_by_seq and "seq" not in trips.columns:
         raise UserWarning(
-            f"""
+            """
     You must include a trips 'seq' column if you wish to sort trips:
     Either include a 'seq' column or use the existing ordering by
     setting 'sort_by_seq' = False/None (default).
@@ -99,7 +100,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
 
     if include_loc and not all(x in trips.columns for x in ["start_loc", "end_loc"]):
         raise UserWarning(
-            f"""
+            """
     You must include a trips 'start_loc' and 'end_loc' column if you wish to use precise locations:
     Either include a 'start_loc' and 'end_loc' column or set 'include_loc' = False (default).
     Note that these columns must be shapely Point geometries.
@@ -109,7 +110,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
     if trip_freq_as_person_freq:  # use trip freq as person freq
         if "freq" not in trips.columns:
             raise UserWarning(
-                f"""
+                """
                 You have opted to use 'trip_freq_as_person_freq' but cannot build this mapping:
                 Please check 'freq' is included in the trips_diary input.
                 """
@@ -130,14 +131,14 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
     if trip_freq_as_hh_freq:
         if "freq" not in trips.columns:
             raise UserWarning(
-                f"""
+                """
                 You have opted to use 'trip_freq_as_hh_freq' but cannot build this mapping:
                 Please check 'freq' is included in the trips_diary input.
                 """
             )
         if "hid" not in trips.columns:
             raise UserWarning(
-                f"""
+                """
                 You have opted to use 'trip_freq_as_hh_freq' but cannot build this mapping:
                 Please check 'hid' is included in the trips_diary input.
                 """
@@ -157,7 +158,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
 
     # add hid to trips if not already added
     if (
-        not "hid" in trips.columns
+        "hid" not in trips.columns
         and (persons_attributes is None or "hid" not in persons_attributes.columns)
         and (hhs_attributes is None or "pid" not in hhs_attributes.columns)
     ):
@@ -172,7 +173,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
     # check that person_attributes has required fields if used
     if persons_attributes is not None:
         if "pid" not in persons_attributes.columns and not persons_attributes.index.name == "pid":
-            raise UserWarning(f"Input person_attributes dataframe missing required unique identifier column: 'pid'.")
+            raise UserWarning("Input person_attributes dataframe missing required unique identifier column: 'pid'.")
 
         if "hid" not in persons_attributes and "hid" in trips:
             logger.warning("Adding pid->hh mapping to persons_attributes from trips.")
@@ -192,7 +193,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
     # check if hh_attributes are being used
     if hhs_attributes is not None:
         if "hid" not in hhs_attributes.columns and not hhs_attributes.index.name == "hid":
-            raise UserWarning(f"Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
+            raise UserWarning("Input hh_attributes dataframe missing required unique identifier column: 'hid'.")
 
         if "hid" in trips.columns:
             logger.info("Using person to household mapping from trips_diary data")
@@ -208,7 +209,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
 
         else:
             raise UserWarning(
-                f"""
+                """
             Household attributes found but failed to build person to household mapping from provided inputs:
             Please provide a household ID field ('hid') in either the trips_diary or person_attributes inputs.
             """
@@ -225,7 +226,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
                 hhs_attributes["hzone"] = hhs_attributes.hid.map(mapping)
 
     # add hzone to trips_diary
-    if not "hzone" in trips.columns:
+    if "hzone" not in trips.columns:
         if hhs_attributes is not None and "hzone" in hhs_attributes.columns:
             logger.info("Loading household area ('hzone') from hh_attributes input.")
             hh_mapping = dict(zip(hhs_attributes.hid, hhs_attributes.hzone))
@@ -240,7 +241,7 @@ If you do not wish to assume this, try setting 'tour_based' = True (default).
             trips["hzone"] = trips.hid.map(hh_mapping)
         else:
             logger.warning(
-                f"""
+                """
         Unable to load household area ('hzone') - not found in trips_diary or unable to build from attributes.
         Pam will try to infer home location from activities, but this behaviour is not recommended.
         """
@@ -612,7 +613,7 @@ def trip_based_travel_diary_read(
                 person.stay_at_home()
                 continue
 
-            home_area = household.location.area or person_trips.hzone.iloc[0]
+            household.location.area or person_trips.hzone.iloc[0]
             origin_area = person_trips.ozone.iloc[0]
 
             loc = None

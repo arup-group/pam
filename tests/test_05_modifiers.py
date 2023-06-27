@@ -1,4 +1,5 @@
 import pytest
+
 from pam.policy.modifiers import Modifier, RemoveActivity
 
 

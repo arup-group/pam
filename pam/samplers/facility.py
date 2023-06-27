@@ -1,19 +1,17 @@
-import os
-from typing import Union
-import geopandas as gp
-from shapely.geometry import Point
-import random
-from lxml import etree as et
 import logging
+import os
+import pickle
+import random
+from types import GeneratorType
 
+import geopandas as gp
+import numpy as np
+import pandas as pd
+from lxml import etree as et
+
+from pam import variables
 from pam.samplers.spatial import RandomPointSampler
 from pam.utils import DEFAULT_GZIP_COMPRESSION, create_crs_attribute, create_local_dir, is_gzip
-from pam import variables
-
-import pandas as pd
-import numpy as np
-import pickle
-from types import GeneratorType
 
 
 class FacilitySampler:
@@ -241,7 +239,7 @@ class FacilitySampler:
                     facility_xml = et.Element(
                         "facility", {"id": str(i), "x": str(data["loc"].x), "y": str(data["loc"].y)}
                     )
-                    act_xml = et.SubElement(facility_xml, "activity", {"type": data["act"]})
+                    et.SubElement(facility_xml, "activity", {"type": data["act"]})
                     xf.write(facility_xml, pretty_print=True)
 
 

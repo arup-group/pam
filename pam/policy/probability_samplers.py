@@ -1,7 +1,8 @@
-import pam.core
-import pam.activity
 import random
-from typing import Union, Callable
+from typing import Callable, Union
+
+import pam.activity
+import pam.core
 
 
 class SamplingProbability:

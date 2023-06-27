@@ -1,7 +1,8 @@
-import pam.core
-import pam.activity
 import random
 from typing import List
+
+import pam.activity
+import pam.core
 
 
 class Modifier:

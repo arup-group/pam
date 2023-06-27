@@ -1,7 +1,8 @@
-import pytest
 from datetime import timedelta
 
-from pam.activity import Plan, Activity, Leg, Location
+import pytest
+
+from pam.activity import Activity, Leg, Location, Plan
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 

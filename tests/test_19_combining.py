@@ -1,5 +1,6 @@
-import pytest
 import os
+
+import pytest
 
 from pam.operations import combine
 

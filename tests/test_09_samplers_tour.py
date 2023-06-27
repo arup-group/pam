@@ -1,9 +1,9 @@
 # %% import packages
-import pytest
-import pandas as pd
 import geopandas as gp
-from shapely.geometry import Point, Polygon
+import pandas as pd
+import pytest
 from matplotlib.figure import Figure
+from shapely.geometry import Point, Polygon
 
 from pam.core import Person
 from pam.samplers import tour
@@ -193,7 +193,7 @@ def test_dzone_sampler_dzone_d_density_zero(delivery_density, df_od):
     threshold_value = 2
 
     with pytest.warns(UserWarning, match="No destinations within this threshold value, change threshold"):
-        d_zone = tour.FrequencySampler(
+        tour.FrequencySampler(
             dist=delivery_density, freq="density", threshold_matrix=df_od[o_zone], threshold_value=threshold_value
         ).threshold_sample()
 
@@ -337,7 +337,6 @@ def test_activity_endtm_returnorigin(agent, agent_plan):
 
 
 def test_final_activity_return_depot(agent, agent_plan):
-    agent_plan_test = agent_plan
     o_loc, d_zones, d_locs = agent_plan.sequence_stops()
     agent_plan.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
 

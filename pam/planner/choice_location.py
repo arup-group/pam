@@ -1,21 +1,21 @@
 """
 Location and mode choice models for activity modelling
 """
-from copy import deepcopy
-from dataclasses import dataclass
 import itertools
 import logging
-from typing import Optional, List, NamedTuple, Callable, Union
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Callable, List, NamedTuple, Optional, Union
 
 import numpy as np
 import pandas as pd
 
-from pam.activity import Activity, Leg
+from pam.activity import Activity
 from pam.core import Population
 from pam.operations.cropping import link_population
 from pam.planner.od import OD
+from pam.planner.utils_planner import apply_mode_to_home_chain, calculate_mnl_probabilities, sample_weighted
 from pam.planner.zones import Zones
-from pam.planner.utils_planner import calculate_mnl_probabilities, sample_weighted, apply_mode_to_home_chain
 
 
 class ChoiceLabel(NamedTuple):
@@ -190,7 +190,6 @@ class ChoiceModel:
         """
         self.configuration.validate(["u", "scope"])
         od = self.od
-        zones = self.zones
         u = self.configuration.u
         scope = self.configuration.scope
 

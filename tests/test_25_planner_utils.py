@@ -1,18 +1,19 @@
-import pytest
-import numpy as np
-import random
 import os
-from pam.read import read_matsim
+import random
+
+import numpy as np
+import pytest
+
 from pam.activity import Leg
 from pam.operations.cropping import link_population
-
 from pam.planner.utils_planner import (
-    calculate_mnl_probabilities,
-    sample_weighted,
-    get_trip_chains,
     apply_mode_to_home_chain,
+    calculate_mnl_probabilities,
+    get_trip_chains,
     get_validate,
+    sample_weighted,
 )
+from pam.read import read_matsim
 
 test_plans_experienced = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_experienced_plans_v12.xml")

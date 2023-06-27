@@ -1,8 +1,9 @@
+import pytest
+
 from pam.activity import Activity
+from pam.policy import modifiers
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.policy import modifiers
-import pytest
 
 
 def assert_correct_activities(person, ordered_activities_list):

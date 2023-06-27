@@ -1,11 +1,10 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
+import pytest
+
+from pam.activity import Activity, Leg
+from pam.core import Household, Person, Population
+from pam.policy import policies, probability_samplers
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.policy import policies
-from pam.policy import probability_samplers
-
-import pytest
 
 
 def assert_single_home_activity(person):
