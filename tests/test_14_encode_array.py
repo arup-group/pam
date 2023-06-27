@@ -177,7 +177,7 @@ def test_rounding_up_to_hour():
     np.testing.assert_array_equal(encoded[12:, :], np.stack([np.array((0, 1, 0))] * 12))
 
 
-def test_rounding_up_to_hour():
+def test_rounding_up_to_hour_2():
     plan = Plan()
     plan.add(
         Activity(
@@ -255,15 +255,15 @@ def test_iter_array():
         ("work", datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0))
     ]
 
-    l = list(decode.iter_array(array=np.array([[1, 0, 0], [0, 1, 0]]), mapping={0: "home", 1: "work"}))
+    leg = list(decode.iter_array(array=np.array([[1, 0, 0], [0, 1, 0]]), mapping={0: "home", 1: "work"}))
 
-    assert l[0] == ("home", datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0))
-    assert l[1] == ("work", datetime(year=1900, month=1, day=1, hour=1, minute=0, second=0))
+    assert leg[0] == ("home", datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0))
+    assert leg[1] == ("work", datetime(year=1900, month=1, day=1, hour=1, minute=0, second=0))
 
-    l = list(decode.iter_array(array=np.array([[1, 0, 0], [1, 0, 0], [0, 1, 0]]), mapping={0: "home", 1: "work"}))
+    leg = list(decode.iter_array(array=np.array([[1, 0, 0], [1, 0, 0], [0, 1, 0]]), mapping={0: "home", 1: "work"}))
 
-    assert l[0] == ("home", datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0))
-    assert l[1] == ("work", datetime(year=1900, month=1, day=1, hour=2, minute=0, second=0))
+    assert leg[0] == ("home", datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0))
+    assert leg[1] == ("work", datetime(year=1900, month=1, day=1, hour=2, minute=0, second=0))
 
 
 def test_add_end_times():
@@ -368,7 +368,7 @@ def test_plan_one_hot_encode_decode_consistent():
     )
     assert len(decoded_plan) == 3
     for i in range(3):
-        assert type(plan[i]) == type(decoded_plan[i])
+        assert isinstance(type(plan[i]), type(decoded_plan[i]))
         assert plan[i].act == decoded_plan[i].act
         assert plan[i].start_time == decoded_plan[i].start_time
         assert plan[i].end_time == decoded_plan[i].end_time

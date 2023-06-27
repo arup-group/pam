@@ -175,9 +175,9 @@ def rename_external(plan: Plan, boundary: Polygon) -> None:
 # helpers ###########################################
 
 
-def list_get(l, i):
-    if i < len(l) and i >= 0:
-        return l[i]
+def list_get(list_to_access, idx):
+    if idx < len(list_to_access) and idx >= 0:
+        return list_to_access[idx]
     else:
         return None
 

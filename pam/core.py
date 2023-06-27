@@ -760,7 +760,7 @@ class Household:
 
     @property
     def mode_classes(self):
-        return set(l.mode for l in self.legs)
+        return set(leg.mode for leg in self.legs)
 
     def get_attribute(self, key) -> set:
         """Get set of attribute values for given key, First searches hh attributes then occupants."""
@@ -818,11 +818,11 @@ class Household:
         shared_activities = []
         household_activities = []
         for pid, person in self.people.items():
-            for activity in person.activities:
-                if activity.isin_exact(household_activities):
-                    shared_activities.append(activity)
-                if not activity.isin_exact(household_activities):
-                    household_activities.append(activity)
+            for activity_ in person.activities:
+                if activity_.isin_exact(household_activities):
+                    shared_activities.append(activity_)
+                if not activity_.isin_exact(household_activities):
+                    household_activities.append(activity_)
         return shared_activities
 
     def print(self):

@@ -27,7 +27,7 @@ def test_get_last_activity():
     assert p.last_activity.seq == 2
 
 
-def test_get_last_activity_empty():
+def test_get_last_component_empty():
     p = Person(0)
     assert p.last_component is None
 
@@ -43,7 +43,7 @@ def test_get_last_leg():
     assert p.last_leg.seq == 2
 
 
-def test_get_last_activity_empty():
+def test_get_last_leg_empty():
     p = Person(0)
     assert p.last_leg is None
 

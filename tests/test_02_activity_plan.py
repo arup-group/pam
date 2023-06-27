@@ -22,7 +22,7 @@ def test_activities(person_heh):
 
 
 def test_legs(person_heh):
-    assert [l.mode for l in person_heh.plan.legs] == ["car", "car"]
+    assert [leg.mode for leg in person_heh.plan.legs] == ["car", "car"]
 
 
 def test_closed(person_heh):
@@ -278,8 +278,8 @@ def test_yield_trip_legs_from_legs_simple():
     )
     plan.add(Activity(seq=5, act="home", area="A", start_time=mtdt(1220), end_time=mtdt(1500)))
     trips = list(plan.trip_legs())
-    assert [len(t) for t in trips] == [1, 1]
-    assert [l.mode for t in trips for l in t] == ["car", "bike"]
+    assert [len(trip) for trip in trips] == [1, 1]
+    assert [leg.mode for trip in trips for leg in trip] == ["car", "bike"]
 
 
 def test_yield_trip_legs_from_legs_with_transit():
@@ -302,8 +302,8 @@ def test_yield_trip_legs_from_legs_with_transit():
     )
     plan.add(Activity(seq=5, act="home", area="A", start_time=mtdt(1220), end_time=mtdt(1500)))
     trips = list(plan.trip_legs())
-    assert [len(t) for t in trips] == [3, 1]
-    assert [l.mode for t in trips for l in t] == ["walk", "bus", "walk", "bike"]
+    assert [len(trip) for trip in trips] == [3, 1]
+    assert [leg.mode for trip in trips for leg in trip] == ["walk", "bus", "walk", "bike"]
 
 
 def test_yield_trip_legs_from_legs_with_complex_transit():
@@ -330,8 +330,8 @@ def test_yield_trip_legs_from_legs_with_complex_transit():
     )
     plan.add(Activity(seq=5, act="home", area="A", start_time=mtdt(1220), end_time=mtdt(1500)))
     trips = list(plan.trip_legs())
-    assert [len(t) for t in trips] == [4, 1]
-    assert [l.mode for t in trips for l in t] == ["walk", "bus", "rail", "walk", "bike"]
+    assert [len(trip) for trip in trips] == [4, 1]
+    assert [leg.mode for trip in trips for leg in trip] == ["walk", "bus", "rail", "walk", "bike"]
 
 
 def test_yield_trip_legs_from_legs_empty():

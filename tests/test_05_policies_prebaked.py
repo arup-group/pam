@@ -1,6 +1,15 @@
 import pam.policy.modifiers as modifiers
 import pam.policy.probability_samplers as probability_samplers
-from pam.policy.policies import *
+from pam.policy.policies import (
+    ActivityPolicy,
+    HouseholdPolicy,
+    MovePersonActivitiesToHome,
+    PersonPolicy,
+    ReduceSharedHouseholdActivities,
+    RemoveHouseholdActivities,
+    RemoveIndividualActivities,
+    RemovePersonActivities,
+)
 
 
 def test_RemoveHouseholdActivities_initiates_correct_policy():
