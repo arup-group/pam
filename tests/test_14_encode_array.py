@@ -368,7 +368,7 @@ def test_plan_one_hot_encode_decode_consistent():
     )
     assert len(decoded_plan) == 3
     for i in range(3):
-        assert isinstance(type(plan[i]), type(decoded_plan[i]))
+        assert isinstance(plan[i], type(decoded_plan[i]))
         assert plan[i].act == decoded_plan[i].act
         assert plan[i].start_time == decoded_plan[i].start_time
         assert plan[i].end_time == decoded_plan[i].end_time

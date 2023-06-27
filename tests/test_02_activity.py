@@ -131,8 +131,8 @@ def test_compare_plans_not_equal_types():
     plana.add(Leg(seq=2, mode="car", start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
     plana.add(Activity(seq=3, act="shop", area="B", start_time=mtdt(620), end_time=mtdt(1200)))
 
-    with pytest.raises(UserWarning):
-        assert plana is not None
+    with pytest.raises(UserWarning, match=r"Cannot compare plan to non plan"):
+        assert plana == "foo"
 
 
 def test_add_wrong_type():

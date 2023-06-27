@@ -93,7 +93,7 @@ def fix_missing_end_activity(plan: list, end_of_day=END_OF_DAY, bin_size=3600):
 
 def fix_missing_components(plan: list, bin_size=3600, default_leg_mode="car", default_activity="other"):
     for i in range(len(plan) - 1):
-        if isinstance(type(plan[i]), type(plan[i + 1])):
+        if isinstance(plan[i], type(plan[i + 1])):
             start_time = plan[i].end_time - timedelta(seconds=int(bin_size / 4))
             end_time = plan[i].end_time + timedelta(seconds=int(bin_size / 4))
 

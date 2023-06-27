@@ -178,6 +178,8 @@ class ChoiceModel:
         od = self.od
         u = self.configuration.u
         scope = self.configuration.scope
+        # zones might be defined in `u` and so be required on calling `eval(u)`
+        zones = self.zones  # noqa: F841
 
         idxs = []
         u_choices = []

@@ -19,6 +19,7 @@ from pam.policy.policies import (
     RemoveHouseholdActivities,
     RemoveIndividualActivities,
     RemovePersonActivities,
+    apply_policies,
 )
 from pam.policy.probability_samplers import (
     ActivityProbability,
@@ -26,4 +27,5 @@ from pam.policy.probability_samplers import (
     PersonProbability,
     SamplingProbability,
     SimpleProbability,
+    verify_probability,
 )
