@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#simple-example-of-vehicle-assignment" class="md-skip">
+        <a href="#adding-vehicles-to-the-plans" class="md-skip">
           Skip to content
         </a>
       
@@ -478,6 +478,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           Advanced Adding Vehicles
@@ -493,6 +495,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -1547,6 +1551,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1585,8 +1591,6 @@
   
   
 
-
-  <h1>Advanced Adding Vehicles</h1>
 
 <script>
 (function (global, factory) {
@@ -2618,8 +2622,20 @@ Licensed under the Apache License, Version 2.0.
     }
     init_mathjax();
     </script>
-    <!-- End of mathjax configuration --><div class="jupyter-wrapper"><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div id="cell-id=99886b74" class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+    <!-- End of mathjax configuration --><div class="jupyter-wrapper">
+<div id="cell-id=9d49e600" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="adding-vehicles-to-the-plans">Adding vehicles to the plans<a class="anchor-link" href="#adding-vehicles-to-the-plans">&#182;</a></h1><p>In this example, we show how an existing set of plans can be updated to include additional vehicles.</p>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div id="cell-id=99886b74" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2639,31 +2655,21 @@ Licensed under the Apache License, Version 2.0.
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">from</span> <span class="nn">pam</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">import</span> <span class="nn">pam.vehicle</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 
-<span class="c1"># load up population</span>
-<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_data&quot;</span><span class="p">)</span>
-<span class="n">trips</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;example_travel_diaries.csv&#39;</span><span class="p">))</span>
-<span class="n">attributes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;example_attributes.csv&#39;</span><span class="p">))</span>
-<span class="n">attributes</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;pid&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">read</span><span class="o">.</span><span class="n">load_travel_diary</span><span class="p">(</span><span class="n">trips</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pam</span>
+<span class="kn">import</span> <span class="nn">pam.vehicle</span>
+<span class="kn">from</span> <span class="nn">pam</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
 </pre></div>
-<div id="cell-1" class="clipboard-copy-txt">from pam import read
-import pam.vehicle
-import pandas as pd
-from pprint import pprint
+<div id="cell-1" class="clipboard-copy-txt">import logging
 import os
+from pprint import pprint
 
-# load up population
-data_path = os.path.join("data", "example_data")
-trips = pd.read_csv(os.path.join(data_path, 'example_travel_diaries.csv'))
-attributes = pd.read_csv(os.path.join(data_path, 'example_attributes.csv'))
-attributes.set_index('pid', inplace=True)
-pop = read.load_travel_diary(trips, attributes)</div>
+import pam
+import pam.vehicle
+from pam import read, write</div>
         
         </div>
     </div>
@@ -2671,33 +2677,9 @@ pop = read.load_travel_diary(trips, attributes)</div>
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>Using tour based purpose parser (recommended)
-Adding pid-&gt;hh mapping to persons_attributes from trips.
-Adding home locations to persons attributes using trips attributes.
-Using freq of &#39;None&#39; for all persons.
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div id="cell-id=3d36096e" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div id="cell-id=bf11ad33" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2717,13 +2699,13 @@ Using freq of &#39;None&#39; for all persons.
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">read_matsim</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;example_plans.xml&#39;</span><span class="p">),</span>
-    <span class="n">version</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># load up population</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_data&quot;</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">read</span><span class="o">.</span><span class="n">read_matsim</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;example_plans.xml&quot;</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 </pre></div>
-<div id="cell-2" class="clipboard-copy-txt">pop = pam.read.read_matsim(
-    os.path.join(data_path, 'example_plans.xml'),
-    version = 12)</div>
+<div id="cell-2" class="clipboard-copy-txt"># load up population
+data_path = os.path.join("data", "example_data")
+pop = read.read_matsim(os.path.join(data_path, "example_plans.xml"), version=12)</div>
         
         </div>
     </div>
@@ -2827,15 +2809,15 @@ Using freq of &#39;None&#39; for all persons.
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># let&#39;s define some vehicles</span>
 
-<span class="n">default_ev_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s1">&#39;default_EV&#39;</span><span class="p">)</span>
-<span class="n">big_ev_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s1">&#39;big_EV&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">default_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s1">&#39;default_car&#39;</span><span class="p">)</span>
+<span class="n">default_ev_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s2">&quot;default_EV&quot;</span><span class="p">)</span>
+<span class="n">big_ev_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s2">&quot;big_EV&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">default_vehicle_type</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">VehicleType</span><span class="p">(</span><span class="s2">&quot;default_car&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-4" class="clipboard-copy-txt"># let's define some vehicles
 
-default_ev_vehicle_type = pam.vehicle.VehicleType('default_EV')
-big_ev_vehicle_type = pam.vehicle.VehicleType('big_EV', length=15, width=2)
-default_vehicle_type = pam.vehicle.VehicleType('default_car')</div>
+default_ev_vehicle_type = pam.vehicle.VehicleType("default_EV")
+big_ev_vehicle_type = pam.vehicle.VehicleType("big_EV", length=15, width=2)
+default_vehicle_type = pam.vehicle.VehicleType("default_car")</div>
         
         </div>
     </div>
@@ -2868,7 +2850,7 @@ default_vehicle_type = pam.vehicle.VehicleType('default_car')</div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 
 <span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
-    <span class="k">if</span> <span class="s1">&#39;car&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">mode_classes</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;car&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">mode_classes</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
             <span class="c1"># let&#39;s give a vehicle to this person</span>
             <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
@@ -2879,7 +2861,7 @@ default_vehicle_type = pam.vehicle.VehicleType('default_car')</div>
 <div id="cell-5" class="clipboard-copy-txt">import random
 
 for hid, pid, p in pop.people():
-    if 'car' in p.mode_classes:
+    if "car" in p.mode_classes:
         if random.random() < 0.5:
             # let's give a vehicle to this person
             if random.random() < 0.5:
@@ -2927,9 +2909,9 @@ for hid, pid, p in pop.people():
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">ElectricVehicle</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">ElectricVehicle</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
 </pre></div>
-<div id="cell-6" class="clipboard-copy-txt">pprint(pam.vehicle.ElectricVehicle('id').__dict__)</div>
+<div id="cell-6" class="clipboard-copy-txt">pprint(pam.vehicle.ElectricVehicle("id").__dict__)</div>
         
         </div>
     </div>
@@ -3008,7 +2990,7 @@ for hid, pid, p in pop.people():
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>2</pre>
+<pre>3</pre>
 </div>
 
 </div>
@@ -3094,29 +3076,15 @@ for hid, pid, p in pop.people():
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pam</span> <span class="kn">import</span> <span class="n">write</span>
-
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
-<span class="n">write</span><span class="o">.</span><span class="n">write_matsim</span><span class="p">(</span>
-    <span class="n">pop</span><span class="p">,</span>
-    <span class="n">plans_path</span><span class="o">=</span><span class="s1">&#39;./tmp/plans.xml&#39;</span><span class="p">,</span>
-    <span class="n">vehicles_dir</span><span class="o">=</span><span class="s1">&#39;./tmp&#39;</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="n">write</span><span class="o">.</span><span class="n">write_matsim</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">plans_path</span><span class="o">=</span><span class="s2">&quot;./tmp/plans.xml&quot;</span><span class="p">,</span> <span class="n">vehicles_dir</span><span class="o">=</span><span class="s2">&quot;./tmp&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-9" class="clipboard-copy-txt">import logging
-from pam import write
-
-logging.basicConfig()
+<div id="cell-9" class="clipboard-copy-txt">logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-write.write_matsim(
-    pop,
-    plans_path='./tmp/plans.xml',
-    vehicles_dir='./tmp',
-)</div>
+write.write_matsim(pop, plans_path="./tmp/plans.xml", vehicles_dir="./tmp")</div>
         
         </div>
     </div>
@@ -3141,45 +3109,13 @@ INFO:root:Saving vehicles to ./tmp
 INFO:root:Writing all vehicles to ./tmp/all_vehicles.xml
 INFO:root:Population includes electric vehicles
 INFO:root:Writing electric vehicles to ./tmp/electric_vehicles.xml
-INFO:root:Found 2 electric vehicles with unique charger types: {&#39;default&#39;}. Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd if you&#39;re running a simulation using org.matsim.contrib.ev
+INFO:root:Found 3 electric vehicles with unique charger types: {&#39;default&#39;}. Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd if you&#39;re running a simulation using org.matsim.contrib.ev
 </pre>
 </div>
 </div>
 
 </div>
 
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div id="cell-id=8a0e052b" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-10">
-                <div>
-                    <span class="notice" hidden>Copied!</span>
-                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                        <path fill="currentColor" fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path>
-                        <path fill="currentColor" fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                    </svg>
-                    </div>
-                </clipboard-copy>
-            </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span>
-</pre></div>
-<div id="cell-10" class="clipboard-copy-txt"></div>
-        
-        </div>
-    </div>
-
-</div>
 </div>
 
 </div>

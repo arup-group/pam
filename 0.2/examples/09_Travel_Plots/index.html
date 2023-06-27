@@ -2583,7 +2583,8 @@ Licensed under the Apache License, Version 2.0.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="plot-activity-plan-travel">Plot Activity Plan Travel<a class="anchor-link" href="#plot-activity-plan-travel">&#182;</a></h1>
+<h1 id="plot-activity-plan-travel">Plot Activity Plan Travel<a class="anchor-link" href="#plot-activity-plan-travel">&#182;</a></h1><p>In this example, we show how plans can be plotted spatially using <code>plotly</code></p>
+
 </div>
 </div>
 </div>
@@ -2644,9 +2645,13 @@ from pam import read</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">read</span><span class="o">.</span><span class="n">read_matsim</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;example_data&#39;</span><span class="p">,</span> <span class="s1">&#39;example_plans.xml&#39;</span><span class="p">))</span>  <span class="c1"># load small sample from the test suite</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">read</span><span class="o">.</span><span class="n">read_matsim</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_plans.xml&quot;</span><span class="p">)</span>
+<span class="p">)</span>  <span class="c1"># load small sample from the test suite</span>
 </pre></div>
-<div id="cell-2" class="clipboard-copy-txt">pop = read.read_matsim(os.path.join('data', 'example_data', 'example_plans.xml'))  # load small sample from the test suite</div>
+<div id="cell-2" class="clipboard-copy-txt">pop = read.read_matsim(
+    os.path.join("data", "example_data", "example_plans.xml")
+)  # load small sample from the test suite</div>
         
         </div>
     </div>
@@ -2691,9 +2696,9 @@ from pam import read</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="s1">&#39;epsg:27700&#39;</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">build_travel_geodataframe</span><span class="p">(</span><span class="n">from_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:27700&quot;</span><span class="p">,</span> <span class="n">to_epsg</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-<div id="cell-3" class="clipboard-copy-txt">pop.build_travel_geodataframe(from_epsg='epsg:27700', to_epsg='epsg:4326').head()</div>
+<div id="cell-3" class="clipboard-copy-txt">pop.build_travel_geodataframe(from_epsg="epsg:27700", to_epsg="epsg:4326").head()</div>
         
         </div>
     </div>
@@ -2707,6 +2712,623 @@ from pam import read</div>
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/plot/plans.py:133: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+/Users/bryn.pickering/Repos/arup-group/pam/pam/core.py:331: FutureWarning:
+
+The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+
+</pre>
+</div>
+</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
@@ -2756,13 +3378,13 @@ from pam import read</div>
       <th>0</th>
       <td>pt</td>
       <td>work</td>
-      <td>1.0</td>
+      <td>1</td>
       <td>None</td>
       <td>1900-01-01 07:24:52</td>
       <td>1900-01-01 07:24:52</td>
       <td>(515226.0, 188222.0)</td>
       <td>(529652.0, 183897.0)</td>
-      <td>LINESTRING (-0.33843 51.58109, -0.13193 51.53909)</td>
+      <td>LINESTRING (-0.33840 51.58109, -0.13191 51.53909)</td>
       <td>15060.381834</td>
       <td>None</td>
       <td>None</td>
@@ -2776,13 +3398,13 @@ from pam import read</div>
       <th>1</th>
       <td>pt</td>
       <td>None</td>
-      <td>2.0</td>
+      <td>2</td>
       <td>None</td>
       <td>1900-01-01 14:50:52</td>
       <td>1900-01-01 14:50:52</td>
       <td>(529652.0, 183897.0)</td>
       <td>(515226.0, 188222.0)</td>
-      <td>LINESTRING (-0.13193 51.53909, -0.33843 51.58109)</td>
+      <td>LINESTRING (-0.13191 51.53909, -0.33840 51.58109)</td>
       <td>15060.381834</td>
       <td>None</td>
       <td>None</td>
@@ -2796,13 +3418,13 @@ from pam import read</div>
       <th>2</th>
       <td>pt</td>
       <td>work</td>
-      <td>1.0</td>
+      <td>1</td>
       <td>None</td>
       <td>1900-01-01 08:27:33</td>
       <td>1900-01-01 08:27:33</td>
       <td>(542920.0, 174494.0)</td>
       <td>(534457.0, 181724.0)</td>
-      <td>LINESTRING (0.05545 51.45140, -0.06352 51.51844)</td>
+      <td>LINESTRING (0.05547 51.45140, -0.06349 51.51844)</td>
       <td>11130.825172</td>
       <td>None</td>
       <td>None</td>
@@ -2816,13 +3438,13 @@ from pam import read</div>
       <th>3</th>
       <td>pt</td>
       <td>None</td>
-      <td>2.0</td>
+      <td>2</td>
       <td>None</td>
       <td>1900-01-01 17:45:33</td>
       <td>1900-01-01 17:45:33</td>
       <td>(534457.0, 181724.0)</td>
       <td>(542920.0, 174494.0)</td>
-      <td>LINESTRING (-0.06352 51.51844, 0.05545 51.45140)</td>
+      <td>LINESTRING (-0.06349 51.51844, 0.05547 51.45140)</td>
       <td>11130.825172</td>
       <td>None</td>
       <td>None</td>
@@ -2836,13 +3458,13 @@ from pam import read</div>
       <th>4</th>
       <td>pt</td>
       <td>work</td>
-      <td>1.0</td>
+      <td>1</td>
       <td>None</td>
       <td>1900-01-01 07:01:09</td>
       <td>1900-01-01 07:01:09</td>
       <td>(535063.0, 163365.0)</td>
       <td>(531998.0, 166080.0)</td>
-      <td>LINESTRING (-0.06179 51.35332, -0.10477 51.37843)</td>
+      <td>LINESTRING (-0.06176 51.35331, -0.10474 51.37843)</td>
       <td>4094.563469</td>
       <td>None</td>
       <td>None</td>
@@ -2897,9 +3519,9 @@ from pam import read</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">mapbox_access_token</span><span class="o">=</span><span class="s1">&#39;token&#39;</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">mapbox_access_token</span> <span class="o">=</span> <span class="s2">&quot;token&quot;</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">mapbox_access_token='token'</div>
+<div id="cell-4" class="clipboard-copy-txt">mapbox_access_token = "token"</div>
         
         </div>
     </div>

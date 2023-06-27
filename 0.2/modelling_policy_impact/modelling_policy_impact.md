@@ -70,7 +70,7 @@ PAM allows multiple of such policies to be combined to build realistic and compl
 - sequences such as tours
 - any combination of the above
 
-A full overview of policies and examples of the policies available are [detailed in this example][pam-getting-started].
+A full overview of policies and examples of the policies available are [detailed in this example][modifying-the-population-using-simple-policies].
 
 ## Example modifiers/policies:
 
