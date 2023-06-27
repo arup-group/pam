@@ -14,6 +14,8 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0  # used to build docs into the gh-pages branch without losing branch history. See https://github.com/jimporter/mike/issues/49
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
