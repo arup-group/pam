@@ -33,20 +33,16 @@ line-length = 120
 line-length = 120
 select = ["E", "F", "I", "Q"]
 
-
 ignore = [
     "E501", # line too long: Black will handle this.
     "D1",   # Ignore missing docstrings in public functions/modules. There are just too many of them missing...
 ]
-
 
 # Exclude a variety of commonly ignored directories.
 exclude = [".*", "__pypackages__", "build", "dist", "venv", "reports/"]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-target-version = "py39"
 
 [tool.ruff.pydocstyle]
 convention = "google"
