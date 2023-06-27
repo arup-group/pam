@@ -1,4 +1,4 @@
---8<-- "README.md:doc"
+--8<-- "README.md:docs"
 
 ## Why Activity Plans?
 
