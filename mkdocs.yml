@@ -36,6 +36,7 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.superfences
+  - pymdownx.snippets
   - attr_list
   - toc:
       permalink: "#"

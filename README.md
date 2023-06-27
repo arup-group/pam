@@ -1,6 +1,11 @@
 # Population Activity Modeller (PAM)
 
-![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg)
+![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg) 
+[![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
+[![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e)
+
+<!--- the "--8<--" html comments define what part of the README to add to the index page of the documentation -->
+<!--- --8<-- [start:docs] -->
 
 PAM is a python API for activity sequence modelling. Primary features:
 
@@ -17,8 +22,6 @@ PAM was originally called the "Pandemic Activity Modifier". It was built in resp
 
 **Who is this for?** PAM is intended for use by any modeller or planner using trip diary data or activity plans.
 **What can this do?** PAM provides an API and examples for modifying activity plans, for example, based on COVID-19 lockdown scenarios.
-
-You can read about PAM on medium [here](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e).
 
 ## Features
 
@@ -40,6 +43,7 @@ This work is primarily intended for transport modellers, to make quick transport
 scenarios. But it may also be useful for other activity based demand modelling such as for goods
 supply or utility demand.
 
+<!--- --8<-- [end:docs] -->
 ## Installation
 
 The PAM package is not yet indexed on pypi or anaconda, so to install it, we recommend following these steps:
@@ -51,7 +55,7 @@ mamba activate pam
 pip install --no-deps -e ./pam
 ```
 
-For more information, see our detailed instructions in our documentation.
+For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/0.2/installation/).
 
 ## Contributing
 
@@ -71,4 +75,16 @@ while you work:
 - `scripts/code-qa/check-staged-file-sizes.sh` - check for large file sizes that have been git staged
 - `scripts/code-qa/check-all-file-sizes.sh` - check for large file sizes
 
-For more information, see our documentation.
+For more information, see our [documentation](https://arup-group.github.io/pam/0.2/get_involved).
+
+## Building the documentation
+
+If you are unable to access the online documentation, you can build the documentation locally.
+First, [install PAM](#installation), then deploy the documentation using [mike](https://github.com/jimporter/mike):
+
+```
+mike deploy 0.2
+mike serve
+```
+
+Then you can view the documentation in a browser at http://localhost:8000/.
