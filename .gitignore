@@ -32,6 +32,7 @@ mprofile_*
 
 # Documentation
 .docs
+mike-*.yml
 
 # Project-specific
 *.mapbox*
