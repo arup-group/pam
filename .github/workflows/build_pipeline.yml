@@ -56,6 +56,10 @@ jobs:
     - name: Check for large files
       run: ./scripts/code-qa/check-all-file-sizes.sh
 
+    - name: Test that docs build
+      if: github.ref != 'refs/heads/main'
+      run: mike deploy 0.2
+
     - name: Build docs
       if: github.ref == 'refs/heads/main'
       run: mike deploy --push --force 0.2
