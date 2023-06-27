@@ -21,7 +21,7 @@
     
     
       
-        <title>PAM Complex Policies - Population Activity Modeller (PAM)</title>
+        <title>Modifying the population using complex policies - Population Activity Modeller (PAM)</title>
       
     
     
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PAM Complex Policies
+              Modifying the population using complex policies
             
           </span>
         </div>
@@ -321,7 +321,7 @@
   
     <li class="md-nav__item">
       <a href="../01_PAM_Getting_Started/" class="md-nav__link">
-        PAM Getting Started
+        PAM - Getting Started
       </a>
     </li>
   
@@ -349,7 +349,7 @@
   
     <li class="md-nav__item">
       <a href="../03_Example_Generate_Random_Population/" class="md-nav__link">
-        Example Generate Random Population
+        Generating a random population for West London
       </a>
     </li>
   
@@ -363,7 +363,7 @@
   
     <li class="md-nav__item">
       <a href="../04_Example_Ingest_NTS_Diaries/" class="md-nav__link">
-        Example Ingest NTS Diaries
+        Converting the National Travel Survey into a Simple MATSim Format Population
       </a>
     </li>
   
@@ -377,7 +377,7 @@
   
     <li class="md-nav__item">
       <a href="../05_PAM_Policies_Walk_Through/" class="md-nav__link">
-        PAM Policies Walk Through
+        Modifying the population using simple policies
       </a>
     </li>
   
@@ -400,12 +400,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          PAM Complex Policies
+          Modifying the population using complex policies
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        PAM Complex Policies
+        Modifying the population using complex policies
       </a>
       
         
@@ -438,14 +438,129 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#add-jones-household" class="md-nav__link">
+    Add Jones household
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#add-jones-household" class="md-nav__link">
-    Add Jones household
+  <a href="#pam-complex-policies" class="md-nav__link">
+    PAM Complex Policies
+  </a>
+  
+    <nav class="md-nav" aria-label="PAM Complex Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#household-quarantine" class="md-nav__link">
+    Household Quarantine
+  </a>
+  
+    <nav class="md-nav" aria-label="Household Quarantine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#person-based-all-people-equal" class="md-nav__link">
+    Person-based, all people equal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-joint-distribution" class="md-nav__link">
+    Using joint distribution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chaining-probabilities" class="md-nav__link">
+    Chaining probabilities
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-education" class="md-nav__link">
+    Remove Education
+  </a>
+  
+    <nav class="md-nav" aria-label="Remove Education">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#personattributefilter" class="md-nav__link">
+    PersonAttributeFilter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-leisure-activities" class="md-nav__link">
+    Remove Leisure Activities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unemploymentfurlough" class="md-nav__link">
+    Unemployment/Furlough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remove-shopping" class="md-nav__link">
+    Remove Shopping
+  </a>
+  
+    <nav class="md-nav" aria-label="Remove Shopping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reducing-shared-activities" class="md-nav__link">
+    Reducing shared activities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moving-shopping-tours" class="md-nav__link">
+    Moving Shopping tours
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-together-now" class="md-nav__link">
+    All together now!
   </a>
   
 </li>
@@ -466,7 +581,7 @@
   
     <li class="md-nav__item">
       <a href="../07_PAM_Point_Sampling/" class="md-nav__link">
-        PAM Point Sampling
+        Geometry Sampling in PAM
       </a>
     </li>
   
@@ -480,7 +595,7 @@
   
     <li class="md-nav__item">
       <a href="../08_PAM_Population_Activity_Plots/" class="md-nav__link">
-        PAM Population Activity Plots
+        Plotting activity times
       </a>
     </li>
   
@@ -494,7 +609,7 @@
   
     <li class="md-nav__item">
       <a href="../09_Travel_Plots/" class="md-nav__link">
-        Travel Plots
+        Plot Activity Plan Travel
       </a>
     </li>
   
@@ -508,7 +623,7 @@
   
     <li class="md-nav__item">
       <a href="../10_Advanced_Spatial-Sampling_Demo/" class="md-nav__link">
-        Advanced Spatial-Sampling Demo
+        Facility sampling
       </a>
     </li>
   
@@ -522,7 +637,7 @@
   
     <li class="md-nav__item">
       <a href="../11_Advanced_Plan_Rescheduling/" class="md-nav__link">
-        Advanced Plan Rescheduling
+        Plan rescheduling
       </a>
     </li>
   
@@ -536,7 +651,7 @@
   
     <li class="md-nav__item">
       <a href="../12_Advanced_Adding_Vehicles/" class="md-nav__link">
-        Advanced Adding Vehicles
+        Adding vehicles to the plans
       </a>
     </li>
   
@@ -550,7 +665,7 @@
   
     <li class="md-nav__item">
       <a href="../13_Advanced_Freight_Synthesis/" class="md-nav__link">
-        Advanced Freight Synthesis
+        Freight synthesis
       </a>
     </li>
   
@@ -564,7 +679,7 @@
   
     <li class="md-nav__item">
       <a href="../14_Advanced_Plan_Cropping/" class="md-nav__link">
-        Advanced Plan Cropping
+        Plan cropping
       </a>
     </li>
   
@@ -578,7 +693,7 @@
   
     <li class="md-nav__item">
       <a href="../15_Advanced_Choice/" class="md-nav__link">
-        Advanced Choice
+        Applying a location and mode choice model to populations
       </a>
     </li>
   
@@ -1597,14 +1712,129 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#add-jones-household" class="md-nav__link">
+    Add Jones household
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#add-jones-household" class="md-nav__link">
-    Add Jones household
+  <a href="#pam-complex-policies" class="md-nav__link">
+    PAM Complex Policies
+  </a>
+  
+    <nav class="md-nav" aria-label="PAM Complex Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#household-quarantine" class="md-nav__link">
+    Household Quarantine
+  </a>
+  
+    <nav class="md-nav" aria-label="Household Quarantine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#person-based-all-people-equal" class="md-nav__link">
+    Person-based, all people equal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-joint-distribution" class="md-nav__link">
+    Using joint distribution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chaining-probabilities" class="md-nav__link">
+    Chaining probabilities
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-education" class="md-nav__link">
+    Remove Education
+  </a>
+  
+    <nav class="md-nav" aria-label="Remove Education">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#personattributefilter" class="md-nav__link">
+    PersonAttributeFilter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-leisure-activities" class="md-nav__link">
+    Remove Leisure Activities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unemploymentfurlough" class="md-nav__link">
+    Unemployment/Furlough
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remove-shopping" class="md-nav__link">
+    Remove Shopping
+  </a>
+  
+    <nav class="md-nav" aria-label="Remove Shopping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reducing-shared-activities" class="md-nav__link">
+    Reducing shared activities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moving-shopping-tours" class="md-nav__link">
+    Moving Shopping tours
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-together-now" class="md-nav__link">
+    All together now!
   </a>
   
 </li>
@@ -3151,7 +3381,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="add-jones-household">Add Jones household<a class="anchor-link" href="#add-jones-household">&#182;</a></h2>
+<h3 id="add-jones-household">Add Jones household<a class="anchor-link" href="#add-jones-household">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -3423,7 +3653,7 @@ Population total travel time: 9.67 hours
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="pam-complex-policies">PAM Complex Policies<a class="anchor-link" href="#pam-complex-policies">&#182;</a></h1><p>Based on <a href="https://docs.google.com/spreadsheets/d/1FQMa7dLe2cv1NEZnbu5cZo3v07tKXINwvOaLQYoEp-M/edit#gid=0">link</a></p>
+<h2 id="pam-complex-policies">PAM Complex Policies<a class="anchor-link" href="#pam-complex-policies">&#182;</a></h2><p>Based on <a href="https://docs.google.com/spreadsheets/d/1FQMa7dLe2cv1NEZnbu5cZo3v07tKXINwvOaLQYoEp-M/edit#gid=0">link</a></p>
 
 </div>
 </div>
@@ -3665,7 +3895,7 @@ vulnerable_distribution = dict(
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="household-quarantine">Household Quarantine<a class="anchor-link" href="#household-quarantine">&#182;</a></h2><p>Probabilistically apply quarantine to a household (remove all activities - stay at home)</p>
+<h3 id="household-quarantine">Household Quarantine<a class="anchor-link" href="#household-quarantine">&#182;</a></h3><p>Probabilistically apply quarantine to a household (remove all activities - stay at home)</p>
 
 </div>
 </div>
@@ -3677,7 +3907,7 @@ vulnerable_distribution = dict(
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="person-based-all-people-equal">Person-based, all people equal<a class="anchor-link" href="#person-based-all-people-equal">&#182;</a></h3><p>If you have a probability of any person having to be quarantined</p>
+<h4 id="person-based-all-people-equal">Person-based, all people equal<a class="anchor-link" href="#person-based-all-people-equal">&#182;</a></h4><p>If you have a probability of any person having to be quarantined</p>
 
 </div>
 </div>
@@ -3899,7 +4129,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="using-joint-distribution">Using joint distribution<a class="anchor-link" href="#using-joint-distribution">&#182;</a></h3>
+<h4 id="using-joint-distribution">Using joint distribution<a class="anchor-link" href="#using-joint-distribution">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -4067,7 +4297,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="chaining-probabilities">Chaining probabilities<a class="anchor-link" href="#chaining-probabilities">&#182;</a></h3>
+<h4 id="chaining-probabilities">Chaining probabilities<a class="anchor-link" href="#chaining-probabilities">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -4241,7 +4471,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="remove-education">Remove Education<a class="anchor-link" href="#remove-education">&#182;</a></h2><p>Probabilistically remove education activities from a person and escort from people in the same household</p>
+<h3 id="remove-education">Remove Education<a class="anchor-link" href="#remove-education">&#182;</a></h3><p>Probabilistically remove education activities from a person and escort from people in the same household</p>
 
 </div>
 </div>
@@ -4793,7 +5023,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="personattributefilter">PersonAttributeFilter<a class="anchor-link" href="#personattributefilter">&#182;</a></h3><p>You can also use the <code>modify.PersonAttributeFilter</code> to only affect people with certain attributes.</p>
+<h4 id="personattributefilter">PersonAttributeFilter<a class="anchor-link" href="#personattributefilter">&#182;</a></h4><p>You can also use the <code>modify.PersonAttributeFilter</code> to only affect people with certain attributes.</p>
 
 </div>
 </div>
@@ -5025,7 +5255,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="remove-leisure-activities">Remove Leisure Activities<a class="anchor-link" href="#remove-leisure-activities">&#182;</a></h2><p>Remove all leisure activities</p>
+<h3 id="remove-leisure-activities">Remove Leisure Activities<a class="anchor-link" href="#remove-leisure-activities">&#182;</a></h3><p>Remove all leisure activities</p>
 
 </div>
 </div>
@@ -5184,7 +5414,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="unemploymentfurlough">Unemployment/Furlough<a class="anchor-link" href="#unemploymentfurlough">&#182;</a></h2><p>Probabilistically remove all work activities from a person</p>
+<h3 id="unemploymentfurlough">Unemployment/Furlough<a class="anchor-link" href="#unemploymentfurlough">&#182;</a></h3><p>Probabilistically remove all work activities from a person</p>
 
 </div>
 </div>
@@ -5515,7 +5745,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="remove-shopping">Remove Shopping<a class="anchor-link" href="#remove-shopping">&#182;</a></h1><p>Probabilistically remove <strong>individual</strong> shopping activities from a person</p>
+<h2 id="remove-shopping">Remove Shopping<a class="anchor-link" href="#remove-shopping">&#182;</a></h2><p>Probabilistically remove <strong>individual</strong> shopping activities from a person</p>
 
 </div>
 </div>
@@ -6352,7 +6582,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="all-together-now">All together now!<a class="anchor-link" href="#all-together-now">&#182;</a></h1>
+<h2 id="all-together-now">All together now!<a class="anchor-link" href="#all-together-now">&#182;</a></h2>
 </div>
 </div>
 </div>

@@ -21,7 +21,7 @@
     
     
       
-        <title>Advanced Plan Rescheduling - Population Activity Modeller (PAM)</title>
+        <title>Plan rescheduling - Population Activity Modeller (PAM)</title>
       
     
     
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Advanced Plan Rescheduling
+              Plan rescheduling
             
           </span>
         </div>
@@ -321,7 +321,7 @@
   
     <li class="md-nav__item">
       <a href="../01_PAM_Getting_Started/" class="md-nav__link">
-        PAM Getting Started
+        PAM - Getting Started
       </a>
     </li>
   
@@ -349,7 +349,7 @@
   
     <li class="md-nav__item">
       <a href="../03_Example_Generate_Random_Population/" class="md-nav__link">
-        Example Generate Random Population
+        Generating a random population for West London
       </a>
     </li>
   
@@ -363,7 +363,7 @@
   
     <li class="md-nav__item">
       <a href="../04_Example_Ingest_NTS_Diaries/" class="md-nav__link">
-        Example Ingest NTS Diaries
+        Converting the National Travel Survey into a Simple MATSim Format Population
       </a>
     </li>
   
@@ -377,7 +377,7 @@
   
     <li class="md-nav__item">
       <a href="../05_PAM_Policies_Walk_Through/" class="md-nav__link">
-        PAM Policies Walk Through
+        Modifying the population using simple policies
       </a>
     </li>
   
@@ -391,7 +391,7 @@
   
     <li class="md-nav__item">
       <a href="../06_PAM_Complex_Policies/" class="md-nav__link">
-        PAM Complex Policies
+        Modifying the population using complex policies
       </a>
     </li>
   
@@ -405,7 +405,7 @@
   
     <li class="md-nav__item">
       <a href="../07_PAM_Point_Sampling/" class="md-nav__link">
-        PAM Point Sampling
+        Geometry Sampling in PAM
       </a>
     </li>
   
@@ -419,7 +419,7 @@
   
     <li class="md-nav__item">
       <a href="../08_PAM_Population_Activity_Plots/" class="md-nav__link">
-        PAM Population Activity Plots
+        Plotting activity times
       </a>
     </li>
   
@@ -433,7 +433,7 @@
   
     <li class="md-nav__item">
       <a href="../09_Travel_Plots/" class="md-nav__link">
-        Travel Plots
+        Plot Activity Plan Travel
       </a>
     </li>
   
@@ -447,7 +447,7 @@
   
     <li class="md-nav__item">
       <a href="../10_Advanced_Spatial-Sampling_Demo/" class="md-nav__link">
-        Advanced Spatial-Sampling Demo
+        Facility sampling
       </a>
     </li>
   
@@ -470,12 +470,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Advanced Plan Rescheduling
+          Plan rescheduling
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Advanced Plan Rescheduling
+        Plan rescheduling
       </a>
       
         
@@ -500,6 +500,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+    <nav class="md-nav" aria-label="Calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimising-utility-score-without-matsim" class="md-nav__link">
+    Optimising utility score without MATSim
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimising utility score without MATSim">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random-search-for-optima" class="md-nav__link">
+    Random Search for Optima
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -516,7 +549,7 @@
   
     <li class="md-nav__item">
       <a href="../12_Advanced_Adding_Vehicles/" class="md-nav__link">
-        Advanced Adding Vehicles
+        Adding vehicles to the plans
       </a>
     </li>
   
@@ -530,7 +563,7 @@
   
     <li class="md-nav__item">
       <a href="../13_Advanced_Freight_Synthesis/" class="md-nav__link">
-        Advanced Freight Synthesis
+        Freight synthesis
       </a>
     </li>
   
@@ -544,7 +577,7 @@
   
     <li class="md-nav__item">
       <a href="../14_Advanced_Plan_Cropping/" class="md-nav__link">
-        Advanced Plan Cropping
+        Plan cropping
       </a>
     </li>
   
@@ -558,7 +591,7 @@
   
     <li class="md-nav__item">
       <a href="../15_Advanced_Choice/" class="md-nav__link">
-        Advanced Choice
+        Applying a location and mode choice model to populations
       </a>
     </li>
   
@@ -1566,6 +1599,39 @@
   <a href="#toy-data" class="md-nav__link">
     Toy Data
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+    <nav class="md-nav" aria-label="Calibration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimising-utility-score-without-matsim" class="md-nav__link">
+    Optimising utility score without MATSim
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimising utility score without MATSim">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random-search-for-optima" class="md-nav__link">
+    Random Search for Optima
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3175,8 +3241,8 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="calibration">Calibration<a class="anchor-link" href="#calibration">&#182;</a></h1><h2 id="optimising-utility-score-without-matsim">Optimising utility score without MATSim<a class="anchor-link" href="#optimising-utility-score-without-matsim">&#182;</a></h2><p>Note that we are not messing with the sequence or the trips, or locations - so trips distances and times do not vary.</p>
-<h3 id="random-search-for-optima">Random Search for Optima<a class="anchor-link" href="#random-search-for-optima">&#182;</a></h3>
+<h2 id="calibration">Calibration<a class="anchor-link" href="#calibration">&#182;</a></h2><h3 id="optimising-utility-score-without-matsim">Optimising utility score without MATSim<a class="anchor-link" href="#optimising-utility-score-without-matsim">&#182;</a></h3><p>Note that we are not messing with the sequence or the trips, or locations - so trips distances and times do not vary.</p>
+<h4 id="random-search-for-optima">Random Search for Optima<a class="anchor-link" href="#random-search-for-optima">&#182;</a></h4>
 </div>
 </div>
 </div>
