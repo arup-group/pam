@@ -8,6 +8,7 @@ TEST_EXPERIENCED_PLANS_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data", "test_matsim_experienced_plans_v12.xml")
 )
 
+
 def test_score_plan_monetary_cost(default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
     plan_cost = 20
@@ -17,7 +18,7 @@ def test_score_plan_monetary_cost(default_config):
 
 def test_score_day_mode_use(default_config):
     scorer = CharyparNagelPlanScorer(cnfg=default_config)
-    mode = 'car'
+    mode = "car"
     result = scorer.score_day_mode_use(mode, default_config)
     assert result == -2
 
@@ -132,13 +133,14 @@ def test_score_pt_interchanges(AnnaPT, default_config):
     result = scorer.score_pt_interchanges(AnnaPT.plan, default_config)
     assert result == -1
 
+
 def test_scores_experienced(config_complex):
-    """ Test calculated scores against MATSim experienced plan scores. """
-    population = read_matsim(TEST_EXPERIENCED_PLANS_PATH, version = 12, crop = False)
+    """Test calculated scores against MATSim experienced plan scores."""
+    population = read_matsim(TEST_EXPERIENCED_PLANS_PATH, version=12, crop=False)
     scorer = CharyparNagelPlanScorer(config_complex)
     for hid, pid, person in population.people():
-        if 'subpopulation' not in person.attributes:
-            person.attributes['subpopulation'] = 'default'
+        if "subpopulation" not in person.attributes:
+            person.attributes["subpopulation"] = "default"
         matsim_score = person.plan.score
         pam_score = scorer.score_person(person)
         assert abs(matsim_score - pam_score) < 0.1

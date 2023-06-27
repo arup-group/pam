@@ -4,12 +4,7 @@ from pam.activity import Plan
 from pam.utils import td_to_s
 
 
-def plan_to_one_hot(
-    plan: Plan,
-    mapping:dict,
-    bin_size:int=3600,
-    duration:int=86400
-    ) -> np.array:
+def plan_to_one_hot(plan: Plan, mapping: dict, bin_size: int = 3600, duration: int = 86400) -> np.array:
     """
     Transform a pam.activity.Plan into a one-hot encoded array. Output array is two dimensional.
     First axis represents time, binnned according to bin_size given in seconds.
@@ -28,7 +23,7 @@ def plan_to_one_hot(
         np.array: one-hot encoded plan
     """
     bins = int(duration / bin_size)
-    encoded = np.zeros((bins,len(mapping)))
+    encoded = np.zeros((bins, len(mapping)))
 
     start_bin = 0
     reference_time = plan.day[0].start_time
@@ -47,13 +42,8 @@ def plan_to_one_hot(
     return encoded
 
 
-class PlansToCategorical():
-
-    def __init__(
-        self,
-        bin_size:int=3600,
-        duration:int=86400
-    ) -> None:
+class PlansToCategorical:
+    def __init__(self, bin_size: int = 3600, duration: int = 86400) -> None:
         """
         Tool for converting pam.core.plans to integer arrays, eg:
         |<----A---->||<----B---->||<C>||<----A---->|
@@ -83,7 +73,7 @@ class PlansToCategorical():
     def encode(
         self,
         plan: Plan,
-        ) -> np.array:
+    ) -> np.array:
         """
         Transform a pam.activity.Plan into a categorical integer array.
 
@@ -115,4 +105,3 @@ class PlansToCategorical():
             start_bin = end_bin
 
         return encoded
-

@@ -21,28 +21,23 @@ def simplify_population(
     """
     # simplify plans
     for hid, pid, person in population.people():
-        simplify_external_plans(
-            person.plan, boundary, snap_to_boundary, rename_external_activities)
+        simplify_external_plans(person.plan, boundary, snap_to_boundary, rename_external_activities)
 
     # remove empty person-plans and households
     remove_persons = []
     for hid, pid, person in population.people():
-        if len(person.plan) == 1 and person.plan.day[0].act == 'external':
+        if len(person.plan) == 1 and person.plan.day[0].act == "external":
             remove_persons.append((hid, pid))
     for hid, pid in remove_persons:
         del population[hid].people[pid]
 
-    remove_hhs = [hid for hid in population.households if len(
-        population.households[hid].people) == 0]
+    remove_hhs = [hid for hid in population.households if len(population.households[hid].people) == 0]
     for hid in remove_hhs:
         del population.households[hid]
 
 
 def simplify_external_plans(
-    plan: Plan,
-    boundary: Polygon,
-    snap_to_boundary=False,
-    rename_external_activities=False
+    plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False
 ) -> None:
     """
     Simplify any activities happening outside the boundary area.
@@ -125,7 +120,7 @@ def filter_component(component, kept_activities: List[Activity]) -> bool:
     if isinstance(component, Activity):
         return component in kept_activities
     elif isinstance(component, Leg):
-        return ((component.previous in kept_activities) and (component.next in kept_activities))
+        return (component.previous in kept_activities) and (component.next in kept_activities)
 
 
 def crop_plan(plan: Plan, kept_activities: List[Activity]) -> None:
@@ -134,8 +129,7 @@ def crop_plan(plan: Plan, kept_activities: List[Activity]) -> None:
     If no plan components are left in scope, the plan will have a single "external" activity.
     """
     if kept_activities:
-        day = list(filter(lambda x: filter_component(
-            x, kept_activities), plan.day))
+        day = list(filter(lambda x: filter_component(x, kept_activities), plan.day))
     else:
         day = empty_day()
     plan.day = day
@@ -145,8 +139,8 @@ def empty_day() -> list:
     day = [
         Activity(
             seq=1,
-            act='external',
-            area='external',
+            act="external",
+            area="external",
             start_time=pam.utils.minutes_to_datetime(0),
             end_time=pam.variables.END_OF_DAY,
         )
@@ -154,16 +148,11 @@ def empty_day() -> list:
     return day
 
 
-def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = 'car') -> Leg:
+def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = "car") -> Leg:
     """
     Create a leg between two activities.
     """
-    leg = Leg(
-        start_time=previous_act.end_time,
-        end_time=next_act.start_time,
-        mode=travel_mode,
-        purp=next_act.act
-    )
+    leg = Leg(start_time=previous_act.end_time, end_time=next_act.start_time, mode=travel_mode, purp=next_act.act)
     leg.start_location = previous_act.location
     leg.end_location = next_act.location
     # link
@@ -180,10 +169,10 @@ def infill_legs(plan: Plan) -> None:
     i = 0
     while i < len(plan.day) - 1:
         component1 = plan.day[i]
-        component2 = plan.day[i+1]
+        component2 = plan.day[i + 1]
         if isinstance(component1, Activity) and isinstance(component2, Activity):
             leg = create_leg(component1, component2)
-            plan.day.insert(i+1, leg)
+            plan.day.insert(i + 1, leg)
             i += 1
         i += 1
 
@@ -202,7 +191,8 @@ def rename_external(plan: Plan, boundary: Polygon) -> None:
     """
     for act in plan.activities:
         if not boundary.contains(act.location.loc):
-            act.act = 'external'
+            act.act = "external"
+
 
 # helpers ###########################################
 
@@ -223,17 +213,17 @@ def link_plan(plan: Plan) -> None:
     leg_list = list(plan.legs)
 
     for i, p in enumerate(plan_list):
-        p.next = list_get(plan_list, i+1)
-        p.previous = list_get(plan_list, i-1)
+        p.next = list_get(plan_list, i + 1)
+        p.previous = list_get(plan_list, i - 1)
 
     for i, p in enumerate(act_list):
-        p.next_act = list_get(act_list, i+1)
-        p.previous_act = list_get(act_list, i-1)
+        p.next_act = list_get(act_list, i + 1)
+        p.previous_act = list_get(act_list, i - 1)
 
     for i, p in enumerate(leg_list):
         p.start_hour = p.start_time.hour
-        p.next_leg = list_get(leg_list, i+1)
-        p.previous_leg = list_get(leg_list, i-1)
+        p.next_leg = list_get(leg_list, i + 1)
+        p.previous_leg = list_get(leg_list, i - 1)
         p.start_location = p.previous.location
         p.end_location = p.next.location
 

@@ -16,7 +16,8 @@ try:
     from Levenshtein import ratio
 except:
     raise ImportError(
-        "To use the pam.planner module, please install the full PAM version with pip install -e .[planner] .")
+        "To use the pam.planner module, please install the full PAM version with pip install -e .[planner] ."
+    )
 
 
 def _levenshtein_distance(a: str, b: str) -> float:
@@ -32,15 +33,13 @@ def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
     """
     levenshtein_distance = np.vectorize(_levenshtein_distance)
     if n_cores == 1:
-        distances = levenshtein_distance(
-            np.array(x).reshape(-1, 1), np.array(y))
+        distances = levenshtein_distance(np.array(x).reshape(-1, 1), np.array(y))
     else:
         xs = np.array_split(x, n_cores)
         xs = [x.reshape(-1, 1) for x in xs]
         calc_levenshtein_matrix_partial = partial(levenshtein_distance, b=y)
         with Pool(n_cores) as p:
-            distances = np.concatenate(
-                p.map(calc_levenshtein_matrix_partial, xs))
+            distances = np.concatenate(p.map(calc_levenshtein_matrix_partial, xs))
 
     return distances
 
@@ -48,14 +47,11 @@ def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
 class PlanClusters:
     """
     Groups activity plans into clusters.
-    Plan similarity is defined using the edit distance 
+    Plan similarity is defined using the edit distance
         of character-encoded plan sequences.
     """
-    def __init__(
-        self,
-        population: Population,
-        n_cores: int = 1
-    ) -> None:
+
+    def __init__(self, population: Population, n_cores: int = 1) -> None:
         self.population = population
         self.plans = list(population.plans())
         self.n_cores = n_cores
@@ -63,11 +59,8 @@ class PlanClusters:
         self.model = None
 
         # encodings
-        self.activity_classes = sorted(
-            list(population.activity_classes) + ['travel']
-        )
-        self.plans_encoder = PlansCharacterEncoder(
-            activity_classes=self.activity_classes)
+        self.activity_classes = sorted(list(population.activity_classes) + ["travel"])
+        self.plans_encoder = PlansCharacterEncoder(activity_classes=self.activity_classes)
 
     @property
     @lru_cache()
@@ -80,8 +73,7 @@ class PlanClusters:
         Levenshtein distances between activity plans.
         """
         if self._distances is None:
-            self._distances = calc_levenshtein_matrix(
-                self.plans_encoded, self.plans_encoded, n_cores=self.n_cores)
+            self._distances = calc_levenshtein_matrix(self.plans_encoded, self.plans_encoded, n_cores=self.n_cores)
         return self._distances
 
     @property
@@ -91,10 +83,10 @@ class PlanClusters:
         return dist
 
     def fit(
-            self,
-            n_clusters: int,
-            clustering_method: str = 'agglomerative',
-            linkage: Optional[str] = 'complete',
+        self,
+        n_clusters: int,
+        clustering_method: str = "agglomerative",
+        linkage: Optional[str] = "complete",
     ) -> None:
         """
         Fit an agglomerative clustering model.
@@ -104,19 +96,16 @@ class PlanClusters:
         :param clustering_method: The clustering method to use.
             The currently-supported methods are 'agglomerative' and 'spectral'.
         """
-        if clustering_method == 'agglomerative':
+        if clustering_method == "agglomerative":
             model = AgglomerativeClustering(
                 n_clusters=n_clusters,
                 linkage=linkage,
-                affinity='precomputed'  # change argument to "metric" for sklearn version>=1.4
+                affinity="precomputed",  # change argument to "metric" for sklearn version>=1.4
             )
             model.fit((self.distances))
-        elif clustering_method == 'spectral':
-            model = SpectralClustering(
-                n_clusters=n_clusters,
-                affinity='precomputed'
-            )
-            model.fit((1-self.distances))
+        elif clustering_method == "spectral":
+            model = SpectralClustering(n_clusters=n_clusters, affinity="precomputed")
+            model.fit((1 - self.distances))
         else:
             raise ValueError("Please select a valid clustering_method ('agglomerative' or 'spectral')")
 
@@ -136,9 +125,7 @@ class PlanClusters:
 
         :param cluster: The cluster index.
         """
-        return list(
-            itertools.compress(self.plans, self.model.labels_ == cluster)
-        )
+        return list(itertools.compress(self.plans, self.model.labels_ == cluster))
 
     def get_cluster_sizes(self) -> pd.Series:
         """
@@ -155,13 +142,7 @@ class PlanClusters:
         ids = [(hid, pid) for hid, pid, person in self.population.people()]
         return dict(zip(ids, self.model.labels_))
 
-    def plot_plan_breakdowns(
-            self,
-            ax=None,
-            cluster=None,
-            activity_classes: Optional[List[str]] = None,
-            **kwargs
-    ):
+    def plot_plan_breakdowns(self, ax=None, cluster=None, activity_classes: Optional[List[str]] = None, **kwargs):
         """
         Area plot of the breakdown of activities taking place every minute
             for a specific cluster.
@@ -174,12 +155,7 @@ class PlanClusters:
         if activity_classes is None:
             activity_classes = self.activity_classes
 
-        return plot_activity_breakdown_area(
-            plans=plans,
-            activity_classes=self.activity_classes,
-            ax=ax,
-            **kwargs
-        )
+        return plot_activity_breakdown_area(plans=plans, activity_classes=self.activity_classes, ax=ax, **kwargs)
 
     def plot_plan_breakdowns_tiles(self, n: Optional[int] = None, **kwargs):
         """
@@ -190,12 +166,6 @@ class PlanClusters:
             n = len(set(self.model.labels_))
 
         clusters = self.get_cluster_sizes().head(n).index
-        plans = {
-            cluster: self.get_cluster_plans(cluster) for cluster in clusters
-        }
+        plans = {cluster: self.get_cluster_plans(cluster) for cluster in clusters}
 
-        return plot_activity_breakdown_area_tiles(
-            plans=plans,
-            activity_classes=self.activity_classes,
-            **kwargs
-        )
+        return plot_activity_breakdown_area_tiles(plans=plans, activity_classes=self.activity_classes, **kwargs)

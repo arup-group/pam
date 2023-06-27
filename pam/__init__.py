@@ -18,6 +18,7 @@ class PAMTimesValidationError(PAMValidationError):
     """
     Custom exception raised for an Activity Plan Time validation Error.
     """
+
     pass
 
 
@@ -25,6 +26,7 @@ class PAMInvalidStartTimeError(PAMTimesValidationError):
     """
     Custom exception raised for an Activity Plan Time validation Error.
     """
+
     pass
 
 
@@ -32,6 +34,7 @@ class PAMInvalidTimeSequenceError(PAMTimesValidationError):
     """
     Custom exception raised for an Activity Plan Time validation Error.
     """
+
     pass
 
 
@@ -39,6 +42,7 @@ class PAMInvalidEndTimeError(PAMTimesValidationError):
     """
     Custom exception raised for an Activity Plan Time validation Error.
     """
+
     pass
 
 
@@ -56,6 +60,7 @@ class PAMVehicleIdError(PAMValidationError):
     """
 
     pass
+
 
 class InvalidMATSimError(PAMValidationError):
     """

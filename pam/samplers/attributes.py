@@ -1,5 +1,6 @@
 import random
 
+
 def bin_integer_transformer(features, target, bins, default=None):
     """
     Bin a target integer feature based on bins. Where bins are a dict, with keys as
@@ -9,14 +10,14 @@ def bin_integer_transformer(features, target, bins, default=None):
     """
     value = features.get(target)
     if value is None:
-            raise KeyError(f"Can not find target key: {target} in sampling features: {features}")
+        raise KeyError(f"Can not find target key: {target} in sampling features: {features}")
     for (lower, upper), new_value in bins.items():
         if lower < int(value) <= upper:
             return new_value
     return default
 
 
-def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False, seed:int=None):
+def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False, seed: int = None):
     """
     Randomly sample from a joint distribution based some discrete features.
 

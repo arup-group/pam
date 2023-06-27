@@ -13,6 +13,7 @@ from mkdocs.structure.files import File, Files
 
 class AddAPIPluginConfig(mkdocs.config.base.Config):
     """Enable the plugin configuration options."""
+
     package_dir = config_options.Type(str)  # directory in which the source code is placed.
     api_dir = config_options.Type(
         str, default="api"

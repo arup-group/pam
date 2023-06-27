@@ -14,12 +14,15 @@ from pam.variables import START_OF_DAY
 # according to gzip manpage
 DEFAULT_GZIP_COMPRESSION = 6
 
+
 def parse_time(time):
     if isinstance(time, int) or isinstance(time, np.int64):
         return minutes_to_datetime(time)
     if isinstance(time, str):
         return datetime_string_to_datetime(time)
-    raise UserWarning(f"Cannot parse {time} of type {type(time)} that is not int (assuming minutes) or str (%Y-%m-%d %H:%M:%S)")
+    raise UserWarning(
+        f"Cannot parse {time} of type {type(time)} that is not int (assuming minutes) or str (%Y-%m-%d %H:%M:%S)"
+    )
 
 
 def minutes_to_datetime(minutes: int):
@@ -30,7 +33,7 @@ def minutes_to_datetime(minutes: int):
     """
     days, remainder = divmod(minutes, 24 * 60)
     hours, minutes = divmod(remainder, 60)
-    return datetime(1900, 1, 1+days, hours, minutes)
+    return datetime(1900, 1, 1 + days, hours, minutes)
 
 
 def minutes_to_timedelta(minutes: int):
@@ -60,7 +63,7 @@ def datetime_to_matsim_time(dt):
     return timedelta_to_matsim_time(dt - START_OF_DAY)
 
 
-def matsim_time_to_datetime(string : str) -> datetime:
+def matsim_time_to_datetime(string: str) -> datetime:
     """
     Convert matsim format time (08:27:33) to datetime.
     Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
@@ -99,7 +102,7 @@ def safe_strptime(mt):
     if hh > 23 then adds a day
     """
     h, m, s = mt.split(":")
-    return START_OF_DAY + timedelta(hours = int(h), minutes = int(m), seconds = int(s))
+    return START_OF_DAY + timedelta(hours=int(h), minutes=int(m), seconds=int(s))
 
 
 def timedelta_to_hours(td):
@@ -125,8 +128,10 @@ def get_linestring(from_point, to_point):
         to_point = Point(to_point.lng().degrees, to_point.lat().degrees)
 
     if not all(isinstance(p, Point) for p in [from_point, to_point]):
-        raise TypeError(f'You need to pass points of type {type(Point)} or {type(CellId)}.'
-                        f'Types passed: type(from_point)={type(from_point)} and type(to_point)={type(to_point)}')
+        raise TypeError(
+            f"You need to pass points of type {type(Point)} or {type(CellId)}."
+            f"Types passed: type(from_point)={type(from_point)} and type(to_point)={type(to_point)}"
+        )
     return LineString([from_point, to_point])
 
 
@@ -182,11 +187,17 @@ def get_tag(target, tag):
     TODO Not working with iterparse, generated elem also have ns which is dealt with later
     """
     nsmap = {}
-    doc = etree.iterparse(target, events=('end', 'start-ns',))
+    doc = etree.iterparse(
+        target,
+        events=(
+            "end",
+            "start-ns",
+        ),
+    )
     count = 0
     for event, element in doc:
         count += 1
-        if event == 'start-ns':
+        if event == "start-ns":
             nsmap[element[0]] = element[1]
         if count == 10:  # assume namespace declared at top so can break early
             del doc
@@ -194,7 +205,7 @@ def get_tag(target, tag):
     if not nsmap:
         return tag
     else:
-        tag = '{' + nsmap[''] + '}' + tag
+        tag = "{" + nsmap[""] + "}" + tag
         return tag
 
 
@@ -205,10 +216,10 @@ def strip_namespace(elem):
     :return: xml element
     """
     if elem.tag.startswith("{"):
-        elem.tag = elem.tag.split('}', 1)[1]  # strip namespace
+        elem.tag = elem.tag.split("}", 1)[1]  # strip namespace
     for k in elem.attrib.keys():
         if k.startswith("{"):
-            k2 = k.split('}', 1)[1]
+            k2 = k.split("}", 1)[1]
             elem.attrib[k2] = elem.attrib[k]
             del elem.attrib[k]
     for child in elem:
@@ -217,8 +228,10 @@ def strip_namespace(elem):
 
 def create_crs_attribute(coordinate_reference_system):
     """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS"""
-    attributes_element = et.Element('attributes')
-    crs_attribute = et.SubElement(attributes_element, 'attribute', {'class': 'java.lang.String', 'name': 'coordinateReferenceSystem'})
+    attributes_element = et.Element("attributes")
+    crs_attribute = et.SubElement(
+        attributes_element, "attribute", {"class": "java.lang.String", "name": "coordinateReferenceSystem"}
+    )
     crs_attribute.text = str(coordinate_reference_system)
     return attributes_element
 
@@ -238,9 +251,5 @@ def create_local_dir(directory):
 
 
 def xml_tree(content):
-    tree = etree.tostring(content,
-                       pretty_print=True,
-                       xml_declaration=False,
-                       encoding='UTF-8')
+    tree = etree.tostring(content, pretty_print=True, xml_declaration=False, encoding="UTF-8")
     return tree
-

@@ -10,9 +10,8 @@ from pam.planner.utils_planner import sample_weighted
 def population_planner_choice(population_no_args):
     for hid, pid, person in population_no_args.people():
         for act in person.activities:
-            act.location.area = 'a'
+            act.location.area = "a"
     return population_no_args
-
 
 
 @pytest.fixture
@@ -26,56 +25,37 @@ def choice_model_mnl(population_planner_choice, od, data_zones) -> ChoiceModel:
 
 
 def test_zones_are_aligned(population_planner_choice, od, data_zones):
-    choice_model = ChoiceModel(population_planner_choice, od, data_zones.loc[['b', 'a']])
+    choice_model = ChoiceModel(population_planner_choice, od, data_zones.loc[["b", "a"]])
     zones_destination = choice_model.od.labels.destination_zones
     zones_index = list(choice_model.zones.data.index)
     assert zones_destination == zones_index
 
 
-@pytest.mark.parametrize('var', ['time', 'distance'])
-@pytest.mark.parametrize('zone', ['a', 'b'])
+@pytest.mark.parametrize("var", ["time", "distance"])
+@pytest.mark.parametrize("zone", ["a", "b"])
 def test_choice_set_reads_od_correctly(choice_model, var, zone):
-    choice_model.configure(
-        u=f"""1 / od['{var}', '{zone}']""",
-        scope="""act.act=='work'"""
-    )
+    choice_model.configure(u=f"""1 / od['{var}', '{zone}']""", scope="""act.act=='work'""")
     choice_set = choice_model.get_choice_set()
-    assert choice_set.choice_labels == [
-        ('a', 'car'), ('a', 'bus'), ('b', 'car'), ('b', 'bus')
-    ]
+    assert choice_set.choice_labels == [("a", "car"), ("a", "bus"), ("b", "car"), ("b", "bus")]
     for choice in choice_set.u_choices:
-        np.testing.assert_array_equal(
-            choice,
-            1 / choice_model.od[var, zone].flatten()
-        )
+        np.testing.assert_array_equal(choice, 1 / choice_model.od[var, zone].flatten())
 
 
 def test_list_parameters_correspond_to_modes(choice_model):
     """
-    When utility parameters are passed as a list, 
+    When utility parameters are passed as a list,
         they should be applied to each respective mode.
     """
     asc = [0, 10]  # 0 should be applied to car, 10 to bus
-    choice_model.configure(
-        u=f"""{asc} + od['time', 'b']""",
-        scope="""True"""
-    )
+    choice_model.configure(u=f"""{asc} + od['time', 'b']""", scope="""True""")
     choice_set = choice_model.get_choice_set()
     u_choices = choice_set.u_choices
     choice_labels = choice_set.choice_labels
-    idx_car = [i for (i, (zone, trmode)) in enumerate(
-        choice_labels) if trmode == 'car']
-    idx_bus = [i for (i, (zone, trmode)) in enumerate(
-        choice_labels) if trmode == 'bus']
+    idx_car = [i for (i, (zone, trmode)) in enumerate(choice_labels) if trmode == "car"]
+    idx_bus = [i for (i, (zone, trmode)) in enumerate(choice_labels) if trmode == "bus"]
 
-    np.testing.assert_equal(
-        u_choices[0, idx_car],
-        choice_model.od['time', 'b', :, 'car']
-    )
-    np.testing.assert_equal(
-        u_choices[0, idx_bus],
-        10 + choice_model.od['time', 'b', :, 'bus']
-    )
+    np.testing.assert_equal(u_choices[0, idx_car], choice_model.od["time", "b", :, "car"])
+    np.testing.assert_equal(u_choices[0, idx_bus], 10 + choice_model.od["time", "b", :, "bus"])
 
 
 def test_get_probabilities_along_dimension(choice_model):
@@ -83,23 +63,16 @@ def test_get_probabilities_along_dimension(choice_model):
         u=f"""1 / od['time', 'b']""",
         scope="""True""",
         func_probabilities=lambda x: x / sum(x),
-        func_sampling=sample_weighted
+        func_sampling=sample_weighted,
     )
     choices = choice_model.get_choice_set().u_choices
     probs = choice_model.selections.probabilities
     assert (probs.sum(axis=1) == 1).all()
-    np.testing.assert_almost_equal(
-        choices / choices.sum(1).reshape(-1, 1),
-        probs
-    )
+    np.testing.assert_almost_equal(choices / choices.sum(1).reshape(-1, 1), probs)
 
 
 def test_apply_once_per_agent_same_locations(choice_model_mnl):
-    choice_model_mnl.configure(
-        u=f"""1 / od['time', 'b']""",
-        scope="""True""",
-        func_probabilities=lambda x: x / sum(x)
-    )
+    choice_model_mnl.configure(u=f"""1 / od['time', 'b']""", scope="""True""", func_probabilities=lambda x: x / sum(x))
 
     def assert_single_location(population_planner_choice):
         for hid, pid, person in population_planner_choice.people():
@@ -122,22 +95,19 @@ def test_nonset_config_attribute_valitation_raise_error():
     config = ChoiceConfiguration()
 
     with pytest.raises(ValueError):
-        config.validate(['u', 'scope'])
+        config.validate(["u", "scope"])
 
-    config.u = '1'
-    config.scope = 'True'
-    config.validate(['u', 'scope'])
+    config.u = "1"
+    config.scope = "True"
+    config.validate(["u", "scope"])
 
 
 def test_model_checks_config_requirements(mocker, choice_model_mnl):
-    mocker.patch.object(ChoiceConfiguration, 'validate')
-    choice_model_mnl.configure(
-        u=f"""1 / od['time', 'a']""",
-        scope="""act.act=='work'"""
-    )
+    mocker.patch.object(ChoiceConfiguration, "validate")
+    choice_model_mnl.configure(u=f"""1 / od['time', 'a']""", scope="""act.act=='work'""")
 
     choice_model_mnl.get_choice_set()
-    ChoiceConfiguration.validate.assert_called_once_with(['u', 'scope'])
+    ChoiceConfiguration.validate.assert_called_once_with(["u", "scope"])
 
 
 def test_utility_calculation(choice_model_mnl):
@@ -156,11 +126,6 @@ def test_utility_calculation(choice_model_mnl):
     choice_model_mnl.configure(u=u, scope=scope)
 
     np.testing.assert_almost_equal(
-        np.array([
-            0.8420680743952365,
-            -1.2579319256047636,
-            0.11932694661921461,
-            -2.0306730533807857
-        ]),
+        np.array([0.8420680743952365, -1.2579319256047636, 0.11932694661921461, -2.0306730533807857]),
         choice_model_mnl.get_choice_set().u_choices[0],
     )

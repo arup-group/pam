@@ -15,23 +15,23 @@ import numpy as np
 import pickle
 from types import GeneratorType
 
-class FacilitySampler:
 
+class FacilitySampler:
     def __init__(
         self,
         facilities: gp.GeoDataFrame,
         zones: gp.GeoDataFrame,
-        activities: list=None,
-        build_xml: bool=True,
-        fail: bool=True,
-        random_default: bool=True,
-        weight_on: str=None,
-        max_walk: float=None,
-        transit_modes: list=None,
-        expected_euclidean_speeds: dict=None,
-        activity_areas_path: str=None,
-        seed: int=None
-        ):
+        activities: list = None,
+        build_xml: bool = True,
+        fail: bool = True,
+        random_default: bool = True,
+        weight_on: str = None,
+        max_walk: float = None,
+        transit_modes: list = None,
+        expected_euclidean_speeds: dict = None,
+        activity_areas_path: str = None,
+        seed: int = None,
+    ):
         """
         Sampler object for facilities. optionally build a facility xml output (for MATSim).
         Note that if a zone id is missing then the sampler will not be able to default to
@@ -61,7 +61,9 @@ class FacilitySampler:
 
         ## overrides for transit mode and speed specifications
         self.TRANSIT_MODES = transit_modes if transit_modes is not None else variables.TRANSIT_MODES
-        self.EXPECTED_EUCLIDEAN_SPEEDS = expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
+        self.EXPECTED_EUCLIDEAN_SPEEDS = (
+            expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
+        )
 
         # spatial join
         if activity_areas_path is None:
@@ -71,7 +73,7 @@ class FacilitySampler:
             self.load_activity_areas(activity_areas_path)
 
         # build samplers
-        self.samplers = self.build_facilities_sampler(self.activity_areas_dict, weight_on = weight_on, max_walk = max_walk)
+        self.samplers = self.build_facilities_sampler(self.activity_areas_dict, weight_on=weight_on, max_walk=max_walk)
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -82,7 +84,6 @@ class FacilitySampler:
         self.facilities = {}
         self.index_counter = 0
         self.error_counter = 0
-
 
     def clear(self):
         self.facilities = {}
@@ -97,14 +98,18 @@ class FacilitySampler:
         :params shapely.Point previous_loc: the location of the last visited activity
         """
 
-        idx, loc = self.sample_facility(location_idx, activity, mode=mode, previous_duration=previous_duration, previous_loc=previous_loc)
+        idx, loc = self.sample_facility(
+            location_idx, activity, mode=mode, previous_duration=previous_duration, previous_loc=previous_loc
+        )
 
         if idx is not None and self.build_xml:
-            self.facilities[idx] = {'loc': loc, 'act': activity}
+            self.facilities[idx] = {"loc": loc, "act": activity}
 
         return loc
 
-    def sample_facility(self, location_idx, activity, patience=1000, mode=None, previous_duration=None, previous_loc=None):
+    def sample_facility(
+        self, location_idx, activity, patience=1000, mode=None, previous_duration=None, previous_loc=None
+    ):
         """
         Sample a facility id and location. If a location idx is missing, can return a random location.
         """
@@ -115,8 +120,8 @@ class FacilitySampler:
                 self.index_counter += 1
                 return idx, self.random_sampler.sample(location_idx, activity)
             if self.fail:
-                raise IndexError(f'Cannot find idx: {location_idx} in facilities sampler')
-            self.logger.warning(f'Missing location idx:{location_idx}')
+                raise IndexError(f"Cannot find idx: {location_idx} in facilities sampler")
+            self.logger.warning(f"Missing location idx:{location_idx}")
             return None, None
 
         sampler = self.samplers[location_idx][activity]
@@ -132,8 +137,8 @@ class FacilitySampler:
                 return idx, self.random_sampler.sample(location_idx, activity)
             elif self.fail:
                 raise UserWarning(
-            f'Cannot find activity: {activity} in location: {location_idx}, consider allowing random default.'
-            )
+                    f"Cannot find activity: {activity} in location: {location_idx}, consider allowing random default."
+                )
             else:
                 return None, None
         else:
@@ -148,7 +153,7 @@ class FacilitySampler:
         Spatially join facility and zone data
         """
         self.logger.warning("Joining facilities data to zones, this may take a while.")
-        activity_areas = gp.sjoin(facilities, zones, how='inner', predicate='intersects')
+        activity_areas = gp.sjoin(facilities, zones, how="inner", predicate="intersects")
         return activity_areas
 
     def activity_areas_indexing(self, activity_areas):
@@ -156,8 +161,8 @@ class FacilitySampler:
         Convert joined zone-activities gdf to a nested dictionary for faster indexing
         The first index level refers to zones, while the second to activity purposes.
         """
-        activity_areas_dict = {x:{} for x in activity_areas['index_right'].unique()}
-        for (zone, act), facility_data in activity_areas.groupby(['index_right', 'activity']):
+        activity_areas_dict = {x: {} for x in activity_areas["index_right"].unique()}
+        for (zone, act), facility_data in activity_areas.groupby(["index_right", "activity"]):
             activity_areas_dict[zone][act] = facility_data
 
         return activity_areas_dict
@@ -166,17 +171,17 @@ class FacilitySampler:
         """
         Export the spatially joined facilities-zones geodataframe
         """
-        with open(filepath, 'wb') as f:
+        with open(filepath, "wb") as f:
             pickle.dump(self.activity_areas_dict, f)
 
     def load_activity_areas(self, filepath):
         """
         Load the spatially joined facilities-zones geodataframe
         """
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             self.activity_areas_dict = pickle.load(f)
 
-    def build_facilities_sampler(self, activity_areas, weight_on = None, max_walk = None):
+    def build_facilities_sampler(self, activity_areas, weight_on=None, max_walk=None):
         """
         Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
@@ -199,25 +204,30 @@ class FacilitySampler:
                     if weight_on is not None:
                         # weighted sampler
                         weights = facs[weight_on]
-                        transit_distance = facs['transit'] if max_walk is not None else None
-                        sampler_dict[zone][act] = inf_yielder(points, weights, transit_distance, max_walk, self.TRANSIT_MODES, self.EXPECTED_EUCLIDEAN_SPEEDS, seed=self.seed)
+                        transit_distance = facs["transit"] if max_walk is not None else None
+                        sampler_dict[zone][act] = inf_yielder(
+                            points,
+                            weights,
+                            transit_distance,
+                            max_walk,
+                            self.TRANSIT_MODES,
+                            self.EXPECTED_EUCLIDEAN_SPEEDS,
+                            seed=self.seed,
+                        )
                     else:
                         # simple sampler
-                        sampler_dict[zone][act] = inf_yielder(points,seed=self.seed)
+                        sampler_dict[zone][act] = inf_yielder(points, seed=self.seed)
                 else:
                     sampler_dict[zone][act] = None
         return sampler_dict
 
     def write_facilities_xml(self, path, comment=None, coordinate_reference_system=None):
-
         create_local_dir(os.path.dirname(path))
-    
+
         compression = DEFAULT_GZIP_COMPRESSION if is_gzip(path) else 0
         with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
             xf.write_declaration()
-            xf.write_doctype(
-                '<!DOCTYPE facilities SYSTEM "http://matsim.org/files/dtd/facilities_v1.dtd">'
-            )
+            xf.write_doctype('<!DOCTYPE facilities SYSTEM "http://matsim.org/files/dtd/facilities_v1.dtd">')
 
             with xf.element("facilities"):
                 if comment:
@@ -229,13 +239,9 @@ class FacilitySampler:
 
                 for i, data in self.facilities.items():
                     facility_xml = et.Element(
-                        'facility',
-                        {'id':str(i), "x" : str(data['loc'].x), "y" : str(data['loc'].y)}
-                        )
-                    act_xml = et.SubElement(
-                        facility_xml,
-                        'activity',
-                        {"type" : data['act']})
+                        "facility", {"id": str(i), "x": str(data["loc"].x), "y": str(data["loc"].y)}
+                    )
+                    act_xml = et.SubElement(facility_xml, "activity", {"type": data["act"]})
                     xf.write(facility_xml, pretty_print=True)
 
 
@@ -243,10 +249,18 @@ def euclidean_distance(p1, p2):
     """
     Calculate euclidean distance between two Activity.location.loc objects
     """
-    return ((p1.x-p2.x)**2 + (p1.y-p2.y)**2)**0.5
+    return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5
 
 
-def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None, transit_modes=None, expected_euclidean_speeds=None, seed:int=None):
+def inf_yielder(
+    candidates,
+    weights=None,
+    transit_distance=None,
+    max_walk=None,
+    transit_modes=None,
+    expected_euclidean_speeds=None,
+    seed: int = None,
+):
     """
     Redirect to the appropriate sampler.
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -255,22 +269,23 @@ def inf_yielder(candidates, weights = None, transit_distance=None, max_walk=None
     :params float max_walk: maximum walking distance from a PT stop
     """
     if isinstance(weights, pd.Series):
-        return lambda mode = None, previous_duration = None, previous_loc = None: inf_yielder_weighted(
-                candidates = candidates,
-                weights = weights,
-                transit_distance = transit_distance,
-                max_walk = max_walk,
-                transit_modes=transit_modes,
-                expected_euclidean_speeds=expected_euclidean_speeds,
-                mode = mode,
-                previous_duration = previous_duration,
-                previous_loc = previous_loc,
-                seed = seed
-            )
+        return lambda mode=None, previous_duration=None, previous_loc=None: inf_yielder_weighted(
+            candidates=candidates,
+            weights=weights,
+            transit_distance=transit_distance,
+            max_walk=max_walk,
+            transit_modes=transit_modes,
+            expected_euclidean_speeds=expected_euclidean_speeds,
+            mode=mode,
+            previous_duration=previous_duration,
+            previous_loc=previous_loc,
+            seed=seed,
+        )
     else:
-        return inf_yielder_simple(candidates, seed = seed)
+        return inf_yielder_simple(candidates, seed=seed)
 
-def inf_yielder_simple(candidates, seed:int = None):
+
+def inf_yielder_simple(candidates, seed: int = None):
     """
     Endlessly yield shuffled candidate items.
     """
@@ -281,7 +296,19 @@ def inf_yielder_simple(candidates, seed:int = None):
         for c in candidates:
             yield c
 
-def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transit_modes, expected_euclidean_speeds, mode, previous_duration, previous_loc, seed:int=None):
+
+def inf_yielder_weighted(
+    candidates,
+    weights,
+    transit_distance,
+    max_walk,
+    transit_modes,
+    expected_euclidean_speeds,
+    mode,
+    previous_duration,
+    previous_loc,
+    seed: int = None,
+):
     """
     A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
     :params list candidates: a list of tuples, containing candidate facilities and their index:
@@ -298,36 +325,41 @@ def inf_yielder_weighted(candidates, weights, transit_distance, max_walk, transi
     if isinstance(weights, pd.Series):
         # if a series of facility weights is provided, perform weighted sampling with replacement
         while True:
-
             ## if a transit mode is used and the distance from a stop is longer than the maximum walking distance,
             ## then replace the weight with a very small value
             if isinstance(transit_distance, pd.Series) and mode in transit_modes:
                 weights = np.where(
                     transit_distance > max_walk,
-                    weights * variables.SMALL_VALUE, # if no alternative is found within the acceptable range, the initial weights will be used
                     weights
+                    * variables.SMALL_VALUE,  # if no alternative is found within the acceptable range, the initial weights will be used
+                    weights,
                 )
             else:
                 weights = weights.values
 
             # if the last location has been passed to the sampler, normalise by (expected) distance
             if previous_loc is not None:
-
                 # calculate euclidean distance between the last visited location and every candidate location
                 distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
 
                 # calculate deviation from "expected" distance
-                speed = expected_euclidean_speeds[mode] if mode in expected_euclidean_speeds.keys() else expected_euclidean_speeds['average']
+                speed = (
+                    expected_euclidean_speeds[mode]
+                    if mode in expected_euclidean_speeds.keys()
+                    else expected_euclidean_speeds["average"]
+                )
                 expected_distance = (previous_duration / pd.Timedelta(seconds=1)) * speed  # (in meters)
                 distance_weights = np.abs(distances - expected_distance)
-                distance_weights = np.where(distance_weights==0, variables.SMALL_VALUE, distance_weights) # avoid having zero weights
+                distance_weights = np.where(
+                    distance_weights == 0, variables.SMALL_VALUE, distance_weights
+                )  # avoid having zero weights
 
                 ## normalise weights by distance
                 # weights = weights / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances
                 # weights = weights / np.exp(distance_weights/distance_weights.max())
                 # weights = weights / (1 + np.exp(1*(distance_weights - distance_weights.mean()))) # alternative formulation: logistic curve
                 # weights = weights / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve
-                weights = weights / (distance_weights ** 2) # distance decay factor of 2
+                weights = weights / (distance_weights**2)  # distance decay factor of 2
 
-            weights = weights / weights.sum() # probability weights should add up to 1
-            yield candidates[np.random.choice(len(candidates), p = weights)]
+            weights = weights / weights.sum()  # probability weights should add up to 1
+            yield candidates[np.random.choice(len(candidates), p=weights)]

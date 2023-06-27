@@ -6,20 +6,20 @@ from pam.operations import combine
 
 @pytest.fixture
 def path_population_A():
-    return os.path.join('tests', 'test_data', 'test_matsim_population_A.xml')
+    return os.path.join("tests", "test_data", "test_matsim_population_A.xml")
 
 
 @pytest.fixture
 def path_population_B():
-    return os.path.join('tests', 'test_data', 'test_matsim_population_B.xml')
+    return os.path.join("tests", "test_data", "test_matsim_population_B.xml")
 
 
 def test_combined_length(path_population_A, path_population_B):
-    """ Combined population size equates to the sum of the individual populations """
+    """Combined population size equates to the sum of the individual populations"""
     combined_pop = combine.pop_combine(
         [path_population_A, path_population_B],
         matsim_version=12,
-        )
+    )
     assert len(combined_pop) == 6
 
 
@@ -27,7 +27,6 @@ def test_combined_length(path_population_A, path_population_B):
 #     """ Test that the same ID's can't be repeated """
 #     combined_pop = combine.pop_combine(test_population_1, test_population_1)
 #     assert (no duplicate hid's)
-
 
 
 # def test_crop_xml(path_test_plan, path_boundary, tmp_path):

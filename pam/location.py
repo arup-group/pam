@@ -51,9 +51,7 @@ class Location:
             return self.link == other.link
         if self.area is not None and other.area is not None:
             return self.area == other.area
-        raise UserWarning(
-            "Cannot check for location equality without same loc types (areas/locs/links)."
-        )
+        raise UserWarning("Cannot check for location equality without same loc types (areas/locs/links).")
 
     def copy(self):
         return Location(loc=self.loc, link=self.link, area=self.area)

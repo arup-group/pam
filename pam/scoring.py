@@ -8,8 +8,8 @@ from pam.activity import Activity, Leg, Plan
 from pam.variables import TRANSIT_MODES
 from pam import utils
 
-class CharyparNagelPlanScorer:
 
+class CharyparNagelPlanScorer:
     example_config = {
         "default": {
             "mUM": 10,
@@ -25,7 +25,7 @@ class CharyparNagelPlanScorer:
                 "closingTime": "20:00:00",
                 "latestStartTime": "09:30:00",
                 "earliestEndTime": "16:00:00",
-                "minimalDuration": "01:00:00"
+                "minimalDuration": "01:00:00",
             },
             "home": {
                 "typicalDuration": "12:00:00",
@@ -42,11 +42,11 @@ class CharyparNagelPlanScorer:
                 "dailyUtilityConstant": -1,
                 "marginalUtilityOfDistance": -0.001,
                 "marginalUtilityOfTravelling": -1,
-                "monetaryDistanceRate": -0.0001
+                "monetaryDistanceRate": -0.0001,
             },
             "walk": {
                 "constant": -20,
-            }
+            },
         }
     }
 
@@ -57,17 +57,12 @@ class CharyparNagelPlanScorer:
         self.logger = logging.getLogger(__name__)
         self.cnfg = cnfg
 
-    def score_person(
-        self,
-        person : Person,
-        subpopulation : str = "subpopulation",
-        plan_costs : Optional[float] = None
-        ):
+    def score_person(self, person: Person, subpopulation: str = "subpopulation", plan_costs: Optional[float] = None):
         """
         Score a pam.core.Person Plan
 
         Args:
-            person (Person): 
+            person (Person):
             subpopulation (str): person attribute name for subpopulation, Defaults to "subpopulation".
             plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.
         """
@@ -75,12 +70,7 @@ class CharyparNagelPlanScorer:
         cnfg = self.cnfg[subpop]
         return self.score_plan(person.plan, plan_cost=plan_costs, cnfg=cnfg)
 
-    def score_plan(
-        self,
-        plan: Plan,
-        cnfg: dict,
-        plan_cost: Optional[float] = None
-        ) -> float:
+    def score_plan(self, plan: Plan, cnfg: dict, plan_cost: Optional[float] = None) -> float:
         """
         Score a pam.activity.Plan
 
@@ -92,12 +82,14 @@ class CharyparNagelPlanScorer:
         Returns:
             float: Charypar-Nagel score
         """
-        return self.score_plan_activities(plan, cnfg) \
-            + self.score_plan_legs(plan, cnfg) \
-            + self.score_plan_monetary_cost(plan_cost, cnfg) \
+        return (
+            self.score_plan_activities(plan, cnfg)
+            + self.score_plan_legs(plan, cnfg)
+            + self.score_plan_monetary_cost(plan_cost, cnfg)
             + self.score_plan_daily(plan, cnfg)
+        )
 
-    def summary(self, person, subpopulation='subpopulation'):
+    def summary(self, person, subpopulation="subpopulation"):
         print(f"Total plan score: {self.score_person(person)}")
         config = self.cnfg[person.attributes[subpopulation]]
         print(f"Total activities score: {self.score_plan_activities(person.plan, cnfg=config)}")
@@ -110,7 +102,7 @@ class CharyparNagelPlanScorer:
                 print()
                 print(f"({i}) Activity: {component.act}")
                 print(f"\tDuration: {component.duration}")
-                if component.act in ['pt interaction', 'pt_interaction']:
+                if component.act in ["pt interaction", "pt_interaction"]:
                     continue
                 print(f"\tScore: {self.score_activity(component, cnfg=config)}")
                 print(f"\tDuration_score: {self.duration_score(component, cnfg=config)}")
@@ -139,8 +131,9 @@ class CharyparNagelPlanScorer:
         return sum([self.score_day_mode_use(mode, cnfg) for mode in modes])
 
     def score_day_mode_use(self, mode, cnfg) -> float:
-        return cnfg[mode].get("dailyUtilityConstant", 0) \
-            + (cnfg[mode].get("dailyMonetaryConstant", 0) * cnfg.get("mUM", 1))
+        return cnfg[mode].get("dailyUtilityConstant", 0) + (
+            cnfg[mode].get("dailyMonetaryConstant", 0) * cnfg.get("mUM", 1)
+        )
 
     def score_plan_activities(self, plan, cnfg):
         activities = list(plan.activities)
@@ -150,36 +143,46 @@ class CharyparNagelPlanScorer:
             # if the first and last activity are not of the same type
             # then the activities are not wrapped
             # see https://github.com/matsim-org/matsim-libs/blob/77536f9f05ff70b69bdf54f19604f5732d81949c/matsim/src/main/java/org/matsim/core/scoring/functions/CharyparNagelActivityScoring.java#L241-L265
-            score = sum([self.score_activity(act, cnfg) for act in activities if act.act not in ["pt interaction", "pt_interaction"]])
+            score = sum(
+                [
+                    self.score_activity(act, cnfg)
+                    for act in activities
+                    if act.act not in ["pt interaction", "pt_interaction"]
+                ]
+            )
         else:
             wrapped_activity, other_activities = self.activities_wrapper(activities)
-            score = self.score_activity(wrapped_activity, cnfg) \
-                + sum([self.score_activity(act, cnfg) for act in other_activities if act.act not in ["pt interaction", "pt_interaction"]])
+            score = self.score_activity(wrapped_activity, cnfg) + sum(
+                [
+                    self.score_activity(act, cnfg)
+                    for act in other_activities
+                    if act.act not in ["pt interaction", "pt_interaction"]
+                ]
+            )
 
         return score
 
     def activities_wrapper(self, activities):
         non_wrapped = activities[1:-1]
         wrapped_act = Activity(
-            act=activities[0].act,
-            start_time=activities[-1].start_time,
-            end_time=activities[0].end_time + td(days=1)
+            act=activities[0].act, start_time=activities[-1].start_time, end_time=activities[0].end_time + td(days=1)
         )
         return wrapped_act, non_wrapped
 
     def score_activity(self, activity, cnfg):
-        return sum([
-            self.duration_score(activity, cnfg),
-            self.waiting_score(activity, cnfg),
-            self.late_arrival_score(activity, cnfg),
-            self.early_departure_score(activity, cnfg)
-        ])
+        return sum(
+            [
+                self.duration_score(activity, cnfg),
+                self.waiting_score(activity, cnfg),
+                self.late_arrival_score(activity, cnfg),
+                self.early_departure_score(activity, cnfg),
+            ]
+        )
 
     def score_plan_legs(self, plan, cnfg):
-        return self.score_pt_interchanges(plan, cnfg) \
-             + sum([self.score_leg(leg, cnfg) for leg in plan.legs])
+        return self.score_pt_interchanges(plan, cnfg) + sum([self.score_leg(leg, cnfg) for leg in plan.legs])
 
-    def score_pt_interchanges(self, plan : Plan, cnfg : dict) -> float:
+    def score_pt_interchanges(self, plan: Plan, cnfg: dict) -> float:
         """
         Calculates utility of line switch.
         """
@@ -189,9 +192,9 @@ class CharyparNagelPlanScorer:
         in_transit = 0
         for i in plan:
             if isinstance(i, Activity):
-                if i.act not in ['pt interaction', 'pt_interaction']:
+                if i.act not in ["pt interaction", "pt_interaction"]:
                     if in_transit > 0:
-                        in_transit -= 1 # the first PT vehicle does not incur a line switch penalty
+                        in_transit -= 1  # the first PT vehicle does not incur a line switch penalty
                     transits.append(in_transit)
                     in_transit = 0
             elif isinstance(i, Leg):
@@ -202,12 +205,14 @@ class CharyparNagelPlanScorer:
         return cost
 
     def score_leg(self, leg, cnfg):
-        return sum([
-            self.pt_waiting_time_score(leg, cnfg),
-            self.mode_constant_score(leg, cnfg),
-            self.travel_time_score(leg, cnfg),
-            self.travel_distance_score(leg, cnfg)
-        ])
+        return sum(
+            [
+                self.pt_waiting_time_score(leg, cnfg),
+                self.mode_constant_score(leg, cnfg),
+                self.travel_time_score(leg, cnfg),
+                self.travel_distance_score(leg, cnfg),
+            ]
+        )
 
     def duration_score(self, activity, cnfg) -> float:
         prio = 1
@@ -237,7 +242,7 @@ class CharyparNagelPlanScorer:
         if actual_end_time < actual_start_time or actual_start_time > actual_end_time:
             duration = 0
         else:
-            duration = (actual_end_time - actual_start_time) / td(hours = 1)
+            duration = (actual_end_time - actual_start_time) / td(hours=1)
 
         if duration < typical_dur / np.e:
             return (duration * np.e - typical_dur) * performing
@@ -254,44 +259,34 @@ class CharyparNagelPlanScorer:
         opening_dt = utils.matsim_time_to_datetime(opening_time)
         start_dt = activity.start_time
         if start_dt.time() < opening_dt.time():
-            return waiting * ((opening_dt - start_dt)  / td(hours = 1))
+            return waiting * ((opening_dt - start_dt) / td(hours=1))
         return 0.0
 
     def late_arrival_score(self, activity, cnfg) -> float:
         if cnfg[activity.act].get("latestStartTime") is not None and cnfg.get("lateArrival"):
-            latest_start_time = utils.matsim_time_to_datetime(
-                cnfg[activity.act]["latestStartTime"]
-                )
+            latest_start_time = utils.matsim_time_to_datetime(cnfg[activity.act]["latestStartTime"])
             if activity.start_time.time() > latest_start_time.time():
-                return cnfg["lateArrival"] \
-                    * ((activity.start_time - latest_start_time) / td(hours = 1))
+                return cnfg["lateArrival"] * ((activity.start_time - latest_start_time) / td(hours=1))
         return 0.0
 
     def early_departure_score(self, activity, cnfg) -> float:
-        if cnfg[activity.act].get("earliestEndTime") is not None \
-        and cnfg.get("earlyDeparture"):
-            earliest_end_time = utils.matsim_time_to_datetime(
-                cnfg[activity.act]["earliestEndTime"]
-                )
+        if cnfg[activity.act].get("earliestEndTime") is not None and cnfg.get("earlyDeparture"):
+            earliest_end_time = utils.matsim_time_to_datetime(cnfg[activity.act]["earliestEndTime"])
             if activity.end_time.time() < earliest_end_time.time():
-                return cnfg["earlyDeparture"] \
-                    * ((earliest_end_time - activity.end_time) / td(hours = 1))
+                return cnfg["earlyDeparture"] * ((earliest_end_time - activity.end_time) / td(hours=1))
         return 0.0
 
     def too_short_score(self, activity, cnfg) -> float:
-        if cnfg[activity.act].get("minimalDuration") \
-            and cnfg.get("earlyDeparture"):
-            minimal_duration = utils.matsim_duration_to_hours(
-                cnfg[activity.act]["minimalDuration"]
-                )
+        if cnfg[activity.act].get("minimalDuration") and cnfg.get("earlyDeparture"):
+            minimal_duration = utils.matsim_duration_to_hours(cnfg[activity.act]["minimalDuration"])
             if activity.hours < minimal_duration:
-                return cnfg['earlyDeparture'] * (minimal_duration - activity.hours)
+                return cnfg["earlyDeparture"] * (minimal_duration - activity.hours)
         return 0.0
 
     def pt_waiting_time_score(self, leg, cnfg):
         print("BT", leg.boarding_time)
         if cnfg.get("waitingPt") and leg.boarding_time:
-            waiting = (leg.boarding_time - leg.start_time) / td(hours = 1)
+            waiting = (leg.boarding_time - leg.start_time) / td(hours=1)
             if waiting > 0:
                 return cnfg["waitingPt"] * waiting
         return 0.0
@@ -302,9 +297,11 @@ class CharyparNagelPlanScorer:
     def travel_time_score(self, leg, cnfg) -> float:
         duration = leg.hours
         if cnfg.get("waitingPt") and leg.boarding_time:
-            duration -= ((leg.boarding_time - leg.start_time) / td(hours = 1))
+            duration -= (leg.boarding_time - leg.start_time) / td(hours=1)
         return duration * cnfg[leg.mode].get("marginalUtilityOfTravelling", 0.0)
 
     def travel_distance_score(self, leg, cnfg) -> float:
-        return leg.distance * (cnfg[leg.mode].get("marginalUtilityOfDistance", 0.0) \
-             + (cnfg.get("mUM", 1.0) * cnfg[leg.mode].get("monetaryDistanceRate", 0.0)))
+        return leg.distance * (
+            cnfg[leg.mode].get("marginalUtilityOfDistance", 0.0)
+            + (cnfg.get("mUM", 1.0) * cnfg[leg.mode].get("monetaryDistanceRate", 0.0))
+        )

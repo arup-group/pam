@@ -7,20 +7,18 @@ from pam.core import Population, Household
 from pam.read import load_travel_diary, load_pickle
 from pam.utils import parse_time
 
-test_trips_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
-)
-test_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
-)
+test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))
+test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv"))
 
 
 testdata = [
     (0, datetime(1900, 1, 1, 0, 0)),
     (1, datetime(1900, 1, 1, 0, 1)),
     (60, datetime(1900, 1, 1, 1, 0)),
-    ('1900-01-01 13:00:00', datetime(1900, 1, 1, 13, 0)),
+    ("1900-01-01 13:00:00", datetime(1900, 1, 1, 13, 0)),
 ]
+
+
 @pytest.mark.parametrize("a,expected", testdata)
 def test_time_parse(a, expected):
     assert parse_time(a) == expected
@@ -53,31 +51,31 @@ def test_load_from_paths():
 def test_agent_pid_0_simple_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[0].people[0].activities]
-    assert acts == ['home', 'work', 'home']
+    assert acts == ["home", "work", "home"]
 
 
 def test_agent_pid_1_simple_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[0].people[1].activities]
-    assert acts == ['home', 'work', 'home', 'other', 'home']
+    assert acts == ["home", "work", "home", "other", "home"]
 
 
 def test_agent_pid_2_simple_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[0].people[2].activities]
-    assert acts == ['home', 'work', 'home', 'work', 'home']
+    assert acts == ["home", "work", "home", "work", "home"]
 
 
 def test_agent_pid_3_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[1].people[3].activities]
-    assert acts == ['home', 'work', 'shop', 'work', 'home']
+    assert acts == ["home", "work", "shop", "work", "home"]
 
 
 def test_agent_pid_4_complex_tour(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[1].people[4].activities]
-    assert acts == ['home', 'work', 'work', 'work', 'work', 'home']
+    assert acts == ["home", "work", "work", "work", "work", "home"]
 
 
 def test_crop_last_act(person_crop_last_act):
@@ -93,7 +91,7 @@ def test_crop_last_leg(person_crop_last_leg):
 def test_infer_home_activity_idxs_simple(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     person = population.households[0].people[2]
-    assert person.plan.infer_activity_idxs(target=person.home) == {0,4,8}
+    assert person.plan.infer_activity_idxs(target=person.home) == {0, 4, 8}
 
 
 def test_infer_home_activity_idxs_mid_plan(test_trips, test_attributes):
@@ -117,57 +115,57 @@ def test_infer_home_activity_idxs_missing(test_trips, test_attributes):
 def test_infer_home_activity_idxs_longest(test_trips, test_attributes):
     population = load_travel_diary(test_trips, test_attributes)
     person = population.households[19].people[22]
-    assert person.plan.infer_activity_idxs(target=person.home) == {0,6}
+    assert person.plan.infer_activity_idxs(target=person.home) == {0, 6}
 
 
 def test_pickle_population(person_crop_last_act, tmpdir):
     population = Population()
-    hh = Household('1')
+    hh = Household("1")
     hh.add(person_crop_last_act)
     population.add(hh)
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     population.pickle(path)
     assert os.path.exists(path)
 
 
 def test_load_pickle_population(person_crop_last_act, tmpdir):
     population = Population()
-    hh = Household('1')
+    hh = Household("1")
     hh.add(person_crop_last_act)
     population.add(hh)
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     population.pickle(path)
     loaded = load_pickle(path)
     assert loaded.households
-    assert list(loaded.households['1'].people) == list(population.households['1'].people)
+    assert list(loaded.households["1"].people) == list(population.households["1"].people)
 
 
 def test_pickle_household(person_crop_last_act, tmpdir):
-    hh = Household('1')
+    hh = Household("1")
     hh.add(person_crop_last_act)
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     hh.pickle(path)
     assert os.path.exists(path)
 
 
 def test_load_pickle_household(person_crop_last_act, tmpdir):
-    hh = Household('1')
+    hh = Household("1")
     hh.add(person_crop_last_act)
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     hh.pickle(path)
     loaded = load_pickle(path)
     assert loaded.people
-    assert list(loaded.people['1'].attributes) == list(hh.people['1'].attributes)
+    assert list(loaded.people["1"].attributes) == list(hh.people["1"].attributes)
 
 
 def test_pickle_person(person_crop_last_act, tmpdir):
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     person_crop_last_act.pickle(path)
     assert os.path.exists(path)
 
 
 def test_load_pickle_person(person_crop_last_act, tmpdir):
-    path = os.path.join(tmpdir, 'test.pkl')
+    path = os.path.join(tmpdir, "test.pkl")
     person_crop_last_act.pickle(path)
     loaded = load_pickle(path)
     assert loaded.plan.day

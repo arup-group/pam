@@ -12,32 +12,62 @@ def benchmarks(population):
     bms = [
         (
             "mode_counts.csv",
-            {'dimensions': ['mode'], 'data_fields': ['freq'], 'colnames': ['mode', 'trips'], 'aggfunc': [sum]}
-            ),
+            {"dimensions": ["mode"], "data_fields": ["freq"], "colnames": ["mode", "trips"], "aggfunc": [sum]},
+        ),
         (
             "distances.csv",
-            {'dimensions': ['euclidean_distance_category'], 'data_fields': ['freq'], 'colnames': ['distance', 'trips'], 'aggfunc': [sum]}
-            ),
+            {
+                "dimensions": ["euclidean_distance_category"],
+                "data_fields": ["freq"],
+                "colnames": ["distance", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
         (
             "mode_distances.csv",
-            {'dimensions': ['mode', 'euclidean_distance_category'], 'data_fields': ['freq'], 'colnames': ['mode', 'distance', 'trips'], 'aggfunc': [sum]}
-            ),
+            {
+                "dimensions": ["mode", "euclidean_distance_category"],
+                "data_fields": ["freq"],
+                "colnames": ["mode", "distance", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
         (
             "durations.csv",
-            {'dimensions': ['duration_category'], 'data_fields': ['freq'], 'colnames': ['duration', 'trips'], 'aggfunc': [sum]}
-            ),
+            {
+                "dimensions": ["duration_category"],
+                "data_fields": ["freq"],
+                "colnames": ["duration", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
         (
             "mode_durations.csv",
-            {'dimensions': ['mode', 'duration_category'], 'data_fields': ['freq'], 'colnames': ['mode', 'duration', 'trips'], 'aggfunc': [sum]}
-            ),
+            {
+                "dimensions": ["mode", "duration_category"],
+                "data_fields": ["freq"],
+                "colnames": ["mode", "duration", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
         (
             "departure_times.csv",
-            {'dimensions': ['departure_hour'], 'data_fields': ['freq'], 'colnames': ['departure_hour', 'trips'], 'aggfunc': [sum]}
-            ),
+            {
+                "dimensions": ["departure_hour"],
+                "data_fields": ["freq"],
+                "colnames": ["departure_hour", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
         (
             "mode_purposes.csv",
-            {'dimensions': ['mode', 'purp'], 'data_fields': ['freq'], 'colnames': ['mode', 'purpose', 'trips'], 'aggfunc': [sum]}
-            )
+            {
+                "dimensions": ["mode", "purp"],
+                "data_fields": ["freq"],
+                "colnames": ["mode", "purpose", "trips"],
+                "aggfunc": [sum],
+            },
+        ),
     ]
     trips = population.trips_df()
     for path, kwargs in bms:
@@ -46,11 +76,11 @@ def benchmarks(population):
 
 def create_benchmark(
     data,
-    dimensions : Optional[List[str]] = None,
-    data_fields : Optional[List[str]] = None,
-    aggfunc : List[Callable]= [len],
-    normalise_by = None,
-    colnames = None,
+    dimensions: Optional[List[str]] = None,
+    data_fields: Optional[List[str]] = None,
+    aggfunc: List[Callable] = [len],
+    normalise_by=None,
+    colnames=None,
 ):
     """
     Extract user-specified benchmarks from the population
@@ -74,15 +104,15 @@ def create_benchmark(
 
     ## show as percentages
     if normalise_by != None:
-        if normalise_by == 'total':
-            df = df / df.sum(axis = 0)
+        if normalise_by == "total":
+            df = df / df.sum(axis=0)
         else:
-            df = df.groupby(level = normalise_by).transform(lambda x: x / x.sum())
+            df = df.groupby(level=normalise_by).transform(lambda x: x / x.sum())
     df = df.sort_index().reset_index()
 
     ## flatten column MultiIndex
     if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.map('_'.join).str.strip('_')
+        df.columns = df.columns.map("_".join).str.strip("_")
 
     ## rename columns
     if colnames != None:
@@ -97,22 +127,23 @@ def mode_counts(population):
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['mode'],
-        data_fields= ['freq'],
-        colnames = ['mode', 'trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["mode"],
+        data_fields=["freq"],
+        colnames=["mode", "trips"],
+        aggfunc=[sum],
+    )
+
 
 def distance_counts(population):
     # number of trips by (euclidean) distance category
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['euclidean_distance_category'],
-        data_fields= ['freq'],
-        colnames = ['distance', 'trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["euclidean_distance_category"],
+        data_fields=["freq"],
+        colnames=["distance", "trips"],
+        aggfunc=[sum],
+    )
 
 
 def mode_distance_counts(population):
@@ -120,11 +151,11 @@ def mode_distance_counts(population):
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['mode','euclidean_distance_category'],
-        data_fields= ['freq'],
-        colnames = ['mode','distance', 'trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["mode", "euclidean_distance_category"],
+        data_fields=["freq"],
+        colnames=["mode", "distance", "trips"],
+        aggfunc=[sum],
+    )
 
 
 def duration_counts(population):
@@ -132,11 +163,11 @@ def duration_counts(population):
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['duration_category'],
-        data_fields= ['freq'],
-        colnames = ['duration', 'trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["duration_category"],
+        data_fields=["freq"],
+        colnames=["duration", "trips"],
+        aggfunc=[sum],
+    )
 
 
 def mode_duration_counts(population):
@@ -144,11 +175,11 @@ def mode_duration_counts(population):
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['mode','duration_category'],
-        data_fields= ['freq'],
-        colnames = ['mode','duration','trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["mode", "duration_category"],
+        data_fields=["freq"],
+        colnames=["mode", "duration", "trips"],
+        aggfunc=[sum],
+    )
 
 
 def departure_time_counts(population):
@@ -156,21 +187,16 @@ def departure_time_counts(population):
     data = population.trips_df()
     return create_benchmark(
         data,
-        dimensions = ['departure_hour'],
-        data_fields= ['freq'],
-        colnames = ['departure_hour', 'trips'],
-        aggfunc = [sum],
-        )
+        dimensions=["departure_hour"],
+        data_fields=["freq"],
+        colnames=["departure_hour", "trips"],
+        aggfunc=[sum],
+    )
 
 
 def mode_purpose_counts(population):
     # purpose split for each mode
     data = population.trips_df()
     return create_benchmark(
-        data,
-        dimensions = ['mode','purp'],
-        data_fields= ['freq'],
-        colnames = ['mode','purpose','trips'],
-        aggfunc = [sum]
-        )
-
+        data, dimensions=["mode", "purp"], data_fields=["freq"], colnames=["mode", "purpose", "trips"], aggfunc=[sum]
+    )

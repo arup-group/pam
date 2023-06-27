@@ -3,12 +3,7 @@ from copy import deepcopy
 from pam.samplers.basic import freq_sample
 
 
-def sample(
-    population: Population,
-    sample: float,
-    seed: int=None,
-    verbose: bool=False
-    ) -> Population:
+def sample(population: Population, sample: float, seed: int = None, verbose: bool = False) -> Population:
     """
     Sample a new population from the existing using a sample size, eg 0.1 for a 10% sample.
     Returns a new pam.core.Population object with households sampled based on input freq.
@@ -28,16 +23,12 @@ def sample(
     """
 
     sampled_population = Population()
-    sample_freq = int(1/sample)
+    sample_freq = int(1 / sample)
     size = population.size * sample
     sampled = 0
 
     for _, hh in population:
-        sampled_count = freq_sample(
-            freq = hh.freq,
-            sample = sample,
-            seed = seed
-        )
+        sampled_count = freq_sample(freq=hh.freq, sample=sample, seed=seed)
 
         for n in range(sampled_count):  # add sampled hhs (note we provide new unique hid)
             sampled_hh = deepcopy(hh)
@@ -57,7 +48,7 @@ def sample(
         if verbose:
             sampled += sampled_count
             progress = sampled / size
-            if progress%0.01 == 0:
+            if progress % 0.01 == 0:
                 print(f"Sampled approx. {progress*100}%")
 
     if verbose:

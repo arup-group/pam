@@ -9,19 +9,19 @@ from pam.location import Location
 from pam.plot import plans as plot
 import pam.utils as utils
 import pam.variables
-from pam import PAMInvalidStartTimeError, PAMInvalidTimeSequenceError, PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, InvalidMATSimError
+from pam import (
+    PAMInvalidStartTimeError,
+    PAMInvalidTimeSequenceError,
+    PAMSequenceValidationError,
+    PAMTimesValidationError,
+    PAMValidationLocationsError,
+    InvalidMATSimError,
+)
 from pam.variables import END_OF_DAY
 
 
 class Plan:
-
-    def __init__(
-        self,
-        home_area=None,
-        home_location: Optional[Location] = None,
-        home_loc=None,
-        freq=None
-        ):
+    def __init__(self, home_area=None, home_location: Optional[Location] = None, home_loc=None, freq=None):
         self.day = []
         if home_location:
             self.home_location = home_location
@@ -41,7 +41,7 @@ class Plan:
             return self.home_location
         if self.day:
             for act in self.activities:
-                if act.act is not None and act.act.lower()[:4] == 'home':
+                if act.act is not None and act.act.lower()[:4] == "home":
                     return act.location
         # self.logger.warning( "failed to find home, return area at start of day")  # too much logging!
         return self.day[0].location
@@ -74,18 +74,18 @@ class Plan:
                     distance += component.distance
                 elif component.act not in ignore:
                     yield Trip(
-                        seq = seq,
-                        mode = max(modes, key=modes.get),
-                        start_area = start_location.area,
-                        end_area = component.location.area,
-                        start_link = start_location.link,
-                        end_link = component.location.link,
-                        start_loc = start_location.loc,
-                        end_loc = component.location.loc,
-                        start_time = start_time,
-                        end_time = component.start_time,
-                        distance = distance,
-                        purp = component.act,
+                        seq=seq,
+                        mode=max(modes, key=modes.get),
+                        start_area=start_location.area,
+                        end_area=component.location.area,
+                        start_link=start_location.link,
+                        end_link=component.location.link,
+                        start_loc=start_location.loc,
+                        end_loc=component.location.loc,
+                        start_time=start_time,
+                        end_time=component.start_time,
+                        distance=distance,
+                        purp=component.act,
                     )
                     modes = {}
                     start_location = component.location
@@ -134,7 +134,7 @@ class Plan:
 
     @property
     def home_based(self):
-        return self.first.lower() == 'home'
+        return self.first.lower() == "home"
 
     @property
     def length(self):
@@ -156,7 +156,7 @@ class Plan:
         tours = []
         tour = []
         for act in self.activities:
-            if act.act == 'home':
+            if act.act == "home":
                 if tour:
                     tours.append(tour)
                 tour = []
@@ -170,7 +170,7 @@ class Plan:
         """
         Reverse iterate through plan, yield idx and component.
         """
-        for i in range(self.length-1, -1, -1):
+        for i in range(self.length - 1, -1, -1):
             yield i, self[i]
 
     def __len__(self):
@@ -261,7 +261,7 @@ class Plan:
         :return: bool
         """
         for i in range(self.length - 1):
-            if not self.day[i].end_time == self.day[i+1].start_time:
+            if not self.day[i].end_time == self.day[i + 1].start_time:
                 return False
         return True
 
@@ -285,11 +285,11 @@ class Plan:
             component = self.day[i]
 
             if isinstance(component, Activity):
-                if not component.location == self.day[i-1].end_location:
+                if not component.location == self.day[i - 1].end_location:
                     return False
 
             elif isinstance(component, Leg):
-                if not component.start_location == self.day[i-1].location:
+                if not component.start_location == self.day[i - 1].location:
                     return False
 
         return True
@@ -327,7 +327,7 @@ class Plan:
             raise PAMValidationLocationsError()
         return True
 
-    def position_of(self, target='home', search='last'):
+    def position_of(self, target="home", search="last"):
         """
         Return position of target activity type (either first or last depending on search).
         Return None if not found.
@@ -336,14 +336,14 @@ class Plan:
         :return: {int, None}
         """
 
-        if search == 'last':
+        if search == "last":
             last = None
             for seq, act in enumerate(self.day):
                 if act.act.lower() == target:
                     last = seq
             return last
 
-        if search == 'first':
+        if search == "first":
             for seq, act in enumerate(self.day):
                 if act.act.lower() == target:
                     return seq
@@ -375,13 +375,13 @@ class Plan:
 
         # crop plan that is out of sequence
         for idx in range(1, self.length):
-            if self[idx].start_time < self[idx-1].end_time:
+            if self[idx].start_time < self[idx - 1].end_time:
                 self.logger.debug(f"Cropping plan components")
                 self.day = self.day[:idx]
                 break
             if self[idx].start_time > self[idx].end_time:
                 self.logger.debug(f"Cropping plan components")
-                self.day = self.day[:idx+1]
+                self.day = self.day[: idx + 1]
                 break
 
         # deal with last component
@@ -397,18 +397,18 @@ class Plan:
         Force plan component time consistency.
         """
         for i in range(self.length - 1):
-            self.day[i+1].start_time = self.day[i].end_time
+            self.day[i + 1].start_time = self.day[i].end_time
 
     def fix_location_consistency(self):
         """
         Force plan locations consistency by adjusting leg locations.
         """
-        for i in range(1, self.length-1):
+        for i in range(1, self.length - 1):
             component = self.day[i]
 
             if isinstance(component, Leg):
-                component.start_location = copy(self.day[i-1].location)
-                component.end_location = copy(self.day[i+1].location)
+                component.start_location = copy(self.day[i - 1].location)
+                component.end_location = copy(self.day[i + 1].location)
 
     def closed_duration(self, idx):
         """
@@ -439,12 +439,12 @@ class Plan:
                     exclude.add(prev_act_idx)
 
         for idx, act in enumerate(self.activities):
-            if act.location == target and (idx*2) not in exclude:
-                candidates.add(idx*2)
+            if act.location == target and (idx * 2) not in exclude:
+                candidates.add(idx * 2)
 
         if default and not candidates:  # assume first activity (and last if closed)
             if self.closed:
-                return set([0, self.length-1])
+                return set([0, self.length - 1])
             return set([0])
 
         return candidates
@@ -456,23 +456,23 @@ class Plan:
         the backward. The next activity type is set based on the trip purpose. Pass forward is exhausted
         first, because it's assumed that this is how the diary is originally filled in.
         """
-        #find home activities
+        # find home activities
         home_idxs = self.infer_activity_idxs(target=self.home)
         for idx in home_idxs:
-            self.day[idx].act = 'home'
+            self.day[idx].act = "home"
 
         area_map = {}
         remaining = set(range(0, self.length, 2)) - set(home_idxs)
 
         # forward traverse
-        queue = [idx+2 for idx in home_idxs if idx+2 < self.length]  # add next act idxs to queue\
+        queue = [idx + 2 for idx in home_idxs if idx + 2 < self.length]  # add next act idxs to queue\
         last_act = None
 
         while queue:  # traverse from home
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purp.lower()
+                act = self.day[idx - 1].purp.lower()
                 location = str(self.day[idx].location.min)
 
                 if act == last_act and location in area_map:
@@ -483,8 +483,8 @@ class Plan:
                 last_act = act
                 area_map[location] = act
 
-                if idx+2 in remaining:
-                    queue.append(idx+2)
+                if idx + 2 in remaining:
+                    queue.append(idx + 2)
 
         queue = []
         for location, activity in area_map.items():
@@ -493,14 +493,14 @@ class Plan:
                 if idx in remaining:
                     self.day[idx].act = activity
                     remaining -= {idx}
-                    if idx+2 in remaining:
-                        queue.append(idx+2)
+                    if idx + 2 in remaining:
+                        queue.append(idx + 2)
 
         while queue:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx-1].purp.lower()
+                act = self.day[idx - 1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -511,8 +511,8 @@ class Plan:
                 last_act = act
                 area_map[location] = act
 
-                if idx+2 < self.length:
-                    queue.append(idx+2)
+                if idx + 2 < self.length:
+                    queue.append(idx + 2)
 
         # backward traverse
         queue = list(remaining)  # add next act idxs to queue
@@ -521,7 +521,7 @@ class Plan:
             idx = queue.pop()
 
             if self.day[idx].act is None:
-                act = self.day[idx+1].purp.lower()
+                act = self.day[idx + 1].purp.lower()
                 location = self.day[idx].location.min
 
                 if act == last_act and location in area_map:
@@ -532,16 +532,16 @@ class Plan:
                 last_act = act
                 area_map[location] = act
 
-                if idx-2 >= 0:
-                    queue.append(idx-2)
+                if idx - 2 >= 0:
+                    queue.append(idx - 2)
 
     def finalise_activity_end_times(self):
         """
         Add activity end times based on start time of next activity.
         """
         if len(self.day) > 1:
-            for seq in range(0, len(self.day)-1, 2):  # activities excluding last one
-                self.day[seq].end_time = self.day[seq+1].start_time
+            for seq in range(0, len(self.day) - 1, 2):  # activities excluding last one
+                self.day[seq].end_time = self.day[seq + 1].start_time
         self.day[-1].end_time = pam.variables.END_OF_DAY
 
     def set_leg_purposes(self):
@@ -551,7 +551,7 @@ class Plan:
         """
         for seq, component in enumerate(self):
             if isinstance(component, Leg):
-                for j in range(seq+1, len(self.day)-1, 2):
+                for j in range(seq + 1, len(self.day) - 1, 2):
                     act = self.day[j].act
                     if not act == "pt interaction":
                         self.day[seq].purp = act
@@ -563,8 +563,8 @@ class Plan:
         """
         for seq, component in enumerate(self):
             if isinstance(component, Leg):
-                self.day[seq].start_location = self.day[seq-1].location
-                self.day[seq].end_location = self.day[seq+1].location
+                self.day[seq].start_location = self.day[seq - 1].location
+                self.day[seq].end_location = self.day[seq + 1].location
 
     def clear(self):
         self.day = []
@@ -597,7 +597,7 @@ class Plan:
             if self.length == 1:  # all activities have been removed
                 self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, now empty")
                 return None, None
-            return self.length-2, 1
+            return self.length - 2, 1
 
         if seq == 0:  # remove first activity
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, first activity")
@@ -607,25 +607,25 @@ class Plan:
         if seq == self.length - 1:  # remove last activity
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, last activity")
             self.day.pop(seq)
-            return self.length-2, None
+            return self.length - 2, None
 
         else:  # remove activity somewhere in middle of plan
             self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}")
             self.day.pop(seq)
-            return seq-2, seq+1
+            return seq - 2, seq + 1
 
-    def move_activity(self, seq, default='home', new_mode='walk'):
+    def move_activity(self, seq, default="home", new_mode="walk"):
         """
         Changes Activity location and associated journeys
         :param seq:
-		:param default: 'home' or pam.activity.Location
-		:param new_mode: access/egress journey switching to this mode. Ie 'walk'
+                :param default: 'home' or pam.activity.Location
+                :param new_mode: access/egress journey switching to this mode. Ie 'walk'
         :return: None
         """
         assert isinstance(self.day[seq], Activity)
 
         # decide on the new location
-        if default == 'home':
+        if default == "home":
             new_location = self.home
         else:
             assert isinstance(default, Location)
@@ -644,7 +644,7 @@ class Plan:
             self.day[seq + 1].start_location = new_location
             self.mode_shift(seq + 1, new_mode)
 
-    def fill_plan(self, idx_start, idx_end, default='home'):
+    def fill_plan(self, idx_start, idx_end, default="home"):
         """
         Fill a plan after Activity has been removed. Plan is filled between given remaining
         activity locations (idx_start and idx_end). Note that the plan will also have legs that
@@ -671,11 +671,8 @@ class Plan:
             return True
 
         if idx_start == idx_end:  # this is a single remaining activity -> stay at home
-
-            if self.position_of(target='home') is None:
-                raise ValueError(
-                    "Require home activity"
-                )
+            if self.position_of(target="home") is None:
+                raise ValueError("Require home activity")
             self.stay_at_home()
             return True
 
@@ -707,7 +704,7 @@ class Plan:
             self.day.pop(0)  # remove start leg
             self.day.pop(-1)  # remove end leg
 
-            pivot_idx = self.position_of(target='home')
+            pivot_idx = self.position_of(target="home")
             if pivot_idx is None:
                 self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
                 self.stay_at_home()
@@ -729,11 +726,11 @@ class Plan:
         # todo this isn't great - just pushes other activities to edges of day
 
         new_time = pam.utils.minutes_to_datetime(0)
-        for seq in range(pivot_idx+1):  # push forward pivot and all proceeding components
+        for seq in range(pivot_idx + 1):  # push forward pivot and all proceeding components
             new_time = self.day[seq].shift_start_time(new_time)
 
         new_time = pam.variables.END_OF_DAY
-        for seq in range(self.length-1, pivot_idx, -1):  # push back all subsequent components
+        for seq in range(self.length - 1, pivot_idx, -1):  # push back all subsequent components
             new_time = self.day[seq].shift_end_time(new_time)
 
         self.day[pivot_idx].end_time = new_time  # expand pivot
@@ -746,13 +743,13 @@ class Plan:
         :return:
         """
         self.day[idx_start + 1].end_location = self.day[idx_end - 1].end_location
-        self.day[idx_start + 1].purp= self.day[idx_end - 1].purp
+        self.day[idx_start + 1].purp = self.day[idx_end - 1].purp
         self.day.pop(idx_end - 1)  # remove second leg
 
         # todo add logic to change mode and time of leg
 
         # press plans away from pivoting activity
-        pivot_idx = self.position_of(target='home')
+        pivot_idx = self.position_of(target="home")
         if pivot_idx is None:
             self.logger.warning(f"Unable to find home activity, changing plan to stay at home")
             self.stay_at_home()
@@ -791,7 +788,7 @@ class Plan:
         self.day = [
             Activity(
                 seq=1,
-                act='home',
+                act="home",
                 area=self.home.area,
                 start_time=pam.utils.minutes_to_datetime(0),
                 end_time=pam.variables.END_OF_DAY,
@@ -807,15 +804,15 @@ class Plan:
         for idx, component in list(self.reversed()):
             if component.act == "pt interaction":  # this is a pt trip
                 if not pt_trip:  # this is a new pt leg
-                    trip_end_time = self[idx+1].end_time
-                    trip_end_location = self[idx+1].end_location
+                    trip_end_time = self[idx + 1].end_time
+                    trip_end_location = self[idx + 1].end_location
 
                 pt_trip = True
-                self.day.pop(idx+1)
+                self.day.pop(idx + 1)
                 self.day.pop(idx)
             else:
                 if pt_trip:  # this is the start of the pt trip - modify the first leg
-                    self[idx].mode = 'pt'
+                    self[idx].mode = "pt"
                     self[idx].end_time = trip_end_time
                     self[idx].end_location = trip_end_location
                 pt_trip = False
@@ -824,15 +821,21 @@ class Plan:
         """
         Get the total duration of home activities.
         """
-        #total time spent at home
+        # total time spent at home
         home_duration = timedelta(0)
         for plan in self.day:
-            if plan.act=='home':
-                home_duration+=plan.duration
+            if plan.act == "home":
+                home_duration += plan.duration
 
         return home_duration
 
-    def mode_shift(self, seq, new_mode='walk', mode_speed = {'car':37, 'bus':10, 'walk':4, 'cycle': 14, 'pt':23, 'rail':37}, update_duration = False):
+    def mode_shift(
+        self,
+        seq,
+        new_mode="walk",
+        mode_speed={"car": 37, "bus": 10, "walk": 4, "cycle": 14, "pt": 23, "rail": 37},
+        update_duration=False,
+    ):
         """
         Changes mode for a leg, along with any legs in the same tour.
         Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
@@ -850,32 +853,37 @@ class Plan:
         tour = self.get_leg_tour(seq)
         for seq, plan in enumerate(self.day):
             if isinstance(plan, Leg):
-                act_from = self.day[seq-1]
-                act_to = self.day[seq+1]
+                act_from = self.day[seq - 1]
+                act_to = self.day[seq + 1]
                 for other_act in tour:
-                    #if any of the trip ends belongs in the tour change the mode
+                    # if any of the trip ends belongs in the tour change the mode
                     if act_from.is_exact(other_act) or act_to.is_exact(other_act):
                         if update_duration:
-                            shift_duration = ((mode_speed[plan.mode] / mode_speed[new_mode]) * plan.duration) - plan.duration #calculate any trip duration changes due to mode shift
-                        plan.mode = new_mode #change mode
+                            shift_duration = (
+                                (mode_speed[plan.mode] / mode_speed[new_mode]) * plan.duration
+                            ) - plan.duration  # calculate any trip duration changes due to mode shift
+                        plan.mode = new_mode  # change mode
                         if update_duration:
-                            self.change_duration(seq=seq, shift_duration=shift_duration) #change the duration of the trip
+                            self.change_duration(
+                                seq=seq, shift_duration=shift_duration
+                            )  # change the duration of the trip
 
         if update_duration:
-            #adjust home activities time in order fit revised legs/activities within a 24hr day
+            # adjust home activities time in order fit revised legs/activities within a 24hr day
             home_duration = self.get_home_duration()
-            home_duration_factor = (self.day[-1].end_time - END_OF_DAY)/home_duration #factor to adjust home activity time by
+            home_duration_factor = (
+                self.day[-1].end_time - END_OF_DAY
+            ) / home_duration  # factor to adjust home activity time by
 
             for seq, plan in enumerate(self.day):
-                if plan.act=='home':
-                    shift_duration = -home_duration_factor*plan.duration
-                    shift_duration = timedelta(seconds=round(shift_duration/timedelta(seconds=1))) #round to second
-                    self.change_duration(seq=seq,shift_duration=shift_duration)
+                if plan.act == "home":
+                    shift_duration = -home_duration_factor * plan.duration
+                    shift_duration = timedelta(seconds=round(shift_duration / timedelta(seconds=1)))  # round to second
+                    self.change_duration(seq=seq, shift_duration=shift_duration)
 
-            #make sure the last activity ends in the end of day (ie remove potential rounding errors)
+            # make sure the last activity ends in the end of day (ie remove potential rounding errors)
             if self.day[-1].end_time != END_OF_DAY:
                 self.day[-1].end_time = END_OF_DAY
-
 
     def change_duration(self, seq, shift_duration):
         """
@@ -886,14 +894,13 @@ class Plan:
         :return: None
         """
 
-        #change leg duration
+        # change leg duration
         self.day[seq].end_time = self.day[seq].end_time + shift_duration
 
-        #shift all subsequent legs and activities
-        for idx in range(seq+1, len(self.day)):
+        # shift all subsequent legs and activities
+        for idx in range(seq + 1, len(self.day)):
             start_time = self.day[idx].start_time
             self.day[idx].shift_start_time(start_time + shift_duration)
-
 
     def get_leg_tour(self, seq):
         """
@@ -904,8 +911,8 @@ class Plan:
         """
         assert isinstance(self.day[seq], Leg)
 
-        act_from = self.day[seq-1]
-        act_to = self.day[seq+1]
+        act_from = self.day[seq - 1]
+        act_to = self.day[seq + 1]
 
         for tour in self.activity_tours():
             for tour_act in tour:
@@ -914,7 +921,6 @@ class Plan:
 
 
 class PlanComponent:
-
     @property
     def duration(self):
         return self.end_time - self.start_time
@@ -962,29 +968,30 @@ class PlanComponent:
 
 
 class Activity(PlanComponent):
-
     def __init__(
-            self,
-            seq=None,
-            act=None,
-            area=None,
-            link=None,
-            loc=None,
-            start_time=None,
-            end_time=None,
-            freq=None,
+        self,
+        seq=None,
+        act=None,
+        area=None,
+        link=None,
+        loc=None,
+        start_time=None,
+        end_time=None,
+        freq=None,
     ):
         self.seq = seq
         self.act = act
         self.location = Location(loc=loc, link=link, area=area)
         self.start_time = start_time
         self.end_time = end_time
-        self.freq=freq
+        self.freq = freq
 
     def __str__(self):
-        return f"Activity(act:{self.act}, location:{self.location}, " \
-               f"time:{self.start_time.time()} --> {self.end_time.time()}, " \
-               f"duration:{self.duration})"
+        return (
+            f"Activity(act:{self.act}, location:{self.location}, "
+            f"time:{self.start_time.time()} --> {self.end_time.time()}, "
+            f"duration:{self.duration})"
+        )
 
     def __eq__(self, other):
         """
@@ -993,8 +1000,12 @@ class Activity(PlanComponent):
         return (self.location == other.location) and (self.act == other.act)
 
     def is_exact(self, other):
-        return (self.location == other.location) and (self.act == other.act) \
-               and (self.start_time == other.start_time) and (self.end_time == other.end_time)
+        return (
+            (self.location == other.location)
+            and (self.act == other.act)
+            and (self.start_time == other.start_time)
+            and (self.end_time == other.end_time)
+        )
 
     def isin_exact(self, activities: list):
         for other in activities:
@@ -1013,25 +1024,25 @@ class Activity(PlanComponent):
 
 
 class Leg(PlanComponent):
-    act = 'travel'
+    act = "travel"
 
     def __init__(
-            self,
-            seq=None,
-            mode=None,
-            start_area=None,
-            end_area=None,
-            start_link=None,
-            end_link=None,
-            start_loc=None,
-            end_loc=None,
-            start_time=None,
-            end_time=None,
-            distance=None,
-            purp=None,
-            freq=None,
-            attributes={},
-            route=None,
+        self,
+        seq=None,
+        mode=None,
+        start_area=None,
+        end_area=None,
+        start_link=None,
+        end_link=None,
+        start_loc=None,
+        end_loc=None,
+        start_time=None,
+        end_time=None,
+        distance=None,
+        purp=None,
+        freq=None,
+        attributes={},
+        route=None,
     ):
         self.seq = seq
         self.purp = purp
@@ -1050,15 +1061,19 @@ class Leg(PlanComponent):
             self.route = Route()
 
     def __str__(self):
-        return f"Leg(mode:{self.mode}, area:{self.start_location} --> " \
-               f"{self.end_location}, time:{self.start_time.time()} --> {self.end_time.time()}, " \
-               f"duration:{self.duration})"
+        return (
+            f"Leg(mode:{self.mode}, area:{self.start_location} --> "
+            f"{self.end_location}, time:{self.start_time.time()} --> {self.end_time.time()}, "
+            f"duration:{self.duration})"
+        )
 
     def __eq__(self, other):
-        return self.start_location == other.start_location and \
-               self.end_location == other.end_location and \
-               self.mode == other.mode and \
-               self.duration == other.duration
+        return (
+            self.start_location == other.start_location
+            and self.end_location == other.end_location
+            and self.mode == other.mode
+            and self.duration == other.duration
+        )
 
     @property
     def distance(self):
@@ -1074,7 +1089,10 @@ class Leg(PlanComponent):
         # calculate leg euclidean distance in km:
         # todo prefer this be in m, not km, (see above) but unsure of implications elsewhere
         # assumes grid definition of Location class
-        return ((self.end_location.loc.x-self.start_location.loc.x)**2 + (self.end_location.loc.y-self.start_location.loc.y)**2)**0.5 / 1000
+        return (
+            (self.end_location.loc.x - self.start_location.loc.x) ** 2
+            + (self.end_location.loc.y - self.start_location.loc.y) ** 2
+        ) ** 0.5 / 1000
 
     @property
     def service_id(self):
@@ -1163,7 +1181,6 @@ class Route:
 
 
 class RouteV11(Route):
-
     def __init__(self, xml_elem) -> None:
         super().__init__(xml_elem)
 
@@ -1171,16 +1188,15 @@ class RouteV11(Route):
     def is_transit(self) -> bool:
         return self.type == "experimentalPt1"
 
-
     @property
     def transit(self) -> dict:
         if self.is_transit:
-            pt_details = self.xml.text.split('===')
+            pt_details = self.xml.text.split("===")
             return {
                 "accessFacilityId": pt_details[1],
                 "transitLineId": pt_details[2],
                 "transitRouteId": pt_details[3],
-                "egressFacilityId": pt_details[4]
+                "egressFacilityId": pt_details[4],
             }
         return {}
 
