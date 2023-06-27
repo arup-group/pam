@@ -1680,25 +1680,24 @@
 
 
 <h1 id="modelling-the-impact-of-policies-on-populations">Modelling the impact of policies on populations<a class="headerlink" href="#modelling-the-impact-of-policies-on-populations" title="Permanent link">#</a></h1>
-<p>PAM uses <strong>policies</strong> to model change to a population. For example, based on social distancing requirements we might
-want to reflect that people are expected to make less shared shopping trips or tours. We can do this using the
-following policy:
-<div class="highlight"><pre><span></span><code>policy_reduce_shopping_activities = HouseholdPolicy(
-        ReduceSharedActivity([&#39;shop&#39;, &#39;shop_food&#39;]),
-        ActivityProbability([&#39;shop&#39;, &#39;shop_food&#39;], 1)
-)
+<p>PAM uses <strong>policies</strong> to model change to a population. 
+For example, based on social distancing requirements we might want to reflect that people are expected to make less shared shopping trips or tours. 
+We can do this using the following policy, if you want to define the policy from first principles:</p>
+<div class="highlight"><pre><span></span><code><span class="n">policy_reduce_shopping_activities</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
+        <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_food&#39;</span><span class="p">]),</span>
+        <span class="n">ActivityProbability</span><span class="p">([</span><span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_food&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
 </code></pre></div>
-if you want to define the policy from first principles. There exists a convenience class for this policy and
-an equivalent policy can be defined in the following way:
-<div class="highlight"><pre><span></span><code>policy_reduce_shopping_activities = ReduceSharedHouseholdActivities(
-        [&#39;shop&#39;, &#39;shop_food&#39;],
-        ActivityProbability([&#39;shop&#39;, &#39;shop_food&#39;], 1)
-)
+<p>There exists a convenience class for this policy and an equivalent policy can be defined in the following way:</p>
+<div class="highlight"><pre><span></span><code><span class="n">policy_reduce_shopping_activities</span> <span class="o">=</span> <span class="n">ReduceSharedHouseholdActivities</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_food&#39;</span><span class="p">],</span>
+        <span class="n">ActivityProbability</span><span class="p">([</span><span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_food&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
 </code></pre></div>
-This policy removes all but one the household's shared shopping tours:</p>
+<p>This policy removes all but one the household's shared shopping tours:</p>
 <p><img alt="PAM-policy-example" src="../resources/PAM-policy-example.png" /></p>
 <p>In general, a policy is defined in the following way:</p>
-<ul>
+<ol>
 <li>You first select the level at which is should be applied:<ul>
 <li><code>HouseholdPolicy</code></li>
 <li><code>PersonPolicy</code></li>
@@ -1711,32 +1710,33 @@ This policy removes all but one the household's shared shopping tours:</p>
 <li><code>MoveActivityTourToHomeLocation</code></li>
 </ul>
 </li>
-<li>Finally, you give a likelihood value with which the policy should be applied with. You have a few choices here:<ul>
-<li>a number greater than 0 and less or equal to 1. This will be understood to be at the level at which the policy
-is applied.<ul>
-<li>E.g. <code>PersonPolicy(RemoveActivity(['work']), 0.5)</code> will give each person a fifty-fifty chance of having
-their work activities removed.</li>
-</ul>
+<li>
+<p>Finally, you give a likelihood value with which the policy should be applied with. 
+You have a few choices here:</p>
+<ul>
+<li>
+<p>a number greater than 0 and less or equal to 1. 
+This will be understood to be at the level at which the policy is applied.
+E.g. <code>PersonPolicy(RemoveActivity(['work']), 0.5)</code> will give each person a fifty-fifty chance of having their work activities removed.</p>
 </li>
-<li>you can explicitly define at which level a number greater than 0 and less or equal to 1 will be applied by passing:<ul>
-<li>E.g. <code>HouseholdPolicy(RemoveActivity(['work']), PersonProbability(0.5))</code> will apply a probability of 0.5
-per person in a household, and apply the policy to all persons within a household if selected.</li>
-</ul>
+<li>
+<p>you can explicitly define at which level a number greater than 0 and less or equal to 1 will be applied.
+E.g. <code>HouseholdPolicy(RemoveActivity(['work']), PersonProbability(0.5))</code> will apply a probability of 0.5 per person in a household, and apply the policy to all persons within a household if selected.</p>
 </li>
-<li>you can also pass a function that operates on a <code>core.Household</code>, <code>core.Person</code> or <code>core.Activity</code> object and
-returns a number between 0 and 1.<ul>
-<li>E.g. if
-<div class="highlight"><pre><span></span><code>def sampler(person):
-    if person.attributes[&#39;key_worker&#39;] == True:
-        return 0
-    else:
-        return 1
+<li>
+<p>you can also pass a function that operates on a <code>core.Household</code>, <code>core.Person</code> or <code>core.Activity</code> object and returns a number between 0 and 1.
+E.g. if our function is:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sampler</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;key_worker&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
 </code></pre></div>
-we can define <code>PersonPolicy(RemoveActivity(['work']), PersonProbability(sampler))</code> which will remove all work
-activities from anyone who is not a 'key_worker'</li>
-</ul>
+we can define <code>PersonPolicy(RemoveActivity(['work']), PersonProbability(sampler))</code> which will remove all work activities from anyone who is not a 'key_worker'</p>
 </li>
-<li>you can choose from:<ul>
+<li>
+<p>you can choose from:</p>
+<ul>
 <li><code>HouseholdProbability</code></li>
 <li><code>PersonProbability</code></li>
 <li><code>ActivityProbability</code></li>
@@ -1744,8 +1744,8 @@ activities from anyone who is not a 'key_worker'</li>
 </li>
 </ul>
 </li>
-</ul>
-<p>PAM allows multiple of such policies to be combined to build realistic and complex scenarios. Leveraging activity plans means that PAM can implement detailed policies that are dependant on:</p>
+</ol>
+<p>PAM allows multiple of such policies to be combined to build realistic and complex scenarios. Leveraging activity plans means that PAM can implement detailed policies that are dependent on:</p>
 <ul>
 <li>person attributes</li>
 <li>household attributes</li>
@@ -1756,7 +1756,7 @@ activities from anyone who is not a 'key_worker'</li>
 <li>sequences such as tours</li>
 <li>any combination of the above</li>
 </ul>
-<p>A full overview of policies and examples of the policies available are <a href="https://github.com/arup-group/pam/blob/master/notebooks/PAM%20Policies%20walk-through.ipynb">detailed in this notebook</a>.</p>
+<p>A full overview of policies and examples of the policies available are [detailed in this example][sampling-and-policy-levels].</p>
 <h2 id="example-modifierspolicies">Example modifiers/policies:<a class="headerlink" href="#example-modifierspolicies" title="Permanent link">#</a></h2>
 <h3 id="ill-and-self-quarantined">Ill and self-quarantined<a class="headerlink" href="#ill-and-self-quarantined" title="Permanent link">#</a></h3>
 <ul>
