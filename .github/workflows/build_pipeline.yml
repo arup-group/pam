@@ -56,6 +56,11 @@ jobs:
     - name: Check for large files
       run: ./scripts/code-qa/check-all-file-sizes.sh
 
+    - name: Setup doc deploy
+      run: |
+        git config --global user.name Docs deploy
+        git config --global user.email docs@dummy.bot.com
+        
     - name: Test that docs build
       if: github.ref != 'refs/heads/main'
       run: mike deploy 0.2
