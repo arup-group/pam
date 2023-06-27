@@ -1,49 +1,42 @@
-pam.egg-info/
-examples/tmp
-/data/**
-*.mapbox_token
-*.xls
-*.xlsx
-*.pptx
+# OS-specific
 .DS_Store
-.cache/
-.idea/
-.ipynb_checkpoints/
-.pytest_cache/
+
+# Editors
+*~
+\#*\#
+**/.vscode
+
+# Byte-compiled files
 __pycache__
-examples/data/example_data/.DS_Store
-https_github.com_fredshone.egg-info/
-__pycache__
-parser.ipynb
-prelim-data-validation.ipynb
-scratch/
-tests/.DS_Store
-tests/__pycache__/
-tests/test_data/.DS_Store
-tests/test_data/output
-.vscode/
-.python-version
+*.pyc
+
+# Build output
+build/
+*.egg-info
+
+# Virtual environment
+venv/
+.venv
+
+# Reports
 .coverage
-reports/*
-mprofile_*.dat
-mprofile_*.png
-pam-performance-report.html
-pam-performance-report*
-sample-perf-report.html
-simple-pam-data-x10000-benchmark.dat
-simple-pam-data-x10000-benchmark.png
-PAM_benchmarking.ipynb
-sandbox
-build
-dist
-fs.ipynb
-facility_sampling.ipynb
-weighted-facility-sampling_demo.ipynb
-notebooks/Downloads/
-outputs/
-michael-local-requirements.txt
-dev
-venv
-examples/all_vehicles.xml
-examples/electric_vehicles.xml
-examples/plans.xml
+.coverage.*
+.hypothesis/
+coverage.xml
+*.cover
+reports/
+mprofile_*
+
+# Caches
+.*[cC]ache*
+
+# Documentation
+.docs
+mike-*.yml
+
+# Project-specific
+*.mapbox*
+.ipynb_checkpoints
+examples
+**/outputs/
+**/tmp/
