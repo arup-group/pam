@@ -17,7 +17,7 @@
         <link rel="next" href="../06_PAM_Complex_Policies/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -3516,7 +3516,8 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-$$P_{household} = 1 - (1-P_{person})^n$$
+<p>$$P_{household} = 1 - (1-P_{person})^n$$</p>
+
 </div>
 </div>
 </div>
@@ -3528,7 +3529,7 @@ $$P_{household} = 1 - (1-P_{person})^n$$
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>If you have a probability that drives of any one person living in the household.</p>
-<p>The probability of the household being chosen is then 
+<p>The probability of the household being chosen is then
 $$1 - (1-P)^n$$
 where $P$ is the probability any one person being chosen and $n$ is the number of people in the household; $(1-P)^n$ is the probability of no one being picked.</p>
 
@@ -3613,7 +3614,7 @@ jp-needs-light-background
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>If you have a probability that drives of any one activity a person does.</p>
-<p>The probability of the person being chosen is then 
+<p>The probability of the person being chosen is then
 $$1 - (1-P)^n$$
 where $P$ is the probability any one (relevant) activity being chosen and $n$ is the number of (relevant) activities in the person's plan; $(1-P)^n$ is the probability of no relevant activities being picked.</p>
 
@@ -3698,7 +3699,7 @@ jp-needs-light-background
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>If you have a probability that drives of any one activity a person does and you want to affect particular activities with no consequence to the person or household.</p>
-<p>Notice that given a probability $P$ for an activity you can affect the whole household. The probability of the household being chosen is then 
+<p>Notice that given a probability $P$ for an activity you can affect the whole household. The probability of the household being chosen is then
 $$1 - (1-P)^n$$
 where $P$ is the probability any one (relevant) activity being chosen and $n$ is then the number of all (relevant) activities in <strong>all of the persons plans within a household</strong>; $(1-P)^n$ is the probability of no relevant activities being picked for the household.</p>
 
@@ -4066,7 +4067,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="moveactivitytourtohomelocation"><code>MoveActivityTourToHomeLocation</code><a class="anchor-link" href="#moveactivitytourtohomelocation">&#182;</a></h3><p>Takes a list of activities and moves those to the home location if they form a <strong>tour</strong>. A tour is a chain of activities sandwiched by two home activities (or boundary of persons plan e.g. if person's activities are: <code>'work', 'home', 'shop', 'work', 'home'</code> (in that order), their tours are: <code>['work']</code>and <code>['shop', work']</code>).</p>
+<h3 id="moveactivitytourtohomelocation"><code>MoveActivityTourToHomeLocation</code><a class="anchor-link" href="#moveactivitytourtohomelocation">&#182;</a></h3><p>Takes a list of activities and moves those to the home location if they form a <strong>tour</strong>. A tour is a chain of activities sandwiched by two home activities (or boundary of persons plan e.g. if person's activities are: <code>'work', 'home', 'shop', 'work', 'home'</code> (in that order), their tours are: <code>['work'] </code>and <code>['shop', work']</code>).</p>
 
 </div>
 </div>
@@ -7319,7 +7320,7 @@ all_together_pop = apply_policies(
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
     
   </body>
