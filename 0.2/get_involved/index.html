@@ -1739,67 +1739,63 @@
 <li>Theoretical Quality: Expert driven features with research and open case studies.</li>
 <li>Feature Quality: Broadly useful and extendable features with good documentation and some testing.</li>
 </ul>
-<p>Less abstractly, there are a good number of <strong>coding</strong> and <strong>non-coding</strong> tasks to chip in
-with:</p>
+<p>Less abstractly, there are a good number of <strong>coding</strong> and <strong>non-coding</strong> tasks to chip in with:</p>
 <h2 id="give-feedback">Give feedback<a class="headerlink" href="#give-feedback" title="Permanent link">#</a></h2>
-<p>Read through this document, let us know what you think, share. Feedback gladly received as an
-<a href="https://github.com/arup-group/pam/issues">issue</a>, on
-<a href="https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA">slack</a>
- or you can email fred.shone@arup.com.</p>
+<p>Read through this document, let us know what you think, share.
+Feedback gladly received as an <a href="https://github.com/arup-group/pam/issues">issue</a>, on <a href="https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA">slack</a> or you can email fred.shone@arup.com.</p>
 <h2 id="literature-review">Literature review<a class="headerlink" href="#literature-review" title="Permanent link">#</a></h2>
-<p>We still need validation of the overall approach. 
+<p>We still need validation of the overall approach.
 Much of the methodology (detailed in this document) is based on what can pragmatically be done, not what theoretically should be done.
-We'd appreciate links to relevant papers. 
+We'd appreciate links to relevant papers.
 Or even better we'd love a lit review - we'll add it to this document.</p>
 <h2 id="research">Research<a class="headerlink" href="#research" title="Permanent link">#</a></h2>
-<p>We need help with designing useful features, applying them to real problems. 
+<p>We need help with designing useful features, applying them to real problems.
 As part of this we need:</p>
 <h3 id="evidence-and-data-for-validation">Evidence and data for validation<a class="headerlink" href="#evidence-and-data-for-validation" title="Permanent link">#</a></h3>
-<p>We know, for example, that many people have removed certain activities from their daily plans, such as to school or university. 
-But we don't know how many. 
-We'd like help finding and eventually applying <strong>validation data</strong> such as recent <a href="https://www.google.com/covid19/mobility/">change in
-mobility</a>.</p>
+<p>We know, for example, that many people have removed certain activities from their daily plans, such as to school or university.
+But we don't know how many.
+We'd like help finding and eventually applying <strong>validation data</strong> such as recent <a href="https://www.google.com/covid19/mobility/">change in mobility</a>.</p>
 <h3 id="evidence-for-new-features">Evidence for new features<a class="headerlink" href="#evidence-for-new-features" title="Permanent link">#</a></h3>
 <p>We currently support the following activity plan modifications:</p>
 <ul>
-<li>probabilistic removal of all activities, ie full quarantine or isolation</li>
-<li>probabilistic removal of specific activities, ie education</li>
+<li>probabilistic removal of all activities, i.e., full quarantine or isolation</li>
+<li>probabilistic removal of specific activities, i.e., education</li>
 <li>automatic extension of other (typically staying at home) activities</li>
 </ul>
 <p>But we'd like help to <strong>find evidence</strong> for other modifications that we think are occurring:</p>
 <ul>
 <li>changing duration of an activity</li>
-<li>moving activity closer to home, ie shopping trips</li>
-<li>changing travel choice, ie mode</li>
-<li>moving home location (ie national and local emigration)</li>
+<li>moving activity closer to home, i.e., shopping trips</li>
+<li>changing travel choice, i.e., mode</li>
+<li>moving home location (i.e., national and local emigration)</li>
 <li>household shared activities/no longer shared activities, such as leisure</li>
 <li>defining key workers</li>
 </ul>
 <h3 id="evidence-for-technical-methodology">Evidence for technical methodology<a class="headerlink" href="#evidence-for-technical-methodology" title="Permanent link">#</a></h3>
-<p>Modifying a plan to remove an activity can cascade into other changes. In the case of
-people with complex chains of activities, the removal of a single activity requires adjustments
-to the remainder. Do people leave later of earlier if they have more time for example? The
-methods for this logic is in <code>pam.core.People</code>.</p>
+<p>Modifying a plan to remove an activity can cascade into other changes.
+In the case of people with complex chains of activities, the removal of a single activity requires adjustments to the remainder.
+Do people leave later of earlier if they have more time for example?
+The methods for this logic is in <code>pam.core.People</code>.</p>
 <h2 id="develop">Develop<a class="headerlink" href="#develop" title="Permanent link">#</a></h2>
 <h3 id="setting-up-a-development-environment">Setting up a development environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permanent link">#</a></h3>
-<p>If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed. 
+<p>If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed.
 If installing directly with pip, you can install these libraries using the <code>dev</code> option, i.e., <code>pip install -e ./pam[dev]</code></p>
 <p>If you plan to make changes to the code then please make regular use of the following tools to verify the codebase while you work:</p>
 <ul>
-<li><code>pre-commit</code>: run <code>pre-commit install</code> in your command line to load inbuilt checks that will run every time you commit your changes. 
-The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the <a href="https://peps.python.org/pep-0008/">pep8 standard</a>. 
+<li><code>pre-commit</code>: run <code>pre-commit install</code> in your command line to load inbuilt checks that will run every time you commit your changes.
+The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the <a href="https://peps.python.org/pep-0008/">pep8 standard</a>.
 You can also run these checks yourself at any time to ensure staged changes are clean by simple calling <code>pre-commit</code>.</li>
 <li><code>pytest</code> - run the unit test suite, check test coverage, and test that the example notebooks successfully run.</li>
 </ul>
 <h3 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">#</a></h3>
 <p>To find beginner-friendly existing bugs and feature requests you may like to have a crack at, take a look <a href="https://github.com/arup-group/pam/contribute">here</a>.</p>
 <p>We maintain a backlog of <a href="https://github.com/arup-group/pam/issues">issues</a>, please in touch if you would like to contribute - or raise your own issue.</p>
-<p>We need help to <strong>go faster</strong>. We expect to deal with populations in the tens of millions. We would
-like help with profiling and implementing parallel compute.</p>
+<p>We need help to <strong>go faster</strong>. We expect to deal with populations in the tens of millions.
+We would like help with profiling and implementing parallel compute.</p>
 <p>If you want to dive deeper into development, we recommend you get in touch with us by joining our <a href="https://join.slack.com/share/I011QU6NN9J/3jAlIBVEbvNln55kGvtZv6ML/zt-dih8pklw-nOPgRzbL3SKj5coH9xemFA">slack</a> channel.</p>
 <h2 id="use-cases">Use cases<a class="headerlink" href="#use-cases" title="Permanent link">#</a></h2>
-<p>We will share open and dummy data where available, we would love people to do some experiments
-and develop some viz and validation pipelines. Any example notebooks can be added to the <a href="https://github.com/arup-group/pam/tree/master/examples">example notebooks</a>.</p>
+<p>We will share open and dummy data where available, we would love people to do some experiments and develop some viz and validation pipelines.
+Any example notebooks can be added to the <a href="https://github.com/arup-group/pam/tree/master/examples">example notebooks</a>.</p>
 
 
 

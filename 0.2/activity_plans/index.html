@@ -1612,7 +1612,8 @@
 
 
 <h1 id="activity-plans">Activity Plans<a class="headerlink" href="#activity-plans" title="Permanent link">#</a></h1>
-<p>PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips'). The main rules are (i) that plans must consist of sequences of alternate <code>pam.activity.Activity</code> and <code>pam.activity.Leg</code> objects and (ii) that a plan must start and end with an <code>Activity</code>:</p>
+<p>PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips').
+The main rules are (i) that plans must consist of sequences of alternate <code>pam.activity.Activity</code> and <code>pam.activity.Leg</code> objects and (ii) that a plan must start and end with an <code>Activity</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pam.core</span> <span class="kn">import</span> <span class="n">Person</span>
 <span class="kn">from</span> <span class="nn">pam.activity</span> <span class="kn">import</span> <span class="n">Leg</span><span class="p">,</span> <span class="n">Activity</span>
 <span class="kn">from</span> <span class="nn">pam</span>
@@ -1666,34 +1667,28 @@
 <span class="n">person</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="how-travel-diaries-relate-to-activity-plans">How travel diaries relate to activity plans<a class="headerlink" href="#how-travel-diaries-relate-to-activity-plans" title="Permanent link">#</a></h2>
-<p>A key component of this project is the conversion of Travel Diaries to Activity Plans. We define
-a Travel Diary as a sequence of travel legs from zone to zone for a given purpose over a single
-day. The Activity Plan takes these legs and infers the activity types between. Example activity
-types are <code>home</code>, <code>work</code>, <code>education</code>, <code>excort_education</code> and so on.</p>
-<p>Activity Plan chains can be pretty complex, consider for example a business person attending
-meetings in many different locations and stopping to eat and shop. We always require the plan
- to last 24 hours and start
-and stop with an activity. We like these start and stop activities to both be the same and ideally
-<code>home</code>. We think of this as 'looping', but they don't have to. Night shift workers, for example,
-do not start or end the day at <code>home</code>.</p>
-<p>When we try to infer activity purpose from trip purpose, we expect a return trip to have the
-same purpose as the outbound trip, eg:</p>
+<p>A key component of this project is the conversion of Travel Diaries to Activity Plans.
+We define a Travel Diary as a sequence of travel legs from zone to zone for a given purpose over a single day.
+The Activity Plan takes these legs and infers the activity types between.
+Example activity types are <code>home</code>, <code>work</code>, <code>education</code>, <code>excort_education</code> and so on.</p>
+<p>Activity Plan chains can be pretty complex, consider for example a business person attending meetings in many different locations and stopping to eat and shop.
+We always require the plan to last 24 hours and start and stop with an activity.
+We like these start and stop activities to both be the same and ideally <code>home</code>.
+We think of this as 'looping', but they don't have to.
+Night shift workers, for example, do not start or end the day at <code>home</code>.</p>
+<p>When we try to infer activity purpose from trip purpose, we expect a return trip to have the same purpose as the outbound trip, e.g.:</p>
 <p><em>trip1(work) + trip2(work) --&gt; activity1(home) + activity2(work) + activity3(home)</em></p>
 <p>But this logic is hard to follow for more complex chains, eg:</p>
-<p><em>trip1(work) + trip2(shop) + trip3(work) --&gt; activity1(home) + activity2(work) + activity3(shop) +
- activity4(home)</em></p>
-<p>The test cases in <code>test_3_parse_challenge</code> capture <strong>some</strong> of the difficult and edge cases observed
- so far.</p>
-<p>It is important to note that as a consequence of encoding outbound and return purpose as an
-activity, we never observe a trip purpose as <code>home</code>. Luckily we do know the home area from the
-travel diary data (<code>hzone</code>). But have to be careful with our logic, as travel between different
-activities locations can be intra-zonal, eg:</p>
+<p><em>trip1(work) + trip2(shop) + trip3(work) --&gt; activity1(home) + activity2(work) + activity3(shop) + activity4(home)</em></p>
+<p>The test cases in <code>test_3_parse_challenge</code> capture <strong>some</strong> of the difficult and edge cases observed so far.</p>
+<p>It is important to note that as a consequence of encoding outbound and return purpose as an activity, we never observe a trip purpose as <code>home</code>.
+Luckily we do know the home area from the travel diary data (<code>hzone</code>).
+But have to be careful with our logic, as travel between different activities locations can be intra-zonal, e.g.:</p>
 <p><em>activity1(home, zoneA) + activity2(shop, zoneA) + activity2(shop, zoneA)</em></p>
-<p>Activity Plans are represented in this project as regular python <code>lists()</code>, containing <strong>ordered</strong>
-<code>activity.Activity</code> and <code>activity.Leg</code> objects. Plans must start and end with a
-<code>activity.Activity</code>. Two <code>activity.Actvity</code> objects must be seperated by a <code>core.Leg</code>.</p>
-<p>Plans belong to <code>core.People</code> which belong to
-<code>core.Households</code> which belong to a <code>core.Population</code>. For example:</p>
+<p>Activity Plans are represented in this project as regular python <code>lists()</code>, containing <strong>ordered</strong> <code>activity.Activity</code> and <code>activity.Leg</code> objects.
+Plans must start and end with a <code>activity.Activity</code>.
+Two <code>activity.Actvity</code> objects must be seperated by a <code>core.Leg</code>.</p>
+<p>Plans belong to <code>core.People</code> which belong to <code>core.Households</code> which belong to a <code>core.Population</code>. For example:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pam.core</span> <span class="kn">import</span> <span class="n">Population</span><span class="p">,</span> <span class="n">Household</span><span class="p">,</span> <span class="n">Person</span>
 <span class="kn">from</span> <span class="nn">pam.activity</span> <span class="kn">import</span> <span class="n">Activity</span><span class="p">,</span> <span class="n">Leg</span>
 
@@ -1719,16 +1714,19 @@ activities locations can be intra-zonal, eg:</p>
 <span class="n">population</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">household</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="a-note-on-the-pain-of-wrapping">A note on the pain of wrapping<a class="headerlink" href="#a-note-on-the-pain-of-wrapping" title="Permanent link">#</a></h2>
-<p>Activity Plans often enforce that a plan returns to the same activity (type and location) that
-they started at. Furthermore they sometimes enforce that this activity be <code>home</code>. Such plans can
-be thought of as wrapping plans. Where the last and first activity can be though of as linked.
+<p>Activity Plans often enforce that a plan returns to the same activity (type and location) that they started at.
+Furthermore they sometimes enforce that this activity be <code>home</code>.
+Such plans can be thought of as wrapping plans.
+Where the last and first activity can be though of as linked.
 This need not be a <code>home</code> activity, for example in the case of night workers.</p>
 <p>We have encountered many variations of sequences for plans, including wrapping and wrapping.
-Although they are generally edge cases, they exists and generally represent real people. We are
-therefore endeavoring to support all these cases in our plan modifiers. This is resulting some
-difficult to follow logic (eg <code>pam.activity.Plan.fill_plan()</code>).</p>
+Although they are generally edge cases, they exists and generally represent real people.
+We are therefore endeavoring to support all these cases in our plan modifiers.
+This is resulting some difficult to follow logic (eg <code>pam.activity.Plan.fill_plan()</code>).</p>
 <h2 id="plan-cropping">Plan cropping<a class="headerlink" href="#plan-cropping" title="Permanent link">#</a></h2>
-<p>The <code>pam.cropping</code> module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area. Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population. Examples of using the module can be found in the <code>18_plan_cropping.ipynb</code> notebook.</p>
+<p>The <code>pam.cropping</code> module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
+Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population.
+Examples of using the module can be found in the <code>18_plan_cropping.ipynb</code> notebook.</p>
 
 
 
