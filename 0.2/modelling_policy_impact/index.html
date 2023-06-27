@@ -1712,16 +1712,16 @@ We can do this using the following policy, if you want to define the policy from
 </li>
 <li>
 <p>Finally, you give a likelihood value with which the policy should be applied with. 
-You have a few choices here:</p>
+    You have a few choices here:</p>
 <ul>
 <li>
 <p>a number greater than 0 and less or equal to 1. 
 This will be understood to be at the level at which the policy is applied.
-E.g. <code>PersonPolicy(RemoveActivity(['work']), 0.5)</code> will give each person a fifty-fifty chance of having their work activities removed.</p>
+E.g. <code class="language-python highlight"><span class="n">PersonPolicy</span><span class="p">(</span><span class="n">RemoveActivity</span><span class="p">([</span><span class="s1">&#39;work&#39;</span><span class="p">]),</span> <span class="mf">0.5</span><span class="p">)</span></code> will give each person a fifty-fifty chance of having their work activities removed.</p>
 </li>
 <li>
 <p>you can explicitly define at which level a number greater than 0 and less or equal to 1 will be applied.
-E.g. <code>HouseholdPolicy(RemoveActivity(['work']), PersonProbability(0.5))</code> will apply a probability of 0.5 per person in a household, and apply the policy to all persons within a household if selected.</p>
+E.g. <code class="language-python highlight"><span class="n">HouseholdPolicy</span><span class="p">(</span><span class="n">RemoveActivity</span><span class="p">([</span><span class="s1">&#39;work&#39;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span></code> will apply a probability of 0.5 per person in a household, and apply the policy to all persons within a household if selected.</p>
 </li>
 <li>
 <p>you can also pass a function that operates on a <code>core.Household</code>, <code>core.Person</code> or <code>core.Activity</code> object and returns a number between 0 and 1.
@@ -1732,7 +1732,7 @@ E.g. if our function is:
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="k">return</span> <span class="mi">1</span>
 </span></code></pre></div>
-we can define <code>PersonPolicy(RemoveActivity(['work']), PersonProbability(sampler))</code> which will remove all work activities from anyone who is not a 'key_worker'</p>
+we can define <code class="language-python highlight"><span class="n">PersonPolicy</span><span class="p">(</span><span class="n">RemoveActivity</span><span class="p">([</span><span class="s1">&#39;work&#39;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="n">sampler</span><span class="p">))</span></code> which will remove all work activities from anyone who is not a 'key_worker'</p>
 </li>
 <li>
 <p>you can choose from:</p>
@@ -1756,7 +1756,7 @@ we can define <code>PersonPolicy(RemoveActivity(['work']), PersonProbability(sam
 <li>sequences such as tours</li>
 <li>any combination of the above</li>
 </ul>
-<p>A full overview of policies and examples of the policies available are [detailed in this example][sampling-and-policy-levels].</p>
+<p>A full overview of policies and examples of the policies available are [detailed in this example][pam-getting-started].</p>
 <h2 id="example-modifierspolicies">Example modifiers/policies:<a class="headerlink" href="#example-modifierspolicies" title="Permanent link">#</a></h2>
 <h3 id="ill-and-self-quarantined">Ill and self-quarantined<a class="headerlink" href="#ill-and-self-quarantined" title="Permanent link">#</a></h3>
 <ul>
