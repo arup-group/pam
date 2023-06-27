@@ -1,6 +1,5 @@
-from typing import DefaultDict, Optional
+from typing import Optional
 import numpy as np
-from datetime import datetime as dt
 from datetime import timedelta as td
 import logging
 
@@ -68,8 +67,8 @@ class CharyparNagelPlanScorer:
         Score a pam.core.Person Plan
 
         Args:
-            person (Person).
-            subpopulation (str): person attribute name for subpopulation, Defalts to "subpopulation".
+            person (Person): 
+            subpopulation (str): person attribute name for subpopulation, Defaults to "subpopulation".
             plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.
         """
         subpop = person.attributes[subpopulation]

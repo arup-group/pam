@@ -30,6 +30,10 @@ mprofile_*
 # Caches
 .*[cC]ache*
 
+# Documentation
+.docs
+mike-*.yml
+
 # Project-specific
 *.mapbox*
 .ipynb_checkpoints

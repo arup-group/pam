@@ -1,8 +1,7 @@
-import pandas as pd
 from shapely.geometry import Point
-from datetime import datetime, timedelta
+from datetime import timedelta
 import logging
-from typing import Union
+from typing import Union, Literal, Optional
 
 import pam.core as core
 import pam.activity as activity
@@ -13,40 +12,46 @@ from pam.variables import START_OF_DAY
 
 
 def read_matsim(
-        plans_path,
-        attributes_path = None,
-        all_vehicles_path = None,
-        electric_vehicles_path = None,
-        weight : int = 100,
-        version : int = 12,
-        household_key : Union[str, None] = None,
-        simplify_pt_trips : bool = False,
-        autocomplete : bool = True,
-        crop : bool = False,
-        keep_non_selected : bool = False,
-        leg_attributes : bool = True,
-        leg_route : bool = True,
-):
+    plans_path: str,
+    attributes_path: Optional[str] = None,
+    all_vehicles_path: Optional[str] = None,
+    electric_vehicles_path: Optional[str] = None,
+    weight : int = 100,
+    version : Literal[11, 12] = 12,
+    household_key : Optional[str] = None,
+    simplify_pt_trips : bool = False,
+    autocomplete : bool = True,
+    crop : bool = False,
+    keep_non_selected : bool = False,
+    leg_attributes : bool = True,
+    leg_route : bool = True,
+) -> core.Population:
     """
     Load a MATSim format population into core population format.
     It is possible to maintain the unity of housholds using a household uid in
     the attributes input, i.e.:
-    <attribute class="java.lang.String" name="hid">hh_0001</attribute>
-    :param plans: path to matsim format xml
-    :param attributes: path to matsim format xml
-    :param all_vehicles_path: path to matsim all_vehicles xml file
-    :param electric_vehicles_path: path to matsim electric_vehicles xml
-    :param weight: int
-    :param version: int {11,12}, default = 12
-    :param household_key: {str, None}
-    :param simplify_pt_trips: bool, simplify legs in multi-leg trips, defaul t= True
-    :param autocomplete: bool, fills missing leg and activity attributes, default = True
-    :param crop: bool, crop plans that go beyond 24 hours, default = False
-    :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected)
-    :param leg_attributes: Parse leg attributes such as routing mode, default = True
-    :param leg_route: Parse leg route, default = True
-    :return: core.Population
+    ``` xml
+        <attribute class="java.lang.String" name="hid">hh_0001</attribute>
+    ```
+
+    Args:
+        plans_path (str): path to matsim format xml
+        attributes_path (str, optional): path to matsim format xml. Defaults to None.
+        all_vehicles_path (str, optional): path to matsim all_vehicles xml file. Defaults to None.
+        electric_vehicles_path (str, optional): path to matsim electric_vehicles xml. Defaults to None.
+        weight (int, optional): int. Defaults to 100.
+        version (Literal[11, 12], optional): Defaults to 12.
+        household_key (str, optional): Defaults to None.
+        simplify_pt_trips (bool, optional): bool, simplify legs in multi-leg trips. Defaults to False.
+        autocomplete (bool, optional): bool, fills missing leg and activity attributes. Defaults to True.
+        crop (bool, optional): bool, crop plans that go beyond 24 hours. Defaults to False.
+        keep_non_selected (bool, optional): Whether to parse non-selected plans (storing them in person.plans_non_selected). Defaults to False.
+        leg_attributes (bool, optional): Parse leg attributes such as routing mode. Defaults to True.
+        leg_route (bool, optional): Parse leg route. Defaults to True.
+    Returns:
+        core.Population:
     """
+
     logger = logging.getLogger(__name__)
 
     population = core.Population()
@@ -115,11 +120,11 @@ have attributes or be able to use a household attribute id. Check this is intend
 
 
 def stream_matsim_persons(
-    plans_path,
-    attributes = {},
-    vehicles = {},
+    plans_path: str,
+    attributes : dict = {},
+    vehicles : dict = {},
     weight : int = 100,
-    version : int = 12,
+    version : Literal[11, 12] = 12,
     simplify_pt_trips : bool = False,
     autocomplete : bool = True,
     crop : bool = False,
@@ -128,23 +133,42 @@ def stream_matsim_persons(
     leg_route : bool = True,
     ) -> core.Person:
     """
+    
     Stream a MATSim format population into core.Person objects.
-    Expects agent attributes (and vehicles) to be supplied as optional dictionaries, this allows this
-    function to support 'version 11' plans.
-    todo: a v12 only method could also stream attributes and would use less memory
-    :param plans: path to matsim format xml
-    :param attributes: {}, map of person attributes, only required for v11
-    :param vehicles: {}, map of vehciles
-    :param electric_vehicles_path: path to matsim electric_vehicles xml
-    :param weight: int
-    :param version: int {11,12}, default = 12
-    :param simplify_pt_trips: bool, simplify legs in multi-leg trips, default = True
-    :param autocomplete: bool, fills missing leg and activity attributes, default = True
-    :param crop: bool, crop plans that go beyond 24 hours, default = False
-    :param keep_non_selected: Whether to parse non-selected plans (storing them in person.plans_non_selected).
-    :param leg_attributes: Parse leg attributes such as routing mode, default = True
-    :param leg_route: Parse leg route, default = True
-    :return: core.Person
+    Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
+    This allows this function to support 'version 11' plans.
+
+    TODO: a v12 only method could also stream attributes and would use less memory
+
+    Args:
+        plans_path (str): 
+            path to matsim format xml
+        attributes (dict, optional): 
+            map of person attributes, only required for v11. Defaults to {}.
+        vehicles (dict, optional): 
+            map of vehciles. Defaults to {}.
+        weight (int, optional): 
+            path to matsim electric_vehicles xml. Defaults to 100.
+        version (Literal[11, 12], optional): 
+            Defaults to 12.
+        simplify_pt_trips (bool, optional): 
+            simplify legs in multi-leg trips. Defaults to False.
+        autocomplete (bool, optional): 
+            fills missing leg and activity attributes. Defaults to True.
+        crop (bool, optional): 
+            crop plans that go beyond 24 hours. Defaults to False.
+        keep_non_selected (bool, optional): 
+            Whether to parse non-selected plans (storing them in `person.plans_non_selected`). Defaults to False.
+        leg_attributes (bool, optional): 
+            Parse leg attributes such as routing mode. Defaults to True.
+        leg_route (bool, optional): 
+            Parse leg route. Defaults to True.
+
+    Raises:
+        UserWarning: `version` must be set to 11 or 12.
+
+    Yields:
+        Iterator[core.Person]:
     """
 
     if version not in [11, 12]:
@@ -314,95 +338,107 @@ def unpack_leg(leg, version):
     return unpack_route_v11(leg)
 
 
-def unpack_route_v11(leg):
+def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
     """
     Extract mode, network route and transit route as available.
 
     Args:
-        leg (xml_leg_element)
+        leg (xml_leg_element):
 
     Returns:
-        (xml_elem, string, list, dict, dict): (route, mode, network route, transit route, attributes)
+        tuple[str, RouteV11, dict]: mode, route, attributes
     """
     mode = leg.get("mode")
     route = RouteV11(leg.xpath("route"))
     return mode, route, {}
 
 
-def unpack_leg_v12(leg):
+def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
     """
     Extract mode, route and attributes as available.
 
-    There are four known cases:
-
-    === Unrouted ===
-
-    For example a leg missing both attributes and route elements, this is the case for non experienced or non routed plans:
-        <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
-        </leg>
-
-    === Transit ===
-
-    This is a transit routed leg with the route encoded as json string and routingMode attribute:
-        <leg mode="pt" trav_time="00:43:42">
-            <attributes>
-                <attribute name="routingMode" class="java.lang.String">bus</attribute>
-            </attributes>
-            <route type="default_pt" start_link="1-2" end_link="3-4" trav_time="00:43:42" distance="10100.0">
-            {"transitRouteId":"work_bound","boardingTime":"07:30:00","transitLineId":"city_line","accessFacilityId":"home_stop_out","egressFacilityId":"work_stop_in"}
-            </route>
-        </leg>
-    Route must be transit i.e. there will not be a network route.
-    Route attributes include:
-        - type = "default_pt"
-        - start_link
-        - end_link
-        - trav_time
-        - distance
-
-    === Network Routed ===
-
-    This is a network routed mode, eg car:
-        <leg mode="car" dep_time="07:58:00" trav_time="00:04:52">
-            <attributes>
-                <attribute name="enterVehicleTime" class="java.lang.Double">28680.0</attribute>
-                <attribute name="routingMode" class="java.lang.String">car</attribute>
-            </attributes>
-            <route type="links" start_link="4155" end_link="5221366698030330427_5221366698041252619" trav_time="00:04:52" distance="4898.473995989452" vehicleRefId="null">
-            4155 5221366345330551489_5221366345327939575 2623 4337 5221366343808222067_5221366343837130911 2984 1636 3671 6110 etc...
-            </route>
-        </leg>
-    Route attributes include:
-        - type = "links"
-        - start_link
-        - end_link
-        - trav_time
-        - distance
-        - vehicleRefId
-    The network route is given as a space seperated sequence of link ids.
-
-    === Teleported ===
-
-    This is a teleported route, eg walk/cycle:
-        <leg mode="walk" dep_time="09:23:00" trav_time="01:54:10">
-            <attributes>
-                <attribute name="routingMode" class="java.lang.String">walk</attribute>
-            </attributes>
-            <route type="generic" start_link="5221366698030330427_5221366698041252619" end_link="114" trav_time="01:54:10" distance="5710.003987453454"></route>
-        </leg>
-    Route attributes include:
-        - type = "generic"
-        - start_link
-        - end_link
-        - trav_time
-        - distance
-    The network route is empty.
-
     Args:
-        leg (xml_leg_element)
+        leg (xml_leg_element):
 
     Returns:
-        mode (str), route (pam.activity.Route), attributes (dict)
+        tuple[str, Route, dict]: mode, route, attributes
+
+    Examples:
+        There are four known cases:
+
+        === Unrouted ===
+
+        For example a leg missing both attributes and route elements, this is the case for non experienced or non routed plans:
+        ```xml
+            <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
+            </leg>
+        ```
+        
+        === Transit ===
+
+        This is a transit routed leg with the route encoded as json string and routingMode attribute:
+        ```xml
+            <leg mode="pt" trav_time="00:43:42">
+                <attributes>
+                    <attribute name="routingMode" class="java.lang.String">bus</attribute>
+                </attributes>
+                <route type="default_pt" start_link="1-2" end_link="3-4" trav_time="00:43:42" distance="10100.0">
+                {"transitRouteId":"work_bound","boardingTime":"07:30:00","transitLineId":"city_line","accessFacilityId":"home_stop_out","egressFacilityId":"work_stop_in"}
+                </route>
+            </leg>
+        ```
+
+        Route must be transit i.e. there will not be a network route.
+        Route attributes include:
+            - type = "default_pt"
+            - start_link
+            - end_link
+            - trav_time
+            - distance
+
+        === Network Routed ===
+
+        This is a network routed mode, eg car:
+        ``` xml   
+            <leg mode="car" dep_time="07:58:00" trav_time="00:04:52">
+                <attributes>
+                    <attribute name="enterVehicleTime" class="java.lang.Double">28680.0</attribute>
+                    <attribute name="routingMode" class="java.lang.String">car</attribute>
+                </attributes>
+                <route type="links" start_link="4155" end_link="5221366698030330427_5221366698041252619" trav_time="00:04:52" distance="4898.473995989452" vehicleRefId="null">
+                4155 5221366345330551489_5221366345327939575 2623 4337 5221366343808222067_5221366343837130911 2984 1636 3671 6110 etc...
+                </route>
+            </leg>
+        ```            
+
+        Route attributes include:
+            - type = "links"
+            - start_link
+            - end_link
+            - trav_time
+            - distance
+            - vehicleRefId
+        The network route is given as a space seperated sequence of link ids.
+
+        === Teleported ===
+
+        This is a teleported route, eg walk/cycle:
+        ``` xml
+            <leg mode="walk" dep_time="09:23:00" trav_time="01:54:10">
+                <attributes>
+                    <attribute name="routingMode" class="java.lang.String">walk</attribute>
+                </attributes>
+                <route type="generic" start_link="5221366698030330427_5221366698041252619" end_link="114" trav_time="01:54:10" distance="5710.003987453454"></route>
+            </leg>
+        ```
+        
+        Route attributes include:
+            - type = "generic"
+            - start_link
+            - end_link
+            - trav_time
+            - distance
+        The network route is empty.
     """
     mode = leg.get("mode")
     route = Route(leg.xpath("route"))
@@ -461,13 +497,17 @@ def selected_plans(plans_path):
 
 
 
-def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
+def read_vehicles(all_vehicles_path: str , electric_vehicles_path: Optional[str] = None) -> dict:
     """
-    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and
-    electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    :param all_vehicles_path: path to matsim all_vehicles xml file
-    :param electric_vehicles_path: path to matsim electric_vehicles xml (optional)
-    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
+    
+    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+
+    Args:
+        all_vehicles_path (str): path to matsim all_vehicles xml file
+        electric_vehicles_path (Optional[str], optional): path to matsim electric_vehicles xml. Defaults to None.
+
+    Returns:
+        dict: dictionary of all vehicles `{ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}`
     """
     vehicles = read_all_vehicles_file(all_vehicles_path)
     if electric_vehicles_path:
@@ -475,11 +515,14 @@ def read_vehicles(all_vehicles_path, electric_vehicles_path=None):
     return vehicles
 
 
-def read_all_vehicles_file(path):
+def read_all_vehicles_file(path: str) -> dict:
     """
     Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-    :param path: path to matsim all_vehicles xml file
-    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
+
+    Args:
+        path (str): path to matsim all_vehicles xml file
+    Returns:
+        dict: dictionary of all vehicles `{ID: pam.vehicle.Vehicle class object}`
     """
     vehicles = {}
     vehicle_types = {}
@@ -494,14 +537,21 @@ def read_all_vehicles_file(path):
     return vehicles
 
 
-def read_electric_vehicles_file(path, vehicles: dict = None):
+def read_electric_vehicles_file(path: str, vehicles: dict = None) -> dict:
     """
     Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    :param path: path to matsim electric_vehicles xml
-    :param vehicles: dictionary of {ID: pam.vehicle.Vehicle} objects, some of which may need to be updated to ElectricVehicle
-        based on contents of the electric_vehicles xml file. Optional, if not passed, vehicles will default to the
-        VehicleType defaults.
-    :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
+
+    Args:
+        path (str): path to matsim electric_vehicles xml
+        vehicles (dict, optional): 
+            dictionary of `{ID: pam.vehicle.Vehicle}` objects, some of which may need to be updated to ElectricVehicle based on contents of the electric_vehicles xml file. 
+            If None, vehicles will default to the VehicleType defaults. Defaults to None.
+
+    Raises:
+        RuntimeError: Vehicle types must match for the same vehicle ID.
+
+    Returns:
+        dict:  dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
     if vehicles is None:
         logging.warning('All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types'

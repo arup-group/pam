@@ -1,43 +1,68 @@
+from __future__ import annotations
+
 import logging
 import random
 import pickle
 import copy
 from collections import defaultdict
-from typing import Optional, Generator
+from typing import Optional, Generator, Union, Any
 import pandas as pd
+import geopandas as gpd
+import plotly.graph_objs as go
 
 from pam.location import Location
 import pam.activity as activity
 import pam.plot as plot
 from pam import PAMInvalidTimeSequenceError, write
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError, PAMVehicleIdError
+from pam import (
+    PAMSequenceValidationError,
+    PAMValidationLocationsError,
+    PAMVehicleIdError,
+)
 from pam import variables
 from pam.vehicle import Vehicle, ElectricVehicle
 
 
 class Population:
+    def __init__(self, name: str = None) -> None:
+        """
 
-    def __init__(self, name: str = None):
+        Args:
+            name (str, optional): Name of population. Defaults to None.
+        """
         self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
 
-    def add(self, target):
+    def add(self, target: list[Union[Household, Person, list]]) -> None:
+        """
+        Add houeshold/person, or a list of households/persons to the population
+
+        Args:
+            target (list[Union[Household, Person, list]]):
+                Can be any arbitrary nesting of lists, as long as the deepest nesting includes only Houeshold and Person objects
+
+        Raises:
+            UserWarning: Only Household and Person objects allowed
+        """
         if isinstance(target, list):
             for hh in target:
                 self.add(hh)
         elif isinstance(target, Household):
             self.households[target.hid] = target
         elif isinstance(target, Person):
-            self.logger.warning((
-                "Directly adding a Person to a Population requires a Household.",
-                f"Auto creating a household {target.pid} for person {target.pid}, check this is intended."
-            ))
+            self.logger.warning(
+                (
+                    "Directly adding a Person to a Population requires a Household.",
+                    f"Auto creating a household {target.pid} for person {target.pid}, check this is intended.",
+                )
+            )
             self.add(Household(hid=target.pid))
             self.households[target.pid].add(target)
         else:
             raise UserWarning(
-                f"Expected instance of Household, list or Person, not: {type(target)}")
+                f"Expected instance of Household, list or Person, not: {type(target)}"
+            )
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -85,7 +110,8 @@ class Population:
                     return True
             return False
         raise UserWarning(
-            f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person.")
+            f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person."
+        )
 
     def __eq__(self, other):
         """
@@ -94,7 +120,8 @@ class Population:
         """
         if not isinstance(other, Population):
             self.logger.warning(
-                f"Cannot compare population to non population: ({type(other)}), please provide a Population.")
+                f"Cannot compare population to non population: ({type(other)}), please provide a Population."
+            )
             return False
         if not len(self) == len(other):
             return False
@@ -151,7 +178,6 @@ class Population:
     def attributes(self, show: int = 10) -> dict:
         attributes = defaultdict(set)
         for _, hh in self.households.items():
-
             for k, v in hh.attributes.items():
                 attributes[k].add(v)
             for _, p in hh.people.items():
@@ -190,15 +216,16 @@ class Population:
                 yield v
 
     def vehicle_types(self):
-        v_types = {p.vehicle.vehicle_type for _, _,
-                   p in self.people() if p.vehicle is not None}
+        v_types = {
+            p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None
+        }
         for vt in v_types:
             yield vt
 
     def electric_vehicle_charger_types(self):
         chargers = set()
         for v in self.electric_vehicles():
-            chargers |= set(v.charger_types.split(','))
+            chargers |= set(v.charger_types.split(","))
         return chargers
 
     def random_household(self):
@@ -221,37 +248,40 @@ class Population:
                 num_activities += person.num_activities
                 num_legs += person.num_legs
         return {
-            'num_households': num_households,
-            'num_people': num_people,
-            'num_activities': num_activities,
-            'num_legs': num_legs,
+            "num_households": num_households,
+            "num_people": num_people,
+            "num_activities": num_activities,
+            "num_legs": num_legs,
         }
 
     def legs_df(self) -> pd.DataFrame:
         """
+
         Extract tabular record of population legs.
-        :return pd.DataFrame: record of legs
+
+        Returns: 
+            pd.DataFrame: record of legs
         """
         df = []
         for hid, pid, person in self.people():
             for seq, leg in enumerate(person.legs):
                 record = {
-                    'pid': pid,
-                    'hid': hid,
-                    'hzone': person.home,
-                    'ozone': leg.start_location.area,
-                    'dzone': leg.end_location.area,
-                    'oloc': leg.start_location,
-                    'dloc': leg.end_location,
-                    'seq': seq,
-                    'purp': leg.purp,
-                    'mode': leg.mode,
-                    'tst': leg.start_time.time(),
-                    'tet': leg.end_time.time(),
+                    "pid": pid,
+                    "hid": hid,
+                    "hzone": person.home,
+                    "ozone": leg.start_location.area,
+                    "dzone": leg.end_location.area,
+                    "oloc": leg.start_location,
+                    "dloc": leg.end_location,
+                    "seq": seq,
+                    "purp": leg.purp,
+                    "mode": leg.mode,
+                    "tst": leg.start_time.time(),
+                    "tet": leg.end_time.time(),
                     # duration in minutes
-                    'duration': leg.duration / pd.Timedelta(minutes=1),
-                    'euclidean_distance': leg.euclidean_distance,
-                    'freq': person.freq,
+                    "duration": leg.duration / pd.Timedelta(minutes=1),
+                    "euclidean_distance": leg.euclidean_distance,
+                    "freq": person.freq,
                 }
                 # add person attributes
                 record = {**record, **dict(person.attributes)}
@@ -263,28 +293,30 @@ class Population:
     def trips_df(self) -> pd.DataFrame:
         """
         Extract tabular record of population legs.
-        :return pd.DataFrame: record of legs
+
+        Returns:
+            pd.DataFrame: record of legs
         """
         df = []
         for hid, pid, person in self.people():
             for seq, trip in enumerate(person.plan.trips()):
                 record = {
-                    'pid': pid,
-                    'hid': hid,
-                    'hzone': person.home,
-                    'ozone': trip.start_location.area,
-                    'dzone': trip.end_location.area,
-                    'oloc': trip.start_location,
-                    'dloc': trip.end_location,
-                    'seq': seq,
-                    'purp': trip.purp,
-                    'mode': trip.mode,
-                    'tst': trip.start_time.time(),
-                    'tet': trip.end_time.time(),
+                    "pid": pid,
+                    "hid": hid,
+                    "hzone": person.home,
+                    "ozone": trip.start_location.area,
+                    "dzone": trip.end_location.area,
+                    "oloc": trip.start_location,
+                    "dloc": trip.end_location,
+                    "seq": seq,
+                    "purp": trip.purp,
+                    "mode": trip.mode,
+                    "tst": trip.start_time.time(),
+                    "tet": trip.end_time.time(),
                     # duration in minutes
-                    'duration': trip.duration / pd.Timedelta(minutes=1),
-                    'euclidean_distance': trip.euclidean_distance,
-                    'freq': person.freq,
+                    "duration": trip.duration / pd.Timedelta(minutes=1),
+                    "euclidean_distance": trip.euclidean_distance,
+                    "freq": person.freq,
                 }
                 # add person attributes
                 record = {**record, **dict(person.attributes)}
@@ -295,33 +327,58 @@ class Population:
         return df
 
     @staticmethod
-    def add_fields(df):
-        # add extra fields used for benchmarking
-        df['personhrs'] = df['freq'] * df['duration'] / 60
-        df['departure_hour'] = df.tst.apply(lambda x: x.hour)
-        df['arrival_hour'] = df.tet.apply(lambda x: x.hour)
-        df['euclidean_distance_category'] = pd.cut(
+    def add_fields(df: pd.DataFrame) -> None:
+        """add extra fields used for benchmarking in place.
+
+        Args:
+            df (pd.DataFrame):
+        """
+
+        df["personhrs"] = df["freq"] * df["duration"] / 60
+        df["departure_hour"] = df.tst.apply(lambda x: x.hour)
+        df["arrival_hour"] = df.tet.apply(lambda x: x.hour)
+        df["euclidean_distance_category"] = pd.cut(
             df.euclidean_distance,
             bins=[0, 1, 5, 10, 25, 50, 100, 200, 999999],
-            labels=['0 to 1 km', '1 to 5 km', '5 to 10 km', '10 to 25 km',
-                    '25 to 50 km', '50 to 100 km', '100 to 200 km', '200+ km']
+            labels=[
+                "0 to 1 km",
+                "1 to 5 km",
+                "5 to 10 km",
+                "10 to 25 km",
+                "25 to 50 km",
+                "50 to 100 km",
+                "100 to 200 km",
+                "200+ km",
+            ],
         )
-        df['duration_category'] = pd.cut(
+        df["duration_category"] = pd.cut(
             df.duration,
             bins=[0, 5, 10, 15, 30, 45, 60, 90, 120, 999999],
-            labels=['0 to 5 min', '5 to 10 min', '10 to 15 min', '15 to 30 min',
-                    '30 to 45 min', '45 to 60 min', '60 to 90 min', '90 to 120 min', '120+ min']
+            labels=[
+                "0 to 5 min",
+                "5 to 10 min",
+                "10 to 15 min",
+                "15 to 30 min",
+                "30 to 45 min",
+                "45 to 60 min",
+                "60 to 90 min",
+                "90 to 120 min",
+                "120+ min",
+            ],
         )
 
-    def build_travel_geodataframe(self, **kwargs):
+    def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
         """
         Builds geopandas.GeoDataFrame for travel Legs found for all agents in the Population.
-        :param kwargs: arguments for plot.build_person_travel_geodataframe,
-            from_epsg: coordinate system the plans are currently in
-            to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
-                from_epsg as well to use this.
-        :return: geopandas.GeoDataFrame with columns for household id (hid) and person id (pid)
+
+        Keyword Args: Keyword arguments for plot.build_person_travel_geodataframe.
+            from_epsg (str): coordinate system the plans are currently in
+            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify from_epsg as well to use this.
+
+        Returns:
+            geopandas.GeoDataFrame:  with columns for household id (hid) and person id (pid)
         """
+
         gdf = None
         for hid, household in self.households.items():
             _gdf = household.build_travel_geodataframe(**kwargs)
@@ -329,37 +386,28 @@ class Population:
                 gdf = _gdf
             else:
                 gdf = gdf.append(_gdf)
-        gdf = gdf.sort_values(['hid', 'pid', 'seq']).reset_index(drop=True)
+        gdf = gdf.sort_values(["hid", "pid", "seq"]).reset_index(drop=True)
         return gdf
 
-    def plot_travel_plotly(self, epsg: str = 'epsg:4326', **kwargs):
+    def plot_travel_plotly(self, epsg: str = "epsg:4326", **kwargs) -> go.Figure:
         """
-        Uses plotly's Scattermapbox to plot agents' travel
-        :param epsg: coordinate system the plans spatial information is in, e.g. 'epsg:27700'
-        :param kwargs: arguments for plot.plot_travel_plans
-            :param gdf: geopandas.GeoDataFrame generated by build_person_travel_geodataframe
-            :param groupby: optional argument for splitting traces in the plot
-            :param colour_by: argument for specifying what the colour should correspond to in the plot, travel mode by
-            default
-            :param cmap: optional argument, useful to pass if generating a number of plots and want to keep colour
-            scheme
-            consistent
-            :param mapbox_access_token: required to generate the plot
-            https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
-        :return:
+        Args:
+            epsg (str, optional): coordinate system the plans spatial information is in, e.g. 'epsg:27700'. Defaults to "epsg:4326".
+        Keyword Args: Keyword arguments for plot.plot_travel_plans
+            gdf (geopandas.GeoDataFrame): geopandas.GeoDataFrame generated by build_person_travel_geodataframe
+            groupby (list): optional argument for splitting traces in the plot
+            colour_by (str): argument for specifying what the colour should correspond to in the plot, travel mode by default
+            cmap (dict): optional argument, useful to pass if generating a number of plots and want to keep colour scheme consistent
+            mapbox_access_token (str): required to generate the plot (see https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+        Returns:
+            go.Figure: Plotly figure object.
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(
-                from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            **kwargs,
         )
 
-    def fix_plans(
-        self,
-        crop: bool = True,
-        times=True,
-        locations=True
-    ):
+    def fix_plans(self, crop: bool = True, times=True, locations=True):
         for _, _, person in self.people():
             if crop:
                 person.plan.crop()
@@ -378,26 +426,24 @@ class Population:
             household.print()
 
     def pickle(self, path: str):
-        with open(path, 'wb') as file:
+        with open(path, "wb") as file:
             pickle.dump(self, file)
 
-    def to_csv(
-        self,
-        dir: str,
-        crs=None,
-        to_crs: str = "EPSG:4326"
-    ):
+    def to_csv(self, dir: str, crs=None, to_crs: str = "EPSG:4326"):
         write.to_csv(self, dir, crs, to_crs)
 
     def __str__(self):
-        return f"Population: {self.population} people in {self.num_households} households."
+        return (
+            f"Population: {self.population} people in {self.num_households} households."
+        )
 
     def __iadd__(self, other):
         """
         Unsafe addition with assignment (no guarantee of unique ids).
         """
         self.logger.debug(
-            "Note that this method requires all identifiers from populations being combined to be unique.")
+            "Note that this method requires all identifiers from populations being combined to be unique."
+        )
         if isinstance(other, Population):
             for hid, hh in other.households.items():
                 self.households[hid] = copy.deepcopy(hh)
@@ -410,7 +456,8 @@ class Population:
             self.households[other.pid].people[other.pid] = copy.deepcopy(other)
             return self
         raise TypeError(
-            f"Object for addition must be a Population Household or Person object, not {type(other)}")
+            f"Object for addition must be a Population Household or Person object, not {type(other)}"
+        )
 
     def reindex(self, prefix: str):
         """
@@ -420,8 +467,7 @@ class Population:
             hh = self.households[hid]
             new_hid = prefix + str(hid)
             if new_hid in self.households:
-                raise KeyError(
-                    f"Duplicate household identifier (hid): {new_hid}")
+                raise KeyError(f"Duplicate household identifier (hid): {new_hid}")
 
             hh.reindex(prefix)
 
@@ -449,10 +495,16 @@ class Population:
             self += hh
             return None
         raise TypeError(
-            f"Object for addition must be a Population Household or Person object, not {type(other)}")
+            f"Object for addition must be a Population Household or Person object, not {type(other)}"
+        )
 
-    def sample_locs(self, sampler, long_term_activities=None, joint_trips_prefix='escort_',
-                    location_override=True):
+    def sample_locs(
+        self,
+        sampler,
+        long_term_activities: list = None,
+        joint_trips_prefix: str = "escort_",
+        location_override: bool = True,
+    ):
         """
         WIP Sample household plan locs using a sampler.
 
@@ -472,66 +524,70 @@ class Population:
         might be expected. For example if we change the location of the household home activity, all
         persons and home activities are impacted.
 
-        TODO - add method to all core classes
-        :param list long_term activities: a list of activities for which location is only assigned once (per zone)
-        :param str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
-        :param bool location_override: if False, the facility sampler will retain any 
-            already-existing locations in the population.
+        Args:
+            long_term_activities (list, optional): a list of activities for which location is only assigned once (per zone). Defaults to None
+            joint_trips_prefix (str, optional): a purpose prefix used to identify escort/joint trips. Defaults to "escort_"
+            location_override (bool, optional): if False, the facility sampler will retain any already-existing locations in the population.. Defaults to True
         """
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
 
         for _, household in self.households.items():
-
             home_loc = activity.Location(
                 area=household.location.area,
-                loc=sampler.sample(household.location.area, 'home')
+                loc=sampler.sample(household.location.area, "home"),
             )
 
-            unique_locations = {(household.location.area, 'home'): home_loc}
+            unique_locations = {(household.location.area, "home"): home_loc}
 
             for __, person in household.people.items():
-
                 for act in person.activities:
-
                     # remove escort prefix from activity types.
-                    if act.act[:len(joint_trips_prefix)] == joint_trips_prefix:
-                        target_act = act.act[(len(joint_trips_prefix)):]
+                    if act.act[: len(joint_trips_prefix)] == joint_trips_prefix:
+                        target_act = act.act[(len(joint_trips_prefix)) :]
                     else:
                         target_act = act.act
-                    
+
                     # assign any unique locations
                     if (act.location.area, target_act) in unique_locations:
-                        location = unique_locations[(
-                            act.location.area, target_act)]
+                        location = unique_locations[(act.location.area, target_act)]
                         act.location = location
                     # sample facility
                     elif location_override or act.location.loc is None:
                         location = activity.Location(
                             area=act.location.area,
-                            loc=sampler.sample(act.location.area, target_act)
+                            loc=sampler.sample(act.location.area, target_act),
                         )
                         if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
                             # short-term activities, such as shopping can visit multiple locations in the same zone
-                            unique_locations[(
-                                act.location.area, target_act)] = location
+                            unique_locations[(act.location.area, target_act)] = location
                         act.location = location
 
                 # complete the alotting activity locations to the trip starts and ends.
                 for idx in range(person.plan.length):
                     component = person.plan[idx]
                     if isinstance(component, activity.Leg):
-                        component.start_location = person.plan[idx-1].location
-                        component.end_location = person.plan[idx+1].location
+                        component.start_location = person.plan[idx - 1].location
+                        component.end_location = person.plan[idx + 1].location
 
-    def sample_locs_complex(self, sampler, long_term_activities=None, joint_trips_prefix='escort_'):
+    def sample_locs_complex(
+        self,
+        sampler,
+        long_term_activities: list = None,
+        joint_trips_prefix: str = "escort_",
+    ):
         """
         Extends sample_locs method to enable more complex and rules-based sampling.
         Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
         It is generally slower than sample_locs, as it loops through both activities and legs.
-        :params list long_term activities: a list of activities for which location is only assigned once (per zone)
-        :params str joint_trips_prefix: a purpose prefix used to identify escort/joint trips
+        Args:
+            long_term_activities (list, optional):
+                a list of activities for which location is only assigned once (per zone).
+                Defaults to None.
+            joint_trips_prefix (str, optional):
+                a purpose prefix used to identify escort/joint trips.
+                Defaults to "escort_".
         """
         if long_term_activities is None:
             long_term_activities = variables.LONG_TERM_ACTIVITIES
@@ -539,12 +595,17 @@ class Population:
         for _, household in self.households.items():
             home_loc = activity.Location(
                 area=household.location.area,
-                loc=sampler.sample(household.location.area, 'home',
-                                   mode=None, previous_duration=None, previous_loc=None)
+                loc=sampler.sample(
+                    household.location.area,
+                    "home",
+                    mode=None,
+                    previous_duration=None,
+                    previous_loc=None,
+                ),
             )
             mode = None
 
-            unique_locations = {(household.location.area, 'home'): home_loc}
+            unique_locations = {(household.location.area, "home"): home_loc}
 
             for _, person in household.people.items():
                 mode = None
@@ -563,25 +624,30 @@ class Population:
 
                         # remove "escort_" from activity types.
                         # TODO: model joint trips
-                        if act.act[:len(joint_trips_prefix)] == joint_trips_prefix:
-                            target_act = act.act[(len(joint_trips_prefix)):]
+                        if act.act[: len(joint_trips_prefix)] == joint_trips_prefix:
+                            target_act = act.act[(len(joint_trips_prefix)) :]
                         else:
                             target_act = act.act
 
                         if (act.location.area, target_act) in unique_locations:
-                            location = unique_locations[(
-                                act.location.area, target_act)]
+                            location = unique_locations[(act.location.area, target_act)]
                             act.location = location
 
                         else:
                             location = activity.Location(
                                 area=act.location.area,
-                                loc=sampler.sample(act.location.area, target_act, mode=mode,
-                                                   previous_duration=previous_duration, previous_loc=previous_loc)
+                                loc=sampler.sample(
+                                    act.location.area,
+                                    target_act,
+                                    mode=mode,
+                                    previous_duration=previous_duration,
+                                    previous_loc=previous_loc,
+                                ),
                             )
                             if target_act in long_term_activities:
-                                unique_locations[(
-                                    act.location.area, target_act)] = location
+                                unique_locations[
+                                    (act.location.area, target_act)
+                                ] = location
                             act.location = location
 
                         previous_loc = location.loc  # keep track of previous location
@@ -590,8 +656,8 @@ class Population:
                 for idx in range(person.plan.length):
                     component = person.plan[idx]
                     if isinstance(component, activity.Leg):
-                        component.start_location = person.plan[idx-1].location
-                        component.end_location = person.plan[idx+1].location
+                        component.start_location = person.plan[idx - 1].location
+                        component.end_location = person.plan[idx + 1].location
 
 
 class Household:
@@ -604,7 +670,7 @@ class Household:
         freq=None,
         location: Optional[Location] = None,
         area=None,
-        loc=None
+        loc=None,
     ):
         self.hid = hid
         self.people = {}
@@ -626,8 +692,7 @@ class Household:
         elif isinstance(person, Person):
             self.people[person.pid] = person
         else:
-            raise UserWarning(
-                f"Expected instance of Person, not: {type(person)}")
+            raise UserWarning(f"Expected instance of Person, not: {type(person)}")
 
     def get(self, pid, default=None):
         return self.people.get(pid, default)
@@ -648,7 +713,8 @@ class Household:
     def __contains__(self, other_person):
         if not isinstance(other_person, Person):
             raise UserWarning(
-                f"Cannot check if household contains object type: {type(other_person)}, please provide Person.")
+                f"Cannot check if household contains object type: {type(other_person)}, please provide Person."
+            )
         for _, person in self:
             if other_person == person:
                 return True
@@ -662,7 +728,8 @@ class Household:
         """
         if not isinstance(other, Household):
             self.logger.warning(
-                f"Cannot compare household to non household: ({type(other)}).")
+                f"Cannot compare household to non household: ({type(other)})."
+            )
             return False
         if not self.attributes == other.attributes:
             return False
@@ -686,8 +753,7 @@ class Household:
         for person in self.people.values():
             if person.home.exists:
                 return person.home
-        self.logger.warning(
-            f"Failed to find location for household: {self.hid}")
+        self.logger.warning(f"Failed to find location for household: {self.hid}")
         return self._location
 
     def set_location(self, location: Location):
@@ -750,15 +816,16 @@ class Household:
     def freq(self):
         """
         Return hh_freq, else if None, return the average frequency of household members.
-        # TODO note this assumes we are basing hh freq on person freq.
-        # TODO replace this with something better.
+        TODO: note this assumes we are basing hh freq on person freq.
+        TODO: replace this with something better.
         """
         if self.hh_freq:
             return self.hh_freq
 
         if not self.people:
             self.logger.warning(
-                f"Unknown hh weight for empty hh {self.hid}, returning None.")
+                f"Unknown hh weight for empty hh {self.hid}, returning None."
+            )
             return None
 
         return self.av_person_freq
@@ -770,12 +837,14 @@ class Household:
     def av_person_freq(self):
         if not self.people:
             self.logger.warning(
-                f"Unknown hh weight for empty hh {self.hid}, returning None.")
+                f"Unknown hh weight for empty hh {self.hid}, returning None."
+            )
             return None
         frequencies = [person.freq for person in self.people.values()]
         if None in frequencies:
             self.logger.warning(
-                f"Missing person weight in hh {self.hid}, returning None.")
+                f"Missing person weight in hh {self.hid}, returning None."
+            )
             return None
         return sum(frequencies) / len(frequencies)
 
@@ -811,46 +880,42 @@ class Household:
     def plot(self, **kwargs):
         plot.plot_household(self, **kwargs)
 
-    def build_travel_geodataframe(self, **kwargs):
+    def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
         """
         Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household
-        :param kwargs: arguments for plot.build_person_travel_geodataframe,
-            from_epsg: coordinate system the plans are currently in
-            to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
+        Keyword Args: Keyword arguments for pam.plot.plans.build_person_travel_geodataframe
+            from_epsg (str): coordinate system the plans are currently in
+            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify
                 from_epsg as well to use this.
-        :return: geopandas.GeoDataFrame with columns for household id (hid) and person id (pid)
+        Returns:
+            geopandas.GeoDataFrame:  with columns for household id (hid) and person id (pid)
         """
         gdf = None
         for _, person in self:
             _gdf = person.build_travel_geodataframe(**kwargs)
-            _gdf['hid'] = self.hid
+            _gdf["hid"] = self.hid
             if gdf is None:
                 gdf = _gdf
             else:
                 gdf = gdf.append(_gdf)
-        gdf = gdf.sort_values(['pid', 'seq']).reset_index(drop=True)
+        gdf = gdf.sort_values(["pid", "seq"]).reset_index(drop=True)
         return gdf
 
-    def plot_travel_plotly(self, epsg='epsg:4326', **kwargs):
+    def plot_travel_plotly(self, epsg: str = "epsg:4326", **kwargs) -> None:
         """
         Uses plotly's Scattermapbox to plot agents' travel
-        :param epsg: coordinate system the plans spatial information is in, e.g. 'epsg:27700'
-        :param kwargs: arguments for plot.plot_travel_plans
-            :param gdf: geopandas.GeoDataFrame generated by build_person_travel_geodataframe
-            :param groupby: optional argument for splitting traces in the plot
-            :param colour_by: argument for specifying what the colour should correspond to in the plot, travel mode by
-            default
-            :param cmap: optional argument, useful to pass if generating a number of plots and want to keep colour
-            scheme
-            consistent
-            :param mapbox_access_token: required to generate the plot
-            https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
-        :return:
+        Args:
+            epsg (str): coordinate system the plans spatial information is in, e.g. 'epsg:27700'
+        Keyword Args: Keyword arguments for plot.plot_travel_plans
+            gdf (geopandas.GeoDataFrame): generated by build_person_travel_geodataframe
+            groupby (list): optional argument for splitting traces in the plot
+            colour_by (str): argument for specifying what the colour should correspond to in the plot, travel mode by default
+            cmap (dict): optional argument, useful to pass if generating a number of plots and want to keep colour scheme consistent
+            mapbox_access_token (str): required to generate the plot (see https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(
-                from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            **kwargs,
         )
 
     def __str__(self):
@@ -861,7 +926,8 @@ class Household:
         Unsafe addition with assignment (no guarantee of unique ids).
         """
         self.logger.debug(
-            "Note that this method requires all identifiers from populations being combined to be unique.")
+            "Note that this method requires all identifiers from populations being combined to be unique."
+        )
         if isinstance(other, Household):
             for pid, person in other.people.items():
                 self.people[pid] = copy.deepcopy(person)
@@ -870,11 +936,14 @@ class Household:
             self.people[other.pid] = copy.deepcopy(other)
             return self
         raise TypeError(
-            f"Object for addition must be a Household or Person object, not {type(other)}")
+            f"Object for addition must be a Household or Person object, not {type(other)}"
+        )
 
     def reindex(self, prefix: str):
         """
         Safely reindex all person identifiers in household using a prefix.
+        Args:
+            prefix (str): Prefix to add.
         """
         self.hid = prefix + self.hid
         for pid in list(self.people):
@@ -887,7 +956,7 @@ class Household:
             del self.people[pid]
 
     def pickle(self, path):
-        with open(path, 'wb') as file:
+        with open(path, "wb") as file:
             pickle.dump(self, file)
 
 
@@ -902,7 +971,7 @@ class Person:
         home_location: Optional[Location] = None,
         home_area=None,
         home_loc=None,
-        vehicle: Vehicle = None
+        vehicle: Vehicle = None,
     ):
         self.pid = pid
         self.person_freq = freq
@@ -935,15 +1004,16 @@ class Person:
     def set_freq(self, freq):
         self.person_freq = freq
 
-    def assign_vehicle(self, vehicle: Vehicle):
+    def assign_vehicle(self, vehicle: Vehicle) -> None:
         """
-        Give a Vehicle or ElectricVehicle to an agent
-        :param vehicle:
-        :return:
+        Give a Vehicle or ElectricVehicle to an agent.
+        Args:
+            vehicle (Vehicle):
         """
         if vehicle.id != self.pid:
             raise PAMVehicleIdError(
-                f'Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}')
+                f"Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}"
+            )
         self.vehicle = vehicle
 
     @property
@@ -1054,8 +1124,7 @@ class Person:
         Check for equality of two persons, equality is based on equal attributes and activity plans.
         """
         if not isinstance(other, Person):
-            self.logger.warning(
-                f"Cannot compare person to non person: ({type(other)})")
+            self.logger.warning(f"Cannot compare person to non person: ({type(other)})")
             return False
         if not self.attributes == other.attributes:
             return False
@@ -1098,7 +1167,8 @@ class Person:
         """
         if not self.plan.valid_sequence:
             raise PAMSequenceValidationError(
-                f"Person {self.pid} has invalid plan sequence")
+                f"Person {self.pid} has invalid plan sequence"
+            )
 
         return True
 
@@ -1109,7 +1179,8 @@ class Person:
         """
         if not self.plan.valid_time_sequence:
             raise PAMInvalidTimeSequenceError(
-                f"Person {self.pid} has invalid plan times")
+                f"Person {self.pid} has invalid plan times"
+            )
 
         return True
 
@@ -1120,7 +1191,8 @@ class Person:
         """
         if not self.plan.valid_locations:
             raise PAMValidationLocationsError(
-                f"Person {self.pid} has invalid plan locations")
+                f"Person {self.pid} has invalid plan locations"
+            )
 
         return True
 
@@ -1140,11 +1212,11 @@ class Person:
     def home_based(self):
         return self.plan.home_based
 
-    def add(self, p):
+    def add(self, p: Any) -> None:
         """
         Safely add a new component to the plan.
-        :param p:
-        :return:
+        Args:
+            p (Any): component to add
         """
         self.plan.add(p)
 
@@ -1176,69 +1248,75 @@ class Person:
     def reindex(self, prefix: str):
         self.pid = prefix + self.pid
 
-    def build_travel_geodataframe(self, **kwargs):
+    def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
         """
         Builds geopandas.GeoDataFrame for Person's Legs
-        :param kwargs: arguments for plot.build_person_travel_geodataframe,
-            from_epsg: coordinate system the plans are currently in
-            to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
-                from_epsg as well to use this.
-        :return: geopandas.GeoDataFrame with columns for person id (pid)
+        Keyword Args: Keyword arguments for plot.build_person_travel_geodataframe,
+            from_epsg (str): coordinate system the plans are currently in
+            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify from_epsg as well to use this.
+        Returns:
+            geopandas.GeoDataFrame: columns for person id (pid)
         """
         return plot.build_person_travel_geodataframe(self, **kwargs)
 
-    def plot_travel_plotly(self, epsg='epsg:4326', **kwargs):
+    def plot_travel_plotly(self, epsg: str = "epsg:4326", **kwargs) -> go.Figure:
         """
-        Uses plotly's Scattermapbox to plot agents' travel
-        :param epsg: coordinate system the plans spatial information is in, e.g. 'epsg:27700'
-        :param kwargs: arguments for plot.plot_travel_plans
-            :param gdf: geopandas.GeoDataFrame generated by build_person_travel_geodataframe
-            :param groupby: optional argument for splitting traces in the plot
-            :param colour_by: argument for specifying what the colour should correspond to in the plot, travel mode by
-            default
-            :param cmap: optional argument, useful to pass if generating a number of plots and want to keep colour
-            scheme
-            consistent
-            :param mapbox_access_token: required to generate the plot
-            https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
-        :return:
+        Uses plotly's Scattermapbox to plot agents' travel.
+
+        Args:
+            epsg (str, optional): coordinate system the plans spatial information is in, e.g. 'epsg:27700'. Defaults to "epsg:4326".
+        Keyword Args: Keyword arguments for plot.plot_travel_plans
+            gdf (geopandas.GeoDataFrame): generated by build_person_travel_geodataframe
+            groupby (list): optional argument for splitting traces in the plot
+            colour_by (str): argument for specifying what the colour should correspond to in the plot, travel mode by default
+            cmap (dict): optional argument, useful to pass if generating a number of plots and want to keep colour scheme consistent
+            mapbox_access_token (str): required to generate the plot (see https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+        Returns:
+            go.Figure: Plotly figure object
         """
         return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(
-                from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
+            **kwargs,
         )
 
     def __str__(self):
         return f"Person: {self.pid}"
 
-    def remove_activity(self, seq):
+    def remove_activity(self, seq: int) -> tuple:
         """
         Remove an activity from plan at given seq.
         Check for wrapped removal.
-        Return (adjusted) idx of previous and subsequent activities as a tuple
-        :param seq:
-        :return: tuple
+
+        Args:
+            seq (int):
+        Returns:
+            tuple: (adjusted) idx of previous and subsequent activities as a tuple
         """
         return self.plan.remove_activity(seq)
 
-    def move_activity(self, seq, default='home', new_mode='walk'):
+    def move_activity(self, seq: Any, default: str = "home", new_mode: str = "walk") -> None:
         """
-        Move an activity from plan at given seq to default location
-        :param seq:
-        :param default: 'home' or pam.activity.Location
-        :param new_mode: access/egress journey switching to this mode. Ie 'walk'
-        :return: None
+        Move an activity from plan at given seq to default location.
+        Args:
+            seq (Any):
+            default (str, optional):
+                'home' or pam.activity.Location.
+                Defaults to "home".
+            new_mode (str, optional):
+                access/egress journey switching to this mode. Ie 'walk'.
+                Defaults to "walk".
         """
         return self.plan.move_activity(seq, default, new_mode)
 
-    def fill_plan(self, p_idx, s_idx, default='home'):
+    def fill_plan(self, p_idx: Any, s_idx: Any, default: str = "home") -> bool:
         """
         Fill a plan after Activity has been removed.
-        :param p_idx: location of previous Activity
-        :param s_idx: location of subsequent Activity
-        :param default:
-        :return: bool
+        Args:
+            p_idx (Any): location of previous Activity
+            s_idx (Any): location of subsequent Activity
+            default (str, optional): Defaults to "home"
+        Returns:
+            bool:
         """
         return self.plan.fill_plan(p_idx, s_idx, default=default)
 
@@ -1246,5 +1324,5 @@ class Person:
         self.plan.stay_at_home()
 
     def pickle(self, path):
-        with open(path, 'wb') as file:
+        with open(path, "wb") as file:
             pickle.dump(self, file)
