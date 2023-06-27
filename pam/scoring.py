@@ -52,15 +52,12 @@ class CharyparNagelPlanScorer:
     }
 
     def __init__(self, cnfg) -> None:
-        """
-        Charypar-Nagel plan scorer.
-        """
+        """Charypar-Nagel plan scorer."""
         self.logger = logging.getLogger(__name__)
         self.cnfg = cnfg
 
     def score_person(self, person: Person, subpopulation: str = "subpopulation", plan_costs: Optional[float] = None):
-        """
-        Score a pam.core.Person Plan
+        """Score a pam.core.Person Plan.
 
         Args:
             person (Person):
@@ -72,8 +69,7 @@ class CharyparNagelPlanScorer:
         return self.score_plan(person.plan, plan_cost=plan_costs, cnfg=cnfg)
 
     def score_plan(self, plan: Plan, cnfg: dict, plan_cost: Optional[float] = None) -> float:
-        """
-        Score a pam.activity.Plan
+        """Score a pam.activity.Plan.
 
         Args:
             plan (pam.activity.Plan): activity plan to be scored.
@@ -184,9 +180,7 @@ class CharyparNagelPlanScorer:
         return self.score_pt_interchanges(plan, cnfg) + sum([self.score_leg(leg, cnfg) for leg in plan.legs])
 
     def score_pt_interchanges(self, plan: Plan, cnfg: dict) -> float:
-        """
-        Calculates utility of line switch.
-        """
+        """Calculates utility of line switch."""
         if not cnfg.get("utilityOfLineSwitch"):
             return 0.0
         transits = []

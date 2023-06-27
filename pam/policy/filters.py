@@ -5,9 +5,7 @@ import pam.core
 
 
 class Filter:
-    """
-    Base class for attribute-based filters
-    """
+    """Base class for attribute-based filters."""
 
     def __init__(self):
         pass
@@ -32,8 +30,7 @@ class Filter:
 
 
 class PersonAttributeFilter(Filter):
-    """
-    Helps filtering Person on specified attributes
+    """Helps filtering Person on specified attributes.
 
     Parameters
     ----------

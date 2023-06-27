@@ -30,8 +30,7 @@ class FacilitySampler:
         activity_areas_path: str = None,
         seed: int = None,
     ):
-        """
-        Sampler object for facilities. optionally build a facility xml output (for MATSim).
+        """Sampler object for facilities. optionally build a facility xml output (for MATSim).
         Note that if a zone id is missing then the sampler will not be able to default to
         random sample, so will either return None or fail as per the fail flag.
         :param facilities: facilities Geodataframe
@@ -45,7 +44,7 @@ class FacilitySampler:
         :param list transit_modes: a list of PT modes. If not specified, the default list in variables.TRANSIT_MODES is used
         :param list expected_euclidean_speeds: a dictionary specifying the euclidean speed of the various modes (m/s). If not specified, the default list in variables.EXPECTED_EUCLIDEAN_SPEEDS is used
         :param str activity_areas_path: path to the activity areas shapefile (previously exported throught the FacilitySampler.export_activity_areas method)
-        :params int seed: seed number for reproducible results (None default - does not fix seed)
+        :params int seed: seed number for reproducible results (None default - does not fix seed).
         """
         self.logger = logging.getLogger(__name__)
 
@@ -87,15 +86,13 @@ class FacilitySampler:
         self.facilities = {}
 
     def sample(self, location_idx, activity, mode=None, previous_duration=None, previous_loc=None):
-        """
-        Sample a shapely.Point from the given location and for the given activity.
+        """Sample a shapely.Point from the given location and for the given activity.
         :params str location_idx: the zone to sample from
         :params str activity: activity purpose
         :params str mode: transport mode used to access facility
         :params pd.Timedelta previous_duration: the time duration of the arriving leg
-        :params shapely.Point previous_loc: the location of the last visited activity
+        :params shapely.Point previous_loc: the location of the last visited activity.
         """
-
         idx, loc = self.sample_facility(
             location_idx, activity, mode=mode, previous_duration=previous_duration, previous_loc=previous_loc
         )
@@ -108,9 +105,7 @@ class FacilitySampler:
     def sample_facility(
         self, location_idx, activity, patience=1000, mode=None, previous_duration=None, previous_loc=None
     ):
-        """
-        Sample a facility id and location. If a location idx is missing, can return a random location.
-        """
+        """Sample a facility id and location. If a location idx is missing, can return a random location."""
         if location_idx not in self.samplers:
             if self.random_default:
                 self.logger.warning(f"Using random sample for zone:{location_idx}:{activity}")
@@ -147,16 +142,13 @@ class FacilitySampler:
                 return next(sampler(mode, previous_duration, previous_loc))
 
     def spatial_join(self, facilities, zones):
-        """
-        Spatially join facility and zone data
-        """
+        """Spatially join facility and zone data."""
         self.logger.warning("Joining facilities data to zones, this may take a while.")
         activity_areas = gp.sjoin(facilities, zones, how="inner", predicate="intersects")
         return activity_areas
 
     def activity_areas_indexing(self, activity_areas):
-        """
-        Convert joined zone-activities gdf to a nested dictionary for faster indexing
+        """Convert joined zone-activities gdf to a nested dictionary for faster indexing
         The first index level refers to zones, while the second to activity purposes.
         """
         activity_areas_dict = {x: {} for x in activity_areas["index_right"].unique()}
@@ -166,24 +158,19 @@ class FacilitySampler:
         return activity_areas_dict
 
     def export_activity_areas(self, filepath):
-        """
-        Export the spatially joined facilities-zones geodataframe
-        """
+        """Export the spatially joined facilities-zones geodataframe."""
         with open(filepath, "wb") as f:
             pickle.dump(self.activity_areas_dict, f)
 
     def load_activity_areas(self, filepath):
-        """
-        Load the spatially joined facilities-zones geodataframe
-        """
+        """Load the spatially joined facilities-zones geodataframe."""
         with open(filepath, "rb") as f:
             self.activity_areas_dict = pickle.load(f)
 
     def build_facilities_sampler(self, activity_areas, weight_on=None, max_walk=None):
-        """
-        Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
+        """Build facility location sampler from osmfs input. The sampler returns a tuple of (uid, Point)
         TODO - I do not like having a sjoin and assuming index names here
-        TODO - look to move to more carefully defined input data format for facilities
+        TODO - look to move to more carefully defined input data format for facilities.
 
         :params str weight_on: a column (name) of the facilities geodataframe to be used as a sampling weight
         """
@@ -244,9 +231,7 @@ class FacilitySampler:
 
 
 def euclidean_distance(p1, p2):
-    """
-    Calculate euclidean distance between two Activity.location.loc objects
-    """
+    """Calculate euclidean distance between two Activity.location.loc objects."""
     return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5
 
 
@@ -259,12 +244,11 @@ def inf_yielder(
     expected_euclidean_speeds=None,
     seed: int = None,
 ):
-    """
-    Redirect to the appropriate sampler.
+    """Redirect to the appropriate sampler.
     :params list candidates: a list of tuples, containing candidate facilities and their index:
     :params pd.Series weights: sampling weights (ie facility floorspace)
     :params pd.Series transit_distance: distance of each candidate facility from the closest PT stop
-    :params float max_walk: maximum walking distance from a PT stop
+    :params float max_walk: maximum walking distance from a PT stop.
     """
     if isinstance(weights, pd.Series):
         return lambda mode=None, previous_duration=None, previous_loc=None: inf_yielder_weighted(
@@ -284,9 +268,7 @@ def inf_yielder(
 
 
 def inf_yielder_simple(candidates, seed: int = None):
-    """
-    Endlessly yield shuffled candidate items.
-    """
+    """Endlessly yield shuffled candidate items."""
     # Fix random seed
     random.seed(seed)
     while True:
@@ -307,8 +289,7 @@ def inf_yielder_weighted(
     previous_loc,
     seed: int = None,
 ):
-    """
-    A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
+    """A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
     :params list candidates: a list of tuples, containing candidate facilities and their index:
     :params pd.Series weights: sampling weights (ie facility floorspace)
     :params pd.Series transit_distance: distance of each candidate facility from the closest PT stop
@@ -316,7 +297,7 @@ def inf_yielder_weighted(
     :params str mode: transport mode used to access facility
     :params pd.Timedelta previous_duration: the time duration of the arriving leg
     :params shapely.Point previous_loc: the location of the last visited activity
-    :params int seed: seed of pseudorandom number generator (default None means that the seed remains unfixed)
+    :params int seed: seed of pseudorandom number generator (default None means that the seed remains unfixed).
     """
     # Fix random seed
     np.random.seed(seed)

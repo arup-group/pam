@@ -60,7 +60,7 @@ def test_assign_same_locs_to_household_escort_activity_in_same_area(SmithHouseho
 
 
 def test_retain_already_existing_locs(SmithHousehold):
-    """The sampler does"""
+    """The sampler does."""
     population = Population()
     population.add(SmithHousehold)
     existing_location = Location(area="w", loc=Point(1, 1))

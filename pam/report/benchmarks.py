@@ -4,8 +4,7 @@ import pandas as pd
 
 
 def benchmarks(population):
-    """
-    Yield bms.
+    """Yield bms.
 
     :param pam.core.Population population: pam.core.Population
     :yield pandas.DataFrame: benchmark
@@ -83,14 +82,13 @@ def create_benchmark(
     normalise_by=None,
     colnames=None,
 ):
-    """
-    Extract user-specified benchmarks from the population
+    """Extract user-specified benchmarks from the population
     :param pandas.DataFrame data: dataframe of trip or leg logs with required fields
     :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
     :params list data_fields: The data to summarise. If None, simply count the instances of each group
     :params list of functions aggfunc: A set of functions to apply to each data_field, after grouping by the specified dimensions. For example: [len, sum], [sum, np.mean], [np.sum], etc
     :params list normalise_by: convert calculated values to percentages across the specified -by this field- dimension(s)
-    :params list colnames: if different to None, rename the columns of the returned dataset
+    :params list colnames: if different to None, rename the columns of the returned dataset.
 
     :return: pandas.DataFrame
     """

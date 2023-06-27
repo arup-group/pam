@@ -105,9 +105,7 @@ def test_population(test_plan) -> Population:
 
 @pytest.fixture
 def test_zoning_system() -> gp.GeoDataFrame:
-    """
-    Dummy orthogonal zoning system
-    """
+    """Dummy orthogonal zoning system."""
     zones = []
     labels = [chr(x) for x in range(97, 106)]
     for x in range(3):
@@ -135,13 +133,13 @@ def path_output_dir():
 
 
 def get_activity_zones(plan: Plan, zoning_system: gp.GeoDataFrame) -> set:
-    """Return the activity location zones"""
+    """Return the activity location zones."""
     locs = gp.GeoDataFrame(geometry=[x.location.loc for x in plan.activities])
     return list(locs.sjoin(zoning_system).zone)
 
 
 def test_simple_cropping(test_plan, test_zoning_system):
-    """Only keep legs entering/exiting zone h"""
+    """Only keep legs entering/exiting zone h."""
     boundary = test_zoning_system.loc["h"].geometry
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
@@ -150,9 +148,7 @@ def test_simple_cropping(test_plan, test_zoning_system):
 
 
 def test_complex_cropping(test_plan, test_zoning_system):
-    """
-    Through-trips and multiple entries to the core area (e)
-    """
+    """Through-trips and multiple entries to the core area (e)."""
     boundary = test_zoning_system.loc["e"].geometry
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
@@ -161,10 +157,7 @@ def test_complex_cropping(test_plan, test_zoning_system):
 
 
 def test_fully_external(test_plan, test_zoning_system, test_population):
-    """
-    All activities happen outside the core area (i)
-
-    """
+    """All activities happen outside the core area (i)."""
     boundary = test_zoning_system.loc["i"].geometry
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)
@@ -178,9 +171,7 @@ def test_fully_external(test_plan, test_zoning_system, test_population):
 
 
 def test_fully_internal_plan(test_plan, test_zoning_system):
-    """
-    All activities in spatial scope -> no change of agent plans
-    """
+    """All activities in spatial scope -> no change of agent plans."""
     boundary = test_zoning_system.dissolve().geometry[0]
     plan_cropped = deepcopy(test_plan)
     cropping.simplify_external_plans(plan_cropped, boundary)

@@ -21,16 +21,12 @@ except:
 
 
 def _levenshtein_distance(a: str, b: str) -> float:
-    """
-    Levenstein distance between two strings.
-    """
+    """Levenstein distance between two strings."""
     return 1 - ratio(a, b)
 
 
 def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
-    """
-    Create a levenshtein distance matrix from two lists of strings.
-    """
+    """Create a levenshtein distance matrix from two lists of strings."""
     levenshtein_distance = np.vectorize(_levenshtein_distance)
     if n_cores == 1:
         distances = levenshtein_distance(np.array(x).reshape(-1, 1), np.array(y))
@@ -45,8 +41,7 @@ def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
 
 
 class PlanClusters:
-    """
-    Groups activity plans into clusters.
+    """Groups activity plans into clusters.
     Plan similarity is defined using the edit distance
         of character-encoded plan sequences.
     """
@@ -69,9 +64,7 @@ class PlanClusters:
 
     @property
     def distances(self) -> np.array:
-        """
-        Levenshtein distances between activity plans.
-        """
+        """Levenshtein distances between activity plans."""
         if self._distances is None:
             self._distances = calc_levenshtein_matrix(self.plans_encoded, self.plans_encoded, n_cores=self.n_cores)
         return self._distances
@@ -88,8 +81,7 @@ class PlanClusters:
         clustering_method: str = "agglomerative",
         linkage: Optional[str] = "complete",
     ) -> None:
-        """
-        Fit an agglomerative clustering model.
+        """Fit an agglomerative clustering model.
 
         :param n_clusters: The number of clusters to use.
         :param linkage: Linkage criterion.
@@ -112,30 +104,24 @@ class PlanClusters:
         self.model = model
 
     def get_closest_matches(self, plan, n) -> List[Plan]:
-        """
-        Get the n closest matches of a PAM activity schedule.
-        """
+        """Get the n closest matches of a PAM activity schedule."""
         idx = self.plans.index(plan)
         idx_closest = np.argsort(self.distances_no_diagonal[idx])[:n]
         return [self.plans[x] for x in idx_closest]
 
     def get_cluster_plans(self, cluster: int):
-        """
-        Get the plans that belong in a specific cluster.
+        """Get the plans that belong in a specific cluster.
 
         :param cluster: The cluster index.
         """
         return list(itertools.compress(self.plans, self.model.labels_ == cluster))
 
     def get_cluster_sizes(self) -> pd.Series:
-        """
-        Get the number of plans in each cluster.
-        """
+        """Get the number of plans in each cluster."""
         return pd.Series(self.model.labels_).value_counts()
 
     def get_cluster_membership(self) -> dict:
-        """
-        Get the cluster membership of each person in the population.
+        """Get the cluster membership of each person in the population.
         Returns a dictionary where the index values are (hid, pid) tuples,
             and the values are the correponding agents' clusters.
         """
@@ -143,9 +129,8 @@ class PlanClusters:
         return dict(zip(ids, self.model.labels_))
 
     def plot_plan_breakdowns(self, ax=None, cluster=None, activity_classes: Optional[List[str]] = None, **kwargs):
-        """
-        Area plot of the breakdown of activities taking place every minute
-            for a specific cluster.
+        """Area plot of the breakdown of activities taking place every minute
+        for a specific cluster.
         """
         if cluster is not None:
             plans = self.get_cluster_plans(cluster)
@@ -158,9 +143,8 @@ class PlanClusters:
         return plot_activity_breakdown_area(plans=plans, activity_classes=self.activity_classes, ax=ax, **kwargs)
 
     def plot_plan_breakdowns_tiles(self, n: Optional[int] = None, **kwargs):
-        """
-        Tiled area plot of the breakdown of activities taking place every minute,
-            for the clusters with the top n number of plans.
+        """Tiled area plot of the breakdown of activities taking place every minute,
+        for the clusters with the top n number of plans.
         """
         if n is None:
             n = len(set(self.model.labels_))

@@ -2,11 +2,10 @@ import random
 
 
 def bin_integer_transformer(features, target, bins, default=None):
-    """
-    Bin a target integer feature based on bins. Where bins are a dict, with keys as
+    """Bin a target integer feature based on bins. Where bins are a dict, with keys as
     a tuple of bin extends (inclusive) and values as the new mapping. Missing ranges
     will return None.
-    Where features are a dictionary structure of features, eg: {'age':1, ...}
+    Where features are a dictionary structure of features, eg: {'age':1, ...}.
     """
     value = features.get(target)
     if value is None:
@@ -18,8 +17,7 @@ def bin_integer_transformer(features, target, bins, default=None):
 
 
 def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False, seed: int = None):
-    """
-    Randomly sample from a joint distribution based some discrete features.
+    """Randomly sample from a joint distribution based some discrete features.
 
     Where features are a dictionary structure of features, eg: {'gender':'female'}
 

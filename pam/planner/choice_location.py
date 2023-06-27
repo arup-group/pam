@@ -1,6 +1,4 @@
-"""
-Location and mode choice models for activity modelling
-"""
+"""Location and mode choice models for activity modelling."""
 import itertools
 import logging
 from copy import deepcopy
@@ -19,14 +17,14 @@ from pam.planner.zones import Zones
 
 
 class ChoiceLabel(NamedTuple):
-    """Destination and mode choice labels of a selected option"""
+    """Destination and mode choice labels of a selected option."""
 
     destination: str
     mode: str
 
 
 class ChoiceIdx(NamedTuple):
-    """Choice set index"""
+    """Choice set index."""
 
     pid: str
     hid: str
@@ -35,7 +33,7 @@ class ChoiceIdx(NamedTuple):
 
 
 class ChoiceSet(NamedTuple):
-    """MNL Choice set"""
+    """MNL Choice set."""
 
     idxs: List[ChoiceIdx]
     u_choices: np.array
@@ -44,7 +42,7 @@ class ChoiceSet(NamedTuple):
 
 @dataclass
 class SelectionSet:
-    """Calculate probabilities and select alternative"""
+    """Calculate probabilities and select alternative."""
 
     choice_set: ChoiceSet
     func_probabilities: Callable
@@ -53,15 +51,11 @@ class SelectionSet:
 
     @property
     def probabilities(self) -> np.array:
-        """
-        Probabilities for each alternative.
-        """
+        """Probabilities for each alternative."""
         return np.apply_along_axis(func1d=self.func_probabilities, axis=1, arr=self.choice_set.u_choices)
 
     def sample(self) -> List:
-        """
-        Sample from a set of alternative options.
-        """
+        """Sample from a set of alternative options."""
         sampled = np.apply_along_axis(func1d=self.func_sampling, axis=1, arr=self.probabilities)
         sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
         self._selections = sampled_labels
@@ -76,8 +70,7 @@ class SelectionSet:
 
 @dataclass
 class ChoiceConfiguration:
-    """
-    :param u: The utility function specification, defined as a string.
+    """:param u: The utility function specification, defined as a string.
         The string may point to household, person, act, leg,
             od, or zone data.
         It can also include values and/or mathematical operations.
@@ -95,9 +88,7 @@ class ChoiceConfiguration:
     func_sampling: Optional[Callable] = None
 
     def validate(self, vars: List[str]) -> None:
-        """
-        Return an error if a value has not been set
-        """
+        """Return an error if a value has not been set."""
         for var in vars:
             if getattr(self, var) is None:
                 raise ValueError(f"Setting {var} has not been set yet")
@@ -105,8 +96,7 @@ class ChoiceConfiguration:
 
 class ChoiceModel:
     def __init__(self, population: Population, od: OD, zones: Union[pd.DataFrame, Zones]) -> None:
-        """
-        Choice model interface.
+        """Choice model interface.
 
         :param population: A PAM population.
         :param od: An object holding origin-destination.
@@ -129,8 +119,7 @@ class ChoiceModel:
             return Zones(data=zones.copy())
 
     def configure(self, **kwargs) -> None:
-        """
-        Specify the model.
+        """Specify the model.
 
         :Keyword Arguments: Parameters of the ChoiceConfiguration class.
         """
@@ -142,8 +131,7 @@ class ChoiceModel:
         self.logger.info(self.configuration)
 
     def apply(self, apply_location=True, apply_mode=True, once_per_agent=True, apply_mode_to="chain"):
-        """
-        Apply the choice model to the PAM population,
+        """Apply the choice model to the PAM population,
             updating the activity locations and mode choices in scope.
 
         :param apply_location: Whether to update activities' location
@@ -185,9 +173,7 @@ class ChoiceModel:
         self.logger.info("Choice model application complete.")
 
     def get_choice_set(self) -> ChoiceSet:
-        """
-        Construct an agent's choice set for each activity/leg within scope.
-        """
+        """Construct an agent's choice set for each activity/leg within scope."""
         self.configuration.validate(["u", "scope"])
         od = self.od
         u = self.configuration.u
@@ -233,9 +219,7 @@ class ChoiceModel:
 
 
 class ChoiceMNL(ChoiceModel):
-    """
-    Applies a Multinomial Logit Choice model.
-    """
+    """Applies a Multinomial Logit Choice model."""
 
     def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
         super().__init__(population, od, zones)

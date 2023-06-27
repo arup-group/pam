@@ -6,9 +6,7 @@ import pam.core
 
 
 class SamplingProbability:
-    """
-    Base class for probabilistic samplers
-    """
+    """Base class for probabilistic samplers."""
 
     def __init__(self, probability: Union[float, int]):
         if isinstance(probability, int):
@@ -40,9 +38,8 @@ class SamplingProbability:
 
 
 class SimpleProbability(SamplingProbability):
-    """
-    A probabilistic sampler which returns value of probability
-    at the same level as the input (household/person/activity)
+    """A probabilistic sampler which returns value of probability
+    at the same level as the input (household/person/activity).
 
     Parameters
     ----------
@@ -58,8 +55,7 @@ class SimpleProbability(SamplingProbability):
 
 
 class HouseholdProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household level based on probability for a household.
 
     Parameters
@@ -96,8 +92,7 @@ class HouseholdProbability(SamplingProbability):
 
 
 class PersonProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household and person level based on probability for a
     person.
 
@@ -138,8 +133,7 @@ class PersonProbability(SamplingProbability):
 
 
 class ActivityProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household, person and activity level based on probability
     for an activity.
 

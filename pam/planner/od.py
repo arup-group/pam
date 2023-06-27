@@ -1,6 +1,4 @@
-"""
-Manages origin-destination data required by the planner module.
-"""
+"""Manages origin-destination data required by the planner module."""
 import itertools
 from typing import List, NamedTuple, Union
 
@@ -9,7 +7,7 @@ import pandas as pd
 
 
 class Labels(NamedTuple):
-    """Data labels for the origin-destination dataset"""
+    """Data labels for the origin-destination dataset."""
 
     vars: List
     origin_zones: List
@@ -18,26 +16,21 @@ class Labels(NamedTuple):
 
 
 class OD:
-    """
-    Holds origin-destination matrices for a number of modes and variables.
-    """
+    """Holds origin-destination matrices for a number of modes and variables."""
 
     def __init__(self, data: np.ndarray, labels: Union[Labels, List, dict]) -> None:
-        """
-        :param data: A multi-dimensional numpy array of the origin-destination data.
-            - First dimension: variable (ie travel time, distance, etc)
-            - Second dimension: origin zone
-            - Third dimension: destination zone
-            - Fourth dimension: mode (ie car, bus, etc)
+        """:param data: A multi-dimensional numpy array of the origin-destination data.
+        - First dimension: variable (ie travel time, distance, etc)
+        - Second dimension: origin zone
+        - Third dimension: destination zone
+        - Fourth dimension: mode (ie car, bus, etc)
         """
         self.data = data
         self.labels = self.parse_labels(labels)
         self.data_checks()
 
     def data_checks(self):
-        """
-        Check the integrity of input data and labels.
-        """
+        """Check the integrity of input data and labels."""
         assert self.data.ndim == 4, "The number of matrix dimensions should be 4 (mode, variable, origin, destination)"
         for i, (key, labels) in enumerate(zip(self.labels._fields, self.labels)):
             assert len(labels) == self.data.shape[i], (
@@ -46,9 +39,7 @@ class OD:
 
     @staticmethod
     def parse_labels(labels: Union[Labels, List, dict]) -> Labels:
-        """
-        Parse labels as a named tuple.
-        """
+        """Parse labels as a named tuple."""
         if not isinstance(labels, Labels):
             if isinstance(labels, list):
                 return Labels(*labels)
@@ -93,9 +84,7 @@ class ODMatrix(NamedTuple):
 class ODFactory:
     @classmethod
     def from_matrices(cls, matrices: List[ODMatrix]) -> OD:
-        """
-        Creates an OD instance from a list of ODMatrices
-        """
+        """Creates an OD instance from a list of ODMatrices."""
         # collect dimensions
         labels = cls.prepare_labels(matrices)
 

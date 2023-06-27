@@ -112,7 +112,7 @@ def test_combine(path_test_plans_A, path_test_plans_B, tmp_path):
 
 @pytest.mark.parametrize("sample_percentage", ["1", "2"])
 def test_cli_sample(path_test_plan, tmp_path, sample_percentage):
-    """Double the population of 5 agents"""
+    """Double the population of 5 agents."""
     path_output_dir = str(tmp_path)
     runner = CliRunner()
     result = runner.invoke(cli, ["sample", path_test_plan, path_output_dir, "-s", sample_percentage])

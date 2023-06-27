@@ -17,8 +17,7 @@ def one_hot_to_plan(
     default_leg_mode: str = "car",
     default_activity: str = "other",
 ) -> Plan:
-    """
-    Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
+    """Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
     by assuming obviously missing components. Does not support locations, these must be created
     manually.
 

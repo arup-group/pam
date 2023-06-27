@@ -14,11 +14,10 @@ def write_od_matrices(
     person_filter: Optional[str] = None,
     time_minutes_filter: Optional[List[Tuple[int]]] = None,
 ) -> None:
-    """
-    Write a core population object to tabular O-D weighted matrices.
+    """Write a core population object to tabular O-D weighted matrices.
     Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
     A single filter can be applied each time.
-    TODO include freq (assume hh)
+    TODO include freq (assume hh).
 
     :param population: core.Population
     :param path: directory to write OD matrix files

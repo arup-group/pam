@@ -20,8 +20,7 @@ def load_travel_diary(
     trip_freq_as_person_freq: bool = False,
     trip_freq_as_hh_freq: bool = False,
 ):
-    """
-    Turn standard tabular data inputs (travel survey and attributes) into core population format.
+    """Turn standard tabular data inputs (travel survey and attributes) into core population format.
     :param trips: DataFrame
     :param persons_attributes: DataFrame
     :param hhs_attributes: DataFrame
@@ -32,7 +31,7 @@ def load_travel_diary(
     :param sort_by_seq=None, optionally force trip sorting as True or False
     :param trip_freq_as_person_freq:bool=False.
     :param trip_freq_as_hh_freq:bool=False.
-    :return: core.Population
+    :return: core.Population.
     """
     # TODO check for required col headers and give useful error?
 
@@ -325,8 +324,7 @@ def build_population(
     persons_attributes: Optional[pd.DataFrame] = None,
     hhs_attributes: Optional[pd.DataFrame] = None,
 ) -> core.Population:
-    """
-    Build a population of households and persons (without plans)
+    """Build a population of households and persons (without plans)
     from available trips, persons_attributes and households_attributes
     data.
     Details of required table formats are in the README.
@@ -465,11 +463,10 @@ def hh_person_df_to_dict(
     key_hh: str,
     key_person: str,
 ):
-    """
-    Restructure a dataframe as a nested dictionary of dataframes,
+    """Restructure a dataframe as a nested dictionary of dataframes,
         where the first level is the household index,
         the second level is the person index,
-        the value is the dataframe slice corresponding to that person
+        the value is the dataframe slice corresponding to that person.
 
     The dictionary structure allows for much faster access to a person's data.
     :params pd.DataFrame df: the pandas dataframe to reindex
@@ -490,16 +487,14 @@ def tour_based_travel_diary_read(
     include_loc=False,
     sort_by_seq: Union[bool, None] = None,
 ):
-    """
-    Complex travel diray reader. Will try to infer home activiity and tour based purposes.
+    """Complex travel diray reader. Will try to infer home activiity and tour based purposes.
     :param trips: DataFrame
     :param persons_attributes: DataFrame
     :param hhs_attributes: DataFrame
     :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
     :param sort_by_seq=None, optionally force trip sorting as True or False
-    :return: core.Population
+    :return: core.Population.
     """
-
     population = build_population(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
 
     if sort_by_seq is None and "seq" in trips.columns:
@@ -582,8 +577,7 @@ def trip_based_travel_diary_read(
     include_loc=False,
     sort_by_seq: Union[bool, None] = None,
 ):
-    """
-    Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
+    """Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
     format. This is a variation of the standard load_travel_diary() method because it does not require
     activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
     We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
@@ -592,9 +586,8 @@ def trip_based_travel_diary_read(
     :param hhs_attributes: DataFrame
     :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
     :param sort_by_seq=None, optionally force trip sorting as True or False
-    :return: core.Population
+    :return: core.Population.
     """
-
     population = build_population(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
 
     if sort_by_seq is None and "seq" in trips.columns:
@@ -678,8 +671,7 @@ def from_to_travel_diary_read(
     include_loc=False,
     sort_by_seq: Union[bool, None] = False,
 ):
-    """
-    Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
+    """Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
     format. This is a variation of the standard load_travel_diary() method because it does not require
     activity inference or home location.
     We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity)
@@ -689,7 +681,7 @@ def from_to_travel_diary_read(
     :param hhs_attributes: DataFrame
     :return: core.Population
     :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
-    :param sort_by_seq=None, optionally force trip sorting as True or False
+    :param sort_by_seq=None, optionally force trip sorting as True or False.
     """
     logger = logging.getLogger(__name__)
 
@@ -771,8 +763,7 @@ def from_to_travel_diary_read(
 
 
 def sample_population(trips_df, sample_perc, attributes_df=None, weight_col="freq"):
-    """
-    Return the trips of a random sample of the travel population.
+    """Return the trips of a random sample of the travel population.
     We merge the trips and attribute datasets to enable probability weights based on population demographics.
 
     :params DataFrame trips_df: Trips dataset

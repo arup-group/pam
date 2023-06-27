@@ -35,9 +35,7 @@ class Encoder:
 
 
 class StringCharacterEncoder(Encoder):
-    """
-    Encodes strings as single characters.
-    """
+    """Encodes strings as single characters."""
 
     @staticmethod
     def get_mapping(labels: List[str]) -> dict:
@@ -48,9 +46,7 @@ class StringCharacterEncoder(Encoder):
 
 
 class StringIntEncoder(Encoder):
-    """
-    Encodes strings as integers.
-    """
+    """Encodes strings as integers."""
 
     @staticmethod
     def get_mapping(labels: List[str]) -> dict:
@@ -82,9 +78,7 @@ class PlanEncoder:
         raise NotImplementedError
 
     def decode(self, encoded_plan: np.array) -> Plan:
-        """
-        Decode a sequence to a new PAM plan.
-        """
+        """Decode a sequence to a new PAM plan."""
         start_time = START_OF_DAY
         plan = activity.Plan()
         # for every activity/leg:
@@ -106,9 +100,7 @@ class PlanCharacterEncoder(PlanEncoder):
     activity_encoder_class = StringCharacterEncoder
 
     def encode(self, plan: Plan) -> np.array:
-        """
-        Convert a pam plan to a character sequence
-        """
+        """Convert a pam plan to a character sequence."""
         encoded = ""
         for act in plan.day:
             duration = int(act.duration / td(minutes=1))
@@ -125,10 +117,9 @@ class PlanOneHotEncoder(PlanEncoder):
     activity_encoder_class = StringIntEncoder
 
     def encode(self, plan: Plan) -> np.array:
-        """
-        Encode a PAM plan into a 2D numpy boolean array,
-            where the row indicates the activity
-            and the column indicates the minute of the day.
+        """Encode a PAM plan into a 2D numpy boolean array,
+        where the row indicates the activity
+        and the column indicates the minute of the day.
         """
         duration = int((plan.day[-1].end_time - START_OF_DAY) / td(minutes=1))
         encoded = np.zeros(shape=(len(self.activity_encoder.labels), duration), dtype=bool)
@@ -153,9 +144,7 @@ class PlansEncoder:
         self.plan_encoder = self.plans_encoder_class(labels=activity_classes)
 
     def encode(self, plans: List[Plan]) -> np.ndarray:
-        """
-        Encode all plans to a stacked numpy array.
-        """
+        """Encode all plans to a stacked numpy array."""
         plans_encoded = np.stack([self.plan_encoder.encode(x) for x in plans])
         return plans_encoded
 
@@ -165,11 +154,10 @@ class PlansCharacterEncoder(PlansEncoder):
 
 
 class PlansOneHotEncoder(PlansEncoder):
-    """
-    Encode plans to a 3D numpy array,
-        where the first axis indicates the person,
-        the second indicates the activity,
-        and the third indicates the minute of the day.
+    """Encode plans to a 3D numpy array,
+    where the first axis indicates the person,
+    the second indicates the activity,
+    and the third indicates the minute of the day.
     """
 
     plans_encoder_class = PlanOneHotEncoder

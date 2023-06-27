@@ -6,8 +6,7 @@ import pam.core
 
 
 class Modifier:
-    """
-    Base class for modifiers - these are classes which change
+    """Base class for modifiers - these are classes which change
     activities in a person's plan.
 
     In general a modifer should be able to be applied on three levels
@@ -45,8 +44,7 @@ class Modifier:
 
 
 class RemoveActivity(Modifier):
-    """
-    Removes specified activities.
+    """Removes specified activities.
 
     Parameters
     ----------
@@ -108,8 +106,7 @@ class RemoveActivity(Modifier):
 
 
 class AddActivity(Modifier):
-    """
-    Adds specified activities.
+    """Adds specified activities.
 
     Parameters
     ----------
@@ -126,8 +123,7 @@ class AddActivity(Modifier):
 
 
 class ReduceSharedActivity(Modifier):
-    """
-    Policy that needs to be applied on a household level. For activities
+    """Policy that needs to be applied on a household level. For activities
     shared within a household (Activity.act (type of activity), start/end
     times and locations match). Randomly assigns a person whose activities
     will be retained and deletes the shared activities from other persons
@@ -206,8 +202,7 @@ class ReduceSharedActivity(Modifier):
 
 
 class MoveActivityTourToHomeLocation(Modifier):
-    """
-    Moves a tour of activities to home location. A tour is defined
+    """Moves a tour of activities to home location. A tour is defined
     as a list of activities sandwiched between two home activities.
 
     Parameters

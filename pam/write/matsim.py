@@ -25,8 +25,7 @@ def write_matsim(
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
 ) -> None:
-    """
-    Write a core population to matsim population v6 xml format.
+    """Write a core population to matsim population v6 xml format.
     Note that this requires activity locs to be set (shapely.geometry.Point).
 
     :param population: core.Population, population to be writen to disk
@@ -40,7 +39,6 @@ def write_matsim(
     :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
     """
-
     if version is not None:
         logging.warning('parameter "version" is no longer supported by write_matsim()')
     if attributes_path is not None:
@@ -66,8 +64,7 @@ def write_matsim(
 
 
 class Writer:
-    """
-    Context Manager for writing to xml. Designed to handle the boilerplate xml.
+    """Context Manager for writing to xml. Designed to handle the boilerplate xml.
     For example:
     `with pam.write.matsim.Writer(PATH) as writer:
         for hid, household in population:
@@ -78,7 +75,7 @@ class Writer:
         for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
             pam.samplers.time.apply_jitter_to_plan(person.plan)
             writer.add_person(household)
-    `
+    `.
     """
 
     def __init__(
@@ -139,15 +136,13 @@ def write_matsim_population_v6(
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
 ) -> None:
-    """
-    Write matsim population v6 xml (persons plans and attributes combined).
+    """Write matsim population v6 xml (persons plans and attributes combined).
     :param population: core.Population, population to be writen to disk
     :param path: str, output path (.xml or .xml.gz)
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, default 'hid'
-    :param keep_non_selected: bool, default False
+    :param keep_non_selected: bool, default False.
     """
-
     with Writer(
         path=path,
         household_key=household_key,
@@ -262,8 +257,7 @@ def population_v6_dtd():
 def write_vehicles(
     output_dir, population, all_vehicles_filename="all_vehicles.xml", electric_vehicles_filename="electric_vehicles.xml"
 ):
-    """
-    Writes:
+    """Writes:
         - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
         - electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     given a population in which Persons have been assigned vehicles.
@@ -306,14 +300,13 @@ def write_vehicles(
 def write_all_vehicles(
     output_dir, vehicles: Set[Vehicle], vehicle_types: Set[VehicleType], file_name="all_vehicles.xml"
 ):
-    """
-    Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    """Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
     for MATSim
     :param output_dir: output directory for all_vehicles file
     :param vehicles: collection of vehicles to write
     :param vehicle_types: collection of vehicle types to write
     :param file_name: name of output file, defaults to 'all_vehicles.xml`
-    :return: None
+    :return: None.
     """
     path = os.path.join(output_dir, file_name)
     logging.info(f"Writing all vehicles to {path}")
@@ -336,13 +329,12 @@ def write_all_vehicles(
 
 
 def write_electric_vehicles(output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"):
-    """
-    Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    """Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     for MATSim
     :param output_dir: output directory for electric_vehicles file
     :param vehicles: collection of electric vehicles to write
     :param file_name: name of output file, defaults to 'electric_vehicles.xml`
-    :return: None
+    :return: None.
     """
     path = os.path.join(output_dir, file_name)
     logging.info(f"Writing electric vehicles to {path}")

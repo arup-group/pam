@@ -241,29 +241,28 @@ def test_get_linestring_with_s2_cellids():
 
 
 def test_matsim_time():
-    """Parse matsim timestamp"""
+    """Parse matsim timestamp."""
     dt = utils.matsim_time_to_datetime("12:01:02")
     assert dt == datetime(1900, 1, 1, 12, 1, 2)
 
 
 def test_matsim_time_past_midnight():
-    """Day-two matsim timestamp"""
+    """Day-two matsim timestamp."""
     dt = utils.matsim_time_to_datetime("25:01:02")
     assert dt == datetime(1900, 1, 2, 1, 1, 2)
 
 
 def test_matsim_time_day_three():
-    """Day-three matsim timestamp"""
+    """Day-three matsim timestamp."""
     dt = utils.matsim_time_to_datetime("49:01:02")
     assert dt == datetime(1900, 1, 3, 1, 1, 2)
 
 
 def test_parser_does_not_delete_current_element(test_trips_pathv12):
-    """
-    The xml iterparse should not delete the current element,
+    """The xml iterparse should not delete the current element,
         as this leads to memory errors.
     See https://lxml.de/3.2/parsing.html#iterparse-and-iterwalk ,
-        section 'Modifying the tree'
+        section 'Modifying the tree'.
     """
     elements = utils.parse_elems(test_trips_pathv12, "person")
     for i, element in enumerate(elements):

@@ -12,10 +12,7 @@ def pop_combine(
     leg_route: bool = True,
     keep_non_selected=True,
 ):
-    """
-    Combine two or more populations (e.g. household, freight... etc).
-
-    """
+    """Combine two or more populations (e.g. household, freight... etc)."""
     print("==================================================")
     print("Combining input populations")
 

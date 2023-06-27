@@ -12,22 +12,18 @@ from pam.variables import END_OF_DAY
 
 
 def interpolate(i, ai, a, bi, b):
-    """
-    :param i, ai, a, bi, b: input values to build distribution between values a and b
-    """
+    """:param i, ai, a, bi, b: input values to build distribution between values a and b"""
     return a + (i - ai) * (b - a) / (bi - ai)
 
 
 def create_density_gdf(facility_zone, zone, activity, normalise=None):
-    """
-    Returns a geodataframe that calculates the spatial density of input activity. The normalise flag
+    """Returns a geodataframe that calculates the spatial density of input activity. The normalise flag
     allows for the user to decide what variable to normalise density against.
     :param facility_zone: a geodataframe that is the spatial join between facility and zone information
     :param zone: a geodataframe with zones information
     :param activity: a list of activities (in string format) that are within facility data
     :return: a geodataframe that measures the density of activities in each zone.
     """
-
     if normalise is not None:
         density = facility_zone.groupby([facility_zone.index, "activity", normalise]).agg({"id": "count"}).reset_index()
         density.set_index(facility_zone.index.name, inplace=True)
@@ -54,19 +50,16 @@ def create_density_gdf(facility_zone, zone, activity, normalise=None):
 
 
 class PivotDistributionSampler:
-    """
-    Defines a distribution, a sampler, and plots based on input values. The resulting distribution can be sampled
+    """Defines a distribution, a sampler, and plots based on input values. The resulting distribution can be sampled
     for inputs required to build an agent plan (i.e, time of day, repetition of activities).
     """
 
     def __init__(self, bins, pivots, total=None):
-        """
-        Builds a dict distribution based on bins (i.e, hours) and pivots (i.e, hourly demand).
+        """Builds a dict distribution based on bins (i.e, hours) and pivots (i.e, hourly demand).
         The interpolate function defined above is applied to estimate values within the bin range where the input pivot does not specify a value.
         :param bins: a range or dictionary of values
-        :param pivots: a dictionary of values associated with the bins
+        :param pivots: a dictionary of values associated with the bins.
         """
-
         self.demand = {}
 
         if bins[0] not in pivots:
@@ -93,10 +86,7 @@ class PivotDistributionSampler:
                 self.demand[i] = (self.demand[i] / dist_sum) * total
 
     def plot(self, plot_title, x_label, y_label):
-        """
-        Plots distribution to validate the distribution aligns with expected hourly demand.
-        """
-
+        """Plots distribution to validate the distribution aligns with expected hourly demand."""
         fig, ax = plt.subplots(figsize=(10, 4))
         ax.bar(list(self.demand.keys()), list(self.demand.values()))
         ax.plot(list(self.demand.keys()), list(self.demand.values()), c="orange")
@@ -111,43 +101,34 @@ class PivotDistributionSampler:
 
 
 class FrequencySampler:
-    """
-    Object for initiating and sampling from frequency weighted distributing.
+    """Object for initiating and sampling from frequency weighted distributing.
     This object includes three samplers: a single sample, multiple samples, or sample based on a threshold value
     (requires a threshold matrix).
     """
 
     def __init__(self, dist, freq=None, threshold_matrix=None, threshold_value=None):
-        """
-        :param dist: a dictionary of an input distribution
+        """:param dist: a dictionary of an input distribution
         :param freq: a parameter to weight the samplers
         :param threshold_matrix: a dataframe that will be reduced based on a specified threshold_value.
         :param threshold_value: a value to filter the threshold_matrix. This is the maximum allowed value.
         """
-
         self.distribution = dist
         self.frequency = freq
         self.threshold_matrix = threshold_matrix
         self.threshold_value = threshold_value
 
     def sample(self):
-        """
-        :return: single object or list of objects sampled from distribution
-        """
+        """:return: single object or list of objects sampled from distribution"""
         return random.choices(self.distribution, weights=self.frequency, k=1)[0]
 
     def samples(self, n=1):
-        """
-        :param n: number of samples to be returned
+        """:param n: number of samples to be returned
         :return: single object or list of objects sampled from distribution
         """
         return random.choices(self.distribution, weights=self.frequency, k=n)
 
     def threshold_sample(self):
-        """
-        Returns a sampler of a distribution that has been reduced based on a threshold value.
-        """
-
+        """Returns a sampler of a distribution that has been reduced based on a threshold value."""
         d_list = self.threshold_matrix
         d_list = d_list[d_list <= self.threshold_value].index
         d_threshold = self.distribution[self.distribution.index.isin(d_list)]
@@ -160,38 +141,32 @@ class FrequencySampler:
 
 
 class ActivityDuration:
-    """
-    Object to estimate the distance, journey time, and stop time of activities.
+    """Object to estimate the distance, journey time, and stop time of activities.
     The last function activity_duration combines these three functions to output parameters that help build tour plans.
     """
 
     def model_distance(self, o, d, scale=1.4):
-        """
-        Models distance between two shapely points
-        """
+        """Models distance between two shapely points."""
         return o.distance(d) * scale
 
     def model_journey_time(self, distance, speed=50000 / 3600):
-        """
-        :param distance: in m
+        """:param distance: in m
         :param speed: in m/s, default 50km/hr
         :return: modelled journey time
         """
         return distance / speed
 
     def model_stop_time(self, time, maxi=3600, mini=600):
-        """
-        Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
+        """Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
         :param time: in s
         :param maxi: maximum time for a journey
         :param mini: minimum time for a journey
-        :return: maximum value between minimum time or the minimum of journey time and maximum time
+        :return: maximum value between minimum time or the minimum of journey time and maximum time.
         """
         return max([mini, min([time, maxi])])
 
     def model_activity_duration(self, o_loc, d_loc, end_tm, speed=50000 / 3600, maxi=3600, mini=600):
-        """
-        Returns estimated Activity Duration, which is combination of previous three functions to return parameters
+        """Returns estimated Activity Duration, which is combination of previous three functions to return parameters
         for next activity in Plan.
         :param o_loc: origin facility
         :param d_loc: destination facility
@@ -199,9 +174,8 @@ class ActivityDuration:
         :param speed: speed of vehicle, default at 50km/hr
         :param maxi: maximum stop time
         :param mini: minimum stop time
-        :return: stop_duration, start_tm, and end_tm for new activity
+        :return: stop_duration, start_tm, and end_tm for new activity.
         """
-
         trip_distance = self.model_distance(o_loc, d_loc)
         trip_duration = self.model_journey_time(trip_distance, speed)
         stop_duration = self.model_stop_time(trip_duration, maxi, mini)
@@ -213,9 +187,7 @@ class ActivityDuration:
 
 
 class TourPlanner:
-    """
-    Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method.
-    """
+    """Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method."""
 
     def __init__(
         self,
@@ -230,8 +202,7 @@ class TourPlanner:
         threshold_matrix=None,
         threshold_value=None,
     ):
-        """
-        :params stops: # of stops
+        """:params stops: # of stops
         :params hour: input of sampled hour
         :params minute: input of sampled minute
         :params o_zone: origin zone
@@ -242,7 +213,6 @@ class TourPlanner:
         :params threshold_matrix: dataframe that will be reduced based on threshold value
         :params threshold_value: maximum threshold value allowed between origin and destination in threshold_matrix.
         """
-
         self.stops = stops
         self.hour = hour
         self.minute = minute
@@ -256,13 +226,11 @@ class TourPlanner:
         self.d_activity = activity_params["d_activity"]
 
     def sequence_stops(self):
-        """
-        Creates a sequence for a number of stops. Sequence is determined by distance from origin.
-        :returns: o_loc, d_zones and d_locs (dataframe of sequenced destinations)
+        """Creates a sequence for a number of stops. Sequence is determined by distance from origin.
+        :returns: o_loc, d_zones and d_locs (dataframe of sequenced destinations).
 
         TODO - Method to sequence stops with different logic (i.e, minimise distance between stops).
         """
-
         o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
 
         d_seq = []
@@ -299,17 +267,15 @@ class TourPlanner:
         return o_loc, d_zones, d_locs
 
     def add_tour_activity(self, agent, k, zone, loc, activity_type, time_params):
-        """
-        Add activity to tour plan.
+        """Add activity to tour plan.
         :params agent: agent for which the activity will be added to Plan
         :params k: when used in a for loop, k populates the next sequence value
         :params zone: zone where activity takes place
         :params loc: facility location where activity takes place
         :params activity_type: str, this function has specific logic for 'return_origin'
         :params time_params: dictionary of time_params that may be time samplers or times of previous journeys
-        :return: end_tm of activity
+        :return: end_tm of activity.
         """
-
         if activity_type == self.o_activity:
             start_tm = 0
             end_tm = (time_params["hour"] * 60) + time_params["minute"]
@@ -338,8 +304,7 @@ class TourPlanner:
         return end_tm
 
     def add_tour_leg(self, agent, k, o_zone, o_loc, d_zone, d_loc, start_tm, end_tm):
-        """
-        Leg to Next Delivery.
+        """Leg to Next Delivery.
         :params agent: agent for which the leg will be added to Plan
         :params k: when used in a for loop, k populates the next sequence value
         :params o_zone: origin zone of leg
@@ -347,9 +312,8 @@ class TourPlanner:
         :params d_zone: destination zone of leg
         :params d_loc: destination facility of leg
         :params start_tm, end_tm: obtained from ActivityDuration object
-        :returns: new end_tm after leg is added to plan
+        :returns: new end_tm after leg is added to plan.
         """
-
         agent.add(
             Leg(
                 seq=k + 1,
@@ -366,8 +330,7 @@ class TourPlanner:
         return end_tm
 
     def add_return_origin(self, agent, k, o_loc, d_zone, d_loc, end_tm):
-        """
-        Driver returns to origin, from their most recent stop to the origin location.
+        """Driver returns to origin, from their most recent stop to the origin location.
         :params agent: agent for which the leg & activity will be added to Plan
         :params k: when used in a for loop, k populates the next sequence valuey
         :params o_loc: origin facility of leg & activity
@@ -377,7 +340,6 @@ class TourPlanner:
         :params speed: default setting of 50km/hr
         :return: end_tm after returning to origin.
         """
-
         trip_distance = ActivityDuration().model_distance(o_loc, d_loc)
         trip_duration = ActivityDuration().model_journey_time(trip_distance)
 
@@ -403,14 +365,12 @@ class TourPlanner:
         return end_tm
 
     def apply(self, agent, o_loc, d_zones, d_locs):
-        """
-        Apply the above functions to the agent to build a plan.
+        """Apply the above functions to the agent to build a plan.
         :params agent: agent to build a plan fory
         :params o_loc: origin facility of leg & activity
         :params d_zones: destination zones of leg & activity
-        :params d_locs: destination facilities of leg & activity
+        :params d_locs: destination facilities of leg & activity.
         """
-
         time_params = {"hour": self.hour, "minute": self.minute}
         end_tm = self.add_tour_activity(
             agent=agent, k=1, zone=self.o_zone, loc=o_loc, activity_type=self.o_activity, time_params=time_params
@@ -474,14 +434,12 @@ class TourPlanner:
 
 
 class ValidateTourOD:
-    """
-    Object to build a dataframe that produces both spatial and statistical plots to validate the tour origin and
+    """Object to build a dataframe that produces both spatial and statistical plots to validate the tour origin and
     destinations align with input data.
     """
 
     def __init__(self, trips, zone, o_dist, d_dist, o_activity, d_activity, o_freq, d_freq):
-        """
-        Create a dataframe that counts the number of origin and destination activities.
+        """Create a dataframe that counts the number of origin and destination activities.
         Merge this against the density information from the input origin and destination samplers.
         :params trips: dataframe, the legs.csv output after building population
         :params zone: zones geodataframe
@@ -489,7 +447,6 @@ class ValidateTourOD:
         :params o_activity, d_activity: activities utilised within the o_dist and d_dist
         :params o_freq, d_freq: frequencies that are used to sample origin and destination distributions.
         """
-
         # Create a dataframe to plot od trips and compare against facility density and flows density.
         df_trips_o = (
             trips[trips["origin activity"] == o_activity].groupby(["ozone"]).agg({"pid": "count"}).reset_index()
@@ -537,13 +494,11 @@ class ValidateTourOD:
         )
 
     def plot_validate_spatial_density(self, title_1, title_2, density_metric, density_trips, cmap="coolwarm"):
-        """
-        Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.
+        """Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.
         :params title_1, title_2: str input for plot title names.
         :params density_metric: the measure for density output from the above dataframe, in the format of 'activity_density'
         :params density_trips: the measure of trips that require validation, either 'origin_trips' or 'destination_trips'.
         """
-
         fig, ax = plt.subplots(1, 2, figsize=(20, 10))
 
         self.od_density.plot(density_metric, ax=ax[0], cmap=cmap)
@@ -561,12 +516,10 @@ class ValidateTourOD:
         return fig
 
     def plot_compare_density(self, title_1, title_2, o_activity, d_activity):
-        """
-        Compares density of input origin/destination activities and trips. As density of locations increases, so should trips.
+        """Compares density of input origin/destination activities and trips. As density of locations increases, so should trips.
         :params title_1, title_2: str input for plot title names.
-        :params o_activity, d_activity: str of activities that are used to measure density of locations
+        :params o_activity, d_activity: str of activities that are used to measure density of locations.
         """
-
         fig, ax = plt.subplots(1, 2, figsize=(15, 7))
 
         m1, b1 = np.polyfit(self.od_density[o_activity], self.od_density.origin_trip_density, 1)
@@ -593,11 +546,9 @@ class ValidateTourOD:
         return fig
 
     def plot_density_difference(self, title_1, title_2, cmap="coolwarm"):
-        """
-        Creates a spatial plot of the difference between input and output densities.
+        """Creates a spatial plot of the difference between input and output densities.
         :params title_1, title_2: str input for plot title names.
         """
-
         fig, ax = plt.subplots(1, 2, figsize=(20, 10))
 
         self.od_density.plot("origin_diff", ax=ax[0], cmap=cmap)

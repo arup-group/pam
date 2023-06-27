@@ -1,6 +1,7 @@
-from mkdocs.structure.files import File
-import mkdocs.plugins
 from pathlib import Path
+
+import mkdocs.plugins
+from mkdocs.structure.files import File
 
 
 # Bump priority to ensure files are moved before jupyter notebook conversion takes place

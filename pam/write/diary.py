@@ -10,8 +10,7 @@ from pam.utils import create_local_dir
 
 
 def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326") -> None:
-    """
-    Write a population to disk as tabular data in csv format. Outputs are:
+    """Write a population to disk as tabular data in csv format. Outputs are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
@@ -20,9 +19,8 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
     :param population: core.Population
     :param dir: str, path to output directory
     :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
     """
-
     create_local_dir(dir)
 
     hhs = []
@@ -116,8 +114,7 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
 
 
 def dump(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326") -> None:
-    """
-    Write a population to disk as tabular data in csv format. Outputs are:
+    """Write a population to disk as tabular data in csv format. Outputs are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
@@ -126,7 +123,7 @@ def dump(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] 
     :param population: core.Population
     :param dir: str, path to output directory
     :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
     """
     to_csv(population=population, dir=dir, crs=crs, to_crs=to_crs)
 
@@ -141,7 +138,7 @@ def save_geojson(df, crs, to_crs, path):
 
 
 def save_csv(df, path):
-    """Write GeoDataFrame as csv by dropping geometry column"""
+    """Write GeoDataFrame as csv by dropping geometry column."""
     if "geometry" in df.columns:
         df = df.drop("geometry", axis=1)
     df.to_csv(path)
@@ -161,7 +158,7 @@ def write_population_csvs(
     :param population: core.Population
     :param dir: str, path to output directory
     :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler
+    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
     """
     create_local_dir(dir)
 

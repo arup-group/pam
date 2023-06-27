@@ -1,6 +1,4 @@
-"""
-Methods for cropping plans outside core areas
-"""
+"""Methods for cropping plans outside core areas."""
 from typing import List
 
 from shapely.geometry import LineString, Polygon
@@ -17,9 +15,7 @@ def simplify_population(
     snap_to_boundary: bool = False,
     rename_external_activities: bool = False,
 ) -> None:
-    """
-    Simplify external plans across a population
-    """
+    """Simplify external plans across a population."""
     # simplify plans
     for hid, pid, person in population.people():
         simplify_external_plans(person.plan, boundary, snap_to_boundary, rename_external_activities)
@@ -40,8 +36,7 @@ def simplify_population(
 def simplify_external_plans(
     plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False
 ) -> None:
-    """
-    Simplify any activities happening outside the boundary area.
+    """Simplify any activities happening outside the boundary area.
 
     Method:
      1: Identify which legs touch the boundary area
@@ -73,25 +68,19 @@ def simplify_external_plans(
 
 
 def get_leg_path(leg: Leg) -> LineString:
-    """
-    Get the (euclidean) geometry of a leg.
-    """
+    """Get the (euclidean) geometry of a leg."""
     path = LineString([leg.start_location.loc, leg.end_location.loc])
     return path
 
 
 def leg_intersects(leg: Leg, boundary: Polygon) -> bool:
-    """
-    Check whether a leg touches an area defined by a boundary.
-    """
+    """Check whether a leg touches an area defined by a boundary."""
     path = get_leg_path(leg)
     return path.intersects(boundary)
 
 
 def crop_leg(leg: Leg, boundary: Polygon) -> None:
-    """
-    Crop a leg to a boundary.
-    """
+    """Crop a leg to a boundary."""
     path = get_leg_path(leg)
     path_cropped = path.intersection(boundary)
     start_location, end_location = path_cropped.boundary.geoms
@@ -102,9 +91,7 @@ def crop_leg(leg: Leg, boundary: Polygon) -> None:
 
 
 def get_kept_activities(plan: Plan, boundary: Polygon) -> list:
-    """
-    Get a list of the activities to keep after cropping external-external movements.
-    """
+    """Get a list of the activities to keep after cropping external-external movements."""
     kept_activities = list()
     for leg in plan.legs:
         if leg_intersects(leg, boundary):
@@ -115,9 +102,7 @@ def get_kept_activities(plan: Plan, boundary: Polygon) -> list:
 
 
 def filter_component(component, kept_activities: List[Activity]) -> bool:
-    """
-    Check if an activity/leg should be kept.
-    """
+    """Check if an activity/leg should be kept."""
     if isinstance(component, Activity):
         return component in kept_activities
     elif isinstance(component, Leg):
@@ -125,8 +110,7 @@ def filter_component(component, kept_activities: List[Activity]) -> bool:
 
 
 def crop_plan(plan: Plan, kept_activities: List[Activity]) -> None:
-    """
-    Crop a plan in a way that exludes any external-external movement (and the corresponding activities).
+    """Crop a plan in a way that exludes any external-external movement (and the corresponding activities).
     If no plan components are left in scope, the plan will have a single "external" activity.
     """
     if kept_activities:
@@ -150,9 +134,7 @@ def empty_day() -> list:
 
 
 def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = "car") -> Leg:
-    """
-    Create a leg between two activities.
-    """
+    """Create a leg between two activities."""
     leg = Leg(start_time=previous_act.end_time, end_time=next_act.start_time, mode=travel_mode, purp=next_act.act)
     leg.start_location = previous_act.location
     leg.end_location = next_act.location
@@ -163,8 +145,7 @@ def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = "c
 
 
 def infill_legs(plan: Plan) -> None:
-    """
-    Infill missing legs.
+    """Infill missing legs.
     If there is no leg between two activities, a new one is created linking them.
     """
     i = 0
@@ -179,17 +160,13 @@ def infill_legs(plan: Plan) -> None:
 
 
 def stretch_times(plan: Plan) -> None:
-    """
-    Extend start/end activity times to the start/end of day.
-    """
+    """Extend start/end activity times to the start/end of day."""
     plan.day[0].start_time = START_OF_DAY
     plan.day[-1].end_time = END_OF_DAY
 
 
 def rename_external(plan: Plan, boundary: Polygon) -> None:
-    """
-    Rename all external-area activities as "external"
-    """
+    """Rename all external-area activities as "external"."""
     for act in plan.activities:
         if not boundary.contains(act.location.loc):
             act.act = "external"
@@ -206,9 +183,7 @@ def list_get(l, i):
 
 
 def link_plan(plan: Plan) -> None:
-    """
-    Link a plan: each activity/leg gets a pointer to the previous/next plan component
-    """
+    """Link a plan: each activity/leg gets a pointer to the previous/next plan component."""
     plan_list = list(plan)
     act_list = list(plan.activities)
     leg_list = list(plan.legs)
@@ -230,8 +205,6 @@ def link_plan(plan: Plan) -> None:
 
 
 def link_population(population: Population) -> None:
-    """
-    Link the plan components of every agent in the population.
-    """
+    """Link the plan components of every agent in the population."""
     for hid, pid, person in population.people():
         link_plan(person.plan)

@@ -27,13 +27,12 @@ def read_matsim(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> core.Population:
-    """
-    Load a MATSim format population into core population format.
+    """Load a MATSim format population into core population format.
     It is possible to maintain the unity of housholds using a household uid in
     the attributes input, i.e.:
     ``` xml
         <attribute class="java.lang.String" name="hid">hh_0001</attribute>
-    ```
+    ```.
 
     Args:
         plans_path (str): path to matsim format xml
@@ -49,10 +48,10 @@ def read_matsim(
         keep_non_selected (bool, optional): Whether to parse non-selected plans (storing them in person.plans_non_selected). Defaults to False.
         leg_attributes (bool, optional): Parse leg attributes such as routing mode. Defaults to True.
         leg_route (bool, optional): Parse leg route. Defaults to True.
+
     Returns:
         core.Population:
     """
-
     logger = logging.getLogger(__name__)
 
     population = core.Population()
@@ -133,9 +132,7 @@ def stream_matsim_persons(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> core.Person:
-    """
-
-    Stream a MATSim format population into core.Person objects.
+    """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support 'version 11' plans.
 
@@ -171,7 +168,6 @@ def stream_matsim_persons(
     Yields:
         Iterator[core.Person]:
     """
-
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
@@ -223,9 +219,7 @@ def parse_matsim_plan(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> activity.Plan:
-    """
-    Parse a MATSim plan.
-    """
+    """Parse a MATSim plan."""
     logger = logging.getLogger(__name__)
     act_seq = 0
     leg_seq = 0
@@ -336,8 +330,7 @@ def unpack_leg(leg, version):
 
 
 def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
-    """
-    Extract mode, network route and transit route as available.
+    """Extract mode, network route and transit route as available.
 
     Args:
         leg (xml_leg_element):
@@ -351,8 +344,7 @@ def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
 
 
 def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
-    """
-    Extract mode, route and attributes as available.
+    """Extract mode, route and attributes as available.
 
     Args:
         leg (xml_leg_element):
@@ -463,9 +455,7 @@ def get_attributes_from_legs(elem):
 
 
 def load_attributes_map(attributes_path):
-    """
-    Given path to MATSim attributes input, return dictionary of attributes (as dict)
-    """
+    """Given path to MATSim attributes input, return dictionary of attributes (as dict)."""
     attributes_map = {}
     people = utils.get_elems(attributes_path, "object")
     for person in people:
@@ -478,9 +468,7 @@ def load_attributes_map(attributes_path):
 
 
 def selected_plans(plans_path):
-    """
-    Given path to MATSim plans input, yield person id and plan for all selected plans.
-    """
+    """Given path to MATSim plans input, yield person id and plan for all selected plans."""
     for person in utils.get_elems(plans_path, "person"):
         for plan in person:
             if plan.get("selected") == "yes":
@@ -488,9 +476,7 @@ def selected_plans(plans_path):
 
 
 def read_vehicles(all_vehicles_path: str, electric_vehicles_path: Optional[str] = None) -> dict:
-    """
-
-    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
 
     Args:
         all_vehicles_path (str): path to matsim all_vehicles xml file
@@ -506,8 +492,7 @@ def read_vehicles(all_vehicles_path: str, electric_vehicles_path: Optional[str] 
 
 
 def read_all_vehicles_file(path: str) -> dict:
-    """
-    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd.
 
     Args:
         path (str): path to matsim all_vehicles xml file
@@ -529,8 +514,7 @@ def read_all_vehicles_file(path: str) -> dict:
 
 
 def read_electric_vehicles_file(path: str, vehicles: dict = None) -> dict:
-    """
-    Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    """Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
 
     Args:
         path (str): path to matsim electric_vehicles xml

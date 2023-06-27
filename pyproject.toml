@@ -31,7 +31,41 @@ line-length = 120
 
 [tool.ruff]
 line-length = 120
-select = ["E", "W", "F", "I"]
+select = ["E", "F", "I", "Q"]
+
+
+ignore = [
+    "E501", # line too long: Black will handle this.
+    "D1",   # Ignore missing docstrings in public functions/modules. There are just too many of them missing...
+]
+
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".*",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "venv",
+]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+target-version = "py39"
 
 [tool.ruff.pydocstyle]
-convention = "numpy"
+convention = "google"
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+# Ignore `E402` (import violations) in all `__init__.py` files
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402"]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"

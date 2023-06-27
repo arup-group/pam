@@ -6,15 +6,15 @@ from pam.variables import END_OF_DAY
 
 
 def apply_jitter_to_plan(plan: Plan, jitter: timedelta, min_duration: timedelta):
-    """
-    Apply time jitter to activity durations in a plan, leg durations are kept the same.
+    """Apply time jitter to activity durations in a plan, leg durations are kept the same.
     Activity durations are jittered in sequence order. At each step the activity
     is jittered according to the maximum jitter and minimum duration of all activities
     in the plan.
+
     Args:
         plan (Plan): plan to be jittered
         jitter (timedelta): maximum jitter
-        min_duration (timedelta): minimum activity duration
+        min_duration (timedelta): minimum activity duration.
     """
     if plan.length == 1:  # do nothing
         return None
@@ -23,8 +23,7 @@ def apply_jitter_to_plan(plan: Plan, jitter: timedelta, min_duration: timedelta)
 
 
 def jitter_activity(plan: Plan, i: int, jitter: timedelta, min_duration: timedelta):
-    """
-    Jitter duration of given activity at index i. Remaining activities and legs after activity are also shifted.
+    """Jitter duration of given activity at index i. Remaining activities and legs after activity are also shifted.
     Leg durations are not changed.
     Subsequent activity durations are equally change to maintain 24hr plan.
     """

@@ -43,9 +43,8 @@ def test_choice_set_reads_od_correctly(choice_model, var, zone):
 
 
 def test_list_parameters_correspond_to_modes(choice_model):
-    """
-    When utility parameters are passed as a list,
-        they should be applied to each respective mode.
+    """When utility parameters are passed as a list,
+    they should be applied to each respective mode.
     """
     asc = [0, 10]  # 0 should be applied to car, 10 to bus
     choice_model.configure(u=f"""{asc} + od['time', 'b']""", scope="""True""")

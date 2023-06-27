@@ -32,7 +32,7 @@ def test_strings_encoded_to_integers(acts):
 
 @pytest.mark.parametrize("encoder_class", [StringCharacterEncoder, StringIntEncoder])
 def test_activity_encoding_works_two_way(acts, encoder_class):
-    """Encoded labels can be converted back to the same value"""
+    """Encoded labels can be converted back to the same value."""
     encoder = encoder_class(acts)
     for act in acts:
         encoded = encoder.encode(act)
@@ -42,7 +42,7 @@ def test_activity_encoding_works_two_way(acts, encoder_class):
 
 @pytest.mark.parametrize("encoder_class", [PlanCharacterEncoder, PlanOneHotEncoder])
 def test_plan_encoding_works_two_way(Steve, encoder_class):
-    """Encoded plans can be converted back to the original"""
+    """Encoded plans can be converted back to the original."""
     plan = Steve.plan
     labels = plan.activity_classes
     encoder = encoder_class(labels=labels)

@@ -16,7 +16,7 @@ def path_population_B():
 
 
 def test_combined_length(path_population_A, path_population_B):
-    """Combined population size equates to the sum of the individual populations"""
+    """Combined population size equates to the sum of the individual populations."""
     combined_pop = combine.pop_combine(
         [path_population_A, path_population_B],
         matsim_version=12,

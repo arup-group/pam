@@ -40,9 +40,7 @@ def extract_leg_log(population):
 
 
 def time_binner(data):
-    """
-    Bin start and end times and durations, return freq table for 24 hour period, 15min intervals.
-    """
+    """Bin start and end times and durations, return freq table for 24 hour period, 15min intervals."""
     bins = list(range(0, 24 * 60 * 60 + 1, 15 * 60))
     bins[-1] = 100 * 60 * 60
     labels = pd.timedelta_range(start="00:00:00", periods=96, freq="15min")

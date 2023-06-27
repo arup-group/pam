@@ -62,17 +62,13 @@ def comment_option(func):
 @click.version_option()
 @click.group()
 def cli():
-    """
-    Population Activity Modeller (PAM) Command Line Tool
-    """
+    """Population Activity Modeller (PAM) Command Line Tool."""
     pass
 
 
 @cli.group()
 def report():
-    """
-    Various reporting for MATSim formatted plans.
-    """
+    """Various reporting for MATSim formatted plans."""
     pass
 
 
@@ -104,9 +100,7 @@ def summary(
     debug: bool,
     rich: bool,
 ):
-    """
-    Summarise a population.
-    """
+    """Summarise a population."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -161,9 +155,7 @@ def benchmarks(
     matsim_version: int = 12,
     debug: bool = False,
 ):
-    """
-    Write batch of benchmarks to directory
-    """
+    """Write batch of benchmarks to directory."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -215,9 +207,7 @@ def stringify(
     simplify_pt_trips: bool,
     crop: bool,
 ):
-    """
-    ASCII plot activity plans to terminal.
-    """
+    """ASCII plot activity plans to terminal."""
     logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
     logger.debug(f"Crop = {crop}")
 
@@ -257,9 +247,7 @@ def crop(
     buffer,
     debug,
 ):
-    """
-    Crop a population's plans outside a core area.
-    """
+    """Crop a population's plans outside a core area."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -344,9 +332,7 @@ def combine(
     force: bool,
     debug: bool,
 ):
-    """
-    Combine multiple populations (e.g. household, freight.. etc).
-    """
+    """Combine multiple populations (e.g. household, freight.. etc)."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -426,9 +412,7 @@ def sample(
     seed: Optional[int],
     debug: bool,
 ):
-    """
-    Down- or up-sample a PAM population.
-    """
+    """Down- or up-sample a PAM population."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -511,9 +495,7 @@ def wipe_all_links(
     comment: str,
     debug: bool,
 ):
-    """
-    Clear all link information from agent plans. Including routes and activity locations.
-    """
+    """Clear all link information from agent plans. Including routes and activity locations."""
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -595,8 +577,7 @@ def wipe_links(
     comment: str,
     debug: bool,
 ):
-    """
-    Clear selected link information from agent plans. Includes routes and activity locations.
+    """Clear selected link information from agent plans. Includes routes and activity locations.
 
     eg: `pam wipe-links INPUT_PLANS.xml OUTPUT_PLANS.xml link_a link_b link_c`
 

@@ -47,13 +47,12 @@ def test_class_represantation_is_string(od):
 
 
 def test_matrix_dimensions_stay_the_same(od):
-    """
-    Regression test: Label dimensions need to stay the same.
-        To apply the model correctly,
-        we need the first dimension to select the variable,
-        the second to select the origin,
-        the third to select the destination,
-        and the last to select the mode.
+    """Regression test: Label dimensions need to stay the same.
+    To apply the model correctly,
+    we need the first dimension to select the variable,
+    the second to select the origin,
+    the third to select the destination,
+    and the last to select the mode.
     """
     assert od.labels._fields == tuple(["vars", "origin_zones", "destination_zones", "mode"])
 

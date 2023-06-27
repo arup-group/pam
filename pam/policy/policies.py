@@ -8,9 +8,7 @@ import pam.policy.probability_samplers as probability_samplers
 
 
 class Policy:
-    """
-    Base class for policies
-    """
+    """Base class for policies."""
 
     def __init__(self):
         pass
@@ -35,9 +33,7 @@ class Policy:
 
 
 class PolicyLevel(Policy):
-    """
-    Base class to formalise the hierarchy of levels at which a policy should applied at
-    """
+    """Base class to formalise the hierarchy of levels at which a policy should applied at."""
 
     def __init__(self, modifier: modifiers.Modifier, attribute_filter: filters.Filter = None):
         super().__init__()
@@ -55,8 +51,7 @@ class PolicyLevel(Policy):
 
 
 class HouseholdPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on a household level
+    """Policy that is to be applied on a household level.
 
     Parameters
     ----------
@@ -86,8 +81,7 @@ class HouseholdPolicy(PolicyLevel):
         self.probability = probability_samplers.verify_probability(probability)
 
     def apply_to(self, household, person=None, activities=None):
-        """
-        uses self.probability to decide if household should be selected
+        """Uses self.probability to decide if household should be selected
         :param household:
         :param person:
         :param activities:
@@ -105,8 +99,7 @@ class HouseholdPolicy(PolicyLevel):
 
 
 class PersonPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on a person level
+    """Policy that is to be applied on a person level.
 
     Parameters
     ----------
@@ -152,8 +145,7 @@ class PersonPolicy(PolicyLevel):
 
 
 class ActivityPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on an individual activity level
+    """Policy that is to be applied on an individual activity level.
 
     Parameters
     ----------
@@ -203,8 +195,7 @@ class ActivityPolicy(PolicyLevel):
 
 
 class HouseholdQuarantined(Policy):
-    """
-    Household level Policy which removes all non-home activities
+    """Household level Policy which removes all non-home activities
     for all persons in a household.
 
     Parameters
@@ -228,8 +219,7 @@ class HouseholdQuarantined(Policy):
 
 
 class PersonStayAtHome(Policy):
-    """
-    Person level Policy which removes all non-home activities
+    """Person level Policy which removes all non-home activities
     for a person.
 
     Parameters
@@ -255,8 +245,7 @@ class PersonStayAtHome(Policy):
 
 
 class RemoveHouseholdActivities(HouseholdPolicy):
-    """
-    Pre-packaged household-level policy which removes specified
+    """Pre-packaged household-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -285,8 +274,7 @@ class RemoveHouseholdActivities(HouseholdPolicy):
 
 
 class RemovePersonActivities(PersonPolicy):
-    """
-    Pre-packaged person-level policy which removes specified
+    """Pre-packaged person-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -316,8 +304,7 @@ class RemovePersonActivities(PersonPolicy):
 
 
 class RemoveIndividualActivities(ActivityPolicy):
-    """
-    Pre-packaged activity-level policy which removes specified
+    """Pre-packaged activity-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -347,8 +334,7 @@ class RemoveIndividualActivities(ActivityPolicy):
 
 
 class MovePersonActivitiesToHome(PersonPolicy):
-    """
-    Pre-packaged person-level policy which moves a tour of activities
+    """Pre-packaged person-level policy which moves a tour of activities
     to home location. A tour is defined as a list of activities sandwiched
     between two home activities.
 
@@ -382,8 +368,7 @@ class MovePersonActivitiesToHome(PersonPolicy):
 
 
 class ReduceSharedHouseholdActivities(HouseholdPolicy):
-    """
-    Pre-packaged household-level policy which reduces the number of activities
+    """Pre-packaged household-level policy which reduces the number of activities
     shared within a household (Activity.act (type of activity), start/end
     times and locations match). Randomly assigns a person whose activities
     will be retained and deletes the shared activities from other persons
@@ -418,8 +403,7 @@ class ReduceSharedHouseholdActivities(HouseholdPolicy):
 
 
 def apply_policies(population, policies: Union[List[Policy], Policy], in_place=False):
-    """
-    Method which applies policies to population.
+    """Method which applies policies to population.
 
     Parameters
     ----------

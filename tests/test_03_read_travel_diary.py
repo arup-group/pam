@@ -345,9 +345,7 @@ def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes,
 
 
 def test_home_location_consistency_between_person_and_plan(trips, persons_attributes, hhs_attributes):
-    """
-    Note that this works because people share a location object with their plans.
-    """
+    """Note that this works because people share a location object with their plans."""
     population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
     hh = population[0]
     person = hh[0]
