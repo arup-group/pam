@@ -14,8 +14,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-      with: 
-        fetch-depth: 0  # used to build docs into the gh-pages branch without losing branch history. See https://github.com/jimporter/mike/issues/49
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
@@ -33,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0  # used to build docs into the gh-pages branch without losing branch history. See https://github.com/jimporter/mike/issues/49
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
@@ -57,9 +57,9 @@ jobs:
       if: github.ref != 'refs/heads/main'
       run: mike deploy 0.2
 
-    - name: Build docs
+    - name: deploy docs to gh-pages branch
       if: github.ref == 'refs/heads/main'
-      run: mike deploy --push --force 0.2
+      run: mike deploy --push 0.2
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
