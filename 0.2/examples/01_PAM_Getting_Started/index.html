@@ -358,32 +358,26 @@
     Load Data
   </a>
   
-    <nav class="md-nav" aria-label="Load Data">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#build-activity-plans" class="md-nav__link">
     Build Activity Plans
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#scenarios" class="md-nav__link">
     Scenarios
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#review" class="md-nav__link">
     Review
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1594,32 +1588,26 @@
     Load Data
   </a>
   
-    <nav class="md-nav" aria-label="Load Data">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#build-activity-plans" class="md-nav__link">
     Build Activity Plans
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#scenarios" class="md-nav__link">
     Scenarios
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#review" class="md-nav__link">
     Review
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2687,10 +2675,6 @@ Licensed under the Apache License, Version 2.0.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h1 id="pam-getting-started">PAM - Getting Started<a class="anchor-link" href="#pam-getting-started">&#182;</a></h1><p><strong>Population Activity Modelling/Modifying</strong></p>
 <p>This notebook is a quick spin through PAM. Intended to provide a technical overview and inspire further research and development.</p>
-<h2 id="load-data">Load Data<a class="anchor-link" href="#load-data">&#182;</a></h2><p>Here we load simple travel diary data of London commuters. This is a very simple 0.1% sample of data about work and education commutes from the 2011 census. 
-Because we're sharing this data, we've aggregated locations to borough level and randomized personal attributes; so, don't get too excited about the results.</p>
-<p>The data is available in the <a href="https://github.com/arup-group/pam/tree/main/examples/data/example_data"><code>data/example_data</code></a> sub-directory.
-All data paths in this example are relative to the <a href="https://github.com/arup-group/pam/tree/main/examples">notebook directory</a> in the PAM repository</p>
 
 </div>
 </div>
@@ -2746,6 +2730,21 @@ from pam.policy import apply_policies
 </div>
 </div>
 
+</div>
+</div>
+<div  class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="load-data">Load Data<a class="anchor-link" href="#load-data">&#182;</a></h2><p>Here we load simple travel diary data of London commuters. This is a very simple 0.1% sample of data about work and education commutes from the 2011 census. 
+Because we're sharing this data, we've aggregated locations to borough level and randomized personal attributes; so, don't get too excited about the results.</p>
+<p>The data is available in the <a href="https://github.com/arup-group/pam/tree/main/examples/data/example_data"><code>data/example_data</code></a> sub-directory.
+All data paths in this example are relative to the <a href="https://github.com/arup-group/pam/tree/main/examples">notebook directory</a> in the PAM repository</p>
+
+</div>
+</div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div  class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -3030,7 +3029,7 @@ attributes = pd.read_csv(os.path.join("data", "example_data", "example_attribute
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="build-activity-plans">Build Activity Plans<a class="anchor-link" href="#build-activity-plans">&#182;</a></h3><p>First we convert the travel diary data to Activity Plans:</p>
+<h2 id="build-activity-plans">Build Activity Plans<a class="anchor-link" href="#build-activity-plans">&#182;</a></h2><p>First we convert the travel diary data to Activity Plans:</p>
 
 </div>
 </div>
@@ -3478,7 +3477,7 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="scenarios">Scenarios<a class="anchor-link" href="#scenarios">&#182;</a></h3><p>Our 2011 baseline London population of commuters seems sensible, they spend about 50 million hours at home and 1.6 million hours travelling.</p>
+<h2 id="scenarios">Scenarios<a class="anchor-link" href="#scenarios">&#182;</a></h2><p>Our 2011 baseline London population of commuters seems sensible, they spend about 50 million hours at home and 1.6 million hours travelling.</p>
 <p>But what if we want to try and build some more up to date scenarios?</p>
 <p>We consider two scenarios from a combination of policies:</p>
 <p>Scenario A - Do Minimum:</p>
@@ -3543,7 +3542,7 @@ lockdown = apply_policies(population, [policy1, policy2, policy3])</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="review">Review<a class="anchor-link" href="#review">&#182;</a></h3><p>So this has been a pretty quick demo. 
+<h2 id="review">Review<a class="anchor-link" href="#review">&#182;</a></h2><p>So this has been a pretty quick demo. 
 But we can still take a look at our new population scenario stats below. 
 Obviously we'd like to add some more analytics... some viz... some validation... then output new travel plans and OD matrices for use in other models.
 See the subsequent examples for each of these!</p>
