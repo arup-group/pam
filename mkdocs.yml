@@ -23,12 +23,18 @@ nav:
     - Advanced Choice: examples/15_Advanced_Choice.ipynb
   - Get involved: get_involved.md
   - CLI Reference: api/cli.md
-theme: material
+theme: 
+  name: material
+  custom_dir: docs/overrides
 repo_url: https://github.com/arup-group/pam/
 site_dir: .docs
 markdown_extensions:
   - admonition
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
   - pymdownx.superfences
   - attr_list
   - toc:
@@ -39,11 +45,12 @@ hooks:
   - docs/static/hooks.py
 plugins:
   - search
+  - autorefs
   - mkdocs-jupyter:
       include: ["examples/*.ipynb"]
       allow_errors: false
       kernel_name: pam
-      ignore_h1_titles: True
+      include_source: True
   - mkdocstrings:
       default_handler: python
       handlers:
