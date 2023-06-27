@@ -383,7 +383,7 @@
       
         <li class="md-nav__item">
   <a href="#aim" class="md-nav__link">
-    Aim:
+    Aim
   </a>
   
 </li>
@@ -392,6 +392,61 @@
   <a href="#import-geographic-data-of-londinium" class="md-nav__link">
     Import geographic data of Londinium
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#facility-sampler" class="md-nav__link">
+    Facility sampler
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#activity-generation-model" class="md-nav__link">
+    Activity generation model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-visulazation-and-validation" class="md-nav__link">
+    Data Visulazation and validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readwrite-data" class="md-nav__link">
+    Read/write data
+  </a>
+  
+    <nav class="md-nav" aria-label="Read/write data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-intermediate-csv-tables-of-population" class="md-nav__link">
+    Export intermediate CSV tables of population
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload-tabular-data" class="md-nav__link">
+    Reload Tabular Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write-output-to-matsim-xml" class="md-nav__link">
+    Write output to MATSim xml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1571,7 +1626,7 @@
       
         <li class="md-nav__item">
   <a href="#aim" class="md-nav__link">
-    Aim:
+    Aim
   </a>
   
 </li>
@@ -1580,6 +1635,61 @@
   <a href="#import-geographic-data-of-londinium" class="md-nav__link">
     Import geographic data of Londinium
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#facility-sampler" class="md-nav__link">
+    Facility sampler
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#activity-generation-model" class="md-nav__link">
+    Activity generation model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-visulazation-and-validation" class="md-nav__link">
+    Data Visulazation and validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readwrite-data" class="md-nav__link">
+    Read/write data
+  </a>
+  
+    <nav class="md-nav" aria-label="Read/write data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-intermediate-csv-tables-of-population" class="md-nav__link">
+    Export intermediate CSV tables of population
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload-tabular-data" class="md-nav__link">
+    Reload Tabular Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write-output-to-matsim-xml" class="md-nav__link">
+    Write output to MATSim xml
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2668,7 +2778,8 @@ Licensed under the Apache License, Version 2.0.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="aim">Aim:<a class="anchor-link" href="#aim">&#182;</a></h3><p>Create a bigger and more realistic sample population automatically for the West London area called Londinium. The sample population includes various activities, personal attributes and modes; the population would be used as input for MATSim transport simulation.</p>
+<h2 id="aim">Aim<a class="anchor-link" href="#aim">&#182;</a></h2><p>Create a bigger and more realistic sample population automatically for the West London area called Londinium. 
+The sample population includes various activities, personal attributes and modes; the population would be used as input for MATSim transport simulation.</p>
 
 </div>
 </div>
@@ -2680,12 +2791,14 @@ Licensed under the Apache License, Version 2.0.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<ul>
-<li>Import geographic data of Londinium.</li>
-<li>Activity generation model with home based tours. Expand agents with different personal attributes, activities and trips.</li>
-<li>Perform Data Visualization and validation. Plot the activity plan, distance and duration of population</li>
-<li>Export intermediate CSV tables of the population</li>
-</ul>
+<p>Steps:</p>
+<ol>
+<li><a href="#import-geographic-data-of-londinium">Import geographic data of Londinium;</a></li>
+<li><a href="#facility-sampler">Facility sampling from OpenStreetMap data;</a></li>
+<li><a href="#activity-generation-model">Activity generation model with home based tours. Expand agents with different personal attributes, activities and trips;</a></li>
+<li><a href="#data-visulazation-and-validation">Perform Data Visualization and validation. Plot the activity plan, distance and duration of population;</a></li>
+<li><a href="#export-intermediate-csv-tables-of-population">Export intermediate CSV tables of the population</a></li>
+</ol>
 
 </div>
 </div>
@@ -3249,7 +3362,7 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="facility-sampler">Facility sampler<a class="anchor-link" href="#facility-sampler">&#182;</a></h1>
+<h2 id="facility-sampler">Facility sampler<a class="anchor-link" href="#facility-sampler">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -5145,13 +5258,24 @@ class="
 
 </div>
 </div>
+<div id="cell-id=e91dad60" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="readwrite-data">Read/write data<a class="anchor-link" href="#readwrite-data">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div>
 <div id="cell-id=straight-elizabeth" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="export-intermediate-csv-tables-of-population">Export intermediate CSV tables of population<a class="anchor-link" href="#export-intermediate-csv-tables-of-population">&#182;</a></h2>
+<h3 id="export-intermediate-csv-tables-of-population">Export intermediate CSV tables of population<a class="anchor-link" href="#export-intermediate-csv-tables-of-population">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -5747,7 +5871,7 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="reload-tabular-data">Reload Tabular Data<a class="anchor-link" href="#reload-tabular-data">&#182;</a></h1><p>We load in the csv files we previously wrote to disk. This replicates a simple synthesis process we might typically use for travel diary survey data.</p>
+<h3 id="reload-tabular-data">Reload Tabular Data<a class="anchor-link" href="#reload-tabular-data">&#182;</a></h3><p>We load in the csv files we previously wrote to disk. This replicates a simple synthesis process we might typically use for travel diary survey data.</p>
 
 </div>
 </div>
@@ -6187,7 +6311,7 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="write-output-to-matsim-xml">Write output to MATSim xml<a class="anchor-link" href="#write-output-to-matsim-xml">&#182;</a></h1>
+<h3 id="write-output-to-matsim-xml">Write output to MATSim xml<a class="anchor-link" href="#write-output-to-matsim-xml">&#182;</a></h3>
 </div>
 </div>
 </div>
