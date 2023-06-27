@@ -2095,7 +2095,7 @@
 
 
 <h2 id="pam.read.diary.build_population" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">build_population</span><span class="p">(</span><span class="n">trips</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">persons_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hhs_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">build_population</span><span class="p">(</span><span class="n">trips</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">persons_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hhs_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Population</span></code>
 
 <a href="#pam.read.diary.build_population" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2125,7 +2125,7 @@ Details of required table formats are in the README.</p>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>trips table</p>
+              <p>trips table. Defaults to None.</p>
             </div>
           </td>
           <td>
@@ -2139,7 +2139,7 @@ Details of required table formats are in the README.</p>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>persons attributes table</p>
+              <p>persons attributes table. Defaults to None.</p>
             </div>
           </td>
           <td>
@@ -2153,7 +2153,7 @@ Details of required table formats are in the README.</p>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>households attributes table</p>
+              <p>households attributes table. Defaults to None.</p>
             </div>
           </td>
           <td>
@@ -2174,6 +2174,7 @@ Details of required table formats are in the README.</p>
     <tbody>
         <tr>
           <td>
+                <code><a class="autorefs autorefs-internal" title="pam.core" href="../../core/#pam.core">core</a>.<a class="autorefs autorefs-internal" title="pam.core.Population" href="../../core/#pam.core.Population">Population</a></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2216,7 +2217,7 @@ Details of required table formats are in the README.</p>
     <span class="n">trips</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">persons_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">hhs_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Population</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Build a population of households and persons (without plans)</span>
 <span class="sd">    from available trips, persons_attributes and households_attributes</span>
@@ -2224,9 +2225,9 @@ Details of required table formats are in the README.</p>
 <span class="sd">    Details of required table formats are in the README.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        trips (Optional[pd.DataFrame]): trips table</span>
-<span class="sd">        persons_attributes (Optional[pd.DataFrame]): persons attributes table</span>
-<span class="sd">        hhs_attributes (Optional[pd.DataFrame]): households attributes table</span>
+<span class="sd">        trips (Optional[pd.DataFrame]): trips table. Defaults to None.</span>
+<span class="sd">        persons_attributes (Optional[pd.DataFrame]): persons attributes table. Defaults to None.</span>
+<span class="sd">        hhs_attributes (Optional[pd.DataFrame]): households attributes table. Defaults to None.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        pam.Population: population object</span>

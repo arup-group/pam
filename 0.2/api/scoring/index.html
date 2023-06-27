@@ -1978,12 +1978,12 @@
 
           <details class="quote">
             <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">53</span>
+<span class="normal">54</span>
 <span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Charypar-Nagel plan scorer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2029,8 +2029,8 @@
 <code class="highlight language-python"><span class="n">example_config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mUM&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;utilityOfLineSwitch&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;performing&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;waiting&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;waitingPt&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;lateArrival&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;earlyDeparture&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;work&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;08:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;latestStartTime&#39;</span><span class="p">:</span> <span class="s1">&#39;09:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;earliestEndTime&#39;</span><span class="p">:</span> <span class="s1">&#39;16:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;01:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;home&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;12:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;05:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;shop&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;00:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;car&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;dailyMonetaryConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;dailyUtilityConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfDistance&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfTravelling&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;monetaryDistanceRate&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.0001</span><span class="p">},</span> <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">}}}</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.scoring.CharyparNagelPlanScorer.example_config" class="headerlink" title="Permanent link">#</a></h3>
@@ -2076,14 +2076,14 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">162</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
+<span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">activities_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activities</span><span class="p">):</span>
+<span class="normal">168</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">activities_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activities</span><span class="p">):</span>
     <span class="n">non_wrapped</span> <span class="o">=</span> <span class="n">activities</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">wrapped_act</span> <span class="o">=</span> <span class="n">Activity</span><span class="p">(</span>
         <span class="n">act</span><span class="o">=</span><span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">,</span>
@@ -2111,7 +2111,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">212</span>
+<span class="normal">213</span>
 <span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
@@ -2143,8 +2144,7 @@
 <span class="normal">242</span>
 <span class="normal">243</span>
 <span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">duration_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">duration_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">prio</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">performing</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;performing&quot;</span><span class="p">]</span>
     <span class="n">typical_dur</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_duration_to_hours</span><span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;typicalDuration&quot;</span><span class="p">])</span>
@@ -2198,7 +2198,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">271</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">270</span>
+<span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
 <span class="normal">274</span>
@@ -2206,8 +2207,7 @@
 <span class="normal">276</span>
 <span class="normal">277</span>
 <span class="normal">278</span>
-<span class="normal">279</span>
-<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">early_departure_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">279</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">early_departure_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earliestEndTime&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
     <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">):</span>
         <span class="n">earliest_end_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span>
@@ -2237,15 +2237,15 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">261</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">260</span>
+<span class="normal">261</span>
 <span class="normal">262</span>
 <span class="normal">263</span>
 <span class="normal">264</span>
 <span class="normal">265</span>
 <span class="normal">266</span>
 <span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">late_arrival_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">268</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">late_arrival_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latestStartTime&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lateArrival&quot;</span><span class="p">):</span>
         <span class="n">latest_start_time</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_time_to_datetime</span><span class="p">(</span>
             <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">][</span><span class="s2">&quot;latestStartTime&quot;</span><span class="p">]</span>
@@ -2274,8 +2274,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">300</span>
-<span class="normal">301</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">mode_constant_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">299</span>
+<span class="normal">300</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">mode_constant_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2297,13 +2297,13 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">292</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">291</span>
+<span class="normal">292</span>
 <span class="normal">293</span>
 <span class="normal">294</span>
 <span class="normal">295</span>
 <span class="normal">296</span>
-<span class="normal">297</span>
-<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pt_waiting_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+<span class="normal">297</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pt_waiting_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BT&quot;</span><span class="p">,</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">:</span>
         <span class="n">waiting</span> <span class="o">=</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span> <span class="o">-</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
@@ -2330,13 +2330,13 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">171</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+<span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">duration_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">waiting_score</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
@@ -2363,9 +2363,9 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_day_mode_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_day_mode_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dailyUtilityConstant&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> \
         <span class="o">+</span> <span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dailyMonetaryConstant&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
@@ -2388,13 +2388,13 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
+<span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_leg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_leg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pt_waiting_time_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode_constant_score</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">),</span>
@@ -2433,13 +2433,27 @@
     </thead>
     <tbody>
         <tr>
+          <td><code>person</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="pam.core.Person" href="../core/#pam.core.Person">Person</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
           <td><code>subpopulation</code></td>
           <td>
                 <code>str</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>person attribute name for subpopulation, Defalts to "subpopulation".</p>
+              <p>person attribute name for subpopulation, Defaults to "subpopulation".</p>
             </div>
           </td>
           <td>
@@ -2465,7 +2479,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
+<span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
 <span class="normal">64</span>
@@ -2480,8 +2495,7 @@
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_person</span><span class="p">(</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_person</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">person</span> <span class="p">:</span> <span class="n">Person</span><span class="p">,</span>
     <span class="n">subpopulation</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;subpopulation&quot;</span><span class="p">,</span>
@@ -2491,8 +2505,8 @@
 <span class="sd">    Score a pam.core.Person Plan</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        person (Person).</span>
-<span class="sd">        subpopulation (str): person attribute name for subpopulation, Defalts to &quot;subpopulation&quot;.</span>
+<span class="sd">        person (Person): </span>
+<span class="sd">        subpopulation (str): person attribute name for subpopulation, Defaults to &quot;subpopulation&quot;.</span>
 <span class="sd">        plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">subpop</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">subpopulation</span><span class="p">]</span>
@@ -2598,7 +2612,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
+<span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span>
@@ -2617,8 +2632,7 @@
 <span class="normal">95</span>
 <span class="normal">96</span>
 <span class="normal">97</span>
-<span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan</span><span class="p">(</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span>
     <span class="n">cnfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
@@ -2659,7 +2673,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">146</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
@@ -2672,8 +2687,7 @@
 <span class="normal">156</span>
 <span class="normal">157</span>
 <span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+<span class="normal">159</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="n">activities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">plan</span><span class="o">.</span><span class="n">activities</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">activities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_activity</span><span class="p">(</span><span class="n">activities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cnfg</span><span class="p">)</span>
@@ -2708,9 +2722,9 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_daily</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_daily</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">modes</span> <span class="o">=</span> <span class="n">plan</span><span class="o">.</span><span class="n">mode_classes</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_day_mode_use</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">])</span>
 </code></pre></div></td></tr></table></div>
@@ -2733,9 +2747,9 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_legs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_legs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_pt_interchanges</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> \
          <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">legs</span><span class="p">])</span>
 </code></pre></div></td></tr></table></div>
@@ -2758,10 +2772,10 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
+<span class="normal">133</span>
 <span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_monetary_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_plan_monetary_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">plan_cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">plan_cost</span>
     <span class="k">return</span> <span class="mf">0.0</span>
@@ -2787,7 +2801,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">182</span>
+<span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
@@ -2806,8 +2821,7 @@
 <span class="normal">199</span>
 <span class="normal">200</span>
 <span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_pt_interchanges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span> <span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">cnfg</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">202</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">score_pt_interchanges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span> <span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">cnfg</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates utility of line switch.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2848,7 +2862,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span>
 <span class="normal">104</span>
@@ -2877,8 +2892,7 @@
 <span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">,</span> <span class="n">subpopulation</span><span class="o">=</span><span class="s1">&#39;subpopulation&#39;</span><span class="p">):</span>
+<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">person</span><span class="p">,</span> <span class="n">subpopulation</span><span class="o">=</span><span class="s1">&#39;subpopulation&#39;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total plan score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_person</span><span class="p">(</span><span class="n">person</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span><span class="p">[</span><span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">subpopulation</span><span class="p">]]</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total activities score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score_plan_activities</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2929,15 +2943,15 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">282</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">281</span>
+<span class="normal">282</span>
 <span class="normal">283</span>
 <span class="normal">284</span>
 <span class="normal">285</span>
 <span class="normal">286</span>
 <span class="normal">287</span>
 <span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">too_short_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">too_short_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">act</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;minimalDuration&quot;</span><span class="p">)</span> \
         <span class="ow">and</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">):</span>
         <span class="n">minimal_duration</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">matsim_duration_to_hours</span><span class="p">(</span>
@@ -2966,9 +2980,9 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_distance_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_distance_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">leg</span><span class="o">.</span><span class="n">distance</span> <span class="o">*</span> <span class="p">(</span><span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marginalUtilityOfDistance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> \
          <span class="o">+</span> <span class="p">(</span><span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;monetaryDistanceRate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))</span>
 </code></pre></div></td></tr></table></div>
@@ -2991,11 +3005,11 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">303</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">302</span>
+<span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">travel_time_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">duration</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">hours</span>
     <span class="k">if</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span><span class="p">:</span>
         <span class="n">duration</span> <span class="o">-=</span> <span class="p">((</span><span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span> <span class="o">-</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
@@ -3020,7 +3034,8 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/scoring.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
+<span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
 <span class="normal">251</span>
@@ -3030,8 +3045,7 @@
 <span class="normal">255</span>
 <span class="normal">256</span>
 <span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">waiting_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">waiting_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">waiting</span> <span class="o">=</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;waiting&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">waiting</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">0.0</span>
