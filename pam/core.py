@@ -60,9 +60,7 @@ class Population:
             self.add(Household(hid=target.pid))
             self.households[target.pid].add(target)
         else:
-            raise UserWarning(
-                f"Expected instance of Household, list or Person, not: {type(target)}"
-            )
+            raise UserWarning(f"Expected instance of Household, list or Person, not: {type(target)}")
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -216,9 +214,7 @@ class Population:
                 yield v
 
     def vehicle_types(self):
-        v_types = {
-            p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None
-        }
+        v_types = {p.vehicle.vehicle_type for _, _, p in self.people() if p.vehicle is not None}
         for vt in v_types:
             yield vt
 
@@ -259,7 +255,7 @@ class Population:
 
         Extract tabular record of population legs.
 
-        Returns: 
+        Returns:
             pd.DataFrame: record of legs
         """
         df = []
@@ -433,9 +429,7 @@ class Population:
         write.to_csv(self, dir, crs, to_crs)
 
     def __str__(self):
-        return (
-            f"Population: {self.population} people in {self.num_households} households."
-        )
+        return f"Population: {self.population} people in {self.num_households} households."
 
     def __iadd__(self, other):
         """
@@ -455,9 +449,7 @@ class Population:
             self.households[other.pid] = Household(other.pid)
             self.households[other.pid].people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(
-            f"Object for addition must be a Population Household or Person object, not {type(other)}"
-        )
+        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
     def reindex(self, prefix: str):
         """
@@ -494,9 +486,7 @@ class Population:
             hh.reindex(prefix)
             self += hh
             return None
-        raise TypeError(
-            f"Object for addition must be a Population Household or Person object, not {type(other)}"
-        )
+        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
 
     def sample_locs(
         self,
@@ -645,9 +635,7 @@ class Population:
                                 ),
                             )
                             if target_act in long_term_activities:
-                                unique_locations[
-                                    (act.location.area, target_act)
-                                ] = location
+                                unique_locations[(act.location.area, target_act)] = location
                             act.location = location
 
                         previous_loc = location.loc  # keep track of previous location
@@ -727,9 +715,7 @@ class Household:
         are included in attributes.
         """
         if not isinstance(other, Household):
-            self.logger.warning(
-                f"Cannot compare household to non household: ({type(other)})."
-            )
+            self.logger.warning(f"Cannot compare household to non household: ({type(other)}).")
             return False
         if not self.attributes == other.attributes:
             return False
@@ -823,9 +809,7 @@ class Household:
             return self.hh_freq
 
         if not self.people:
-            self.logger.warning(
-                f"Unknown hh weight for empty hh {self.hid}, returning None."
-            )
+            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
 
         return self.av_person_freq
@@ -836,15 +820,11 @@ class Household:
     @property
     def av_person_freq(self):
         if not self.people:
-            self.logger.warning(
-                f"Unknown hh weight for empty hh {self.hid}, returning None."
-            )
+            self.logger.warning(f"Unknown hh weight for empty hh {self.hid}, returning None.")
             return None
         frequencies = [person.freq for person in self.people.values()]
         if None in frequencies:
-            self.logger.warning(
-                f"Missing person weight in hh {self.hid}, returning None."
-            )
+            self.logger.warning(f"Missing person weight in hh {self.hid}, returning None.")
             return None
         return sum(frequencies) / len(frequencies)
 
@@ -935,9 +915,7 @@ class Household:
         if isinstance(other, Person):
             self.people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(
-            f"Object for addition must be a Household or Person object, not {type(other)}"
-        )
+        raise TypeError(f"Object for addition must be a Household or Person object, not {type(other)}")
 
     def reindex(self, prefix: str):
         """
@@ -1011,9 +989,7 @@ class Person:
             vehicle (Vehicle):
         """
         if vehicle.id != self.pid:
-            raise PAMVehicleIdError(
-                f"Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}"
-            )
+            raise PAMVehicleIdError(f"Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}")
         self.vehicle = vehicle
 
     @property
@@ -1166,9 +1142,7 @@ class Person:
         :return: True
         """
         if not self.plan.valid_sequence:
-            raise PAMSequenceValidationError(
-                f"Person {self.pid} has invalid plan sequence"
-            )
+            raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
 
         return True
 
@@ -1178,9 +1152,7 @@ class Person:
         :return: True
         """
         if not self.plan.valid_time_sequence:
-            raise PAMInvalidTimeSequenceError(
-                f"Person {self.pid} has invalid plan times"
-            )
+            raise PAMInvalidTimeSequenceError(f"Person {self.pid} has invalid plan times")
 
         return True
 
@@ -1190,9 +1162,7 @@ class Person:
         :return: True
         """
         if not self.plan.valid_locations:
-            raise PAMValidationLocationsError(
-                f"Person {self.pid} has invalid plan locations"
-            )
+            raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
 
         return True
 

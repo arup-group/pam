@@ -14,6 +14,8 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0  # used to build docs into the gh-pages branch without losing branch history. See https://github.com/jimporter/mike/issues/49
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
@@ -21,9 +23,11 @@ jobs:
         post-cleanup: all
         cache-environment: true
     - name: install PAM
-      run: pip install --no-dependencies -e .
+      run: |
+        pip install --no-dependencies -e .
+        python -m ipykernel install --user --name pam
     - name: run tests
-      run: pytest -v
+      run: pytest
       
   build:
     runs-on: ubuntu-latest
@@ -33,28 +37,16 @@ jobs:
       with:
         micromamba-version: latest
         environment-file: environment.yml
-        create-args: flake8
         post-cleanup: all
         cache-environment: true
-      
-    - name: install PAM
-      run: pip install --no-dependencies -e .
 
-    - name: Lint with flake8
+    - name: install PAM
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=scripts,tests,osmread
+        pip install --no-dependencies -e .
+        python -m ipykernel install --user --name pam
 
     - name: Run tests
-      run: |
-        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-qa/code-coverage.sh
-
-    - name: Smoke test notebooks
-      run: ./scripts/code-qa/notebooks-smoke-test.sh
-
-    - name: Check for large files
-      run: ./scripts/code-qa/check-all-file-sizes.sh
+      run: pytest
 
     - name: Setup doc deploy
       run: |

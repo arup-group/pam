@@ -24,13 +24,13 @@ jobs:
         post-cleanup: all
         cache-environment: true
 
-    - name: install PAM
-      run: pip install --no-deps -e .
+    - name: Install PAM
+      run: |
+        pip install --no-deps -e .
+        python -m ipykernel install --user --name pam
   
     - name: Run tests
-      run: |
-        export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-        ./scripts/code-qa/code-coverage.sh
+      run: pytest --no-cov
 
     - name: Send build success notification
       if: success()

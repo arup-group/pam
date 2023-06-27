@@ -30,7 +30,7 @@ setup(
     },
     extras_require={
         "docs": requirements["docs"],
-        "tests": requirements["docs"] + requirements["tests"],
+        "dev": requirements["docs"] + requirements["dev"],
     },
     install_requires=requirements["base"],
 )

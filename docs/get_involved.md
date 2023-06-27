@@ -68,6 +68,17 @@ The checks are: 1. check no large files have been staged, 2. lint python files f
 You can also run these checks yourself at any time to ensure staged changes are clean by simple calling `pre-commit`.
 - `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
 
+### Memory profiling
+PAM can be memory intensive; we like to ensure that any development to the core code does not exacerbate this.
+If you are running on a UNIX device (i.e., **not** on Windows), you can test whether any changes you have made adversely impact memory and time performance as follows:
+
+1. Install [memray](https://bloomberg.github.io/memray/index.html) in your `pam` mamba environment: `mamba install memray pytest-memray`.
+2. Run the memory profiling integration test: `pytest -p memray -m "high_mem" --no-cov`. 
+3. Optionally, to visualise the memory allocation, run `pytest -p memray -m "high_mem" --no-cov --memray-bin-path=[my_path] --memray-bin-prefix=[my_prefix]` - where you must define `[my_path]` and `[my_prefix]` - followed by `memray flamegraph [my_path]/[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.bin`.
+You will then find the HTML report at `[my_path]/memray-flamegraph-[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.html`.
+
+For more information on using memray, refer to their [documentation](https://bloomberg.github.io/memray/index.html).
+
 ### Contributing
 
 To find beginner-friendly existing bugs and feature requests you may like to have a crack at, take a look [here](https://github.com/arup-group/pam/contribute).

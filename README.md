@@ -63,17 +63,16 @@ There are many ways to make both technical and non-technical contributions to PA
 Before making contributions to the PAM source code, see our contribution guidelines and follow the instructions below to install and work in a test environment.
 
 If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed. 
-If installing directly with pip, you can install these libraries using the `tests` option, i.e., `pip install -e ./pam[tests]`
+If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`
 
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
 while you work:
 
-- `scripts/code-qa/qa-checks.sh` - run a sensible combination of all the following
-- `pytest` - run the unit test suite
-- `scripts/code-qa/code-coverage.sh` - run unit tests and verify the code coverage threshold
-- `scripts/code-qa/notebooks-smoke-test.sh` - smoke test all Jupyter notebooks found in the `examples` directory
-- `scripts/code-qa/check-staged-file-sizes.sh` - check for large file sizes that have been git staged
-- `scripts/code-qa/check-all-file-sizes.sh` - check for large file sizes
+- `pre-commit`: run `pre-commit install` in your command line to load inbuilt checks that will run every time you commit your changes. 
+The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the [pep8 standard](https://peps.python.org/pep-0008/). 
+You can also run these checks yourself at any time to ensure staged changes are clean by simple calling `pre-commit`.
+- `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
+- `pytest -p memray -m "high_mem" --no-cov` (not available on Windows) - after installing memray (`mamba install memray pytest-memray`), test that memory and time performance does not exceed benchmarks.
 
 For more information, see our [documentation](https://arup-group.github.io/pam/0.2/get_involved).
 
