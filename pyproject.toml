@@ -4,10 +4,10 @@ minversion = "6.0"
 # `--strict-markers` - Raise error on unexpected pytest markers being used (add new markers to `markers` config)
 # `-n2` - parallelise over two threads (uses pytest-xdist)
 # `--nbmake --nbmake-kernel=pam` - test example notebooks using the "pam" notebook kernel (uses nbmake)
-# `--cov=. --cov-report=html --cov-report=xml` - generate coverage report for tests (uses pytest-cov; call `--no-cov` in CLI to switch off)
+# `--cov=. --cov-report=html --cov-report=xml --cov-config=pyproject.toml` - generate coverage report for tests (uses pytest-cov; call `--no-cov` in CLI to switch off)
 # `-m 'not high_mem'` - Do not run tests marked as consuming large amounts of memory (call `-m "high_mem"` in CLI to invert this; only `high_mem` marked tests will be run)
 # `-p no:memray` - Do not use the memray memory profiling plugin (call `-p memray` in CLI to switch on memory profiling)
-addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov=. --cov-report=html --cov-report=xml -m 'not high_mem' -p no:memray"
+addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov=. --cov-report=html --cov-report=xml --cov-config=pyproject.toml -m 'not high_mem' -p no:memray"
 testpaths = ["tests", "examples", "mkdocs_plugins"]
 # to mark a test, decorate it with `@pytest.mark.[marker-name]`
 markers = ["high_mem", "limit_memory"]
