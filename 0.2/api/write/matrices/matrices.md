@@ -1,0 +1,2 @@
+
+::: pam.write.matrices

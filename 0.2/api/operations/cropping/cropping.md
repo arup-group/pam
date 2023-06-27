@@ -1,0 +1,2 @@
+
+::: pam.operations.cropping
