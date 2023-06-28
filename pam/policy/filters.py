@@ -16,7 +16,9 @@ class Filter:
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
-            self.__class__.__name__, id(self), ", ".join("%r: %r" % item for item in attribs.items())
+            self.__class__.__name__,
+            id(self),
+            ", ".join("%r: %r" % item for item in attribs.items()),
         )
 
     def __str__(self):
@@ -76,12 +78,18 @@ class PersonAttributeFilter(Filter):
         elif self.how == "all":
             satisfies_attribute_conditions = True
             for attribute_key, attribute_condition in self.conditions.items():
-                satisfies_attribute_conditions &= attribute_condition(person.attributes[attribute_key])
+                satisfies_attribute_conditions &= attribute_condition(
+                    person.attributes[attribute_key]
+                )
             return satisfies_attribute_conditions
         elif self.how == "any":
             satisfies_attribute_conditions = False
             for attribute_key, attribute_condition in self.conditions.items():
-                satisfies_attribute_conditions |= attribute_condition(person.attributes[attribute_key])
+                satisfies_attribute_conditions |= attribute_condition(
+                    person.attributes[attribute_key]
+                )
             return satisfies_attribute_conditions
         else:
-            raise NotImplementedError("{} not implemented, use only `all` or `any`".format(self.how))
+            raise NotImplementedError(
+                "{} not implemented, use only `all` or `any`".format(self.how)
+            )

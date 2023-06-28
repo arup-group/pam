@@ -58,7 +58,9 @@ class PlanEncoder:
     activity_encoder_class = None
 
     def __init__(
-        self, activity_encoder: Optional[StringCharacterEncoder] = None, labels: Optional[List[str]] = None
+        self,
+        activity_encoder: Optional[StringCharacterEncoder] = None,
+        labels: Optional[List[str]] = None,
     ) -> None:
         if activity_encoder is not None:
             self.activity_encoder = activity_encoder
@@ -72,7 +74,11 @@ class PlanEncoder:
         if act == "travel":
             plan.add(activity.Leg(seq=seq, start_time=start_time, end_time=start_time + duration))
         else:
-            plan.add(activity.Activity(seq=seq, act=act, start_time=start_time, end_time=start_time + duration))
+            plan.add(
+                activity.Activity(
+                    seq=seq, act=act, start_time=start_time, end_time=start_time + duration
+                )
+            )
 
     def encode(self):
         raise NotImplementedError
@@ -86,7 +92,9 @@ class PlanEncoder:
             duration = td(minutes=len(list(g)))
             act = self.activity_encoder.decode(k)
             # add to the plan and advance start time
-            self.add_plan_component(plan=plan, seq=seq, act=act, start_time=start_time, duration=duration)
+            self.add_plan_component(
+                plan=plan, seq=seq, act=act, start_time=start_time, duration=duration
+            )
             start_time += duration
 
         return plan

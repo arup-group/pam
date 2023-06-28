@@ -23,14 +23,19 @@ class Modifier:
         super().__init__()
 
     def apply_to(
-        self, household: pam.core.Household, person: pam.core.Person = None, activity: pam.activity.Activity = None
+        self,
+        household: pam.core.Household,
+        person: pam.core.Person = None,
+        activity: pam.activity.Activity = None,
     ):
         raise NotImplementedError("{} is a base class".format(type(Modifier)))
 
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
-            self.__class__.__name__, id(self), ", ".join("%r: %r" % item for item in attribs.items())
+            self.__class__.__name__,
+            id(self),
+            ", ".join("%r: %r" % item for item in attribs.items()),
         )
 
     def __str__(self):
@@ -179,7 +184,9 @@ class ReduceSharedActivity(Modifier):
             # pick the person that retains activities
             ppl_sharing_activities = self.people_who_share_activities_for_removal(household)
             if ppl_sharing_activities:
-                person_retaining_activities = random.choice(self.people_who_share_activities_for_removal(household))
+                person_retaining_activities = random.choice(
+                    self.people_who_share_activities_for_removal(household)
+                )
                 for pid, person in household.people.items():
                     if person != person_retaining_activities:
                         self.remove_activities(person, acts_for_removal)

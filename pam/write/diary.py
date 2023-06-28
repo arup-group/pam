@@ -9,7 +9,9 @@ from pam.activity import Activity, Leg
 from pam.utils import create_local_dir
 
 
-def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326") -> None:
+def to_csv(
+    population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
+) -> None:
     """Write a population to disk as tabular data in csv format. Outputs are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
@@ -63,8 +65,13 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
                         "tet": component.end_time,
                         "duration": str(component.duration),
                     }
-                    if component.start_location.loc is not None and component.end_location.loc is not None:
-                        leg_data["geometry"] = LineString((component.start_location.loc, component.end_location.loc))
+                    if (
+                        component.start_location.loc is not None
+                        and component.end_location.loc is not None
+                    ):
+                        leg_data["geometry"] = LineString(
+                            (component.start_location.loc, component.end_location.loc)
+                        )
 
                     legs.append(leg_data)
 
@@ -102,7 +109,9 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
     save_csv(acts, os.path.join(dir, "activities.csv"))
 
 
-def dump(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326") -> None:
+def dump(
+    population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
+) -> None:
     """Write a population to disk as tabular data in csv format. Outputs are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
@@ -134,7 +143,10 @@ def save_csv(df, path):
 
 
 def write_population_csvs(
-    list_of_populations: list, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
+    list_of_populations: list,
+    dir: str,
+    crs: Optional[str] = None,
+    to_crs: Optional[str] = "EPSG:4326",
 ) -> None:
     """ "
     Write a list of populations to disk as tabular data in csv format. Outputs are:
@@ -156,6 +168,8 @@ def write_population_csvs(
         if population.name is None:
             population.name = idx
         populations.append({"population_id": idx, "population_name": population.name})
-        to_csv(population=population, dir=os.path.join(dir, population.name), crs=crs, to_crs=to_crs)
+        to_csv(
+            population=population, dir=os.path.join(dir, population.name), crs=crs, to_crs=to_crs
+        )
 
     pd.DataFrame(populations).to_csv(os.path.join(dir, "populations.csv"), index=False)

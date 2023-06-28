@@ -102,7 +102,9 @@ class Writer:
         self.xmlfile = et.xmlfile(self.path, encoding="utf-8", compression=self.compression)
         self.writer = self.xmlfile.__enter__()  # enter into lxml file writer
         self.writer.write_declaration()
-        self.writer.write_doctype('<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">')
+        self.writer.write_doctype(
+            '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
+        )
         if self.comment:
             self.writer.write(et.Comment(self.comment), pretty_print=True)
         self.writer.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
@@ -110,13 +112,16 @@ class Writer:
         self.population_writer = self.writer.element("population")
         self.population_writer.__enter__()  # enter into lxml element writer
         if self.coordinate_reference_system is not None:
-            self.writer.write(create_crs_attribute(self.coordinate_reference_system), pretty_print=True)
+            self.writer.write(
+                create_crs_attribute(self.coordinate_reference_system), pretty_print=True
+            )
         return self
 
     def add_hh(self, household) -> None:
         for _, person in household:
             if self.household_key is not None:
-                person.attributes[self.household_key] = household.hid  # force add hid as an attribute
+                # force add hid as an attribute
+                person.attributes[self.household_key] = household.hid
             self.add_person(person)
 
     def add_person(self, person) -> None:
@@ -161,7 +166,9 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
     for k, v in person.attributes.items():
         if k == "vehicles":  # todo make something more robust for future 'special' classes
             attribute = et.SubElement(
-                attributes, "attribute", {"class": "org.matsim.vehicles.PersonVehicles", "name": str(k)}
+                attributes,
+                "attribute",
+                {"class": "org.matsim.vehicles.PersonVehicles", "name": str(k)},
             )
             attribute.text = str(v)
         else:
@@ -199,12 +206,16 @@ def write_plan(person_xml: et.SubElement, plan: Plan, selected: Optional[bool] =
             et.SubElement(plan_xml, "activity", act_data)
 
         if isinstance(component, Leg):
-            leg = et.SubElement(plan_xml, "leg", {"mode": component.mode, "trav_time": tdtm(component.duration)})
+            leg = et.SubElement(
+                plan_xml, "leg", {"mode": component.mode, "trav_time": tdtm(component.duration)}
+            )
 
             if component.attributes:
                 attributes = et.SubElement(leg, "attributes")
                 for k, v in component.attributes.items():
-                    if k == "enterVehicleTime":  # todo make something more robust for future 'special' classes
+                    if (
+                        k == "enterVehicleTime"
+                    ):  # todo make something more robust for future 'special' classes
                         attribute = et.SubElement(
                             attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
                         )
@@ -218,13 +229,21 @@ def write_plan(person_xml: et.SubElement, plan: Plan, selected: Optional[bool] =
 
 def add_attribute(attributes, k, v):
     if type(v) == bool:
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)}
+        )
     elif type(v) == int:
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)}
+        )
     elif type(v) == float:
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Double", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
+        )
     else:
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.String", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.String", "name": str(k)}
+        )
     attribute.text = str(v)
 
 
@@ -236,12 +255,17 @@ def object_attributes_dtd():
 
 
 def population_v6_dtd():
-    dtd_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd"))
+    dtd_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd")
+    )
     return et.DTD(dtd_path)
 
 
 def write_vehicles(
-    output_dir, population, all_vehicles_filename="all_vehicles.xml", electric_vehicles_filename="electric_vehicles.xml"
+    output_dir,
+    population,
+    all_vehicles_filename="all_vehicles.xml",
+    electric_vehicles_filename="electric_vehicles.xml",
 ):
     """Writes:
         - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
@@ -264,7 +288,9 @@ def write_vehicles(
             if population.has_electric_vehicles:
                 logging.info("Population includes electric vehicles")
                 electric_vehicles = set(population.electric_vehicles())
-                write_electric_vehicles(output_dir, vehicles=electric_vehicles, file_name=electric_vehicles_filename)
+                write_electric_vehicles(
+                    output_dir, vehicles=electric_vehicles, file_name=electric_vehicles_filename
+                )
                 electric_vehicle_charger_types = population.electric_vehicle_charger_types()
                 logging.info(
                     f"Found {len(electric_vehicles)} electric vehicles "
@@ -284,7 +310,10 @@ def write_vehicles(
 
 
 def write_all_vehicles(
-    output_dir, vehicles: Set[Vehicle], vehicle_types: Set[VehicleType], file_name="all_vehicles.xml"
+    output_dir,
+    vehicles: Set[Vehicle],
+    vehicle_types: Set[VehicleType],
+    file_name="all_vehicles.xml",
 ):
     """Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
     for MATSim
@@ -314,7 +343,9 @@ def write_all_vehicles(
                 vehicle.to_xml(xf)
 
 
-def write_electric_vehicles(output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"):
+def write_electric_vehicles(
+    output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"
+):
     """Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
     for MATSim
     :param output_dir: output directory for electric_vehicles file

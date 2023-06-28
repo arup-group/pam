@@ -26,7 +26,9 @@ def test_plan() -> Plan:
             end_time=mtdt(480),
             distance=1000,
         ),
-        Activity(seq=2, act="shop", loc=Point(0.12, 1.45), start_time=mtdt(480), end_time=mtdt(510)),
+        Activity(
+            seq=2, act="shop", loc=Point(0.12, 1.45), start_time=mtdt(480), end_time=mtdt(510)
+        ),
         Leg(
             seq=2,
             mode="car",
@@ -36,7 +38,9 @@ def test_plan() -> Plan:
             end_time=mtdt(540),
             distance=1000,
         ),
-        Activity(seq=3, act="work", loc=Point(0.84, 2.12), start_time=mtdt(540), end_time=mtdt(800)),
+        Activity(
+            seq=3, act="work", loc=Point(0.84, 2.12), start_time=mtdt(540), end_time=mtdt(800)
+        ),
         Leg(
             seq=3,
             mode="walk",
@@ -46,7 +50,9 @@ def test_plan() -> Plan:
             end_time=mtdt(900),
             distance=1000,
         ),
-        Activity(seq=4, act="medical", loc=Point(1.90, 0.23), start_time=mtdt(900), end_time=mtdt(960)),
+        Activity(
+            seq=4, act="medical", loc=Point(1.90, 0.23), start_time=mtdt(900), end_time=mtdt(960)
+        ),
         Leg(
             seq=4,
             mode="walk",
@@ -56,7 +62,9 @@ def test_plan() -> Plan:
             end_time=mtdt(990),
             distance=1000,
         ),
-        Activity(seq=5, act="other", loc=Point(2.26, 0.24), start_time=mtdt(990), end_time=mtdt(1010)),
+        Activity(
+            seq=5, act="other", loc=Point(2.26, 0.24), start_time=mtdt(990), end_time=mtdt(1010)
+        ),
         Leg(
             seq=5,
             mode="walk",
@@ -66,7 +74,9 @@ def test_plan() -> Plan:
             end_time=mtdt(1030),
             distance=1000,
         ),
-        Activity(seq=6, act="other", loc=Point(2.77, 1.82), start_time=mtdt(1030), end_time=mtdt(1060)),
+        Activity(
+            seq=6, act="other", loc=Point(2.77, 1.82), start_time=mtdt(1030), end_time=mtdt(1060)
+        ),
         Leg(
             seq=6,
             mode="walk",
@@ -76,7 +86,9 @@ def test_plan() -> Plan:
             end_time=mtdt(1100),
             distance=1000,
         ),
-        Activity(seq=7, act="other", loc=Point(1.88, 1.72), start_time=mtdt(1100), end_time=mtdt(1200)),
+        Activity(
+            seq=7, act="other", loc=Point(1.88, 1.72), start_time=mtdt(1100), end_time=mtdt(1200)
+        ),
         Leg(
             seq=7,
             mode="car",
@@ -86,7 +98,9 @@ def test_plan() -> Plan:
             end_time=mtdt(1210),
             distance=1000,
         ),
-        Activity(seq=8, act="home", loc=Point(0.23, 0.10), start_time=mtdt(1210), end_time=END_OF_DAY),
+        Activity(
+            seq=8, act="home", loc=Point(0.23, 0.10), start_time=mtdt(1210), end_time=END_OF_DAY
+        ),
     ]
     return plan
 

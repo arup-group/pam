@@ -57,9 +57,27 @@ def test_shift_end_time():
 def test_plan():
     plan = Plan()
     plan.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)))
-    plan.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(180), end_time=mtdt(190)))
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="b",
+            start_time=mtdt(180),
+            end_time=mtdt(190),
+        )
+    )
     plan.add(Activity(seq=2, act="work", area="b", start_time=mtdt(190), end_time=mtdt(200)))
-    plan.add(Leg(seq=1, mode="car", start_area="b", end_area="a", start_time=mtdt(200), end_time=mtdt(390)))
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(200),
+            end_time=mtdt(390),
+        )
+    )
     plan.add(Activity(seq=3, act="home", area="b", start_time=mtdt(390), end_time=END_OF_DAY))
     return plan
 

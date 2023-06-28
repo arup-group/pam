@@ -39,7 +39,9 @@ def curdir():
 @pytest.fixture(scope="function")
 def api_plugin():
     plugin = api_generator.AddAPIPlugin()
-    plugin.load_config({"package_dir": "src", "skip": ["src/file_1_ignore.py", "src/subdir/file_2_ignore.py"]})
+    plugin.load_config(
+        {"package_dir": "src", "skip": ["src/file_1_ignore.py", "src/subdir/file_2_ignore.py"]}
+    )
     return plugin
 
 

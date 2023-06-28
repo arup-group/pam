@@ -8,8 +8,12 @@ from pam.core import Household, Population
 from pam.read import load_pickle, load_travel_diary
 from pam.utils import parse_time
 
-test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))
-test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv"))
+test_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
+)
+test_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
+)
 
 
 testdata = [
@@ -170,4 +174,6 @@ def test_load_pickle_person(person_crop_last_act, tmpdir):
     person_crop_last_act.pickle(path)
     loaded = load_pickle(path)
     assert loaded.plan.day
-    assert [a.act for a in loaded.plan.activities] == [a.act for a in person_crop_last_act.plan.activities]
+    assert [a.act for a in loaded.plan.activities] == [
+        a.act for a in person_crop_last_act.plan.activities
+    ]

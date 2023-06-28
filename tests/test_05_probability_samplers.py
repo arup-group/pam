@@ -79,15 +79,21 @@ def test_HouseholdProbability_defaults_to_empty_kwargs_with_custom_distros():
     custom_sampler("", **prob.kwargs)
 
 
-def test_HouseholdProbability_p_delegates_to_compute_probability_for_household_for_Household(mocker):
+def test_HouseholdProbability_p_delegates_to_compute_probability_for_household_for_Household(
+    mocker,
+):
     mocker.patch.object(
-        probability_samplers.HouseholdProbability, "compute_probability_for_household", return_value=None
+        probability_samplers.HouseholdProbability,
+        "compute_probability_for_household",
+        return_value=None,
     )
     prob = probability_samplers.HouseholdProbability(0.5)
     hhld = Household(1)
     prob.p(hhld)
 
-    probability_samplers.HouseholdProbability.compute_probability_for_household.assert_called_once_with(hhld)
+    probability_samplers.HouseholdProbability.compute_probability_for_household.assert_called_once_with(
+        hhld
+    )
 
 
 def test_HouseholdProbability_p_throws_exception_when_given_Person():
@@ -113,7 +119,9 @@ def test_HouseholdProbability_compute_probability_for_household_returns_same_lev
     assert prob.compute_probability_for_household(Household(1)) == 0.5
 
 
-def test_HouseholdProbability_compute_probability_for_household_delegates_p_to_custom_callable(mocker):
+def test_HouseholdProbability_compute_probability_for_household_delegates_p_to_custom_callable(
+    mocker,
+):
     called = None
 
     def custom_sampler(x, kwarg):
@@ -159,7 +167,9 @@ def test_PersonProbability_defaults_to_empty_kwargs_with_custom_distros():
 def test_PersonProbability_p_delegates_to_compute_probability_for_person_for_each_person_in_Household(
     mocker, SmithHousehold_alt
 ):
-    mocker.patch.object(probability_samplers.PersonProbability, "compute_probability_for_person", return_value=0.25)
+    mocker.patch.object(
+        probability_samplers.PersonProbability, "compute_probability_for_person", return_value=0.25
+    )
     prob = probability_samplers.PersonProbability(0.25)
     p = prob.p(SmithHousehold_alt)
 
@@ -168,12 +178,16 @@ def test_PersonProbability_p_delegates_to_compute_probability_for_person_for_eac
 
 
 def test_PersonProbability_p_delegates_to_compute_probability_for_person_for_Person(mocker):
-    mocker.patch.object(probability_samplers.PersonProbability, "compute_probability_for_person", return_value=None)
+    mocker.patch.object(
+        probability_samplers.PersonProbability, "compute_probability_for_person", return_value=None
+    )
     prob = probability_samplers.PersonProbability(0.5)
     person = Person(1)
     prob.p(person)
 
-    probability_samplers.PersonProbability.compute_probability_for_person.assert_called_once_with(person)
+    probability_samplers.PersonProbability.compute_probability_for_person.assert_called_once_with(
+        person
+    )
 
 
 def test_PersonProbability_p_throws_exception_when_given_Activity():
@@ -239,7 +253,11 @@ def test_ActivityProbability_defaults_to_empty_kwargs_with_custom_distros():
 def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_each_activity_for_person_in_Household(
     mocker, SmithHousehold_alt
 ):
-    mocker.patch.object(probability_samplers.ActivityProbability, "compute_probability_for_activity", return_value=0.25)
+    mocker.patch.object(
+        probability_samplers.ActivityProbability,
+        "compute_probability_for_activity",
+        return_value=0.25,
+    )
     prob = probability_samplers.ActivityProbability(["work", "escort_education"], 0.25)
     p = prob.p(SmithHousehold_alt)
 
@@ -250,7 +268,11 @@ def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for
 def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_each_Activity_for_Person(
     mocker, Steve
 ):
-    mocker.patch.object(probability_samplers.ActivityProbability, "compute_probability_for_activity", return_value=0.25)
+    mocker.patch.object(
+        probability_samplers.ActivityProbability,
+        "compute_probability_for_activity",
+        return_value=0.25,
+    )
     prob = probability_samplers.ActivityProbability(["work", "escort"], 0.25)
     person = Steve
     p = prob.p(person)
@@ -259,13 +281,21 @@ def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for
     assert p == 0.4375
 
 
-def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_relevant_Activity(mocker, Steve):
-    mocker.patch.object(probability_samplers.ActivityProbability, "compute_probability_for_activity", return_value=0.25)
+def test_ActivityProbability_p_delegates_to_compute_probability_for_activity_for_relevant_Activity(
+    mocker, Steve
+):
+    mocker.patch.object(
+        probability_samplers.ActivityProbability,
+        "compute_probability_for_activity",
+        return_value=0.25,
+    )
     prob = probability_samplers.ActivityProbability(["work"], 0.25)
     act = [act for act in Steve.activities][1]
     p = prob.p(act)
 
-    probability_samplers.ActivityProbability.compute_probability_for_activity.assert_called_once_with(act)
+    probability_samplers.ActivityProbability.compute_probability_for_activity.assert_called_once_with(
+        act
+    )
     assert p == 0.25
 
 

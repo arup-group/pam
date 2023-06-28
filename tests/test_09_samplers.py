@@ -4,7 +4,15 @@ from types import GeneratorType
 import geopandas as gp
 import pandas as pd
 import pytest
-from shapely.geometry import LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon
+from shapely.geometry import (
+    LinearRing,
+    LineString,
+    MultiLineString,
+    MultiPoint,
+    MultiPolygon,
+    Point,
+    Polygon,
+)
 
 from pam.samplers import attributes, basic, facility, spatial
 
@@ -77,7 +85,9 @@ def test_applt_discrete_joint_distribution_sampler_to_fred_carefully(fred, cat_j
         attributes.discrete_joint_distribution_sampler(fred, mapping, dist, careful=True)
 
 
-def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(fred, cat_joint_distribution):
+def test_applt_discrete_joint_distribution_sampler_to_fred_not_carefully(
+    fred, cat_joint_distribution
+):
     mapping, dist = cat_joint_distribution
     assert attributes.discrete_joint_distribution_sampler(fred, mapping, dist) is False
 
@@ -96,14 +106,24 @@ def test_applt_discrete_joint_distribution_sampler_reproducibility_to_michael_ca
     michael, dog_joint_distribution, fixed_seed
 ):
     mapping, dist = dog_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(michael, mapping, dist, careful=True, seed=fixed_seed) is True
+    assert (
+        attributes.discrete_joint_distribution_sampler(
+            michael, mapping, dist, careful=True, seed=fixed_seed
+        )
+        is True
+    )
 
 
 def test_applt_discrete_joint_distribution_sampler_reproducibility_to_kasia_carefully(
     kasia, dog_joint_distribution, fixed_seed2
 ):
     mapping, dist = dog_joint_distribution
-    assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist, careful=True, seed=fixed_seed2) is False
+    assert (
+        attributes.discrete_joint_distribution_sampler(
+            kasia, mapping, dist, careful=True, seed=fixed_seed2
+        )
+        is False
+    )
 
 
 testdata = [(0, 1.5, 0), (10, 1.0, 10), (0, 0.0, 0), (10, 2.0, 20), (10, 1.5, 15), (10, 0.5, 5)]
@@ -205,7 +225,10 @@ def test_random_sample_point_from_multilinestring_random_seed(fixed_seed):
     poly = MultiLineString([p1, p2])
     gdf = gp.GeoDataFrame(df, geometry=[poly] * 3)
     sampler = spatial.RandomPointSampler(gdf.geometry, patience=0, seed=fixed_seed)
-    assert list(sampler.sample_point_from_multilinestring(gdf.geometry[0]).coords[0]) == [0.5374569764496049, 0.0]
+    assert list(sampler.sample_point_from_multilinestring(gdf.geometry[0]).coords[0]) == [
+        0.5374569764496049,
+        0.0,
+    ]
 
 
 def test_random_sample_point_from_multipoint():
@@ -322,7 +345,9 @@ def test_inf_yield_weighted_random_seed(fixed_seed):
 
 
 def test_facility_dict_build():
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -341,7 +366,9 @@ def test_facility_dict_build():
 
 
 def test_facility_sampler_normal():
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -358,7 +385,9 @@ def test_facility_sampler_normal():
 
 
 def test_facility_sampler_missing_activity_random_sample():
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -375,7 +404,9 @@ def test_facility_sampler_missing_activity_random_sample():
 
 
 def test_facility_sampler_missing_activity_random_sample_fixed_seed(fixed_seed):
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -387,12 +418,16 @@ def test_facility_sampler_missing_activity_random_sample_fixed_seed(fixed_seed):
     ]
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
-    sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ["home", "work", "education"], seed=fixed_seed)
+    sampler = facility.FacilitySampler(
+        facility_gdf, zones_gdf, ["home", "work", "education"], seed=fixed_seed
+    )
     assert sampler.sample(0, "education").coords[0] == (0.26872848822480244, 1.6948674738744653)
 
 
 def test_facility_sampler_missing_activity_return_None():
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -411,7 +446,9 @@ def test_facility_sampler_missing_activity_return_None():
 
 
 def test_facility_sampler_missing_activity_fail():
-    facility_df = pd.DataFrame({"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]})
+    facility_df = pd.DataFrame(
+        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"]}
+    )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -437,7 +474,11 @@ def test_facility_sampler_missing_activity_fail():
 def test_facility_sampler_weighted():
     # zero-weight home facility is ignored:
     facility_df = pd.DataFrame(
-        {"id": [1, 2, 3, 4], "activity": ["home", "home", "home", "education"], "floorspace": [0, 200, 700, 100]}
+        {
+            "id": [1, 2, 3, 4],
+            "activity": ["home", "home", "home", "education"],
+            "floorspace": [0, 200, 700, 100],
+        }
     )
     points = [Point((1, 1)), Point((1.5, 1.5)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
@@ -450,7 +491,9 @@ def test_facility_sampler_weighted():
     ]
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
-    sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ["home", "work", "education"], weight_on="floorspace")
+    sampler = facility.FacilitySampler(
+        facility_gdf, zones_gdf, ["home", "work", "education"], weight_on="floorspace"
+    )
     assert sampler.sample(0, "home") == Point((1.5, 1.5))
 
 
@@ -476,14 +519,22 @@ def test_facility_sampler_weighted_maxwalk():
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
     sampler = facility.FacilitySampler(
-        facility_gdf, zones_gdf, ["home", "work", "education"], weight_on="floorspace", max_walk=1000
+        facility_gdf,
+        zones_gdf,
+        ["home", "work", "education"],
+        weight_on="floorspace",
+        max_walk=1000,
     )
     assert sampler.sample(0, "work", mode="bus") == Point((1.8, 1.8))
 
 
 def test_facility_sampler_missing_activity_return_None_weighted():
     facility_df = pd.DataFrame(
-        {"id": [1, 2, 3, 4], "activity": ["home", "work", "home", "education"], "floorspace": [0, 200, 700, 100]}
+        {
+            "id": [1, 2, 3, 4],
+            "activity": ["home", "work", "home", "education"],
+            "floorspace": [0, 200, 700, 100],
+        }
     )
     points = [Point((1, 1)), Point((1, 1)), Point((3, 3)), Point((3, 3))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
@@ -497,7 +548,12 @@ def test_facility_sampler_missing_activity_return_None_weighted():
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
     sampler = facility.FacilitySampler(
-        facility_gdf, zones_gdf, ["home", "work", "education"], random_default=False, fail=False, weight_on="floorspace"
+        facility_gdf,
+        zones_gdf,
+        ["home", "work", "education"],
+        random_default=False,
+        fail=False,
+        weight_on="floorspace",
     )
     assert sampler.sample(0, "education") is None
 
@@ -506,7 +562,11 @@ def test_facility_sampler_weighted_distance():
     # distance-based sampling
     # a 10-min walking trip at 5kph would have a radius of approx 1250 meters.
     facility_df = pd.DataFrame(
-        {"id": [1, 2, 3, 4], "activity": ["work", "work", "work", "education"], "floorspace": [1, 1, 10, 10]}
+        {
+            "id": [1, 2, 3, 4],
+            "activity": ["work", "work", "work", "education"],
+            "floorspace": [1, 1, 10, 10],
+        }
     )
     points = [Point((0.01, 0.01)), Point((1000, 750)), Point((100, 100)), Point((30000, 30000))]
     facility_gdf = gp.GeoDataFrame(facility_df, geometry=points)
@@ -519,10 +579,18 @@ def test_facility_sampler_weighted_distance():
     ]
     zones_gdf = gp.GeoDataFrame(zones_df, geometry=polys)
 
-    sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ["home", "work", "education"], weight_on="floorspace")
+    sampler = facility.FacilitySampler(
+        facility_gdf, zones_gdf, ["home", "work", "education"], weight_on="floorspace"
+    )
     sampled_facilities = []
     for i in range(20):
         sampled_facilities.append(
-            sampler.sample(0, "work", mode="walk", previous_duration=pd.Timedelta(minutes=15), previous_loc=Point(0, 0))
+            sampler.sample(
+                0,
+                "work",
+                mode="walk",
+                previous_duration=pd.Timedelta(minutes=15),
+                previous_loc=Point(0, 0),
+            )
         )
     assert pd.Series(sampled_facilities).value_counts(normalize=True).idxmax() == Point((1000, 750))

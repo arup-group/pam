@@ -41,22 +41,30 @@ def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_
     )
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_given_person(mocker, SmithHousehold):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_given_person(
+    mocker, SmithHousehold
+):
     mocker.patch.object(MoveActivityTourToHomeLocation, "move_person_activities")
 
     policy = MoveActivityTourToHomeLocation([""])
     policy.apply_to(SmithHousehold, SmithHousehold[4])
 
-    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(SmithHousehold[4], "walk")
+    MoveActivityTourToHomeLocation.move_person_activities.assert_called_once_with(
+        SmithHousehold[4], "walk"
+    )
 
 
-def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_household(mocker, SmithHousehold):
+def test_MoveActivityTourToHomeLocation_apply_to_delegates_to_helper_when_given_household(
+    mocker, SmithHousehold
+):
     mocker.patch.object(MoveActivityTourToHomeLocation, "move_household_activities")
 
     policy = MoveActivityTourToHomeLocation([""])
     policy.apply_to(SmithHousehold)
 
-    MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(SmithHousehold, "walk")
+    MoveActivityTourToHomeLocation.move_household_activities.assert_called_once_with(
+        SmithHousehold, "walk"
+    )
 
 
 def test_MoveActivityTourToHomeLocation_throws_exception_if_apply_to_given_wrong_input(Bobby):
@@ -76,14 +84,18 @@ def test_MoveActivityTourToHomeLocation_move_individual_activities_moves_an_acti
     assert Bobby.plan[2].location == Bobby.home
 
 
-def test_MoveActivityTourToHomeLocation_doesnt_move_individual_activities_empty_selected_activities_list(Bobby):
+def test_MoveActivityTourToHomeLocation_doesnt_move_individual_activities_empty_selected_activities_list(
+    Bobby,
+):
     policy = MoveActivityTourToHomeLocation(["education"])
     policy.move_individual_activities(Bobby, [])
 
     assert Bobby.plan[2].location.area == "b"
 
 
-def test_move_person_activities_delegates_to_remove_person_activities_for_persons_activities(mocker, Bobby):
+def test_move_person_activities_delegates_to_remove_person_activities_for_persons_activities(
+    mocker, Bobby
+):
     mocker.patch.object(MoveActivityTourToHomeLocation, "move_activities")
 
     policy = MoveActivityTourToHomeLocation([""])
@@ -126,19 +138,27 @@ def test_matching_activity_tours_delegates_to_plan_activity_tours(mocker, plain_
     Plan.activity_tours.assert_called_once()
 
 
-def test_matching_activity_tours_delegates_to_tour_matches_activities(mocker, activity_tours, plain_filter):
+def test_matching_activity_tours_delegates_to_tour_matches_activities(
+    mocker, activity_tours, plain_filter
+):
     mocker.patch.object(Plan, "activity_tours", return_value=[activity_tours[0]])
     mocker.patch.object(MoveActivityTourToHomeLocation, "tour_matches_activities")
     MoveActivityTourToHomeLocation([""]).matching_activity_tours(Plan(1), plain_filter)
 
-    MoveActivityTourToHomeLocation.tour_matches_activities.assert_called_once_with(activity_tours[0], plain_filter)
+    MoveActivityTourToHomeLocation.tour_matches_activities.assert_called_once_with(
+        activity_tours[0], plain_filter
+    )
 
 
 def test_matching_activity_tours_matches_one_tour(mocker, activity_tours, plain_filter):
     mocker.patch.object(Plan, "activity_tours", return_value=activity_tours)
-    mocker.patch.object(MoveActivityTourToHomeLocation, "tour_matches_activities", side_effect=[True, False])
+    mocker.patch.object(
+        MoveActivityTourToHomeLocation, "tour_matches_activities", side_effect=[True, False]
+    )
 
-    matching_tours = MoveActivityTourToHomeLocation([""]).matching_activity_tours(Plan(1), plain_filter)
+    matching_tours = MoveActivityTourToHomeLocation([""]).matching_activity_tours(
+        Plan(1), plain_filter
+    )
 
     assert matching_tours == [activity_tours[0]]
 
@@ -151,7 +171,9 @@ def test_tour_matches_activities_returns_True_when_there_is_a_matching_tour_and_
     )
 
 
-def test_tour_matches_activities_returns_True_when_there_is_a_matching_tour_and_individual_filter(activity_tours):
+def test_tour_matches_activities_returns_True_when_there_is_a_matching_tour_and_individual_filter(
+    activity_tours,
+):
     def is_a_selected_activity(act):
         for other_act in activity_tours[0]:
             if act.is_exact(other_act):
@@ -178,7 +200,9 @@ def test_activity_is_part_of_tour(activity_tours):
 
 def test_activity_is_not_part_of_tour(activity_tours):
     activity_not_in_tour = Activity(0, "blah", "bleh")
-    assert not MoveActivityTourToHomeLocation([""]).is_part_of_tour(activity_not_in_tour, activity_tours)
+    assert not MoveActivityTourToHomeLocation([""]).is_part_of_tour(
+        activity_not_in_tour, activity_tours
+    )
 
 
 def test_is_part_of_tour_delegates_to_is_exact_method(mocker):

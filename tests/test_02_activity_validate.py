@@ -83,9 +83,23 @@ def act_leg_act_leg_act_bad_times():
     person = Person("1")
     person.plan.day = [
         Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)),
-        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(180), end_time=mtdt(190)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="b",
+            start_time=mtdt(180),
+            end_time=mtdt(190),
+        ),
         Activity(seq=2, act="work", area="b", start_time=mtdt(0), end_time=mtdt(180)),
-        Leg(seq=1, mode="car", start_area="b", end_area="a", start_time=mtdt(190), end_time=mtdt(390)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(190),
+            end_time=mtdt(390),
+        ),
         Activity(seq=3, act="home", area="a", start_time=mtdt(280), end_time=END_OF_DAY),
     ]
     return person
@@ -114,9 +128,23 @@ def act_leg_act_leg_act_bad_locations1():
     person = Person("1")
     person.plan.day = [
         Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)),
-        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(180), end_time=mtdt(190)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="b",
+            start_time=mtdt(180),
+            end_time=mtdt(190),
+        ),
         Activity(seq=2, act="work", area="b", start_time=mtdt(190), end_time=mtdt(200)),
-        Leg(seq=1, mode="car", start_area="a", end_area="a", start_time=mtdt(200), end_time=mtdt(390)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="a",
+            start_time=mtdt(200),
+            end_time=mtdt(390),
+        ),
         Activity(seq=3, act="home", area="a", start_time=mtdt(390), end_time=END_OF_DAY),
     ]
     return person
@@ -133,9 +161,23 @@ def act_leg_act_leg_act_bad_locations2():
     person = Person("1")
     person.plan.day = [
         Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)),
-        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(180), end_time=mtdt(190)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="b",
+            start_time=mtdt(180),
+            end_time=mtdt(190),
+        ),
         Activity(seq=2, act="work", area="b", start_time=mtdt(190), end_time=mtdt(200)),
-        Leg(seq=1, mode="car", start_area="b", end_area="a", start_time=mtdt(200), end_time=mtdt(390)),
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(200),
+            end_time=mtdt(390),
+        ),
         Activity(seq=3, act="home", area="b", start_time=mtdt(390), end_time=END_OF_DAY),
     ]
     return person
@@ -150,7 +192,16 @@ def test_invalid_locations2(act_leg_act_leg_act_bad_locations2):
 def test_invalid_not_end_with_act():
     plan = Plan()
     plan.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)))
-    plan.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(180), end_time=mtdt(190)))
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="a",
+            end_area="b",
+            start_time=mtdt(180),
+            end_time=mtdt(190),
+        )
+    )
     assert not plan.valid_sequence
 
 

@@ -12,7 +12,12 @@ def benchmarks(population):
     bms = [
         (
             "mode_counts.csv",
-            {"dimensions": ["mode"], "data_fields": ["freq"], "colnames": ["mode", "trips"], "aggfunc": [sum]},
+            {
+                "dimensions": ["mode"],
+                "data_fields": ["freq"],
+                "colnames": ["mode", "trips"],
+                "aggfunc": [sum],
+            },
         ),
         (
             "distances.csv",
@@ -124,7 +129,9 @@ def create_benchmark(
 def mode_counts(population):
     # number of trips by (euclidean) distance category
     data = population.trips_df()
-    return create_benchmark(data, dimensions=["mode"], data_fields=["freq"], colnames=["mode", "trips"], aggfunc=[sum])
+    return create_benchmark(
+        data, dimensions=["mode"], data_fields=["freq"], colnames=["mode", "trips"], aggfunc=[sum]
+    )
 
 
 def distance_counts(population):
@@ -155,7 +162,11 @@ def duration_counts(population):
     # number of trips by duration
     data = population.trips_df()
     return create_benchmark(
-        data, dimensions=["duration_category"], data_fields=["freq"], colnames=["duration", "trips"], aggfunc=[sum]
+        data,
+        dimensions=["duration_category"],
+        data_fields=["freq"],
+        colnames=["duration", "trips"],
+        aggfunc=[sum],
     )
 
 
@@ -175,7 +186,11 @@ def departure_time_counts(population):
     # number of trips by hour of departure
     data = population.trips_df()
     return create_benchmark(
-        data, dimensions=["departure_hour"], data_fields=["freq"], colnames=["departure_hour", "trips"], aggfunc=[sum]
+        data,
+        dimensions=["departure_hour"],
+        data_fields=["freq"],
+        colnames=["departure_hour", "trips"],
+        aggfunc=[sum],
     )
 
 
@@ -183,5 +198,9 @@ def mode_purpose_counts(population):
     # purpose split for each mode
     data = population.trips_df()
     return create_benchmark(
-        data, dimensions=["mode", "purp"], data_fields=["freq"], colnames=["mode", "purpose", "trips"], aggfunc=[sum]
+        data,
+        dimensions=["mode", "purp"],
+        data_fields=["freq"],
+        colnames=["mode", "purpose", "trips"],
+        aggfunc=[sum],
     )

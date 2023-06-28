@@ -7,7 +7,9 @@ from shapely.geometry import Point
 
 
 class RandomPointSampler:
-    def __init__(self, geoms: Union[gp.GeoSeries, gp.GeoDataFrame], patience=100, fail=True, seed: int = None):
+    def __init__(
+        self, geoms: Union[gp.GeoSeries, gp.GeoDataFrame], patience=100, fail=True, seed: int = None
+    ):
         """Returns randomly placed point within given geometries, as defined by geoms. Note that it uses
         random sampling within the shape's bounding box then checks if point is within given geometry.
         If the method cannot return a valid point within 'patience' attempts then either a RunTimeWarning
@@ -28,7 +30,9 @@ class RandomPointSampler:
             self.geoms = geoms.geometry
 
         else:
-            raise UserWarning(f"Unknown datatype: {type(geoms)}, please use GeoSeries or GeoDataFrame")
+            raise UserWarning(
+                f"Unknown datatype: {type(geoms)}, please use GeoSeries or GeoDataFrame"
+            )
 
         self.patience = patience
         self.fail = fail
@@ -123,7 +127,9 @@ class GeometryRandomSampler:
         self.geometry_name_column = geometry_name_column
         self.default_region = default_region
 
-        self.geo_df_loc_lookup = {value: key for (key, value) in self.geo_df[geometry_name_column].to_dict().items()}
+        self.geo_df_loc_lookup = {
+            value: key for (key, value) in self.geo_df[geometry_name_column].to_dict().items()
+        }
 
         # Throws exception if default_region is invalid
         default_id = self.geo_df_loc_lookup[default_region]
@@ -160,4 +166,6 @@ class GeometryRandomSampler:
                 if random_point.within(geom.buffer(0)):
                     return random_point
 
-        raise RuntimeWarning(f"unable to sample point from geometry:{geo_region} with {patience} attempts")
+        raise RuntimeWarning(
+            f"unable to sample point from geometry:{geo_region} with {patience} attempts"
+        )

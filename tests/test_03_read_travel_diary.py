@@ -82,11 +82,17 @@ hid,hzone,freq,persons,cars
     return pd.read_csv(hhs_attributes_csv)
 
 
-test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))
+test_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
+)
 
-test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv"))
+test_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
+)
 
-test_hhs_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_hhs_data.csv"))
+test_hhs_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_hhs_data.csv")
+)
 
 
 # simple trips only cases
@@ -94,32 +100,64 @@ test_hhs_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__
 
 def test_build_population_trips_only(trips):
     population = build_population(trips=trips)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 3}
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 3,
+    }
 
 
 def test_build_population_trips_only_activity_encoding(activity_encoded_trips):
     population = build_population(trips=activity_encoded_trips)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 3}
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 3,
+    }
 
 
 def test_build_population_person_attributes_only(persons_attributes):
     population = build_population(persons_attributes=persons_attributes)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 3}
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 3,
+    }
 
 
 def test_build_population_person_attributes_only_with_extra_person(extra_persons_attributes):
     population = build_population(persons_attributes=extra_persons_attributes)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 4}
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 4,
+    }
 
 
 def test_build_population_hhs_only(hhs_attributes):
     population = build_population(hhs_attributes=hhs_attributes)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 0}
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 0,
+    }
 
 
 def test_build_population_from_persons_and_hhs(hhs_attributes, persons_attributes):
-    population = build_population(persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
-    assert population.stats == {"num_activities": 0, "num_households": 2, "num_legs": 0, "num_people": 3}
+    population = build_population(
+        persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
+    assert population.stats == {
+        "num_activities": 0,
+        "num_households": 2,
+        "num_legs": 0,
+        "num_people": 3,
+    }
 
 
 def test_read_trips_only(trips):
@@ -201,19 +239,25 @@ def test_extra_person_stays_at_home(trips, extra_persons_attributes):
 
 
 def test_read_trips_and_persons_and_hhs(trips, persons_attributes, hhs_attributes):
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     assert len(population) == 3
 
 
 def test_read_trips_and_persons_and_hhs_no_index(trips, persons_attributes, hhs_attributes):
     hhs_attributes.reset_index()
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     assert len(population) == 3
 
 
 def test_read_trips_and_persons_and_hhs_from_paths():
     population = load_travel_diary(
-        trips=test_trips_path, persons_attributes=test_attributes_path, hhs_attributes=test_hhs_attributes_path
+        trips=test_trips_path,
+        persons_attributes=test_attributes_path,
+        hhs_attributes=test_hhs_attributes_path,
     )
     assert len(population) == 23
 
@@ -224,13 +268,19 @@ def test_read_fail_with_bad_hhs_input(trips, persons_attributes, hhs_attributes)
 
 
 def test_read_hhs_with_missing_persons_input(trips, persons_attributes, hhs_attributes):
-    population = load_travel_diary(trips=trips, persons_attributes=None, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=None, hhs_attributes=hhs_attributes
+    )
     assert len(population) == 3
 
 
-def test_read_hhs_with_missing_persons_input_and_no_trips_hid(trips, persons_attributes, hhs_attributes):
+def test_read_hhs_with_missing_persons_input_and_no_trips_hid(
+    trips, persons_attributes, hhs_attributes
+):
     trips = trips.drop("hid", axis=1)
-    population = load_travel_diary(trips=trips, persons_attributes=None, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=None, hhs_attributes=hhs_attributes
+    )
     assert len(population) == 3
     for hid, hh in population:
         assert len(hh.people) == 1
@@ -238,7 +288,9 @@ def test_read_hhs_with_missing_persons_input_and_no_trips_hid(trips, persons_att
 
 
 def test_read_hh_weights_from_hhs(trips, persons_attributes, hhs_attributes):
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     assert population[0].freq == 1
 
 
@@ -267,28 +319,39 @@ def test_read_trips_without_seq_fail_if_out_of_order(trips):
 
 
 def test_use_trips_freq_as_persons_freq_overwrite(trips, persons_attributes):
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, trip_freq_as_person_freq=True)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, trip_freq_as_person_freq=True
+    )
     assert population[0][0].freq == 2
 
 
 def test_use_trips_freq_as_persons_freq_no_persons_attributes(trips):
-    population = load_travel_diary(trips=trips, persons_attributes=None, trip_freq_as_person_freq=True)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=None, trip_freq_as_person_freq=True
+    )
     assert population[0][0].freq == 2
 
 
 def test_use_trips_freq_as_hhs_freq_overwrite(trips, persons_attributes, hhs_attributes):
     population = load_travel_diary(
-        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes, trip_freq_as_hh_freq=True
+        trips=trips,
+        persons_attributes=persons_attributes,
+        hhs_attributes=hhs_attributes,
+        trip_freq_as_hh_freq=True,
     )
     assert population[0].freq == 4
 
 
 def test_use_trips_freq_as_hhs_freq_no_persons_attributes(trips):
-    population = load_travel_diary(trips=trips, persons_attributes=None, hhs_attributes=None, trip_freq_as_hh_freq=True)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=None, hhs_attributes=None, trip_freq_as_hh_freq=True
+    )
     assert population[0].freq == 4
 
 
-def test_use_trips_freq_as_persons_and_hhs_freq_overwrite(trips, persons_attributes, hhs_attributes):
+def test_use_trips_freq_as_persons_and_hhs_freq_overwrite(
+    trips, persons_attributes, hhs_attributes
+):
     with pytest.raises(UserWarning):
         load_travel_diary(
             trips=trips,
@@ -336,7 +399,9 @@ def test_read_trips_location(trips):
 
 
 def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes, hhs_attributes):
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     assert population[0][0].home.area == "Harrow"
 
     # person and household location match
@@ -344,9 +409,13 @@ def test_read_trips_and_persons_and_hhs_home_location(trips, persons_attributes,
         assert person.home.area == population[hid].location.area
 
 
-def test_home_location_consistency_between_person_and_plan(trips, persons_attributes, hhs_attributes):
+def test_home_location_consistency_between_person_and_plan(
+    trips, persons_attributes, hhs_attributes
+):
     """Note that this works because people share a location object with their plans."""
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     hh = population[0]
     person = hh[0]
     assert person.home.area == "Harrow"
@@ -359,7 +428,9 @@ def test_home_location_consistency_between_person_and_plan(trips, persons_attrib
 def test_home_location_consistency_between_hhs_and_persons_when_changing_hh_area(
     trips, persons_attributes, hhs_attributes
 ):
-    population = load_travel_diary(trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes)
+    population = load_travel_diary(
+        trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
+    )
     hh = population[0]
     person = hh[0]
 

@@ -24,25 +24,40 @@ def common_options(func):
 
 
 def common_matsim_options(func):
-    func = click.option("--matsim_version", "-v", type=int, default=12, help="MATSim plan format, default 12.")(func)
     func = click.option(
-        "--household_key", "-h", type=str, default=None, help="Household key, such as 'hid', default None."
+        "--matsim_version", "-v", type=int, default=12, help="MATSim plan format, default 12."
     )(func)
     func = click.option(
-        "--simplify_pt_trips", is_flag=True, default=False, help="Optionally simplify transit legs into single trip."
+        "--household_key",
+        "-h",
+        type=str,
+        default=None,
+        help="Household key, such as 'hid', default None.",
     )(func)
     func = click.option(
-        "--autocomplete/--no_autocomplete", default=True, help="Optionally turn off autocomplete, not recommended."
+        "--simplify_pt_trips",
+        is_flag=True,
+        default=False,
+        help="Optionally simplify transit legs into single trip.",
     )(func)
     func = click.option(
-        "--crop/--no_crop", default=False, help="Crop or don't crop plans to 24 hours, defaults to no_crop."
+        "--autocomplete/--no_autocomplete",
+        default=True,
+        help="Optionally turn off autocomplete, not recommended.",
     )(func)
     func = click.option(
-        "--leg_attributes/--no_leg_attributes", default=True, help="Optionally turn of reading of leg_attributes."
+        "--crop/--no_crop",
+        default=False,
+        help="Crop or don't crop plans to 24 hours, defaults to no_crop.",
     )(func)
-    func = click.option("--leg_route/--no_leg_route", default=True, help="Optionally turn off reading of leg_route.")(
-        func
-    )
+    func = click.option(
+        "--leg_attributes/--no_leg_attributes",
+        default=True,
+        help="Optionally turn of reading of leg_attributes.",
+    )(func)
+    func = click.option(
+        "--leg_route/--no_leg_route", default=True, help="Optionally turn off reading of leg_route."
+    )(func)
     func = click.option(
         "--keep_non_selected/--selected_only",
         default=False,
@@ -52,7 +67,9 @@ def common_matsim_options(func):
 
 
 def comment_option(func):
-    func = click.option("--comment", "-c", default="", help="A comment included in the output population.")(func)
+    func = click.option(
+        "--comment", "-c", default="", help="A comment included in the output population."
+    )(func)
     return func
 
 
@@ -80,8 +97,16 @@ def report():
     default=1,
     help="Input sample size. Default 1. For example, use 0.1 to apply a 10% weighting to the input population.",
 )
-@click.option("--attribute_key", "-k", help="Optional population attribute key to segment output, eg 'subpopulation'.")
-@click.option("--rich/--text", default=True, help="Formatted (for terminal) or regular text output (for .txt).")
+@click.option(
+    "--attribute_key",
+    "-k",
+    help="Optional population attribute key to segment output, eg 'subpopulation'.",
+)
+@click.option(
+    "--rich/--text",
+    default=True,
+    help="Formatted (for terminal) or regular text output (for .txt).",
+)
 def summary(
     path_population_input: str,
     sample_size: float,
@@ -162,7 +187,9 @@ def benchmarks(
     logger.debug(f"MATSim version set to {matsim_version}.")
 
     with Console().status("[bold green]Loading population...", spinner="aesthetic") as _:
-        population = read.read_matsim(population_input_path, version=matsim_version, weight=int(1 / sample_size))
+        population = read.read_matsim(
+            population_input_path, version=matsim_version, weight=int(1 / sample_size)
+        )
     logger.info("Loading complete, creating benchmarks...")
 
     # export
@@ -187,13 +214,26 @@ def benchmarks(
 
 @report.command()
 @click.argument("path_population_input", type=click.Path(exists=True))
-@click.option("--colour/--bw", default=True, help="Choose a colour or grey-scale (bw) output, default 'colour'")
-@click.option("--width", "-w", type=int, default=72, help="Target character width for plot, default 72")
 @click.option(
-    "--simplify_pt_trips", is_flag=True, default=False, help="Optionally simplify transit legs into single trip."
+    "--colour/--bw",
+    default=True,
+    help="Choose a colour or grey-scale (bw) output, default 'colour'",
 )
-@click.option("--crop/--no_crop", default=True, help="Crop or don't crop plans to 24 hours, defaults to crop.")
-def stringify(path_population_input: str, colour: bool, width: int, simplify_pt_trips: bool, crop: bool):
+@click.option(
+    "--width", "-w", type=int, default=72, help="Target character width for plot, default 72"
+)
+@click.option(
+    "--simplify_pt_trips",
+    is_flag=True,
+    default=False,
+    help="Optionally simplify transit legs into single trip.",
+)
+@click.option(
+    "--crop/--no_crop", default=True, help="Crop or don't crop plans to 24 hours, defaults to crop."
+)
+def stringify(
+    path_population_input: str, colour: bool, width: int, simplify_pt_trips: bool, crop: bool
+):
     """ASCII plot activity plans to terminal."""
     logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
     logger.debug(f"Crop = {crop}")
@@ -208,7 +248,12 @@ def stringify(path_population_input: str, colour: bool, width: int, simplify_pt_
 @click.argument("path_population_input", type=click.Path(exists=True))
 @click.argument("path_boundary", type=click.Path(exists=True))
 @click.argument("dir_population_output", type=click.Path(exists=False, writable=True))
-@click.option("--buffer", "-b", default=0, help="A buffer distance to (optionally) apply to the core area shapefile.")
+@click.option(
+    "--buffer",
+    "-b",
+    default=0,
+    help="A buffer distance to (optionally) apply to the core area shapefile.",
+)
 def crop(
     path_population_input,
     path_boundary,
@@ -331,7 +376,9 @@ def combine(
         else:
             raise UserWarning(f"Aborting to avoid overwrite of {population_output}")
 
-    with Console().status("[bold green]Loading and combining populations...", spinner="aesthetic") as _:
+    with Console().status(
+        "[bold green]Loading and combining populations...", spinner="aesthetic"
+    ) as _:
         combined_population = pop_combine(
             inpaths=population_paths,
             matsim_version=matsim_version,
@@ -364,9 +411,13 @@ def combine(
 @click.argument("path_population_input", type=click.Path(exists=True))
 @click.argument("dir_population_output", type=click.Path(exists=False, writable=True))
 @click.option(
-    "--sample_size", "-s", help="The sample size, eg, use 0.1 to produce a 10% version of the input population."
+    "--sample_size",
+    "-s",
+    help="The sample size, eg, use 0.1 to produce a 10% version of the input population.",
 )
-@click.option("--household_key", "-h", type=str, default="hid", help="Household key, defaults to 'hid'.")
+@click.option(
+    "--household_key", "-h", type=str, default="hid", help="Household key, defaults to 'hid'."
+)
 @click.option("--seed", default=None, help="Random seed.")
 def sample(
     path_population_input: str,
@@ -482,9 +533,14 @@ def wipe_all_links(
         logger.debug(f"Loading attributes from {path_population_input}")
         attributes = read.matsim.load_attributes_map(path_population_input)
 
-    with Console().status("[bold orange]Wiping all links from population...", spinner="aesthetic") as _:
+    with Console().status(
+        "[bold orange]Wiping all links from population...", spinner="aesthetic"
+    ) as _:
         with write.Writer(
-            path=path_population_output, household_key=None, comment=comment, keep_non_selected=keep_non_selected
+            path=path_population_output,
+            household_key=None,
+            comment=comment,
+            keep_non_selected=keep_non_selected,
         ) as outfile:
             for person in read.matsim.stream_matsim_persons(
                 path_population_input,
@@ -573,9 +629,14 @@ def wipe_links(
             if act.location.link in links:
                 return True
 
-    with Console().status("[bold orange]Wiping selected links from population...", spinner="aesthetic") as _:
+    with Console().status(
+        "[bold orange]Wiping selected links from population...", spinner="aesthetic"
+    ) as _:
         with write.Writer(
-            path=path_population_output, household_key=None, comment=comment, keep_non_selected=keep_non_selected
+            path=path_population_output,
+            household_key=None,
+            comment=comment,
+            keep_non_selected=keep_non_selected,
         ) as outfile:
             for person in read.matsim.stream_matsim_persons(
                 path_population_input,

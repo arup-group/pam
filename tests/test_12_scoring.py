@@ -48,7 +48,9 @@ def test_score_leg(default_config, default_leg):
     mode_constant_score = 0
     travel_time_score = -1
     travel_distance_score = 0
-    expected = pt_waiting_time_score + mode_constant_score + travel_time_score + travel_distance_score
+    expected = (
+        pt_waiting_time_score + mode_constant_score + travel_time_score + travel_distance_score
+    )
     result = scorer.score_leg(default_leg, default_config)
     assert result == expected
 

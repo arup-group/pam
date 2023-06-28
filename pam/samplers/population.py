@@ -4,7 +4,9 @@ from pam.core import Population
 from pam.samplers.basic import freq_sample
 
 
-def sample(population: Population, sample: float, seed: int = None, verbose: bool = False) -> Population:
+def sample(
+    population: Population, sample: float, seed: int = None, verbose: bool = False
+) -> Population:
     """Sample a new population from the existing using a sample size, eg 0.1 for a 10% sample.
     Returns a new pam.core.Population object with households sampled based on input freq.
     Freq of returned population is set to 1/sample, eg 0.1 -> 10, such that each household

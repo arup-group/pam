@@ -34,7 +34,9 @@ def test_PersonAttributeFilter_satisfies_conditions_delegates_to_household_satis
     PersonAttributeFilter.household_satisfies_conditions.assert_called_once_with(hhld)
 
 
-def test_PersonAttributeFilter_satisfies_conditions_delegates_to_person_satisfies_conditions_when_given_person(mocker):
+def test_PersonAttributeFilter_satisfies_conditions_delegates_to_person_satisfies_conditions_when_given_person(
+    mocker,
+):
     mocker.patch.object(PersonAttributeFilter, "person_satisfies_conditions")
 
     person = Person(1)
@@ -56,7 +58,9 @@ def test_PersonAttributeFilter_household_satisfies_conditions_when_conditions_em
     assert PersonAttributeFilter({}).satisfies_conditions(Household(1))
 
 
-def test_PersonAttributeFilter_satisfies_conditions_when_one_person_satisfies_conditions(SmithHousehold):
+def test_PersonAttributeFilter_satisfies_conditions_when_one_person_satisfies_conditions(
+    SmithHousehold,
+):
     def equals_6(val):
         return val == 6
 
@@ -96,5 +100,7 @@ def test_PersonAttributeFilter_person_satisfies_conditions_returns_True_if_condi
 
 def test_PersonAttributeFilter_person_satisfies_conditions_throws_exception_with_unknown_how():
     with pytest.raises(NotImplementedError) as e:
-        PersonAttributeFilter({"age": choice([True, False])}, how="?!?!").person_satisfies_conditions(Person(1))
+        PersonAttributeFilter(
+            {"age": choice([True, False])}, how="?!?!"
+        ).person_satisfies_conditions(Person(1))
     assert "?!?! not implemented, use only `all` or `any`" in str(e.value)

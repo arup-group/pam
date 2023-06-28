@@ -12,7 +12,11 @@ from pam.activity import Activity
 from pam.core import Population
 from pam.operations.cropping import link_population
 from pam.planner.od import OD
-from pam.planner.utils_planner import apply_mode_to_home_chain, calculate_mnl_probabilities, sample_weighted
+from pam.planner.utils_planner import (
+    apply_mode_to_home_chain,
+    calculate_mnl_probabilities,
+    sample_weighted,
+)
 from pam.planner.zones import Zones
 
 
@@ -52,7 +56,9 @@ class SelectionSet:
     @property
     def probabilities(self) -> np.array:
         """Probabilities for each alternative."""
-        return np.apply_along_axis(func1d=self.func_probabilities, axis=1, arr=self.choice_set.u_choices)
+        return np.apply_along_axis(
+            func1d=self.func_probabilities, axis=1, arr=self.choice_set.u_choices
+        )
 
     def sample(self) -> List:
         """Sample from a set of alternative options."""
@@ -130,7 +136,9 @@ class ChoiceModel:
         self.logger.info("Updated model configuration")
         self.logger.info(self.configuration)
 
-    def apply(self, apply_location=True, apply_mode=True, once_per_agent=True, apply_mode_to="chain"):
+    def apply(
+        self, apply_location=True, apply_mode=True, once_per_agent=True, apply_mode_to="chain"
+    ):
         """Apply the choice model to the PAM population,
             updating the activity locations and mode choices in scope.
 
@@ -225,4 +233,6 @@ class ChoiceMNL(ChoiceModel):
 
     def __init__(self, population: Population, od: OD, zones: pd.DataFrame) -> None:
         super().__init__(population, od, zones)
-        self.configure(func_probabilities=calculate_mnl_probabilities, func_sampling=sample_weighted)
+        self.configure(
+            func_probabilities=calculate_mnl_probabilities, func_sampling=sample_weighted
+        )

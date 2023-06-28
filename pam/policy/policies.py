@@ -19,7 +19,9 @@ class Policy:
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
-            self.__class__.__name__, id(self), ", ".join("%r: %r" % item for item in attribs.items())
+            self.__class__.__name__,
+            id(self),
+            ", ".join("%r: %r" % item for item in attribs.items()),
         )
 
     def __str__(self):
@@ -37,9 +39,9 @@ class PolicyLevel(Policy):
 
     def __init__(self, modifier: modifiers.Modifier, attribute_filter: filters.Filter = None):
         super().__init__()
-        assert isinstance(modifier, modifiers.Modifier), "modifier needs to be subclass of {}".format(
-            type(modifiers.Modifier())
-        )
+        assert isinstance(
+            modifier, modifiers.Modifier
+        ), "modifier needs to be subclass of {}".format(type(modifiers.Modifier()))
         self.modifier = modifier
         if attribute_filter is None:
             self.attribute_filter = filters.PersonAttributeFilter({})
@@ -174,7 +176,8 @@ class ActivityPolicy(PolicyLevel):
     ):
         super().__init__(modifier, attribute_filter)
         self.probability = probability_samplers.verify_probability(
-            probability, (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability)
+            probability,
+            (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability),
         )
 
     def apply_to(self, household, person=None, activities=None):
@@ -364,7 +367,9 @@ class MovePersonActivitiesToHome(PersonPolicy):
         probability: Union[float, int, probability_samplers.SamplingProbability],
         attribute_filter: filters.Filter = None,
     ):
-        super().__init__(modifiers.MoveActivityTourToHomeLocation(activities), probability, attribute_filter)
+        super().__init__(
+            modifiers.MoveActivityTourToHomeLocation(activities), probability, attribute_filter
+        )
 
 
 class ReduceSharedHouseholdActivities(HouseholdPolicy):

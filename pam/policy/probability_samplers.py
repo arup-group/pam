@@ -18,7 +18,9 @@ class SamplingProbability:
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
-            self.__class__.__name__, id(self), ", ".join("%r: %r" % item for item in attribs.items())
+            self.__class__.__name__,
+            id(self),
+            ", ".join("%r: %r" % item for item in attribs.items()),
         )
 
     def __str__(self):
@@ -66,7 +68,9 @@ class HouseholdProbability(SamplingProbability):
     corresponding to the likelihood of the household being sampled.
     """
 
-    def __init__(self, probability: Union[float, int, Callable[[pam.core.Household], float]], kwargs=None):
+    def __init__(
+        self, probability: Union[float, int, Callable[[pam.core.Household], float]], kwargs=None
+    ):
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -104,7 +108,9 @@ class PersonProbability(SamplingProbability):
     corresponding to the likelihood of the person being sampled.
     """
 
-    def __init__(self, probability: Union[float, int, Callable[[pam.core.Person], float]], kwargs=None):
+    def __init__(
+        self, probability: Union[float, int, Callable[[pam.core.Person], float]], kwargs=None
+    ):
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -146,7 +152,10 @@ class ActivityProbability(SamplingProbability):
     """
 
     def __init__(
-        self, activities: list, probability: Union[float, int, Callable[[pam.activity.Activity], float]], kwargs=None
+        self,
+        activities: list,
+        probability: Union[float, int, Callable[[pam.activity.Activity], float]],
+        kwargs=None,
     ):
         super().__init__(probability)
         self.activities = activities

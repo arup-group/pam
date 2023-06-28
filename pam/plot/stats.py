@@ -90,7 +90,10 @@ def calculate_leg_duration_by_mode(population):
     for hid, pid, person in population.people():
         for seq, leg in enumerate(person.legs):
             all_legs.append(
-                {"leg mode": leg.mode, "duration_hours": leg.duration.days * 24 + leg.duration.seconds / 3600}
+                {
+                    "leg mode": leg.mode,
+                    "duration_hours": leg.duration.days * 24 + leg.duration.seconds / 3600,
+                }
             )
     all_legs_df = pd.DataFrame(all_legs)
     outputs_df = all_legs_df.groupby("leg mode", as_index=False).agg({"duration_hours": "sum"})
@@ -103,7 +106,11 @@ def calculate_activity_duration_by_act(population, exclude=None):
     for hid, pid, person in population.people():
         for seq, activity in enumerate(person.activities):
             all_activities.append(
-                {"act": activity.act, "duration_hours": activity.duration.days * 24 + activity.duration.seconds / 3600}
+                {
+                    "act": activity.act,
+                    "duration_hours": activity.duration.days * 24
+                    + activity.duration.seconds / 3600,
+                }
             )
     all_activities_df = pd.DataFrame(all_activities)
     outputs_df = all_activities_df.groupby("act", as_index=False).agg({"duration_hours": "sum"})
@@ -119,7 +126,9 @@ def calculate_total_activity_duration(population, exclude=None):
         for seq, activity in enumerate(person.activities):
             if activity.act != exclude:
                 total_activity_duration = total_activity_duration + activity.duration
-    total_activity_duration_hours = total_activity_duration.days * 24 + total_activity_duration.seconds / 3600
+    total_activity_duration_hours = (
+        total_activity_duration.days * 24 + total_activity_duration.seconds / 3600
+    )
     return total_activity_duration_hours
 
 
@@ -192,9 +201,12 @@ def plot_activity_duration_by_act(list_of_populations, exclude=None, axis=None):
     population_act_df = pd.DataFrame()
     for idx, population in enumerate(list_of_populations):
         population_act_df = pd.concat(
-            [population_act_df, calculate_activity_duration_by_act(population, exclude)], ignore_index=True
+            [population_act_df, calculate_activity_duration_by_act(population, exclude)],
+            ignore_index=True,
         )
-    pivot_for_chart = population_act_df.pivot(index="scenario", columns="act", values="duration_hours")
+    pivot_for_chart = population_act_df.pivot(
+        index="scenario", columns="act", values="duration_hours"
+    )
 
     if exclude is not None:
         title = "activities by type (excl " + exclude + ")"
@@ -219,7 +231,9 @@ def plot_leg_duration_by_mode(list_of_populations, axis=None):
         population_mode_df = pd.concat(
             [population_mode_df, calculate_leg_duration_by_mode(population)], ignore_index=True
         )
-    pivot_for_chart = population_mode_df.pivot(index="scenario", columns="leg mode", values="duration_hours")
+    pivot_for_chart = population_mode_df.pivot(
+        index="scenario", columns="leg mode", values="duration_hours"
+    )
     title = "legs by mode"
 
     if axis is None:

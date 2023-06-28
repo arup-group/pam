@@ -10,7 +10,10 @@ from pam.variables import END_OF_DAY, START_OF_DAY
 
 
 def simplify_population(
-    population: str, boundary: str, snap_to_boundary: bool = False, rename_external_activities: bool = False
+    population: str,
+    boundary: str,
+    snap_to_boundary: bool = False,
+    rename_external_activities: bool = False,
 ) -> None:
     """Simplify external plans across a population."""
     # simplify plans
@@ -25,7 +28,9 @@ def simplify_population(
     for hid, pid in remove_persons:
         del population[hid].people[pid]
 
-    remove_hhs = [hid for hid in population.households if len(population.households[hid].people) == 0]
+    remove_hhs = [
+        hid for hid in population.households if len(population.households[hid].people) == 0
+    ]
     for hid in remove_hhs:
         del population.households[hid]
 
@@ -132,7 +137,12 @@ def empty_day() -> list:
 
 def create_leg(previous_act: Activity, next_act: Activity, travel_mode: str = "car") -> Leg:
     """Create a leg between two activities."""
-    leg = Leg(start_time=previous_act.end_time, end_time=next_act.start_time, mode=travel_mode, purp=next_act.act)
+    leg = Leg(
+        start_time=previous_act.end_time,
+        end_time=next_act.start_time,
+        mode=travel_mode,
+        purp=next_act.act,
+    )
     leg.start_location = previous_act.location
     leg.end_location = next_act.location
     # link

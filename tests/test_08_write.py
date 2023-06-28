@@ -73,7 +73,10 @@ def test_writer_add_person(tmp_path):
         txt = f.read()
         assert '<population><person id="a">' in txt
         assert '<attribute class="java.lang.String" name="1">1</attribute>' in txt
-        assert '<activity type="home" start_time="00:00:00" end_time="08:00:00" x="0.0" y="0.0"/>' in txt
+        assert (
+            '<activity type="home" start_time="00:00:00" end_time="08:00:00" x="0.0" y="0.0"/>'
+            in txt
+        )
 
 
 def test_writer_add_hh(tmp_path):
@@ -196,7 +199,14 @@ def test_write_plans_xml_assert_contents(tmp_path):
             end_time=datetime(1900, 1, 1, 19, 0, 0),
         )
     )
-    p.add(Activity(act="home", loc=Point((0, 0)), start_time=datetime(1900, 1, 1, 19, 0, 0), end_time=END_OF_DAY))
+    p.add(
+        Activity(
+            act="home",
+            loc=Point((0, 0)),
+            start_time=datetime(1900, 1, 1, 19, 0, 0),
+            end_time=END_OF_DAY,
+        )
+    )
     hh.add(p)
     population.add(hh)
     plans_location = str(tmp_path / "test_plans.xml")
@@ -208,7 +218,9 @@ def test_write_plans_xml_assert_contents(tmp_path):
 
 
 def test_read_write_consistent(tmp_path):
-    test_tripsv12_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml"))
+    test_tripsv12_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+    )
     population = read_matsim(test_tripsv12_path, version=12)
     location = str(tmp_path / "test.xml.gz")
     write_matsim(population=population, plans_path=location, comment="test", household_key=None)
@@ -218,11 +230,17 @@ def test_read_write_consistent(tmp_path):
 
 
 def test_read_write_non_selected_plans_inconsistently(tmp_path):
-    test_tripsv12_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml"))
+    test_tripsv12_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+    )
     population = read_matsim(test_tripsv12_path, version=12, crop=False, keep_non_selected=True)
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
-        population=population, plans_path=location, comment="test", household_key=None, keep_non_selected=False
+        population=population,
+        plans_path=location,
+        comment="test",
+        household_key=None,
+        keep_non_selected=False,
     )
     expected_file = "{}/test.xml.gz".format(tmp_path)
     population2 = read_matsim(expected_file, version=12, crop=False, keep_non_selected=False)
@@ -230,10 +248,18 @@ def test_read_write_non_selected_plans_inconsistently(tmp_path):
 
 
 def test_read_write_non_selected_plans_consistently(tmp_path):
-    test_tripsv12_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml"))
+    test_tripsv12_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+    )
     population = read_matsim(test_tripsv12_path, version=12, crop=False, keep_non_selected=True)
     location = str(tmp_path / "test.xml.gz")
-    write_matsim(population=population, plans_path=location, comment="test", household_key=None, keep_non_selected=True)
+    write_matsim(
+        population=population,
+        plans_path=location,
+        comment="test",
+        household_key=None,
+        keep_non_selected=True,
+    )
     expected_file = "{}/test.xml.gz".format(tmp_path)
     population2 = read_matsim(expected_file, version=12, crop=False, keep_non_selected=True)
     assert population == population2
@@ -245,9 +271,20 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     household = Household(hid="0")
     person = Person(pid="0", home_area="Barnet", attributes={"occ": "white"})
     person.add(Activity(1, "home", "Barnet", start_time=mtdt(0)))
-    person.add(Leg(1, mode="car", start_area="Barnet", end_area="Southwark", start_time=mtdt(400), purp="work"))
+    person.add(
+        Leg(
+            1,
+            mode="car",
+            start_area="Barnet",
+            end_area="Southwark",
+            start_time=mtdt(400),
+            purp="work",
+        )
+    )
     person.add(Activity(2, "work", "Southwark", start_time=mtdt(420)))
-    person.add(Leg(2, "car", start_area="Southwark", end_area="Barnet", start_time=mtdt(1020), purp="work"))
+    person.add(
+        Leg(2, "car", start_area="Southwark", end_area="Barnet", start_time=mtdt(1020), purp="work")
+    )
     person.add(Activity(3, "home", "Barnet", start_time=mtdt(1040), end_time=mtdt(1439)))
     household.add(person)
     population.add(household)
@@ -285,12 +322,24 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     person.add(Activity(1, "home", "Ealing", start_time=mtdt(0)))
     person.add(
         Leg(
-            1, mode="car", start_area="Ealing", end_area="Westminster,City of London", start_time=mtdt(450), purp="work"
+            1,
+            mode="car",
+            start_area="Ealing",
+            end_area="Westminster,City of London",
+            start_time=mtdt(450),
+            purp="work",
         )
     )
     person.add(Activity(2, "work", "Westminster,City of London", start_time=mtdt(480)))
     person.add(
-        Leg(2, "car", start_area="Westminster,City of London", end_area="Ealing", start_time=mtdt(1050), purp="work")
+        Leg(
+            2,
+            "car",
+            start_area="Westminster,City of London",
+            end_area="Ealing",
+            start_time=mtdt(1050),
+            purp="work",
+        )
     )
     person.add(Activity(3, "home", "Ealing", start_time=mtdt(1080), end_time=mtdt(1439)))
     household.add(person)
@@ -299,9 +348,20 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     household = Household(hid="3")
     person = Person(pid="3", home_area="Barnet", attributes={"occ": "blue"})
     person.add(Activity(1, "home", "Barnet", start_time=mtdt(0)))
-    person.add(Leg(1, mode="walk", start_area="Barnet", end_area="Barnet", start_time=mtdt(450), purp="shop"))
+    person.add(
+        Leg(
+            1,
+            mode="walk",
+            start_area="Barnet",
+            end_area="Barnet",
+            start_time=mtdt(450),
+            purp="shop",
+        )
+    )
     person.add(Activity(2, "shop", "Barnet", start_time=mtdt(470)))
-    person.add(Leg(2, "walk", start_area="Barnet", end_area="Barnet", start_time=mtdt(600), purp="shop"))
+    person.add(
+        Leg(2, "walk", start_area="Barnet", end_area="Barnet", start_time=mtdt(600), purp="shop")
+    )
     person.add(Activity(3, "home", "Barnet", start_time=mtdt(620), end_time=mtdt(1439)))
     household.add(person)
     population.add(household)
@@ -309,9 +369,20 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
     household = Household(hid="4")
     person = Person(pid="4", home_area="Ealing", attributes={"occ": "blue"})
     person.add(Activity(1, "home", "Ealing", start_time=mtdt(0)))
-    person.add(Leg(1, mode="cycle", start_area="Ealing", end_area="Ealing", start_time=mtdt(400), purp="work"))
+    person.add(
+        Leg(
+            1,
+            mode="cycle",
+            start_area="Ealing",
+            end_area="Ealing",
+            start_time=mtdt(400),
+            purp="work",
+        )
+    )
     person.add(Activity(2, "work", "Ealing", start_time=mtdt(420)))
-    person.add(Leg(2, "cycle", start_area="Ealing", end_area="Ealing", start_time=mtdt(1030), purp="work"))
+    person.add(
+        Leg(2, "cycle", start_area="Ealing", end_area="Ealing", start_time=mtdt(1030), purp="work")
+    )
     person.add(Activity(3, "home", "Ealing", start_time=mtdt(1050), end_time=mtdt(1439)))
     household.add(person)
     population.add(household)
@@ -335,7 +406,9 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
             assert od_matrix_csv_string == expected_od_matrix
         if m == "cycle":
             expected_od_matrix = (
-                'Origin,Ealing,"Westminster,City of London"\n' "Ealing,2,1\n" '"Westminster,City of London",1,0\n'
+                'Origin,Ealing,"Westminster,City of London"\n'
+                "Ealing,2,1\n"
+                '"Westminster,City of London",1,0\n'
             )
             assert od_matrix_csv_string == expected_od_matrix
         if m == "walk":
@@ -384,12 +457,17 @@ def test_writes_od_matrix_to_expected_file(tmpdir):
         od_matrix_csv_string = open(od_matrix_file).read()
         if (start_time, end_time) == (400, 500):
             expected_od_matrix = (
-                'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n' "Barnet,1,0,1,0\n" "Ealing,0,1,0,1\n"
+                'Origin,Barnet,Ealing,Southwark,"Westminster,City of London"\n'
+                "Barnet,1,0,1,0\n"
+                "Ealing,0,1,0,1\n"
             )
             assert od_matrix_csv_string == expected_od_matrix
         if (start_time, end_time) == (1020, 1060):
             expected_od_matrix = (
-                "Origin,Barnet,Ealing\n" "Ealing,0,1\n" "Southwark,1,0\n" '"Westminster,City of London",0,1\n'
+                "Origin,Barnet,Ealing\n"
+                "Ealing,0,1\n"
+                "Southwark,1,0\n"
+                '"Westminster,City of London",0,1\n'
             )
             assert od_matrix_csv_string == expected_od_matrix
 

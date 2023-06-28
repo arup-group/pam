@@ -72,7 +72,9 @@ def test_get_probabilities_along_dimension(choice_model):
 
 
 def test_apply_once_per_agent_same_locations(choice_model_mnl):
-    choice_model_mnl.configure(u="""1 / od['time', 'b']""", scope="""True""", func_probabilities=lambda x: x / sum(x))
+    choice_model_mnl.configure(
+        u="""1 / od['time', 'b']""", scope="""True""", func_probabilities=lambda x: x / sum(x)
+    )
 
     def assert_single_location(population_planner_choice):
         for hid, pid, person in population_planner_choice.people():
@@ -125,6 +127,8 @@ def test_utility_calculation(choice_model_mnl):
     choice_model_mnl.configure(u=utility_calc, scope=scope)
 
     np.testing.assert_almost_equal(
-        np.array([0.8420680743952365, -1.2579319256047636, 0.11932694661921461, -2.0306730533807857]),
+        np.array(
+            [0.8420680743952365, -1.2579319256047636, 0.11932694661921461, -2.0306730533807857]
+        ),
         choice_model_mnl.get_choice_set().u_choices[0],
     )

@@ -19,7 +19,13 @@ class CapacityType:
 
     def to_xml(self, xf):
         xf.write(
-            et.Element("capacity", {"seats": str(self.seats), "standingRoomInPersons": str(self.standingRoomInPersons)})
+            et.Element(
+                "capacity",
+                {
+                    "seats": str(self.seats),
+                    "standingRoomInPersons": str(self.standingRoomInPersons),
+                },
+            )
         )
 
 
@@ -36,7 +42,9 @@ class VehicleType:
 
     @classmethod
     def from_xml_elem(cls, elem):
-        attribs = {attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem}
+        attribs = {
+            attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem
+        }
         return cls(
             id=elem.get("id"),
             length=float(attribs["length"].attrib["meter"]),
@@ -56,7 +64,9 @@ class VehicleType:
             self.capacity.to_xml(xf)
             xf.write(et.Element("length", {"meter": str(self.length)}))
             xf.write(et.Element("width", {"meter": str(self.width)}))
-            xf.write(et.Element("passengerCarEquivalents", {"pce": str(self.passengerCarEquivalents)}))
+            xf.write(
+                et.Element("passengerCarEquivalents", {"pce": str(self.passengerCarEquivalents)})
+            )
             xf.write(et.Element("networkMode", {"networkMode": str(self.networkMode)}))
             xf.write(et.Element("flowEfficiencyFactor", {"factor": str(self.flowEfficiencyFactor)}))
 

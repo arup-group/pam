@@ -27,11 +27,11 @@ directory = "reports/coverage"
 output = "reports/coverage/coverage.xml"
 
 [tool.black]
-line-length = 120
+line-length = 100
 skip_magic_trailing_comma = true
 
 [tool.ruff]
-line-length = 120
+line-length = 100
 select = ["E", "F", "I", "Q"]
 
 ignore = [

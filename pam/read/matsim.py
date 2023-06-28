@@ -86,7 +86,9 @@ have attributes or be able to use a household attribute id. Check this is intend
     if attributes_path:
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
-            logger.warning("It is not required to load attributes from a separate path for version 11.")
+            logger.warning(
+                "It is not required to load attributes from a separate path for version 11."
+            )
         attributes = load_attributes_map(attributes_path)
 
     for person in stream_matsim_persons(
@@ -282,7 +284,11 @@ def parse_matsim_plan(
                 # Optionally ignores route info such as links, distance and so on.
                 plan.add(
                     activity.Leg(
-                        seq=leg_seq, mode=mode, start_time=departure_dt, end_time=arrival_dt, attributes=attributes
+                        seq=leg_seq,
+                        mode=mode,
+                        start_time=departure_dt,
+                        end_time=arrival_dt,
+                        attributes=attributes,
                     )
                 )
 
@@ -432,7 +438,9 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
 
 
 def load_attributes_map_from_v12(plans_path):
-    return dict([get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")])
+    return dict(
+        [get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")]
+    )
 
 
 def get_attributes_from_person(elem):

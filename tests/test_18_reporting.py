@@ -75,7 +75,9 @@ def test_stringify_colourer_bw():
 def test_stringify_plan():
     assert (
         stringify.stringify_plan(
-            plan_array=np.array((0, 1)), mapping={0: "travel", 1: "act"}, colourer=stringify.ActColour(colour=True)
+            plan_array=np.array((0, 1)),
+            mapping={0: "travel", 1: "act"},
+            colourer=stringify.ActColour(colour=True),
         )
         == "\033[38;5;232m▇\033[0m\033[38;5;21m▇\033[0m"
     )

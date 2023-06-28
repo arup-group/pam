@@ -61,7 +61,9 @@ class Population:
             self.add(Household(hid=target.pid))
             self.households[target.pid].add(target)
         else:
-            raise UserWarning(f"Expected instance of Household, list or Person, not: {type(target)}")
+            raise UserWarning(
+                f"Expected instance of Household, list or Person, not: {type(target)}"
+            )
 
     def get(self, hid, default=None):
         return self.households.get(hid, default)
@@ -369,7 +371,7 @@ class Population:
             if gdf is None:
                 gdf = _gdf
             else:
-                gdf = gdf.append(_gdf)
+                gdf = pd.concat([gdf, _gdf])
         gdf = gdf.sort_values(["hid", "pid", "seq"]).reset_index(drop=True)
         return gdf
 
@@ -388,7 +390,9 @@ class Population:
         Returns:
             go.Figure: Plotly figure object.
         """
-        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
+        return plot.plot_travel_plans(
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs
+        )
 
     def fix_plans(self, crop: bool = True, times=True, locations=True):
         for _, _, person in self.people():
@@ -434,7 +438,9 @@ class Population:
             self.households[other.pid] = Household(other.pid)
             self.households[other.pid].people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Population Household or Person object, not {type(other)}"
+        )
 
     def reindex(self, prefix: str):
         """Safely reindex all household and person identifiers in population using a prefix."""
@@ -467,7 +473,9 @@ class Population:
             hh.reindex(prefix)
             self += hh
             return None
-        raise TypeError(f"Object for addition must be a Population Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Population Household or Person object, not {type(other)}"
+        )
 
     def sample_locs(
         self,
@@ -524,7 +532,8 @@ class Population:
                     # sample facility
                     elif location_override or act.location.loc is None:
                         location = activity.Location(
-                            area=act.location.area, loc=sampler.sample(act.location.area, target_act)
+                            area=act.location.area,
+                            loc=sampler.sample(act.location.area, target_act),
                         )
                         if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
@@ -539,7 +548,9 @@ class Population:
                         component.start_location = person.plan[idx - 1].location
                         component.end_location = person.plan[idx + 1].location
 
-    def sample_locs_complex(self, sampler, long_term_activities: list = None, joint_trips_prefix: str = "escort_"):
+    def sample_locs_complex(
+        self, sampler, long_term_activities: list = None, joint_trips_prefix: str = "escort_"
+    ):
         """Extends sample_locs method to enable more complex and rules-based sampling.
 
         Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
@@ -560,7 +571,11 @@ class Population:
             home_loc = activity.Location(
                 area=household.location.area,
                 loc=sampler.sample(
-                    household.location.area, "home", mode=None, previous_duration=None, previous_loc=None
+                    household.location.area,
+                    "home",
+                    mode=None,
+                    previous_duration=None,
+                    previous_loc=None,
                 ),
             )
             mode = None
@@ -621,7 +636,15 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, hid, attributes={}, freq=None, location: Optional[Location] = None, area=None, loc=None):
+    def __init__(
+        self,
+        hid,
+        attributes={},
+        freq=None,
+        location: Optional[Location] = None,
+        area=None,
+        loc=None,
+    ):
         self.hid = hid
         self.people = {}
         self.attributes = attributes
@@ -833,7 +856,7 @@ class Household:
             if gdf is None:
                 gdf = _gdf
             else:
-                gdf = gdf.append(_gdf)
+                gdf = pd.concat([gdf, _gdf])
         gdf = gdf.sort_values(["pid", "seq"]).reset_index(drop=True)
         return gdf
 
@@ -849,7 +872,9 @@ class Household:
             cmap (dict): optional argument, useful to pass if generating a number of plots and want to keep colour scheme consistent
             mapbox_access_token (str): required to generate the plot (see https://docs.mapbox.com/help/how-mapbox-works/access-tokens/).
         """
-        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
+        return plot.plot_travel_plans(
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs
+        )
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -866,7 +891,9 @@ class Household:
         if isinstance(other, Person):
             self.people[other.pid] = copy.deepcopy(other)
             return self
-        raise TypeError(f"Object for addition must be a Household or Person object, not {type(other)}")
+        raise TypeError(
+            f"Object for addition must be a Household or Person object, not {type(other)}"
+        )
 
     def reindex(self, prefix: str):
         """Safely reindex all person identifiers in household using a prefix.
@@ -940,7 +967,9 @@ class Person:
             vehicle (Vehicle):
         """
         if vehicle.id != self.pid:
-            raise PAMVehicleIdError(f"Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}")
+            raise PAMVehicleIdError(
+                f"Vehicle with ID: {vehicle.id} does not match Person ID: {self.pid}"
+            )
         self.vehicle = vehicle
 
     @property
@@ -1190,7 +1219,9 @@ class Person:
         Returns:
             go.Figure: Plotly figure object
         """
-        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
+        return plot.plot_travel_plans(
+            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs
+        )
 
     def __str__(self):
         return f"Person: {self.pid}"

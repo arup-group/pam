@@ -4,7 +4,9 @@ from pam.activity import Plan
 from pam.utils import td_to_s
 
 
-def plan_to_one_hot(plan: Plan, mapping: dict, bin_size: int = 3600, duration: int = 86400) -> np.array:
+def plan_to_one_hot(
+    plan: Plan, mapping: dict, bin_size: int = 3600, duration: int = 86400
+) -> np.array:
     """Transform a pam.activity.Plan into a one-hot encoded array. Output array is two dimensional.
     First axis represents time, binnned according to bin_size given in seconds.
     Seconds axis is a one-hot endcoding of activity type based on the given mapping. Note that Leg

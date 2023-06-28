@@ -60,7 +60,9 @@ class PlanClusters:
     def distances(self) -> np.array:
         """Levenshtein distances between activity plans."""
         if self._distances is None:
-            self._distances = calc_levenshtein_matrix(self.plans_encoded, self.plans_encoded, n_cores=self.n_cores)
+            self._distances = calc_levenshtein_matrix(
+                self.plans_encoded, self.plans_encoded, n_cores=self.n_cores
+            )
         return self._distances
 
     @property
@@ -70,7 +72,10 @@ class PlanClusters:
         return dist
 
     def fit(
-        self, n_clusters: int, clustering_method: str = "agglomerative", linkage: Optional[str] = "complete"
+        self,
+        n_clusters: int,
+        clustering_method: str = "agglomerative",
+        linkage: Optional[str] = "complete",
     ) -> None:
         """Fit an agglomerative clustering model.
 
@@ -90,7 +95,9 @@ class PlanClusters:
             model = SpectralClustering(n_clusters=n_clusters, affinity="precomputed")
             model.fit((1 - self.distances))
         else:
-            raise ValueError("Please select a valid clustering_method ('agglomerative' or 'spectral')")
+            raise ValueError(
+                "Please select a valid clustering_method ('agglomerative' or 'spectral')"
+            )
 
         self.model = model
 
@@ -119,7 +126,9 @@ class PlanClusters:
         ids = [(hid, pid) for hid, pid, person in self.population.people()]
         return dict(zip(ids, self.model.labels_))
 
-    def plot_plan_breakdowns(self, ax=None, cluster=None, activity_classes: Optional[List[str]] = None, **kwargs):
+    def plot_plan_breakdowns(
+        self, ax=None, cluster=None, activity_classes: Optional[List[str]] = None, **kwargs
+    ):
         """Area plot of the breakdown of activities taking place every minute
         for a specific cluster.
         """
@@ -131,7 +140,9 @@ class PlanClusters:
         if activity_classes is None:
             activity_classes = self.activity_classes
 
-        return plot_activity_breakdown_area(plans=plans, activity_classes=self.activity_classes, ax=ax, **kwargs)
+        return plot_activity_breakdown_area(
+            plans=plans, activity_classes=self.activity_classes, ax=ax, **kwargs
+        )
 
     def plot_plan_breakdowns_tiles(self, n: Optional[int] = None, **kwargs):
         """Tiled area plot of the breakdown of activities taking place every minute,
@@ -143,4 +154,6 @@ class PlanClusters:
         clusters = self.get_cluster_sizes().head(n).index
         plans = {cluster: self.get_cluster_plans(cluster) for cluster in clusters}
 
-        return plot_activity_breakdown_area_tiles(plans=plans, activity_classes=self.activity_classes, **kwargs)
+        return plot_activity_breakdown_area_tiles(
+            plans=plans, activity_classes=self.activity_classes, **kwargs
+        )

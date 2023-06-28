@@ -63,7 +63,11 @@ def write_od_matrices(
         for filter, leg in data_legs_grouped:
             df = pd.DataFrame(data=leg, columns=["Origin", "Destination"]).set_index("Origin")
             matrix = df.pivot_table(
-                values="Destination", index="Origin", columns="Destination", fill_value=0, aggfunc=len
+                values="Destination",
+                index="Origin",
+                columns="Destination",
+                fill_value=0,
+                aggfunc=len,
             )
             matrix.to_csv(os.path.join(path, filter + "_od.csv"))
         return None
@@ -73,7 +77,11 @@ def write_od_matrices(
         for filter, leg in data_legs_grouped:
             df = pd.DataFrame(data=leg, columns=["Origin", "Destination"]).set_index("Origin")
             matrix = df.pivot_table(
-                values="Destination", index="Origin", columns="Destination", fill_value=0, aggfunc=len
+                values="Destination",
+                index="Origin",
+                columns="Destination",
+                fill_value=0,
+                aggfunc=len,
             )
             matrix.to_csv(os.path.join(path, filter + "_od.csv"))
         return None
@@ -86,10 +94,16 @@ def write_od_matrices(
             file_name = str(start_time) + "_to_" + str(end_time)
             start_time = mtdt(start_time)
             end_time = mtdt(end_time)
-            data_time = data_legs[(data_legs["Start time"] >= start_time) & (data_legs["Start time"] < end_time)]
+            data_time = data_legs[
+                (data_legs["Start time"] >= start_time) & (data_legs["Start time"] < end_time)
+            ]
             df = pd.DataFrame(data=data_time, columns=["Origin", "Destination"]).set_index("Origin")
             matrix = df.pivot_table(
-                values="Destination", index="Origin", columns="Destination", fill_value=0, aggfunc=len
+                values="Destination",
+                index="Origin",
+                columns="Destination",
+                fill_value=0,
+                aggfunc=len,
             )
             matrix.to_csv(os.path.join(path, "time_" + file_name + "_od.csv"))
         return None

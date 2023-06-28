@@ -29,7 +29,11 @@ class CharyparNagelPlanScorer:
                 "minimalDuration": "01:00:00",
             },
             "home": {"typicalDuration": "12:00:00", "minimalDuration": "05:00:00"},
-            "shop": {"typicalDuration": "00:30:00", "openingTime": "06:00:00", "closingTime": "20:00:00"},
+            "shop": {
+                "typicalDuration": "00:30:00",
+                "openingTime": "06:00:00",
+                "closingTime": "20:00:00",
+            },
             "car": {
                 "constant": -10,
                 "dailyMonetaryConstant": -1,
@@ -47,7 +51,12 @@ class CharyparNagelPlanScorer:
         self.logger = logging.getLogger(__name__)
         self.cnfg = cnfg
 
-    def score_person(self, person: Person, subpopulation: str = "subpopulation", plan_costs: Optional[float] = None):
+    def score_person(
+        self,
+        person: Person,
+        subpopulation: str = "subpopulation",
+        plan_costs: Optional[float] = None,
+    ):
         """Score a pam.core.Person Plan.
 
         Args:
@@ -96,7 +105,9 @@ class CharyparNagelPlanScorer:
                 print(f"\tDuration_score: {self.duration_score(component, cnfg=config)}")
                 print(f"\tWaiting_score: {self.waiting_score(component, cnfg=config)}")
                 print(f"\tLate_arrival_score: {self.late_arrival_score(component, cnfg=config)}")
-                print(f"\tEarly_departure_score: {self.early_departure_score(component, cnfg=config)}")
+                print(
+                    f"\tEarly_departure_score: {self.early_departure_score(component, cnfg=config)}"
+                )
                 print(f"\tToo_short_score: {self.too_short_score(component, cnfg=config)}")
 
             if isinstance(component, Leg):
@@ -104,10 +115,14 @@ class CharyparNagelPlanScorer:
                 print(f"({i}) Leg: {component.mode}")
                 print(f"\tDistance: {component.distance} Duration: {component.duration}")
                 print(f"\tScore: {self.score_leg(component, cnfg=config)}")
-                print(f"\tPt_waiting_time_score: {self.pt_waiting_time_score(component, cnfg=config)}")
+                print(
+                    f"\tPt_waiting_time_score: {self.pt_waiting_time_score(component, cnfg=config)}"
+                )
                 print(f"\tConstant: {self.mode_constant_score(component, cnfg=config)}")
                 print(f"\tTravel_time_score: {self.travel_time_score(component, cnfg=config)}")
-                print(f"\tTravel_distance_score: {self.travel_distance_score(component, cnfg=config)}")
+                print(
+                    f"\tTravel_distance_score: {self.travel_distance_score(component, cnfg=config)}"
+                )
 
     def score_plan_monetary_cost(self, plan_cost, cnfg) -> float:
         if plan_cost is not None:
@@ -153,7 +168,9 @@ class CharyparNagelPlanScorer:
     def activities_wrapper(self, activities):
         non_wrapped = activities[1:-1]
         wrapped_act = Activity(
-            act=activities[0].act, start_time=activities[-1].start_time, end_time=activities[0].end_time + td(days=1)
+            act=activities[0].act,
+            start_time=activities[-1].start_time,
+            end_time=activities[0].end_time + td(days=1),
         )
         return wrapped_act, non_wrapped
 
@@ -168,7 +185,9 @@ class CharyparNagelPlanScorer:
         )
 
     def score_plan_legs(self, plan, cnfg):
-        return self.score_pt_interchanges(plan, cnfg) + sum([self.score_leg(leg, cnfg) for leg in plan.legs])
+        return self.score_pt_interchanges(plan, cnfg) + sum(
+            [self.score_leg(leg, cnfg) for leg in plan.legs]
+        )
 
     def score_pt_interchanges(self, plan: Plan, cnfg: dict) -> float:
         """Calculates utility of line switch."""
@@ -252,14 +271,18 @@ class CharyparNagelPlanScorer:
         if cnfg[activity.act].get("latestStartTime") is not None and cnfg.get("lateArrival"):
             latest_start_time = utils.matsim_time_to_datetime(cnfg[activity.act]["latestStartTime"])
             if activity.start_time.time() > latest_start_time.time():
-                return cnfg["lateArrival"] * ((activity.start_time - latest_start_time) / td(hours=1))
+                return cnfg["lateArrival"] * (
+                    (activity.start_time - latest_start_time) / td(hours=1)
+                )
         return 0.0
 
     def early_departure_score(self, activity, cnfg) -> float:
         if cnfg[activity.act].get("earliestEndTime") is not None and cnfg.get("earlyDeparture"):
             earliest_end_time = utils.matsim_time_to_datetime(cnfg[activity.act]["earliestEndTime"])
             if activity.end_time.time() < earliest_end_time.time():
-                return cnfg["earlyDeparture"] * ((earliest_end_time - activity.end_time) / td(hours=1))
+                return cnfg["earlyDeparture"] * (
+                    (earliest_end_time - activity.end_time) / td(hours=1)
+                )
         return 0.0
 
     def too_short_score(self, activity, cnfg) -> float:

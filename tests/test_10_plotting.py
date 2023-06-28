@@ -135,7 +135,10 @@ def test_plot_population_comparisons(Steve, Hilda):
     check = calculate_leg_duration_by_mode(population_2)
     assert isinstance(outputs[0], Figure)
     assert isinstance(outputs[1], Figure)
-    assert legs.loc["work_removed", "walk"] == check.loc[check["leg mode"] == "walk", "duration_hours"].iloc[0]
+    assert (
+        legs.loc["work_removed", "walk"]
+        == check.loc[check["leg mode"] == "walk", "duration_hours"].iloc[0]
+    )
 
 
 def test_plot_travel_plans(cyclist):

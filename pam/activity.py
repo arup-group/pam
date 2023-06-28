@@ -6,14 +6,21 @@ from typing import Optional
 
 import pam.utils as utils
 import pam.variables
-from pam import InvalidMATSimError, PAMInvalidTimeSequenceError, PAMSequenceValidationError, PAMValidationLocationsError
+from pam import (
+    InvalidMATSimError,
+    PAMInvalidTimeSequenceError,
+    PAMSequenceValidationError,
+    PAMValidationLocationsError,
+)
 from pam.location import Location
 from pam.plot import plans as plot
 from pam.variables import END_OF_DAY
 
 
 class Plan:
-    def __init__(self, home_area=None, home_location: Optional[Location] = None, home_loc=None, freq=None):
+    def __init__(
+        self, home_area=None, home_location: Optional[Location] = None, home_loc=None, freq=None
+    ):
         self.day = []
         if home_location:
             self.home_location = home_location
@@ -173,7 +180,9 @@ class Plan:
 
     def __contains__(self, other):
         if not isinstance(other, PlanComponent):
-            raise UserWarning(f"Expected PlanComponent type (either Leg or Activity) not ({type(other)})")
+            raise UserWarning(
+                f"Expected PlanComponent type (either Leg or Activity) not ({type(other)})"
+            )
         for c in self:
             if c == other:
                 return True
@@ -190,14 +199,20 @@ class Plan:
 
         elif isinstance(p, Activity):
             if self.day and isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError("Failed to add to plan, next component must be a Trip or Leg.")
+                raise PAMSequenceValidationError(
+                    "Failed to add to plan, next component must be a Trip or Leg."
+                )
             self.day.append(p)
 
         elif isinstance(p, Leg) or isinstance(p, Trip):
             if not self.day:
-                raise PAMSequenceValidationError("Failed to add to plan, first component must be Activity instance.")
+                raise PAMSequenceValidationError(
+                    "Failed to add to plan, first component must be Activity instance."
+                )
             if not isinstance(self.day[-1], Activity):  # enforce act-leg-act seq
-                raise PAMSequenceValidationError("Failed to add to plan, next component must be Activity instance.")
+                raise PAMSequenceValidationError(
+                    "Failed to add to plan, next component must be Activity instance."
+                )
             self.day.append(p)
 
         else:
@@ -431,7 +446,9 @@ class Plan:
         remaining = set(range(0, self.length, 2)) - set(home_idxs)
 
         # forward traverse
-        queue = [idx + 2 for idx in home_idxs if idx + 2 < self.length]  # add next act idxs to queue\
+        queue = [
+            idx + 2 for idx in home_idxs if idx + 2 < self.length
+        ]  # add next act idxs to queue\
         last_act = None
 
         while queue:  # traverse from home
@@ -546,7 +563,9 @@ class Plan:
         assert isinstance(self.day[seq], Activity)
 
         if seq == 0 and seq == self.length - 1:  # remove activity that is entire plan
-            self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, plan now empty")
+            self.logger.debug(
+                f" remove_activity, idx:{seq} type:{self.day[seq].act}, plan now empty"
+            )
             self.day.pop(0)
             return None, None
 
@@ -555,17 +574,23 @@ class Plan:
             self.day.pop(0)
             self.day.pop(self.length - 1)
             if self.length == 1:  # all activities have been removed
-                self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, now empty")
+                self.logger.debug(
+                    f" remove_activity, idx:{seq} type:{self.day[seq].act}, now empty"
+                )
                 return None, None
             return self.length - 2, 1
 
         if seq == 0:  # remove first activity
-            self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, first activity")
+            self.logger.debug(
+                f" remove_activity, idx:{seq} type:{self.day[seq].act}, first activity"
+            )
             self.day.pop(seq)
             return None, 1
 
         if seq == self.length - 1:  # remove last activity
-            self.logger.debug(f" remove_activity, idx:{seq} type:{self.day[seq].act}, last activity")
+            self.logger.debug(
+                f" remove_activity, idx:{seq} type:{self.day[seq].act}, last activity"
+            )
             self.day.pop(seq)
             return self.length - 2, None
 
@@ -828,7 +853,9 @@ class Plan:
             for seq, plan in enumerate(self.day):
                 if plan.act == "home":
                     shift_duration = -home_duration_factor * plan.duration
-                    shift_duration = timedelta(seconds=round(shift_duration / timedelta(seconds=1)))  # round to second
+                    shift_duration = timedelta(
+                        seconds=round(shift_duration / timedelta(seconds=1))
+                    )  # round to second
                     self.change_duration(seq=seq, shift_duration=shift_duration)
 
             # make sure the last activity ends in the end of day (ie remove potential rounding errors)
@@ -912,7 +939,17 @@ class PlanComponent:
 
 
 class Activity(PlanComponent):
-    def __init__(self, seq=None, act=None, area=None, link=None, loc=None, start_time=None, end_time=None, freq=None):
+    def __init__(
+        self,
+        seq=None,
+        act=None,
+        area=None,
+        link=None,
+        loc=None,
+        start_time=None,
+        end_time=None,
+        freq=None,
+    ):
         self.seq = seq
         self.act = act
         self.location = Location(loc=loc, link=link, area=area)

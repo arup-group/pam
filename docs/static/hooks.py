@@ -17,4 +17,9 @@ def on_files(files: list, config: dict, **kwargs):
 
 
 def _new_file(path: Path, config: str) -> File:
-    return File(path=path, src_dir=".", dest_dir=config["site_dir"], use_directory_urls=config["use_directory_urls"])
+    return File(
+        path=path,
+        src_dir=".",
+        dest_dir=config["site_dir"],
+        use_directory_urls=config["use_directory_urls"],
+    )

@@ -39,13 +39,16 @@ def random_mutate_activity_durations(plan: Plan, copy=True):
         allowance -= leg.duration.total_seconds()
     n_activities = len(list(plan.activities))
     activity_durations = [
-        timedelta(seconds=int(random.random() * allowance / n_activities)) for n in range(n_activities)
+        timedelta(seconds=int(random.random() * allowance / n_activities))
+        for n in range(n_activities)
     ]
     if copy:
         plan = deepcopy(plan)
     time = plan.day[0].shift_duration(new_duration=activity_durations.pop(0))
     idx = 1
-    for activity_duration, leg_duration in zip(activity_durations, [leg.duration for leg in plan.legs]):
+    for activity_duration, leg_duration in zip(
+        activity_durations, [leg.duration for leg in plan.legs]
+    ):
         time = plan.day[idx].shift_duration(new_start_time=time, new_duration=leg_duration)
         time = plan.day[idx + 1].shift_duration(new_start_time=time, new_duration=activity_duration)
         idx += 2

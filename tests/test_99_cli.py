@@ -105,7 +105,9 @@ def test_cli_cropping(path_test_plan, path_boundary, tmp_path):
 def test_combine(path_test_plans_A, path_test_plans_B, tmp_path):
     path_output_dir = str(os.path.join(tmp_path, "plans.xml"))
     runner = CliRunner()
-    result = runner.invoke(cli, ["combine", path_test_plans_A, path_test_plans_B, "-o", path_output_dir])
+    result = runner.invoke(
+        cli, ["combine", path_test_plans_A, path_test_plans_B, "-o", path_output_dir]
+    )
     assert result.exit_code == 0
     assert os.path.exists(path_output_dir)
 
@@ -115,7 +117,9 @@ def test_cli_sample(path_test_plan, tmp_path, sample_percentage):
     """Double the population of 5 agents."""
     path_output_dir = str(tmp_path)
     runner = CliRunner()
-    result = runner.invoke(cli, ["sample", path_test_plan, path_output_dir, "-s", sample_percentage])
+    result = runner.invoke(
+        cli, ["sample", path_test_plan, path_output_dir, "-s", sample_percentage]
+    )
     if result.exit_code != 0:
         print(result.output)
     assert result.exit_code == 0
@@ -123,7 +127,9 @@ def test_cli_sample(path_test_plan, tmp_path, sample_percentage):
 
     population_input = read.read_matsim(path_test_plan, household_key="hid", version=12)
 
-    population = read.read_matsim(os.path.join(path_output_dir, "plans.xml"), household_key="hid", version=12)
+    population = read.read_matsim(
+        os.path.join(path_output_dir, "plans.xml"), household_key="hid", version=12
+    )
     assert len(population) == (len(population_input) * float(sample_percentage))
 
 
@@ -152,13 +158,17 @@ def test_cli_link_wipe_selected_only(path_test_plan, tmp_path):
     path_output_dir = str(tmp_path)
     path_output = os.path.join(path_output_dir, "test_out.xml")
     runner = CliRunner()
-    result = runner.invoke(cli, ["wipe-links", path_test_plan, path_output, "3-4", "--keep_non_selected"])
+    result = runner.invoke(
+        cli, ["wipe-links", path_test_plan, path_output, "3-4", "--keep_non_selected"]
+    )
     if result.exit_code != 0:
         print(result.output)
     assert result.exit_code == 0
     assert os.path.exists(path_output)
 
-    population = read.read_matsim(path_output, household_key="hid", version=12, leg_route=True, keep_non_selected=True)
+    population = read.read_matsim(
+        path_output, household_key="hid", version=12, leg_route=True, keep_non_selected=True
+    )
     assert len(population) == len(population_input)
     for _, _, person in population.people():
         for leg in person.legs:

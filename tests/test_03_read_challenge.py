@@ -5,8 +5,12 @@ import pytest
 
 from pam.read import load_travel_diary
 
-test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv"))
-test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv"))
+test_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
+)
+test_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
+)
 
 
 @pytest.fixture
@@ -42,13 +46,17 @@ def test_agent_pid_7_not_start_and_return_home_night_worker(test_trips, test_att
     assert acts == ["work", "home", "work"]
 
 
-def test_agent_pid_8_not_start_and_return_home_night_worker_complex_chain_type1(test_trips, test_attributes):
+def test_agent_pid_8_not_start_and_return_home_night_worker_complex_chain_type1(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[5].people[8].activities]
     assert acts == ["work", "shop", "home", "work"]
 
 
-def test_agent_pid_9_not_start_and_return_home_night_worker_complex_chain_type2(test_trips, test_attributes):
+def test_agent_pid_9_not_start_and_return_home_night_worker_complex_chain_type2(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[6].people[9].activities]
     assert acts == ["work", "shop", "home", "work"]
@@ -85,34 +93,44 @@ def test_agent_pid_13_not_start_and_return_home_night_worker_complex_chain_type2
 
 
 @pytest.mark.skip(reason="Redundant test - we rarely see this requirment any more")
-def test_agent_pid_14_not_start_from_home_impossible_chain_type1_intra_trip(test_trips, test_attributes):
+def test_agent_pid_14_not_start_from_home_impossible_chain_type1_intra_trip(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[11].people[14].activities]
     assert acts == ["work", "shop", "home"]
 
 
 @pytest.mark.skip(reason="Redundant test - we rarely see this requirment any more")
-def test_agent_pid_15_not_start_from_home_impossible_chain_type2_intra_trip(test_trips, test_attributes):
+def test_agent_pid_15_not_start_from_home_impossible_chain_type2_intra_trip(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[12].people[15].activities]
     assert acts == ["work", "shop", "home"]
 
 
 @pytest.mark.skip(reason="Redundant test - we rarely see this requirment any more")
-def test_agent_pid_16_not_start_and_return_home_night_worker_complex_chain_type1_not_work(test_trips, test_attributes):
+def test_agent_pid_16_not_start_and_return_home_night_worker_complex_chain_type1_not_work(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[13].people[16].activities]
     assert acts == ["work", "shop", "home", "work"]
 
 
-def test_agent_pid_17_not_start_and_return_home_night_worker_complex_chain_type2_not_work(test_trips, test_attributes):
+def test_agent_pid_17_not_start_and_return_home_night_worker_complex_chain_type2_not_work(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[14].people[17].activities]
     assert acts == ["other", "shop", "home", "other"]
 
 
 @pytest.mark.skip(reason="Redundant test - we rarely see this requirment any more")
-def test_agent_pid_18_not_start_from_home_impossible_chain_type1_not_work(test_trips, test_attributes):
+def test_agent_pid_18_not_start_from_home_impossible_chain_type1_not_work(
+    test_trips, test_attributes
+):
     population = load_travel_diary(test_trips, test_attributes)
     acts = [a.act for a in population.households[15].people[18].activities]
     assert acts == ["other", "shop", "home"]

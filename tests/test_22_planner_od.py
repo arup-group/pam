@@ -65,7 +65,10 @@ def test_create_od_from_matrices(od_matrices, od):
 
 def test_od_factory_inconsistent_inputs_raise_error(od_matrices):
     labels = Labels(
-        vars=["time", "distance"], origin_zones=("a", "b"), destination_zones=("a", "b"), mode=["car", "bus"]
+        vars=["time", "distance"],
+        origin_zones=("a", "b"),
+        destination_zones=("a", "b"),
+        mode=["car", "bus"],
     )
     # duplicate key
     with pytest.raises(AssertionError):

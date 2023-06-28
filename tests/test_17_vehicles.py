@@ -43,20 +43,28 @@ def person_without_a_vehicle():
 
 @pytest.fixture()
 def person_with_default_vehicle():
-    return Person("Vladya", attributes={"age": 25, "job": "influencer", "gender": "female"}, vehicle=Vehicle("Vladya"))
+    return Person(
+        "Vladya",
+        attributes={"age": 25, "job": "influencer", "gender": "female"},
+        vehicle=Vehicle("Vladya"),
+    )
 
 
 @pytest.fixture()
 def another_person_with_default_vehicle():
     return Person(
-        "Stevie", attributes={"age": 36, "job": "blue_collar_crime", "gender": "male"}, vehicle=Vehicle("Stevie")
+        "Stevie",
+        attributes={"age": 36, "job": "blue_collar_crime", "gender": "male"},
+        vehicle=Vehicle("Stevie"),
     )
 
 
 @pytest.fixture()
 def person_with_electric_vehicle():
     return Person(
-        "Eddy", attributes={"age": 45, "job": "white_collar_crime", "gender": "male"}, vehicle=ElectricVehicle("Eddy")
+        "Eddy",
+        attributes={"age": 45, "job": "white_collar_crime", "gender": "male"},
+        vehicle=ElectricVehicle("Eddy"),
     )
 
 
@@ -81,7 +89,9 @@ def population_with_default_vehicles(
 
 
 @pytest.fixture()
-def population_with_electric_vehicles(population_with_default_vehicles, person_with_electric_vehicle):
+def population_with_electric_vehicles(
+    population_with_default_vehicles, person_with_electric_vehicle
+):
     hhld = Household(hid="3")
     hhld.add(person_with_electric_vehicle)
     population_with_default_vehicles.add(hhld)
@@ -96,7 +106,9 @@ def test_population_with_default_vehicles_has_vehicles(population_with_default_v
     assert population_with_default_vehicles.has_vehicles
 
 
-def test_population_with_default_vehicles_does_not_have_electric_vehicles(population_with_default_vehicles):
+def test_population_with_default_vehicles_does_not_have_electric_vehicles(
+    population_with_default_vehicles,
+):
     assert not population_with_default_vehicles.has_electric_vehicles
 
 
@@ -133,7 +145,9 @@ def test_extracting_vehicle_types_from_population(population_with_electric_vehic
     }
 
 
-def test_population_with_electric_vehicles_has_uniquely_defined_vehicle_types(population_with_electric_vehicles):
+def test_population_with_electric_vehicles_has_uniquely_defined_vehicle_types(
+    population_with_electric_vehicles,
+):
     assert population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
 
 
@@ -158,18 +172,31 @@ def test_population_with_non_uniquely_defined_vehicle_types(population_with_elec
     assert not population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
 
 
-def test_extracting_unique_electric_charger_types_from_population(population_with_electric_vehicles):
+def test_extracting_unique_electric_charger_types_from_population(
+    population_with_electric_vehicles,
+):
     hhld = Household(hid="4")
-    hhld.add(Person("Micky Faraday", vehicle=ElectricVehicle(charger_types="other,tesla", id="Micky Faraday")))
+    hhld.add(
+        Person(
+            "Micky Faraday",
+            vehicle=ElectricVehicle(charger_types="other,tesla", id="Micky Faraday"),
+        )
+    )
     population_with_electric_vehicles.add(hhld)
 
-    assert population_with_electric_vehicles.electric_vehicle_charger_types() == {"default", "other", "tesla"}
+    assert population_with_electric_vehicles.electric_vehicle_charger_types() == {
+        "default",
+        "other",
+        "tesla",
+    }
 
 
 @pytest.fixture
 def vehicles_v2_xsd():
     xsd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "pam", "fixtures", "dtd", "vehicleDefinitions_v2.0.xsd")
+        os.path.join(
+            os.path.dirname(__file__), "..", "pam", "fixtures", "dtd", "vehicleDefinitions_v2.0.xsd"
+        )
     )
     xml_schema_doc = lxml.etree.parse(xsd_path)
     yield lxml.etree.XMLSchema(xml_schema_doc)
@@ -178,14 +205,20 @@ def vehicles_v2_xsd():
 @pytest.fixture
 def electric_vehicles_v1_dtd():
     dtd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "pam", "fixtures", "dtd", "electric_vehicles_v1.dtd")
+        os.path.join(
+            os.path.dirname(__file__), "..", "pam", "fixtures", "dtd", "electric_vehicles_v1.dtd"
+        )
     )
     yield lxml.etree.DTD(dtd_path)
 
 
-def test_writing_all_vehicles_results_in_valid_xml_file(tmpdir, population_with_electric_vehicles, vehicles_v2_xsd):
+def test_writing_all_vehicles_results_in_valid_xml_file(
+    tmpdir, population_with_electric_vehicles, vehicles_v2_xsd
+):
     write_all_vehicles(
-        tmpdir, population_with_electric_vehicles.vehicles(), population_with_electric_vehicles.vehicle_types()
+        tmpdir,
+        population_with_electric_vehicles.vehicles(),
+        population_with_electric_vehicles.vehicle_types(),
     )
 
     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
@@ -199,7 +232,9 @@ def test_generates_matsim_vehicles_xml_file_containing_expected_vehicle_types(
     expected_vehicle_types = {"defaultVehicleType", "defaultElectricVehicleType"}
 
     write_all_vehicles(
-        tmpdir, population_with_electric_vehicles.vehicles(), population_with_electric_vehicles.vehicle_types()
+        tmpdir,
+        population_with_electric_vehicles.vehicles(),
+        population_with_electric_vehicles.vehicle_types(),
     )
 
     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
@@ -210,7 +245,9 @@ def test_generates_matsim_vehicles_xml_file_containing_expected_vehicle_types(
     assert expected_vehicle_types == vehicle_types
 
 
-def test_generates_matsim_vehicles_xml_file_containing_expected_vehicles(tmpdir, population_with_electric_vehicles):
+def test_generates_matsim_vehicles_xml_file_containing_expected_vehicles(
+    tmpdir, population_with_electric_vehicles
+):
     expected_vehicles = {
         "Eddy": "defaultElectricVehicleType",
         "Stevie": "defaultVehicleType",
@@ -218,7 +255,9 @@ def test_generates_matsim_vehicles_xml_file_containing_expected_vehicles(tmpdir,
     }
 
     write_all_vehicles(
-        tmpdir, population_with_electric_vehicles.vehicles(), population_with_electric_vehicles.vehicle_types()
+        tmpdir,
+        population_with_electric_vehicles.vehicles(),
+        population_with_electric_vehicles.vehicle_types(),
     )
 
     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
@@ -241,7 +280,9 @@ def test_writing_electric_vehicles_results_in_valid_xml_file(
     )
 
 
-def test_generates_electric_vehicles_xml_file_containing_expected_vehicles(tmpdir, population_with_electric_vehicles):
+def test_generates_electric_vehicles_xml_file_containing_expected_vehicles(
+    tmpdir, population_with_electric_vehicles
+):
     expected_vehicles = [
         {
             "id": "Eddy",
@@ -308,12 +349,16 @@ def test_generating_vehicle_files_from_electric_population_informs_of_charger_ty
 
 @pytest.fixture
 def ev_population_xml_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "ev_population.xml"))
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "ev_population.xml")
+    )
 
 
 @pytest.fixture
 def all_vehicle_xml_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "all_vehicles.xml"))
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "all_vehicles.xml")
+    )
 
 
 @pytest.fixture
@@ -327,7 +372,9 @@ def expected_all_vehicle_xml_output():
 
 @pytest.fixture
 def electric_vehicles_xml_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "electric_vehicles.xml"))
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "electric_vehicles.xml")
+    )
 
 
 @pytest.fixture
@@ -345,19 +392,28 @@ def test_reading_all_vehicles_file(all_vehicle_xml_path, expected_all_vehicle_xm
 
 
 def test_reading_electric_vehicles_with_all_vehicles_results_in_vehicles_being_updated_to_electric_vehicle_class(
-    electric_vehicles_xml_path, expected_all_vehicle_xml_output, expected_electric_vehicle_xml_output
+    electric_vehicles_xml_path,
+    expected_all_vehicle_xml_output,
+    expected_electric_vehicle_xml_output,
 ):
-    vehicles = read_electric_vehicles_file(electric_vehicles_xml_path, expected_all_vehicle_xml_output)
+    vehicles = read_electric_vehicles_file(
+        electric_vehicles_xml_path, expected_all_vehicle_xml_output
+    )
     assert vehicles == expected_electric_vehicle_xml_output
 
 
-def test_reading_electric_vehicles_only_results_in_defaulted_vehicle_type(electric_vehicles_xml_path):
+def test_reading_electric_vehicles_only_results_in_defaulted_vehicle_type(
+    electric_vehicles_xml_path,
+):
     vehicles = read_electric_vehicles_file(electric_vehicles_xml_path)
     assert vehicles == {"Eddy": ElectricVehicle(id="Eddy")}
 
 
 def test_reading_population_with_both_vehicle_files_assigns_all_vehicles_correctly(
-    ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, expected_electric_vehicle_xml_output
+    ev_population_xml_path,
+    all_vehicle_xml_path,
+    electric_vehicles_xml_path,
+    expected_electric_vehicle_xml_output,
 ):
     pop = read_matsim(
         plans_path=ev_population_xml_path,
@@ -372,6 +428,8 @@ def test_reading_population_with_both_vehicle_files_assigns_all_vehicles_correct
 def test_reading_population_with_all_vehicle_file_defaults_to_vehicle_class(
     ev_population_xml_path, all_vehicle_xml_path, expected_all_vehicle_xml_output
 ):
-    pop = read_matsim(plans_path=ev_population_xml_path, all_vehicles_path=all_vehicle_xml_path, version=12)
+    pop = read_matsim(
+        plans_path=ev_population_xml_path, all_vehicles_path=all_vehicle_xml_path, version=12
+    )
     for person in ["Eddy", "Stevie", "Vladya"]:
         pop.get(person).people[person].vehicle = expected_all_vehicle_xml_output[person]

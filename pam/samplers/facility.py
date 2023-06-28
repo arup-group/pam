@@ -59,7 +59,9 @@ class FacilitySampler:
         ## overrides for transit mode and speed specifications
         self.TRANSIT_MODES = transit_modes if transit_modes is not None else variables.TRANSIT_MODES
         self.EXPECTED_EUCLIDEAN_SPEEDS = (
-            expected_euclidean_speeds if expected_euclidean_speeds is not None else variables.EXPECTED_EUCLIDEAN_SPEEDS
+            expected_euclidean_speeds
+            if expected_euclidean_speeds is not None
+            else variables.EXPECTED_EUCLIDEAN_SPEEDS
         )
 
         # spatial join
@@ -70,7 +72,9 @@ class FacilitySampler:
             self.load_activity_areas(activity_areas_path)
 
         # build samplers
-        self.samplers = self.build_facilities_sampler(self.activity_areas_dict, weight_on=weight_on, max_walk=max_walk)
+        self.samplers = self.build_facilities_sampler(
+            self.activity_areas_dict, weight_on=weight_on, max_walk=max_walk
+        )
         self.build_xml = build_xml
         self.fail = fail
         self.random_default = random_default
@@ -94,7 +98,11 @@ class FacilitySampler:
         :params shapely.Point previous_loc: the location of the last visited activity.
         """
         idx, loc = self.sample_facility(
-            location_idx, activity, mode=mode, previous_duration=previous_duration, previous_loc=previous_loc
+            location_idx,
+            activity,
+            mode=mode,
+            previous_duration=previous_duration,
+            previous_loc=previous_loc,
         )
 
         if idx is not None and self.build_xml:
@@ -103,7 +111,13 @@ class FacilitySampler:
         return loc
 
     def sample_facility(
-        self, location_idx, activity, patience=1000, mode=None, previous_duration=None, previous_loc=None
+        self,
+        location_idx,
+        activity,
+        patience=1000,
+        mode=None,
+        previous_duration=None,
+        previous_loc=None,
     ):
         """Sample a facility id and location. If a location idx is missing, can return a random location."""
         if location_idx not in self.samplers:
@@ -212,7 +226,9 @@ class FacilitySampler:
         compression = DEFAULT_GZIP_COMPRESSION if is_gzip(path) else 0
         with et.xmlfile(path, encoding="utf-8", compression=compression) as xf:
             xf.write_declaration()
-            xf.write_doctype('<!DOCTYPE facilities SYSTEM "http://matsim.org/files/dtd/facilities_v1.dtd">')
+            xf.write_doctype(
+                '<!DOCTYPE facilities SYSTEM "http://matsim.org/files/dtd/facilities_v1.dtd">'
+            )
 
             with xf.element("facilities"):
                 if comment:
@@ -318,7 +334,9 @@ def inf_yielder_weighted(
             # if the last location has been passed to the sampler, normalise by (expected) distance
             if previous_loc is not None:
                 # calculate euclidean distance between the last visited location and every candidate location
-                distances = np.array([euclidean_distance(previous_loc, candidate[1]) for candidate in candidates])
+                distances = np.array(
+                    [euclidean_distance(previous_loc, candidate[1]) for candidate in candidates]
+                )
 
                 # calculate deviation from "expected" distance
                 speed = (
@@ -326,7 +344,9 @@ def inf_yielder_weighted(
                     if mode in expected_euclidean_speeds.keys()
                     else expected_euclidean_speeds["average"]
                 )
-                expected_distance = (previous_duration / pd.Timedelta(seconds=1)) * speed  # (in meters)
+                expected_distance = (
+                    previous_duration / pd.Timedelta(seconds=1)
+                ) * speed  # (in meters)
                 distance_weights = np.abs(distances - expected_distance)
                 distance_weights = np.where(
                     distance_weights == 0, variables.SMALL_VALUE, distance_weights

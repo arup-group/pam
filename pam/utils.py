@@ -207,7 +207,9 @@ def create_crs_attribute(coordinate_reference_system):
     """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS."""
     attributes_element = et.Element("attributes")
     crs_attribute = et.SubElement(
-        attributes_element, "attribute", {"class": "java.lang.String", "name": "coordinateReferenceSystem"}
+        attributes_element,
+        "attribute",
+        {"class": "java.lang.String", "name": "coordinateReferenceSystem"},
     )
     crs_attribute.text = str(coordinate_reference_system)
     return attributes_element

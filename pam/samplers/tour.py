@@ -25,20 +25,30 @@ def create_density_gdf(facility_zone, zone, activity, normalise=None):
     :return: a geodataframe that measures the density of activities in each zone.
     """
     if normalise is not None:
-        density = facility_zone.groupby([facility_zone.index, "activity", normalise]).agg({"id": "count"}).reset_index()
+        density = (
+            facility_zone.groupby([facility_zone.index, "activity", normalise])
+            .agg({"id": "count"})
+            .reset_index()
+        )
         density.set_index(facility_zone.index.name, inplace=True)
         density = density[density["activity"].isin(activity)]
         density["density"] = density["id"] / density[normalise]
         total_density = density[~(density[normalise] == 0)]["density"].sum()
         density["density"] = density["density"] / total_density
     else:
-        density = facility_zone.groupby([facility_zone.index, "activity"]).agg({"id": "count"}).reset_index()
+        density = (
+            facility_zone.groupby([facility_zone.index, "activity"])
+            .agg({"id": "count"})
+            .reset_index()
+        )
         density.set_index(facility_zone.index.name, inplace=True)
         density = density[density["activity"].isin(activity)]
         density["density"] = density["id"] / density["id"].sum()
 
     # Convert back to geodataframe for merging.
-    density = pd.merge(density, zone["geometry"], left_on=density.index, right_on=zone.index, how="left")
+    density = pd.merge(
+        density, zone["geometry"], left_on=density.index, right_on=zone.index, how="left"
+    )
     density.rename(columns={"key_0": facility_zone.index.name}, inplace=True)
     density = gp.GeoDataFrame(data=density, geometry="geometry")
     density.set_index(facility_zone.index.name, inplace=True)
@@ -137,7 +147,9 @@ class FrequencySampler:
             warnings.warn("No destinations within this threshold value, change threshold")
             return None
         else:
-            return random.choices(list(d_threshold.index), weights=list(d_threshold[self.frequency]), k=1)[0]
+            return random.choices(
+                list(d_threshold.index), weights=list(d_threshold[self.frequency]), k=1
+            )[0]
 
 
 class ActivityDuration:
@@ -165,7 +177,9 @@ class ActivityDuration:
         """
         return max([mini, min([time, maxi])])
 
-    def model_activity_duration(self, o_loc, d_loc, end_tm, speed=50000 / 3600, maxi=3600, mini=600):
+    def model_activity_duration(
+        self, o_loc, d_loc, end_tm, speed=50000 / 3600, maxi=3600, mini=600
+    ):
         """Returns estimated Activity Duration, which is combination of previous three functions to return parameters
         for next activity in Plan.
         :param o_loc: origin facility
@@ -299,7 +313,16 @@ class TourPlanner:
         else:
             end_tm_mtdt = end_tm
 
-        agent.add(Activity(seq=seq, act=act, area=zone, loc=loc, start_time=mtdt(start_tm), end_time=end_tm_mtdt))
+        agent.add(
+            Activity(
+                seq=seq,
+                act=act,
+                area=zone,
+                loc=loc,
+                start_time=mtdt(start_tm),
+                end_time=end_tm_mtdt,
+            )
+        )
 
         return end_tm
 
@@ -359,7 +382,12 @@ class TourPlanner:
 
         time_params = {"start_tm": end_tm, "end_tm": END_OF_DAY}
         end_tm = self.add_tour_activity(
-            agent=agent, k=k, zone=self.o_zone, loc=o_loc, activity_type="return_origin", time_params=time_params
+            agent=agent,
+            k=k,
+            zone=self.o_zone,
+            loc=o_loc,
+            activity_type="return_origin",
+            time_params=time_params,
         )
 
         return end_tm
@@ -373,12 +401,21 @@ class TourPlanner:
         """
         time_params = {"hour": self.hour, "minute": self.minute}
         end_tm = self.add_tour_activity(
-            agent=agent, k=1, zone=self.o_zone, loc=o_loc, activity_type=self.o_activity, time_params=time_params
+            agent=agent,
+            k=1,
+            zone=self.o_zone,
+            loc=o_loc,
+            activity_type=self.o_activity,
+            time_params=time_params,
         )
 
         for k in range(self.stops):
-            stop_duration, start_tm, end_tm = ActivityDuration().model_activity_duration(o_loc, d_locs[k], end_tm)
-            if (mtdt(end_tm) >= END_OF_DAY) | (mtdt(end_tm + int(stop_duration / 60)) >= END_OF_DAY):
+            stop_duration, start_tm, end_tm = ActivityDuration().model_activity_duration(
+                o_loc, d_locs[k], end_tm
+            )
+            if (mtdt(end_tm) >= END_OF_DAY) | (
+                mtdt(end_tm + int(stop_duration / 60)) >= END_OF_DAY
+            ):
                 break
             elif k == 0:
                 end_tm = self.add_tour_leg(
@@ -449,13 +486,19 @@ class ValidateTourOD:
         """
         # Create a dataframe to plot od trips and compare against facility density and flows density.
         df_trips_o = (
-            trips[trips["origin activity"] == o_activity].groupby(["ozone"]).agg({"pid": "count"}).reset_index()
+            trips[trips["origin activity"] == o_activity]
+            .groupby(["ozone"])
+            .agg({"pid": "count"})
+            .reset_index()
         )
         df_trips_o.rename(columns={"pid": "origin_trips"}, inplace=True)
         df_trips_o.set_index("ozone", inplace=True)
 
         df_trips_d = (
-            trips[trips["destination activity"] == d_activity].groupby(["dzone"]).agg({"pid": "count"}).reset_index()
+            trips[trips["destination activity"] == d_activity]
+            .groupby(["dzone"])
+            .agg({"pid": "count"})
+            .reset_index()
         )
         df_trips_d.rename(columns={"pid": "destination_trips"}, inplace=True)
         df_trips_d.set_index("dzone", inplace=True)
@@ -464,9 +507,15 @@ class ValidateTourOD:
 
         # Merge in trips information
         self.od_density = pd.merge(
-            self.od_density, df_trips_o, left_on=self.od_density.index, right_on=df_trips_o.index, how="left"
+            self.od_density,
+            df_trips_o,
+            left_on=self.od_density.index,
+            right_on=df_trips_o.index,
+            how="left",
         )
-        self.od_density = pd.merge(self.od_density, df_trips_d, left_on="key_0", right_on=df_trips_d.index, how="left")
+        self.od_density = pd.merge(
+            self.od_density, df_trips_d, left_on="key_0", right_on=df_trips_d.index, how="left"
+        )
 
         # Merge in density information
         o_density = o_dist.reset_index()
@@ -482,7 +531,9 @@ class ValidateTourOD:
 
         # Add in features for analysis
         self.od_density = self.od_density.fillna(0)
-        self.od_density["origin_trip_density"] = self.od_density.origin_trips / self.od_density.origin_trips.sum()
+        self.od_density["origin_trip_density"] = (
+            self.od_density.origin_trips / self.od_density.origin_trips.sum()
+        )
         self.od_density["destination_trip_density"] = (
             self.od_density.destination_trips / self.od_density.destination_trips.sum()
         )
@@ -493,7 +544,9 @@ class ValidateTourOD:
             self.od_density["destination_trip_density"] - self.od_density[f"{d_activity}_density"]
         )
 
-    def plot_validate_spatial_density(self, title_1, title_2, density_metric, density_trips, cmap="coolwarm"):
+    def plot_validate_spatial_density(
+        self, title_1, title_2, density_metric, density_trips, cmap="coolwarm"
+    ):
         """Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.
         :params title_1, title_2: str input for plot title names.
         :params density_metric: the measure for density output from the above dataframe, in the format of 'activity_density'
@@ -523,7 +576,9 @@ class ValidateTourOD:
         fig, ax = plt.subplots(1, 2, figsize=(15, 7))
 
         m1, b1 = np.polyfit(self.od_density[o_activity], self.od_density.origin_trip_density, 1)
-        m2, b2 = np.polyfit(self.od_density[d_activity], self.od_density.destination_trip_density, 1)
+        m2, b2 = np.polyfit(
+            self.od_density[d_activity], self.od_density.destination_trip_density, 1
+        )
 
         ax[0].scatter(x=o_activity, y="origin_trip_density", data=self.od_density)
         ax[0].plot(

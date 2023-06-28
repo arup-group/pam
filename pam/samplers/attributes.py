@@ -16,7 +16,9 @@ def bin_integer_transformer(features, target, bins, default=None):
     return default
 
 
-def discrete_joint_distribution_sampler(features, mapping, distribution, careful=False, seed: int = None):
+def discrete_joint_distribution_sampler(
+    features, mapping, distribution, careful=False, seed: int = None
+):
     """Randomly sample from a joint distribution based some discrete features.
 
     Where features are a dictionary structure of features, eg: {'gender':'female'}

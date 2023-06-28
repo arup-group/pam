@@ -31,10 +31,13 @@ class OD:
 
     def data_checks(self):
         """Check the integrity of input data and labels."""
-        assert self.data.ndim == 4, "The number of matrix dimensions should be 4 (mode, variable, origin, destination)"
+        assert (
+            self.data.ndim == 4
+        ), "The number of matrix dimensions should be 4 (mode, variable, origin, destination)"
         for i, (key, labels) in enumerate(zip(self.labels._fields, self.labels)):
             assert len(labels) == self.data.shape[i], (
-                f"The number of {key} labels should match the number of elements" f"in dimension {i} of the OD dataset"
+                f"The number of {key} labels should match the number of elements"
+                f"in dimension {i} of the OD dataset"
             )
 
     @staticmethod
@@ -119,7 +122,11 @@ class ODFactory:
         combinations_matrices = [(var, trmode) for (var, trmode, *others) in matrices]
         combinations_labels = list(itertools.product(labels.vars, labels.mode))
         for combination in combinations_labels:
-            assert combination in combinations_matrices, f"Combination {combination} missing from the input matrices"
+            assert (
+                combination in combinations_matrices
+            ), f"Combination {combination} missing from the input matrices"
 
         # no duplicate combinations
-        assert len(combinations_matrices) == len(set(combinations_matrices)), "No duplicate keys are allowed"
+        assert len(combinations_matrices) == len(
+            set(combinations_matrices)
+        ), "No duplicate keys are allowed"

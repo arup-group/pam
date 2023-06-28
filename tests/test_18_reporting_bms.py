@@ -6,7 +6,18 @@ from pam.report import benchmarks
 def test_get_trips_data(population):
     trips = population.trips_df()
     assert len(trips) == 10
-    assert list(trips["mode"]) == ["car", "car", "car", "car", "bike", "bike", "bus", "bus", "pt", "pt"]
+    assert list(trips["mode"]) == [
+        "car",
+        "car",
+        "car",
+        "car",
+        "bike",
+        "bike",
+        "bus",
+        "bus",
+        "pt",
+        "pt",
+    ]
 
 
 def test_get_legs_data(population):
@@ -36,7 +47,9 @@ def test_get_legs_data(population):
 
 def test_benchmark_trips_hour(population):
     data = population.trips_df()
-    bm = benchmarks.create_benchmark(data, dimensions=["departure_hour"], data_fields=["freq"], aggfunc=[sum])
+    bm = benchmarks.create_benchmark(
+        data, dimensions=["departure_hour"], data_fields=["freq"], aggfunc=[sum]
+    )
     expected_benchmark = pd.DataFrame(
         {"departure_hour": {0: 7, 1: 8, 2: 16, 3: 17}, "freq_sum": {0: 2, 1: 3, 2: 2, 3: 3}}
     )

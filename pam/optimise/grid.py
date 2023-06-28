@@ -5,11 +5,21 @@ from pam.activity import Plan
 from pam.scoring import CharyparNagelPlanScorer
 
 
-def grid_search(plan: Plan, plans_scorer=CharyparNagelPlanScorer, config: dict = {}, step: int = 300):
+def grid_search(
+    plan: Plan, plans_scorer=CharyparNagelPlanScorer, config: dict = {}, step: int = 300
+):
     best_score = plans_scorer.score_plan(plan, config)
     recorder = Recorder(best_score, plan)
 
-    traverse(scorer=plans_scorer, config=config, plan=plan, earliest=0, step=step, leg_index=0, recorder=recorder)
+    traverse(
+        scorer=plans_scorer,
+        config=config,
+        plan=plan,
+        earliest=0,
+        step=step,
+        leg_index=0,
+        recorder=recorder,
+    )
 
     return recorder.best_score, recorder.best_plan
 
