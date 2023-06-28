@@ -14,10 +14,7 @@ from pam.report.stringify import stringify_plans
 from pam.report.summary import pretty_print_summary, print_summary
 from pam.samplers import population as population_sampler
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(levelname)-3s %(message)s",
-)
+logging.basicConfig(level=logging.INFO, format="%(levelname)-3s %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -165,11 +162,7 @@ def benchmarks(
     logger.debug(f"MATSim version set to {matsim_version}.")
 
     with Console().status("[bold green]Loading population...", spinner="aesthetic") as _:
-        population = read.read_matsim(
-            population_input_path,
-            version=matsim_version,
-            weight=int(1 / sample_size),
-        )
+        population = read.read_matsim(population_input_path, version=matsim_version, weight=int(1 / sample_size))
     logger.info("Loading complete, creating benchmarks...")
 
     # export
@@ -200,13 +193,7 @@ def benchmarks(
     "--simplify_pt_trips", is_flag=True, default=False, help="Optionally simplify transit legs into single trip."
 )
 @click.option("--crop/--no_crop", default=True, help="Crop or don't crop plans to 24 hours, defaults to crop.")
-def stringify(
-    path_population_input: str,
-    colour: bool,
-    width: int,
-    simplify_pt_trips: bool,
-    crop: bool,
-):
+def stringify(path_population_input: str, colour: bool, width: int, simplify_pt_trips: bool, crop: bool):
     """ASCII plot activity plans to terminal."""
     logger.debug(f"Simplify PT trips = {simplify_pt_trips}")
     logger.debug(f"Crop = {crop}")
@@ -218,18 +205,9 @@ def stringify(
 @common_options
 @common_matsim_options
 @comment_option
-@click.argument(
-    "path_population_input",
-    type=click.Path(exists=True),
-)
-@click.argument(
-    "path_boundary",
-    type=click.Path(exists=True),
-)
-@click.argument(
-    "dir_population_output",
-    type=click.Path(exists=False, writable=True),
-)
+@click.argument("path_population_input", type=click.Path(exists=True))
+@click.argument("path_boundary", type=click.Path(exists=True))
+@click.argument("dir_population_output", type=click.Path(exists=False, writable=True))
 @click.option("--buffer", "-b", default=0, help="A buffer distance to (optionally) apply to the core area shapefile.")
 def crop(
     path_population_input,
@@ -383,14 +361,8 @@ def combine(
 @common_options
 @common_matsim_options
 @comment_option
-@click.argument(
-    "path_population_input",
-    type=click.Path(exists=True),
-)
-@click.argument(
-    "dir_population_output",
-    type=click.Path(exists=False, writable=True),
-)
+@click.argument("path_population_input", type=click.Path(exists=True))
+@click.argument("dir_population_output", type=click.Path(exists=False, writable=True))
 @click.option(
     "--sample_size", "-s", help="The sample size, eg, use 0.1 to produce a 10% version of the input population."
 )
@@ -473,14 +445,8 @@ def sample(
 @common_options
 @common_matsim_options
 @comment_option
-@click.argument(
-    "path_population_input",
-    type=click.Path(exists=True),
-)
-@click.argument(
-    "path_population_output",
-    type=click.Path(exists=False, writable=True),
-)
+@click.argument("path_population_input", type=click.Path(exists=True))
+@click.argument("path_population_output", type=click.Path(exists=False, writable=True))
 def wipe_all_links(
     path_population_input: str,
     path_population_output: str,
@@ -518,10 +484,7 @@ def wipe_all_links(
 
     with Console().status("[bold orange]Wiping all links from population...", spinner="aesthetic") as _:
         with write.Writer(
-            path=path_population_output,
-            household_key=None,
-            comment=comment,
-            keep_non_selected=keep_non_selected,
+            path=path_population_output, household_key=None, comment=comment, keep_non_selected=keep_non_selected
         ) as outfile:
             for person in read.matsim.stream_matsim_persons(
                 path_population_input,
@@ -550,18 +513,9 @@ def wipe_all_links(
 @common_options
 @common_matsim_options
 @comment_option
-@click.argument(
-    "path_population_input",
-    type=click.Path(exists=True),
-)
-@click.argument(
-    "path_population_output",
-    type=click.Path(exists=False, writable=True),
-)
-@click.argument(
-    "links",
-    nargs=-1,
-)
+@click.argument("path_population_input", type=click.Path(exists=True))
+@click.argument("path_population_output", type=click.Path(exists=False, writable=True))
+@click.argument("links", nargs=-1)
 def wipe_links(
     path_population_input: str,
     path_population_output: str,
@@ -621,10 +575,7 @@ def wipe_links(
 
     with Console().status("[bold orange]Wiping selected links from population...", spinner="aesthetic") as _:
         with write.Writer(
-            path=path_population_output,
-            household_key=None,
-            comment=comment,
-            keep_non_selected=keep_non_selected,
+            path=path_population_output, household_key=None, comment=comment, keep_non_selected=keep_non_selected
         ) as outfile:
             for person in read.matsim.stream_matsim_persons(
                 path_population_input,

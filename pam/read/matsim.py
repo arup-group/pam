@@ -282,11 +282,7 @@ def parse_matsim_plan(
                 # Optionally ignores route info such as links, distance and so on.
                 plan.add(
                     activity.Leg(
-                        seq=leg_seq,
-                        mode=mode,
-                        start_time=departure_dt,
-                        end_time=arrival_dt,
-                        attributes=attributes,
+                        seq=leg_seq, mode=mode, start_time=departure_dt, end_time=arrival_dt, attributes=attributes
                     )
                 )
 

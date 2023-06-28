@@ -68,10 +68,7 @@ class PlansToCategorical:
     def get_act(self, index):
         return self.index_to_act.get(index)
 
-    def encode(
-        self,
-        plan: Plan,
-    ) -> np.array:
+    def encode(self, plan: Plan) -> np.array:
         """Transform a pam.activity.Plan into a categorical integer array.
 
         Args:

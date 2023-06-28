@@ -167,26 +167,14 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
         else:
             add_attribute(attributes, k, v)
 
-    write_plan(
-        person_xml,
-        person.plan,
-        selected=True,
-    )
+    write_plan(person_xml, person.plan, selected=True)
     if keep_non_selected:
         for plan in person.plans_non_selected:
-            write_plan(
-                person_xml,
-                plan,
-                selected=False,
-            )
+            write_plan(person_xml, plan, selected=False)
     return person_xml
 
 
-def write_plan(
-    person_xml: et.SubElement,
-    plan: Plan,
-    selected: Optional[bool] = None,
-):
+def write_plan(person_xml: et.SubElement, plan: Plan, selected: Optional[bool] = None):
     plan_attributes = {}
     if selected is not None:
         plan_attributes["selected"] = {True: "yes", False: "no"}[selected]
@@ -197,9 +185,7 @@ def write_plan(
     for component in plan:
         if isinstance(component, Activity):
             component.validate_matsim()
-            act_data = {
-                "type": component.act,
-            }
+            act_data = {"type": component.act}
             if component.start_time is not None:
                 act_data["start_time"] = dttm(component.start_time)
             if component.end_time is not None:

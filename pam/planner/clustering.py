@@ -70,10 +70,7 @@ class PlanClusters:
         return dist
 
     def fit(
-        self,
-        n_clusters: int,
-        clustering_method: str = "agglomerative",
-        linkage: Optional[str] = "complete",
+        self, n_clusters: int, clustering_method: str = "agglomerative", linkage: Optional[str] = "complete"
     ) -> None:
         """Fit an agglomerative clustering model.
 

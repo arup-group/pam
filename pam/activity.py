@@ -6,12 +6,7 @@ from typing import Optional
 
 import pam.utils as utils
 import pam.variables
-from pam import (
-    InvalidMATSimError,
-    PAMInvalidTimeSequenceError,
-    PAMSequenceValidationError,
-    PAMValidationLocationsError,
-)
+from pam import InvalidMATSimError, PAMInvalidTimeSequenceError, PAMSequenceValidationError, PAMValidationLocationsError
 from pam.location import Location
 from pam.plot import plans as plot
 from pam.variables import END_OF_DAY
@@ -918,17 +913,7 @@ class PlanComponent:
 
 
 class Activity(PlanComponent):
-    def __init__(
-        self,
-        seq=None,
-        act=None,
-        area=None,
-        link=None,
-        loc=None,
-        start_time=None,
-        end_time=None,
-        freq=None,
-    ):
+    def __init__(self, seq=None, act=None, area=None, link=None, loc=None, start_time=None, end_time=None, freq=None):
         self.seq = seq
         self.act = act
         self.location = Location(loc=loc, link=link, area=area)

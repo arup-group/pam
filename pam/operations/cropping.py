@@ -10,10 +10,7 @@ from pam.variables import END_OF_DAY, START_OF_DAY
 
 
 def simplify_population(
-    population: str,
-    boundary: str,
-    snap_to_boundary: bool = False,
-    rename_external_activities: bool = False,
+    population: str, boundary: str, snap_to_boundary: bool = False, rename_external_activities: bool = False
 ) -> None:
     """Simplify external plans across a population."""
     # simplify plans

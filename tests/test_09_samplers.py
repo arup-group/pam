@@ -106,14 +106,7 @@ def test_applt_discrete_joint_distribution_sampler_reproducibility_to_kasia_care
     assert attributes.discrete_joint_distribution_sampler(kasia, mapping, dist, careful=True, seed=fixed_seed2) is False
 
 
-testdata = [
-    (0, 1.5, 0),
-    (10, 1.0, 10),
-    (0, 0.0, 0),
-    (10, 2.0, 20),
-    (10, 1.5, 15),
-    (10, 0.5, 5),
-]
+testdata = [(0, 1.5, 0), (10, 1.0, 10), (0, 0.0, 0), (10, 2.0, 20), (10, 1.5, 15), (10, 0.5, 5)]
 
 
 @pytest.mark.parametrize("freq,sample,result", testdata)
@@ -121,12 +114,7 @@ def test_freq_sampler_determined(freq, sample, result):
     assert basic.freq_sample(freq, sample) == result
 
 
-testdata = [
-    (1, 1.5, 1, 2),
-    (1, 0.5, 0, 1),
-    (1, 0.0001, 0, 1),
-    (1, 1.0001, 1, 2),
-]
+testdata = [(1, 1.5, 1, 2), (1, 0.5, 0, 1), (1, 0.0001, 0, 1), (1, 1.0001, 1, 2)]
 
 
 @pytest.mark.parametrize("freq,sample,lower,upper", testdata)
@@ -134,12 +122,7 @@ def test_freq_sampler_random_round(freq, sample, lower, upper):
     assert basic.freq_sample(freq, sample) in [lower, upper]
 
 
-testdata = [
-    (1, 1.5, 2),
-    (1, 0.5, 1),
-    (1, 0.0001, 0),
-    (1, 1.0001, 1),
-]
+testdata = [(1, 1.5, 2), (1, 0.5, 1), (1, 0.0001, 0), (1, 1.0001, 1)]
 
 
 @pytest.mark.parametrize("freq,sample,value", testdata)

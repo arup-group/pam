@@ -39,13 +39,7 @@ def plot_household(household, **kwargs):
 
 def build_plan_df(plan, pid="sample"):
     """Loop through a plan, creating a pandas dataframe defining activities for plotting."""
-    data = {
-        "act": [],
-        "modes": [],
-        "start_time": [],
-        "end_time": [],
-        "dur": [],
-    }
+    data = {"act": [], "modes": [], "start_time": [], "end_time": [], "dur": []}
     for component in plan.day:
         data["act"].append(component.act.lower().title())
         if isinstance(component, activity.Leg) and component.mode is not None:
@@ -71,13 +65,7 @@ def plot_plan(plan, kwargs=None):
 
 def build_person_df(person):
     """Loop through a persons plan, creating a pandas dataframe defining activities for plotting."""
-    data = {
-        "act": [],
-        "modes": [],
-        "start_time": [],
-        "end_time": [],
-        "dur": [],
-    }
+    data = {"act": [], "modes": [], "start_time": [], "end_time": [], "dur": []}
     for component in person.plan.day:
         data["act"].append(component.act.lower().title())
         if isinstance(component, activity.Leg):

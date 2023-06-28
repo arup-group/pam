@@ -29,11 +29,7 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
     legs = []
 
     for hid, hh in population.households.items():
-        hh_data = {
-            "hid": hid,
-            "freq": hh.freq,
-            "hzone": hh.location.area,
-        }
+        hh_data = {"hid": hid, "freq": hh.freq, "hzone": hh.location.area}
         if isinstance(hh.attributes, dict):
             hh_data.update(hh.attributes)
         # if hh.location.area is not None:
@@ -44,12 +40,7 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
         hhs.append(hh_data)
 
         for pid, person in hh.people.items():
-            people_data = {
-                "pid": pid,
-                "hid": hid,
-                "freq": person.freq,
-                "hzone": hh.location.area,
-            }
+            people_data = {"pid": pid, "hid": hid, "freq": person.freq, "hzone": hh.location.area}
             if isinstance(person.attributes, dict):
                 people_data.update(person.attributes)
             if hh.location.loc is not None:

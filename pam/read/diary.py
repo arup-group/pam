@@ -385,10 +385,7 @@ def add_hhs_from_persons_attributes(population: core.Population, persons_attribu
             population.add(household)
 
 
-def add_hhs_from_trips(
-    population: core.Population,
-    trips: Optional[pd.DataFrame] = None,
-):
+def add_hhs_from_trips(population: core.Population, trips: Optional[pd.DataFrame] = None):
     logger = logging.getLogger(__name__)
 
     if trips is None or "hid" not in trips.columns:
@@ -402,10 +399,7 @@ def add_hhs_from_trips(
             population.add(household)
 
 
-def add_persons_from_persons_attributes(
-    population: core.Population,
-    persons_attributes: Optional[pd.DataFrame] = None,
-):
+def add_persons_from_persons_attributes(population: core.Population, persons_attributes: Optional[pd.DataFrame] = None):
     logger = logging.getLogger(__name__)
 
     if persons_attributes is None or "hid" not in persons_attributes.columns:
@@ -434,10 +428,7 @@ def add_persons_from_persons_attributes(
             household.add(person)
 
 
-def add_persons_from_trips(
-    population: core.Population,
-    trips: Optional[pd.DataFrame] = None,
-):
+def add_persons_from_trips(population: core.Population, trips: Optional[pd.DataFrame] = None):
     logger = logging.getLogger(__name__)
 
     if trips is None or "hid" not in trips.columns:
@@ -451,18 +442,11 @@ def add_persons_from_trips(
             continue
         if pid in household.people:
             continue
-        person = core.Person(
-            pid,
-            home_area=hh_person_data.iloc[0].to_dict().get("hzone"),
-        )
+        person = core.Person(pid, home_area=hh_person_data.iloc[0].to_dict().get("hzone"))
         household.add(person)
 
 
-def hh_person_df_to_dict(
-    df: pd.DataFrame,
-    key_hh: str,
-    key_person: str,
-):
+def hh_person_df_to_dict(df: pd.DataFrame, key_hh: str, key_person: str):
     """Restructure a dataframe as a nested dictionary of dataframes,
         where the first level is the household index,
         the second level is the person index,
@@ -521,11 +505,7 @@ def tour_based_travel_diary_read(
 
             person.add(
                 activity.Activity(
-                    seq=0,
-                    act=None,
-                    area=person_trips.ozone.iloc[0],
-                    loc=loc,
-                    start_time=utils.parse_time(0),
+                    seq=0, act=None, area=person_trips.ozone.iloc[0], loc=loc, start_time=utils.parse_time(0)
                 )
             )
 
@@ -555,11 +535,7 @@ def tour_based_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
-                        act=None,
-                        area=trip.dzone,
-                        loc=end_loc,
-                        start_time=utils.parse_time(trip.tet),
+                        seq=n + 1, act=None, area=trip.dzone, loc=end_loc, start_time=utils.parse_time(trip.tet)
                     )
                 )
 
@@ -613,15 +589,7 @@ def trip_based_travel_diary_read(
             if include_loc:
                 loc = person_trips.start_loc.iloc[0]
 
-            person.add(
-                activity.Activity(
-                    seq=0,
-                    act="home",
-                    area=origin_area,
-                    loc=loc,
-                    start_time=utils.parse_time(0),
-                )
-            )
+            person.add(activity.Activity(seq=0, act="home", area=origin_area, loc=loc, start_time=utils.parse_time(0)))
 
             for n, trip in person_trips.iterrows():
                 start_loc = None
@@ -648,11 +616,7 @@ def trip_based_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
-                        act=purpose,
-                        area=trip.dzone,
-                        loc=end_loc,
-                        start_time=utils.parse_time(trip.tet),
+                        seq=n + 1, act=purpose, area=trip.dzone, loc=end_loc, start_time=utils.parse_time(trip.tet)
                     )
                 )
 
@@ -713,11 +677,7 @@ def from_to_travel_diary_read(
 
             person.add(
                 activity.Activity(
-                    seq=0,
-                    act=first_act,
-                    area=person_trips.iloc[0].ozone,
-                    loc=loc,
-                    start_time=utils.parse_time(0),
+                    seq=0, act=first_act, area=person_trips.iloc[0].ozone, loc=loc, start_time=utils.parse_time(0)
                 )
             )
 
@@ -746,11 +706,7 @@ def from_to_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
-                        act=purpose,
-                        area=trip.dzone,
-                        loc=end_loc,
-                        start_time=utils.parse_time(trip.tet),
+                        seq=n + 1, act=purpose, area=trip.dzone, loc=end_loc, start_time=utils.parse_time(trip.tet)
                     )
                 )
 

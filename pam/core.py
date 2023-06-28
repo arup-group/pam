@@ -388,10 +388,7 @@ class Population:
         Returns:
             go.Figure: Plotly figure object.
         """
-        return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs,
-        )
+        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
 
     def fix_plans(self, crop: bool = True, times=True, locations=True):
         for _, _, person in self.people():
@@ -507,8 +504,7 @@ class Population:
 
         for _, household in self.households.items():
             home_loc = activity.Location(
-                area=household.location.area,
-                loc=sampler.sample(household.location.area, "home"),
+                area=household.location.area, loc=sampler.sample(household.location.area, "home")
             )
 
             unique_locations = {(household.location.area, "home"): home_loc}
@@ -528,8 +524,7 @@ class Population:
                     # sample facility
                     elif location_override or act.location.loc is None:
                         location = activity.Location(
-                            area=act.location.area,
-                            loc=sampler.sample(act.location.area, target_act),
+                            area=act.location.area, loc=sampler.sample(act.location.area, target_act)
                         )
                         if target_act in long_term_activities:
                             # one location per zone for long-term choices (only)
@@ -544,12 +539,7 @@ class Population:
                         component.start_location = person.plan[idx - 1].location
                         component.end_location = person.plan[idx + 1].location
 
-    def sample_locs_complex(
-        self,
-        sampler,
-        long_term_activities: list = None,
-        joint_trips_prefix: str = "escort_",
-    ):
+    def sample_locs_complex(self, sampler, long_term_activities: list = None, joint_trips_prefix: str = "escort_"):
         """Extends sample_locs method to enable more complex and rules-based sampling.
 
         Keeps track of the last location and transport mode, to apply distance- and mode-based sampling rules.
@@ -570,11 +560,7 @@ class Population:
             home_loc = activity.Location(
                 area=household.location.area,
                 loc=sampler.sample(
-                    household.location.area,
-                    "home",
-                    mode=None,
-                    previous_duration=None,
-                    previous_loc=None,
+                    household.location.area, "home", mode=None, previous_duration=None, previous_loc=None
                 ),
             )
             mode = None
@@ -635,15 +621,7 @@ class Population:
 class Household:
     logger = logging.getLogger(__name__)
 
-    def __init__(
-        self,
-        hid,
-        attributes={},
-        freq=None,
-        location: Optional[Location] = None,
-        area=None,
-        loc=None,
-    ):
+    def __init__(self, hid, attributes={}, freq=None, location: Optional[Location] = None, area=None, loc=None):
         self.hid = hid
         self.people = {}
         self.attributes = attributes
@@ -871,10 +849,7 @@ class Household:
             cmap (dict): optional argument, useful to pass if generating a number of plots and want to keep colour scheme consistent
             mapbox_access_token (str): required to generate the plot (see https://docs.mapbox.com/help/how-mapbox-works/access-tokens/).
         """
-        return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs,
-        )
+        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
 
     def __str__(self):
         return f"Household: {self.hid}"
@@ -1215,10 +1190,7 @@ class Person:
         Returns:
             go.Figure: Plotly figure object
         """
-        return plot.plot_travel_plans(
-            gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"),
-            **kwargs,
-        )
+        return plot.plot_travel_plans(gdf=self.build_travel_geodataframe(from_epsg=epsg, to_epsg="epsg:4326"), **kwargs)
 
     def __str__(self):
         return f"Person: {self.pid}"

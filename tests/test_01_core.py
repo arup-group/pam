@@ -132,10 +132,7 @@ def test_person_validate_sequence():
 
 def test_person_validate_sequence_fail1():
     person = Person("1")
-    person.plan.day = [
-        Activity(1, "home", 1),
-        Leg(1, "car", start_area=1, end_area=2),
-    ]
+    person.plan.day = [Activity(1, "home", 1), Leg(1, "car", start_area=1, end_area=2)]
     with pytest.raises(PAMSequenceValidationError):
         assert person.validate_sequence()
 
@@ -208,9 +205,7 @@ def test_person_validate_locations_fail():
 
 def test_crop_plan():
     person = Person("1")
-    person.plan.day = [
-        Activity(1, "home", 1, start_time=mtdt(0), end_time=mtdt(25 * 60)),
-    ]
+    person.plan.day = [Activity(1, "home", 1, start_time=mtdt(0), end_time=mtdt(25 * 60))]
     person.fix_plan()
     assert person.validate_sequence()
 

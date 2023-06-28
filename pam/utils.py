@@ -171,13 +171,7 @@ def get_tag(target, tag):
     TODO Not working with iterparse, generated elem also have ns which is dealt with later.
     """
     nsmap = {}
-    doc = etree.iterparse(
-        target,
-        events=(
-            "end",
-            "start-ns",
-        ),
-    )
+    doc = etree.iterparse(target, events=("end", "start-ns"))
     count = 0
     for event, element in doc:
         count += 1

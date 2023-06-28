@@ -333,12 +333,8 @@ def default_config():
         "pt": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
         "bus": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
         "train": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
-        "walk": {
-            "marginalUtilityOfTravelling": -12,
-        },
-        "bike": {
-            "marginalUtilityOfTravelling": -12,
-        },
+        "walk": {"marginalUtilityOfTravelling": -12},
+        "bike": {"marginalUtilityOfTravelling": -12},
     }
 
 
@@ -381,12 +377,8 @@ def config():
             "pt": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
             "bus": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
             "train": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
-            "walk": {
-                "marginalUtilityOfTravelling": -12,
-            },
-            "bike": {
-                "marginalUtilityOfTravelling": -12,
-            },
+            "walk": {"marginalUtilityOfTravelling": -12},
+            "bike": {"marginalUtilityOfTravelling": -12},
         }
     }
 

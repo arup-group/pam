@@ -28,15 +28,8 @@ class CharyparNagelPlanScorer:
                 "earliestEndTime": "16:00:00",
                 "minimalDuration": "01:00:00",
             },
-            "home": {
-                "typicalDuration": "12:00:00",
-                "minimalDuration": "05:00:00",
-            },
-            "shop": {
-                "typicalDuration": "00:30:00",
-                "openingTime": "06:00:00",
-                "closingTime": "20:00:00",
-            },
+            "home": {"typicalDuration": "12:00:00", "minimalDuration": "05:00:00"},
+            "shop": {"typicalDuration": "00:30:00", "openingTime": "06:00:00", "closingTime": "20:00:00"},
             "car": {
                 "constant": -10,
                 "dailyMonetaryConstant": -1,
@@ -45,9 +38,7 @@ class CharyparNagelPlanScorer:
                 "marginalUtilityOfTravelling": -1,
                 "monetaryDistanceRate": -0.0001,
             },
-            "walk": {
-                "constant": -20,
-            },
+            "walk": {"constant": -20},
         }
     }
 
