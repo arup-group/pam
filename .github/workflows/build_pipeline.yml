@@ -51,8 +51,7 @@ jobs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       env: 
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          directory: "./reports/coverage/"
+        directory: "./reports/coverage/"
 
     - name: Setup doc deploy
       run: |
