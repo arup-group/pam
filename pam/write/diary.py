@@ -32,8 +32,6 @@ def to_csv(population, dir: str, crs: Optional[str] = None, to_crs: Optional[str
         hh_data = {"hid": hid, "freq": hh.freq, "hzone": hh.location.area}
         if isinstance(hh.attributes, dict):
             hh_data.update(hh.attributes)
-        # if hh.location.area is not None:
-        #     hh_data['area'] = hh.location.area
         if hh.location.loc is not None:
             hh_data["geometry"] = hh.location.loc
 

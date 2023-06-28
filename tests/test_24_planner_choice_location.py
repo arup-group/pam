@@ -116,14 +116,13 @@ def test_utility_calculation(choice_model_mnl):
     asc_shift_poor = [0, 2]
     beta_time = [-0.05, -0.07]
     beta_zones = 0.4
-    u = f""" \
+    utility_calc = f""" \
         {asc} + \
         (np.array({asc_shift_poor}) * (person.attributes['subpopulation']=='poor')) + \
         ({beta_time} * od['time', person.home.area]) + \
         ({beta_zones} * np.log(zones.jobs))
     """
-    # ({beta_zones} * np.log(zones['jobs'].values[:, np.newaxis]))
-    choice_model_mnl.configure(u=u, scope=scope)
+    choice_model_mnl.configure(u=utility_calc, scope=scope)
 
     np.testing.assert_almost_equal(
         np.array([0.8420680743952365, -1.2579319256047636, 0.11932694661921461, -2.0306730533807857]),

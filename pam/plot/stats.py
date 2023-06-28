@@ -76,14 +76,12 @@ def plot_time_bins(data, sub_col, width=12, height_factor=1.2):
 def plot_activity_times(population):
     acts = extract_activity_log(population)
     fig = plot_time_bins(acts, sub_col="act")
-    # fig.suptitle("Activity Time Bins")
     return fig
 
 
 def plot_leg_times(population):
     legs = extract_leg_log(population)
     fig = plot_time_bins(legs, sub_col="mode")
-    # fig.suptitle("Travel Time Bins")
     return fig
 
 

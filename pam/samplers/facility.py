@@ -217,7 +217,6 @@ class FacilitySampler:
             with xf.element("facilities"):
                 if comment:
                     xf.write(et.Comment(comment), pretty_print=True)
-                # xf.write(et.Comment(f"Created {datetime.today()}"))
 
                 if coordinate_reference_system is not None:
                     xf.write(create_crs_attribute(coordinate_reference_system), pretty_print=True)
@@ -334,10 +333,6 @@ def inf_yielder_weighted(
                 )  # avoid having zero weights
 
                 ## normalise weights by distance
-                # weights = weights / np.exp(distance_weights) # exponentiate distances to reduce the effect very small distances
-                # weights = weights / np.exp(distance_weights/distance_weights.max())
-                # weights = weights / (1 + np.exp(1*(distance_weights - distance_weights.mean()))) # alternative formulation: logistic curve
-                # weights = weights / (1 + np.exp((distance_weights))) # alternative formulation: logistic curve
                 weights = weights / (distance_weights**2)  # distance decay factor of 2
 
             weights = weights / weights.sum()  # probability weights should add up to 1
