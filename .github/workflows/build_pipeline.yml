@@ -47,6 +47,11 @@ jobs:
 
     - name: Run tests
       run: pytest
+      
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env: 
+        directory: "./reports/coverage/"
 
     - name: Setup doc deploy
       run: |
