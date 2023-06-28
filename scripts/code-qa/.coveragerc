@@ -1,6 +1,0 @@
-[run]
-branch = True
-source = pam/
-
-[report]
-fail_under = 89

@@ -321,7 +321,7 @@ def build_population(
     trips: Optional[pd.DataFrame] = None,
     persons_attributes: Optional[pd.DataFrame] = None,
     hhs_attributes: Optional[pd.DataFrame] = None
-    ):
+    ) -> core.Population:
     """
     Build a population of households and persons (without plans)
     from available trips, persons_attributes and households_attributes
@@ -329,9 +329,9 @@ def build_population(
     Details of required table formats are in the README.
 
     Args:
-        trips (Optional[pd.DataFrame]): trips table
-        persons_attributes (Optional[pd.DataFrame]): persons attributes table
-        hhs_attributes (Optional[pd.DataFrame]): households attributes table
+        trips (Optional[pd.DataFrame]): trips table. Defaults to None.
+        persons_attributes (Optional[pd.DataFrame]): persons attributes table. Defaults to None.
+        hhs_attributes (Optional[pd.DataFrame]): households attributes table. Defaults to None.
 
     Returns:
         pam.Population: population object

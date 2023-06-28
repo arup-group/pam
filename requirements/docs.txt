@@ -1,4 +1,9 @@
 colorama
-jupyter_contrib_nbextensions < 0.6
 jupyter < 2
+jupyter_contrib_nbextensions < 0.6
+mike ~= 1.1
+mkdocs ~= 1.4
+mkdocs-click ~= 0.6.0
+mkdocs-jupyter ~= 0.24.1
+mkdocstrings-python ~= 1.1
 tabulate < 1

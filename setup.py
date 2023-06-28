@@ -24,10 +24,13 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.7",
-    entry_points={"console_scripts": ["pam = pam.cli:cli"]},
+    entry_points={
+        "console_scripts": ["pam = pam.cli:cli"], 
+        'mkdocs.plugins': ['generate-api = mkdocs_plugins.api_generator:AddAPIPlugin']
+    },
     extras_require={
         "docs": requirements["docs"],
-        "tests": requirements["docs"] + requirements["tests"],
+        "dev": requirements["docs"] + requirements["dev"],
     },
     install_requires=requirements["base"],
 )
