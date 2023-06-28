@@ -17,9 +17,10 @@ def temp_src_dir(tmpdir):
 
     temp_sub_dir = src_dir.mkdir("subdir")
     file_2 = temp_sub_dir.join("file_2.py")
+    file_3 = temp_sub_dir.join("file_3.py")
     file_2_ignore = temp_sub_dir.join("file_2_ignore.py")
 
-    for file in [file_1, file_2, file_1_ignore, file_2_ignore, file_1_autoignore]:
+    for file in [file_1, file_2, file_3, file_1_ignore, file_2_ignore, file_1_autoignore]:
         file.write(
             textwrap.dedent(
                 """
@@ -53,6 +54,7 @@ def base_config(tmpdir):
     [
         ("src/foo.py", {"top_level": [{"src.foo": "api/foo.md"}]}),
         ("src/foo/bar.py", {"top_level": [], "src.foo": [{"src.foo.bar": "api/foo/bar.md"}]}),
+        ("src/foo/bar/baz.py", {"top_level": [], "src.foo": [{"src.foo.bar.baz": "api/foo/bar/baz.md"}]}),
     ],
 )
 def test_api_reference_populated(api_plugin, base_config, input_path, expected_api_dict):
@@ -81,15 +83,19 @@ def test_generate_md_from_py(curdir, temp_src_dir, api_plugin, base_config):
 
     files = api_plugin.on_files([], base_config)
 
-    assert len(files) == 2
     assert all(isinstance(i, File) for i in files)
-    assert set(file.name for file in files) == {"file_1", "file_2"}
+    assert {file.name for file in files} == {"file_1", "file_2", "file_3"}
 
     assert base_config["nav"] == [
         {
             "API Reference": [
                 {"src.file_1": "api/file_1.md"},
-                {"src.subdir": [{"src.subdir.file_2": "api/subdir/file_2.md"}]},
+                {
+                    "src.subdir": [
+                        {"src.subdir.file_3": "api/subdir/file_3.md"},
+                        {"src.subdir.file_2": "api/subdir/file_2.md"},
+                    ]
+                },
             ]
         }
     ]

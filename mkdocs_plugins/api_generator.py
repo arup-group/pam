@@ -4,6 +4,7 @@ Each source code file with have a separate page in the documentation, with pages
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import Union
 
 import mkdocs
 from mkdocs.config import Config, config_options
@@ -13,6 +14,7 @@ from mkdocs.structure.files import File, Files
 
 class AddAPIPluginConfig(mkdocs.config.base.Config):
     """Enable the plugin configuration options."""
+
     package_dir = config_options.Type(str)  # directory in which the source code is placed.
     api_dir = config_options.Type(
         str, default="api"
@@ -32,7 +34,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         self._tmpdir = tempfile.TemporaryDirectory(prefix="mkdocs_api_file_generator_")
         """Temporary directory to store generated markdown files"""
 
-        self._api_reference: dict = {"top_level": []}
+        self._api_reference: dict[str, Union[list, dict[str, list]]] = {"top_level": []}
         """Dictionary to store navigation elements, which will be added to the mkdocs `nav`"""
 
     def on_files(self, files: Files, config: Config) -> Files:
