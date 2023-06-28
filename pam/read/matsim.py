@@ -17,15 +17,15 @@ def read_matsim(
     attributes_path: Optional[str] = None,
     all_vehicles_path: Optional[str] = None,
     electric_vehicles_path: Optional[str] = None,
-    weight : int = 100,
-    version : Literal[11, 12] = 12,
-    household_key : Optional[str] = None,
-    simplify_pt_trips : bool = False,
-    autocomplete : bool = True,
-    crop : bool = False,
-    keep_non_selected : bool = False,
-    leg_attributes : bool = True,
-    leg_route : bool = True,
+    weight: int = 100,
+    version: Literal[11, 12] = 12,
+    household_key: Optional[str] = None,
+    simplify_pt_trips: bool = False,
+    autocomplete: bool = True,
+    crop: bool = False,
+    keep_non_selected: bool = False,
+    leg_attributes: bool = True,
+    leg_route: bool = True,
 ) -> core.Population:
     """
     Load a MATSim format population into core population format.
@@ -87,9 +87,7 @@ have attributes or be able to use a household attribute id. Check this is intend
     if attributes_path:
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
-            logger.warning(
-                "It is not required to load attributes from a separate path for version 11."
-            )
+            logger.warning("It is not required to load attributes from a separate path for version 11.")
         attributes = load_attributes_map(attributes_path)
 
     for person in stream_matsim_persons(
@@ -107,15 +105,11 @@ have attributes or be able to use a household attribute id. Check this is intend
     ):
         # Check if using households, then update population accordingly.
         if household_key and person.attributes.get(household_key):  # using households
-            if population.get(
-                person.attributes.get(household_key)
-            ):  # existing household
+            if population.get(person.attributes.get(household_key)):  # existing household
                 household = population.get(person.attributes.get(household_key))
                 household.add(person)
             else:  # new household
-                household = core.Household(
-                    person.attributes.get(household_key), freq=weight
-                )
+                household = core.Household(person.attributes.get(household_key), freq=weight)
                 household.add(person)
                 population.add(household)
         else:  # not using households, create dummy household
@@ -140,7 +134,7 @@ def stream_matsim_persons(
     leg_route: bool = True,
 ) -> core.Person:
     """
-    
+
     Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support 'version 11' plans.
@@ -148,27 +142,27 @@ def stream_matsim_persons(
     TODO: a v12 only method could also stream attributes and would use less memory
 
     Args:
-        plans_path (str): 
+        plans_path (str):
             path to matsim format xml
-        attributes (dict, optional): 
+        attributes (dict, optional):
             map of person attributes, only required for v11. Defaults to {}.
-        vehicles (VehicleManager, optional): 
+        vehicles (VehicleManager, optional):
             map of vehciles. Defaults to {}.
-        weight (int, optional): 
+        weight (int, optional):
             path to matsim electric_vehicles xml. Defaults to 100.
-        version (Literal[11, 12], optional): 
+        version (Literal[11, 12], optional):
             Defaults to 12.
-        simplify_pt_trips (bool, optional): 
+        simplify_pt_trips (bool, optional):
             simplify legs in multi-leg trips. Defaults to False.
-        autocomplete (bool, optional): 
+        autocomplete (bool, optional):
             fills missing leg and activity attributes. Defaults to True.
-        crop (bool, optional): 
+        crop (bool, optional):
             crop plans that go beyond 24 hours. Defaults to False.
-        keep_non_selected (bool, optional): 
+        keep_non_selected (bool, optional):
             Whether to parse non-selected plans (storing them in `person.plans_non_selected`). Defaults to False.
-        leg_attributes (bool, optional): 
+        leg_attributes (bool, optional):
             Parse leg attributes such as routing mode. Defaults to True.
-        leg_route (bool, optional): 
+        leg_route (bool, optional):
             Parse leg route. Defaults to True.
 
     Raises:
@@ -190,14 +184,9 @@ def stream_matsim_persons(
 
         # remove vehicle attribute from agent and create person vehciles dictionary
         # todo: repair the attributes and veh types before writting!
-        person_vehs = {
-            mode: vehicles.pop(vid)
-            for mode, vid in attributes.pop("vehicles", {}).items()
-        }
+        person_vehs = {mode: vehicles.pop(vid) for mode, vid in attributes.pop("vehicles", {}).items()}
 
-        person = core.Person(
-            person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs
-        )
+        person = core.Person(person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs)
 
         for plan_xml in person_xml:
             if plan_xml.get("selected") == "yes":
@@ -384,7 +373,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
             <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
             </leg>
         ```
-        
+
         === Transit ===
 
         This is a transit routed leg with the route encoded as json string and routingMode attribute:
@@ -410,7 +399,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
         === Network Routed ===
 
         This is a network routed mode, eg car:
-        ``` xml   
+        ``` xml
             <leg mode="car" dep_time="07:58:00" trav_time="00:04:52">
                 <attributes>
                     <attribute name="enterVehicleTime" class="java.lang.Double">28680.0</attribute>
@@ -420,7 +409,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
                 4155 5221366345330551489_5221366345327939575 2623 4337 5221366343808222067_5221366343837130911 2984 1636 3671 6110 etc...
                 </route>
             </leg>
-        ```            
+        ```
 
         Route attributes include:
             - type = "links"
@@ -442,7 +431,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
                 <route type="generic" start_link="5221366698030330427_5221366698041252619" end_link="114" trav_time="01:54:10" distance="5710.003987453454"></route>
             </leg>
         ```
-        
+
         Route attributes include:
             - type = "generic"
             - start_link
@@ -458,12 +447,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
 
 
 def load_attributes_map_from_v12(plans_path):
-    return dict(
-        [
-            get_attributes_from_person(elem)
-            for elem in utils.get_elems(plans_path, "person")
-        ]
-    )
+    return dict([get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")])
 
 
 def get_attributes_from_person(elem):
@@ -480,14 +464,14 @@ def get_attributes_from_person(elem):
         elif data == "java.lang.Double":
             attributes[attr.get("name")] = float(attr)
         elif data == "org.matsim.vehicles.PersonVehicles":
-            attributes[attr.get("name")] = parse_veh_attribute(attr)
+            attributes[attr.get("name")] = parse_veh_attribute(attr.text)
         # last try:
         attributes[attr.get("name")] = attr.text
     return ident, attributes
 
 
 def parse_veh_attribute(text) -> dict:
-    return json.loads(text)
+    return json.loads(str(text))
 
 
 def get_attributes_from_legs(elem):

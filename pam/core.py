@@ -187,6 +187,16 @@ class Population:
                 attributes[k] = set(list(attributes[k])[:show])
         return dict(attributes)
 
+    def rebuild_vehicles(self):
+        """
+        (Re)build veh population from agents.
+        """
+        self.vehicles.clear()
+        for _, _, mode, veh in self.vehicles():
+            self.vehicles[veh.vid] = veh
+        if not self.is_consistent():
+            raise UserWarning("Failed consistency check refer to logs.")
+
     def vehicle_types(self):
         for veh_type in self.vehicle_types.veh_types():
             yield veh_type.id, veh_type
@@ -203,7 +213,7 @@ class Population:
 
     @property
     def has_vehicles(self) -> bool:
-        return bool(self.vehicles())
+        return bool(self.vehicles().__next__()())
 
     @property
     def has_electric_vehicles(self):
@@ -214,9 +224,7 @@ class Population:
 
     def safe_add_veh_to_agent(self, hid: str, pid: str, mode: str, v: Vehicle) -> bool:
         if v.type_id not in self.vehicle_types:
-            raise UserWarning(
-                f"Unable to add vehicle with unknown type: '{v.type_id}'."
-            )
+            raise UserWarning(f"Unable to add vehicle with unknown type: '{v.type_id}'.")
         self.households[hid][pid].vehicles[mode] = v
 
     @property
@@ -443,9 +451,7 @@ class Population:
         write.to_csv(self, dir, crs, to_crs)
 
     def __str__(self):
-        return (
-            f"Population: {self.population} people in {self.num_households} households."
-        )
+        return f"Population: {self.population} people in {self.num_households} households."
 
     def __iadd__(self, other):
         """
