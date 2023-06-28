@@ -47,7 +47,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         Returns:
             Files: Updated files list including pointers to the API markdown files which are stored in a temporary directory
         """
-        for file in Path(self.config.package_dir).glob("**/[!_]*.py"):
+        for file in sorted(Path(self.config.package_dir).glob("**/[!_]*.py")):
             if file.as_posix() in self.config.skip:
                 continue
             fileobj = self.py_to_md(file, config)
