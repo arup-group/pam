@@ -90,7 +90,7 @@ have attributes or be able to use a household attribute id. Check this is intend
     for person in stream_matsim_persons(
         plans_path,
         attributes=attributes,
-        vehicles=vehicle_types,
+        vehicles=population.vehicle_types,
         weight=weight,
         version=version,
         simplify_pt_trips=simplify_pt_trips,

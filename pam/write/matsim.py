@@ -4,10 +4,9 @@ from datetime import datetime
 import logging
 from pathlib import Path
 from lxml import etree as et
-from typing import Optional, Set, Union
+from typing import Optional, Union
 
 from pam.activity import Plan, Activity, Leg
-from pam.vehicles import Vehicle, ElectricVehicle, VehicleType
 from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
 from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
@@ -179,9 +178,9 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
         attribute = et.SubElement(
             attributes,
             "attribute",
-            {"class": "org.matsim.vehicles.PersonVehicles", "name": str(k)},
+            {"class": "org.matsim.vehicles.PersonVehicles", "name": str("vehicles")},
         )
-        attribute.text = str(v)
+        attribute.text = str(person.vehicles)
 
     for k, v in person.attributes.items():
         add_attribute(attributes, k, v)
@@ -297,122 +296,3 @@ def population_v6_dtd():
         )
     )
     return et.DTD(dtd_path)
-
-
-def write_vehicles(
-    output_dir,
-    population,
-    all_vehicles_filename="all_vehicles.xml",
-    electric_vehicles_filename="electric_vehicles.xml",
-):
-    """
-    Writes:
-        - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        - electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    given a population in which Persons have been assigned vehicles.
-    :param output_dir: output directory for all_vehicles file
-    :param population: pam.core.Population
-    :param all_vehicles_filename: name of output all vehicles file, defaults to 'all_vehicles.xml`
-    :param electric_vehicles_filename: name of output electric vehicles file, defaults to 'electric_vehicles.xml`
-    :return:
-    """
-    if population.has_vehicles:
-        vehs_path = os.path.join(output_dir, file_name)
-        path = os.path.join(output_dir, file_name)
-        population.vehicle_types.to_xml(
-            output_dir, vehs_path="all_vehicles.xml", evs_path="electric_vehicles.xml"
-        )
-
-        if population.has_uniquely_indexed_vehicle_types:
-            write_all_vehicles(
-                output_dir,
-                vehicles=population.vehicles(),
-                vehicle_types=population.vehicle_types(),
-                file_name=all_vehicles_filename,
-            )
-            if population.has_electric_vehicles:
-                logging.info("Population includes electric vehicles")
-                electric_vehicles = set(population.electric_vehicles())
-                write_electric_vehicles(
-                    output_dir,
-                    vehicles=electric_vehicles,
-                    file_name=electric_vehicles_filename,
-                )
-                electric_vehicle_charger_types = (
-                    population.electric_vehicle_charger_types()
-                )
-                logging.info(
-                    f"Found {len(electric_vehicles)} electric vehicles "
-                    f"with unique charger types: {electric_vehicle_charger_types}. "
-                    "Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd "
-                    "if you're running a simulation using org.matsim.contrib.ev"
-                )
-            else:
-                logging.info("Provided population does not have electric vehicles")
-        else:
-            logging.warning(
-                "The vehicle types in provided population do not have unique indices. Current Vehicle "
-                f"Type IDs: {[vt.id for vt in population.vehicle_types()]}"
-            )
-    else:
-        logging.warning("Provided population does not have vehicles")
-
-
-def write_all_vehicles(
-    output_dir,
-    vehicles: Set[Vehicle],
-    vehicle_types: Set[VehicleType],
-    file_name="all_vehicles.xml",
-):
-    """
-    Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-    for MATSim
-    :param output_dir: output directory for all_vehicles file
-    :param vehicles: collection of vehicles to write
-    :param vehicle_types: collection of vehicle types to write
-    :param file_name: name of output file, defaults to 'all_vehicles.xml`
-    :return: None
-    """
-    path = os.path.join(output_dir, file_name)
-    logging.info(f"Writing all vehicles to {path}")
-
-    with et.xmlfile(path, encoding="utf-8") as xf:
-        xf.write_declaration()
-        vehicleDefinitions_attribs = {
-            "xmlns": "http://www.matsim.org/files/dtd",
-            "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            "xsi:schemaLocation": "http://www.matsim.org/files/dtd "
-            "http://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd",
-        }
-        with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
-            for vehicle_type in set(vehicle_types):
-                vehicle_type.to_xml(xf)
-            vehicles = list(vehicles)
-            vehicles.sort()
-            for vehicle in vehicles:
-                vehicle.to_xml(xf)
-
-
-def write_electric_vehicles(
-    output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"
-):
-    """
-    Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    for MATSim
-    :param output_dir: output directory for electric_vehicles file
-    :param vehicles: collection of electric vehicles to write
-    :param file_name: name of output file, defaults to 'electric_vehicles.xml`
-    :return: None
-    """
-    path = os.path.join(output_dir, file_name)
-    logging.info(f"Writing electric vehicles to {path}")
-
-    with et.xmlfile(path, encoding="utf-8") as xf:
-        xf.write_declaration(
-            doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">'
-        )
-        with xf.element("vehicles"):
-            vehicles = list(vehicles)
-            vehicles.sort()
-            for vehicle in vehicles:
-                vehicle.to_xml(xf)
