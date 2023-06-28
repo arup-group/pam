@@ -2656,12 +2656,12 @@ from pam.plot.stats import plot_activity_times, plot_leg_times</div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_data&quot;</span><span class="p">)</span>
 <span class="n">trips</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;example_travel_diaries.csv&quot;</span><span class="p">))</span>
 <span class="n">attributes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;example_attributes.csv&quot;</span><span class="p">))</span>
-<span class="n">attributes</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-2" class="clipboard-copy-txt">data_path = os.path.join("data", "example_data")
 trips = pd.read_csv(os.path.join(data_path, "example_travel_diaries.csv"))
 attributes = pd.read_csv(os.path.join(data_path, "example_attributes.csv"))
-attributes.set_index("pid", inplace=True)</div>
+attributes = attributes.set_index("pid")</div>
         
         </div>
     </div>

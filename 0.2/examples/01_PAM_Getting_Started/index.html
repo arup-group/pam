@@ -3200,9 +3200,7 @@ person.print()</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">print_simple_stats</span><span class="p">(</span><span class="n">population</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Print some simple population statistics.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print some simple population statistics.&quot;&quot;&quot;</span>
     <span class="n">time_at_home</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">travel_time</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">low_income_central_trips</span> <span class="o">=</span> <span class="mi">0</span>
@@ -3235,9 +3233,7 @@ person.print()</div>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;High income trips to Central London: </span><span class="si">{</span><span class="n">high_income_central_trips</span><span class="si">}</span><span class="s2"> trips&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-6" class="clipboard-copy-txt">def print_simple_stats(population):
-    """
-    Print some simple population statistics.
-    """
+    """Print some simple population statistics."""
     time_at_home = 0
     travel_time = 0
     low_income_central_trips = 0
@@ -3354,16 +3350,14 @@ High income trips to Central London: 4000 trips
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">plot_simple_stats</span><span class="p">(</span><span class="n">population</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plot some simple population statistics.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot some simple population statistics.&quot;&quot;&quot;</span>
     <span class="n">geoms</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;example_data&quot;</span><span class="p">,</span> <span class="s2">&quot;geometry.geojson&quot;</span><span class="p">))</span>
 
     <span class="n">departures</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">arrivals</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">hh</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">hh</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">_hid</span><span class="p">,</span> <span class="n">hh</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">hh</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">freq</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">freq</span>
 
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">:</span>
@@ -3380,16 +3374,14 @@ High income trips to Central London: 4000 trips
         <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-8" class="clipboard-copy-txt">def plot_simple_stats(population):
-    """
-    Plot some simple population statistics.
-    """
+    """Plot some simple population statistics."""
     geoms = gp.read_file(os.path.join("data", "example_data", "geometry.geojson"))
 
     departures = defaultdict(int)
     arrivals = defaultdict(int)
 
-    for hid, hh in population.households.items():
-        for pid, person in hh.people.items():
+    for _hid, hh in population.households.items():
+        for _pid, person in hh.people.items():
             freq = person.freq
 
             for p in person.plan:

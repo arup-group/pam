@@ -3572,12 +3572,10 @@ facilities.head()</div>
 
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">)</span>
 <span class="n">education</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Educational facilities&quot;</span><span class="p">)</span>
-<span class="c1"># lsoas_clipped.plot(ax = ax1)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">boundary</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">)</span>
 <span class="n">medical</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Medical facilities&quot;</span><span class="p">)</span>
-<span class="c1"># lsoas_clipped.plot(ax = ax2)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 <div id="cell-8" class="clipboard-copy-txt">education = facilities[facilities["activity"] == "education"]
@@ -3587,12 +3585,10 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 12))
 
 boundary.plot(ax=ax1, color="steelblue")
 education.plot(ax=ax1, color="orange", label="Educational facilities")
-# lsoas_clipped.plot(ax = ax1)
 ax1.legend()
 
 boundary.plot(ax=ax2, color="steelblue")
 medical.plot(ax=ax2, color="red", label="Medical facilities")
-# lsoas_clipped.plot(ax = ax2)
 ax2.legend()</div>
         
         </div>
@@ -3661,12 +3657,10 @@ class="
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># zones = lsoas_clipped</span>
-<span class="n">lsoas_clipped</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:27700&quot;</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">lsoas_clipped</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:27700&quot;</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">lsoas_clipped</span><span class="p">)</span>
 </pre></div>
-<div id="cell-9" class="clipboard-copy-txt"># zones = lsoas_clipped
-lsoas_clipped.crs = "EPSG:27700"
+<div id="cell-9" class="clipboard-copy-txt">lsoas_clipped.crs = "EPSG:27700"
 len(lsoas_clipped)</div>
         
         </div>
@@ -3754,12 +3748,12 @@ len(lsoas_clipped)</div>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># build the sampler</span>
 <span class="n">facility_sampler</span> <span class="o">=</span> <span class="n">facility</span><span class="o">.</span><span class="n">FacilitySampler</span><span class="p">(</span>
-    <span class="n">facilities</span><span class="o">=</span><span class="n">facilities</span><span class="p">,</span> <span class="n">zones</span><span class="o">=</span><span class="n">lsoas_clipped</span><span class="p">,</span> <span class="n">build_xml</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">facilities</span><span class="o">=</span><span class="n">facilities</span><span class="p">,</span> <span class="n">zones</span><span class="o">=</span><span class="n">lsoas_clipped</span><span class="p">,</span> <span class="n">build_xml</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-11" class="clipboard-copy-txt"># build the sampler
 facility_sampler = facility.FacilitySampler(
-    facilities=facilities, zones=lsoas_clipped, build_xml=True, fail=False, random_default=True
+    facilities=facilities, zones=lsoas_clipped, build_xml=True, fail=False, random_default=True,
 )</div>
         
         </div>
@@ -3956,7 +3950,6 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
 <span class="sd">    The trip finally ends at home.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">population</span> <span class="o">=</span> <span class="n">Population</span><span class="p">()</span>  <span class="c1"># Initialise an empty population</span>
 
     <span class="c1"># Create simple personal attributes</span>
@@ -4023,8 +4016,8 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
 
         <span class="n">agent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
             <span class="n">Activity</span><span class="p">(</span>
-                <span class="n">seq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="n">location1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">location1_loc</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">leaves_home</span><span class="p">)</span>
-            <span class="p">)</span>
+                <span class="n">seq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="n">location1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">location1_loc</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">leaves_home</span><span class="p">),</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Initiated parameters</span>
@@ -4044,7 +4037,7 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">random_act</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sub_activity</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">random_act</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;work&quot;</span> <span class="ow">or</span> <span class="s2">&quot;education&quot;</span> <span class="ow">or</span> <span class="s2">&quot;leisure&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">random_act</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;work&quot;</span><span class="p">):</span>
                 <span class="n">leaves_primary</span> <span class="o">=</span> <span class="n">arrives_primary</span> <span class="o">+</span> <span class="n">trip_duration_main_activity</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">leaves_primary</span> <span class="o">=</span> <span class="n">arrives_primary</span> <span class="o">+</span> <span class="n">trip_duration_sub_activity</span>
@@ -4063,7 +4056,7 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
                     <span class="n">end_loc</span><span class="o">=</span><span class="n">location_next_loc</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">leave_time</span><span class="p">),</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">arrives_primary</span><span class="p">),</span>
-                <span class="p">)</span>
+                <span class="p">),</span>
             <span class="p">)</span>
 
             <span class="n">agent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -4074,7 +4067,7 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
                     <span class="n">loc</span><span class="o">=</span><span class="n">location_next_loc</span><span class="p">,</span>
                     <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">arrives_primary</span><span class="p">),</span>
                     <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">leaves_primary</span><span class="p">),</span>
-                <span class="p">)</span>
+                <span class="p">),</span>
             <span class="p">)</span>
 
             <span class="c1"># Update parameters</span>
@@ -4094,7 +4087,7 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
                 <span class="n">end_loc</span><span class="o">=</span><span class="n">location1_loc</span><span class="p">,</span>
                 <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">leave_time</span><span class="p">),</span>
                 <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">arrives_home</span><span class="p">),</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Activity</span>
@@ -4106,7 +4099,7 @@ mapping_dict1 = dict(zip(lsoas_clipped.index, lsoas_clipped.LA_NAME))</div>
                 <span class="n">loc</span><span class="o">=</span><span class="n">location1_loc</span><span class="p">,</span>
                 <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="n">arrives_home</span><span class="p">),</span>
                 <span class="n">end_time</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">population</span>
@@ -4121,7 +4114,6 @@ def generate_agents(no_of_agents):
     The trip finally ends at home.
 
     """
-
     population = Population()  # Initialise an empty population
 
     # Create simple personal attributes
@@ -4188,8 +4180,8 @@ def generate_agents(no_of_agents):
 
         agent.add(
             Activity(
-                seq=1, act="home", area=location1, loc=location1_loc, start_time=mtdt(0), end_time=mtdt(leaves_home)
-            )
+                seq=1, act="home", area=location1, loc=location1_loc, start_time=mtdt(0), end_time=mtdt(leaves_home),
+            ),
         )
 
         # Initiated parameters
@@ -4209,7 +4201,7 @@ def generate_agents(no_of_agents):
             else:
                 random_act = np.random.choice(sub_activity)
 
-            if random_act == ("work" or "education" or "leisure"):
+            if random_act == ("work"):
                 leaves_primary = arrives_primary + trip_duration_main_activity
             else:
                 leaves_primary = arrives_primary + trip_duration_sub_activity
@@ -4228,7 +4220,7 @@ def generate_agents(no_of_agents):
                     end_loc=location_next_loc,
                     start_time=mtdt(leave_time),
                     end_time=mtdt(arrives_primary),
-                )
+                ),
             )
 
             agent.add(
@@ -4239,7 +4231,7 @@ def generate_agents(no_of_agents):
                     loc=location_next_loc,
                     start_time=mtdt(arrives_primary),
                     end_time=mtdt(leaves_primary),
-                )
+                ),
             )
 
             # Update parameters
@@ -4259,7 +4251,7 @@ def generate_agents(no_of_agents):
                 end_loc=location1_loc,
                 start_time=mtdt(leave_time),
                 end_time=mtdt(arrives_home),
-            )
+            ),
         )
 
         # Activity
@@ -4271,7 +4263,7 @@ def generate_agents(no_of_agents):
                 loc=location1_loc,
                 start_time=mtdt(arrives_home),
                 end_time=END_OF_DAY,
-            )
+            ),
         )
 
     return population</div>
@@ -4655,11 +4647,11 @@ population.random_person().print()</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">random_person</span><span class="p">()</span>
     <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
-<div id="cell-20" class="clipboard-copy-txt">for i in range(5):
+<div id="cell-20" class="clipboard-copy-txt">for _i in range(5):
     p = population.random_person()
     p.plot()</div>
         
@@ -5422,14 +5414,14 @@ class="
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">write_od_matrices</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;outputs&quot;</span><span class="p">)</span>
 <span class="n">od_matrices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="s2">&quot;total_od.csv&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="s2">&quot;total_od.csv&quot;</span><span class="p">),</span>
 <span class="p">)</span>  <span class="c1"># we should change this method to be consistent with other - ie return a dataframe</span>
 <span class="n">od_matrices</span><span class="p">[</span><span class="s2">&quot;total origins&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">od_matrices</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Origin&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">od_matrices</span>
 </pre></div>
 <div id="cell-28" class="clipboard-copy-txt">write_od_matrices(population, path="outputs")
 od_matrices = pd.read_csv(
-    os.path.join("outputs", "total_od.csv")
+    os.path.join("outputs", "total_od.csv"),
 )  # we should change this method to be consistent with other - ie return a dataframe
 od_matrices["total origins"] = od_matrices.drop("Origin", axis=1).sum(axis=1)
 od_matrices</div>
@@ -5901,14 +5893,14 @@ class="
 <span class="n">hhs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="s2">&quot;households.csv&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;hid&quot;</span><span class="p">)</span>
 <span class="n">trips</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="s2">&quot;legs.csv&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">trips</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;origin activity&quot;</span><span class="p">:</span> <span class="s2">&quot;oact&quot;</span><span class="p">,</span> <span class="s2">&quot;destination activity&quot;</span><span class="p">:</span> <span class="s2">&quot;dact&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trips</span> <span class="o">=</span> <span class="n">trips</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;origin activity&quot;</span><span class="p">:</span> <span class="s2">&quot;oact&quot;</span><span class="p">,</span> <span class="s2">&quot;destination activity&quot;</span><span class="p">:</span> <span class="s2">&quot;dact&quot;</span><span class="p">})</span>
 <span class="n">trips</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 <div id="cell-30" class="clipboard-copy-txt">people = pd.read_csv(os.path.join("outputs", "people.csv")).set_index("pid")
 hhs = pd.read_csv(os.path.join("outputs", "households.csv")).set_index("hid")
 trips = pd.read_csv(os.path.join("outputs", "legs.csv")).drop(["Unnamed: 0"], axis=1)
 
-trips.rename(columns={"origin activity": "oact", "destination activity": "dact"}, inplace=True)
+trips = trips.rename(columns={"origin activity": "oact", "destination activity": "dact"})
 trips.head()</div>
         
         </div>

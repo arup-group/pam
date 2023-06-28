@@ -2887,12 +2887,12 @@ from pam.utils import minutes_to_datetime</div>
 
 <span class="n">zones</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">polygon_list</span><span class="p">)</span>
 <span class="n">zones</span><span class="p">[</span><span class="s2">&quot;zone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_list</span>
-<span class="n">zones</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">)</span>
 
 <span class="c1"># create facilities</span>
 <span class="n">point_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">activity</span> <span class="ow">in</span> <span class="n">activities_list</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
         <span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">l</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">l</span><span class="p">)</span>
         <span class="n">point_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
@@ -2902,7 +2902,7 @@ from pam.utils import minutes_to_datetime</div>
                 <span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
                 <span class="s2">&quot;transit&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span>
                 <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">point</span><span class="p">,</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
         <span class="p">)</span>
 
 <span class="n">facilities</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">point_list</span><span class="p">)</span>
@@ -2932,12 +2932,12 @@ for y in [2 * l, l, 0]:
 
 zones = gp.GeoDataFrame(geometry=polygon_list)
 zones["zone"] = zone_list
-zones.set_index("zone", inplace=True)
+zones = zones.set_index("zone")
 
 # create facilities
 point_list = []
 for activity in activities_list:
-    for i in range(1000):
+    for _i in range(1000):
         point = Point(np.random.rand() * 3 * l, np.random.rand() * 3 * l)
         point_list.append(
             {
@@ -2947,7 +2947,7 @@ for activity in activities_list:
                 "area": np.random.randint(1, 100),
                 "transit": np.random.randint(1, 10000),
                 "geometry": point,
-            }
+            },
         )
 
 facilities = gp.GeoDataFrame(point_list)
@@ -3201,11 +3201,11 @@ facilities.head()</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="nb">print</span><span class="p">(</span>
-    <span class="s2">&quot;The expected straight-line speed for the trip is: </span><span class="si">{}</span><span class="s2"> kph&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">EXPECTED_EUCLIDEAN_SPEEDS</span><span class="p">[</span><span class="s2">&quot;walk&quot;</span><span class="p">])</span>
+    <span class="s2">&quot;The expected straight-line speed for the trip is: </span><span class="si">{}</span><span class="s2"> kph&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">EXPECTED_EUCLIDEAN_SPEEDS</span><span class="p">[</span><span class="s2">&quot;walk&quot;</span><span class="p">]),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-4" class="clipboard-copy-txt">print(
-    "The expected straight-line speed for the trip is: {} kph".format(pam.variables.EXPECTED_EUCLIDEAN_SPEEDS["walk"])
+    "The expected straight-line speed for the trip is: {} kph".format(pam.variables.EXPECTED_EUCLIDEAN_SPEEDS["walk"]),
 )</div>
         
         </div>
@@ -3279,7 +3279,7 @@ facilities.head()</div>
         <span class="n">end_area</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
         <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span>
         <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span>
-    <span class="p">)</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 <span class="n">p1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activity</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">120</span><span class="p">)))</span>
 
@@ -3299,7 +3299,7 @@ p1.add(
         end_area="a",
         start_time=minutes_to_datetime(60),
         end_time=minutes_to_datetime(90),
-    )
+    ),
 )
 p1.add(Activity(seq=2, act="work", area="a", start_time=minutes_to_datetime(90), end_time=minutes_to_datetime(120)))
 
@@ -3378,7 +3378,7 @@ logger.setLevel(logging.CRITICAL)</div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">test_sampler_distance</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">n_iterations</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># increase this</span>
     <span class="n">distance_commute</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">complex_sampler</span><span class="p">:</span>
             <span class="n">population</span><span class="o">.</span><span class="n">sample_locs_complex</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -3395,7 +3395,7 @@ logger.setLevel(logging.CRITICAL)</div>
 <div id="cell-7" class="clipboard-copy-txt">def test_sampler_distance(population, sampler, n_iterations=20, complex_sampler=False, title=None):  # increase this
     distance_commute = []
 
-    for i in range(n_iterations):
+    for _i in range(n_iterations):
         if complex_sampler:
             population.sample_locs_complex(sampler)
         else:
@@ -3441,22 +3441,22 @@ logger.setLevel(logging.CRITICAL)</div>
 
 
 <span class="n">facility_sampler_nonweighted</span> <span class="o">=</span> <span class="n">facility</span><span class="o">.</span><span class="n">FacilitySampler</span><span class="p">(</span>
-    <span class="n">facilities</span><span class="o">=</span><span class="n">facilities</span><span class="p">,</span> <span class="n">zones</span><span class="o">=</span><span class="n">zones</span><span class="p">,</span> <span class="n">build_xml</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">facilities</span><span class="o">=</span><span class="n">facilities</span><span class="p">,</span> <span class="n">zones</span><span class="o">=</span><span class="n">zones</span><span class="p">,</span> <span class="n">build_xml</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">test_sampler_distance</span><span class="p">(</span>
-    <span class="n">population</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling&quot;</span>
+    <span class="n">population</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-8" class="clipboard-copy-txt"># simple sampling
 
 
 facility_sampler_nonweighted = facility.FacilitySampler(
-    facilities=facilities, zones=zones, build_xml=True, fail=False, random_default=True
+    facilities=facilities, zones=zones, build_xml=True, fail=False, random_default=True,
 )
 
 test_sampler_distance(
-    population, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling"
+    population, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling",
 )</div>
         
         </div>
@@ -3528,7 +3528,7 @@ jp-needs-light-background
 <span class="p">)</span>
 
 <span class="n">test_sampler_distance</span><span class="p">(</span>
-    <span class="n">population</span><span class="p">,</span> <span class="n">facility_sampler_weighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, distance-weighted sampling&quot;</span>
+    <span class="n">population</span><span class="p">,</span> <span class="n">facility_sampler_weighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, distance-weighted sampling&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-9" class="clipboard-copy-txt"># distance-weighted sampling
@@ -3545,7 +3545,7 @@ facility_sampler_weighted = facility.FacilitySampler(
 )
 
 test_sampler_distance(
-    population, facility_sampler_weighted, complex_sampler=True, title="Commute distance, distance-weighted sampling"
+    population, facility_sampler_weighted, complex_sampler=True, title="Commute distance, distance-weighted sampling",
 )</div>
         
         </div>
@@ -3690,7 +3690,7 @@ jp-needs-light-background
         <span class="n">end_area</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span>
         <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span>
         <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span>
-    <span class="p">)</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 <span class="n">p2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activity</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">120</span><span class="p">)))</span>
 
@@ -3701,7 +3701,7 @@ jp-needs-light-background
 <span class="n">population2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hh2</span><span class="p">)</span>
 
 <span class="n">test_sampler_distance</span><span class="p">(</span>
-    <span class="n">population2</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling, car&quot;</span>
+    <span class="n">population2</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling, car&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">test_sampler_distance</span><span class="p">(</span>
     <span class="n">population2</span><span class="p">,</span>
@@ -3720,7 +3720,7 @@ p2.add(
         end_area="b",
         start_time=minutes_to_datetime(60),
         end_time=minutes_to_datetime(90),
-    )
+    ),
 )
 p2.add(Activity(seq=2, act="work", area="b", start_time=minutes_to_datetime(90), end_time=minutes_to_datetime(120)))
 
@@ -3731,7 +3731,7 @@ population2 = Population()
 population2.add(hh2)
 
 test_sampler_distance(
-    population2, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling, car"
+    population2, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling, car",
 )
 test_sampler_distance(
     population2,
@@ -3833,7 +3833,7 @@ jp-needs-light-background
         <span class="n">end_area</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">,</span>
         <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span>
         <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span>
-    <span class="p">)</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 <span class="n">p3</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activity</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">minutes_to_datetime</span><span class="p">(</span><span class="mi">120</span><span class="p">)))</span>
 
@@ -3844,7 +3844,7 @@ jp-needs-light-background
 <span class="n">population3</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hh3</span><span class="p">)</span>
 
 <span class="n">test_sampler_distance</span><span class="p">(</span>
-    <span class="n">population3</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling, car&quot;</span>
+    <span class="n">population3</span><span class="p">,</span> <span class="n">facility_sampler_nonweighted</span><span class="p">,</span> <span class="n">complex_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Commute distance, simple sampling, car&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">test_sampler_distance</span><span class="p">(</span>
     <span class="n">population3</span><span class="p">,</span>
@@ -3863,7 +3863,7 @@ p3.add(
         end_area="c",
         start_time=minutes_to_datetime(60),
         end_time=minutes_to_datetime(90),
-    )
+    ),
 )
 p3.add(Activity(seq=2, act="work", area="c", start_time=minutes_to_datetime(90), end_time=minutes_to_datetime(120)))
 
@@ -3874,7 +3874,7 @@ population3 = Population()
 population3.add(hh3)
 
 test_sampler_distance(
-    population3, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling, car"
+    population3, facility_sampler_nonweighted, complex_sampler=False, title="Commute distance, simple sampling, car",
 )
 test_sampler_distance(
     population3,

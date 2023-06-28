@@ -3045,7 +3045,7 @@ person.print()</div>
         <span class="n">end_loc</span><span class="o">=</span><span class="n">Point</span><span class="p">((</span><span class="mi">1234</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)),</span>
         <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">445</span><span class="p">),</span>
         <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">505</span><span class="p">),</span>
-    <span class="p">)</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 <span class="n">person</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activity</span><span class="p">(</span><span class="n">act</span><span class="o">=</span><span class="s2">&quot;hotel&quot;</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">505</span><span class="p">),</span> <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">1000</span><span class="p">)))</span>
 
@@ -3064,7 +3064,7 @@ person.add(
         end_loc=Point((1234, 1234)),
         start_time=mtdt(445),
         end_time=mtdt(505),
-    )
+    ),
 )
 person.add(Activity(act="hotel", area="B", start_time=mtdt(505), end_time=mtdt(1000)))
 
@@ -3206,7 +3206,7 @@ person.print()</div>
             <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">1050</span><span class="p">),</span>
             <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>  <span class="c1"># assuming a 24 hour day</span>
         <span class="p">),</span>
-    <span class="p">]</span>
+    <span class="p">],</span>
 <span class="p">)</span>
 
 <span class="n">tom</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -3217,8 +3217,8 @@ person.print()</div>
             <span class="n">loc</span><span class="o">=</span><span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
             <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
             <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>  <span class="c1"># assuming a 24 hour day</span>
-        <span class="p">)</span>
-    <span class="p">]</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-7" class="clipboard-copy-txt">the_smiths = Household("Smiths")
@@ -3258,7 +3258,7 @@ tammy.add(
             start_time=mtdt(1050),
             end_time=mtdt(24 * 60),  # assuming a 24 hour day
         ),
-    ]
+    ],
 )
 
 tom.add(
@@ -3269,8 +3269,8 @@ tom.add(
             loc=Point((0, 0)),
             start_time=mtdt(0),
             end_time=mtdt(24 * 60),  # assuming a 24 hour day
-        )
-    ]
+        ),
+    ],
 )</div>
         
         </div>
@@ -3363,7 +3363,7 @@ jp-needs-light-background
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">milkman</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bot&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;electric vehicle&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">})</span>
 
 <span class="n">population</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="n">milkman</span>
+    <span class="n">milkman</span><span class="p">,</span>
 <span class="p">)</span>  <span class="c1"># adding a person directly to the population is possible but a household with the same id will be auto generated</span>
 
 <span class="n">milkman</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -3405,13 +3405,13 @@ jp-needs-light-background
             <span class="n">start_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">350</span><span class="p">),</span>
             <span class="n">end_time</span><span class="o">=</span><span class="n">mtdt</span><span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span><span class="p">),</span>  <span class="c1"># assuming a 24 hour day</span>
         <span class="p">),</span>
-    <span class="p">]</span>
+    <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-9" class="clipboard-copy-txt">milkman = Person(0, attributes={"bot": "yes", "electric vehicle": "yes"})
 
 population.add(
-    milkman
+    milkman,
 )  # adding a person directly to the population is possible but a household with the same id will be auto generated
 
 milkman.add(
@@ -3453,7 +3453,7 @@ milkman.add(
             start_time=mtdt(350),
             end_time=mtdt(24 * 60),  # assuming a 24 hour day
         ),
-    ]
+    ],
 )</div>
         
         </div>

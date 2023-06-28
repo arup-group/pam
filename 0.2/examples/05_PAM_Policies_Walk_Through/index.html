@@ -4850,7 +4850,7 @@ jp-needs-light-background
 
 
 <span class="n">policy_remove_higher_education</span> <span class="o">=</span> <span class="n">PersonPolicy</span><span class="p">(</span>
-    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">({</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="n">over_17</span><span class="p">},</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">({</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="n">over_17</span><span class="p">},</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-21" class="clipboard-copy-txt">def over_17(attribute_value):
@@ -4858,7 +4858,7 @@ jp-needs-light-background
 
 
 policy_remove_higher_education = PersonPolicy(
-    RemoveActivity(["education"]), PersonProbability(1), PersonAttributeFilter({"age": over_17}, how="all")
+    RemoveActivity(["education"]), PersonProbability(1), PersonAttributeFilter({"age": over_17}, how="all"),
 )</div>
         
         </div>
@@ -5103,7 +5103,7 @@ Attributes:
 <span class="c1"># in the end the policy removes both education and escort (`RemoveActivity([&#39;education&#39;, &#39;escort&#39;])`)</span>
 <span class="c1"># but the presence of escort doesn&#39;t affect the likelihood</span>
 <span class="n">policy_remove_any_education</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
-    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">],</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">],</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">(</span><span class="n">conditions</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-25" class="clipboard-copy-txt">def attribute_False(attribute_value):
@@ -5121,7 +5121,7 @@ conditions = {"care_constrained": attribute_False, "wfh": attribute_True}
 # in the end the policy removes both education and escort (`RemoveActivity(['education', 'escort'])`)
 # but the presence of escort doesn't affect the likelihood
 policy_remove_any_education = HouseholdPolicy(
-    RemoveActivity(["education", "escort"]), ActivityProbability(["education"], 0.95), PersonAttributeFilter(conditions)
+    RemoveActivity(["education", "escort"]), ActivityProbability(["education"], 0.95), PersonAttributeFilter(conditions),
 )</div>
         
         </div>
@@ -5704,10 +5704,12 @@ jp-needs-light-background
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find mapping: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> in sampling features: </span><span class="si">{</span><span class="n">features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find mapping: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> in sampling features: </span><span class="si">{</span><span class="n">features</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find feature for </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in distribution: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find feature for </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in distribution: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">p</span>
 </pre></div>
 <div id="cell-34" class="clipboard-copy-txt">def discrete_joint_distribution_sampler(person, mapping, distribution):
@@ -5715,10 +5717,12 @@ jp-needs-light-background
     for key in mapping:
         value = person.attributes.get(key)
         if value is None:
-            raise KeyError(f"Cannot find mapping: {key} in sampling features: {features}")
+            msg = f"Cannot find mapping: {key} in sampling features: {features}"
+            raise KeyError(msg)
         p = p.get(value)
         if p is None:
-            raise KeyError(f"Cannot find feature for {key}: {value} in distribution: {p}")
+            msg = f"Cannot find feature for {key}: {value} in distribution: {p}"
+            raise KeyError(msg)
     return p</div>
         
         </div>
@@ -5751,12 +5755,12 @@ jp-needs-light-background
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">vulnerable_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">]</span>
 <span class="n">vulnerable_distribution</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="p">[{</span><span class="s2">&quot;male&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;female&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)])</span>
+    <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="p">[{</span><span class="s2">&quot;male&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;female&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)]),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-35" class="clipboard-copy-txt">vulnerable_mapping = ["age", "gender"]
 vulnerable_distribution = dict(
-    zip(list(range(101)), [{"male": i / 100, "female": i / 100, "other": i / 100} for i in range(101)])
+    zip(list(range(101)), [{"male": i / 100, "female": i / 100, "other": i / 100} for i in range(101)]),
 )</div>
         
         </div>
@@ -6328,11 +6332,11 @@ Attributes:
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_work_from_home</span> <span class="o">=</span> <span class="n">PersonPolicy</span><span class="p">(</span>
-    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">PersonAttributeFilter</span><span class="p">(</span><span class="n">conditions</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-45" class="clipboard-copy-txt">policy_work_from_home = PersonPolicy(
-    RemoveActivity(["work"]), PersonProbability(0.5), PersonAttributeFilter(conditions)
+    RemoveActivity(["work"]), PersonProbability(0.5), PersonAttributeFilter(conditions),
 )</div>
         
         </div>
@@ -6694,11 +6698,11 @@ jp-needs-light-background
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_reduce_shopping_activities</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
-    <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-51" class="clipboard-copy-txt">policy_reduce_shopping_activities = HouseholdPolicy(
-    ReduceSharedActivity(["shop", "shop_1", "shop_2"]), ActivityProbability(["shop", "shop_1", "shop_2"], 1)
+    ReduceSharedActivity(["shop", "shop_1", "shop_2"]), ActivityProbability(["shop", "shop_1", "shop_2"], 1),
 )</div>
         
         </div>
@@ -6929,11 +6933,11 @@ jp-needs-light-background
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_move_shopping</span> <span class="o">=</span> <span class="n">PersonPolicy</span><span class="p">(</span>
-    <span class="n">MoveActivityTourToHomeLocation</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">MoveActivityTourToHomeLocation</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-56" class="clipboard-copy-txt">policy_move_shopping = PersonPolicy(
-    MoveActivityTourToHomeLocation(["shop_1", "shop", "shop_2"]), ActivityProbability(["shop_1", "shop", "shop_2"], 1.0)
+    MoveActivityTourToHomeLocation(["shop_1", "shop", "shop_2"]), ActivityProbability(["shop_1", "shop", "shop_2"], 1.0),
 )</div>
         
         </div>

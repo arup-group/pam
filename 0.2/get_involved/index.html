@@ -633,13 +633,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-profiling" class="md-nav__link">
-    Memory profiling
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     Contributing
   </a>
@@ -1706,13 +1699,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-profiling" class="md-nav__link">
-    Memory profiling
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     Contributing
   </a>
@@ -1798,15 +1784,35 @@ The methods for this logic is in <code>pam.core.People</code>.</p>
 <h2 id="develop">Develop<a class="headerlink" href="#develop" title="Permanent link">#</a></h2>
 <h3 id="setting-up-a-development-environment">Setting up a development environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permanent link">#</a></h3>
 <p>If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed.
-If installing directly with pip, you can install these libraries using the <code>dev</code> option, i.e., <code>pip install -e ./pam[dev]</code></p>
+If installing directly with pip, you can install these libraries using the <code>dev</code> option, i.e., <code>pip install -e ./pam[dev]</code>
+Either way, you should add your environment as a jupyter kernel, so the example notebooks can run in the tests: <code>ipython kernel install --user --name=pam</code></p>
 <p>If you plan to make changes to the code then please make regular use of the following tools to verify the codebase while you work:</p>
 <ul>
 <li><code>pre-commit</code>: run <code>pre-commit install</code> in your command line to load inbuilt checks that will run every time you commit your changes.
 The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the <a href="https://peps.python.org/pep-0008/">pep8 standard</a>.
-You can also run these checks yourself at any time to ensure staged changes are clean by simple calling <code>pre-commit</code>.</li>
+You can also run these checks yourself at any time to ensure staged changes are clean by calling <code>pre-commit</code>.</li>
 <li><code>pytest</code> - run the unit test suite, check test coverage, and test that the example notebooks successfully run.</li>
 </ul>
-<h3 id="memory-profiling">Memory profiling<a class="headerlink" href="#memory-profiling" title="Permanent link">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have <a class="autorefs autorefs-internal" href="../installation/#choosing-a-different-environment-name">chosen a different environment name</a> to the default <code>pam</code>, you will need to add this as a pytest argument: <code>pytest --nbmake-kernel=[my-env-name]</code></p>
+</div>
+<h4 id="rapid-fire-testing">Rapid-fire testing<a class="headerlink" href="#rapid-fire-testing" title="Permanent link">#</a></h4>
+<p>The following options allow you to strip down the test suite to the bare essentials:</p>
+<ol>
+<li>The test suite includes unit tests and integration tests (in the form of jupyter notebooks found in the <code>examples</code> directory). 
+The integration tests can be slow, so if you want to avoid them during development, you should run <code>pytest tests/</code>.</li>
+<li>You can avoid generating coverage reports, by adding the <code>--no-cov</code> argument: <code>pytest --no-cov</code>.</li>
+<li>By default, the tests run with up to two parallel threads, to increase this to e.g. 4 threads: <code>pytest -n4</code>.</li>
+</ol>
+<p>All together:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pytest<span class="w"> </span>tests/<span class="w"> </span>--no-cov<span class="w"> </span>-n4
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You cannot debug failing tests and have your tests run in parallel, you will need to set <code>-n0</code> if using the <code>--pdb</code> flag</p>
+</div>
+<h4 id="memory-profiling">Memory profiling<a class="headerlink" href="#memory-profiling" title="Permanent link">#</a></h4>
 <p>PAM can be memory intensive; we like to ensure that any development to the core code does not exacerbate this.
 If you are running on a UNIX device (i.e., <strong>not</strong> on Windows), you can test whether any changes you have made adversely impact memory and time performance as follows:</p>
 <ol>
@@ -1815,6 +1821,11 @@ If you are running on a UNIX device (i.e., <strong>not</strong> on Windows), you
 <li>Optionally, to visualise the memory allocation, run <code>pytest -p memray -m "high_mem" --no-cov --memray-bin-path=[my_path] --memray-bin-prefix=[my_prefix]</code> - where you must define <code>[my_path]</code> and <code>[my_prefix]</code> - followed by <code>memray flamegraph [my_path]/[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.bin</code>.
 You will then find the HTML report at <code>[my_path]/memray-flamegraph-[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.html</code>.</li>
 </ol>
+<p>All together:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mamba<span class="w"> </span>install<span class="w"> </span>memray<span class="w"> </span>pytest-memray
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pytest<span class="w"> </span>-p<span class="w"> </span>memray<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;high_mem&quot;</span><span class="w"> </span>--no-cov<span class="w"> </span>--memray-bin-path<span class="o">=[</span>my_path<span class="o">]</span><span class="w"> </span>--memray-bin-prefix<span class="o">=[</span>my_prefix<span class="o">]</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>memray<span class="w"> </span>flamegraph<span class="w"> </span><span class="o">[</span>my_path<span class="o">]</span>/<span class="o">[</span>my_prefix<span class="o">]</span>-tests-test_100_memory_profiling.py-test_activity_loader.bin
+</span></code></pre></div>
 <p>For more information on using memray, refer to their <a href="https://bloomberg.github.io/memray/index.html">documentation</a>.</p>
 <h3 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">#</a></h3>
 <p>To find beginner-friendly existing bugs and feature requests you may like to have a crack at, take a look <a href="https://github.com/arup-group/pam/contribute">here</a>.</p>

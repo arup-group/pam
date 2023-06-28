@@ -1,6 +1,8 @@
-from mkdocs.structure.files import File
-import mkdocs.plugins
 from pathlib import Path
+
+import mkdocs.plugins
+from mkdocs.structure.files import File
+
 
 # Bump priority to ensure files are moved before jupyter notebook conversion takes place
 @mkdocs.plugins.event_priority(50)
@@ -12,6 +14,7 @@ def on_files(files: list, config: dict, **kwargs):
         files.append(_new_file(file, config))
 
     return files
+
 
 def _new_file(path: Path, config: str) -> File:
     return File(

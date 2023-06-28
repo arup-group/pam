@@ -2053,8 +2053,8 @@
 <code class="highlight language-python"><span class="n">seats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.CapacityType.seats" class="headerlink" title="Permanent link">#</a></h3>
@@ -2073,8 +2073,8 @@
 <code class="highlight language-python"><span class="n">standingRoomInPersons</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.CapacityType.standingRoomInPersons" class="headerlink" title="Permanent link">#</a></h3>
@@ -2134,9 +2134,23 @@
         <summary>Source code in <code>pam/vehicle.py</code></summary>
         <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">,</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>                        <span class="p">{</span><span class="s1">&#39;seats&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seats</span><span class="p">),</span> <span class="s1">&#39;standingRoomInPersons&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standingRoomInPersons</span><span class="p">)}))</span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>            <span class="s2">&quot;capacity&quot;</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>            <span class="p">{</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>                <span class="s2">&quot;seats&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seats</span><span class="p">),</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>                <span class="s2">&quot;standingRoomInPersons&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">standingRoomInPersons</span><span class="p">),</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>            <span class="p">},</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>        <span class="p">)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2191,8 +2205,8 @@
 <code class="highlight language-python"><span class="n">battery_capacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">60</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.ElectricVehicle.battery_capacity" class="headerlink" title="Permanent link">#</a></h3>
@@ -2211,8 +2225,8 @@
 <code class="highlight language-python"><span class="n">charger_types</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.ElectricVehicle.charger_types" class="headerlink" title="Permanent link">#</a></h3>
@@ -2231,8 +2245,8 @@
 <code class="highlight language-python"><span class="n">initial_soc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">battery_capacity</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.ElectricVehicle.initial_soc" class="headerlink" title="Permanent link">#</a></h3>
@@ -2251,8 +2265,8 @@
 <code class="highlight language-python"><span class="n">vehicle_type</span><span class="p">:</span> <span class="n">VehicleType</span> <span class="o">=</span> <span class="n">VehicleType</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;defaultElectricVehicleType&#39;</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.ElectricVehicle.vehicle_type" class="headerlink" title="Permanent link">#</a></h3>
@@ -2279,21 +2293,31 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/vehicle.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-82">82</a></span>
-<span class="normal"><a href="#__codelineno-0-83">83</a></span>
-<span class="normal"><a href="#__codelineno-0-84">84</a></span>
-<span class="normal"><a href="#__codelineno-0-85">85</a></span>
-<span class="normal"><a href="#__codelineno-0-86">86</a></span>
-<span class="normal"><a href="#__codelineno-0-87">87</a></span>
-<span class="normal"><a href="#__codelineno-0-88">88</a></span>
-<span class="normal"><a href="#__codelineno-0-89">89</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="k">def</span> <span class="nf">to_e_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
-</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84"></a>        <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;vehicle&quot;</span><span class="p">,</span>
-</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85"></a>                   <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="s1">&#39;battery_capacity&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">battery_capacity</span><span class="p">),</span>
-</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86"></a>                    <span class="s1">&#39;initial_soc&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_soc</span><span class="p">),</span> <span class="s1">&#39;charger_types&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charger_types</span><span class="p">),</span>
-</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a>                    <span class="s1">&#39;vehicle_type&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_type</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
-</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a>                   <span class="p">)</span>
-</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a>    <span class="p">)</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#__codelineno-0-101">101</a></span>
+<span class="normal"><a href="#__codelineno-0-102">102</a></span>
+<span class="normal"><a href="#__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#__codelineno-0-105">105</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a><span class="k">def</span> <span class="nf">to_e_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95"></a>        <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96"></a>            <span class="s2">&quot;vehicle&quot;</span><span class="p">,</span>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a>            <span class="p">{</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98"></a>                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>                <span class="s2">&quot;battery_capacity&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">battery_capacity</span><span class="p">),</span>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>                <span class="s2">&quot;initial_soc&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_soc</span><span class="p">),</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a>                <span class="s2">&quot;charger_types&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charger_types</span><span class="p">),</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a>                <span class="s2">&quot;vehicle_type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_type</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103"></a>            <span class="p">},</span>
+</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>        <span class="p">)</span>
+</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2365,8 +2389,8 @@
 <code class="highlight language-python"><span class="n">vehicle_type</span><span class="p">:</span> <span class="n">VehicleType</span> <span class="o">=</span> <span class="n">VehicleType</span><span class="p">()</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.Vehicle.vehicle_type" class="headerlink" title="Permanent link">#</a></h3>
@@ -2393,9 +2417,9 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/vehicle.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-71">71</a></span>
-<span class="normal"><a href="#__codelineno-0-72">72</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
-</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;vehicle&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_type</span><span class="o">.</span><span class="n">id</span><span class="p">)}))</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;vehicle&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_type</span><span class="o">.</span><span class="n">id</span><span class="p">)}))</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2448,8 +2472,8 @@
 <code class="highlight language-python"><span class="n">capacity</span><span class="p">:</span> <span class="n">CapacityType</span> <span class="o">=</span> <span class="n">CapacityType</span><span class="p">()</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.capacity" class="headerlink" title="Permanent link">#</a></h3>
@@ -2468,8 +2492,8 @@
 <code class="highlight language-python"><span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;personal_vehicle&#39;</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.description" class="headerlink" title="Permanent link">#</a></h3>
@@ -2488,8 +2512,8 @@
 <code class="highlight language-python"><span class="n">flowEfficiencyFactor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.flowEfficiencyFactor" class="headerlink" title="Permanent link">#</a></h3>
@@ -2508,8 +2532,8 @@
 <code class="highlight language-python"><span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;defaultVehicleType&#39;</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.id" class="headerlink" title="Permanent link">#</a></h3>
@@ -2528,8 +2552,8 @@
 <code class="highlight language-python"><span class="n">length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">7.5</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.length" class="headerlink" title="Permanent link">#</a></h3>
@@ -2548,8 +2572,8 @@
 <code class="highlight language-python"><span class="n">networkMode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;car&#39;</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.networkMode" class="headerlink" title="Permanent link">#</a></h3>
@@ -2568,8 +2592,8 @@
 <code class="highlight language-python"><span class="n">passengerCarEquivalents</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.passengerCarEquivalents" class="headerlink" title="Permanent link">#</a></h3>
@@ -2588,8 +2612,8 @@
 <code class="highlight language-python"><span class="n">width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
 
 <a href="#pam.vehicle.VehicleType.width" class="headerlink" title="Permanent link">#</a></h3>
@@ -2620,31 +2644,35 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/vehicle.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-43">43</a></span>
 <span class="normal"><a href="#__codelineno-0-44">44</a></span>
 <span class="normal"><a href="#__codelineno-0-45">45</a></span>
 <span class="normal"><a href="#__codelineno-0-46">46</a></span>
 <span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="nd">@classmethod</span>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="k">def</span> <span class="nf">from_xml_elem</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="n">attribs</span> <span class="o">=</span> <span class="p">{</span><span class="n">attrib</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{http://www.matsim.org/files/dtd}&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span> <span class="n">attrib</span> <span class="k">for</span> <span class="n">attrib</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">}</span>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="nb">id</span><span class="o">=</span><span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">),</span>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>        <span class="n">length</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;meter&#39;</span><span class="p">]),</span>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>        <span class="n">width</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;meter&#39;</span><span class="p">]),</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="n">passengerCarEquivalents</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;passengerCarEquivalents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;pce&#39;</span><span class="p">]),</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a>        <span class="n">networkMode</span><span class="o">=</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;networkMode&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;networkMode&#39;</span><span class="p">],</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>        <span class="n">flowEfficiencyFactor</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;flowEfficiencyFactor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">]),</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>        <span class="n">capacity</span><span class="o">=</span><span class="n">CapacityType</span><span class="o">.</span><span class="n">from_xml_elem</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]),</span>
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>        <span class="n">description</span><span class="o">=</span><span class="n">attribs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="nd">@classmethod</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="k">def</span> <span class="nf">from_xml_elem</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">attribs</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>        <span class="n">attrib</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{http://www.matsim.org/files/dtd}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span> <span class="n">attrib</span> <span class="k">for</span> <span class="n">attrib</span> <span class="ow">in</span> <span class="n">elem</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="p">}</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>        <span class="nb">id</span><span class="o">=</span><span class="n">elem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>        <span class="n">length</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;meter&quot;</span><span class="p">]),</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="n">width</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;meter&quot;</span><span class="p">]),</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">passengerCarEquivalents</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;passengerCarEquivalents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;pce&quot;</span><span class="p">]),</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="n">networkMode</span><span class="o">=</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;networkMode&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;networkMode&quot;</span><span class="p">],</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="n">flowEfficiencyFactor</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;flowEfficiencyFactor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;factor&quot;</span><span class="p">]),</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="n">capacity</span><span class="o">=</span><span class="n">CapacityType</span><span class="o">.</span><span class="n">from_xml_elem</span><span class="p">(</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;capacity&quot;</span><span class="p">]),</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="n">description</span><span class="o">=</span><span class="n">attribs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2665,27 +2693,31 @@
 
       <details class="quote">
         <summary>Source code in <code>pam/vehicle.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="k">with</span> <span class="n">xf</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="s2">&quot;vehicleType&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">}):</span>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">rec</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="n">rec</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span><span class="n">xf</span><span class="p">)</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;length&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;meter&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)}))</span>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;meter&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)}))</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;passengerCarEquivalents&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;pce&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">passengerCarEquivalents</span><span class="p">)}))</span>
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;networkMode&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;networkMode&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">networkMode</span><span class="p">)}))</span>
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;flowEfficiencyFactor&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flowEfficiencyFactor</span><span class="p">)}))</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">):</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>    <span class="k">with</span> <span class="n">xf</span><span class="o">.</span><span class="n">element</span><span class="p">(</span><span class="s2">&quot;vehicleType&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">}):</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>        <span class="n">rec</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>        <span class="n">rec</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="o">.</span><span class="n">to_xml</span><span class="p">(</span><span class="n">xf</span><span class="p">)</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;length&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;meter&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)}))</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;meter&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)}))</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>            <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;passengerCarEquivalents&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;pce&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">passengerCarEquivalents</span><span class="p">)})</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>        <span class="p">)</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;networkMode&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;networkMode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">networkMode</span><span class="p">)}))</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>        <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;flowEfficiencyFactor&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flowEfficiencyFactor</span><span class="p">)}))</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>

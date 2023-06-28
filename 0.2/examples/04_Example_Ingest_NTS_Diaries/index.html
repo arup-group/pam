@@ -4176,7 +4176,7 @@ travel_diaries_in["hh_weight"] = travel_diaries_in.HouseholdID.map(weight_mappin
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">travel_diaries</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">travel_diaries</span> <span class="o">=</span> <span class="n">travel_diaries</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span>  <span class="c1"># rename data</span>
         <span class="s2">&quot;JourSeq&quot;</span><span class="p">:</span> <span class="s2">&quot;seq&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TripOrigUA2009_B01ID&quot;</span><span class="p">:</span> <span class="s2">&quot;ozone&quot;</span><span class="p">,</span>
@@ -4187,12 +4187,11 @@ travel_diaries_in["hh_weight"] = travel_diaries_in.HouseholdID.map(weight_mappin
         <span class="s2">&quot;TripStart&quot;</span><span class="p">:</span> <span class="s2">&quot;tst&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TripEnd&quot;</span><span class="p">:</span> <span class="s2">&quot;tet&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">travel_diaries</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-<div id="cell-11" class="clipboard-copy-txt">travel_diaries.rename(
+<div id="cell-11" class="clipboard-copy-txt">travel_diaries = travel_diaries.rename(
     columns={  # rename data
         "JourSeq": "seq",
         "TripOrigUA2009_B01ID": "ozone",
@@ -4203,7 +4202,6 @@ travel_diaries_in["hh_weight"] = travel_diaries_in.HouseholdID.map(weight_mappin
         "TripStart": "tst",
         "TripEnd": "tet",
     },
-    inplace=True,
 )
 
 travel_diaries.head()</div>
@@ -5274,7 +5272,7 @@ print(len(clean_travel_diaries))</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">string_to_dict</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;used to build dicts from NTS rtf format dictionaries (cut and paste from the NTS documentation)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to build dicts from NTS rtf format dictionaries (cut and paste from the NTS documentation).&quot;&quot;&quot;</span>
     <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -5284,7 +5282,7 @@ print(len(clean_travel_diaries))</div>
     <span class="k">return</span> <span class="n">mapping</span>
 </pre></div>
 <div id="cell-22" class="clipboard-copy-txt">def string_to_dict(string):
-    """used to build dicts from NTS rtf format dictionaries (cut and paste from the NTS documentation)"""
+    """Used to build dicts from NTS rtf format dictionaries (cut and paste from the NTS documentation)."""
     mapping = {}
     for line in string.split("\n"):
         _, v, l = line.split("\t")
@@ -5467,7 +5465,7 @@ clean_travel_diaries["dact"] = clean_travel_diaries["dact"].map(purp_mapping)</d
 <span class="k">def</span> <span class="nf">reweight</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reweight based on multiple diary days, ie if an agent has two diary days, we will treat these as</span>
-<span class="sd">    two unique agents, so we half the original weighting</span>
+<span class="sd">    two unique agents, so we half the original weighting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">group</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">hh_weight</span> <span class="o">/</span> <span class="n">group</span><span class="o">.</span><span class="n">DayID</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">group</span>
@@ -5483,7 +5481,7 @@ clean_travel_diaries["dact"] = clean_travel_diaries["dact"].map(purp_mapping)</d
 def reweight(group):
     """
     Reweight based on multiple diary days, ie if an agent has two diary days, we will treat these as
-    two unique agents, so we half the original weighting
+    two unique agents, so we half the original weighting.
     """
     group["freq"] = group.hh_weight / group.DayID.nunique()
     return group
@@ -5796,7 +5794,7 @@ To adopt the future behavior and silence this warning, use
             <span class="n">split</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">target</span><span class="p">[</span><span class="n">target_on</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
             <span class="n">split</span><span class="p">[</span><span class="n">new_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
             <span class="n">expanded</span> <span class="o">=</span> <span class="n">expanded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
-    <span class="n">expanded</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">new_id</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expanded</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">new_id</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">expanded</span>
 </pre></div>
@@ -5825,7 +5823,7 @@ To adopt the future behavior and silence this warning, use
             split = target.loc[target[target_on] == i]
             split[new_id] = idx
             expanded = expanded.append(split)
-    expanded.set_index(new_id, inplace=True)
+    expanded = expanded.set_index(new_id)
     print("Done")
     return expanded</div>
         
@@ -7202,11 +7200,11 @@ trips.tet = trips.tet.astype(int)</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">population</span> <span class="o">=</span> <span class="n">read</span><span class="o">.</span><span class="n">load_travel_diary</span><span class="p">(</span>
-    <span class="n">trips</span><span class="o">=</span><span class="n">trips</span><span class="p">,</span> <span class="n">persons_attributes</span><span class="o">=</span><span class="n">people</span><span class="p">,</span> <span class="n">hhs_attributes</span><span class="o">=</span><span class="n">hhs</span><span class="p">,</span> <span class="n">trip_freq_as_person_freq</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">trips</span><span class="o">=</span><span class="n">trips</span><span class="p">,</span> <span class="n">persons_attributes</span><span class="o">=</span><span class="n">people</span><span class="p">,</span> <span class="n">hhs_attributes</span><span class="o">=</span><span class="n">hhs</span><span class="p">,</span> <span class="n">trip_freq_as_person_freq</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-32" class="clipboard-copy-txt">population = read.load_travel_diary(
-    trips=trips, persons_attributes=people, hhs_attributes=hhs, trip_freq_as_person_freq=True
+    trips=trips, persons_attributes=people, hhs_attributes=hhs, trip_freq_as_person_freq=True,
 )</div>
         
         </div>
@@ -7930,7 +7928,7 @@ jp-needs-light-background
 
 <span class="n">population_sample</span> <span class="o">=</span> <span class="n">Population</span><span class="p">()</span>
 
-<span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">household</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">_hid</span><span class="p">,</span> <span class="n">household</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">av_hh_weight</span> <span class="o">=</span> <span class="n">household</span><span class="o">.</span><span class="n">freq</span>  <span class="c1"># this is currently the av of person freq in the hh</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">freq_sample</span><span class="p">(</span><span class="n">av_hh_weight</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 
@@ -7951,7 +7949,7 @@ from pam.samplers.basic import freq_sample
 
 population_sample = Population()
 
-for hid, household in population.households.items():
+for _hid, household in population.households.items():
     av_hh_weight = household.freq  # this is currently the av of person freq in the hh
     freq = freq_sample(av_hh_weight, 10)
 
@@ -8068,92 +8066,32 @@ for hid, household in population.households.items():
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">load_facilities</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">from_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span> <span class="n">to_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">):</span>
     <span class="n">facilities</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">facilities</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">from_crs</span>
-    <span class="n">facilities</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">to_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">facilities</span> <span class="o">=</span> <span class="n">facilities</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">to_crs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">facilities</span>
 
 
 <span class="k">def</span> <span class="nf">load_zones</span><span class="p">(</span><span class="n">zones_path</span><span class="p">,</span> <span class="n">from_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">to_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">):</span>
     <span class="n">zones</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">zones_path</span><span class="p">)</span>
-    <span class="n">zones</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">from_crs</span> <span class="o">==</span> <span class="n">to_crs</span><span class="p">:</span>
+    <span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">from_crs</span> <span class="o">!=</span> <span class="n">to_crs</span><span class="p">:</span>
         <span class="n">zones</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">from_crs</span>
-        <span class="n">zones</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">to_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">to_crs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">zones</span>
 </pre></div>
 <div id="cell-46" class="clipboard-copy-txt">def load_facilities(path, from_crs="EPSG:4326", to_crs="EPSG:27700"):
     facilities = gp.read_file(path)
     facilities.crs = from_crs
-    facilities.to_crs(to_crs, inplace=True)
+    facilities = facilities.to_crs(to_crs)
     return facilities
 
 
 def load_zones(zones_path, from_crs="EPSG:27700", to_crs="EPSG:27700"):
     zones = gp.read_file(zones_path)
-    zones.set_index("id", inplace=True)
-    if not from_crs == to_crs:
+    zones = zones.set_index("id")
+    if from_crs != to_crs:
         zones.crs = from_crs
-        zones.to_crs(to_crs, inplace=True)
+        zones = zones.to_crs(to_crs)
     return zones</div>
-        
-        </div>
-    </div>
-
-</div>
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div  class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[47]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-47">
-                <div>
-                    <span class="notice" hidden>Copied!</span>
-                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                        <path fill="currentColor" fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path>
-                        <path fill="currentColor" fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                    </svg>
-                    </div>
-                </clipboard-copy>
-            </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># facilities_path = &#39;~Data/facilities/NTS_london_facilities.json&#39;</span>
-
-<span class="c1"># facilities = load_facilities(facilities_path)</span>
-<span class="c1"># zones = load_zones(area_path, from_crs=&quot;EPSG:4326&quot;)</span>
-
-<span class="c1"># facility_sampler = facility.FacilitySampler(</span>
-<span class="c1"># facilities=facilities,</span>
-<span class="c1"># zones=zones,</span>
-<span class="c1"># build_xml=True,</span>
-<span class="c1"># fail=False,</span>
-<span class="c1"># random_default=True</span>
-<span class="c1"># )</span>
-
-<span class="c1"># facility_sampler.clear()</span>
-<span class="c1"># population_sample.sample_locs(facility_sampler)</span>
-</pre></div>
-<div id="cell-47" class="clipboard-copy-txt"># facilities_path = '~Data/facilities/NTS_london_facilities.json'
-
-# facilities = load_facilities(facilities_path)
-# zones = load_zones(area_path, from_crs="EPSG:4326")
-
-# facility_sampler = facility.FacilitySampler(
-# facilities=facilities,
-# zones=zones,
-# build_xml=True,
-# fail=False,
-# random_default=True
-# )
-
-# facility_sampler.clear()
-# population_sample.sample_locs(facility_sampler)</div>
         
         </div>
     </div>
@@ -8185,7 +8123,7 @@ def load_zones(zones_path, from_crs="EPSG:27700", to_crs="EPSG:27700"):
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-48">
+                <clipboard-copy for="cell-47">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -8198,7 +8136,7 @@ def load_zones(zones_path, from_crs="EPSG:27700", to_crs="EPSG:27700"):
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">zones</span> <span class="o">=</span> <span class="n">load_zones</span><span class="p">(</span><span class="n">area_path</span><span class="p">,</span> <span class="n">from_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
 <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomPointSampler</span><span class="p">(</span><span class="n">geoms</span><span class="o">=</span><span class="n">zones</span><span class="p">)</span>
 </pre></div>
-<div id="cell-48" class="clipboard-copy-txt">zones = load_zones(area_path, from_crs="EPSG:4326")
+<div id="cell-47" class="clipboard-copy-txt">zones = load_zones(area_path, from_crs="EPSG:4326")
 sampler = RandomPointSampler(geoms=zones)</div>
         
         </div>
@@ -8219,7 +8157,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-49">
+                <clipboard-copy for="cell-48">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -8231,7 +8169,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">530</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
-<div id="cell-49" class="clipboard-copy-txt">sampler.sample(530, None)</div>
+<div id="cell-48" class="clipboard-copy-txt">sampler.sample(530, None)</div>
         
         </div>
     </div>
@@ -8273,7 +8211,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-50">
+                <clipboard-copy for="cell-49">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -8285,7 +8223,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">population_sample</span><span class="o">.</span><span class="n">sample_locs</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
 </pre></div>
-<div id="cell-50" class="clipboard-copy-txt">population_sample.sample_locs(sampler)</div>
+<div id="cell-49" class="clipboard-copy-txt">population_sample.sample_locs(sampler)</div>
         
         </div>
     </div>
@@ -8305,7 +8243,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-51">
+                <clipboard-copy for="cell-50">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -8319,7 +8257,7 @@ sampler = RandomPointSampler(geoms=zones)</div>
 <span class="n">person</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">person</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
-<div id="cell-51" class="clipboard-copy-txt">person = population_sample.random_person()
+<div id="cell-50" class="clipboard-copy-txt">person = population_sample.random_person()
 person.plot()
 person.print()</div>
         
@@ -8398,7 +8336,7 @@ jp-needs-light-background
         
         <div class="CodeMirror cm-s-jupyter">
             <div class="zeroclipboard-container">
-                <clipboard-copy for="cell-52">
+                <clipboard-copy for="cell-51">
                 <div>
                     <span class="notice" hidden>Copied!</span>
                     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -8412,13 +8350,11 @@ jp-needs-light-background
 
 <span class="n">write</span><span class="o">.</span><span class="n">write_matsim</span><span class="p">(</span><span class="n">population_sample</span><span class="p">,</span> <span class="n">plans_path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s2">&quot;plans.xml&quot;</span><span class="p">),</span> <span class="n">comment</span><span class="o">=</span><span class="n">comment</span><span class="p">)</span>
 <span class="n">population_sample</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">to_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
-<span class="c1"># facility_sampler.write_facilities_xml(os.path.join(out_dir, &#39;facilities.xml&#39;), comment=comment)</span>
 </pre></div>
-<div id="cell-52" class="clipboard-copy-txt">comment = "NTS london prelim 24nov2020 epsg27700"
+<div id="cell-51" class="clipboard-copy-txt">comment = "NTS london prelim 24nov2020 epsg27700"
 
 write.write_matsim(population_sample, plans_path=os.path.join(out_dir, "plans.xml"), comment=comment)
-population_sample.to_csv(out_dir, crs="EPSG:27700", to_crs="EPSG:4326")
-# facility_sampler.write_facilities_xml(os.path.join(out_dir, 'facilities.xml'), comment=comment)</div>
+population_sample.to_csv(out_dir, crs="EPSG:27700", to_crs="EPSG:4326")</div>
         
         </div>
     </div>

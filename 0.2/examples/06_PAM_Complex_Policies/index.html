@@ -2990,16 +2990,14 @@ from pam.variables import END_OF_DAY</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">def</span> <span class="nf">print_simple_stats</span><span class="p">(</span><span class="n">population</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Print some simple population statistics.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print some simple population statistics.&quot;&quot;&quot;</span>
     <span class="n">time_at_home</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">travel_time</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">low_income_central_trips</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">high_income_central_trips</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">hh</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">hh</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">_hid</span><span class="p">,</span> <span class="n">hh</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">hh</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">freq</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">freq</span>
 
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">:</span>
@@ -3023,16 +3021,14 @@ from pam.variables import END_OF_DAY</div>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Population total travel time: </span><span class="si">{</span><span class="n">travel_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-2" class="clipboard-copy-txt">def print_simple_stats(population):
-    """
-    Print some simple population statistics.
-    """
+    """Print some simple population statistics."""
     time_at_home = 0
     travel_time = 0
     low_income_central_trips = 0
     high_income_central_trips = 0
 
-    for hid, hh in population.households.items():
-        for pid, person in hh.people.items():
+    for _hid, hh in population.households.items():
+        for _pid, person in hh.people.items():
             freq = person.freq
 
             for p in person.plan:
@@ -3686,16 +3682,18 @@ Population total travel time: 9.67 hours
 <span class="sd">    Distribution is a nested dict of probabilities based on possible features, eg:</span>
 <span class="sd">    {&#39;0-0&#39;: {&#39;male&#39;: 0, &#39;female&#39;: 0},... , &#39;90-120&#39;: {&#39;male&#39;: 1, &#39;female&#39;: 1}}</span>
 <span class="sd">    Mapping provides the feature name for each level of the distribution, eg:</span>
-<span class="sd">    [&#39;age&#39;, &#39;gender&#39;]</span>
+<span class="sd">    [&#39;age&#39;, &#39;gender&#39;].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">distribution</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find mapping: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> in sampling features: </span><span class="si">{</span><span class="n">features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find mapping: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> in sampling features: </span><span class="si">{</span><span class="n">features</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find feature for </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in distribution: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find feature for </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in distribution: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">p</span>
 </pre></div>
@@ -3706,16 +3704,18 @@ Population total travel time: 9.67 hours
     Distribution is a nested dict of probabilities based on possible features, eg:
     {'0-0': {'male': 0, 'female': 0},... , '90-120': {'male': 1, 'female': 1}}
     Mapping provides the feature name for each level of the distribution, eg:
-    ['age', 'gender']
+    ['age', 'gender'].
     """
     p = distribution
     for key in mapping:
         value = obj.attributes.get(key)
         if value is None:
-            raise KeyError(f"Cannot find mapping: {key} in sampling features: {features}")
+            msg = f"Cannot find mapping: {key} in sampling features: {features}"
+            raise KeyError(msg)
         p = p.get(value)
         if p is None:
-            raise KeyError(f"Cannot find feature for {key}: {value} in distribution: {p}")
+            msg = f"Cannot find feature for {key}: {value} in distribution: {p}"
+            raise KeyError(msg)
 
     return p</div>
         
@@ -3749,12 +3749,12 @@ Population total travel time: 9.67 hours
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">vulnerable_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">]</span>
 <span class="n">vulnerable_distribution</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="p">[{</span><span class="s2">&quot;male&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;female&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)])</span>
+    <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)),</span> <span class="p">[{</span><span class="s2">&quot;male&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;female&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">100</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">)]),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-12" class="clipboard-copy-txt">vulnerable_mapping = ["age", "gender"]
 vulnerable_distribution = dict(
-    zip(list(range(101)), [{"male": i / 100, "female": i / 100, "other": i / 100} for i in range(101)])
+    zip(list(range(101)), [{"male": i / 100, "female": i / 100, "other": i / 100} for i in range(101)]),
 )</div>
         
         </div>
@@ -3934,11 +3934,11 @@ vulnerable_distribution = dict(
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_quarantine</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
-    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="s2">&quot;health&quot;</span><span class="p">,</span> <span class="s2">&quot;leisure&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.0000000000001</span><span class="p">)</span>
+    <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="s2">&quot;health&quot;</span><span class="p">,</span> <span class="s2">&quot;leisure&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.0000000000001</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-15" class="clipboard-copy-txt">policy_quarantine = HouseholdPolicy(
-    RemoveActivity(["work", "health", "leisure", "escort", "shop", "education"]), PersonProbability(0.0000000000001)
+    RemoveActivity(["work", "health", "leisure", "escort", "shop", "education"]), PersonProbability(0.0000000000001),
 )</div>
         
         </div>
@@ -4157,14 +4157,14 @@ jp-needs-light-background
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_quarantine</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
     <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="s2">&quot;health&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">,</span> <span class="s2">&quot;leisure&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">]),</span>
     <span class="n">PersonProbability</span><span class="p">(</span>
-        <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">vulnerable_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">vulnerable_distribution</span><span class="p">)</span>
+        <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">vulnerable_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">vulnerable_distribution</span><span class="p">},</span>
     <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-19" class="clipboard-copy-txt">policy_quarantine = HouseholdPolicy(
     RemoveActivity(["work", "health", "escort", "leisure", "shop", "education"]),
     PersonProbability(
-        discrete_joint_distribution_sampler, dict(mapping=vulnerable_mapping, distribution=vulnerable_distribution)
+        discrete_joint_distribution_sampler, {"mapping": vulnerable_mapping, "distribution": vulnerable_distribution},
     ),
 )</div>
         
@@ -4327,7 +4327,7 @@ jp-needs-light-background
     <span class="p">[</span>
         <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">vulnerable_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">vulnerable_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">vulnerable_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">vulnerable_distribution</span><span class="p">},</span>
         <span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
@@ -4337,7 +4337,7 @@ jp-needs-light-background
     [
         PersonProbability(0.5),
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=vulnerable_mapping, distribution=vulnerable_distribution)
+            discrete_joint_distribution_sampler, {"mapping": vulnerable_mapping, "distribution": vulnerable_distribution},
         ),
     ],
 )</div>
@@ -4624,10 +4624,10 @@ key_distribution = {True: 0, False: 1}</div>
     <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">]),</span>
     <span class="p">[</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">edu_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">edu_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">edu_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">edu_distribution</span><span class="p">},</span>
         <span class="p">),</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">key_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">key_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">key_distribution</span><span class="p">},</span>
         <span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
@@ -4636,10 +4636,10 @@ key_distribution = {True: 0, False: 1}</div>
     RemoveActivity(["education", "escort"]),
     [
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=edu_mapping, distribution=edu_distribution)
+            discrete_joint_distribution_sampler, {"mapping": edu_mapping, "distribution": edu_distribution},
         ),
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=key_mapping, distribution=key_distribution)
+            discrete_joint_distribution_sampler, {"mapping": key_mapping, "distribution": key_distribution},
         ),
     ],
 )</div>
@@ -5055,7 +5055,7 @@ jp-needs-light-background
 
 <span class="n">policy_remove_education_and_escort</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
     <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;escort&quot;</span><span class="p">]),</span>
-    <span class="n">PersonProbability</span><span class="p">(</span><span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">key_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">key_distribution</span><span class="p">)),</span>
+    <span class="n">PersonProbability</span><span class="p">(</span><span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">key_distribution</span><span class="p">}),</span>
     <span class="n">PersonAttributeFilter</span><span class="p">({</span><span class="s2">&quot;job&quot;</span><span class="p">:</span> <span class="n">condition_job_education</span><span class="p">}),</span>
 <span class="p">)</span>
 </pre></div>
@@ -5065,7 +5065,7 @@ jp-needs-light-background
 
 policy_remove_education_and_escort = HouseholdPolicy(
     RemoveActivity(["education", "escort"]),
-    PersonProbability(discrete_joint_distribution_sampler, dict(mapping=key_mapping, distribution=key_distribution)),
+    PersonProbability(discrete_joint_distribution_sampler, {"mapping": key_mapping, "distribution": key_distribution}),
     PersonAttributeFilter({"job": condition_job_education}),
 )</div>
         
@@ -5161,10 +5161,10 @@ jp-needs-light-background
     <span class="p">[</span>
         <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;education&quot;</span><span class="p">],</span> <span class="mf">0.9999</span><span class="p">),</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">edu_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">edu_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">edu_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">edu_distribution</span><span class="p">},</span>
         <span class="p">),</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">key_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">key_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">key_distribution</span><span class="p">},</span>
         <span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
@@ -5174,10 +5174,10 @@ jp-needs-light-background
     [
         ActivityProbability(["education"], 0.9999),
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=edu_mapping, distribution=edu_distribution)
+            discrete_joint_distribution_sampler, {"mapping": edu_mapping, "distribution": edu_distribution},
         ),
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=key_mapping, distribution=key_distribution)
+            discrete_joint_distribution_sampler, {"mapping": key_mapping, "distribution": key_distribution},
         ),
     ],
 )</div>
@@ -5478,9 +5478,8 @@ key_distribution = {True: 0, False: 1}</div>
     <span class="n">RemoveActivity</span><span class="p">([</span><span class="s2">&quot;work&quot;</span><span class="p">]),</span>
     <span class="p">[</span>
         <span class="n">PersonProbability</span><span class="p">(</span>
-            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="n">key_mapping</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="n">key_distribution</span><span class="p">)</span>
+            <span class="n">discrete_joint_distribution_sampler</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">,</span> <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="n">key_distribution</span><span class="p">},</span>
         <span class="p">),</span>
-        <span class="c1">#          PersonProbability(0.1)</span>
     <span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
@@ -5488,9 +5487,8 @@ key_distribution = {True: 0, False: 1}</div>
     RemoveActivity(["work"]),
     [
         PersonProbability(
-            discrete_joint_distribution_sampler, dict(mapping=key_mapping, distribution=key_distribution)
+            discrete_joint_distribution_sampler, {"mapping": key_mapping, "distribution": key_distribution},
         ),
-        #          PersonProbability(0.1)
     ],
 )</div>
         
@@ -5930,11 +5928,11 @@ jp-needs-light-background
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_reduce_shopping_activities</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
-    <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">]),</span> <span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">,</span> <span class="s2">&quot;shop&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-51" class="clipboard-copy-txt">policy_reduce_shopping_activities = HouseholdPolicy(
-    ReduceSharedActivity(["shop_1", "shop_2", "shop"]), ActivityProbability(["shop_1", "shop_2", "shop"], 1.0)
+    ReduceSharedActivity(["shop_1", "shop_2", "shop"]), ActivityProbability(["shop_1", "shop_2", "shop"], 1.0),
 )</div>
         
         </div>
@@ -6216,11 +6214,11 @@ jp-needs-light-background
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">policy_move_shopping_tours</span> <span class="o">=</span> <span class="n">PersonPolicy</span><span class="p">(</span>
-    <span class="n">MoveActivityTourToHomeLocation</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="p">[</span><span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)]</span>
+    <span class="n">MoveActivityTourToHomeLocation</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">]),</span> <span class="p">[</span><span class="n">ActivityProbability</span><span class="p">([</span><span class="s2">&quot;shop_1&quot;</span><span class="p">,</span> <span class="s2">&quot;shop_2&quot;</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)],</span>
 <span class="p">)</span>
 </pre></div>
 <div id="cell-56" class="clipboard-copy-txt">policy_move_shopping_tours = PersonPolicy(
-    MoveActivityTourToHomeLocation(["shop_1", "shop_2"]), [ActivityProbability(["shop_1", "shop_2"], 1.0)]
+    MoveActivityTourToHomeLocation(["shop_1", "shop_2"]), [ActivityProbability(["shop_1", "shop_2"], 1.0)],
 )</div>
         
         </div>

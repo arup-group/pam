@@ -2905,14 +2905,14 @@ matplotlib.style.use("ggplot")</div>
                 </clipboard-copy>
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">zones</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/lsoas/LSOA_2004_London_Low_Resolution.shp&quot;</span><span class="p">)</span>
-<span class="n">zones</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">zones</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;LSOA_CODE&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">zones</span> <span class="o">=</span> <span class="n">zones</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;LSOA_CODE&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">})</span>
 <span class="n">zones</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 <div id="cell-3" class="clipboard-copy-txt">zones = gp.read_file("./data/lsoas/LSOA_2004_London_Low_Resolution.shp")
-zones.set_crs("EPSG:27700", allow_override=True, inplace=True)
-zones.rename(columns={"LSOA_CODE": "zone"}, inplace=True)
+zones = zones.set_crs("EPSG:27700", allow_override=True)
+zones = zones.rename(columns={"LSOA_CODE": "zone"})
 zones.plot()
 plt.show()</div>
         
@@ -2973,7 +2973,7 @@ jp-needs-light-background
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># load facilities</span>
 <span class="n">facilities</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/londinium_facilities_sample.geojson&quot;</span><span class="p">)</span>
-<span class="n">facilities</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">facilities</span> <span class="o">=</span> <span class="n">facilities</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:27700&quot;</span><span class="p">,</span> <span class="n">allow_override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># dummy create depots and deliveries</span>
 <span class="n">facilities</span><span class="p">[</span><span class="s2">&quot;activity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">facilities</span><span class="p">[</span><span class="s2">&quot;activity&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shop&quot;</span><span class="p">,</span> <span class="s2">&quot;depot&quot;</span><span class="p">,</span> <span class="n">facilities</span><span class="p">[</span><span class="s2">&quot;activity&quot;</span><span class="p">])</span>
@@ -2983,7 +2983,7 @@ jp-needs-light-background
 </pre></div>
 <div id="cell-4" class="clipboard-copy-txt"># load facilities
 facilities = gp.read_file("./data/londinium_facilities_sample.geojson")
-facilities.set_crs("EPSG:27700", allow_override=True, inplace=True)
+facilities = facilities.set_crs("EPSG:27700", allow_override=True)
 
 # dummy create depots and deliveries
 facilities["activity"] = np.where(facilities["activity"] == "shop", "depot", facilities["activity"])
@@ -3194,13 +3194,13 @@ Building sampler, this may take a while.
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="c1"># Create a facility zone dataset to be used in samplers</span>
 <span class="n">facility_zone</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">facilities</span><span class="p">,</span> <span class="n">zones</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="s2">&quot;intersects&quot;</span><span class="p">)</span>
-<span class="n">facility_zone</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index_right&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">facility_zone</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">facility_zone</span> <span class="o">=</span> <span class="n">facility_zone</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index_right&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">})</span>
+<span class="n">facility_zone</span> <span class="o">=</span> <span class="n">facility_zone</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">)</span>
 </pre></div>
 <div id="cell-7" class="clipboard-copy-txt"># Create a facility zone dataset to be used in samplers
 facility_zone = gp.sjoin(facilities, zones, how="inner", predicate="intersects")
-facility_zone.rename(columns={"index_right": "zone"}, inplace=True)
-facility_zone.set_index("zone", inplace=True)</div>
+facility_zone = facility_zone.rename(columns={"index_right": "zone"})
+facility_zone = facility_zone.set_index("zone")</div>
         
         </div>
     </div>
@@ -3872,10 +3872,7 @@ today</div>
         <span class="n">minute</span> <span class="o">=</span> <span class="n">minute_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
         <span class="n">o_zone</span> <span class="o">=</span> <span class="n">depot_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">freight_params</span><span class="p">[</span><span class="s2">&quot;agent_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LGV&quot;</span><span class="p">:</span>
-            <span class="n">stops</span> <span class="o">=</span> <span class="n">stop_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">stops</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">stops</span> <span class="o">=</span> <span class="n">stop_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">if</span> <span class="n">freight_params</span><span class="p">[</span><span class="s2">&quot;agent_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LGV&quot;</span> <span class="k">else</span> <span class="mi">1</span>
 
         <span class="n">agent_plan</span> <span class="o">=</span> <span class="n">tour</span><span class="o">.</span><span class="n">TourPlanner</span><span class="p">(</span>
             <span class="n">stops</span><span class="o">=</span><span class="n">stops</span><span class="p">,</span>
@@ -3924,10 +3921,7 @@ def sample_agents(size):
         minute = minute_sampler.sample()
         o_zone = depot_sampler.sample()
 
-        if freight_params["agent_id"] == "LGV":
-            stops = stop_sampler.sample()
-        else:
-            stops = 1
+        stops = stop_sampler.sample() if freight_params["agent_id"] == "LGV" else 1
 
         agent_plan = tour.TourPlanner(
             stops=stops,
