@@ -42,7 +42,9 @@ def curdir():
 @pytest.fixture(scope="function")
 def api_plugin():
     plugin = api_generator.AddAPIPlugin()
-    plugin.load_config({"package_dir": "src", "skip": ["src/file_1_ignore.py", "src/subdir/file_2_ignore.py"]})
+    plugin.load_config(
+        {"package_dir": "src", "skip": ["src/file_1_ignore.py", "src/subdir/file_2_ignore.py"]}
+    )
     return plugin
 
 
@@ -58,7 +60,10 @@ def base_config(tmp_path: Path):
     [
         ("src/foo.py", {"top_level": [{"src.foo": "api/foo.md"}]}),
         ("src/foo/bar.py", {"top_level": [], "src.foo": [{"src.foo.bar": "api/foo/bar.md"}]}),
-        ("src/foo/bar/baz.py", {"top_level": [], "src.foo": [{"src.foo.bar.baz": "api/foo/bar/baz.md"}]}),
+        (
+            "src/foo/bar/baz.py",
+            {"top_level": [], "src.foo": [{"src.foo.bar.baz": "api/foo/bar/baz.md"}]},
+        ),
     ],
 )
 def test_api_reference_populated(api_plugin, base_config, input_path, expected_api_dict):

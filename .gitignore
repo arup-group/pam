@@ -21,11 +21,9 @@ venv/
 # Reports
 .coverage
 .coverage.*
-.hypothesis/
 coverage.xml
 *.cover
 reports/
-mprofile_*
 
 # Caches
 .*[cC]ache*

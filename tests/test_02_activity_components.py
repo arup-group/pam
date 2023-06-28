@@ -1,7 +1,8 @@
-import pytest
 from datetime import timedelta
 
-from pam.activity import Plan, Activity, Leg, Location
+import pytest
+
+from pam.activity import Activity, Leg, Location, Plan
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
@@ -17,107 +18,83 @@ def test_leg_init():
 
 
 def test_activity_equal():
-    assert Activity(1, 'work', 1) == Activity(3, 'work', 1)
+    assert Activity(1, "work", 1) == Activity(3, "work", 1)
 
 
 def test_activity_not_equal_areas():
-    assert not Activity(1, 'work', 2) == Activity(3, 'work', 1)
+    assert not Activity(1, "work", 2) == Activity(3, "work", 1)
 
 
 def test_activity_not_equal_acts():
-    assert not Activity(1, 'home', 2) == Activity(3, 'work', 2)
+    assert not Activity(1, "home", 2) == Activity(3, "work", 2)
 
 
 def test_duration():
     plan = Plan()
-    act = Activity(1, 'home', 1, start_time=mtdt(0))
+    act = Activity(1, "home", 1, start_time=mtdt(0))
     plan.add(act)
-    leg = Leg(1, 'car', start_area=1, end_area=2, start_time=mtdt(900), end_time=mtdt(930))
+    leg = Leg(1, "car", start_area=1, end_area=2, start_time=mtdt(900), end_time=mtdt(930))
     plan.add(leg)
-    act = Activity(2, 'work', 1, start_time=mtdt(930))
+    act = Activity(2, "work", 1, start_time=mtdt(930))
     plan.add(act)
     plan.finalise_activity_end_times()
     assert plan.day[0].duration == timedelta(minutes=900)
     assert plan.day[1].duration == timedelta(minutes=30)
-    assert plan.day[-1].duration == timedelta(seconds=(24*60-930)*60)
+    assert plan.day[-1].duration == timedelta(seconds=(24 * 60 - 930) * 60)
 
 
 def test_shift_start_time():
-    act = Activity(1, 'home', 1, start_time=mtdt(900), end_time=mtdt(930))
+    act = Activity(1, "home", 1, start_time=mtdt(900), end_time=mtdt(930))
     assert act.shift_start_time(new_start_time=mtdt(910)) == mtdt(940)
 
 
 def test_shift_end_time():
-    act = Activity(1, 'home', 1, start_time=mtdt(900), end_time=mtdt(930))
+    act = Activity(1, "home", 1, start_time=mtdt(900), end_time=mtdt(930))
     assert act.shift_end_time(new_end_time=mtdt(920)) == mtdt(890)
 
 
 @pytest.fixture
 def test_plan():
     plan = Plan()
-    plan.add(
-        Activity(
-            seq=1,
-            act='home',
-            area='a',
-            start_time=mtdt(0),
-            end_time=mtdt(180)
-        )
-    )
+    plan.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(180)))
     plan.add(
         Leg(
             seq=1,
-            mode='car',
-            start_area='a',
-            end_area='b',
+            mode="car",
+            start_area="a",
+            end_area="b",
             start_time=mtdt(180),
-            end_time=mtdt(190)
+            end_time=mtdt(190),
         )
     )
-    plan.add(
-        Activity(
-            seq=2,
-            act='work',
-            area='b',
-            start_time=mtdt(190),
-            end_time=mtdt(200)
-        )
-    )
+    plan.add(Activity(seq=2, act="work", area="b", start_time=mtdt(190), end_time=mtdt(200)))
     plan.add(
         Leg(
             seq=1,
-            mode='car',
-            start_area='b',
-            end_area='a',
+            mode="car",
+            start_area="b",
+            end_area="a",
             start_time=mtdt(200),
-            end_time=mtdt(390)
+            end_time=mtdt(390),
         )
     )
-    plan.add(
-        Activity(
-            seq=3,
-            act='home',
-            area='b',
-            start_time=mtdt(390),
-            end_time=END_OF_DAY
-        )
-    )
+    plan.add(Activity(seq=3, act="home", area="b", start_time=mtdt(390), end_time=END_OF_DAY))
     return plan
 
 
 def test_position_of(test_plan):
-    assert test_plan.position_of('work') == 2
-    assert test_plan.position_of('home') == 4
-    assert test_plan.position_of('home', search='first') == 0
+    assert test_plan.position_of("work") == 2
+    assert test_plan.position_of("home") == 4
+    assert test_plan.position_of("home", search="first") == 0
 
 
 def test_position_of_using_bad_option(test_plan):
     with pytest.raises(UserWarning):
-        test_plan.position_of('home', search='spelling') == 1
+        test_plan.position_of("home", search="spelling") == 1
 
 
 def test_position_of_missing(test_plan):
-    assert test_plan.position_of('play') is None
+    assert test_plan.position_of("play") is None
 
 
 def test_location_gets():

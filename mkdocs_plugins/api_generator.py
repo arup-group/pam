@@ -15,11 +15,14 @@ from mkdocs.structure.files import File, Files
 class AddAPIPluginConfig(mkdocs.config.base.Config):
     """Enable the plugin configuration options."""
 
-    package_dir = config_options.Type(str)  # directory in which the source code is placed.
-    api_dir = config_options.Type(
-        str, default="api"
-    )  # directory in the mkdocs structure to place the symbolic links to temporary markdown files.
-    skip = config_options.Type(list, default=[])  # List of files to skip generating an API page for.
+    # directory in which the source code is placed.
+    package_dir = config_options.Type(str)
+
+    # directory in the mkdocs structure to place the symbolic links to temporary markdown files.
+    api_dir = config_options.Type(str, default="api")
+
+    # List of files to skip generating an API page for.
+    skip = config_options.Type(list, default=[])
 
 
 class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
@@ -55,7 +58,10 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         # Mkdocs navigation is composed of lists of dictionaries.
         # Lists nesting defines navigation nesting, dictionary keys are the page names, and values are the pointers to markdown files.
         api_reference_nav = {
-            "API Reference": [*self._api_reference.pop("top_level"), *[{k: v} for k, v in self._api_reference.items()]]
+            "API Reference": [
+                *self._api_reference.pop("top_level"),
+                *[{k: v} for k, v in self._api_reference.items()],
+            ]
         }
 
         config["nav"].append(api_reference_nav)

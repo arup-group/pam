@@ -1,14 +1,13 @@
-import os
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
 import pytest
 from geopandas import GeoDataFrame
 from pandas import Timestamp
 from pandas.testing import assert_frame_equal
 from s2sphere import CellId
 from shapely.geometry import LineString
-import pandas as pd
 
 from pam import utils
 from pam.core import Population
@@ -102,7 +101,16 @@ def correct_pt_person_geodataframe():
                 7: None,
             },
             "seq": {0: 1.0, 1: 2.0, 2: 3.0, 3: 4.0, 4: 5.0, 5: 6.0, 6: 7.0, 7: 8.0},
-            "service_id": {0: None, 1: None, 2: "25239", 3: None, 4: "162", 5: None, 6: "723", 7: None},
+            "service_id": {
+                0: None,
+                1: None,
+                2: "25239",
+                3: None,
+                4: "162",
+                5: None,
+                6: "723",
+                7: None,
+            },
             "start_location": {
                 0: (547360.0, 184166.0),
                 1: (550873.0, 187629.0),
@@ -158,7 +166,10 @@ def correct_cyclist_geodataframe():
             "seq": {0: 1.0, 1: 2.0},
             "service_id": {0: None, 1: None},
             "start_location": {0: (515226.0, 188222.0), 1: (529652.0, 183897.0)},
-            "start_time": {0: Timestamp("1900-01-01 07:24:52"), 1: Timestamp("1900-01-01 14:50:52")},
+            "start_time": {
+                0: Timestamp("1900-01-01 07:24:52"),
+                1: Timestamp("1900-01-01 14:50:52"),
+            },
             "pid": {0: "census_2", 1: "census_2"},
         }
     )
@@ -182,7 +193,9 @@ def test_building_geodataframe_with_reprojection(pt_person):
         [(0.080917, 51.539493), (0.146117, 51.526088)],
         [(0.146117, 51.526088), (0.123336, 51.537168)],
     ]
-    built_coords = [[(round(p[0], 6), round(p[1], 6)) for p in ls.coords] for ls in gdf["geometry"].to_list()]
+    built_coords = [
+        [(round(p[0], 6), round(p[1], 6)) for p in ls.coords] for ls in gdf["geometry"].to_list()
+    ]
     np.testing.assert_allclose(built_coords, expected_coords, rtol=1e-3)
 
 
@@ -193,7 +206,11 @@ def test_build_geodataframe_for_cyclist(cyclist, correct_cyclist_geodataframe):
 
 
 def test_build_hhld_geodataframe(
-    instantiate_household_with, pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe
+    instantiate_household_with,
+    pt_person,
+    cyclist,
+    correct_pt_person_geodataframe,
+    correct_cyclist_geodataframe,
 ):
     hhld = instantiate_household_with([pt_person, cyclist], hid="household_id")
     gdf = hhld.build_travel_geodataframe()
@@ -208,7 +225,11 @@ def test_build_hhld_geodataframe(
 
 
 def test_build_pop_geodataframe(
-    instantiate_household_with, pt_person, cyclist, correct_pt_person_geodataframe, correct_cyclist_geodataframe
+    instantiate_household_with,
+    pt_person,
+    cyclist,
+    correct_pt_person_geodataframe,
+    correct_cyclist_geodataframe,
 ):
     pop = Population()
     pop.add(instantiate_household_with([pt_person, cyclist], hid="1"))
@@ -238,33 +259,35 @@ def test_get_linestring_with_s2_cellids():
 
     ls = utils.get_linestring(from_point, to_point)
     assert isinstance(ls, LineString)
-    assert [(round(c[0], 6), round(c[1], 6)) for c in ls.coords] == [(-0.137925, 51.521699), (-0.134456, 51.520027)]
+    assert [(round(c[0], 6), round(c[1], 6)) for c in ls.coords] == [
+        (-0.137925, 51.521699),
+        (-0.134456, 51.520027),
+    ]
 
 
 def test_matsim_time():
-    """Parse matsim timestamp"""
+    """Parse matsim timestamp."""
     dt = utils.matsim_time_to_datetime("12:01:02")
     assert dt == datetime(1900, 1, 1, 12, 1, 2)
 
 
 def test_matsim_time_past_midnight():
-    """Day-two matsim timestamp"""
+    """Day-two matsim timestamp."""
     dt = utils.matsim_time_to_datetime("25:01:02")
     assert dt == datetime(1900, 1, 2, 1, 1, 2)
 
 
 def test_matsim_time_day_three():
-    """Day-three matsim timestamp"""
+    """Day-three matsim timestamp."""
     dt = utils.matsim_time_to_datetime("49:01:02")
     assert dt == datetime(1900, 1, 3, 1, 1, 2)
 
 
 def test_parser_does_not_delete_current_element(test_trips_pathv12):
-    """
-    The xml iterparse should not delete the current element,
+    """The xml iterparse should not delete the current element,
         as this leads to memory errors.
     See https://lxml.de/3.2/parsing.html#iterparse-and-iterwalk ,
-        section 'Modifying the tree'
+        section 'Modifying the tree'.
     """
     elements = utils.parse_elems(test_trips_pathv12, "person")
     for i, element in enumerate(elements):

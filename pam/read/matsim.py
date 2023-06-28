@@ -1,14 +1,15 @@
-from shapely.geometry import Point
-from datetime import timedelta
 import logging
-from typing import Union, Literal, Optional
+from datetime import timedelta
+from typing import Literal, Optional
 
-import pam.core as core
+from shapely.geometry import Point
+
 import pam.activity as activity
-from pam.activity import Route, RouteV11
+import pam.core as core
 import pam.utils as utils
-from pam.vehicle import VehicleType, Vehicle, ElectricVehicle
+from pam.activity import Route, RouteV11
 from pam.variables import START_OF_DAY
+from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
 
 
 def read_matsim(
@@ -16,23 +17,22 @@ def read_matsim(
     attributes_path: Optional[str] = None,
     all_vehicles_path: Optional[str] = None,
     electric_vehicles_path: Optional[str] = None,
-    weight : int = 100,
-    version : Literal[11, 12] = 12,
-    household_key : Optional[str] = None,
-    simplify_pt_trips : bool = False,
-    autocomplete : bool = True,
-    crop : bool = False,
-    keep_non_selected : bool = False,
-    leg_attributes : bool = True,
-    leg_route : bool = True,
+    weight: int = 100,
+    version: Literal[11, 12] = 12,
+    household_key: Optional[str] = None,
+    simplify_pt_trips: bool = False,
+    autocomplete: bool = True,
+    crop: bool = False,
+    keep_non_selected: bool = False,
+    leg_attributes: bool = True,
+    leg_route: bool = True,
 ) -> core.Population:
-    """
-    Load a MATSim format population into core population format.
+    """Load a MATSim format population into core population format.
     It is possible to maintain the unity of housholds using a household uid in
     the attributes input, i.e.:
     ``` xml
         <attribute class="java.lang.String" name="hid">hh_0001</attribute>
-    ```
+    ```.
 
     Args:
         plans_path (str): path to matsim format xml
@@ -48,29 +48,29 @@ def read_matsim(
         keep_non_selected (bool, optional): Whether to parse non-selected plans (storing them in person.plans_non_selected). Defaults to False.
         leg_attributes (bool, optional): Parse leg attributes such as routing mode. Defaults to True.
         leg_route (bool, optional): Parse leg route. Defaults to True.
+
     Returns:
         core.Population:
     """
-
     logger = logging.getLogger(__name__)
 
     population = core.Population()
 
     if attributes_path is not None and version == 12:
         raise UserWarning(
-"""
+            """
 You have provided an attributes_path and enabled matsim version 12, but
 v12 does not require an attributes input:
 Either remove the attributes_path arg, or enable version 11.
 """
-    )
+        )
 
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
     if version == 11 and not attributes_path:
         logger.warning(
-"""
+            """
 You have specified version 11 and not supplied an attributes path, population will not
 have attributes or be able to use a household attribute id. Check this is intended.
 """
@@ -86,22 +86,24 @@ have attributes or be able to use a household attribute id. Check this is intend
     if attributes_path:
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
-            logger.warning("It is not required to load attributes from a separate path for version 11.")
+            logger.warning(
+                "It is not required to load attributes from a separate path for version 11."
+            )
         attributes = load_attributes_map(attributes_path)
 
     for person in stream_matsim_persons(
         plans_path,
-        attributes = attributes,
-        vehicles = vehicles,
-        weight = weight,
-        version = version,
-        simplify_pt_trips = simplify_pt_trips,
-        autocomplete = autocomplete,
-        crop = crop,
-        keep_non_selected = keep_non_selected,
+        attributes=attributes,
+        vehicles=vehicles,
+        weight=weight,
+        version=version,
+        simplify_pt_trips=simplify_pt_trips,
+        autocomplete=autocomplete,
+        crop=crop,
+        keep_non_selected=keep_non_selected,
         leg_attributes=leg_attributes,
         leg_route=leg_route,
-        ):
+    ):
         # Check if using households, then update population accordingly.
         if household_key and person.attributes.get(household_key):  # using households
             if population.get(person.attributes.get(household_key)):  # existing household
@@ -121,47 +123,45 @@ have attributes or be able to use a household attribute id. Check this is intend
 
 def stream_matsim_persons(
     plans_path: str,
-    attributes : dict = {},
-    vehicles : dict = {},
-    weight : int = 100,
-    version : Literal[11, 12] = 12,
-    simplify_pt_trips : bool = False,
-    autocomplete : bool = True,
-    crop : bool = False,
-    keep_non_selected : bool = False,
-    leg_attributes : bool = True,
-    leg_route : bool = True,
-    ) -> core.Person:
-    """
-    
-    Stream a MATSim format population into core.Person objects.
+    attributes: dict = {},
+    vehicles: dict = {},
+    weight: int = 100,
+    version: Literal[11, 12] = 12,
+    simplify_pt_trips: bool = False,
+    autocomplete: bool = True,
+    crop: bool = False,
+    keep_non_selected: bool = False,
+    leg_attributes: bool = True,
+    leg_route: bool = True,
+) -> core.Person:
+    """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support 'version 11' plans.
 
     TODO: a v12 only method could also stream attributes and would use less memory
 
     Args:
-        plans_path (str): 
+        plans_path (str):
             path to matsim format xml
-        attributes (dict, optional): 
+        attributes (dict, optional):
             map of person attributes, only required for v11. Defaults to {}.
-        vehicles (dict, optional): 
+        vehicles (dict, optional):
             map of vehciles. Defaults to {}.
-        weight (int, optional): 
+        weight (int, optional):
             path to matsim electric_vehicles xml. Defaults to 100.
-        version (Literal[11, 12], optional): 
+        version (Literal[11, 12], optional):
             Defaults to 12.
-        simplify_pt_trips (bool, optional): 
+        simplify_pt_trips (bool, optional):
             simplify legs in multi-leg trips. Defaults to False.
-        autocomplete (bool, optional): 
+        autocomplete (bool, optional):
             fills missing leg and activity attributes. Defaults to True.
-        crop (bool, optional): 
+        crop (bool, optional):
             crop plans that go beyond 24 hours. Defaults to False.
-        keep_non_selected (bool, optional): 
+        keep_non_selected (bool, optional):
             Whether to parse non-selected plans (storing them in `person.plans_non_selected`). Defaults to False.
-        leg_attributes (bool, optional): 
+        leg_attributes (bool, optional):
             Parse leg attributes such as routing mode. Defaults to True.
-        leg_route (bool, optional): 
+        leg_route (bool, optional):
             Parse leg route. Defaults to True.
 
     Raises:
@@ -170,12 +170,10 @@ def stream_matsim_persons(
     Yields:
         Iterator[core.Person]:
     """
-
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
     for person_xml in utils.get_elems(plans_path, "person"):
-
         if version == 11:
             person_id = person_xml.xpath("@id")[0]
             agent_attributes = attributes.get(person_id, {})
@@ -186,7 +184,7 @@ def stream_matsim_persons(
         person = core.Person(person_id, attributes=agent_attributes, freq=weight, vehicle=vehicle)
 
         for plan_xml in person_xml:
-            if plan_xml.get('selected') == 'yes':
+            if plan_xml.get("selected") == "yes":
                 person.plan = parse_matsim_plan(
                     plan_xml=plan_xml,
                     person_id=person_id,
@@ -196,8 +194,8 @@ def stream_matsim_persons(
                     autocomplete=autocomplete,
                     leg_attributes=leg_attributes,
                     leg_route=leg_route,
-                    )
-            elif keep_non_selected and plan_xml.get('selected') == 'no':
+                )
+            elif keep_non_selected and plan_xml.get("selected") == "no":
                 person.plans_non_selected.append(
                     parse_matsim_plan(
                         plan_xml=plan_xml,
@@ -208,24 +206,22 @@ def stream_matsim_persons(
                         autocomplete=autocomplete,
                         leg_attributes=leg_attributes,
                         leg_route=leg_route,
-                        )
                     )
+                )
         yield person
 
 
 def parse_matsim_plan(
     plan_xml,
-    person_id : str,
-    version : int,
-    simplify_pt_trips : bool,
-    crop : bool,
-    autocomplete : bool,
-    leg_attributes : bool = True,
-    leg_route : bool = True,
-    ) -> activity.Plan:
-    """
-    Parse a MATSim plan.
-    """
+    person_id: str,
+    version: int,
+    simplify_pt_trips: bool,
+    crop: bool,
+    autocomplete: bool,
+    leg_attributes: bool = True,
+    leg_route: bool = True,
+) -> activity.Plan:
+    """Parse a MATSim plan."""
     logger = logging.getLogger(__name__)
     act_seq = 0
     leg_seq = 0
@@ -237,26 +233,24 @@ def parse_matsim_plan(
         """
         Loop through stages incrementing time and extracting attributes.
         """
-        if stage.tag in ['act', 'activity']:
+        if stage.tag in ["act", "activity"]:
             act_seq += 1
-            act_type = stage.get('type')
+            act_type = stage.get("type")
 
             loc = None
-            x, y = stage.get('x'), stage.get('y')
+            x, y = stage.get("x"), stage.get("y")
             if x and y:
                 loc = Point(int(float(x)), int(float(y)))
 
-            if act_type == 'pt interaction':
-                departure = stage.get('end_time')
+            if act_type == "pt interaction":
+                departure = stage.get("end_time")
                 if departure is not None:
                     departure_dt = utils.safe_strptime(departure)
                 else:
-                    departure_dt = arrival_dt + timedelta(seconds=0.)
+                    departure_dt = arrival_dt + timedelta(seconds=0.0)
 
             else:
-                departure_dt = utils.safe_strptime(
-                    stage.get('end_time', '24:00:00')
-                )
+                departure_dt = utils.safe_strptime(stage.get("end_time", "24:00:00"))
 
             if departure_dt < arrival_dt:
                 logger.debug(f"Negative duration activity found at pid={person_id}")
@@ -266,20 +260,19 @@ def parse_matsim_plan(
                     seq=act_seq,
                     act=act_type,
                     loc=loc,
-                    link=stage.get('link'),
+                    link=stage.get("link"),
                     start_time=arrival_dt,
-                    end_time=departure_dt
+                    end_time=departure_dt,
                 )
             )
 
-        if stage.tag == 'leg':
-
+        if stage.tag == "leg":
             mode, route, attributes = unpack_leg(stage, version)
             if not leg_attributes:
                 attributes = {}
 
             leg_seq += 1
-            trav_time = stage.get('trav_time')
+            trav_time = stage.get("trav_time")
             if trav_time is not None:
                 h, m, s = trav_time.split(":")
                 leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
@@ -293,9 +286,9 @@ def parse_matsim_plan(
                     activity.Leg(
                         seq=leg_seq,
                         mode=mode,
-                        start_time = departure_dt,
-                        end_time = arrival_dt,
-                        attributes = attributes,
+                        start_time=departure_dt,
+                        end_time=arrival_dt,
+                        attributes=attributes,
                     )
                 )
 
@@ -304,13 +297,13 @@ def parse_matsim_plan(
                     activity.Leg(
                         seq=leg_seq,
                         mode=mode,
-                        start_link = route.get('start_link'),
-                        end_link = route.get('end_link'),
-                        start_time = departure_dt,
-                        end_time = arrival_dt,
-                        distance = route.distance,
-                        attributes = attributes,
-                        route = route
+                        start_link=route.get("start_link"),
+                        end_link=route.get("end_link"),
+                        start_time=departure_dt,
+                        end_time=arrival_dt,
+                        distance=route.distance,
+                        attributes=attributes,
+                        route=route,
                     )
                 )
 
@@ -319,10 +312,10 @@ def parse_matsim_plan(
 
     plan.set_leg_purposes()
 
-    score = plan_xml.get('score', None)
+    score = plan_xml.get("score", None)
     if score:
         score = float(score)
-    plan.score = score # experienced plan scores
+    plan.score = score  # experienced plan scores
 
     if crop:
         plan.crop()
@@ -339,8 +332,7 @@ def unpack_leg(leg, version):
 
 
 def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
-    """
-    Extract mode, network route and transit route as available.
+    """Extract mode, network route and transit route as available.
 
     Args:
         leg (xml_leg_element):
@@ -354,8 +346,7 @@ def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
 
 
 def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
-    """
-    Extract mode, route and attributes as available.
+    """Extract mode, route and attributes as available.
 
     Args:
         leg (xml_leg_element):
@@ -373,7 +364,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
             <leg mode="car" dep_time="07:00:00" trav_time="00:07:34">
             </leg>
         ```
-        
+
         === Transit ===
 
         This is a transit routed leg with the route encoded as json string and routingMode attribute:
@@ -399,7 +390,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
         === Network Routed ===
 
         This is a network routed mode, eg car:
-        ``` xml   
+        ``` xml
             <leg mode="car" dep_time="07:58:00" trav_time="00:04:52">
                 <attributes>
                     <attribute name="enterVehicleTime" class="java.lang.Double">28680.0</attribute>
@@ -409,7 +400,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
                 4155 5221366345330551489_5221366345327939575 2623 4337 5221366343808222067_5221366343837130911 2984 1636 3671 6110 etc...
                 </route>
             </leg>
-        ```            
+        ```
 
         Route attributes include:
             - type = "links"
@@ -431,7 +422,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
                 <route type="generic" start_link="5221366698030330427_5221366698041252619" end_link="114" trav_time="01:54:10" distance="5710.003987453454"></route>
             </leg>
         ```
-        
+
         Route attributes include:
             - type = "generic"
             - start_link
@@ -448,59 +439,48 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
 
 def load_attributes_map_from_v12(plans_path):
     return dict(
-        [
-            get_attributes_from_person(elem)
-            for elem in utils.get_elems(plans_path, "person")
-        ]
+        [get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")]
     )
 
 
 def get_attributes_from_person(elem):
     ident = elem.xpath("@id")[0]
     attributes = {}
-    for attr in elem.xpath('./attributes/attribute'):
-        attributes[attr.get('name')] = attr.text
+    for attr in elem.xpath("./attributes/attribute"):
+        attributes[attr.get("name")] = attr.text
     return ident, attributes
 
 
 def get_attributes_from_legs(elem):
     attributes = {}
-    for attr in elem.xpath('./attributes/attribute'):
-        attributes[attr.get('name')] = attr.text
+    for attr in elem.xpath("./attributes/attribute"):
+        attributes[attr.get("name")] = attr.text
     return attributes
 
 
 def load_attributes_map(attributes_path):
-    """
-    Given path to MATSim attributes input, return dictionary of attributes (as dict)
-    """
+    """Given path to MATSim attributes input, return dictionary of attributes (as dict)."""
     attributes_map = {}
     people = utils.get_elems(attributes_path, "object")
     for person in people:
         att_map = {}
         for attribute in person:
-            att_map[attribute.get('name')] = attribute.text
-        attributes_map[person.get('id')] = att_map
+            att_map[attribute.get("name")] = attribute.text
+        attributes_map[person.get("id")] = att_map
 
     return attributes_map
 
 
 def selected_plans(plans_path):
-    """
-    Given path to MATSim plans input, yield person id and plan for all selected plans.
-    """
+    """Given path to MATSim plans input, yield person id and plan for all selected plans."""
     for person in utils.get_elems(plans_path, "person"):
         for plan in person:
-            if plan.get('selected') == 'yes':
-                yield person.get('id'), plan
+            if plan.get("selected") == "yes":
+                yield person.get("id"), plan
 
 
-
-
-def read_vehicles(all_vehicles_path: str , electric_vehicles_path: Optional[str] = None) -> dict:
-    """
-    
-    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+def read_vehicles(all_vehicles_path: str, electric_vehicles_path: Optional[str] = None) -> dict:
+    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
 
     Args:
         all_vehicles_path (str): path to matsim all_vehicles xml file
@@ -516,8 +496,7 @@ def read_vehicles(all_vehicles_path: str , electric_vehicles_path: Optional[str]
 
 
 def read_all_vehicles_file(path: str) -> dict:
-    """
-    Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd.
 
     Args:
         path (str): path to matsim all_vehicles xml file
@@ -528,23 +507,23 @@ def read_all_vehicles_file(path: str) -> dict:
     vehicle_types = {}
 
     for vehicle_type_elem in utils.get_elems(path, "vehicleType"):
-        vehicle_types[vehicle_type_elem.get('id')] = VehicleType.from_xml_elem(vehicle_type_elem)
+        vehicle_types[vehicle_type_elem.get("id")] = VehicleType.from_xml_elem(vehicle_type_elem)
 
     for vehicle_elem in utils.get_elems(path, "vehicle"):
-        vehicles[vehicle_elem.get('id')] = Vehicle(id=vehicle_elem.get('id'),
-                                                   vehicle_type=vehicle_types[vehicle_elem.get('type')])
+        vehicles[vehicle_elem.get("id")] = Vehicle(
+            id=vehicle_elem.get("id"), vehicle_type=vehicle_types[vehicle_elem.get("type")]
+        )
 
     return vehicles
 
 
 def read_electric_vehicles_file(path: str, vehicles: dict = None) -> dict:
-    """
-    Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
+    """Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
 
     Args:
         path (str): path to matsim electric_vehicles xml
-        vehicles (dict, optional): 
-            dictionary of `{ID: pam.vehicle.Vehicle}` objects, some of which may need to be updated to ElectricVehicle based on contents of the electric_vehicles xml file. 
+        vehicles (dict, optional):
+            dictionary of `{ID: pam.vehicle.Vehicle}` objects, some of which may need to be updated to ElectricVehicle based on contents of the electric_vehicles xml file.
             If None, vehicles will default to the VehicleType defaults. Defaults to None.
 
     Raises:
@@ -554,21 +533,25 @@ def read_electric_vehicles_file(path: str, vehicles: dict = None) -> dict:
         dict:  dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
     """
     if vehicles is None:
-        logging.warning('All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types'
-                        'Definitions assumed by the Electric Vehicles')
+        logging.warning(
+            "All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types"
+            "Definitions assumed by the Electric Vehicles"
+        )
         vehicles = {}
     for vehicle_elem in utils.get_elems(path, "vehicle"):
         attribs = dict(vehicle_elem.attrib)
-        id = attribs.pop('id')
-        attribs['battery_capacity'] = float(attribs['battery_capacity'])
-        attribs['initial_soc'] = float(attribs['initial_soc'])
+        id = attribs.pop("id")
+        attribs["battery_capacity"] = float(attribs["battery_capacity"])
+        attribs["initial_soc"] = float(attribs["initial_soc"])
         if id in vehicles:
-            elem_vehicle_type = attribs.pop('vehicle_type')
+            elem_vehicle_type = attribs.pop("vehicle_type")
             vehicle_type = vehicles[id].vehicle_type
             if elem_vehicle_type != vehicle_type.id:
-                raise RuntimeError(f'Electric vehicle: {id} has mis-matched vehicle type '
-                                   f'defined: {elem_vehicle_type} != {vehicle_type.id}')
+                raise RuntimeError(
+                    f"Electric vehicle: {id} has mis-matched vehicle type "
+                    f"defined: {elem_vehicle_type} != {vehicle_type.id}"
+                )
         else:
-            vehicle_type = VehicleType(id=attribs.pop('vehicle_type'))
+            vehicle_type = VehicleType(id=attribs.pop("vehicle_type"))
         vehicles[id] = ElectricVehicle(id=id, vehicle_type=vehicle_type, **attribs)
     return vehicles

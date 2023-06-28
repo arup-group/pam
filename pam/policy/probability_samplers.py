@@ -1,15 +1,14 @@
-import pam.core
-import pam.activity
 import random
-from typing import Union, Callable
+from typing import Callable, Union
+
+import pam.activity
+import pam.core
 
 
 class SamplingProbability:
-    """
-    Base class for probabilistic samplers
-    """
-    def __init__(self,
-                 probability: Union[float, int]):
+    """Base class for probabilistic samplers."""
+
+    def __init__(self, probability: Union[float, int]):
         if isinstance(probability, int):
             probability = float(probability)
         if isinstance(probability, float):
@@ -21,13 +20,14 @@ class SamplingProbability:
         return "<{} instance at {}: {}>".format(
             self.__class__.__name__,
             id(self),
-            ', '.join("%r: %r" % item for item in attribs.items()))
+            ", ".join("%r: %r" % item for item in attribs.items()),
+        )
 
     def __str__(self):
         attribs = vars(self)
         return "{} with attributes: {}".format(
-            self.__class__.__name__,
-            ', '.join("%s: %s" % item for item in attribs.items()))
+            self.__class__.__name__, ", ".join("%s: %s" % item for item in attribs.items())
+        )
 
     def print(self):
         print(self.__str__())
@@ -36,19 +36,19 @@ class SamplingProbability:
         return random.random() < self.p(x)
 
     def p(self, x):
-        raise NotImplementedError('{} is a base class'.format(type(SamplingProbability)))
+        raise NotImplementedError("{} is a base class".format(type(SamplingProbability)))
 
 
 class SimpleProbability(SamplingProbability):
-    """
-    A probabilistic sampler which returns value of probability
-    at the same level as the input (household/person/activity)
+    """A probabilistic sampler which returns value of probability
+    at the same level as the input (household/person/activity).
 
     Parameters
     ----------
     :param probability
     A float/int: 0<probability<=1
     """
+
     def __init__(self, probability):
         super().__init__(probability)
 
@@ -57,8 +57,7 @@ class SimpleProbability(SamplingProbability):
 
 
 class HouseholdProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household level based on probability for a household.
 
     Parameters
@@ -68,9 +67,10 @@ class HouseholdProbability(SamplingProbability):
     pam.core.Household returns a float/int: 0<probability<=1
     corresponding to the likelihood of the household being sampled.
     """
-    def __init__(self,
-                 probability: Union[float, int, Callable[[pam.core.Household], float]],
-                 kwargs=None):
+
+    def __init__(
+        self, probability: Union[float, int, Callable[[pam.core.Household], float]], kwargs=None
+    ):
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -96,8 +96,7 @@ class HouseholdProbability(SamplingProbability):
 
 
 class PersonProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household and person level based on probability for a
     person.
 
@@ -108,9 +107,10 @@ class PersonProbability(SamplingProbability):
     pam.core.Person returns a float/int: 0<probability<=1
     corresponding to the likelihood of the person being sampled.
     """
-    def __init__(self,
-                 probability: Union[float, int, Callable[[pam.core.Person], float]],
-                 kwargs=None):
+
+    def __init__(
+        self, probability: Union[float, int, Callable[[pam.core.Person], float]], kwargs=None
+    ):
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -139,8 +139,7 @@ class PersonProbability(SamplingProbability):
 
 
 class ActivityProbability(SamplingProbability):
-    """
-    A probabilistic sampler which evaluates value of probability
+    """A probabilistic sampler which evaluates value of probability
     at household, person and activity level based on probability
     for an activity.
 
@@ -151,10 +150,13 @@ class ActivityProbability(SamplingProbability):
     pam.core.Activity returns a float/int: 0<probability<=1
     corresponding to the likelihood of the activity being sampled.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, Callable[[pam.activity.Activity], float]],
-                 kwargs=None):
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, Callable[[pam.activity.Activity], float]],
+        kwargs=None,
+    ):
         super().__init__(probability)
         self.activities = activities
         assert isinstance(self.probability, float) or callable(self.probability)
@@ -199,21 +201,27 @@ def verify_probability(probability, unacceptable_types=None):
         unacceptable_types = ()
     if isinstance(probability, int):
         probability = float(probability)
-    assert not isinstance(probability, unacceptable_types), \
-        '{} is of type {} which is not accepted. Check your policy\'s application level.'.format(
-            probability, type(probability))
+    assert not isinstance(
+        probability, unacceptable_types
+    ), "{} is of type {} which is not accepted. Check your policy's application level.".format(
+        probability, type(probability)
+    )
     if isinstance(probability, float):
         assert 0 < probability <= 1
         probability = SimpleProbability(probability)
     elif isinstance(probability, list):
         for i in range(len(probability)):
-            assert not isinstance(probability[i], unacceptable_types), \
-                '{} is of type {} which is not accepted. Check your policy\'s application level'.format(
-                    probability[i], type(probability[i]))
+            assert not isinstance(
+                probability[i], unacceptable_types
+            ), "{} is of type {} which is not accepted. Check your policy's application level".format(
+                probability[i], type(probability[i])
+            )
             if isinstance(probability[i], float):
                 probability[i] = SimpleProbability(probability[i])
     else:
-        assert isinstance(probability, SamplingProbability), \
-            'Probability passed to a policy needs to be float, integer or {}, not {}'.format(
-                type(SamplingProbability), type(probability))
+        assert isinstance(
+            probability, SamplingProbability
+        ), "Probability passed to a policy needs to be float, integer or {}, not {}".format(
+            type(SamplingProbability), type(probability)
+        )
     return probability

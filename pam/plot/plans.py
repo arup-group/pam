@@ -1,24 +1,25 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Union, List, Dict, Optional
+
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 if TYPE_CHECKING:
     from pam.activity import Plan
 
-import pandas as pd
-import numpy as np
-from geopandas import GeoDataFrame
+import warnings
+
 import matplotlib
-from matplotlib import pyplot as plt
-from matplotlib import cm
-from matplotlib.patches import Patch
 import matplotlib.ticker as mtick
+import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
-from plotly.offline import offline
+from geopandas import GeoDataFrame
+from matplotlib import pyplot as plt
+from matplotlib.patches import Patch
+from shapely.errors import ShapelyDeprecationWarning
+
 import pam.activity as activity
 import pam.utils as utils
 from pam.planner import encoder
-import warnings
-from shapely.errors import ShapelyDeprecationWarning
 
 
 def plot_person(person, **kwargs):
@@ -37,16 +38,8 @@ def plot_household(household, **kwargs):
 
 
 def build_plan_df(plan, pid="sample"):
-    """
-    Loop through a plan, creating a pandas dataframe defining activities for plotting.
-    """
-    data = {
-        "act": [],
-        "modes": [],
-        "start_time": [],
-        "end_time": [],
-        "dur": [],
-    }
+    """Loop through a plan, creating a pandas dataframe defining activities for plotting."""
+    data = {"act": [], "modes": [], "start_time": [], "end_time": [], "dur": []}
     for component in plan.day:
         data["act"].append(component.act.lower().title())
         if isinstance(component, activity.Leg) and component.mode is not None:
@@ -71,16 +64,8 @@ def plot_plan(plan, kwargs=None):
 
 
 def build_person_df(person):
-    """
-    Loop through a persons plan, creating a pandas dataframe defining activities for plotting.
-    """
-    data = {
-        "act": [],
-        "modes": [],
-        "start_time": [],
-        "end_time": [],
-        "dur": [],
-    }
+    """Loop through a persons plan, creating a pandas dataframe defining activities for plotting."""
+    data = {"act": [], "modes": [], "start_time": [], "end_time": [], "dur": []}
     for component in person.plan.day:
         data["act"].append(component.act.lower().title())
         if isinstance(component, activity.Leg):
@@ -97,8 +82,7 @@ def build_person_df(person):
 
 
 def build_person_travel_geodataframe(person, from_epsg=None, to_epsg=None):
-    """
-    Loop through a persons legs, creating a geopandas GeoDataFrame defining travel for plotting.
+    """Loop through a persons legs, creating a geopandas GeoDataFrame defining travel for plotting.
     :param person: pam.core.Person object
     :param from_epsg: coordinate system the plans are currently in, optional
     :param to_epsg: coordinate system you want the geo dataframe to be projected to, optional, you need to specify
@@ -148,7 +132,10 @@ loc attribute defined with a shapely.Point or s2sphere.CellId.
 
 
 def build_rgb_travel_cmap(df, colour_by):
-    colors = [(int(tup[0] * 255), int(tup[1] * 255), int(tup[2] * 255)) for tup in plt.cm.Set3.colors[::-1]]
+    colors = [
+        (int(tup[0] * 255), int(tup[1] * 255), int(tup[2] * 255))
+        for tup in plt.cm.Set3.colors[::-1]
+    ]
     colour_by_unique = df[colour_by].unique()
     # repeat colours if unique items > 12
     len_factor = (len(colour_by_unique) // len(colors)) + 1
@@ -167,9 +154,7 @@ def build_cmap(df):
 
 
 def plot_activities(df, **kwargs):
-    """
-    Plot activity plans from pandas dataframe.
-    """
+    """Plot activity plans from pandas dataframe."""
     if "cmap" not in kwargs:
         cmap = build_cmap(df)
     else:
@@ -179,7 +164,10 @@ def plot_activities(df, **kwargs):
     pids = df["pid"].unique()
 
     fig, axs = plt.subplots(
-        len(pids), 1, figsize=(16, 3 + (1 * (len(pids) - 1))), sharex=True  # fudge to keep proportions about right
+        len(pids),
+        1,
+        figsize=(16, 3 + (1 * (len(pids) - 1))),
+        sharex=True,  # fudge to keep proportions about right
     )
 
     for idx, pid in enumerate(pids):
@@ -195,7 +183,14 @@ def plot_activities(df, **kwargs):
             y = 1
             data = person_data.iloc[i]
             ax.barh(
-                y, width="dur", data=data, left="start_time", label="act", color="color", edgecolor="black", linewidth=2
+                y,
+                width="dur",
+                data=data,
+                left="start_time",
+                label="act",
+                color="color",
+                edgecolor="black",
+                linewidth=2,
             )
 
             # Populate Labelling Params
@@ -213,7 +208,12 @@ def plot_activities(df, **kwargs):
 
             if rect.get_width() >= 2:
                 ax.text(
-                    x, y, label, ha="center", va="center", fontdict={"color": color, "size": 10, "weight": "regular"}
+                    x,
+                    y,
+                    label,
+                    ha="center",
+                    va="center",
+                    fontdict={"color": color, "size": 10, "weight": "regular"},
                 )
                 continue
             if rect.get_width() >= 0.5:
@@ -231,7 +231,7 @@ def plot_activities(df, **kwargs):
         for side in ["top", "right", "bottom", "left"]:
             ax.spines[side].set_visible(False)
 
-    if kwargs.get("legend", True) == True:
+    if kwargs.get("legend", True) is True:
         legend_elements = []
         for act, color in cmap.items():
             legend_elements.append(Patch(facecolor=color, edgecolor="black", label=act))
@@ -255,10 +255,13 @@ def plot_activities(df, **kwargs):
 
 
 def plot_travel_plans(
-    gdf, groupby: list = None, colour_by: str = "mode", cmap: dict = None, mapbox_access_token: str = ""
+    gdf,
+    groupby: list = None,
+    colour_by: str = "mode",
+    cmap: dict = None,
+    mapbox_access_token: str = "",
 ):
-    """
-    Uses plotly's Scattermapbox to plot travel GeoDataFrame
+    """Uses plotly's Scattermapbox to plot travel GeoDataFrame
     :param gdf: geopandas.GeoDataFrame generated by build_person_travel_geodataframe
     :param groupby: optional argument for splitting traces in the plot
     :param colour_by: argument for specifying what the colour should correspond to in the plot, travel mode by default
@@ -291,7 +294,9 @@ def plot_travel_plans(
             colour_by_item = name[0]
         else:
             colour_by_item = name
-        colour = "rgb({},{},{})".format(cmap[colour_by_item][0], cmap[colour_by_item][1], cmap[colour_by_item][2])
+        colour = "rgb({},{},{})".format(
+            cmap[colour_by_item][0], cmap[colour_by_item][1], cmap[colour_by_item][2]
+        )
 
         lat = []
         lon = []
@@ -303,10 +308,16 @@ def plot_travel_plans(
             lon = lon + [point[0] for point in coords] + [float("nan")]
             _hovertext = [""] * (len(coords) + 1)
             _hovertext[0] = "pid: {}<br>start time: {}<br>trip seq: {}<br>mode: {}".format(
-                group.loc[idx, "pid"], group.loc[idx, "start_time"], group.loc[idx, "seq"], group.loc[idx, "mode"]
+                group.loc[idx, "pid"],
+                group.loc[idx, "start_time"],
+                group.loc[idx, "seq"],
+                group.loc[idx, "mode"],
             )
             _hovertext[-2] = "pid: {}<br>end time: {}<br>trip seq: {}<br>mode: {}".format(
-                group.loc[idx, "pid"], group.loc[idx, "end_time"], group.loc[idx, "seq"], group.loc[idx, "mode"]
+                group.loc[idx, "pid"],
+                group.loc[idx, "end_time"],
+                group.loc[idx, "seq"],
+                group.loc[idx, "mode"],
             )
             hovertext = hovertext + _hovertext
 
@@ -356,8 +367,7 @@ def plot_activity_breakdown_area(
     ax=None,
     colormap="tab20",
 ):
-    """
-    Area plot of the breakdown of activities taking place every minute.
+    """Area plot of the breakdown of activities taking place every minute.
 
     :param plans: A list of PAM plans
     :param activity_classes: A list of the activity labels.
@@ -401,10 +411,10 @@ def plot_activity_breakdown_area(
     return ax
 
 
-def plot_activity_breakdown_area_tiles(plans: Dict[List[Plan]], activity_classes: List[str], figsize=(10, 8), **kwargs):
-    """
-    Tiled area plot of the breakdown of activities taking place every minute.
-    """
+def plot_activity_breakdown_area_tiles(
+    plans: Dict[List[Plan]], activity_classes: List[str], figsize=(10, 8), **kwargs
+):
+    """Tiled area plot of the breakdown of activities taking place every minute."""
     plans_encoder = encoder.PlansOneHotEncoder(activity_classes=activity_classes)
     labels = plans_encoder.plan_encoder.activity_encoder.labels
     nrows = int(np.ceil(len(plans) / 2))

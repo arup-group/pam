@@ -1,21 +1,22 @@
 from collections import defaultdict
-from prettytable import PrettyTable
 from enum import Enum
+
+from prettytable import PrettyTable
 
 from pam.core import Population
 
 
 class TEXT(Enum):
-    TITLE = '\n\033[95m\033[4m\033[1m'
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    END = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    TITLE = "\n\033[95m\033[4m\033[1m"
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    END = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
 
 
 def header(head: str):
@@ -36,7 +37,7 @@ def pretty_print_summary(population: Population, key="subpopulation"):
     print(stats_summary(population, key))
     print()
 
-    #attributes
+    # attributes
     header("Population Attributes:")
     for k, vs in get_attributes(population).items():
         subheader_and_text(f"{k}:", vs)
@@ -65,7 +66,7 @@ def print_summary(population: Population, key="subpopulation"):
     print(stats_summary(population, key))
     print()
 
-    #attributes
+    # attributes
     print("Population Attributes:")
     for k, vs in get_attributes(population).items():
         print(f"{k}:", vs)
@@ -89,14 +90,13 @@ def print_summary(population: Population, key="subpopulation"):
 
 
 def stats_summary(population: Population, key="subpopulation") -> PrettyTable:
-
     table = PrettyTable()
     summary = {}
     summary["total"] = calc_stats(population)
     slices = []
 
     if key is not None:
-        slices =  population.attributes.get(key, [])
+        slices = population.attributes.get(key, [])
         for value in slices:
             summary[value] = calc_stats(population, key, value)
 
@@ -113,10 +113,7 @@ def stats_summary(population: Population, key="subpopulation") -> PrettyTable:
 
 
 def calc_stats(population: Population, key=None, value=None) -> dict:
-    summary = {
-        "hhs": 0,
-        "persons": 0,
-        }
+    summary = {"hhs": 0, "persons": 0}
     hh_occupants = []
     for _, hh in population:
         if key is not None and value not in hh.get_attribute(key):
@@ -133,9 +130,11 @@ def calc_stats(population: Population, key=None, value=None) -> dict:
         summary["av_occupancy"] = sum(hh_occupants) / len(hh_occupants)
     return summary
 
+
 # Attributes
 
-def get_attributes(population, show:int=10, key=None, value=None) -> dict:
+
+def get_attributes(population, show: int = 10, key=None, value=None) -> dict:
     attributes = defaultdict(set)
     for _, _, person in population.people():
         if key is not None and not person.attributes.get(key) == value:
@@ -152,15 +151,15 @@ def get_attributes(population, show:int=10, key=None, value=None) -> dict:
 
 # Activites
 
-def activities_summary(population: Population, key="subpopulation") -> PrettyTable:
 
+def activities_summary(population: Population, key="subpopulation") -> PrettyTable:
     table = PrettyTable()
     summary = {}
     summary["total"] = count_activites(population)
     slices = []
 
     if key is not None:
-        slices =  population.attributes.get(key, [])
+        slices = population.attributes.get(key, [])
         for value in slices:
             summary[value] = count_activites(population, key, value)
 
@@ -190,15 +189,15 @@ def count_activites(population: Population, key=None, value=None) -> dict:
 
 # Modes
 
-def modes_summary(population: Population, key="subpopulation") -> PrettyTable:
 
+def modes_summary(population: Population, key="subpopulation") -> PrettyTable:
     table = PrettyTable()
     summary = {}
     summary["total"] = count_modes(population)
     slices = []
 
     if key is not None:
-        slices =  population.attributes.get(key, [])
+        slices = population.attributes.get(key, [])
         for value in slices:
             summary[value] = count_modes(population, key, value)
 
