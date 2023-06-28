@@ -4,6 +4,7 @@ Each source code file with have a separate page in the documentation, with pages
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import Union
 
 import mkdocs
 from mkdocs.config import Config, config_options
@@ -36,7 +37,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         self._tmpdir = tempfile.TemporaryDirectory(prefix="mkdocs_api_file_generator_")
         """Temporary directory to store generated markdown files"""
 
-        self._api_reference: dict = {"top_level": []}
+        self._api_reference: dict[str, Union[list, dict[str, list]]] = {"top_level": []}
         """Dictionary to store navigation elements, which will be added to the mkdocs `nav`"""
 
     def on_files(self, files: Files, config: Config) -> Files:
@@ -49,7 +50,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         Returns:
             Files: Updated files list including pointers to the API markdown files which are stored in a temporary directory
         """
-        for file in Path(self.config.package_dir).glob("**/[!_]*.py"):
+        for file in sorted(Path(self.config.package_dir).glob("**/[!_]*.py")):
             if file.as_posix() in self.config.skip:
                 continue
             fileobj = self.py_to_md(file, config)
