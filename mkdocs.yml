@@ -22,7 +22,9 @@ nav:
     - Advanced Plan Cropping: examples/14_Advanced_Plan_Cropping.ipynb
     - Advanced Choice: examples/15_Advanced_Choice.ipynb
   - Get involved: get_involved.md
-  - CLI Reference: api/cli.md
+  - Reference: 
+      - Command line interface: api/cli.md
+  - Changelog: CHANGELOG.md
 theme: 
   name: material
   custom_dir: docs/overrides
@@ -64,6 +66,7 @@ plugins:
             show_if_no_docstring: true
             show_signature_annotations: true
             signature_crossrefs: true
+            show_root_toc_entry: false
   - generate-api:
       package_dir: "pam"
       api_dir: "api"

@@ -58,13 +58,13 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         # Mkdocs navigation is composed of lists of dictionaries.
         # Lists nesting defines navigation nesting, dictionary keys are the page names, and values are the pointers to markdown files.
         api_reference_nav = {
-            "API Reference": [
+            "Python API": [
                 *self._api_reference.pop("top_level"),
                 *[{k: v} for k, v in self._api_reference.items()],
             ]
         }
-
-        config["nav"].append(api_reference_nav)
+        nav_reference = [idx for idx in config["nav"] if set(idx.keys()) == {"Reference"}][0]
+        nav_reference["Reference"].append(api_reference_nav)
         return files
 
     def py_to_md(self, filepath: Path, config: Config) -> File:
