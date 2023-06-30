@@ -25,7 +25,9 @@ nav:
     - contributing/index.md
     - Coding contributions: contributing/coding.md
     - Non-coding contributions: contributing/non_coding.md
-  - CLI Reference: api/cli.md
+  - Changelog: CHANGELOG.md
+  - Reference: 
+    - Command line interface: api/cli.md
 theme: 
   name: material
   custom_dir: docs/overrides
@@ -79,6 +81,7 @@ plugins:
             show_if_no_docstring: true
             show_signature_annotations: true
             signature_crossrefs: true
+            show_root_toc_entry: false
   - search
 watch: 
   - pam

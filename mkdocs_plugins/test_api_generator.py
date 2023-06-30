@@ -52,7 +52,7 @@ def api_plugin():
 def base_config(tmp_path: Path):
     site_dir = tmp_path / "site_dir"
     site_dir.mkdir()
-    return {"nav": [], "site_dir": site_dir, "use_directory_urls": True}
+    return {"nav": [{"Reference": []}], "site_dir": site_dir, "use_directory_urls": True}
 
 
 @pytest.mark.parametrize(
@@ -96,14 +96,18 @@ def test_generate_md_from_py(curdir, temp_src_dir, api_plugin, base_config):
 
     assert base_config["nav"] == [
         {
-            "API Reference": [
-                {"src.file_1": "api/file_1.md"},
+            "Reference": [
                 {
-                    "src.subdir": [
-                        {"src.subdir.file_2": "api/subdir/file_2.md"},
-                        {"src.subdir.file_3": "api/subdir/file_3.md"},
+                    "Python API": [
+                        {"src.file_1": "api/file_1.md"},
+                        {
+                            "src.subdir": [
+                                {"src.subdir.file_2": "api/subdir/file_2.md"},
+                                {"src.subdir.file_3": "api/subdir/file_3.md"},
+                            ]
+                        },
                     ]
-                },
+                }
             ]
         }
     ]
