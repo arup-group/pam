@@ -13,7 +13,6 @@ testpaths = ["tests", "examples", "mkdocs_plugins"]
 markers = ["high_mem", "limit_memory"]
 
 [tool.coverage.run]
-branch = true
 source = ["pam/", "mkdocs_plugins/"]
 
 [tool.coverage.report]
