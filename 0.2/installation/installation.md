@@ -22,7 +22,7 @@ pip install --no-deps -e ./pam
 We do not recommend trying to install PAM directly with pip (e.g. in a virtual environment) as you need to first install underlying native geospatial libraries, the method for which differs by operating system.
 If you choose to install into a virtual environment, ensure you have `libgdal` and `libspatialindex` installed on your device before installing with pip. 
 
-### Running the example notebooks
+## Running the example notebooks
 If you would like to run the [example notebooks](https://github.com/arup-group/pam/tree/main/examples), it's easiest to add the environment as a jupyter kernel: 
 
 ``` shell
@@ -31,7 +31,7 @@ ipython kernel install --user --name=pam
 jupyter notebook
 ```
 
-### Choosing a different environment name
+## Choosing a different environment name
 If you would like to use a different name to `pam` for your mamba environment, the installation becomes (where `[my-env-name]` is your preferred name for the environment):
 
 ``` shell
