@@ -7,6 +7,6 @@ All others should be checked by the reviewer(s).
 You can add extra checklist items here if required by the PR.
 
 - [ ] CHANGELOG updated
-- [ ] Memory profiling tests pass (see [here](https://arup-group.github.io/pam/0.2/get_involved/#memory-profiling) for more details)
+- [ ] Memory profiling tests pass (see [here](https://arup-group.github.io/pam/contributing/coding/#memory-profiling) for more details)
 - [ ] Tests added to cover contribution
 - [ ] Documentation updated

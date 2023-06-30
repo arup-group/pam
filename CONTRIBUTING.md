@@ -82,7 +82,7 @@ When adding docstrings, we request you use the [Google docstring style](https://
 
 ### Pre-release
 
-- [ ] Make sure all unit and integration tests pass (`pytest` and `pytest -p memray -m "high_mem" --no-cov` if you are able to use memray - see [][memory-profiling] for more info).
+- [ ] Make sure all unit and integration tests pass (`pytest` and `pytest -p memray -m "high_mem" --no-cov` if you are able to use memray - see [memory-profiling][] for more info).
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
 - [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
