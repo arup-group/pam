@@ -44,4 +44,4 @@ ipython kernel install --user --name=[my-env-name]
 
 ## Setting up a development environment
 
-For installation instructions specific to developing the PAM codebase, see [here](get_involved.md#setting-up-a-development-environment)
+For installation instructions specific to developing the PAM codebase, see our [development documentation][setting-up-a-development-environment].
