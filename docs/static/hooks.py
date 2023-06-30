@@ -12,7 +12,7 @@ def on_files(files: list, config: dict, **kwargs):
         files.append(_new_file(file, config))
     for file in Path("./resources").glob("**/*.*"):
         files.append(_new_file(file, config))
-
+    files.append(_new_file("./CHANGELOG.md", config))
     return files
 
 
