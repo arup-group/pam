@@ -53,7 +53,7 @@ class PlansToCategorical:
 
         Examples:
             |<----A---->||<----B---->||<C>||<----A---->| => [0,0,0,1,1,1,2,0,0,0]
-            Where 0 represends a time bin of activity A, 1 of B and so on.
+            Where 0 represents a time bin of activity A, 1 of B and so on.
             The axis represents time, binnned according to bin_size and total duration, both given in seconds.
             A mapping between the array values (indexes) and plan activities can be accessed
             via self.index_to_act and self.act_to_index.
