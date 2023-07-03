@@ -36,24 +36,26 @@ def simplify_population(
 
 
 def simplify_external_plans(
-    plan: Plan, boundary: Polygon, snap_to_boundary=False, rename_external_activities=False
+    plan: Plan,
+    boundary: Polygon,
+    snap_to_boundary: bool = False,
+    rename_external_activities: bool = False,
 ) -> None:
     """Simplify any activities happening outside the boundary area.
 
     Method:
-     1: Identify which legs touch the boundary area
-     2: Keep the relevant legs/activities and drop the remaining components
-     3: Infill: create any new legs between external activities as necessary
-     4: Ensure plan consistency: start/end times, sequences, etc
-     5 (optional) : Rename activities to "external"
-     6 (optional) : Crop the leg geometries to start/stop at the core area boundaries
+     1. Identify which legs touch the boundary area
+     2. Keep the relevant legs/activities and drop the remaining components
+     3. Infill: create any new legs between external activities as necessary
+     4. Ensure plan consistency: start/end times, sequences, etc
+     5. **optional** Rename activities to "external"
+     6. **optional** Crop the leg geometries to start/stop at the core area boundaries
 
-    :param plan: a PAM plan
-    :param boundary: the geometry of the core modelled area
-    :param snap_to_boundary: whether to crop legs to stop at the core area boundary.
-    :param rename_external_activities: whether to rename all external-area activities as "external"
-
-    :return: None
+    Args:
+      plan (Plan): a PAM plan
+      boundary (Polygon): the geometry of the core modelled area
+      snap_to_boundary (bool, optional): whether to crop legs to stop at the core area boundary. Defaults to False.
+      rename_external_activities (bool, optional): whether to rename all external-area activities as "external" Defaults to False.
 
     """
     link_plan(plan)

@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import itertools
 from functools import lru_cache, partial
 from multiprocessing import Pool
-from typing import List, Optional
+from typing import TYPE_CHECKING, Literal, Optional
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 import numpy as np
 import pandas as pd
@@ -9,7 +14,6 @@ from Levenshtein import ratio
 from sklearn.cluster import AgglomerativeClustering, SpectralClustering
 
 from pam.activity import Plan
-from pam.core import Population
 from pam.planner.encoder import PlansCharacterEncoder
 from pam.plot.plans import plot_activity_breakdown_area, plot_activity_breakdown_area_tiles
 
@@ -19,7 +23,7 @@ def _levenshtein_distance(a: str, b: str) -> float:
     return 1 - ratio(a, b)
 
 
-def calc_levenshtein_matrix(x: List[str], y: List[str], n_cores=1) -> np.array:
+def calc_levenshtein_matrix(x: list[str], y: list[str], n_cores=1) -> np.array:
     """Create a levenshtein distance matrix from two lists of strings."""
     levenshtein_distance = np.vectorize(_levenshtein_distance)
     if n_cores == 1:
@@ -53,7 +57,7 @@ class PlanClusters:
 
     @property
     @lru_cache()
-    def plans_encoded(self) -> List[str]:
+    def plans_encoded(self) -> list[str]:
         return self.plans_encoder.encode(self.plans)
 
     @property
@@ -74,15 +78,16 @@ class PlanClusters:
     def fit(
         self,
         n_clusters: int,
-        clustering_method: str = "agglomerative",
+        clustering_method: Literal["agglomerative", "spectral"] = "agglomerative",
         linkage: Optional[str] = "complete",
     ) -> None:
         """Fit an agglomerative clustering model.
 
-        :param n_clusters: The number of clusters to use.
-        :param linkage: Linkage criterion.
-        :param clustering_method: The clustering method to use.
-            The currently-supported methods are 'agglomerative' and 'spectral'.
+        Args:
+          n_clusters (int): The number of clusters to use.
+          clustering_method (Literal['agglomerative', 'spectral']): The clustering method to use. Defaults to "agglomerative".
+          linkage (str, optional): Linkage criterion. Defaults to "complete".
+
         """
         if clustering_method == "agglomerative":
             model = AgglomerativeClustering(
@@ -101,16 +106,17 @@ class PlanClusters:
 
         self.model = model
 
-    def get_closest_matches(self, plan, n) -> List[Plan]:
+    def get_closest_matches(self, plan, n) -> list[Plan]:
         """Get the n closest matches of a PAM activity schedule."""
         idx = self.plans.index(plan)
         idx_closest = np.argsort(self.distances_no_diagonal[idx])[:n]
         return [self.plans[x] for x in idx_closest]
 
-    def get_cluster_plans(self, cluster: int):
+    def get_cluster_plans(self, cluster: int) -> list:
         """Get the plans that belong in a specific cluster.
 
-        :param cluster: The cluster index.
+        Args:
+            cluster (int): The cluster index.
         """
         return list(itertools.compress(self.plans, self.model.labels_ == cluster))
 
@@ -127,7 +133,7 @@ class PlanClusters:
         return dict(zip(ids, self.model.labels_))
 
     def plot_plan_breakdowns(
-        self, ax=None, cluster=None, activity_classes: Optional[List[str]] = None, **kwargs
+        self, ax=None, cluster=None, activity_classes: Optional[list[str]] = None, **kwargs
     ):
         """Area plot of the breakdown of activities taking place every minute
         for a specific cluster.

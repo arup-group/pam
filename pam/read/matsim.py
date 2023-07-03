@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Iterator
 from datetime import timedelta
 from typing import Literal, Optional
 
@@ -133,7 +134,7 @@ def stream_matsim_persons(
     keep_non_selected: bool = False,
     leg_attributes: bool = True,
     leg_route: bool = True,
-) -> core.Person:
+) -> Iterator[core.Person]:
     """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support 'version 11' plans.

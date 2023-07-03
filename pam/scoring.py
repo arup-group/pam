@@ -56,13 +56,16 @@ class CharyparNagelPlanScorer:
         person: Person,
         subpopulation: str = "subpopulation",
         plan_costs: Optional[float] = None,
-    ):
+    ) -> float:
         """Score a pam.core.Person Plan.
 
         Args:
-            person (Person):
-            subpopulation (str): person attribute name for subpopulation, Defaults to "subpopulation".
-            plan_costs (Optional[float], optional): Optionally add monetary costs such as tolls. Defaults to None.
+          person (Person):
+          subpopulation (str, optional): person attribute name for subpopulation. Defaults to "subpopulation".
+          plan_costs (float, optional): Optionally add monetary costs such as tolls. Defaults to None.
+
+        Returns:
+            float: score
         """
         subpop = person.attributes[subpopulation]
         cnfg = self.cnfg[subpop]
@@ -72,12 +75,13 @@ class CharyparNagelPlanScorer:
         """Score a pam.activity.Plan.
 
         Args:
-            plan (pam.activity.Plan): activity plan to be scored.
-            cnfg (dict): configuration for plan scoring, refer to self.example_config for example.
-            plan_cost (float, optional): Optionally add a plan monetary cost. Defaults to None.
+          plan (Plan): activity plan to be scored.
+          cnfg (dict): configuration for plan scoring, refer to self.example_config for example.
+          plan_cost (float, optional): Optionally add a plan monetary cost. Defaults to None.
 
         Returns:
-            float: Charypar-Nagel score
+          float: Charypar-Nagel score
+
         """
         return (
             self.score_plan_activities(plan, cnfg)
@@ -190,7 +194,15 @@ class CharyparNagelPlanScorer:
         )
 
     def score_pt_interchanges(self, plan: Plan, cnfg: dict) -> float:
-        """Calculates utility of line switch."""
+        """Calculates utility of line switch.
+
+        Args:
+          plan (Plan):
+          cnfg (dict):
+
+        Returns:
+            float:
+        """
         if not cnfg.get("utilityOfLineSwitch"):
             return 0.0
         transits = []

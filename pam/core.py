@@ -5,7 +5,8 @@ import logging
 import pickle
 import random
 from collections import defaultdict
-from typing import Any, Generator, Optional, Union
+from collections.abc import Iterator
+from typing import Any, Optional, Union
 
 import geopandas as gpd
 import pandas as pd
@@ -81,7 +82,7 @@ class Population:
             for pid, person in household.people.items():
                 yield hid, pid, person
 
-    def plans(self) -> Generator[activity.Plan, None, None]:
+    def plans(self) -> Iterator[activity.Plan]:
         """Iterator for plans in poulation."""
         for hid, household in self.households.items():
             for pid, person in household.people.items():
@@ -1100,10 +1101,11 @@ class Person:
         return self.plan.mode_classes
 
     @property
-    def has_valid_plan(self):
+    def has_valid_plan(self) -> bool:
         """Check sequence of Activities and Legs.
 
-        :return: True.
+        Returns:
+            bool:
         """
         return self.plan.is_valid
 
@@ -1112,30 +1114,33 @@ class Person:
         self.plan.validate()
         return True
 
-    def validate_sequence(self):
+    def validate_sequence(self) -> True:
         """Check sequence of Activities and Legs.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_sequence:
             raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
 
         return True
 
-    def validate_times(self):
+    def validate_times(self) -> True:
         """Check sequence of Activity and Leg times.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_time_sequence:
             raise PAMInvalidTimeSequenceError(f"Person {self.pid} has invalid plan times")
 
         return True
 
-    def validate_locations(self):
+    def validate_locations(self) -> True:
         """Check sequence of Activity and Leg locations.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_locations:
             raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
@@ -1143,10 +1148,11 @@ class Person:
         return True
 
     @property
-    def closed_plan(self):
+    def closed_plan(self) -> bool:
         """Check if plan starts and stops at the same facility (based on activity and location).
 
-        :return: Bool.
+        Returns:
+            bool:
         """
         return self.plan.closed
 

@@ -3,7 +3,10 @@ from __future__ import annotations
 import logging
 import os
 from datetime import datetime
-from typing import Optional, Set
+from typing import TYPE_CHECKING, Optional, Set
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 from lxml import etree as et
 
@@ -15,29 +18,32 @@ from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
 
 
 def write_matsim(
-    population,
+    population: Population,
     plans_path: str,
     attributes_path: Optional[str] = None,
     vehicles_dir: Optional[str] = None,
-    version: int = None,
+    version: Optional[int] = None,
     comment: Optional[str] = None,
     household_key: Optional[str] = "hid",
     keep_non_selected: bool = False,
-    coordinate_reference_system: str = None,
+    coordinate_reference_system: Optional[str] = None,
 ) -> None:
     """Write a core population to matsim population v6 xml format.
     Note that this requires activity locs to be set (shapely.geometry.Point).
 
-    :param population: core.Population, population to be writen to disk
-    :param plans_path: {str, Path}, output path (.xml or .xml.gz)
-    :param attributes_path: legacy parameter, does not have an effect
-    :param vehicles_dir: {str, None}, default None, path to output directory for vehicle files
-    :param version: legacy parameter, does not have an effect
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
-    :param keep_non_selected: bool, default False
-    :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
-    :return: None
+    Args:
+        population (Population): population to be writen to disk
+        plans_path (str): output path (.xml or .xml.gz)
+        attributes_path (Optional[str], optional): legacy parameter, does not have an effect. Defaults to None.
+        vehicles_dir (Optional[str], optional): path to output directory for vehicle files. Defaults to None.
+        version (Optional[int], optional): legacy parameter, does not have an effect. Defaults to None.
+        comment (Optional[str], optional): default None, optionally add a comment string to the xml outputs. Defaults to None.
+        household_key (Optional[str], optional): optionally add household id to person attributes. Defaults to "hid".
+        keep_non_selected (bool, optional): Defaults to False.
+        coordinate_reference_system (Optional[str], optional): optionally add CRS attribute to xml outputs. Defaults to None.
+
+    Raises:
+        UserWarning: If population includes vehicles, `vehicles_dir` must be defined.
     """
     if version is not None:
         logging.warning('parameter "version" is no longer supported by write_matsim()')
@@ -64,18 +70,23 @@ def write_matsim(
 
 
 class Writer:
-    """Context Manager for writing to xml. Designed to handle the boilerplate xml.
-    For example:
-    `with pam.write.matsim.Writer(PATH) as writer:
-        for hid, household in population:
-            writer.add_hh(household)
-    `
-    For example:
-    `with pam.write.matsim.Writer(OUT_PATH) as writer:
-        for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
-            pam.samplers.time.apply_jitter_to_plan(person.plan)
-            writer.add_person(household)
-    `.
+    """Context Manager for writing to xml.
+
+    Designed to handle the boilerplate xml.
+
+    Examples:
+        ```
+        with pam.write.matsim.Writer(PATH) as writer:
+            for hid, household in population:
+                writer.add_hh(household)
+        ```
+
+        ```
+        with pam.write.matsim.Writer(OUT_PATH) as writer:
+            for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
+                pam.samplers.time.apply_jitter_to_plan(person.plan)
+                writer.add_person(household)
+        ```
     """
 
     def __init__(
@@ -134,7 +145,7 @@ class Writer:
 
 
 def write_matsim_population_v6(
-    population,
+    population: Population,
     path: str,
     household_key: Optional[str] = "hid",
     comment: Optional[str] = None,
@@ -142,11 +153,14 @@ def write_matsim_population_v6(
     coordinate_reference_system: str = None,
 ) -> None:
     """Write matsim population v6 xml (persons plans and attributes combined).
-    :param population: core.Population, population to be writen to disk
-    :param path: str, output path (.xml or .xml.gz)
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, default 'hid'
-    :param keep_non_selected: bool, default False.
+
+    Args:
+        population (Population): population to be writen to disk
+        path (str): output path (.xml or .xml.gz)
+        household_key (Optional[str], optional): Defaults to "hid".
+        comment (Optional[str], optional): optionally add a comment string to the xml outputs. Defaults to None.
+        keep_non_selected (bool, optional): Defaults to False.
+        coordinate_reference_system (str, optional): Defaults to None.
     """
     with Writer(
         path=path,
@@ -262,20 +276,23 @@ def population_v6_dtd():
 
 
 def write_vehicles(
-    output_dir,
-    population,
-    all_vehicles_filename="all_vehicles.xml",
-    electric_vehicles_filename="electric_vehicles.xml",
-):
-    """Writes:
-        - all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        - electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    given a population in which Persons have been assigned vehicles.
-    :param output_dir: output directory for all_vehicles file
-    :param population: pam.core.Population
-    :param all_vehicles_filename: name of output all vehicles file, defaults to 'all_vehicles.xml`
-    :param electric_vehicles_filename: name of output electric vehicles file, defaults to 'electric_vehicles.xml`
-    :return:
+    output_dir: str,
+    population: Population,
+    all_vehicles_filename: str = "all_vehicles.xml",
+    electric_vehicles_filename: str = "electric_vehicles.xml",
+) -> None:
+    """Writes vehicle files for a given population in which Persons have been assigned vehicles.
+
+    Output files:
+        - all_vehicles file following the [matsim format](https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd)
+        - electric_vehicles file following the [matsim format](https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd)
+
+    Args:
+      output_dir (str): output directory for all_vehicles file
+      population (Population):
+      all_vehicles_filename (str, optional): name of output all vehicles file. Defaults to 'all_vehicles.xml`.
+      electric_vehicles_filename (str, optional): name of output electric vehicles file. Defaults to 'electric_vehicles.xml`.
+
     """
     if population.has_vehicles:
         if population.has_uniquely_indexed_vehicle_types:
@@ -310,18 +327,18 @@ def write_vehicles(
 
 
 def write_all_vehicles(
-    output_dir,
-    vehicles: Set[Vehicle],
-    vehicle_types: Set[VehicleType],
-    file_name="all_vehicles.xml",
-):
-    """Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-    for MATSim
-    :param output_dir: output directory for all_vehicles file
-    :param vehicles: collection of vehicles to write
-    :param vehicle_types: collection of vehicle types to write
-    :param file_name: name of output file, defaults to 'all_vehicles.xml`
-    :return: None.
+    output_dir: str,
+    vehicles: set[Vehicle],
+    vehicle_types: set[VehicleType],
+    file_name: str = "all_vehicles.xml",
+) -> None:
+    """Writes all_vehicles file following the [matsim format](https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
+
+    Args:
+        output_dir (str): output directory for all_vehicles file
+        vehicles (set[Vehicle]): collection of vehicles to write
+        vehicle_types (set[VehicleType]):  collection of vehicle types to write
+        file_name (str, optional): name of output file. Defaults to "all_vehicles.xml".
     """
     path = os.path.join(output_dir, file_name)
     logging.info(f"Writing all vehicles to {path}")
@@ -344,14 +361,14 @@ def write_all_vehicles(
 
 
 def write_electric_vehicles(
-    output_dir, vehicles: Set[ElectricVehicle], file_name="electric_vehicles.xml"
-):
-    """Writes electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-    for MATSim
-    :param output_dir: output directory for electric_vehicles file
-    :param vehicles: collection of electric vehicles to write
-    :param file_name: name of output file, defaults to 'electric_vehicles.xml`
-    :return: None.
+    output_dir: str, vehicles: Set[ElectricVehicle], file_name: str = "electric_vehicles.xml"
+) -> None:
+    """Writes electric_vehicles file following the [matsim format](https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd)
+
+    Args:
+        output_dir (str): output directory for electric_vehicles file
+        vehicles (Set[ElectricVehicle]): collection of electric vehicles to write
+        file_name (str, optional): name of output file. Defaults to "electric_vehicles.xml".
     """
     path = os.path.join(output_dir, file_name)
     logging.info(f"Writing electric vehicles to {path}")
