@@ -21,17 +21,27 @@ nav:
     - Advanced Freight Synthesis: examples/13_Advanced_Freight_Synthesis.ipynb
     - Advanced Plan Cropping: examples/14_Advanced_Plan_Cropping.ipynb
     - Advanced Choice: examples/15_Advanced_Choice.ipynb
-  - Get involved: get_involved.md
-  - Reference: 
-      - Command line interface: api/cli.md
+  - Contributing: 
+    - contributing/index.md
+    - Coding contributions: contributing/coding.md
+    - Non-coding contributions: contributing/non_coding.md
   - Changelog: CHANGELOG.md
+  - Reference: 
+    - Command line interface: api/cli.md
 theme: 
   name: material
   custom_dir: docs/overrides
+  features:
+    - navigation.indexes
 repo_url: https://github.com/arup-group/pam/
 site_dir: .docs
 markdown_extensions:
   - admonition
+  - attr_list
+  - mkdocs-click
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -39,16 +49,21 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.snippets
-  - attr_list
+  - pymdownx.tasklist:
+      clickable_checkbox: true
   - toc:
       permalink: "#"
       toc_depth: 3
-  - mkdocs-click
 hooks:
   - docs/static/hooks.py
 plugins:
-  - search
   - autorefs
+  - generate-api:
+      package_dir: "pam"
+      api_dir: "api"
+      skip:
+          - pam/cli.py
+          - pam/variables.py
   - mkdocs-jupyter:
       include: ["examples/*.ipynb"]
       allow_errors: false
@@ -67,12 +82,7 @@ plugins:
             show_signature_annotations: true
             signature_crossrefs: true
             show_root_toc_entry: false
-  - generate-api:
-      package_dir: "pam"
-      api_dir: "api"
-      skip:
-          - pam/cli.py
-          - pam/variables.py
+  - search
 watch: 
   - pam
 extra_css:
