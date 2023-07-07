@@ -132,7 +132,7 @@ def SmithHousehold(instantiate_household_with, Steve, Hilda, Timmy, Bobby):
 
 
 @pytest.fixture
-def person_heh():
+def person_heh() -> Person:
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
     person.add(
