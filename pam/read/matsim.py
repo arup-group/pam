@@ -276,8 +276,7 @@ def parse_matsim_plan(
             leg_seq += 1
             trav_time = stage.get("trav_time")
             if trav_time is not None:
-                h, m, s = trav_time.split(":")
-                leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                leg_duration = utils.safe_strpdelta(trav_time)
                 arrival_dt = departure_dt + leg_duration
             else:
                 arrival_dt = departure_dt  # todo this assumes 0 duration unless known

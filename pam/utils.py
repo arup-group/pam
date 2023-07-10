@@ -90,8 +90,26 @@ def safe_strptime(mt):
     """Safely parse string into datetime, can cope with time strings in format hh:mm:ss
     if hh > 23 then adds a day.
     """
-    h, m, s = mt.split(":")
-    return START_OF_DAY + timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+    units = mt.split(":")
+    if len(units) == 3:
+        h, m, s = mt.split(":")
+        return START_OF_DAY + timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+    if len(units) == 2:
+        h, m = mt.split(":")
+        return START_OF_DAY + timedelta(hours=int(h), minutes=int(m))
+    raise UserWarning(f"Unrecognised time format: {mt}")
+
+
+def safe_strpdelta(mt):
+    """Parse string into timedelta, can cope with time strings in format hh:mm:ss or hh:mm"""
+    units = mt.split(":")
+    if len(units) == 3:
+        h, m, s = mt.split(":")
+        return timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+    if len(units) == 2:
+        h, m = mt.split(":")
+        return timedelta(hours=int(h), minutes=int(m))
+    raise UserWarning(f"Unrecognised timedelta format: {mt}")
 
 
 def timedelta_to_hours(td):
