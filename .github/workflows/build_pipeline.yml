@@ -23,9 +23,9 @@ jobs:
         environment-name: pam-win
         environment-file: requirements/base.txt
         create-args: >-
-            -c city-modelling-lab
-            -f requirements/dev.txt
-            python=3.11
+          -f requirements/dev.txt
+          -c city-modelling-lab
+          python=3.11
         post-cleanup: all
         cache-environment: true
     - name: install PAM
@@ -72,7 +72,6 @@ jobs:
         environment-file: requirements/base.txt
         create-args: >-
             -c city-modelling-lab
-            -f requirements/docs.txt
             -f requirements/dev.txt
             python=3.9
         post-cleanup: all
