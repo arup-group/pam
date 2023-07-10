@@ -1,9 +1,11 @@
 import pytest
 import lxml
-import os
-import logging
+from pathlib import Path
+
 from pam.core import Person, Population, Household
 from pam.vehicles import VehicleManager, Vehicle, ElectricVehicle, VehicleType
+from pam.read.matsim import read_matsim
+from pam.write.matsim import write_matsim
 from pam import PAMVehicleIdError
 
 
@@ -32,42 +34,42 @@ def test_veh_manager_add_type_again(car_type, lorry_type):
 
 
 def test_create_car():
-    veh = Vehicle("car")
+    veh = Vehicle("0", "car")
     assert veh.type_id == "car"
 
 
 def test_create_ev():
-    veh = ElectricVehicle("car")
+    veh = ElectricVehicle("0", "car")
     assert veh.type_id == "car"
 
 
 def test_add_veh_failure_due_to_unknown_type():
     manager = VehicleManager()
-    veh1 = Vehicle("car")
+    veh1 = Vehicle("1", "car")
     with pytest.raises(PAMVehicleIdError):
-        manager.add_veh("1", veh1)
+        manager.add_veh(veh1)
 
 
 def test_add_veh(car_type):
     manager = VehicleManager()
     manager.add_type("car", car_type)
-    veh1 = Vehicle("car")
-    manager.add_veh("1", veh1)
+    veh1 = Vehicle("1", "car")
+    manager.add_veh(veh1)
     assert "1" in manager
 
 
 def test_add_ev_failure_due_to_unknown_type():
     manager = VehicleManager()
-    veh1 = ElectricVehicle("car")
+    veh1 = ElectricVehicle("1", "car")
     with pytest.raises(PAMVehicleIdError):
-        manager.add_veh("1", veh1)
+        manager.add_veh(veh1)
 
 
 def test_add_ev(car_type):
     manager = VehicleManager()
     manager.add_type("car", car_type)
-    veh1 = ElectricVehicle("car")
-    manager.add_veh("1", veh1)
+    veh1 = ElectricVehicle("1", "car")
+    manager.add_veh(veh1)
     assert "1" in manager
 
 
@@ -79,7 +81,7 @@ def test_set_veh_fails_due_to_unknown_type():
 
 def test_set_veh_fails_due_to_missing_type():
     manager = VehicleManager()
-    veh1 = Vehicle("car")
+    veh1 = Vehicle("1", "car")
     with pytest.raises(PAMVehicleIdError):
         manager["1"] = veh1
 
@@ -87,7 +89,7 @@ def test_set_veh_fails_due_to_missing_type():
 def test_set_veh(car_type):
     manager = VehicleManager()
     manager.add_type("car", car_type)
-    veh1 = Vehicle("car")
+    veh1 = Vehicle("1", "car")
     manager["1"] = veh1
     assert "1" in manager
 
@@ -95,7 +97,7 @@ def test_set_veh(car_type):
 def test_set_ev(car_type):
     manager = VehicleManager()
     manager.add_type("car", car_type)
-    veh1 = ElectricVehicle("car")
+    veh1 = ElectricVehicle("1", "car")
     manager["1"] = veh1
     assert "1" in manager
 
@@ -106,13 +108,13 @@ def manager(car_type, lorry_type):
     manager.add_type("car", car_type)
     manager.add_type("lorry", lorry_type)
     for i in range(2):
-        veh = Vehicle("car")
+        veh = Vehicle(f"car_{i}", "car")
         manager[f"car_{i}"] = veh
     for i in range(2):
-        veh = ElectricVehicle("car")
+        veh = ElectricVehicle(f"ev_{i}", "car")
         manager[f"ev_{i}"] = veh
     for i in range(1):
-        veh = Vehicle("lorry")
+        veh = Vehicle(f"freight_{i}", "lorry")
         manager[f"freight_{i}"] = veh
     return manager
 
@@ -145,14 +147,19 @@ def test_manager_contains(manager):
     assert "car_0" in manager
 
 
+def test_manager_equals(manager):
+    assert manager == manager
+    other = VehicleManager()
+    assert manager != other
+
+
 def test_manager_length(manager):
     assert manager.len() == 5
 
 
 def test_manager_iters(manager):
     assert set([k for k, v in manager.types()]) == {"car", "lorry"}
-    assert set([k for k, v in manager.iter()]) == {"car_0", "car_1", "ev_0", "ev_1", "freight_0"}
-    assert set([k for k, v in manager.vehs()]) == {"car_0", "car_1", "freight_0"}
+    assert set([k for k, v in manager.vehs()]) == {"car_0", "car_1", "freight_0", "ev_0", "ev_1"}
     assert set([k for k, v in manager.evs()]) == {"ev_0", "ev_1"}
 
 
@@ -164,434 +171,242 @@ def test_manager_is_consistent(manager):
     assert manager.is_consistent()
 
 
-def test_manager_is_consistent(manager):
-    assert manager.is_consistent()
-
-
 def test_manager_inconsistent_vehs(manager):
-    manager.vehicles["taxi_0"] = Vehicle("taxi")
+    manager.vehicles["taxi_0"] = Vehicle("taxi_0", "taxi")
     with pytest.raises(PAMVehicleIdError):
         manager.is_consistent()
 
 
-def test_manager_inconsistent_veh_types(manager):
+def test_manager_redundant_veh_types(manager):
     manager.veh_types["taxi"] = VehicleType()
+    assert manager.redundant_types() == {"taxi": VehicleType()}
+
+
+def test_reading_all_vehicles_file(all_vehicle_xml_path):
+    manager = VehicleManager()
+    manager.from_xml(all_vehicle_xml_path)
+    assert manager.veh_types == {
+        "defaultVehicleType": VehicleType(),
+        "defaultElectricVehicleType": VehicleType(),
+    }
+    assert manager.vehicles == {
+        "Eddy": Vehicle("Eddy", "defaultElectricVehicleType"),
+        "Stevie": Vehicle("Stevie", "defaultVehicleType"),
+        "Vladya": Vehicle("Vladya", "defaultVehicleType"),
+    }
+
+
+def test_reading_electric_vehicles(
+    all_vehicle_xml_path,
+    electric_vehicles_xml_path,
+):
+    manager = VehicleManager()
+    manager.from_xml(all_vehicle_xml_path, electric_vehicles_xml_path)
+    assert manager.veh_types == {
+        "defaultVehicleType": VehicleType(),
+        "defaultElectricVehicleType": VehicleType(),
+    }
+    assert manager.vehicles == {
+        "Eddy": ElectricVehicle("Eddy", "defaultElectricVehicleType"),
+        "Stevie": Vehicle("Stevie", "defaultVehicleType"),
+        "Vladya": Vehicle("Vladya", "defaultVehicleType"),
+    }
+
+
+def test_assign_vehicles_to_person(manager):
+    person = Person("0", attributes={"subpopulation": "default", "vehicles": {"car": "car_0"}})
+    person.assign_vehicles(manager)
+    assert "car_0" not in manager
+    assert person.vehicles == {"car": Vehicle("car_0", "car")}
+
+
+def test_assign_evs_to_person(manager):
+    person = Person("0", attributes={"subpopulation": "default", "vehicles": {"car": "ev_0"}})
+    person.assign_vehicles(manager)
+    assert "ev_0" not in manager
+    assert person.vehicles == {"car": ElectricVehicle("ev_0", "car")}
+
+
+def test_assign_multiple_vehs_to_person(manager):
+    person = Person("0", attributes={"subpopulation": "default", "vehicles": {"ev": "ev_0", "car": "car_0"}})
+    person.assign_vehicles(manager)
+    assert "car_0" not in manager
+    assert "ev_0" not in manager
+    assert person.vehicles["ev"] == ElectricVehicle("ev_0", "car")
+    assert person.vehicles["car"] == Vehicle("car_0", "car")
+
+
+def test_rebuild_manager_fails_due_to_missing_type():
+    population = Population()
+    population.vehicles_manager = VehicleManager()
+    population.vehicles_manager.add_type("car", VehicleType())
+
+    person = Person("0", attributes={"subpopulation": "default"})
+    person.vehicles = {"big_car": Vehicle("0", "big_car")}
+    population.add(person)
+
     with pytest.raises(PAMVehicleIdError):
-        manager.is_consistent()
-
-
-# @pytest.fixture()
-# def person_without_a_vehicle():
-#     return Person("Bobby", attributes={"age": 6, "job": "education", "gender": "non-binary"})
-
-
-# @pytest.fixture()
-# def person_with_car():
-#     return Person(
-#         "Vladya",
-#         attributes={"age": 25, "job": "influencer", "gender": "female"},
-#         vehicle=Vehicle(vid="car_Vladya", veh_type="car"),
-#     )
-
-
-# @pytest.fixture()
-# def another_person_with_car():
-#     return Person(
-#         "Stevie",
-#         attributes={"age": 36, "job": "blue_collar_crime", "gender": "male"},
-#         vehicle=Vehicle(vid="car_Stevie", veh_type="car"),
-#     )
-
-
-# @pytest.fixture()
-# def person_with_electric_vehicle():
-#     return Person(
-#         "Eddy",
-#         attributes={"age": 45, "job": "white_collar_crime", "gender": "male"},
-#         vehicle=ElectricVehicle(vid="ev_Eddy", veh_type="car"),
-#     )
-
-
-# @pytest.fixture()
-# def population_without_vehicles(person_without_a_vehicle):
-#     pop = Population()
-#     hhld = Household(hid="1")
-#     hhld.add(person_without_a_vehicle)
-#     pop.add(hhld)
-#     return pop
-
-
-# @pytest.fixture()
-# def population_with_default_vehicles(
-#     population_without_vehicles,
-#     person_with_car,
-#     another_person_with_car,
-# ):
-#     hhld = Household(hid="2")
-#     hhld.add(person_with_car)
-#     hhld.add(another_person_with_car)
-#     population_without_vehicles.add(hhld)
-#     return population_without_vehicles
-
-
-# @pytest.fixture()
-# def population_with_electric_vehicles(population_with_default_vehicles, person_with_electric_vehicle):
-#     hhld = Household(hid="3")
-#     hhld.add(person_with_electric_vehicle)
-#     population_with_default_vehicles.add(hhld)
-#     return population_with_default_vehicles
-
-
-# def test_vehicle_types(population_with_electric_vehicles):
-#     population_with_electric_vehicles.vehicle_types()
-
-
-# def test_population_without_vehicles_does_not_have_vehicles(
-#     population_without_vehicles,
-# ):
-#     assert not population_without_vehicles.has_vehicles
-
-
-# def test_population_with_default_vehicles_has_vehicles(
-#     population_with_default_vehicles,
-# ):
-#     assert population_with_default_vehicles.has_vehicles
-
-
-# def test_population_with_default_vehicles_does_not_have_electric_vehicles(
-#     population_with_default_vehicles,
-# ):
-#     assert not population_with_default_vehicles.has_electric_vehicles
-
-
-# def test_population_with_electric_vehicles_has_vehicles(
-#     population_with_electric_vehicles,
-# ):
-#     assert population_with_electric_vehicles.has_vehicles
-
-
-# def test_population_with_electric_vehicles_has_electric_vehicles(
-#     population_with_electric_vehicles,
-# ):
-#     assert population_with_electric_vehicles.has_electric_vehicles
-
-
-# def test_extracting_vehicles_from_population(population_with_electric_vehicles):
-#     assert set(population_with_electric_vehicles.vehicles()) == {
-#         Vehicle("Vladya"),
-#         Vehicle("Stevie"),
-#         ElectricVehicle("Eddy"),
-#     }
-
-
-# def test_sorting_vehicles_list(population_with_electric_vehicles):
-#     pop_vehicles = list(population_with_electric_vehicles.vehicles())
-#     pop_vehicles.sort()
-#     assert pop_vehicles == [
-#         ElectricVehicle("Eddy"),
-#         Vehicle("Stevie"),
-#         Vehicle("Vladya"),
-#     ]
-
-
-# def test_extracting_electric_vehicles_from_population(
-#     population_with_electric_vehicles,
-# ):
-#     assert set(population_with_electric_vehicles.electric_vehicles()) == {ElectricVehicle("Eddy")}
-
-
-# def test_extracting_vehicle_types_from_population(population_with_electric_vehicles):
-#     assert set(population_with_electric_vehicles.vehicle_types()) == {
-#         VehicleType("defaultVehicleType"),
-#         VehicleType("defaultElectricVehicleType"),
-#     }
-
-
-# def test_population_with_electric_vehicles_has_uniquely_defined_vehicle_types(
-#     population_with_electric_vehicles,
-# ):
-#     assert population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
-
-
-# def test_population_with_non_uniquely_defined_vehicle_types(
-#     population_with_electric_vehicles,
-# ):
-#     hhld = Household(hid="4")
-#     hhld.add(
-#         Person(
-#             "Micky Faraday",
-#             vehicle=ElectricVehicle(
-#                 charger_types="other,tesla",
-#                 id="Micky Faraday",
-#                 type_id=VehicleType("defaultElectricVehicleType", networkMode="e_car"),
-#             ),
-#         )
-#     )
-#     population_with_electric_vehicles.add(hhld)
-#     assert set(population_with_electric_vehicles.vehicle_types()) == {
-#         VehicleType("defaultVehicleType"),
-#         VehicleType("defaultElectricVehicleType"),
-#         VehicleType("defaultElectricVehicleType", networkMode="e_car"),
-#     }
-#     assert not population_with_electric_vehicles.has_uniquely_indexed_vehicle_types
-
-
-# def test_extracting_unique_electric_charger_types_from_population(
-#     population_with_electric_vehicles,
-# ):
-#     hhld = Household(hid="4")
-#     hhld.add(
-#         Person(
-#             "Micky Faraday",
-#             vehicle=ElectricVehicle(charger_types="other,tesla", id="Micky Faraday"),
-#         )
-#     )
-#     population_with_electric_vehicles.add(hhld)
-
-#     assert population_with_electric_vehicles.electric_vehicle_charger_types() == {
-#         "default",
-#         "other",
-#         "tesla",
-#     }
-
-
-# @pytest.fixture
-# def vehicles_v2_xsd():
-#     xsd_path = os.path.abspath(
-#         os.path.join(
-#             os.path.dirname(__file__),
-#             "..",
-#             "pam",
-#             "fixtures",
-#             "dtd",
-#             "vehicleDefinitions_v2.0.xsd",
-#         )
-#     )
-#     xml_schema_doc = lxml.etree.parse(xsd_path)
-#     yield lxml.etree.XMLSchema(xml_schema_doc)
-
-
-# @pytest.fixture
-# def electric_vehicles_v1_dtd():
-#     dtd_path = os.path.abspath(
-#         os.path.join(
-#             os.path.dirname(__file__),
-#             "..",
-#             "pam",
-#             "fixtures",
-#             "dtd",
-#             "electric_vehicles_v1.dtd",
-#         )
-#     )
-#     yield lxml.etree.DTD(dtd_path)
-
-
-# def test_writing_all_vehicles_results_in_valid_xml_file(tmpdir, population_with_electric_vehicles, vehicles_v2_xsd):
-#     write_all_vehicles(
-#         tmpdir,
-#         population_with_electric_vehicles.vehicles(),
-#         population_with_electric_vehicles.vehicle_types(),
-#     )
-
-#     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
-#     xml_obj = lxml.etree.parse(generated_file_path)
-#     vehicles_v2_xsd.assertValid(xml_obj)  # this needs internet?
-
-
-# def test_generates_matsim_vehicles_xml_file_containing_expected_vehicle_types(
-#     tmpdir, population_with_electric_vehicles
-# ):
-#     expected_vehicle_types = {"defaultVehicleType", "defaultElectricVehicleType"}
-
-#     write_all_vehicles(
-#         tmpdir,
-#         population_with_electric_vehicles.vehicles(),
-#         population_with_electric_vehicles.vehicle_types(),
-#     )
-
-#     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
-#     xml_obj = lxml.etree.parse(generated_file_path)
-
-#     vehicle_types = xml_obj.findall("{http://www.matsim.org/files/dtd}vehicleType")
-#     vehicle_types = set(vehicle_type.get("id") for vehicle_type in vehicle_types)
-#     assert expected_vehicle_types == vehicle_types
-
-
-# def test_generates_matsim_vehicles_xml_file_containing_expected_vehicles(tmpdir, population_with_electric_vehicles):
-#     expected_vehicles = {
-#         "Eddy": "defaultElectricVehicleType",
-#         "Stevie": "defaultVehicleType",
-#         "Vladya": "defaultVehicleType",
-#     }
-
-#     write_all_vehicles(
-#         tmpdir,
-#         population_with_electric_vehicles.vehicles(),
-#         population_with_electric_vehicles.vehicle_types(),
-#     )
-
-#     generated_file_path = os.path.join(tmpdir, "all_vehicles.xml")
-#     xml_obj = lxml.etree.parse(generated_file_path)
-
-#     vehicles = xml_obj.findall("{http://www.matsim.org/files/dtd}vehicle")
-#     assert expected_vehicles == {vehicle.get("id"): vehicle.get("type") for vehicle in vehicles}
-
-
-# def test_writing_electric_vehicles_results_in_valid_xml_file(
-#     tmpdir, population_with_electric_vehicles, electric_vehicles_v1_dtd
-# ):
-#     write_electric_vehicles(tmpdir, population_with_electric_vehicles.electric_vehicles())
-
-#     generated_file_path = os.path.join(tmpdir, "electric_vehicles.xml")
-#     xml_obj = lxml.etree.parse(generated_file_path)
-#     assert electric_vehicles_v1_dtd.validate(xml_obj), (
-#         f"Doc generated at {generated_file_path} is not valid against DTD "
-#         f"due to {electric_vehicles_v1_dtd.error_log.filter_from_errors()}"
-#     )
-
-
-# def test_generates_electric_vehicles_xml_file_containing_expected_vehicles(tmpdir, population_with_electric_vehicles):
-#     expected_vehicles = [
-#         {
-#             "id": "Eddy",
-#             "battery_capacity": "60",
-#             "initial_soc": "60",
-#             "charger_types": "default",
-#             "vehicle_type": "defaultElectricVehicleType",
-#         }
-#     ]
-
-#     write_electric_vehicles(tmpdir, population_with_electric_vehicles.electric_vehicles())
-
-#     generated_file_path = os.path.join(tmpdir, "electric_vehicles.xml")
-#     xml_obj = lxml.etree.parse(generated_file_path)
-
-#     vehicles = xml_obj.findall("vehicle")
-#     assert expected_vehicles == [v.attrib for v in vehicles]
-
-
-# def test_generating_vehicle_files_from_nonelectric_population_produces_only_vehicle_file(
-#     tmpdir, population_with_default_vehicles
-# ):
-#     expected_all_vehicles_file = os.path.join(tmpdir, "all_vehicles.xml")
-#     expected_electric_vehicles_file = os.path.join(tmpdir, "electric_vehicles.xml")
-
-#     assert not os.path.exists(expected_all_vehicles_file)
-#     assert not os.path.exists(expected_electric_vehicles_file)
-
-#     write_vehicles(tmpdir, population_with_default_vehicles)
-
-#     assert os.path.exists(expected_all_vehicles_file)
-#     assert not os.path.exists(expected_electric_vehicles_file)
-
-
-# def test_generating_vehicle_files_from_electric_population_produces_both_files(
-#     tmpdir, population_with_electric_vehicles
-# ):
-#     expected_all_vehicles_file = os.path.join(tmpdir, "all_vehicles.xml")
-#     expected_electric_vehicles_file = os.path.join(tmpdir, "electric_vehicles.xml")
-
-#     assert not os.path.exists(expected_all_vehicles_file)
-#     assert not os.path.exists(expected_electric_vehicles_file)
-
-#     write_vehicles(tmpdir, population_with_electric_vehicles)
-
-#     assert os.path.exists(expected_all_vehicles_file)
-#     assert os.path.exists(expected_electric_vehicles_file)
-
-
-# def test_generating_vehicle_files_from_electric_population_informs_of_charger_types(
-#     tmpdir, population_with_electric_vehicles, caplog
-# ):
-#     logging.basicConfig()
-#     logging.getLogger().setLevel(logging.INFO)
-
-#     write_vehicles(tmpdir, population_with_electric_vehicles)
-
-#     recs = [rec for rec in caplog.records if "electric" in rec.message]
-#     last_electric_message = recs[-1]
-#     assert last_electric_message.levelname == "INFO"
-#     assert "unique charger types: " in last_electric_message.message
-#     assert "{'default'}" in last_electric_message.message
-
-
-# @pytest.fixture
-# def ev_population_xml_path():
-#     return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "ev_population.xml"))
-
-
-# @pytest.fixture
-# def all_vehicle_xml_path():
-#     return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "all_vehicles.xml"))
-
-
-# @pytest.fixture
-# def expected_all_vehicle_xml_output():
-#     return {
-#         "Eddy": Vehicle("Eddy", VehicleType("defaultElectricVehicleType")),
-#         "Stevie": Vehicle("Stevie", VehicleType("defaultVehicleType")),
-#         "Vladya": Vehicle("Vladya", VehicleType("defaultVehicleType")),
-#     }
-
-
-# @pytest.fixture
-# def electric_vehicles_xml_path():
-#     return os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data", "vehicles", "electric_vehicles.xml"))
-
-
-# @pytest.fixture
-# def expected_electric_vehicle_xml_output():
-#     return {
-#         "Eddy": ElectricVehicle("Eddy", VehicleType("defaultElectricVehicleType")),
-#         "Stevie": Vehicle("Stevie", VehicleType("defaultVehicleType")),
-#         "Vladya": Vehicle("Vladya", VehicleType("defaultVehicleType")),
-#     }
-
-
-# def test_reading_all_vehicles_file(all_vehicle_xml_path, expected_all_vehicle_xml_output):
-#     vehicles = read_all_vehicles_file(all_vehicle_xml_path)
-#     assert vehicles == expected_all_vehicle_xml_output
-
-
-# def test_reading_electric_vehicles_with_all_vehicles_results_in_vehicles_being_updated_to_electric_vehicle_class(
-#     electric_vehicles_xml_path,
-#     expected_all_vehicle_xml_output,
-#     expected_electric_vehicle_xml_output,
-# ):
-#     vehicles = read_electric_vehicles_file(electric_vehicles_xml_path, expected_all_vehicle_xml_output)
-#     assert vehicles == expected_electric_vehicle_xml_output
-
-
-# def test_reading_electric_vehicles_only_results_in_defaulted_vehicle_type(
-#     electric_vehicles_xml_path,
-# ):
-#     vehicles = read_electric_vehicles_file(electric_vehicles_xml_path)
-#     assert vehicles == {"Eddy": ElectricVehicle(id="Eddy")}
-
-
-# def test_reading_population_with_both_vehicle_files_assigns_all_vehicles_correctly(
-#     ev_population_xml_path,
-#     all_vehicle_xml_path,
-#     electric_vehicles_xml_path,
-#     expected_electric_vehicle_xml_output,
-# ):
-#     pop = read_matsim(
-#         plans_path=ev_population_xml_path,
-#         all_vehicles_path=all_vehicle_xml_path,
-#         electric_vehicles_path=electric_vehicles_xml_path,
-#         version=12,
-#     )
-#     for person in ["Eddy", "Stevie", "Vladya"]:
-#         pop.get(person).people[person].vehicle = expected_electric_vehicle_xml_output[person]
-
-
-# def test_reading_population_with_all_vehicle_file_defaults_to_vehicle_class(
-#     ev_population_xml_path, all_vehicle_xml_path, expected_all_vehicle_xml_output
-# ):
-#     pop = read_matsim(
-#         plans_path=ev_population_xml_path,
-#         all_vehicles_path=all_vehicle_xml_path,
-#         version=12,
-#     )
-#     for person in ["Eddy", "Stevie", "Vladya"]:
-#         pop.get(person).people[person].vehicle = expected_all_vehicle_xml_output[person]
+        population.rebuild_vehicles_manager()
+
+
+def test_rebuild_manager_fails_due_to_duplicates():
+    population = Population()
+    population.vehicles_manager = VehicleManager()
+    population.vehicles_manager.add_type("car", VehicleType())
+
+    personA = Person("0", attributes={"subpopulation": "default"})
+    personA.vehicles = {"car0": Vehicle("car0", "car")}
+    personB = Person("1", attributes={"subpopulation": "default"})
+    personB.vehicles = {"car0": Vehicle("car0", "car")}
+    population.add(personA)
+    population.add(personB)
+
+    with pytest.raises(PAMVehicleIdError):
+        population.rebuild_vehicles_manager()
+
+
+def test_rebuild_manager_single_agent(manager):
+    population = Population()
+    population.vehicles_manager = manager
+
+    person = Person("0", attributes={"subpopulation": "default"})
+    person.vehicles = {"car": Vehicle("0", "car")}
+    population.add(person)
+
+    population.rebuild_vehicles_manager()
+    assert population.vehicles_manager.vehicles == {"0": Vehicle("0", "car")}
+    assert population.vehicles_manager.redundant_types() == {"lorry": VehicleType(passengerCarEquivalents=3.0)}
+
+
+def test_rebuild_manager_multi_agent(manager):
+    population = Population()
+    population.vehicles_manager = manager
+
+    personA = Person("0", attributes={"subpopulation": "default"})
+    personA.vehicles = {"0": Vehicle("0", "car")}
+    population.add(personA)
+
+    personB = Person("1", attributes={"subpopulation": "freight"})
+    personB.vehicles = {"1": Vehicle("1", "lorry")}
+    population.add(personB)
+
+    personC = Person("2", attributes={"subpopulation": "ev"})
+    personC.vehicles = {"2": ElectricVehicle("2", "car")}
+    population.add(personC)
+
+    population.rebuild_vehicles_manager()
+    assert population.vehicles_manager.vehicles == {
+        "0": Vehicle("0", "car"),
+        "1": Vehicle("1", "lorry"),
+        "2": ElectricVehicle("2", "car"),
+    }
+    assert population.vehicles_manager.redundant_types() == {}
+
+
+def test_writing_all_vehicles_results_in_valid_xml_file(manager, tmp_path, vehicles_v2_xsd):
+    file_path = tmp_path / "all_vehicles.xml"
+    manager.to_xml(vehs_path=file_path)
+    xml_obj = lxml.etree.parse(file_path)
+    vehicles_v2_xsd.assertValid(xml_obj)  # this needs internet?
+
+
+def test_writing_electric_vehicles_results_in_valid_xml_file(manager, tmp_path, electric_vehicles_v1_dtd):
+    vehs_path = tmp_path / "all_vehicles.xml"
+    evs_path = tmp_path / "ev_vehicles.xml"
+    manager.to_xml(vehs_path=vehs_path, evs_path=evs_path)
+    xml_obj = lxml.etree.parse(evs_path)
+    assert electric_vehicles_v1_dtd.validate(xml_obj), (
+        f"Doc generated at {evs_path} is not valid against DTD "
+        f"due to {electric_vehicles_v1_dtd.error_log.filter_from_errors()}"
+    )
+
+
+def test_read_write_xml_consistently(all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+    manager = VehicleManager()
+    manager.from_xml(all_vehicle_xml_path, electric_vehicles_xml_path)
+    vehs_path = tmp_path / "vehs.xml"
+    evs_path = tmp_path / "evs.xml"
+    manager.to_xml(vehs_path, evs_path)
+    duplicate = VehicleManager()
+    duplicate.from_xml(vehs_path, evs_path)
+    assert manager == duplicate
+
+
+def test_read_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path):
+    population = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        electric_vehicles_path=electric_vehicles_xml_path,
+    )
+    assert population.vehicles_manager.veh_types == {
+        "defaultVehicleType": VehicleType(),
+        "defaultElectricVehicleType": VehicleType(),
+    }
+    assert population.vehicles_manager.vehicles == {}
+
+    # check vehicles attribute is removed
+    for pid in ["Eddy", "Stevie", "Vladya"]:
+        assert list(population[pid][pid].attributes.keys()) == ["subpopulation"]
+
+    assert population["Eddy"]["Eddy"].vehicles["car"] == ElectricVehicle("Eddy", "defaultElectricVehicleType")
+    assert population["Stevie"]["Stevie"].vehicles["car"] == Vehicle("Stevie", "defaultVehicleType")
+    assert population["Vladya"]["Vladya"].vehicles["car"] == Vehicle("Vladya", "defaultVehicleType")
+
+
+def test_write_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+    population = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        electric_vehicles_path=electric_vehicles_xml_path,
+    )
+    plans_path = tmp_path / "plans.xml"
+    vehs_path = tmp_path / "vehs.xml"
+    evs_path = tmp_path / "evs.xml"
+    write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
+    duplicate = read_matsim(
+        plans_path=plans_path,
+        all_vehicles_path=vehs_path,
+        electric_vehicles_path=evs_path,
+    )
+    assert population == duplicate
+
+
+def test_read_edit_size_write(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+    population = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        electric_vehicles_path=electric_vehicles_xml_path,
+    )
+    population.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents = 1.2
+    plans_path = tmp_path / "plans.xml"
+    vehs_path = tmp_path / "vehs.xml"
+    evs_path = tmp_path / "evs.xml"
+    write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
+    duplicate = read_matsim(
+        plans_path=plans_path,
+        all_vehicles_path=vehs_path,
+        electric_vehicles_path=evs_path,
+    )
+    assert duplicate.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents == 1.2
+
+
+def test_read_edit_veh_write(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+    population = read_matsim(
+        plans_path=ev_population_xml_path,
+        all_vehicles_path=all_vehicle_xml_path,
+        electric_vehicles_path=electric_vehicles_xml_path,
+    )
+    population["Stevie"]["Stevie"].vehicles["car"] = ElectricVehicle("Stevie", "defaultElectricVehicleType")
+    population["Eddy"]["Eddy"].vehicles["car"] = Vehicle("Eddy", "defaultVehicleType")
+
+    plans_path = tmp_path / "plans.xml"
+    vehs_path = tmp_path / "vehs.xml"
+    evs_path = tmp_path / "evs.xml"
+    write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
+    duplicate = read_matsim(
+        plans_path=plans_path,
+        all_vehicles_path=vehs_path,
+        electric_vehicles_path=evs_path,
+    )
+    assert duplicate["Stevie"]["Stevie"].vehicles["car"] == ElectricVehicle("Stevie", "defaultElectricVehicleType")
+    assert duplicate["Eddy"]["Eddy"].vehicles["car"] == Vehicle("Eddy", "defaultVehicleType")

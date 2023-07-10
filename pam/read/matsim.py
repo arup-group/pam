@@ -81,7 +81,7 @@ have attributes or be able to use a household attribute id. Check this is intend
         logger.debug(f"Loading vehicles from {all_vehicles_path}")
         if electric_vehicles_path:
             logger.debug(f"Loading EVs from {electric_vehicles_path}")
-        population.vehicle_types.from_xml(all_vehicles_path, electric_vehicles_path)
+        population.vehicles_manager.from_xml(all_vehicles_path, electric_vehicles_path)
 
     attributes = {}
     if attributes_path:
@@ -93,7 +93,7 @@ have attributes or be able to use a household attribute id. Check this is intend
     for person in stream_matsim_persons(
         plans_path,
         attributes=attributes,
-        vehicles=population.vehicle_types,
+        vehicles_manager=population.vehicles_manager,
         weight=weight,
         version=version,
         simplify_pt_trips=simplify_pt_trips,
@@ -123,7 +123,7 @@ have attributes or be able to use a household attribute id. Check this is intend
 def stream_matsim_persons(
     plans_path: str,
     attributes: dict = {},
-    vehicles: Optional[VehicleManager] = VehicleManager(),
+    vehicles_manager: Optional[VehicleManager] = VehicleManager(),
     weight: int = 100,
     version: int = 12,
     simplify_pt_trips: bool = False,
@@ -182,9 +182,11 @@ def stream_matsim_persons(
         else:
             person_id, agent_attributes = get_attributes_from_person(person_xml)
 
-        # remove vehicle attribute from agent and create person vehciles dictionary
-        # todo: repair the attributes and veh types before writting!
-        person_vehs = {mode: vehicles.pop(vid) for mode, vid in attributes.pop("vehicles", {}).items()}
+        # remove vehicle attribute from agent and create person vehicles dictionary
+        person_vehs = {}
+        if vehicles_manager.len():
+            agent_vehs = agent_attributes.pop("vehicles", {})
+            person_vehs = {mode: vehicles_manager.pop(vid) for mode, vid in agent_vehs.items()}
 
         person = core.Person(person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs)
 
@@ -466,12 +468,13 @@ def get_attributes_from_person(elem):
         elif data == "org.matsim.vehicles.PersonVehicles":
             attributes[attr.get("name")] = parse_veh_attribute(attr.text)
         # last try:
-        attributes[attr.get("name")] = attr.text
+        else:
+            attributes[attr.get("name")] = attr.text
     return ident, attributes
 
 
 def parse_veh_attribute(text) -> dict:
-    return json.loads(str(text))
+    return json.loads(text)
 
 
 def get_attributes_from_legs(elem):

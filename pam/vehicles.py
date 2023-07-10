@@ -34,7 +34,7 @@ class CapacityType:
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class VehicleType:
     length: float = 7.5  # metres
     width: float = 1.0  # metres
@@ -78,27 +78,36 @@ class VehicleType:
             xf.write(et.Element("flowEfficiencyFactor", {"factor": str(self.flowEfficiencyFactor)}))
 
 
-@dataclass(frozen=True)
-class Vehicle:
+@dataclass
+class BaseVehicle:
+    vid: str
     type_id: str
 
-    def to_xml(self, xf, vid: str):
-        xf.write(et.Element("vehicle", {"id": vid, "type": str(self.type_id)}))
+    def to_xml(self, xf):
+        xf.write(et.Element("vehicle", {"id": str(self.vid), "type": str(self.type_id)}))
+
+    def to_atribute(self, xf):
+        xf.write(et.Element("attribute", {"class": "org.matsim.vehicles.PersonVehicles", "type": str(self.type_id)}))
 
 
-@dataclass(frozen=True)
-class ElectricVehicle:
+@dataclass
+class Vehicle(BaseVehicle):
+    pass
+
+
+@dataclass
+class ElectricVehicle(BaseVehicle):
     type_id: str
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = "default"  # supported charger types; comma-separated list: 'default,other'
 
-    def to_xml(self, xf, vid: str):
+    def to_ev_xml(self, xf):
         xf.write(
             et.Element(
                 "vehicle",
                 {
-                    "id": vid,
+                    "id": str(self.vid),
                     "battery_capacity": str(self.battery_capacity),
                     "initial_soc": str(self.initial_soc),
                     "charger_types": str(self.charger_types),
@@ -129,27 +138,20 @@ class VehicleManager:
             logging.info(f"Warning, overwriting existing vehicle type '{k}'.")
         self.veh_types[k] = vehicle_type
 
-    def add_veh(self, k: str, v: Vehicle) -> bool:
+    def add_veh(self, v: Vehicle):
         if v.type_id not in self.veh_types:
             raise PAMVehicleIdError(
-                f"Failed to add vehicle: {k}, the vehicle type '{v.type_id}' is an unknown veh type."
+                f"Failed to add vehicle: {v.vid}, the vehicle type '{v.type_id}' is an unknown veh type."
             )
-        if k in self.vehicles:
-            logging.info(f"Warning, overwriting existing vehicle: '{k}'.")
-        self.vehicles[k] = v
-
-    def add_ev(self, k: str, v: ElectricVehicle) -> bool:
-        if v.type_id not in self.veh_types:
-            raise PAMVehicleIdError(f"Failed to add ev: {k}, the vehicle type '{v.type_id}' is an unknown veh type.")
-        if k in self.vehicles:
-            logging.info(f"Warning, overwriting existing ev: '{k}'.")
-        self.vehicles[k] = v
+        if v.vid in self.vehicles:
+            logging.info(f"Warning, overwriting existing vehicle: '{v.vid}'.")
+        self.vehicles[v.vid] = v
 
     def __setitem__(self, k: str, v: Union[Vehicle, ElectricVehicle]):
         if isinstance(v, ElectricVehicle):
-            self.add_ev(k, v)
+            self.add_veh(v)
         elif isinstance(v, Vehicle):
-            self.add_veh(k, v)
+            self.add_veh(v)
         else:
             raise UserWarning(f"Unsupported type {type(v)}, please use 'Union[Vehicle, ElectricVehicle]'.")
 
@@ -165,21 +167,26 @@ class VehicleManager:
     def __contains__(self, k: str):
         return k in self.vehicles
 
+    def __eq__(self, other):
+        if not self.veh_types == other.veh_types:
+            return False
+        if not self.vehicles == other.vehicles:
+            return False
+        return True
+
+    def pop(self, vid):
+        return self.vehicles.pop(vid)
+
     def types(self):
         for tid, t in self.veh_types.items():
             yield tid, t
 
-    def iter(self):
+    def vehs(self):
         for veh_id, veh in self.vehicles.items():
             yield veh_id, veh
 
-    def vehs(self):
-        for vid, veh in self.iter():
-            if isinstance(veh, Vehicle):
-                yield vid, veh
-
     def evs(self):
-        for vid, veh in self.iter():
+        for vid, veh in self.vehs():
             if isinstance(veh, ElectricVehicle):
                 yield vid, veh
 
@@ -191,14 +198,19 @@ class VehicleManager:
 
     def is_consistent(self) -> bool:
         veh_types = set(self.veh_types.keys())
-        veh_veh_types = set([v.type_id for k, v in self.iter()])
-        for k, v in self.iter():
+        for k, v in self.vehs():
             if v.type_id not in veh_types:
                 raise PAMVehicleIdError(f"Failed to find veh type of id '{v}', specified for veh id '{k}'.")
+        return True
+
+    def redundant_types(self) -> dict:
+        unused = {}
+        veh_types = set(self.veh_types.keys())
+        veh_veh_types = set([v.type_id for k, v in self.vehs()])
         for t in veh_types:
             if t not in veh_veh_types:
-                raise PAMVehicleIdError(f"Unused veh type: '{t}'.")
-        return True
+                unused[t] = self.veh_types[t]
+        return unused
 
     def clear_types(self):
         self.veh_types = {}
@@ -206,18 +218,19 @@ class VehicleManager:
     def clear_vehs(self):
         self.vehicles = {}
 
-    def from_xml(self, vehs_path: str, evs_path: Optional[str]):
+    def from_xml(self, vehs_path: str, evs_path: Optional[str] = None):
         """
         Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
         and reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
         :param vehs_path: path to matsim all_vehicles xml file
-        :param evs_path: path to matsim electric_vehicles xml file
+        :param evs_path: optional path to matsim electric_vehicles xml file
         """
         if not vehs_path and evs_path:
             raise UserWarning("Cannot load an evs file without a vehs file.")
         self.types_from_xml(vehs_path)
         self.vehs_from_xml(vehs_path)
-        self.evs_from_xml(evs_path)
+        if evs_path is not None:
+            self.evs_from_xml(evs_path)
         if not self.is_consistent():
             raise UserWarning("Inputs not consistent, refer to log.")
 
@@ -239,7 +252,10 @@ class VehicleManager:
         :param path: path to matsim all_vehicles xml file
         :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
         """
-        vehs = {elem.get("id"): Vehicle(vehicle_type=elem.get("type")) for elem in utils.get_elems(path, "vehicle")}
+        vehs = {
+            elem.get("id"): Vehicle(vid=elem.get("id"), type_id=elem.get("type"))
+            for elem in utils.get_elems(path, "vehicle")
+        }
         keys = set(vehs) & set(self.vehicles)
         if keys:
             PAMVehicleIdError(f"Failed to read vehs from xml due to duplicate keys: {keys}")
@@ -249,11 +265,11 @@ class VehicleManager:
         evs = {}
         for vehicle_elem in utils.get_elems(path, "vehicle"):
             attribs = dict(vehicle_elem.attrib)
-            vid = attribs.pop("vid")
+            vid = attribs.pop("id")
             vehicle_type = attribs.pop("vehicle_type")
             attribs["battery_capacity"] = float(attribs["battery_capacity"])
             attribs["initial_soc"] = float(attribs["initial_soc"])
-            evs[vid] = ElectricVehicle(vehicle_type=vehicle_type, **attribs)
+            evs[vid] = ElectricVehicle(vid=vid, type_id=vehicle_type, **attribs)
         keys = set(evs) & set(self.vehicles)
         if keys:
             PAMVehicleIdError(f"Failed to read evs from xml due to duplicate keys: {keys}")
@@ -262,7 +278,7 @@ class VehicleManager:
     def to_xml(
         self,
         vehs_path: str,
-        evs_path: Optional[str],
+        evs_path: Optional[str] = None,
     ):
         self.to_veh_xml(vehs_path)
         if evs_path:
@@ -288,8 +304,8 @@ class VehicleManager:
             }
             with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
                 logging.info(f"Writing vehicle types to {path}")
-                for vehicle_type in self.veh_types.values():
-                    vehicle_type.to_xml(xf)
+                for tid, vehicle_type in self.veh_types.items():
+                    vehicle_type.to_xml(xf, tid)
                 logging.info(f"Writing vehicles to {path}")
                 for _, veh in self.vehs():
                     veh.to_xml(xf)
@@ -308,4 +324,4 @@ class VehicleManager:
             )
             with xf.element("vehicles"):
                 for _, veh in self.evs():
-                    veh.to_xml(xf)
+                    veh.to_ev_xml(xf)

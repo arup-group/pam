@@ -10,6 +10,7 @@ from pam.activity import Plan, Activity, Leg
 from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
 from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
+from pam.vehicles import Vehicle
 
 
 def write_matsim(
@@ -44,9 +45,7 @@ def write_matsim(
     if version is not None:
         logging.warning('parameter "version" is no longer supported by write_matsim()')
     if attributes_path is not None:
-        logging.warning(
-            'parameter "attributes_path" is no longer supported by write_matsim()'
-        )
+        logging.warning('parameter "attributes_path" is no longer supported by write_matsim()')
     if vehs_path is None and evs_path is not None:
         raise UserWarning("You must provide a vehs_path in addition to evs_path.")
 
@@ -63,8 +62,8 @@ def write_matsim(
     if vehs_path is not None:
         logging.info("Building population vehicles output.")
         # rebuild vehicles output from population
-        population.vehicle_types.from_population(population)
-        population.vehicle_types.to_xml(vehs_path, evs_path)
+        population.rebuild_vehicles_manager()
+        population.vehicles_manager.to_xml(vehs_path, evs_path)
 
 
 class Writer:
@@ -104,14 +103,10 @@ class Writer:
         self.population_writer = None
 
     def __enter__(self) -> Writer:
-        self.xmlfile = et.xmlfile(
-            self.path, encoding="utf-8", compression=self.compression
-        )
+        self.xmlfile = et.xmlfile(self.path, encoding="utf-8", compression=self.compression)
         self.writer = self.xmlfile.__enter__()  # enter into lxml file writer
         self.writer.write_declaration()
-        self.writer.write_doctype(
-            '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
-        )
+        self.writer.write_doctype('<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">')
         if self.comment:
             self.writer.write(et.Comment(self.comment), pretty_print=True)
         self.writer.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
@@ -128,9 +123,7 @@ class Writer:
     def add_hh(self, household) -> None:
         for _, person in household:
             if self.household_key is not None:
-                person.attributes[
-                    self.household_key
-                ] = household.hid  # force add hid as an attribute
+                person.attributes[self.household_key] = household.hid  # force add hid as an attribute
             self.add_person(person)
 
     def add_person(self, person) -> None:
@@ -180,7 +173,7 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
             "attribute",
             {"class": "org.matsim.vehicles.PersonVehicles", "name": str("vehicles")},
         )
-        attribute.text = str(person.vehicles)
+        attribute.text = str({k: v.vid for k, v in person.vehicles.items()}).replace("'", '"')
 
     for k, v in person.attributes.items():
         add_attribute(attributes, k, v)
@@ -240,9 +233,7 @@ def write_plan(
             if component.attributes:
                 attributes = et.SubElement(leg, "attributes")
                 for k, v in component.attributes.items():
-                    if (
-                        k == "enterVehicleTime"
-                    ):  # todo make something more robust for future 'special' classes
+                    if k == "enterVehicleTime":  # todo make something more robust for future 'special' classes
                         attribute = et.SubElement(
                             attributes,
                             "attribute",
@@ -257,23 +248,28 @@ def write_plan(
 
 
 def add_attribute(attributes, k, v):
-    if type(v) == bool:
+    if isinstance(v, str):
+        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.String", "name": str(k)})
+        attribute.text = str(v)
+    elif isinstance(v, bool):
+        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)})
+        attribute.text = str(v)
+    elif isinstance(v, int):
+        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)})
+        attribute.text = str(v)
+    elif isinstance(v, float):
+        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Double", "name": str(k)})
+        attribute.text = str(v)
+    elif k == "vehicles":
         attribute = et.SubElement(
-            attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)}
+            attributes,
+            "attribute",
+            {"class": "org.matsim.vehicles.PersonVehicles", "name": str("vehicles")},
         )
-    elif type(v) == int:
-        attribute = et.SubElement(
-            attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)}
-        )
-    elif type(v) == float:
-        attribute = et.SubElement(
-            attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
-        )
+        attribute.text = str(v).replace("'", '"')
     else:
-        attribute = et.SubElement(
-            attributes, "attribute", {"class": "java.lang.String", "name": str(k)}
-        )
-    attribute.text = str(v)
+        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.String", "name": str(k)})
+        attribute.text = str(v)
 
 
 def object_attributes_dtd():
@@ -290,9 +286,5 @@ def object_attributes_dtd():
 
 
 def population_v6_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd"
-        )
-    )
+    dtd_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd"))
     return et.DTD(dtd_path)

@@ -33,7 +33,7 @@ class Population:
         self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
-        self.vehicle_types = VehicleManager()
+        self.vehicles_manager = VehicleManager()
 
     def add(self, target: list[Union[Household, Person, list]]) -> None:
         """
@@ -181,24 +181,38 @@ class Population:
                 attributes[k].add(v)
             for _, p in hh.people.items():
                 for k, v in p.attributes.items():
-                    attributes[k].add(v)
+                    attributes[k].add(str(v))
         for k, v in attributes.items():
             if len(v) > show:
                 attributes[k] = set(list(attributes[k])[:show])
         return dict(attributes)
 
-    def rebuild_vehicles(self):
+    def assign_vehicles(self, manager: VehicleManager):
+        for _, _, person in self.people():
+            person.assign_vehicle(manager)
+
+    def rebuild_vehicles_manager(self):
         """
         (Re)build veh population from agents.
         """
-        self.vehicles.clear()
-        for _, _, mode, veh in self.vehicles():
-            self.vehicles[veh.vid] = veh
-        if not self.is_consistent():
+        self.vehicles_manager.clear_vehs()
+        self._build_vehicles_manager()
+
+    def _build_vehicles_manager(self):
+        """
+        Update veh population from agents.
+        """
+        vehs = {}
+        for _, _, _, veh in self.vehicles():
+            if veh.vid in vehs:
+                raise PAMVehicleIdError("Failed to build due to duplicate veh id: {veh.vid}")
+            vehs[veh.vid] = veh
+        self.vehicles_manager.vehicles.update(vehs)
+        if not self.vehicles_manager.is_consistent():
             raise UserWarning("Failed consistency check refer to logs.")
 
-    def vehicle_types(self):
-        for veh_type in self.vehicle_types.veh_types():
+    def vehicles_manager(self):
+        for veh_type in self.vehicles_manager.veh_types():
             yield veh_type.id, veh_type
 
     def vehicles(self):
@@ -208,7 +222,7 @@ class Population:
 
     def evs(self):
         for hid, pid, p in self.people():
-            for mode, veh in p.evs().items():
+            for mode, veh in p.evs():
                 yield hid, pid, mode, veh
 
     @property
@@ -220,22 +234,22 @@ class Population:
         return bool(self.evs())
 
     def add_veh_type(self, vehicle_type: VehicleType):
-        self.vehicle_types.add_type(vehicle_type)
+        self.vehicles_manager.add_type(vehicle_type)
 
     def safe_add_veh_to_agent(self, hid: str, pid: str, mode: str, v: Vehicle) -> bool:
-        if v.type_id not in self.vehicle_types:
+        if v.type_id not in self.vehicles_manager:
             raise UserWarning(f"Unable to add vehicle with unknown type: '{v.type_id}'.")
         self.households[hid][pid].vehicles[mode] = v
 
     @property
     def has_uniquely_indexed_vehicle_types(self):
         # checks indexing of vehicle types in population
-        vehicle_types = self.vehicle_types()
+        vehicle_types = self.vehicles_manager()
         all_vehicle_type_ids = [vt.id for vt in vehicle_types]
         unique_vehicle_type_ids = set(all_vehicle_type_ids)
         return len(all_vehicle_type_ids) == len(unique_vehicle_type_ids)
 
-    def vehicle_types(self):
+    def vehicles_manager(self):
         v_types = {p.vehicles.vehicle_type for _, _, p in self.people() if p.vehicles is not None}
         for vt in v_types:
             yield vt
@@ -821,11 +835,9 @@ class Household:
         return self.get_attribute("subpopulation")
 
     def vehicles(self):
-        hh_vehs = defaultdict[defaultdict[Vehicle]]
-        for pid, p in self.people:
+        for pid, p in self.people.items():
             for mode, veh in p.vehicles.items():
-                hh_vehs[mode][veh.vid] = veh
-        return hh_vehs
+                yield pid, mode, veh
 
     @property
     def freq(self):
@@ -1047,6 +1059,9 @@ class Person:
     def set_loc(self, loc):
         self.home_location.loc = loc
         self.plan.home_location.loc = loc
+
+    def assign_vehicles(self, manager: VehicleManager):
+        self.vehicles = {mode: manager.pop(vid) for mode, vid in self.attributes.pop("vehicles", {}).items()}
 
     @property
     def activities(self):
