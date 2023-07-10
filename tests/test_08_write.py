@@ -5,6 +5,7 @@ from datetime import datetime
 import geopandas as gp
 import lxml
 import pandas as pd
+import pytest
 from shapely.geometry import Point
 
 from pam import write
@@ -729,6 +730,9 @@ def test_write_to_csv_some_locs(population_heh, tmpdir):
     assert len(acts_df) == 6
 
 
+@pytest.mark.filterwarnings(
+    "ignore:Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future:DeprecationWarning"
+)
 def test_write_to_csv_convert_locs(population_heh, tmpdir):
     population_heh.to_csv(tmpdir, crs="EPSG:27700")
 

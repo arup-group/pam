@@ -29,8 +29,32 @@ jobs:
         python -m ipykernel install --user --name pam
     - name: run tests
       run: pytest
+
+  py39-build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: latest
+          environment-name: pam-linux-39
+          environment-file: requirements/base.txt
+          create-args: >-
+              -c city-modelling-lab
+              -f requirements/dev.txt
+              python=3.9
+          post-cleanup: all
+          cache-environment: true
+  
+      - name: install PAM
+        run: |
+          pip install --no-dependencies -e .
+          python -m ipykernel install --user --name pam
+  
+      - name: Run unit tests
+        run: pytest tests/ --no-cov
       
-  build:
+  py311-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

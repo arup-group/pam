@@ -86,9 +86,7 @@ class PlanClusters:
         """
         if clustering_method == "agglomerative":
             model = AgglomerativeClustering(
-                n_clusters=n_clusters,
-                linkage=linkage,
-                affinity="precomputed",  # change argument to "metric" for sklearn version>=1.4
+                n_clusters=n_clusters, linkage=linkage, metric="precomputed"
             )
             model.fit((self.distances))
         elif clustering_method == "spectral":
