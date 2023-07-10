@@ -1,20 +1,26 @@
 import os
+
 import pytest
 from lxml import etree as et
 
+from pam.activity import Plan
 from pam.read import (
-    parse_veh_attribute,
+    get_attributes_from_person,
     load_attributes_map,
+    parse_veh_attribute,
     read_matsim,
     stream_matsim_persons,
-    get_attributes_from_person,
 )
-from pam.activity import Plan
 
-
-test_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml"))
-test_tripsv12_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml"))
-test_attributes_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_attributes.xml"))
+test_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
+)
+test_tripsv12_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
+)
+test_attributes_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_attributes.xml")
+)
 
 
 def test_load_attributes_map():
@@ -54,7 +60,9 @@ def test_parsing_complex_person_results_in_valid_pt_leg():
     assert not pt_leg.route.is_routed
     assert not pt_leg.route.is_teleported
     assert pt_leg.route.transit.get("transitLineId") == "25239"
-    assert pt_leg.route.transit.get("transitRouteId") == "VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf"
+    assert (
+        pt_leg.route.transit.get("transitRouteId") == "VJ307b99b535bf55bc9d62b5475e5edf0d37176bcf"
+    )
     assert pt_leg.route.transit.get("accessFacilityId") == "9100ROMFORD.link:25821"
     assert pt_leg.route.transit.get("egressFacilityId") == "9100UPMNSP6.link:302438"
     assert pt_leg.route.network_route == []
@@ -81,7 +89,9 @@ def test_remove_pt_interactions():
     assert person.has_valid_plan
 
 
-test_bad_trips_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_plan.xml"))
+test_bad_trips_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_plan.xml")
+)
 test_bad_attributes_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_attributes.xml")
 )
@@ -97,15 +107,20 @@ def test_parse_v12_matsim():
     population = read_matsim(test_tripsv12_path, version=12)
     person = population["chris"]["chris"]
     assert person.has_valid_plan
-    assert person.attributes == {"subpopulation": "rich", "age": "yes", "hid": "A", "vehicles": {"car": "chris"}}
+    assert person.attributes == {
+        "subpopulation": "rich",
+        "age": "yes",
+        "hid": "A",
+        "vehicles": {"car": "chris"},
+    }
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
     assert legs[1].distance == 10300
-    assert legs[1].service_id == None
-    assert legs[1].route_id == None
-    assert legs[1].o_stop == None
-    assert legs[1].d_stop == None
+    assert legs[1].service_id is None
+    assert legs[1].route_id is None
+    assert legs[1].o_stop is None
+    assert legs[1].d_stop is None
     assert legs[1].network_route == ["3-4", "4-3", "3-2", "2-1", "1-2"]
 
 
@@ -113,15 +128,20 @@ def test_parse_v12_matsim_with_hh_ids():
     population = read_matsim(test_tripsv12_path, version=12, household_key="hid")
     person = population["A"]["chris"]
     assert person.has_valid_plan
-    assert person.attributes == {"subpopulation": "rich", "age": "yes", "hid": "A", "vehicles": {"car": "chris"}}
+    assert person.attributes == {
+        "subpopulation": "rich",
+        "age": "yes",
+        "hid": "A",
+        "vehicles": {"car": "chris"},
+    }
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
     assert legs[1].mode == "car"
     assert legs[1].distance == 10300
-    assert legs[1].service_id == None
-    assert legs[1].route_id == None
-    assert legs[1].o_stop == None
-    assert legs[1].d_stop == None
+    assert legs[1].service_id is None
+    assert legs[1].route_id is None
+    assert legs[1].o_stop is None
+    assert legs[1].d_stop is None
     assert legs[1].network_route == ["3-4", "4-3", "3-2", "2-1", "1-2"]
 
 
@@ -143,16 +163,18 @@ def test_parse_transit_v12_matsim():
 
 def test_fail_v12_plus_attributes():
     with pytest.raises(UserWarning):
-        population = read_matsim(test_tripsv12_path, attributes_path="fake", version=12)
+        read_matsim(test_tripsv12_path, attributes_path="fake", version=12)
 
 
 def test_fail_bad_version():
     with pytest.raises(UserWarning):
-        population = read_matsim(test_tripsv12_path, version=1)
+        read_matsim(test_tripsv12_path, version=1)
 
 
 def test_parse_simple_matsim_non_selected():
-    population = read_matsim(test_trips_path, test_attributes_path, keep_non_selected=True, version=11)
+    population = read_matsim(
+        test_trips_path, test_attributes_path, keep_non_selected=True, version=11
+    )
     person1 = population["census_1"]["census_1"]
     person2 = population["census_2"]["census_2"]
     assert person1.has_valid_plan

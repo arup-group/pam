@@ -1,6 +1,7 @@
 from collections import defaultdict
-from prettytable import PrettyTable
 from enum import Enum
+
+from prettytable import PrettyTable
 
 from pam.core import Population
 
@@ -112,10 +113,7 @@ def stats_summary(population: Population, key="subpopulation") -> PrettyTable:
 
 
 def calc_stats(population: Population, key=None, value=None) -> dict:
-    summary = {
-        "hhs": 0,
-        "persons": 0,
-    }
+    summary = {"hhs": 0, "persons": 0}
     hh_occupants = []
     for _, hh in population:
         if key is not None and value not in hh.get_attribute(key):

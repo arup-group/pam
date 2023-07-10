@@ -1,13 +1,13 @@
-import pytest
 from datetime import datetime, timedelta
 
-from pam.core import Population, Household, Person
+import pytest
+
+from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.activity import Activity, Leg
+from pam.core import Household, Person, Population
 from pam.utils import minutes_to_datetime as mtdt
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.variables import END_OF_DAY
-
 
 testdata = [
     (0, datetime(1900, 1, 1, 0, 0)),
@@ -132,10 +132,7 @@ def test_person_validate_sequence():
 
 def test_person_validate_sequence_fail1():
     person = Person("1")
-    person.plan.day = [
-        Activity(1, "home", 1),
-        Leg(1, "car", start_area=1, end_area=2),
-    ]
+    person.plan.day = [Activity(1, "home", 1), Leg(1, "car", start_area=1, end_area=2)]
     with pytest.raises(PAMSequenceValidationError):
         assert person.validate_sequence()
 
@@ -208,9 +205,7 @@ def test_person_validate_locations_fail():
 
 def test_crop_plan():
     person = Person("1")
-    person.plan.day = [
-        Activity(1, "home", 1, start_time=mtdt(0), end_time=mtdt(25 * 60)),
-    ]
+    person.plan.day = [Activity(1, "home", 1, start_time=mtdt(0), end_time=mtdt(25 * 60))]
     person.fix_plan()
     assert person.validate_sequence()
 
@@ -286,9 +281,27 @@ def test_person_not_closed_plan_different_areas():
 def test_extract_person_activity_classes():
     person = Person(pid=str(1))
     person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-    person.add(Leg(seq=2, mode="bike", start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="bike",
+            start_area="A",
+            end_area="B",
+            start_time=mtdt(600),
+            end_time=mtdt(620),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="B", start_time=mtdt(620), end_time=mtdt(1200)))
-    person.add(Leg(seq=2, mode="pt", start_area="B", end_area="A", start_time=mtdt(1200), end_time=mtdt(1220)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="pt",
+            start_area="B",
+            end_area="A",
+            start_time=mtdt(1200),
+            end_time=mtdt(1220),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="A", start_time=mtdt(1220), end_time=mtdt(1500)))
 
     assert person.activity_classes == set(["home", "work"])
@@ -297,9 +310,27 @@ def test_extract_person_activity_classes():
 def test_extract_person_mode_classes():
     person = Person(pid=str(1))
     person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-    person.add(Leg(seq=2, mode="bike", start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="bike",
+            start_area="A",
+            end_area="B",
+            start_time=mtdt(600),
+            end_time=mtdt(620),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="B", start_time=mtdt(620), end_time=mtdt(1200)))
-    person.add(Leg(seq=2, mode="pt", start_area="B", end_area="A", start_time=mtdt(1200), end_time=mtdt(1220)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="pt",
+            start_area="B",
+            end_area="A",
+            start_time=mtdt(1200),
+            end_time=mtdt(1220),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="A", start_time=mtdt(1220), end_time=mtdt(1500)))
 
     assert person.mode_classes == set(["bike", "pt"])
@@ -310,7 +341,16 @@ def test_extract_household_activity_classes():
     for i, (act, mode) in enumerate(zip(["work", "school"], ["car", "pt"])):
         person = Person(pid=str(i))
         person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-        person.add(Leg(seq=2, mode=mode, start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
+        person.add(
+            Leg(
+                seq=2,
+                mode=mode,
+                start_area="A",
+                end_area="B",
+                start_time=mtdt(600),
+                end_time=mtdt(620),
+            )
+        )
         person.add(Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200)))
         household.add(person)
 
@@ -322,7 +362,16 @@ def test_extract_household_mode_classes():
     for i, (act, mode) in enumerate(zip(["work", "school"], ["car", "pt"])):
         person = Person(pid=str(i))
         person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-        person.add(Leg(seq=2, mode=mode, start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
+        person.add(
+            Leg(
+                seq=2,
+                mode=mode,
+                start_area="A",
+                end_area="B",
+                start_time=mtdt(600),
+                end_time=mtdt(620),
+            )
+        )
         person.add(Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200)))
         household.add(person)
 
@@ -336,9 +385,22 @@ def test_extract_population_activity_classes():
         population.add(household)
         for i, (act, mode) in enumerate(zip(["work", _act], ["car", _mode])):
             person = Person(pid=str(i))
-            person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-            person.add(Leg(seq=2, mode=mode, start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
-            person.add(Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200)))
+            person.add(
+                Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600))
+            )
+            person.add(
+                Leg(
+                    seq=2,
+                    mode=mode,
+                    start_area="A",
+                    end_area="B",
+                    start_time=mtdt(600),
+                    end_time=mtdt(620),
+                )
+            )
+            person.add(
+                Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200))
+            )
             household.add(person)
 
     assert population.activity_classes == set(["home", "leisure", "work", "shop"])
@@ -351,9 +413,22 @@ def test_extract_population_mode_classes():
         population.add(household)
         for i, (act, mode) in enumerate(zip(["work", _act], ["car", _mode])):
             person = Person(pid=str(i))
-            person.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
-            person.add(Leg(seq=2, mode=mode, start_area="A", end_area="B", start_time=mtdt(600), end_time=mtdt(620)))
-            person.add(Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200)))
+            person.add(
+                Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600))
+            )
+            person.add(
+                Leg(
+                    seq=2,
+                    mode=mode,
+                    start_area="A",
+                    end_area="B",
+                    start_time=mtdt(600),
+                    end_time=mtdt(620),
+                )
+            )
+            person.add(
+                Activity(seq=3, act=act, area="B", start_time=mtdt(620), end_time=mtdt(1200))
+            )
             household.add(person)
 
     assert population.mode_classes == set(["car", "pt", "walk"])

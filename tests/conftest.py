@@ -1,20 +1,21 @@
 from pathlib import Path
+
+import lxml
+import numpy as np
+import pandas as pd
 import pytest
 from shapely.geometry import Point
-import pandas as pd
-import numpy as np
-import lxml
 
 from pam import read
 from pam.activity import Activity, Leg
-from pam.core import Population, Household, Person
+from pam.core import Household, Person, Population
+from pam.planner.od import OD
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.planner.od import OD
-
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 FIXTURES_DIR = Path(__file__).parent.parent / "pam" / "fixtures"
+
 
 @pytest.fixture(scope="session")
 def vehicles_v2_xsd():
@@ -27,6 +28,7 @@ def vehicles_v2_xsd():
 def electric_vehicles_v1_dtd():
     dtd_path = FIXTURES_DIR / "dtd" / "electric_vehicles_v1.dtd"
     yield lxml.etree.DTD(dtd_path)
+
 
 @pytest.fixture(scope="session")
 def ev_population_xml_path():
@@ -91,7 +93,9 @@ def Steve():
     Steve.add(Leg(1, "car", "a", "b", start_time=mtdt(5 * 60), end_time=mtdt(6 * 60)))
     Steve.add(Activity(2, "work", "b", start_time=mtdt(6 * 60), end_time=mtdt(12 * 60)))
     Steve.add(Leg(2, "walk", "b", "c", start_time=mtdt(12 * 60), end_time=mtdt(12 * 60 + 10)))
-    Steve.add(Activity(3, "leisure", "c", start_time=mtdt(12 * 60 + 10), end_time=mtdt(13 * 60 - 10)))
+    Steve.add(
+        Activity(3, "leisure", "c", start_time=mtdt(12 * 60 + 10), end_time=mtdt(13 * 60 - 10))
+    )
     Steve.add(Leg(3, "walk", "c", "b", start_time=mtdt(13 * 60 - 10), end_time=mtdt(13 * 60)))
     Steve.add(Activity(4, "work", "b", start_time=mtdt(13 * 60), end_time=mtdt(18 * 60)))
     Steve.add(Leg(4, "car", "b", "a", start_time=mtdt(18 * 60), end_time=mtdt(19 * 60)))
@@ -104,13 +108,21 @@ def Hilda():
     Hilda = Person(2, attributes={"age": 45, "job": "influencer", "gender": "female"})
     Hilda.add(Activity(1, "home", "a", start_time=mtdt(0), end_time=mtdt(8 * 60)))
     Hilda.add(Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5)))
-    Hilda.add(Activity(2, "escort_education", "b", start_time=mtdt(8 * 60 + 5), end_time=mtdt(8 * 60 + 30)))
+    Hilda.add(
+        Activity(
+            2, "escort_education", "b", start_time=mtdt(8 * 60 + 5), end_time=mtdt(8 * 60 + 30)
+        )
+    )
     Hilda.add(Leg(1, "pt", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30)))
     Hilda.add(Activity(2, "shop", "b", start_time=mtdt(8 * 60 + 30), end_time=mtdt(14 * 60)))
     Hilda.add(Leg(2, "pt", "b", "c", start_time=mtdt(14 * 60), end_time=mtdt(14 * 60 + 20)))
-    Hilda.add(Activity(3, "leisure", "c", start_time=mtdt(14 * 60 + 20), end_time=mtdt(16 * 60 - 20)))
+    Hilda.add(
+        Activity(3, "leisure", "c", start_time=mtdt(14 * 60 + 20), end_time=mtdt(16 * 60 - 20))
+    )
     Hilda.add(Leg(3, "pt", "c", "b", start_time=mtdt(16 * 60 - 20), end_time=mtdt(16 * 60)))
-    Hilda.add(Activity(2, "escort_education", "b", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30)))
+    Hilda.add(
+        Activity(2, "escort_education", "b", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30))
+    )
     Hilda.add(Leg(1, "walk", "a", "b", start_time=mtdt(16 * 60 + 30), end_time=mtdt(17 * 60)))
     Hilda.add(Activity(5, "home", "a", start_time=mtdt(17 * 60), end_time=END_OF_DAY))
     return Hilda
@@ -150,12 +162,23 @@ def SmithHousehold(instantiate_household_with, Steve, Hilda, Timmy, Bobby):
 
 
 @pytest.fixture
-def person_heh():
+def person_heh() -> Person:
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -165,9 +188,20 @@ def person_heh():
 def person_crop_last_act():
     person = Person("1", attributes={"old": True})
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -177,9 +211,20 @@ def person_crop_last_act():
 def person_crop_last_leg():
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(2600)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(2600),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="a", start_time=mtdt(2600), end_time=mtdt(3000)))
 
     return person
@@ -191,11 +236,37 @@ def population_heh():
     education_loc = Point(110, 110)
     attributes = {"hid": "0", "hh_size": "3", "inc": "high"}
     person = Person("1", attributes=attributes)
-    person.add(Activity(seq=1, act="home", area="a", loc=home_loc, start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
-    person.add(Activity(seq=2, act="education", area="b", loc=education_loc, start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
-    person.add(Activity(seq=3, act="home", area="a", loc=home_loc, start_time=mtdt(180), end_time=END_OF_DAY))
+    person.add(
+        Activity(seq=1, act="home", area="a", loc=home_loc, start_time=mtdt(0), end_time=mtdt(60))
+    )
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
+    person.add(
+        Activity(
+            seq=2,
+            act="education",
+            area="b",
+            loc=education_loc,
+            start_time=mtdt(90),
+            end_time=mtdt(120),
+        )
+    )
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
+    person.add(
+        Activity(
+            seq=3, act="home", area="a", loc=home_loc, start_time=mtdt(180), end_time=END_OF_DAY
+        )
+    )
     person.plan.autocomplete_matsim()
     household = Household("0")
     household.add(person)
@@ -208,9 +279,20 @@ def population_heh():
 def person_heh_open1():
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="b", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="b",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="b", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -220,9 +302,20 @@ def person_heh_open1():
 def person_hew_open2():
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -232,9 +325,20 @@ def person_hew_open2():
 def person_whw():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -244,13 +348,42 @@ def person_whw():
 def person_whshw():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="c", start_time=mtdt(120), end_time=mtdt(190)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_time=mtdt(120),
+            end_time=mtdt(190),
+        )
+    )
     person.add(Activity(seq=3, act="shop", area="c", start_time=mtdt(190), end_time=mtdt(220)))
-    person.add(Leg(seq=3, mode="car", start_area="c", end_area="b", start_time=mtdt(220), end_time=mtdt(280)))
+    person.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="b",
+            start_time=mtdt(220),
+            end_time=mtdt(280),
+        )
+    )
     person.add(Activity(seq=4, act="home", area="b", start_time=mtdt(280), end_time=mtdt(320)))
-    person.add(Leg(seq=4, mode="car", start_area="b", end_area="a", start_time=mtdt(320), end_time=mtdt(380)))
+    person.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(320),
+            end_time=mtdt(380),
+        )
+    )
     person.add(Activity(seq=5, act="work", area="a", start_time=mtdt(380), end_time=END_OF_DAY))
 
     return person
@@ -260,9 +393,20 @@ def person_whshw():
 def person_home_education_home():
     person = Person("1")
     person.add(Activity(seq=1, act="home", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="education", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="home", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -272,9 +416,20 @@ def person_home_education_home():
 def person_work_home_work_closed():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="a", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="a", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -284,13 +439,42 @@ def person_work_home_work_closed():
 def person_work_home_shop_home_work_closed():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="c", start_time=mtdt(120), end_time=mtdt(190)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_time=mtdt(120),
+            end_time=mtdt(190),
+        )
+    )
     person.add(Activity(seq=3, act="shop", area="c", start_time=mtdt(190), end_time=mtdt(220)))
-    person.add(Leg(seq=3, mode="car", start_area="c", end_area="b", start_time=mtdt(220), end_time=mtdt(280)))
+    person.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="b",
+            start_time=mtdt(220),
+            end_time=mtdt(280),
+        )
+    )
     person.add(Activity(seq=4, act="home", area="b", start_time=mtdt(280), end_time=mtdt(320)))
-    person.add(Leg(seq=4, mode="car", start_area="b", end_area="a", start_time=mtdt(320), end_time=mtdt(380)))
+    person.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="b",
+            end_area="a",
+            start_time=mtdt(320),
+            end_time=mtdt(380),
+        )
+    )
     person.add(Activity(seq=5, act="work", area="a", start_time=mtdt(380), end_time=END_OF_DAY))
 
     return person
@@ -300,13 +484,42 @@ def person_work_home_shop_home_work_closed():
 def person_work_home_shop_home_work_not_closed():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="c", start_time=mtdt(120), end_time=mtdt(190)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_time=mtdt(120),
+            end_time=mtdt(190),
+        )
+    )
     person.add(Activity(seq=3, act="shop", area="c", start_time=mtdt(190), end_time=mtdt(220)))
-    person.add(Leg(seq=3, mode="car", start_area="c", end_area="d", start_time=mtdt(220), end_time=mtdt(280)))
+    person.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="d",
+            start_time=mtdt(220),
+            end_time=mtdt(280),
+        )
+    )
     person.add(Activity(seq=4, act="home", area="d", start_time=mtdt(280), end_time=mtdt(320)))
-    person.add(Leg(seq=4, mode="car", start_area="d", end_area="a", start_time=mtdt(320), end_time=mtdt(380)))
+    person.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="d",
+            end_area="a",
+            start_time=mtdt(320),
+            end_time=mtdt(380),
+        )
+    )
     person.add(Activity(seq=5, act="work", area="a", start_time=mtdt(380), end_time=END_OF_DAY))
 
     return person
@@ -316,9 +529,20 @@ def person_work_home_shop_home_work_not_closed():
 def person_work_home_work_not_closed():
     person = Person("1")
     person.add(Activity(seq=1, act="work", area="a", start_time=mtdt(0), end_time=mtdt(60)))
-    person.add(Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90)))
+    person.add(
+        Leg(seq=1, mode="car", start_area="a", end_area="b", start_time=mtdt(60), end_time=mtdt(90))
+    )
     person.add(Activity(seq=2, act="home", area="b", start_time=mtdt(90), end_time=mtdt(120)))
-    person.add(Leg(seq=2, mode="car", start_area="b", end_area="c", start_time=mtdt(120), end_time=mtdt(180)))
+    person.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_time=mtdt(120),
+            end_time=mtdt(180),
+        )
+    )
     person.add(Activity(seq=3, act="work", area="c", start_time=mtdt(180), end_time=END_OF_DAY))
 
     return person
@@ -361,12 +585,8 @@ def default_config():
         "pt": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
         "bus": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
         "train": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
-        "walk": {
-            "marginalUtilityOfTravelling": -12,
-        },
-        "bike": {
-            "marginalUtilityOfTravelling": -12,
-        },
+        "walk": {"marginalUtilityOfTravelling": -12},
+        "bike": {"marginalUtilityOfTravelling": -12},
     }
 
 
@@ -409,12 +629,8 @@ def config():
             "pt": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
             "bus": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
             "train": {"marginalUtilityOfTravelling": -5, "monetaryDistanceRate": -0.001},
-            "walk": {
-                "marginalUtilityOfTravelling": -12,
-            },
-            "bike": {
-                "marginalUtilityOfTravelling": -12,
-            },
+            "walk": {"marginalUtilityOfTravelling": -12},
+            "bike": {"marginalUtilityOfTravelling": -12},
         }
     }
 
@@ -657,7 +873,11 @@ def config_complex():
             "mUM": 1.0,
             "home": {"priority": "1", "typicalDuration": "12:00:00", "minimalDuration": "08:00:00"},
             "work": {"priority": "1", "typicalDuration": "08:30:00", "minimalDuration": "08:00:00"},
-            "education": {"priority": "1", "typicalDuration": "08:30:00", "minimalDuration": "06:00:00"},
+            "education": {
+                "priority": "1",
+                "typicalDuration": "08:30:00",
+                "minimalDuration": "06:00:00",
+            },
             "shop": {"priority": "1", "typicalDuration": "00:30:00", "minimalDuration": "00:10:00"},
             "car": {
                 "constant": 0.0,
@@ -738,7 +958,14 @@ class FakeRoute:
 @pytest.fixture()
 def default_leg():
     default_leg = Leg(
-        1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5, route=FakeRoute()
+        1,
+        "walk",
+        "a",
+        "b",
+        start_time=mtdt(8 * 60),
+        end_time=mtdt(8 * 60 + 5),
+        distance=5,
+        route=FakeRoute(),
     )
     return default_leg
 
@@ -750,14 +977,23 @@ def pt_wait_leg():
             self.transit = {"boardingTime": btime}
 
     pt_wait_leg = Leg(
-        1, "bus", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 15), distance=5, route=FakeRoute("08:05:00")
+        1,
+        "bus",
+        "a",
+        "b",
+        start_time=mtdt(8 * 60),
+        end_time=mtdt(8 * 60 + 15),
+        distance=5,
+        route=FakeRoute("08:05:00"),
     )
     return pt_wait_leg
 
 
 @pytest.fixture()
 def car_leg():
-    car_leg = Leg(1, "car", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5)
+    car_leg = Leg(
+        1, "car", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 5), distance=5
+    )
     return car_leg
 
 
@@ -775,28 +1011,64 @@ def late_activity():
 
 @pytest.fixture()
 def Anna():
-    Anna = Person(4, attributes={"age": 6, "job": "education", "gender": "female", "subpopulation": "default"})
+    Anna = Person(
+        4, attributes={"age": 6, "job": "education", "gender": "female", "subpopulation": "default"}
+    )
     Anna.add(Activity(1, "home", "a", start_time=mtdt(0), end_time=mtdt(8 * 60)))
-    Anna.add(Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30), distance=5))
+    Anna.add(
+        Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 30), distance=5)
+    )
     Anna.add(Activity(2, "education", "b", start_time=mtdt(8 * 60 + 30), end_time=mtdt(16 * 60)))
-    Anna.add(Leg(2, "walk", "b", "c", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5))
+    Anna.add(
+        Leg(2, "walk", "b", "c", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5)
+    )
     Anna.add(Activity(5, "home", "a", start_time=mtdt(16 * 60 + 30), end_time=END_OF_DAY))
     return Anna
 
 
 @pytest.fixture()
 def AnnaPT():
-    AnnaPT = Person(4, attributes={"age": 6, "job": "education", "gender": "female", "subpopulation": "default"})
+    AnnaPT = Person(
+        4, attributes={"age": 6, "job": "education", "gender": "female", "subpopulation": "default"}
+    )
     AnnaPT.add(Activity(1, "home", "a", start_time=mtdt(0), end_time=mtdt(8 * 60)))
-    AnnaPT.add(Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 10), distance=1))
-    AnnaPT.add(Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 10)))
-    AnnaPT.add(Leg(1, "bus", "a", "b", start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 20), distance=5))
-    AnnaPT.add(Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 20)))
-    AnnaPT.add(Leg(1, "bus", "a", "b", start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 30), distance=5))
-    AnnaPT.add(Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 30), end_time=mtdt(8 * 60 + 30)))
-    AnnaPT.add(Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60 + 30), end_time=mtdt(8 * 60 + 40), distance=1))
+    AnnaPT.add(
+        Leg(1, "walk", "a", "b", start_time=mtdt(8 * 60), end_time=mtdt(8 * 60 + 10), distance=1)
+    )
+    AnnaPT.add(
+        Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 10))
+    )
+    AnnaPT.add(
+        Leg(
+            1, "bus", "a", "b", start_time=mtdt(8 * 60 + 10), end_time=mtdt(8 * 60 + 20), distance=5
+        )
+    )
+    AnnaPT.add(
+        Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 20))
+    )
+    AnnaPT.add(
+        Leg(
+            1, "bus", "a", "b", start_time=mtdt(8 * 60 + 20), end_time=mtdt(8 * 60 + 30), distance=5
+        )
+    )
+    AnnaPT.add(
+        Activity(1, "pt_interaction", "a", start_time=mtdt(8 * 60 + 30), end_time=mtdt(8 * 60 + 30))
+    )
+    AnnaPT.add(
+        Leg(
+            1,
+            "walk",
+            "a",
+            "b",
+            start_time=mtdt(8 * 60 + 30),
+            end_time=mtdt(8 * 60 + 40),
+            distance=1,
+        )
+    )
     AnnaPT.add(Activity(2, "education", "b", start_time=mtdt(8 * 60 + 40), end_time=mtdt(16 * 60)))
-    AnnaPT.add(Leg(2, "walk", "b", "c", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5))
+    AnnaPT.add(
+        Leg(2, "walk", "b", "c", start_time=mtdt(16 * 60), end_time=mtdt(16 * 60 + 30), distance=5)
+    )
     AnnaPT.add(Activity(5, "home", "a", start_time=mtdt(16 * 60 + 30), end_time=END_OF_DAY))
     return AnnaPT
 
@@ -809,7 +1081,15 @@ def early_activity():
 
 @pytest.fixture()
 def small_plan():
-    Henry = Person(4, attributes={"age": 6, "job": "education", "gender": "male", "subpopulation": "subpopulation"})
+    Henry = Person(
+        4,
+        attributes={
+            "age": 6,
+            "job": "education",
+            "gender": "male",
+            "subpopulation": "subpopulation",
+        },
+    )
     Henry.add(Activity(1, "home", "a", start_time=mtdt(0), end_time=mtdt(24 * 60)))
     small_plan = Henry.plan
     return small_plan
@@ -848,7 +1128,9 @@ def data_zones():
 
 @pytest.fixture
 def data_od():
-    matrices = np.array([[[[20, 30], [40, 45]], [[40, 45], [20, 30]]], [[[5, 5], [8, 9]], [[8, 9], [5, 5]]]])
+    matrices = np.array(
+        [[[[20, 30], [40, 45]], [[40, 45], [20, 30]]], [[[5, 5], [8, 9]], [[8, 9], [5, 5]]]]
+    )
     return matrices
 
 

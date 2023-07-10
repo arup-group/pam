@@ -1,17 +1,16 @@
-from pam.core import Population, Household, Person
-from pam.activity import Plan, Activity, Leg
+import pytest
+
+from pam.activity import Activity, Leg
+from pam.core import Household, Person, Population
+from pam.policy import policies, probability_samplers
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
-from pam.policy import policies
-from pam.policy import probability_samplers
-
-import pytest
 
 
 def assert_single_home_activity(person):
     assert len(person.plan) == 1
     assert isinstance(person.plan.day[0], Activity)
-    assert person.plan.day[0].act == 'home'
+    assert person.plan.day[0].act == "home"
     assert person.plan.day[0].location == person.home
     assert person.plan.day[0].start_time == mtdt(0)
     assert person.plan.day[0].end_time == END_OF_DAY
@@ -19,7 +18,6 @@ def assert_single_home_activity(person):
 
 @pytest.fixture
 def population():
-
     population = Population()
     for hid in range(1, 11):
         household = Household(hid)
@@ -27,11 +25,11 @@ def population():
             pid = f"{hid}-{pid}"
             person = Person(pid)
 
-            person.add(Activity(1, 'home', 'a'))
-            person.add(Leg(1, 'car', 'a', 'b'))
-            person.add(Activity(2, 'work', 'b'))
-            person.add(Leg(2, 'car', 'b', 'a'))
-            person.add(Activity(3, 'home', 'a'))
+            person.add(Activity(1, "home", "a"))
+            person.add(Leg(1, "car", "a", "b"))
+            person.add(Activity(2, "work", "b"))
+            person.add(Leg(2, "car", "b", "a"))
+            person.add(Activity(3, "home", "a"))
 
             household.add(person)
         population.add(household)
@@ -42,11 +40,11 @@ def population():
             pid = f"{hid}-{pid}"
             person = Person(pid)
 
-            person.add(Activity(1, 'home', 'a'))
-            person.add(Leg(1, 'bus', 'a', 'b'))
-            person.add(Activity(2, 'education', 'b'))
-            person.add(Leg(2, 'bus', 'b', 'a'))
-            person.add(Activity(3, 'home', 'a'))
+            person.add(Activity(1, "home", "a"))
+            person.add(Leg(1, "bus", "a", "b"))
+            person.add(Activity(2, "education", "b"))
+            person.add(Leg(2, "bus", "b", "a"))
+            person.add(Activity(3, "home", "a"))
 
             household.add(person)
         population.add(household)
@@ -90,8 +88,8 @@ def test_apply_full_person_stay_at_home(population):
 
 
 def test_apply_two_policies(population):
-    policy1 = policies.HouseholdQuarantined(.1)
-    policy2 = policies.PersonStayAtHome(.4)
+    policy1 = policies.HouseholdQuarantined(0.1)
+    policy2 = policies.PersonStayAtHome(0.4)
     counter = 0
     policies.apply_policies(population, [policy1, policy2], in_place=True)
     for hid, household in population.households.items():

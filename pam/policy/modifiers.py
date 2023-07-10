@@ -1,12 +1,12 @@
-import pam.core
-import pam.activity
 import random
 from typing import List
 
+import pam.activity
+import pam.core
+
 
 class Modifier:
-    """
-    Base class for modifiers - these are classes which change
+    """Base class for modifiers - these are classes which change
     activities in a person's plan.
 
     In general a modifer should be able to be applied on three levels
@@ -22,30 +22,34 @@ class Modifier:
     def __init__(self):
         super().__init__()
 
-    def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activity: pam.activity.Activity = None):
-        raise NotImplementedError('{} is a base class'.format(type(Modifier)))
+    def apply_to(
+        self,
+        household: pam.core.Household,
+        person: pam.core.Person = None,
+        activity: pam.activity.Activity = None,
+    ):
+        raise NotImplementedError("{} is a base class".format(type(Modifier)))
 
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
             self.__class__.__name__,
             id(self),
-            ', '.join("%r: %r" % item for item in attribs.items()))
+            ", ".join("%r: %r" % item for item in attribs.items()),
+        )
 
     def __str__(self):
         attribs = vars(self)
         return "Modifier {} with attributes: {}".format(
-            self.__class__.__name__,
-            ', '.join("%s: %s" % item for item in attribs.items()))
+            self.__class__.__name__, ", ".join("%s: %s" % item for item in attribs.items())
+        )
 
     def print(self):
         print(self.__str__())
 
 
 class RemoveActivity(Modifier):
-    """
-    Removes specified activities.
+    """Removes specified activities.
 
     Parameters
     ----------
@@ -57,8 +61,12 @@ class RemoveActivity(Modifier):
         super().__init__()
         self.activities = activities
 
-    def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activities: List[pam.activity.Activity] = None):
+    def apply_to(
+        self,
+        household: pam.core.Household,
+        person: pam.core.Person = None,
+        activities: List[pam.activity.Activity] = None,
+    ):
         if activities and person:
             self.remove_individual_activities(person, activities)
         elif person:
@@ -66,9 +74,10 @@ class RemoveActivity(Modifier):
         elif household and isinstance(household, pam.core.Household):
             self.remove_household_activities(household)
         else:
-            raise TypeError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
-                            ''.format(type(household), type(person),
-                                      type(activities), type(pam.core.Household)))
+            raise TypeError(
+                "Types passed incorrectly: {}, {}, {}. You need {} at the very least."
+                "".format(type(household), type(person), type(activities), type(pam.core.Household))
+            )
 
     def remove_activities(self, person, p):
         seq = 0
@@ -76,7 +85,7 @@ class RemoveActivity(Modifier):
             act = person.plan[seq]
             if self.is_activity_for_removal(act) and p(act):
                 previous_idx, subsequent_idx = person.remove_activity(seq)
-                person.fill_plan(previous_idx, subsequent_idx, default='home')
+                person.fill_plan(previous_idx, subsequent_idx, default="home")
             else:
                 seq += 1
 
@@ -102,8 +111,7 @@ class RemoveActivity(Modifier):
 
 
 class AddActivity(Modifier):
-    """
-    Adds specified activities.
+    """Adds specified activities.
 
     Parameters
     ----------
@@ -116,12 +124,11 @@ class AddActivity(Modifier):
         self.activities = activities
 
     def apply_to(self, household, person=None, activities=None):
-        raise NotImplementedError('Watch this space')
+        raise NotImplementedError("Watch this space")
 
 
 class ReduceSharedActivity(Modifier):
-    """
-    Policy that needs to be applied on a household level. For activities
+    """Policy that needs to be applied on a household level. For activities
     shared within a household (Activity.act (type of activity), start/end
     times and locations match). Randomly assigns a person whose activities
     will be retained and deletes the shared activities from other persons
@@ -140,15 +147,20 @@ class ReduceSharedActivity(Modifier):
         super().__init__()
         self.activities = activities
 
-    def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activities: List[pam.activity.Activity] = None):
+    def apply_to(
+        self,
+        household: pam.core.Household,
+        person: pam.core.Person = None,
+        activities: List[pam.activity.Activity] = None,
+    ):
         if household and isinstance(household, pam.core.Household):
             self.remove_household_activities(household)
         else:
-            raise NotImplementedError('Types passed incorrectly: {}, {}, {}. This modifier exists only for Households'
-                                      'you need to pass {}.'
-                                      ''.format(type(household), type(person), type(activities),
-                                                type(pam.core.Household)))
+            raise NotImplementedError(
+                "Types passed incorrectly: {}, {}, {}. This modifier exists only for Households"
+                "you need to pass {}."
+                "".format(type(household), type(person), type(activities), type(pam.core.Household))
+            )
 
     def remove_activities(self, person, shared_activities_for_removal):
         seq = 0
@@ -162,7 +174,7 @@ class ReduceSharedActivity(Modifier):
             # same name and location but aren't shared
             if isinstance(act, pam.activity.Activity) and act in shared_activities_for_removal:
                 previous_idx, subsequent_idx = person.remove_activity(seq)
-                person.fill_plan(previous_idx, subsequent_idx, default='home')
+                person.fill_plan(previous_idx, subsequent_idx, default="home")
             else:
                 seq += 1
 
@@ -172,7 +184,9 @@ class ReduceSharedActivity(Modifier):
             # pick the person that retains activities
             ppl_sharing_activities = self.people_who_share_activities_for_removal(household)
             if ppl_sharing_activities:
-                person_retaining_activities = random.choice(self.people_who_share_activities_for_removal(household))
+                person_retaining_activities = random.choice(
+                    self.people_who_share_activities_for_removal(household)
+                )
                 for pid, person in household.people.items():
                     if person != person_retaining_activities:
                         self.remove_activities(person, acts_for_removal)
@@ -195,8 +209,7 @@ class ReduceSharedActivity(Modifier):
 
 
 class MoveActivityTourToHomeLocation(Modifier):
-    """
-    Moves a tour of activities to home location. A tour is defined
+    """Moves a tour of activities to home location. A tour is defined
     as a list of activities sandwiched between two home activities.
 
     Parameters
@@ -214,7 +227,7 @@ class MoveActivityTourToHomeLocation(Modifier):
     Mode used in the legs to/from the activity when we relocate the activity
     """
 
-    def __init__(self, activities: List[str], location: str = 'home', new_mode: str = 'walk'):
+    def __init__(self, activities: List[str], location: str = "home", new_mode: str = "walk"):
         super().__init__()
         # list of activities defines the accepted activity tour,
         # any combination of activities in activities sandwiched
@@ -223,8 +236,12 @@ class MoveActivityTourToHomeLocation(Modifier):
         self.default = location
         self.new_mode = new_mode
 
-    def apply_to(self, household: pam.core.Household, person: pam.core.Person = None,
-                 activities: List[pam.activity.Activity] = None):
+    def apply_to(
+        self,
+        household: pam.core.Household,
+        person: pam.core.Person = None,
+        activities: List[pam.activity.Activity] = None,
+    ):
         new_mode = self.new_mode
         if activities and person:
             self.move_individual_activities(person, activities, new_mode)
@@ -233,11 +250,12 @@ class MoveActivityTourToHomeLocation(Modifier):
         elif household and isinstance(household, pam.core.Household):
             self.move_household_activities(household, new_mode)
         else:
-            raise NotImplementedError('Types passed incorrectly: {}, {}, {}. You need {} at the very least.'
-                                      ''.format(type(household), type(person), type(activities),
-                                                type(pam.core.Household)))
+            raise NotImplementedError(
+                "Types passed incorrectly: {}, {}, {}. You need {} at the very least."
+                "".format(type(household), type(person), type(activities), type(pam.core.Household))
+            )
 
-    def move_activities(self, person, p, new_mode='walk'):
+    def move_activities(self, person, p, new_mode="walk"):
         tours = self.matching_activity_tours(person.plan, p)
         if tours:
             for seq in range(len(person.plan)):
@@ -246,20 +264,20 @@ class MoveActivityTourToHomeLocation(Modifier):
                     if self.is_part_of_tour(act, tours):
                         person.move_activity(seq, default=self.default, new_mode=new_mode)
 
-    def move_individual_activities(self, person, activities, new_mode='walk'):
+    def move_individual_activities(self, person, activities, new_mode="walk"):
         def is_a_selected_activity(act):
             # more rigorous check if activity in activities; Activity.__eq__ is not sufficient here
             return act.isin_exact(activities)
 
         self.move_activities(person, p=is_a_selected_activity, new_mode=new_mode)
 
-    def move_person_activities(self, person, new_mode='walk'):
+    def move_person_activities(self, person, new_mode="walk"):
         def return_true(act):
             return True
 
         self.move_activities(person, p=return_true, new_mode=new_mode)
 
-    def move_household_activities(self, household, new_mode='walk'):
+    def move_household_activities(self, household, new_mode="walk"):
         for pid, person in household.people.items():
             self.move_person_activities(person, new_mode=new_mode)
 

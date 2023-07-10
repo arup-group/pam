@@ -4,6 +4,7 @@ Each source code file with have a separate page in the documentation, with pages
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import Union
 
 import mkdocs
 from mkdocs.config import Config, config_options
@@ -13,11 +14,15 @@ from mkdocs.structure.files import File, Files
 
 class AddAPIPluginConfig(mkdocs.config.base.Config):
     """Enable the plugin configuration options."""
-    package_dir = config_options.Type(str)  # directory in which the source code is placed.
-    api_dir = config_options.Type(
-        str, default="api"
-    )  # directory in the mkdocs structure to place the symbolic links to temporary markdown files.
-    skip = config_options.Type(list, default=[])  # List of files to skip generating an API page for.
+
+    # directory in which the source code is placed.
+    package_dir = config_options.Type(str)
+
+    # directory in the mkdocs structure to place the symbolic links to temporary markdown files.
+    api_dir = config_options.Type(str, default="api")
+
+    # List of files to skip generating an API page for.
+    skip = config_options.Type(list, default=[])
 
 
 class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
@@ -32,7 +37,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         self._tmpdir = tempfile.TemporaryDirectory(prefix="mkdocs_api_file_generator_")
         """Temporary directory to store generated markdown files"""
 
-        self._api_reference: dict = {"top_level": []}
+        self._api_reference: dict[str, Union[list, dict[str, list]]] = {"top_level": []}
         """Dictionary to store navigation elements, which will be added to the mkdocs `nav`"""
 
     def on_files(self, files: Files, config: Config) -> Files:
@@ -45,7 +50,7 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         Returns:
             Files: Updated files list including pointers to the API markdown files which are stored in a temporary directory
         """
-        for file in Path(self.config.package_dir).glob("**/[!_]*.py"):
+        for file in sorted(Path(self.config.package_dir).glob("**/[!_]*.py")):
             if file.as_posix() in self.config.skip:
                 continue
             fileobj = self.py_to_md(file, config)
@@ -53,10 +58,13 @@ class AddAPIPlugin(BasePlugin[AddAPIPluginConfig]):
         # Mkdocs navigation is composed of lists of dictionaries.
         # Lists nesting defines navigation nesting, dictionary keys are the page names, and values are the pointers to markdown files.
         api_reference_nav = {
-            "API Reference": [*self._api_reference.pop("top_level"), *[{k: v} for k, v in self._api_reference.items()]]
+            "Python API": [
+                *self._api_reference.pop("top_level"),
+                *[{k: v} for k, v in self._api_reference.items()],
+            ]
         }
-
-        config["nav"].append(api_reference_nav)
+        nav_reference = [idx for idx in config["nav"] if set(idx.keys()) == {"Reference"}][0]
+        nav_reference["Reference"].append(api_reference_nav)
         return files
 
     def py_to_md(self, filepath: Path, config: Config) -> File:

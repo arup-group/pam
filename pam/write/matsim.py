@@ -1,16 +1,17 @@
 from __future__ import annotations
+
+import logging
 import os
 from datetime import datetime
-import logging
 from pathlib import Path
-from lxml import etree as et
 from typing import Optional, Union
 
-from pam.activity import Plan, Activity, Leg
-from pam.utils import create_crs_attribute, datetime_to_matsim_time as dttm
+from lxml import etree as et
+
+from pam.activity import Activity, Leg, Plan
+from pam.utils import DEFAULT_GZIP_COMPRESSION, create_crs_attribute, create_local_dir, is_gzip
+from pam.utils import datetime_to_matsim_time as dttm
 from pam.utils import timedelta_to_matsim_time as tdtm
-from pam.utils import create_local_dir, is_gzip, DEFAULT_GZIP_COMPRESSION
-from pam.vehicles import Vehicle
 
 
 def write_matsim(
@@ -25,8 +26,7 @@ def write_matsim(
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
 ) -> None:
-    """
-    Write a core population to matsim population v6 xml format.
+    """Write a core population to matsim population v6 xml format.
     Note that this requires activity locs to be set (shapely.geometry.Point).
 
     :param population: core.Population, population to be writen to disk
@@ -41,7 +41,6 @@ def write_matsim(
     :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
     :return: None
     """
-
     if version is not None:
         logging.warning('parameter "version" is no longer supported by write_matsim()')
     if attributes_path is not None:
@@ -67,8 +66,7 @@ def write_matsim(
 
 
 class Writer:
-    """
-    Context Manager for writing to xml. Designed to handle the boilerplate xml.
+    """Context Manager for writing to xml. Designed to handle the boilerplate xml.
     For example:
     `with pam.write.matsim.Writer(PATH) as writer:
         for hid, household in population:
@@ -79,7 +77,7 @@ class Writer:
         for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
             pam.samplers.time.apply_jitter_to_plan(person.plan)
             writer.add_person(household)
-    `
+    `.
     """
 
     def __init__(
@@ -106,7 +104,9 @@ class Writer:
         self.xmlfile = et.xmlfile(self.path, encoding="utf-8", compression=self.compression)
         self.writer = self.xmlfile.__enter__()  # enter into lxml file writer
         self.writer.write_declaration()
-        self.writer.write_doctype('<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">')
+        self.writer.write_doctype(
+            '<!DOCTYPE population SYSTEM "http://matsim.org/files/dtd/population_v6.dtd">'
+        )
         if self.comment:
             self.writer.write(et.Comment(self.comment), pretty_print=True)
         self.writer.write(et.Comment(f"Created {datetime.today()}"), pretty_print=True)
@@ -115,15 +115,15 @@ class Writer:
         self.population_writer.__enter__()  # enter into lxml element writer
         if self.coordinate_reference_system is not None:
             self.writer.write(
-                create_crs_attribute(self.coordinate_reference_system),
-                pretty_print=True,
+                create_crs_attribute(self.coordinate_reference_system), pretty_print=True
             )
         return self
 
     def add_hh(self, household) -> None:
         for _, person in household:
             if self.household_key is not None:
-                person.attributes[self.household_key] = household.hid  # force add hid as an attribute
+                # force add hid as an attribute
+                person.attributes[self.household_key] = household.hid
             self.add_person(person)
 
     def add_person(self, person) -> None:
@@ -143,15 +143,13 @@ def write_matsim_population_v6(
     keep_non_selected: bool = False,
     coordinate_reference_system: str = None,
 ) -> None:
-    """
-    Write matsim population v6 xml (persons plans and attributes combined).
+    """Write matsim population v6 xml (persons plans and attributes combined).
     :param population: core.Population, population to be writen to disk
     :param path: str, output path (.xml or .xml.gz)
     :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
     :param household_key: {str, None}, default 'hid'
-    :param keep_non_selected: bool, default False
+    :param keep_non_selected: bool, default False.
     """
-
     with Writer(
         path=path,
         household_key=household_key,
@@ -178,26 +176,14 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
     for k, v in person.attributes.items():
         add_attribute(attributes, k, v)
 
-    write_plan(
-        person_xml,
-        person.plan,
-        selected=True,
-    )
+    write_plan(person_xml, person.plan, selected=True)
     if keep_non_selected:
         for plan in person.plans_non_selected:
-            write_plan(
-                person_xml,
-                plan,
-                selected=False,
-            )
+            write_plan(person_xml, plan, selected=False)
     return person_xml
 
 
-def write_plan(
-    person_xml: et.SubElement,
-    plan: Plan,
-    selected: Optional[bool] = None,
-):
+def write_plan(person_xml: et.SubElement, plan: Plan, selected: Optional[bool] = None):
     plan_attributes = {}
     if selected is not None:
         plan_attributes["selected"] = {True: "yes", False: "no"}[selected]
@@ -208,9 +194,7 @@ def write_plan(
     for component in plan:
         if isinstance(component, Activity):
             component.validate_matsim()
-            act_data = {
-                "type": component.act,
-            }
+            act_data = {"type": component.act}
             if component.start_time is not None:
                 act_data["start_time"] = dttm(component.start_time)
             if component.end_time is not None:
@@ -225,19 +209,17 @@ def write_plan(
 
         if isinstance(component, Leg):
             leg = et.SubElement(
-                plan_xml,
-                "leg",
-                {"mode": component.mode, "trav_time": tdtm(component.duration)},
+                plan_xml, "leg", {"mode": component.mode, "trav_time": tdtm(component.duration)}
             )
 
             if component.attributes:
                 attributes = et.SubElement(leg, "attributes")
                 for k, v in component.attributes.items():
-                    if k == "enterVehicleTime":  # todo make something more robust for future 'special' classes
+                    if (
+                        k == "enterVehicleTime"
+                    ):  # todo make something more robust for future 'special' classes
                         attribute = et.SubElement(
-                            attributes,
-                            "attribute",
-                            {"class": "java.lang.Double", "name": str(k)},
+                            attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
                         )
                         attribute.text = str(v)
                     else:
@@ -249,16 +231,24 @@ def write_plan(
 
 def add_attribute(attributes, k, v):
     if isinstance(v, str):
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.String", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.String", "name": str(k)}
+        )
         attribute.text = str(v)
     elif isinstance(v, bool):
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Boolean", "name": str(k)}
+        )
         attribute.text = str(v)
     elif isinstance(v, int):
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Integer", "name": str(k)}
+        )
         attribute.text = str(v)
     elif isinstance(v, float):
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.Double", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.Double", "name": str(k)}
+        )
         attribute.text = str(v)
     elif k == "vehicles":
         attribute = et.SubElement(
@@ -268,23 +258,21 @@ def add_attribute(attributes, k, v):
         )
         attribute.text = str(v).replace("'", '"')
     else:
-        attribute = et.SubElement(attributes, "attribute", {"class": "java.lang.String", "name": str(k)})
+        attribute = et.SubElement(
+            attributes, "attribute", {"class": "java.lang.String", "name": str(k)}
+        )
         attribute.text = str(v)
 
 
 def object_attributes_dtd():
     dtd_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "fixtures",
-            "dtd",
-            "objectattributes_v1.dtd",
-        )
+        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "objectattributes_v1.dtd")
     )
     return et.DTD(dtd_path)
 
 
 def population_v6_dtd():
-    dtd_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd"))
+    dtd_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd")
+    )
     return et.DTD(dtd_path)

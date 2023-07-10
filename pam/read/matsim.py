@@ -1,15 +1,18 @@
-import json
-from shapely.geometry import Point
-from datetime import timedelta
-import logging
-from typing import Optional, Literal
+from __future__ import annotations
 
-import pam.core as core
+import json
+import logging
+from datetime import timedelta
+from typing import Literal, Optional
+
+from shapely.geometry import Point
+
 import pam.activity as activity
-from pam.activity import Route, RouteV11
+import pam.core as core
 import pam.utils as utils
-from pam.vehicles import VehicleManager
+from pam.activity import Route, RouteV11
 from pam.variables import START_OF_DAY
+from pam.vehicles import VehicleManager
 
 
 def read_matsim(
@@ -27,13 +30,12 @@ def read_matsim(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> core.Population:
-    """
-    Load a MATSim format population into core population format.
+    """Load a MATSim format population into core population format.
     It is possible to maintain the unity of housholds using a household uid in
     the attributes input, i.e.:
     ``` xml
         <attribute class="java.lang.String" name="hid">hh_0001</attribute>
-    ```
+    ```.
 
     Args:
         plans_path (str): path to matsim format xml
@@ -49,10 +51,10 @@ def read_matsim(
         keep_non_selected (bool, optional): Whether to parse non-selected plans (storing them in person.plans_non_selected). Defaults to False.
         leg_attributes (bool, optional): Parse leg attributes such as routing mode. Defaults to True.
         leg_route (bool, optional): Parse leg route. Defaults to True.
+
     Returns:
         core.Population:
     """
-
     logger = logging.getLogger(__name__)
 
     population = core.Population()
@@ -87,7 +89,9 @@ have attributes or be able to use a household attribute id. Check this is intend
     if attributes_path:
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
-            logger.warning("It is not required to load attributes from a separate path for version 11.")
+            logger.warning(
+                "It is not required to load attributes from a separate path for version 11."
+            )
         attributes = load_attributes_map(attributes_path)
 
     for person in stream_matsim_persons(
@@ -133,11 +137,9 @@ def stream_matsim_persons(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> core.Person:
-    """
-
-    Stream a MATSim format population into core.Person objects.
+    """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
-    This allows this function to support 'version 11' plans.
+    This allows this function to support "version 11" plans.
 
     TODO: a v12 only method could also stream attributes and would use less memory
 
@@ -171,7 +173,6 @@ def stream_matsim_persons(
     Yields:
         Iterator[core.Person]:
     """
-
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
@@ -188,7 +189,9 @@ def stream_matsim_persons(
             agent_vehs = agent_attributes.pop("vehicles", {})
             person_vehs = {mode: vehicles_manager.pop(vid) for mode, vid in agent_vehs.items()}
 
-        person = core.Person(person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs)
+        person = core.Person(
+            person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs
+        )
 
         for plan_xml in person_xml:
             if plan_xml.get("selected") == "yes":
@@ -228,9 +231,7 @@ def parse_matsim_plan(
     leg_attributes: bool = True,
     leg_route: bool = True,
 ) -> activity.Plan:
-    """
-    Parse a MATSim plan.
-    """
+    """Parse a MATSim plan."""
     logger = logging.getLogger(__name__)
     act_seq = 0
     leg_seq = 0
@@ -283,8 +284,7 @@ def parse_matsim_plan(
             leg_seq += 1
             trav_time = stage.get("trav_time")
             if trav_time is not None:
-                h, m, s = trav_time.split(":")
-                leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                leg_duration = utils.safe_strpdelta(trav_time)
                 arrival_dt = departure_dt + leg_duration
             else:
                 arrival_dt = departure_dt  # todo this assumes 0 duration unless known
@@ -341,8 +341,7 @@ def unpack_leg(leg, version):
 
 
 def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
-    """
-    Extract mode, network route and transit route as available.
+    """Extract mode, network route and transit route as available.
 
     Args:
         leg (xml_leg_element):
@@ -356,8 +355,7 @@ def unpack_route_v11(leg) -> tuple[str, RouteV11, dict]:
 
 
 def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
-    """
-    Extract mode, route and attributes as available.
+    """Extract mode, route and attributes as available.
 
     Args:
         leg (xml_leg_element):
@@ -449,7 +447,9 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
 
 
 def load_attributes_map_from_v12(plans_path):
-    return dict([get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")])
+    return dict(
+        [get_attributes_from_person(elem) for elem in utils.get_elems(plans_path, "person")]
+    )
 
 
 def get_attributes_from_person(elem):
@@ -485,9 +485,7 @@ def get_attributes_from_legs(elem):
 
 
 def load_attributes_map(attributes_path):
-    """
-    Given path to MATSim attributes input, return dictionary of attributes (as dict)
-    """
+    """Given path to MATSim attributes input, return dictionary of attributes (as dict)."""
     attributes_map = {}
     people = utils.get_elems(attributes_path, "object")
     for person in people:
@@ -500,9 +498,7 @@ def load_attributes_map(attributes_path):
 
 
 def selected_plans(plans_path):
-    """
-    Given path to MATSim plans input, yield person id and plan for all selected plans.
-    """
+    """Given path to MATSim plans input, yield person id and plan for all selected plans."""
     for person in utils.get_elems(plans_path, "person"):
         for plan in person:
             if plan.get("selected") == "yes":

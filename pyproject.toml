@@ -4,18 +4,21 @@ minversion = "6.0"
 # `--strict-markers` - Raise error on unexpected pytest markers being used (add new markers to `markers` config)
 # `-n2` - parallelise over two threads (uses pytest-xdist)
 # `--nbmake --nbmake-kernel=pam` - test example notebooks using the "pam" notebook kernel (uses nbmake)
-# `--cov=. --cov-report=html --cov-report=xml --cov-config=pyproject.toml` - generate coverage report for tests (uses pytest-cov; call `--no-cov` in CLI to switch off)
+# `--cov --cov-report=xml --cov-config=pyproject.toml` - generate coverage report for tests (uses pytest-cov; call `--no-cov` in CLI to switch off; `--cov-config` include to avoid bug)
 # `-m 'not high_mem'` - Do not run tests marked as consuming large amounts of memory (call `-m "high_mem"` in CLI to invert this; only `high_mem` marked tests will be run)
 # `-p no:memray` - Do not use the memray memory profiling plugin (call `-p memray` in CLI to switch on memory profiling)
-addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov=. --cov-report=html --cov-report=xml --cov-config=pyproject.toml -m 'not high_mem' -p no:memray"
+addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov --cov-report=xml --cov-config=pyproject.toml -m 'not high_mem' -p no:memray"
 testpaths = ["tests", "examples", "mkdocs_plugins"]
 # to mark a test, decorate it with `@pytest.mark.[marker-name]`
 markers = ["high_mem", "limit_memory"]
+filterwarnings = [
+    # https://github.com/pytest-dev/pytest-xdist/issues/825
+    "ignore:The --rsyncdir command line argument and rsyncdirs config variable are deprecated.:DeprecationWarning",
+]
 
 [tool.coverage.run]
 branch = true
 source = ["pam/", "mkdocs_plugins/"]
-omit = ["__init__.py"]
 
 [tool.coverage.report]
 fail_under = 89
@@ -27,11 +30,34 @@ directory = "reports/coverage"
 output = "reports/coverage/coverage.xml"
 
 [tool.black]
-line-length = 120
+line-length = 100
+skip_magic_trailing_comma = true
 
 [tool.ruff]
-line-length = 120
-select = ["E9", "F63", "F7", "F82"]
+line-length = 100
+select = ["E", "F", "I", "Q"]
+
+ignore = [
+    "E501", # line too long: Black will handle this.
+    "D1",   # Ignore missing docstrings in public functions/modules. There are just too many of them missing...
+]
+
+# Exclude a variety of commonly ignored directories.
+exclude = [".*", "__pypackages__", "build", "dist", "venv", "reports/"]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.pydocstyle]
-convention = "numpy"
+convention = "google"
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+# Ignore `E402` (import violations) and `F401` (unused imports) in all `__init__.py` files
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402", "F401"]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"

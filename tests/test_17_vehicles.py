@@ -1,12 +1,11 @@
-import pytest
 import lxml
-from pathlib import Path
+import pytest
 
-from pam.core import Person, Population, Household
-from pam.vehicles import VehicleManager, Vehicle, ElectricVehicle, VehicleType
-from pam.read.matsim import read_matsim
-from pam.write.matsim import write_matsim
 from pam import PAMVehicleIdError
+from pam.core import Person, Population
+from pam.read.matsim import read_matsim
+from pam.vehicles import ElectricVehicle, Vehicle, VehicleManager, VehicleType
+from pam.write.matsim import write_matsim
 
 
 @pytest.fixture()
@@ -196,10 +195,7 @@ def test_reading_all_vehicles_file(all_vehicle_xml_path):
     }
 
 
-def test_reading_electric_vehicles(
-    all_vehicle_xml_path,
-    electric_vehicles_xml_path,
-):
+def test_reading_electric_vehicles(all_vehicle_xml_path, electric_vehicles_xml_path):
     manager = VehicleManager()
     manager.from_xml(all_vehicle_xml_path, electric_vehicles_xml_path)
     assert manager.veh_types == {
@@ -228,7 +224,9 @@ def test_assign_evs_to_person(manager):
 
 
 def test_assign_multiple_vehs_to_person(manager):
-    person = Person("0", attributes={"subpopulation": "default", "vehicles": {"ev": "ev_0", "car": "car_0"}})
+    person = Person(
+        "0", attributes={"subpopulation": "default", "vehicles": {"ev": "ev_0", "car": "car_0"}}
+    )
     person.assign_vehicles(manager)
     assert "car_0" not in manager
     assert "ev_0" not in manager
@@ -275,7 +273,9 @@ def test_rebuild_manager_single_agent(manager):
 
     population.rebuild_vehicles_manager()
     assert population.vehicles_manager.vehicles == {"0": Vehicle("0", "car")}
-    assert population.vehicles_manager.redundant_types() == {"lorry": VehicleType(passengerCarEquivalents=3.0)}
+    assert population.vehicles_manager.redundant_types() == {
+        "lorry": VehicleType(passengerCarEquivalents=3.0)
+    }
 
 
 def test_rebuild_manager_multi_agent(manager):
@@ -310,7 +310,9 @@ def test_writing_all_vehicles_results_in_valid_xml_file(manager, tmp_path, vehic
     vehicles_v2_xsd.assertValid(xml_obj)  # this needs internet?
 
 
-def test_writing_electric_vehicles_results_in_valid_xml_file(manager, tmp_path, electric_vehicles_v1_dtd):
+def test_writing_electric_vehicles_results_in_valid_xml_file(
+    manager, tmp_path, electric_vehicles_v1_dtd
+):
     vehs_path = tmp_path / "all_vehicles.xml"
     evs_path = tmp_path / "ev_vehicles.xml"
     manager.to_xml(vehs_path=vehs_path, evs_path=evs_path)
@@ -332,7 +334,9 @@ def test_read_write_xml_consistently(all_vehicle_xml_path, electric_vehicles_xml
     assert manager == duplicate
 
 
-def test_read_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path):
+def test_read_vehs_into_population(
+    ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path
+):
     population = read_matsim(
         plans_path=ev_population_xml_path,
         all_vehicles_path=all_vehicle_xml_path,
@@ -348,12 +352,16 @@ def test_read_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path,
     for pid in ["Eddy", "Stevie", "Vladya"]:
         assert list(population[pid][pid].attributes.keys()) == ["subpopulation"]
 
-    assert population["Eddy"]["Eddy"].vehicles["car"] == ElectricVehicle("Eddy", "defaultElectricVehicleType")
+    assert population["Eddy"]["Eddy"].vehicles["car"] == ElectricVehicle(
+        "Eddy", "defaultElectricVehicleType"
+    )
     assert population["Stevie"]["Stevie"].vehicles["car"] == Vehicle("Stevie", "defaultVehicleType")
     assert population["Vladya"]["Vladya"].vehicles["car"] == Vehicle("Vladya", "defaultVehicleType")
 
 
-def test_write_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+def test_write_vehs_into_population(
+    ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path
+):
     population = read_matsim(
         plans_path=ev_population_xml_path,
         all_vehicles_path=all_vehicle_xml_path,
@@ -364,39 +372,46 @@ def test_write_vehs_into_population(ev_population_xml_path, all_vehicle_xml_path
     evs_path = tmp_path / "evs.xml"
     write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
     duplicate = read_matsim(
-        plans_path=plans_path,
-        all_vehicles_path=vehs_path,
-        electric_vehicles_path=evs_path,
+        plans_path=plans_path, all_vehicles_path=vehs_path, electric_vehicles_path=evs_path
     )
     assert population == duplicate
 
 
-def test_read_edit_size_write(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+def test_read_edit_size_write(
+    ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path
+):
     population = read_matsim(
         plans_path=ev_population_xml_path,
         all_vehicles_path=all_vehicle_xml_path,
         electric_vehicles_path=electric_vehicles_xml_path,
     )
-    population.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents = 1.2
+    population.vehicles_manager.veh_types[
+        "defaultElectricVehicleType"
+    ].passengerCarEquivalents = 1.2
     plans_path = tmp_path / "plans.xml"
     vehs_path = tmp_path / "vehs.xml"
     evs_path = tmp_path / "evs.xml"
     write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
     duplicate = read_matsim(
-        plans_path=plans_path,
-        all_vehicles_path=vehs_path,
-        electric_vehicles_path=evs_path,
+        plans_path=plans_path, all_vehicles_path=vehs_path, electric_vehicles_path=evs_path
     )
-    assert duplicate.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents == 1.2
+    assert (
+        duplicate.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents
+        == 1.2
+    )
 
 
-def test_read_edit_veh_write(ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):
+def test_read_edit_veh_write(
+    ev_population_xml_path, all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path
+):
     population = read_matsim(
         plans_path=ev_population_xml_path,
         all_vehicles_path=all_vehicle_xml_path,
         electric_vehicles_path=electric_vehicles_xml_path,
     )
-    population["Stevie"]["Stevie"].vehicles["car"] = ElectricVehicle("Stevie", "defaultElectricVehicleType")
+    population["Stevie"]["Stevie"].vehicles["car"] = ElectricVehicle(
+        "Stevie", "defaultElectricVehicleType"
+    )
     population["Eddy"]["Eddy"].vehicles["car"] = Vehicle("Eddy", "defaultVehicleType")
 
     plans_path = tmp_path / "plans.xml"
@@ -404,9 +419,9 @@ def test_read_edit_veh_write(ev_population_xml_path, all_vehicle_xml_path, elect
     evs_path = tmp_path / "evs.xml"
     write_matsim(population, plans_path=plans_path, vehs_path=vehs_path, evs_path=evs_path)
     duplicate = read_matsim(
-        plans_path=plans_path,
-        all_vehicles_path=vehs_path,
-        electric_vehicles_path=evs_path,
+        plans_path=plans_path, all_vehicles_path=vehs_path, electric_vehicles_path=evs_path
     )
-    assert duplicate["Stevie"]["Stevie"].vehicles["car"] == ElectricVehicle("Stevie", "defaultElectricVehicleType")
+    assert duplicate["Stevie"]["Stevie"].vehicles["car"] == ElectricVehicle(
+        "Stevie", "defaultElectricVehicleType"
+    )
     assert duplicate["Eddy"]["Eddy"].vehicles["car"] == Vehicle("Eddy", "defaultVehicleType")
