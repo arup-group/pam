@@ -161,6 +161,7 @@ def test_simple_cropping(test_plan, test_zoning_system):
     assert activity_zones == ["g", "h", "e"]
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in intersects:RuntimeWarning")
 def test_complex_cropping(test_plan, test_zoning_system):
     """Through-trips and multiple entries to the core area (e)."""
     boundary = test_zoning_system.loc["e"].geometry

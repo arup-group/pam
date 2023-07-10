@@ -11,7 +11,7 @@ requirements = {
 
 setup(
     name="pam",
-    version="0.2.5-dev",
+    version="0.2.5.dev",
     author="Fred Shone",
     author_email="",
     description="Pandemic Activity Modeller/Modifier",

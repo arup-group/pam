@@ -11,6 +11,10 @@ addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov --cov-re
 testpaths = ["tests", "examples", "mkdocs_plugins"]
 # to mark a test, decorate it with `@pytest.mark.[marker-name]`
 markers = ["high_mem", "limit_memory"]
+filterwarnings = [
+    # https://github.com/pytest-dev/pytest-xdist/issues/825
+    "ignore:The --rsyncdir command line argument and rsyncdirs config variable are deprecated.:DeprecationWarning",
+]
 
 [tool.coverage.run]
 branch = true
