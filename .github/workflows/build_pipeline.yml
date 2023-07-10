@@ -73,7 +73,7 @@ jobs:
         create-args: >-
             -c city-modelling-lab
             -f requirements/dev.txt
-            python=3.9
+            python=3.11
         post-cleanup: all
         cache-environment: true
 
