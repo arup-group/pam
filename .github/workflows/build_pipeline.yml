@@ -20,7 +20,12 @@ jobs:
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
-        environment-file: environment.yml
+        environment-name: pam-win
+        environment-file: requirements/base.txt
+        create-args: >-
+            -c city-modelling-lab
+            -f requirements/dev.txt
+            python=3.11
         post-cleanup: all
         cache-environment: true
     - name: install PAM
@@ -63,7 +68,13 @@ jobs:
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
-        environment-file: environment.yml
+        environment-name: pam-linux-311
+        environment-file: requirements/base.txt
+        create-args: >-
+            -c city-modelling-lab
+            -f requirements/docs.txt
+            -f requirements/dev.txt
+            python=3.9
         post-cleanup: all
         cache-environment: true
 

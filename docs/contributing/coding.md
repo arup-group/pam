@@ -14,7 +14,7 @@ It is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/lat
 1. Install mamba with the [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) executable for your operating system.
 2. Open the command line (or the "miniforge prompt" in Windows).
 3. Download (a.k.a., clone) the PAM respository: `git clone git@github.com:arup-group/pam.git`
-4. Create the PAM mamba environment: `mamba create -n pam -c city-modelling-lab -f requirements/base.txt -f requirements/dev.txt -f requirements/docs.txt`
+4. Create the PAM mamba environment: `mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt --file requirements/docs.txt`
 5. Activate the PAM mamba environment: `mamba activate pam`
 6. Install the PAM package into the environment, in editible mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e ./pam`
 
@@ -22,7 +22,7 @@ All together:
 
 ``` shell
 git clone git@github.com:arup-group/pam.git
-mamba create -n pam -c city-modelling-lab -f requirements/base.txt -f requirements/dev.txt -f requirements/docs.txt
+mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt --file requirements/docs.txt
 mamba activate pam
 pip install --no-deps -e ./pam
 ```
