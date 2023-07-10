@@ -1,0 +1,30 @@
+name: Feature Request
+description: Suggest an idea for PAM.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for letting us know about your idea!
+  - type: textarea
+    id: description
+    attributes:
+      label: What can be improved?
+      placeholder: Tell us what you would like to see!
+      value: "PAM should include dog walkers!"
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of PAM are you using?
+      options:
+        - 0.2.0
+        - 0.2.1
+        - 0.2.2
+        - 0.2.3
+        - 0.2.4
+        - 0.2.5-dev
+    validations:
+      required: true

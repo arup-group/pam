@@ -1,46 +1,47 @@
 import random
-from typing import Union, List
 from copy import deepcopy
+from typing import List, Union
+
+import pam.policy.filters as filters
 import pam.policy.modifiers as modifiers
 import pam.policy.probability_samplers as probability_samplers
-import pam.policy.filters as filters
 
 
 class Policy:
-    """
-    Base class for policies
-    """
+    """Base class for policies."""
+
     def __init__(self):
         pass
 
     def apply_to(self, household, person=None, activity=None):
-        raise NotImplementedError('{} is a base class'.format(type(Policy)))
+        raise NotImplementedError("{} is a base class".format(type(Policy)))
 
     def __repr__(self):
         attribs = vars(self)
         return "<{} instance at {}: {}>".format(
             self.__class__.__name__,
             id(self),
-            ', '.join("%r: %r" % item for item in attribs.items()))
+            ", ".join("%r: %r" % item for item in attribs.items()),
+        )
 
     def __str__(self):
         attribs = vars(self)
-        return  "Policy {} with attributes: \n{}".format(
-            self.__class__.__name__,
-            ', \n'.join("%s: %s" % item for item in attribs.items()))
+        return "Policy {} with attributes: \n{}".format(
+            self.__class__.__name__, ", \n".join("%s: %s" % item for item in attribs.items())
+        )
 
     def print(self):
         print(self.__str__())
 
 
 class PolicyLevel(Policy):
-    """
-    Base class to formalise the hierarchy of levels at which a policy should applied at
-    """
+    """Base class to formalise the hierarchy of levels at which a policy should applied at."""
+
     def __init__(self, modifier: modifiers.Modifier, attribute_filter: filters.Filter = None):
         super().__init__()
-        assert isinstance(modifier, modifiers.Modifier), 'modifier needs to be subclass of {}'.format(
-            type(modifiers.Modifier()))
+        assert isinstance(
+            modifier, modifiers.Modifier
+        ), "modifier needs to be subclass of {}".format(type(modifiers.Modifier()))
         self.modifier = modifier
         if attribute_filter is None:
             self.attribute_filter = filters.PersonAttributeFilter({})
@@ -48,12 +49,11 @@ class PolicyLevel(Policy):
             self.attribute_filter = attribute_filter
 
     def apply_to(self, household, person=None, activity=None):
-        raise NotImplementedError('{} is a base class'.format(type(PolicyLevel)))
+        raise NotImplementedError("{} is a base class".format(type(PolicyLevel)))
 
 
 class HouseholdPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on a household level
+    """Policy that is to be applied on a household level.
 
     Parameters
     ----------
@@ -72,16 +72,18 @@ class HouseholdPolicy(PolicyLevel):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 modifier: modifiers.Modifier,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        modifier: modifiers.Modifier,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifier, attribute_filter)
         self.probability = probability_samplers.verify_probability(probability)
 
     def apply_to(self, household, person=None, activities=None):
-        """
-        uses self.probability to decide if household should be selected
+        """Uses self.probability to decide if household should be selected
         :param household:
         :param person:
         :param activities:
@@ -99,8 +101,7 @@ class HouseholdPolicy(PolicyLevel):
 
 
 class PersonPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on a person level
+    """Policy that is to be applied on a person level.
 
     Parameters
     ----------
@@ -120,14 +121,17 @@ class PersonPolicy(PolicyLevel):
     Optional argument which helps filter/select person for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 modifier: modifiers.Modifier,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        modifier: modifiers.Modifier,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifier, attribute_filter)
         self.probability = probability_samplers.verify_probability(
-            probability,
-            (probability_samplers.HouseholdProbability))
+            probability, (probability_samplers.HouseholdProbability)
+        )
 
     def apply_to(self, household, person=None, activities=None):
         for pid, person in household.people.items():
@@ -143,8 +147,7 @@ class PersonPolicy(PolicyLevel):
 
 
 class ActivityPolicy(PolicyLevel):
-    """
-    Policy that is to be applied on an individual activity level
+    """Policy that is to be applied on an individual activity level.
 
     Parameters
     ----------
@@ -164,14 +167,18 @@ class ActivityPolicy(PolicyLevel):
     Optional argument which helps filter/select activity for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 modifier: modifiers.Modifier,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        modifier: modifiers.Modifier,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifier, attribute_filter)
         self.probability = probability_samplers.verify_probability(
             probability,
-            (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability))
+            (probability_samplers.HouseholdProbability, probability_samplers.PersonProbability),
+        )
 
     def apply_to(self, household, person=None, activities=None):
         for pid, person in household.people.items():
@@ -191,8 +198,7 @@ class ActivityPolicy(PolicyLevel):
 
 
 class HouseholdQuarantined(Policy):
-    """
-    Household level Policy which removes all non-home activities
+    """Household level Policy which removes all non-home activities
     for all persons in a household.
 
     Parameters
@@ -203,6 +209,7 @@ class HouseholdQuarantined(Policy):
     If probability given as float: 0<probability<=1 then the probability
     level is assumed to be of the same level as the policy, i.e. Household.
     """
+
     def __init__(self, probability):
         super().__init__()
         self.probability = probability_samplers.verify_probability(probability)
@@ -215,8 +222,7 @@ class HouseholdQuarantined(Policy):
 
 
 class PersonStayAtHome(Policy):
-    """
-    Person level Policy which removes all non-home activities
+    """Person level Policy which removes all non-home activities
     for a person.
 
     Parameters
@@ -228,11 +234,12 @@ class PersonStayAtHome(Policy):
     If probability given as float: 0<probability<=1 then the probability
     level is assumed to be of the same level as the policy, i.e. Person.
     """
+
     def __init__(self, probability):
         super().__init__()
         self.probability = probability_samplers.verify_probability(
-            probability,
-            (probability_samplers.HouseholdProbability))
+            probability, (probability_samplers.HouseholdProbability)
+        )
 
     def apply_to(self, household, person=None, activity=None):
         for pid, person in household.people.items():
@@ -241,8 +248,7 @@ class PersonStayAtHome(Policy):
 
 
 class RemoveHouseholdActivities(HouseholdPolicy):
-    """
-    Pre-packaged household-level policy which removes specified
+    """Pre-packaged household-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -260,16 +266,18 @@ class RemoveHouseholdActivities(HouseholdPolicy):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifiers.RemoveActivity(activities), probability, attribute_filter)
 
 
 class RemovePersonActivities(PersonPolicy):
-    """
-    Pre-packaged person-level policy which removes specified
+    """Pre-packaged person-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -288,16 +296,18 @@ class RemovePersonActivities(PersonPolicy):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifiers.RemoveActivity(activities), probability, attribute_filter)
 
 
 class RemoveIndividualActivities(ActivityPolicy):
-    """
-    Pre-packaged activity-level policy which removes specified
+    """Pre-packaged activity-level policy which removes specified
     activities from all person's plans within selected households.
 
     Parameters
@@ -316,16 +326,18 @@ class RemoveIndividualActivities(ActivityPolicy):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifiers.RemoveActivity(activities), probability, attribute_filter)
 
 
 class MovePersonActivitiesToHome(PersonPolicy):
-    """
-    Pre-packaged person-level policy which moves a tour of activities
+    """Pre-packaged person-level policy which moves a tour of activities
     to home location. A tour is defined as a list of activities sandwiched
     between two home activities.
 
@@ -348,16 +360,20 @@ class MovePersonActivitiesToHome(PersonPolicy):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
-        super().__init__(modifiers.MoveActivityTourToHomeLocation(activities), probability, attribute_filter)
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
+        super().__init__(
+            modifiers.MoveActivityTourToHomeLocation(activities), probability, attribute_filter
+        )
 
 
 class ReduceSharedHouseholdActivities(HouseholdPolicy):
-    """
-    Pre-packaged household-level policy which reduces the number of activities
+    """Pre-packaged household-level policy which reduces the number of activities
     shared within a household (Activity.act (type of activity), start/end
     times and locations match). Randomly assigns a person whose activities
     will be retained and deletes the shared activities from other persons
@@ -381,16 +397,18 @@ class ReduceSharedHouseholdActivities(HouseholdPolicy):
     Optional argument which helps filter/select household for policy application
     based on object attributes.
     """
-    def __init__(self,
-                 activities: list,
-                 probability: Union[float, int, probability_samplers.SamplingProbability],
-                 attribute_filter: filters.Filter = None):
+
+    def __init__(
+        self,
+        activities: list,
+        probability: Union[float, int, probability_samplers.SamplingProbability],
+        attribute_filter: filters.Filter = None,
+    ):
         super().__init__(modifiers.ReduceSharedActivity(activities), probability, attribute_filter)
 
 
 def apply_policies(population, policies: Union[List[Policy], Policy], in_place=False):
-    """
-    Method which applies policies to population.
+    """Method which applies policies to population.
 
     Parameters
     ----------
@@ -418,9 +436,11 @@ def apply_policies(population, policies: Union[List[Policy], Policy], in_place=F
         policies = [policies]
     for i in range(len(policies)):
         policy = policies[i]
-        assert isinstance(policy, Policy), \
-            'Policies need to be of type {}, not {}. Failed for policy {} at list index {}'.format(
-                type(Policy), type(policy), policy, i)
+        assert isinstance(
+            policy, Policy
+        ), "Policies need to be of type {}, not {}. Failed for policy {} at list index {}".format(
+            type(Policy), type(policy), policy, i
+        )
     for hid, household in pop.households.items():
         for policy in policies:
             policy.apply_to(household)

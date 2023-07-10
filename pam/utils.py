@@ -1,13 +1,14 @@
-from datetime import datetime, timedelta
-import numpy as np
 import gzip
-from lxml import etree
-from io import BytesIO
 import os
-from shapely.geometry import Point, LineString
-from s2sphere import CellId
+from datetime import datetime, timedelta
+from io import BytesIO
 from pathlib import Path
+
+import numpy as np
+from lxml import etree
 from lxml import etree as et
+from s2sphere import CellId
+from shapely.geometry import LineString, Point
 
 from pam.variables import START_OF_DAY
 
@@ -26,10 +27,9 @@ def parse_time(time):
 
 
 def minutes_to_datetime(minutes: int):
-    """
-    Convert minutes to datetime
+    """Convert minutes to datetime
     :param minutes: int
-    :return: datetime
+    :return: datetime.
     """
     days, remainder = divmod(minutes, 24 * 60)
     hours, minutes = divmod(remainder, 60)
@@ -37,35 +37,31 @@ def minutes_to_datetime(minutes: int):
 
 
 def minutes_to_timedelta(minutes: int):
-    """
-    Convert minutes to timedelta
+    """Convert minutes to timedelta
     :param minutes: int
-    :return: timedelta
+    :return: timedelta.
     """
     return timedelta(minutes=minutes)
 
 
 def datetime_string_to_datetime(string: str):
-    """
-    Convert datetime formatted string to datetime
+    """Convert datetime formatted string to datetime
     :param string: str "%Y-%m-%d %H:%M:%S"
-    :return: datetime
+    :return: datetime.
     """
     return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 
 def datetime_to_matsim_time(dt):
-    """
-    Convert datetime to matsim format time (08:27:33)
+    """Convert datetime to matsim format time (08:27:33)
     Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
-    return dt.strftime("%H:%M:%S")
+    return dt.strftime("%H:%M:%S").
     """
     return timedelta_to_matsim_time(dt - START_OF_DAY)
 
 
 def matsim_time_to_datetime(string: str) -> datetime:
-    """
-    Convert matsim format time (08:27:33) to datetime.
+    """Convert matsim format time (08:27:33) to datetime.
     Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
 
     :param string: Time from start of the simulation (%H:%M:%S)
@@ -74,32 +70,25 @@ def matsim_time_to_datetime(string: str) -> datetime:
 
 
 def timedelta_to_matsim_time(td):
-    """
-    Convert datetime timedelta object to matsim string format (00:00:00)
-    """
+    """Convert datetime timedelta object to matsim string format (00:00:00)."""
     hours, remainder = divmod(td.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
     return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
 
 def dt_to_s(dt):
-    """
-    Convert datetime to seconds since start of day.
-    """
+    """Convert datetime to seconds since start of day."""
     return (((dt.hour * 60) + dt.minute) * 60) + dt.second
 
 
 def td_to_s(td):
-    """
-    Convert timedelta to seconds since start of day.
-    """
+    """Convert timedelta to seconds since start of day."""
     return (td.days * 86400) + td.seconds
 
 
 def safe_strptime(mt):
-    """
-    safely parse string into datetime, can cope with time strings in format hh:mm:ss or hh:mm
-    if hh > 23 then adds a day
+    """Safely parse string into datetime, can cope with time strings in format hh:mm:ss
+    if hh > 23 then adds a day.
     """
     units = mt.split(":")
     if len(units) == 3:
@@ -112,9 +101,7 @@ def safe_strptime(mt):
 
 
 def safe_strpdelta(mt):
-    """
-    safely parse string into timedelta, can cope with time strings in format hh:mm:ss or hh:mm
-    """
+    """Parse string into timedelta, can cope with time strings in format hh:mm:ss or hh:mm"""
     units = mt.split(":")
     if len(units) == 3:
         h, m, s = mt.split(":")
@@ -135,8 +122,7 @@ def matsim_duration_to_hours(mt):
 
 
 def get_linestring(from_point, to_point):
-    """
-    Makes a shapely.geometry.LineString out of two points
+    """Makes a shapely.geometry.LineString out of two points
     :param from_point: shapely.geometry.Point or s2sphere.CellId
     :param to_point: shapely.geometry.Point or s2sphere.CellId
     :return:
@@ -156,11 +142,10 @@ def get_linestring(from_point, to_point):
 
 
 def get_elems(path, tag):
-    """
-    Wrapper for unzipping and dealing with xml namespaces
+    """Wrapper for unzipping and dealing with xml namespaces
     :param path: xml path string
     :param tag: The tag type to extract , e.g. 'link'
-    :return: Generator of elements
+    :return: Generator of elements.
     """
     target = try_unzip(path)
     tag = get_tag(target, tag)
@@ -169,11 +154,10 @@ def get_elems(path, tag):
 
 
 def parse_elems(target, tag):
-    """
-    Traverse the given XML tree, retrieving the elements of the specified tag.
+    """Traverse the given XML tree, retrieving the elements of the specified tag.
     :param target: Target xml, either BytesIO object or string path
     :param tag: The tag type to extract , e.g. 'link'
-    :return: Generator of elements
+    :return: Generator of elements.
     """
     doc = etree.iterparse(target, tag=tag)
     for _, element in doc:
@@ -185,10 +169,9 @@ def parse_elems(target, tag):
 
 
 def try_unzip(path):
-    """
-    Attempts to unzip xml at given path, if fails, returns path
+    """Attempts to unzip xml at given path, if fails, returns path
     :param path: xml path string
-    :return: either BytesIO object or string path
+    :return: either BytesIO object or string path.
     """
     try:
         with gzip.open(path) as unzipped:
@@ -200,20 +183,13 @@ def try_unzip(path):
 
 
 def get_tag(target, tag):
-    """
-    Check for namespace declaration. If they exists return tag string
+    """Check for namespace declaration. If they exists return tag string
     with namespace [''] ie {namespaces['']}tag. If no namespaces declared
     return original tag
-    TODO Not working with iterparse, generated elem also have ns which is dealt with later
+    TODO Not working with iterparse, generated elem also have ns which is dealt with later.
     """
     nsmap = {}
-    doc = etree.iterparse(
-        target,
-        events=(
-            "end",
-            "start-ns",
-        ),
-    )
+    doc = etree.iterparse(target, events=("end", "start-ns"))
     count = 0
     for event, element in doc:
         count += 1
@@ -230,10 +206,9 @@ def get_tag(target, tag):
 
 
 def strip_namespace(elem):
-    """
-    Strips namespaces from given xml element
+    """Strips namespaces from given xml element
     :param elem: xml element
-    :return: xml element
+    :return: xml element.
     """
     if elem.tag.startswith("{"):
         elem.tag = elem.tag.split("}", 1)[1]  # strip namespace
@@ -247,10 +222,12 @@ def strip_namespace(elem):
 
 
 def create_crs_attribute(coordinate_reference_system):
-    """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS"""
+    """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS."""
     attributes_element = et.Element("attributes")
     crs_attribute = et.SubElement(
-        attributes_element, "attribute", {"class": "java.lang.String", "name": "coordinateReferenceSystem"}
+        attributes_element,
+        "attribute",
+        {"class": "java.lang.String", "name": "coordinateReferenceSystem"},
     )
     crs_attribute.text = str(coordinate_reference_system)
     return attributes_element

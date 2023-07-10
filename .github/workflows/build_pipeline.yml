@@ -20,14 +20,35 @@ jobs:
         environment-file: environment.yml
         post-cleanup: all
         cache-environment: true
+        create-args: python=3.11
     - name: install PAM
       run: |
         pip install --no-dependencies -e .
         python -m ipykernel install --user --name pam
     - name: run tests
       run: pytest
+
+  py39-build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: latest
+          environment-file: environment.yml
+          post-cleanup: all
+          cache-environment: true
+          create-args: python=3.9
+  
+      - name: install PAM
+        run: |
+          pip install --no-dependencies -e .
+          python -m ipykernel install --user --name pam
+  
+      - name: Run unit tests
+        run: pytest tests/ --no-cov
       
-  build:
+  py311-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -39,6 +60,7 @@ jobs:
         environment-file: environment.yml
         post-cleanup: all
         cache-environment: true
+        create-args: python=3.11
 
     - name: install PAM
       run: |
@@ -47,6 +69,11 @@ jobs:
 
     - name: Run tests
       run: pytest
+      
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env: 
+        directory: "./reports/coverage/"
 
     - name: Setup doc deploy
       run: |

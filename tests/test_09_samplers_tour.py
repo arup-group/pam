@@ -1,9 +1,9 @@
 # %% import packages
-import pytest
-import pandas as pd
 import geopandas as gp
-from shapely.geometry import Point, Polygon
+import pandas as pd
+import pytest
 from matplotlib.figure import Figure
+from shapely.geometry import Point, Polygon
 
 from pam.core import Person
 from pam.samplers import tour
@@ -18,7 +18,17 @@ def facility_gdf():
     facility_df = pd.DataFrame(
         {
             "id": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            "activity": ["home", "delivery", "home", "depot", "depot", "depot", "delivery", "delivery", "depot"],
+            "activity": [
+                "home",
+                "delivery",
+                "home",
+                "depot",
+                "depot",
+                "depot",
+                "delivery",
+                "delivery",
+                "depot",
+            ],
         }
     )
     points = [
@@ -59,13 +69,19 @@ def facility_zone(facility_gdf, zones_gdf):
 
 @pytest.fixture
 def df_od(zones_gdf):
-    od_matrix = [[0, 2.82842712, 5.65685425], [2.82842712, 0, 2.82842712], [5.65685425, 2.82842712, 0]]
+    od_matrix = [
+        [0, 2.82842712, 5.65685425],
+        [2.82842712, 0, 2.82842712],
+        [5.65685425, 2.82842712, 0],
+    ]
     return pd.DataFrame(od_matrix, index=zones_gdf.index, columns=zones_gdf.index)
 
 
 @pytest.fixture
 def facility_sampler(facility_gdf, zones_gdf):
-    return FacilitySampler(facilities=facility_gdf, zones=zones_gdf, build_xml=True, fail=False, random_default=True)
+    return FacilitySampler(
+        facilities=facility_gdf, zones=zones_gdf, build_xml=True, fail=False, random_default=True
+    )
 
 
 @pytest.fixture
@@ -75,12 +91,16 @@ def depot_density(facility_zone, zones_gdf):
 
 @pytest.fixture
 def depot_normalised(facility_zone, zones_gdf):
-    return tour.create_density_gdf(facility_zone=facility_zone, zone=zones_gdf, activity=["depot"], normalise="area")
+    return tour.create_density_gdf(
+        facility_zone=facility_zone, zone=zones_gdf, activity=["depot"], normalise="area"
+    )
 
 
 @pytest.fixture
 def delivery_density(facility_zone, zones_gdf):
-    return tour.create_density_gdf(facility_zone=facility_zone, zone=zones_gdf, activity=["delivery"])
+    return tour.create_density_gdf(
+        facility_zone=facility_zone, zone=zones_gdf, activity=["delivery"]
+    )
 
 
 @pytest.fixture
@@ -185,16 +205,23 @@ def test_facility_density_normalised_raises_warning_inf_values(facility_zone, zo
     zones_gdf.loc[3, "area"] = 0
     facility_zone.loc[3, "area"] = 0
     with pytest.warns(UserWarning, match="Your density gdf has infinite values"):
-        tour.create_density_gdf(facility_zone=facility_zone, zone=zones_gdf, activity=["depot"], normalise="area")
+        tour.create_density_gdf(
+            facility_zone=facility_zone, zone=zones_gdf, activity=["depot"], normalise="area"
+        )
 
 
 def test_dzone_sampler_dzone_d_density_zero(delivery_density, df_od):
     o_zone = 3
     threshold_value = 2
 
-    with pytest.warns(UserWarning, match="No destinations within this threshold value, change threshold"):
-        d_zone = tour.FrequencySampler(
-            dist=delivery_density, freq="density", threshold_matrix=df_od[o_zone], threshold_value=threshold_value
+    with pytest.warns(
+        UserWarning, match="No destinations within this threshold value, change threshold"
+    ):
+        tour.FrequencySampler(
+            dist=delivery_density,
+            freq="density",
+            threshold_matrix=df_od[o_zone],
+            threshold_value=threshold_value,
         ).threshold_sample()
 
 
@@ -207,7 +234,10 @@ def test_frequency_sampler_with_density():
     """
     assert (
         tour.FrequencySampler(
-            dist=zone_densities.index, freq=zone_densities.density, threshold_matrix=None, threshold_value=None
+            dist=zone_densities.index,
+            freq=zone_densities.density,
+            threshold_matrix=None,
+            threshold_value=None,
         ).sample()
         == "A"
     )
@@ -220,7 +250,9 @@ def test_frequency_sampler_with_threshold():
     A   1
     B   1
     """
-    threshold_matrix = pd.DataFrame({"zone": ["A", "B"], "A": [0, 1000], "B": [1000, 0]}).set_index("zone")
+    threshold_matrix = pd.DataFrame({"zone": ["A", "B"], "A": [0, 1000], "B": [1000, 0]}).set_index(
+        "zone"
+    )
     """
         A   B
     A   0   100
@@ -228,7 +260,10 @@ def test_frequency_sampler_with_threshold():
     """
     assert (
         tour.FrequencySampler(
-            dist=zone_densities, freq="density", threshold_matrix=threshold_matrix["A"], threshold_value=50
+            dist=zone_densities,
+            freq="density",
+            threshold_matrix=threshold_matrix["A"],
+            threshold_value=50,
         ).threshold_sample()
         == "A"
     )
@@ -302,7 +337,12 @@ def test_activity_endtm_depot(agent, agent_plan, hour_sampler, minute_sampler, o
     o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
     time_params = {"hour": hour_sampler.sample(), "minute": minute_sampler.sample()}
     end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test, k=0, zone=o_zone, loc=o_loc, activity_type="depot", time_params=time_params
+        agent=agent_test,
+        k=0,
+        zone=o_zone,
+        loc=o_loc,
+        activity_type="depot",
+        time_params=time_params,
     )
 
     assert end_tm == ((time_params["hour"] * 60) + time_params["minute"])
@@ -317,7 +357,12 @@ def test_activity_endtm_notdepot(agent, agent_plan, hour_sampler, minute_sampler
     o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
     time_params = {"end_tm": hour_sampler.sample(), "stop_duration": minute_sampler.sample()}
     end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test, k=0, zone=o_zone, loc=o_loc, activity_type="not_depot", time_params=time_params
+        agent=agent_test,
+        k=0,
+        zone=o_zone,
+        loc=o_loc,
+        activity_type="not_depot",
+        time_params=time_params,
     )
 
     assert end_tm == (time_params["end_tm"] + int(time_params["stop_duration"] / 60))
@@ -330,14 +375,18 @@ def test_activity_endtm_returnorigin(agent, agent_plan):
     o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
     time_params = {"start_tm": 0, "end_tm": END_OF_DAY}
     end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test, k=0, zone=o_zone, loc=o_loc, activity_type="return_origin", time_params=time_params
+        agent=agent_test,
+        k=0,
+        zone=o_zone,
+        loc=o_loc,
+        activity_type="return_origin",
+        time_params=time_params,
     )
 
     assert end_tm == END_OF_DAY
 
 
 def test_final_activity_return_depot(agent, agent_plan):
-    agent_plan_test = agent_plan
     o_loc, d_zones, d_locs = agent_plan.sequence_stops()
     agent_plan.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
 
@@ -370,6 +419,8 @@ def test_plot_compare_density(od_density):
 
 
 def test_plot_density_difference(od_density):
-    fig = od_density.plot_density_difference(title_1="Origin Difference", title_2="Destination Difference")
+    fig = od_density.plot_density_difference(
+        title_1="Origin Difference", title_2="Destination Difference"
+    )
 
     assert isinstance(fig, Figure)

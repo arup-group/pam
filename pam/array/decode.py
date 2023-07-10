@@ -1,23 +1,23 @@
-import numpy as np
 from datetime import datetime, timedelta
 
-from pam.activity import Plan, Activity, Leg
-from pam.variables import START_OF_DAY, END_OF_DAY
+import numpy as np
+
+from pam.activity import Activity, Leg, Plan
+from pam.variables import END_OF_DAY, START_OF_DAY
 
 
 def one_hot_to_plan(
-    array:np.array,
-    mapping:dict,
-    bin_size:int=3600,
-    duration:int=86400,
-    start_of_day:datetime=START_OF_DAY,
-    end_of_day:datetime=END_OF_DAY,
-    leg_encoding:str="travel",
-    default_leg_mode:str="car",
-    default_activity:str="other"
-    ) -> Plan:
-    """
-    Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
+    array: np.array,
+    mapping: dict,
+    bin_size: int = 3600,
+    duration: int = 86400,
+    start_of_day: datetime = START_OF_DAY,
+    end_of_day: datetime = END_OF_DAY,
+    leg_encoding: str = "travel",
+    default_leg_mode: str = "car",
+    default_activity: str = "other",
+) -> Plan:
+    """Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
     by assuming obviously missing components. Does not support locations, these must be created
     manually.
 
@@ -40,15 +40,14 @@ def one_hot_to_plan(
     """
     bins = int(duration / bin_size)
     if not len(array) == bins:
-        raise UserWarning("Specified plan duration and bin lengths do not match given array length.")
+        raise UserWarning(
+            "Specified plan duration and bin lengths do not match given array length."
+        )
 
     proposed_plan = []
     for act, start_time in iter_array(
-        array=array,
-        mapping=mapping,
-        start_of_day=start_of_day,
-        bin_size=bin_size
-        ):
+        array=array, mapping=mapping, start_of_day=start_of_day, bin_size=bin_size
+    ):
         if act == leg_encoding:  # add leg
             proposed_plan.append(Leg(mode=default_leg_mode, start_time=start_time))
         else:
@@ -70,69 +69,56 @@ def iter_array(array, mapping, start_of_day=START_OF_DAY, bin_size=3600):
         if (prev is None) or (not np.array_equal(time_bin, prev)):  # new component class
             component_class = mapping.get(np.argmax(time_bin))
             if component_class is None:
-                raise UserWarning(f"Not found index of {np.argmax(time_bin)} in supplied mapping: {mapping}.")
+                raise UserWarning(
+                    f"Not found index of {np.argmax(time_bin)} in supplied mapping: {mapping}."
+                )
             yield component_class, start_of_day + timedelta(seconds=(i * bin_size))
         prev = time_bin
 
 
-def add_end_times(plan:list, end_of_day=END_OF_DAY):
+def add_end_times(plan: list, end_of_day=END_OF_DAY):
     # add end_times
-    for i in range(len(plan)-1):
-        plan[i].end_time = plan[i+1].start_time
+    for i in range(len(plan) - 1):
+        plan[i].end_time = plan[i + 1].start_time
     plan[-1].end_time = end_of_day
 
 
-def fix_missing_start_activity(plan:list, start_of_day=START_OF_DAY, bin_size=3600):
+def fix_missing_start_activity(plan: list, start_of_day=START_OF_DAY, bin_size=3600):
     if not isinstance(plan[0], Activity):
-        end_time = start_of_day + timedelta(seconds=int(bin_size/2))  # expected duration
+        end_time = start_of_day + timedelta(seconds=int(bin_size / 2))  # expected duration
         plan.insert(
-            0,
-            Activity(
-                act="home",  # sensible assumption
-                start_time=start_of_day,
-                end_time=end_time
-            ))
+            0, Activity(act="home", start_time=start_of_day, end_time=end_time)
+        )  # sensible assumption
         plan[1].start_time = end_time
 
 
-def fix_missing_end_activity(plan:list, end_of_day=END_OF_DAY, bin_size=3600):
+def fix_missing_end_activity(plan: list, end_of_day=END_OF_DAY, bin_size=3600):
     if not isinstance(plan[-1], Activity):
-        start_time = end_of_day - timedelta(seconds=int(bin_size/2))  # expected duration
+        start_time = end_of_day - timedelta(seconds=int(bin_size / 2))  # expected duration
         plan.append(
-            Activity(
-                act="home",  # sensible assumption
-                start_time=start_time,
-                end_time=end_of_day
-            ))
+            Activity(act="home", start_time=start_time, end_time=end_of_day)
+        )  # sensible assumption
         plan[-2].end_time = start_time
 
 
-def fix_missing_components(plan:list, bin_size=3600, default_leg_mode="car", default_activity="other"):
-    for i in range(len(plan)-1):
-        if type(plan[i]) is type(plan[i+1]):
-            start_time = plan[i].end_time - timedelta(seconds=int(bin_size/4))
-            end_time = plan[i].end_time + timedelta(seconds=int(bin_size/4))
+def fix_missing_components(
+    plan: list, bin_size=3600, default_leg_mode="car", default_activity="other"
+):
+    for i in range(len(plan) - 1):
+        if isinstance(plan[i], type(plan[i + 1])):
+            start_time = plan[i].end_time - timedelta(seconds=int(bin_size / 4))
+            end_time = plan[i].end_time + timedelta(seconds=int(bin_size / 4))
 
             if isinstance(plan[i], Activity):  # add missing Leg
                 plan.insert(
-                    i+1,
-                    Leg(
-                        mode=default_leg_mode,
-                        start_time=start_time,
-                        end_time=end_time
-                    )
+                    i + 1, Leg(mode=default_leg_mode, start_time=start_time, end_time=end_time)
                 )
                 plan[i].end_time = start_time
-                plan[i+2].start_time = end_time
+                plan[i + 2].start_time = end_time
 
             if isinstance(plan[i], Leg):  # add missing Activity
                 plan.insert(
-                    i+1,
-                    Activity(
-                        act=default_activity,
-                        start_time=start_time,
-                        end_time=end_time
-                    )
+                    i + 1, Activity(act=default_activity, start_time=start_time, end_time=end_time)
                 )
                 plan[i].end_time = start_time
-                plan[i+2].start_time = end_time
+                plan[i + 2].start_time = end_time
