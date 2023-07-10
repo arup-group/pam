@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import numpy as np
 import pytest
@@ -270,3 +270,25 @@ def test_parser_does_not_delete_current_element(test_trips_pathv12):
     for i, element in enumerate(elements):
         if i > 0:
             assert element.getparent()[0] != element
+
+
+def test_safe_strptime():
+    assert utils.safe_strptime("00:00:00") == datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0)
+    assert utils.safe_strptime("10:10:10") == datetime(year=1900, month=1, day=1, hour=10, minute=10, second=10)
+    assert utils.safe_strptime("24:00:00") == datetime(year=1900, month=1, day=2, hour=0, minute=0, second=0)
+    assert utils.safe_strptime("25:00:00") == datetime(year=1900, month=1, day=2, hour=1, minute=0, second=0)
+    assert utils.safe_strptime("00:00") == datetime(year=1900, month=1, day=1, hour=0, minute=0, second=0)
+    assert utils.safe_strptime("10:10") == datetime(year=1900, month=1, day=1, hour=10, minute=10, second=0)
+    assert utils.safe_strptime("24:00") == datetime(year=1900, month=1, day=2, hour=0, minute=0, second=0)
+    assert utils.safe_strptime("25:00") == datetime(year=1900, month=1, day=2, hour=1, minute=0, second=0)
+
+
+def test_safe_strpdelta():
+    assert utils.safe_strpdelta("00:00:00") == timedelta(hours=0, minutes=0, seconds=0)
+    assert utils.safe_strpdelta("10:10:10") == timedelta(hours=10, minutes=10, seconds=10)
+    assert utils.safe_strpdelta("24:00:00") == timedelta(hours=24, minutes=0, seconds=0)
+    assert utils.safe_strpdelta("25:00:00") == timedelta(hours=25, minutes=0, seconds=0)
+    assert utils.safe_strpdelta("00:00") == timedelta(hours=0, minutes=0, seconds=0)
+    assert utils.safe_strpdelta("10:10") == timedelta(hours=10, minutes=10, seconds=0)
+    assert utils.safe_strpdelta("24:00") == timedelta(hours=24, minutes=0, seconds=0)
+    assert utils.safe_strpdelta("25:00") == timedelta(hours=25, minutes=0, seconds=0)
