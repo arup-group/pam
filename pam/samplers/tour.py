@@ -349,16 +349,18 @@ class TourPlanner:
 
         return o_loc, d_zones, d_locs
 
-    def add_tour_activity(self, agent, k, zone, loc, activity_type, time_params):
-        """Add activity to tour plan.
+    def add_tour_activity(
+        self, agent: str, k: Iterable, zone: str, loc: Point, activity_type: str, time_params: dict
+    ):
+        """Add activity to tour plan. This will add an activity to the agent plan after each leg within the tour.
 
         Args:
-          agent: agent for which the activity will be added to Plan
-          k: when used in a for loop, k populates the next sequence value
-          zone: zone where activity takes place
-          loc: facility location where activity takes place
-          activity_type: str, this function has specific logic for 'return_origin'
-          time_params: dictionary of time_params that may be time samplers or times of previous journeys
+          agent (string): agent for which the activity will be added to Plan
+          k (int): when used in a for loop, k populates the next sequence value
+          zone (string): zone where activity takes place
+          loc (Point): facility location where activity takes place
+          activity_type (string): this function has specific logic for 'return_origin'
+          time_params (dict[str, str]): dictionary of time_params that may be time samplers or times of previous journeys
 
         Returns:
           end_tm of activity.
@@ -400,16 +402,26 @@ class TourPlanner:
 
         return end_tm
 
-    def add_tour_leg(self, agent, k, o_zone, o_loc, d_zone, d_loc, start_tm: int, end_tm: int):
-        """Leg to Next Delivery.
+    def add_tour_leg(
+        self,
+        agent: str,
+        k: Iterable,
+        o_zone: str,
+        o_loc: Point,
+        d_zone: str,
+        d_loc: Point,
+        start_tm: int,
+        end_tm: int,
+    ):
+        """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
 
         Args:
-          agent: agent for which the leg will be added to Plan
-          k: when used in a for loop, k populates the next sequence value
-          o_zone: origin zone of leg
-          o_loc: origin facility of leg
-          d_zone: destination zone of leg
-          d_loc: destination facility of leg
+          agent (str): agent for which the leg will be added to Plan
+          k (Iterable): when used in a for loop, k populates the next sequence value
+          o_zone (string): origin zone of leg
+          o_loc (point): origin facility of leg
+          d_zone (string): destination zone of leg
+          d_loc (point): destination facility of leg
           start_tm (int): obtained from ActivityDuration object
           end_tm (int): obtained from ActivityDuration object
 
@@ -432,16 +444,18 @@ class TourPlanner:
 
         return end_tm
 
-    def add_return_origin(self, agent, k, o_loc, d_zone, d_loc, end_tm):
-        """Driver returns to origin, from their most recent stop to the origin location.
+    def add_return_origin(
+        self, agent: str, k: Iterable, o_loc: Point, d_zone: str, d_loc: Point, end_tm: int
+    ):
+        """The agent returns to their origin activity, from their most recent stop to the origin location.
 
         Args:
-          agent: agent for which the leg & activity will be added to Plan
-          k: when used in a for loop, k populates the next sequence valuey
-          o_loc: origin facility of leg & activity
-          d_zone: destination zone of leg & activity
-          d_loc: destination facility of leg & activity
-          end_tm: obtained from ActivityDuration object
+          agent (string): agent for which the leg & activity will be added to Plan
+          k (Iterable): when used in a for loop, k populates the next sequence valuey
+          o_loc (point): origin facility of leg & activity
+          d_zone (string): destination zone of leg & activity
+          d_loc (point): destination facility of leg & activity
+          end_tm (int): obtained from ActivityDuration object
 
         Returns:
           end_tm after returning to origin.
@@ -476,14 +490,14 @@ class TourPlanner:
 
         return end_tm
 
-    def apply(self, agent, o_loc, d_zones, d_locs) -> None:
+    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list) -> None:
         """Apply the above functions to the agent to build a plan.
 
         Args:
-          agent: agent to build a plan fory
-          o_loc: origin facility of leg & activity
-          d_zones: destination zones of leg & activity
-          d_locs: destination facilities of leg & activity.
+          agent (string): agent to build a plan fory
+          o_loc (Point): origin facility of leg & activity
+          d_zones (list): destination zones of leg & activity
+          d_locs (list): destination facilities of leg & activity.
 
         """
         time_params = {"hour": self.hour, "minute": self.minute}
@@ -724,7 +738,9 @@ class ValidateTourOD:
 
         return fig
 
-    def plot_density_difference(self, title_1, title_2, cmap: str = "coolwarm") -> plt.Figure:
+    def plot_density_difference(
+        self, title_1: str, title_2: str, cmap: str = "coolwarm"
+    ) -> plt.Figure:
         """Creates a spatial plot of the difference between input and output densities.
 
         Args:

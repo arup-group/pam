@@ -100,19 +100,19 @@ class FacilitySampler:
         activity: str,
         mode: Optional[str] = None,
         previous_duration: Optional[pd.Timedelta] = None,
-        previous_loc: Optional[shapely.Point] = None,
-    ) -> shapely.Point:
-        """Sample a shapely.Point from the given location and for the given activity.
+        previous_loc: Optional[shapely.geometry.Point] = None,
+    ) -> shapely.geometry.Point:
+        """Sample a Point from the given location and for the given activity.
 
         Args:
             location_idx (str): the zone to sample from
             activity (str): activity purpose
             mode (Optional[str], optional): transport mode used to access facility. Defaults to None.
             previous_duration (Optional[pd.Timedelta], optional): the time duration of the arriving leg. Defaults to None.
-            previous_loc (Optional[shapely.Point], optional): the location of the last visited activity. Defaults to None.
+            previous_loc (Optional[shapely.geometry.Point], optional): the location of the last visited activity. Defaults to None.
 
         Returns:
-            shapely.Point: Sampled point
+            shapely.geometry.Point: Sampled point
         """
         idx, loc = self.sample_facility(
             location_idx,
@@ -134,7 +134,7 @@ class FacilitySampler:
         patience=1000,
         mode: Optional[str] = None,
         previous_duration: Optional[pd.Timedelta] = None,
-        previous_loc: Optional[shapely.Point] = None,
+        previous_loc: Optional[shapely.geometry.Point] = None,
     ):
         """Sample a facility id and location. If a location idx is missing, can return a random location."""
         if location_idx not in self.samplers:
@@ -282,18 +282,18 @@ def euclidean_distance(p1, p2):
 
 
 def inf_yielder(
-    candidates: list[tuple[Any, shapely.Point]],
+    candidates: list[tuple[Any, shapely.geometry.Point]],
     weights: Optional[pd.Series] = None,
     transit_distance: Optional[pd.Series] = None,
     max_walk: Optional[float] = None,
     transit_modes: Optional[list[str]] = None,
     expected_euclidean_speeds: Optional[dict] = None,
     seed: Optional[int] = None,
-) -> tuple[Any, shapely.Point]:
+) -> tuple[Any, shapely.geometry.Point]:
     """Redirect to the appropriate sampler.
 
     Args:
-        candidates (list[tuple[Any, shapely.Point]]): Tuples contain candidate facilities index values and their geolocation.
+        candidates (list[tuple[Any, shapely.geometry.Point]]): Tuples contain candidate facilities index values and their geolocation.
         weights (Optional[pd.Series], optional): sampling weights (ie facility floorspace). Defaults to None.
         transit_distance (Optional[pd.Series], optional):  distance of each candidate facility from the closest PT stop. Defaults to None.
         max_walk (Optional[float], optional): maximum walking distance from a PT stop. Defaults to None.
@@ -302,7 +302,7 @@ def inf_yielder(
         seed (Optional[int], optional): If given, seed number for reproducible results. Defaults to None.
 
     Returns:
-        tuple[Any, shapely.Point]: Sampled candidate.
+        tuple[Any, shapely.geometry.Point]: Sampled candidate.
     """
 
     if isinstance(weights, pd.Series):
@@ -323,8 +323,8 @@ def inf_yielder(
 
 
 def inf_yielder_simple(
-    candidates: list[tuple[Any, shapely.Point]], seed: Optional[int] = None
-) -> Iterator[tuple[Any, shapely.Point]]:
+    candidates: list[tuple[Any, shapely.geometry.Point]], seed: Optional[int] = None
+) -> Iterator[tuple[Any, shapely.geometry.Point]]:
     """Endlessly yield shuffled candidate items."""
     # Fix random seed
     random.seed(seed)
@@ -335,7 +335,7 @@ def inf_yielder_simple(
 
 
 def inf_yielder_weighted(
-    candidates: list[tuple[Any, shapely.Point]],
+    candidates: list[tuple[Any, shapely.geometry.Point]],
     weights: Optional[pd.Series],
     transit_distance: Optional[pd.Series],
     max_walk: Optional[float],
@@ -343,13 +343,13 @@ def inf_yielder_weighted(
     expected_euclidean_speeds: Optional[dict],
     mode: Optional[str],
     previous_duration: Optional[pd.Timedelta],
-    previous_loc: Optional[shapely.Point],
+    previous_loc: Optional[shapely.geometry.Point],
     seed: Optional[int] = None,
-) -> Iterator[tuple[Any, shapely.Point]]:
+) -> Iterator[tuple[Any, shapely.geometry.Point]]:
     """A more complex sampler, which allows for weighted and rule-based sampling (with replacement).
 
     Args:
-        candidates (list[tuple[Any, shapely.Point]]): Tuples contain candidate facilities index values and their geolocation.
+        candidates (list[tuple[Any, shapely.geometry.Point]]): Tuples contain candidate facilities index values and their geolocation.
         weights (Optional[pd.Series]): sampling weights (ie facility floorspace).
         transit_distance (Optional[pd.Series]): distance of each candidate facility from the closest public transport (PT) stop.
         max_walk (Optional[float]): maximum walking distance from a PT stop.
@@ -357,12 +357,12 @@ def inf_yielder_weighted(
         expected_euclidean_speeds (Optional[dict]):
         mode (Optional[str]):  transport mode used to access facility.
         previous_duration (Optional[pd.Timedelta]): the time duration of the arriving leg.
-        previous_loc (Optional[shapely.Point]):  the location of the last visited activity.
+        previous_loc (Optional[shapely.geometry.Point]):  the location of the last visited activity.
         seed (Optional[int], optional):  If given, seed number for reproducible results. Defaults to None.
 
 
     Yields:
-        Iterator[tuple[Any, shapely.Point]]:
+        Iterator[tuple[Any, shapely.geometry.Point]]:
     """
     # Fix random seed
     np.random.seed(seed)
