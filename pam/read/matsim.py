@@ -357,7 +357,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
     Returns:
         tuple[str, Route, dict]: mode, route, attributes
 
-    Examples:
+    Example:
         There are four known cases:
 
         === Unrouted ===

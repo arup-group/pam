@@ -842,10 +842,9 @@ class Household:
     def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
         """Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household.
 
-        Keyword Args: Keyword arguments for pam.plot.plans.build_person_travel_geodataframe
+        Keyword Args: Keyword arguments for plot.plans.build_person_travel_geodataframe
             from_epsg (str): coordinate system the plans are currently in
-            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify
-                from_epsg as well to use this.
+            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify from_epsg as well to use this.
 
         Returns:
             geopandas.GeoDataFrame:  with columns for household id (hid) and person id (pid).

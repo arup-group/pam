@@ -51,7 +51,7 @@ class PlansToCategorical:
             bin_size (int, optional): Defaults to 3600.
             duration (int, optional): Defaults to 86400.
 
-        Examples:
+        Example:
             |<----A---->||<----B---->||<C>||<----A---->| => [0,0,0,1,1,1,2,0,0,0]
             Where 0 represents a time bin of activity A, 1 of B and so on.
             The axis represents time, binnned according to bin_size and total duration, both given in seconds.

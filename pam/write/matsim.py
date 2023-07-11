@@ -29,7 +29,7 @@ def write_matsim(
     coordinate_reference_system: Optional[str] = None,
 ) -> None:
     """Write a core population to matsim population v6 xml format.
-    Note that this requires activity locs to be set (shapely.geometry.Point).
+    Note that this requires activity locs to be set (shapely.Point).
 
     Args:
         population (Population): population to be writen to disk
@@ -74,14 +74,14 @@ class Writer:
 
     Designed to handle the boilerplate xml.
 
-    Examples:
-        ```
+    Example:
+        ``` python
         with pam.write.matsim.Writer(PATH) as writer:
             for hid, household in population:
                 writer.add_hh(household)
         ```
 
-        ```
+        ``` python
         with pam.write.matsim.Writer(OUT_PATH) as writer:
             for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
                 pam.samplers.time.apply_jitter_to_plan(person.plan)

@@ -24,7 +24,7 @@ def to_csv(
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
 
     Args:
       population (Population):
@@ -129,7 +129,7 @@ def dump(
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
 
     Args:
       population (Population):
@@ -170,7 +170,7 @@ def write_population_csvs(
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
 
     Args:
       list_of_populations (list[Population]):
