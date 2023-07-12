@@ -1,28 +1,29 @@
 from copy import deepcopy
+from typing import Optional
 
 from pam.core import Population
 from pam.samplers.basic import freq_sample
 
 
 def sample(
-    population: Population, sample: float, seed: int = None, verbose: bool = False
+    population: Population, sample: float, seed: Optional[int] = None, verbose: bool = False
 ) -> Population:
-    """Sample a new population from the existing using a sample size, eg 0.1 for a 10% sample.
-    Returns a new pam.core.Population object with households sampled based on input freq.
-    Freq of returned population is set to 1/sample, eg 0.1 -> 10, such that each household
-    and person represents 10 people from input population.
-    Note that in the current implementation frequencies are automatically discovered from the population object households,
-    person and leg weights, in that order. When gathering frequencies, for
-    example for a household from multiple person in that houshold, the household
-    frequency is taken as the average person frequency. Similarly for persons
-    and their legs.
+    """Sample a new population from the existing using a sample size.
+
+    Frequency of returned population is set to 1/sample, eg 0.1 -> 10, such that each household and person represents 10 people from input population.
+    Note that in the current implementation frequencies are automatically discovered from the population object households, person and leg weights, in that order.
+    When gathering frequencies, for example for a household from multiple person in that houshold, the household frequency is taken as the average person frequency.
+    Similarly for persons and their legs.
 
     Args:
-        population (Population): input population object to sample from using population freq
-        sample (float): sample size of new population, eg 0.1 for a 10% sample
-        verbose (bool): verbosity
+        population (Population): input population object to sample from using population frequency.
+        sample (float):  sample size of new population, eg 0.1 for a 10% sample.
+        seed (Optional[int], optional): If given, seed number for reproducible results. Defaults to None.
+        verbose (bool, optional): Defaults to False.
+
     Returns:
-        pam.core.Population.
+        Population:
+            A new Population object with households sampled based on input frequency.
     """
     sampled_population = Population()
     sample_freq = int(1 / sample)

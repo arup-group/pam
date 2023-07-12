@@ -35,12 +35,13 @@ def get_trip_chains(plan: Plan, act: str = "home") -> List[List[Union[Activity, 
     return chains
 
 
-def apply_mode_to_home_chain(act: Activity, trmode: str):
+def apply_mode_to_home_chain(act: Activity, trmode: str) -> None:
     """Apply a transport mode across a home-based trip chain,
     which comprises the specified activity.
 
-    :param act: The activity that is part of the trip chain.
-    :param trmode: The mode to apply to each leg of the chain.
+    Args:
+        act (Activity): The activity that is part of the trip chain.
+        trmode (str): The mode to apply to each leg of the chain.
     """
     if "next" not in act.__dict__:
         raise KeyError(

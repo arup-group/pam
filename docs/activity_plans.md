@@ -98,7 +98,7 @@ from pam.core import Population, Household, Person
 from pam.activity import Activity, Leg
 
 population = Population()  # init
-household = HouseHold(hid=1)  # hid is household id
+household = Household(hid=1)  # hid is household id
 person = Person(pid=1)  # pid is person id
 person.add(
     Activity(seq=1, act='home', area='a', start_time=0, end_time=450)  # time in minutes

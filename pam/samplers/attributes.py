@@ -1,10 +1,12 @@
 import random
+from typing import Any, Optional
 
 
 def bin_integer_transformer(features, target, bins, default=None):
-    """Bin a target integer feature based on bins. Where bins are a dict, with keys as
-    a tuple of bin extends (inclusive) and values as the new mapping. Missing ranges
-    will return None.
+    """Bin a target integer feature based on bins.
+
+    Where bins are a dict, with keys as a tuple of bin extends (inclusive) and values as the new mapping.
+    Missing ranges will return None.
     Where features are a dictionary structure of features, eg: {'age':1, ...}.
     """
     value = features.get(target)
@@ -17,22 +19,33 @@ def bin_integer_transformer(features, target, bins, default=None):
 
 
 def discrete_joint_distribution_sampler(
-    features, mapping, distribution, careful=False, seed: int = None
-):
+    features: dict,
+    mapping: Any,
+    distribution: dict[dict],
+    careful: bool = False,
+    seed: Optional[int] = None,
+) -> bool:
     """Randomly sample from a joint distribution based some discrete features.
 
-    Where features are a dictionary structure of features, eg: {'gender':'female'}
+    Args:
+        features (dict): a dictionary structure of features, eg: {'gender':'female'}
+        mapping (Any): the feature name for each level of the distribution, e.g.: ['age', 'gender']
+        distribution (dict[dict]):
+            A nested dict of probabilities based on possible features.
+            E.g.: {'0-0': {'male': 0, 'female': 0},... , '90-120': {'male': 1, 'female': .5}}
+        careful (bool, optional):
+            If True, missing mapped feature in `distribution` will raise an exception. If False, missing values will return False.
+            Defaults to False.
+        seed (Optional[int], optional): If given, seed number for reproducible results. Defaults to None.
 
-    Distribution is a nested dict of probabilities based on possible features, eg:
-    {'0-0': {'male': 0, 'female': 0},... , '90-120': {'male': 1, 'female': .5}}
+    Raises:
+        KeyError: all `mapping` keys must be in `features`.
+        KeyError: If `careful`, mapped feature must be a key in `distribution`.
 
-    Mapping provides the feature name for each level of the distribution, eg:
-    ['age', 'gender']
-
-    Missing keys return False, unless careful is set to True, which will raise an error.
-
-    :params int seed: seed number for reproducible results (None default - does not fix seed)
+    Returns:
+        bool:
     """
+
     # Fix random seed
     random.seed(seed)
     p = distribution

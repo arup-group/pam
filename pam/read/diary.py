@@ -12,27 +12,32 @@ def load_travel_diary(
     trips: Union[pd.DataFrame, str],
     persons_attributes: Union[pd.DataFrame, str, None] = None,
     hhs_attributes: Union[pd.DataFrame, str, None] = None,
-    sample_perc: Union[float, None] = None,
+    sample_perc: Optional[float] = None,
     tour_based: bool = True,
     from_to: bool = False,
     include_loc: bool = False,
-    sort_by_seq: Union[bool, None] = None,
+    sort_by_seq: Optional[bool] = None,
     trip_freq_as_person_freq: bool = False,
     trip_freq_as_hh_freq: bool = False,
-):
+) -> core.Population:
     """Turn standard tabular data inputs (travel survey and attributes) into core population format.
-    :param trips: DataFrame
-    :param persons_attributes: DataFrame
-    :param hhs_attributes: DataFrame
-    :param sample_perc: Float. If different to None, it samples the travel population by the corresponding percentage
-    :param tour_based: bool=True, set to False to force a simpler trip-based purpose parser
-    :param from_to: bool=False, set to True to force the from-to purpose parser (requires 'oact' and 'dact' trips columns)
-    :param include_loc: bool=False, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' trips columns)
-    :param sort_by_seq=None, optionally force trip sorting as True or False
-    :param trip_freq_as_person_freq:bool=False.
-    :param trip_freq_as_hh_freq:bool=False.
-    :return: core.Population.
+
+    Args:
+      trips (Union[pd.DataFrame, str]):
+      persons_attributes (Union[pd.DataFrame, str, None], optional): Defaults to None.
+      hhs_attributes (Union[pd.DataFrame, str, None], optional): Defaults to None.
+      sample_perc (float, optional): If different to None, it samples the travel population by the corresponding percentage. Defaults to None.
+      tour_based (bool, optional): Set to False to force a simpler trip-based purpose parser. Defaults to True.
+      from_to (bool, optional): Set to True to force the from-to purpose parser (requires 'oact' and 'dact' trips columns). Defaults to False.
+      include_loc (bool, optional): If True, include location data as shapely Point geometries ('start_loc' and 'end_loc' trips columns). Defaults to False.
+      sort_by_seq (bool, optional): If not None, force trip sorting as True or False. Defaults to None.
+      trip_freq_as_person_freq (bool, optional): Defaults to False.
+      trip_freq_as_hh_freq (bool, optional): Defaults to False.
+
+    Returns:
+      core.Population:
     """
+
     # TODO check for required col headers and give useful error?
 
     logger = logging.getLogger(__name__)
@@ -343,18 +348,19 @@ def build_population(
     persons_attributes: Optional[pd.DataFrame] = None,
     hhs_attributes: Optional[pd.DataFrame] = None,
 ) -> core.Population:
-    """Build a population of households and persons (without plans)
-    from available trips, persons_attributes and households_attributes
-    data.
+    """Build a population of households and persons (without plans).
+
+    Built from available trips, persons_attributes and households_attributes data.
     Details of required table formats are in the README.
 
     Args:
-        trips (Optional[pd.DataFrame]): trips table. Defaults to None.
-        persons_attributes (Optional[pd.DataFrame]): persons attributes table. Defaults to None.
-        hhs_attributes (Optional[pd.DataFrame]): households attributes table. Defaults to None.
+      trips (Optional[pd.DataFrame]): trips table. Defaults to None.
+      persons_attributes (Optional[pd.DataFrame]): persons attributes table. Defaults to None.
+      hhs_attributes (Optional[pd.DataFrame]): households attributes table. Defaults to None.
 
     Returns:
-        pam.Population: population object
+      pam.Population: population object
+
     """
     population = core.Population()
     add_hhs_from_hhs_attributes(population=population, hhs_attributes=hhs_attributes)
@@ -475,17 +481,22 @@ def add_persons_from_trips(population: core.Population, trips: Optional[pd.DataF
         household.add(person)
 
 
-def hh_person_df_to_dict(df: pd.DataFrame, key_hh: str, key_person: str):
-    """Restructure a dataframe as a nested dictionary of dataframes,
-        where the first level is the household index,
-        the second level is the person index,
-        the value is the dataframe slice corresponding to that person.
+def hh_person_df_to_dict(df: pd.DataFrame, key_hh: str, key_person: str) -> dict[pd.DataFrame]:
+    """Restructure a dataframe as a nested dictionary of dataframes.
+
+    The first level is the household index.
+    The second level is the person index.
+    The value is the dataframe slice corresponding to that person.
 
     The dictionary structure allows for much faster access to a person's data.
-    :params pd.DataFrame df: the pandas dataframe to reindex
-    :params str key_hh: the household key column name
-    :params str key_person: the person key column name
-    :params boolean values_dict: whether to convert the person data to a dictionary as well
+
+    Args:
+        df (pd.DataFrame): the pandas dataframe to reindex.
+        key_hh (str): the household key column name.
+        key_person (str): the person key column name.
+
+    Returns:
+        dict:
     """
     df_dict = {x: {} for x in df[key_hh].unique()}
     for (hid, pid), person_data in df.groupby([key_hh, key_person]):
@@ -495,18 +506,24 @@ def hh_person_df_to_dict(df: pd.DataFrame, key_hh: str, key_person: str):
 
 def tour_based_travel_diary_read(
     trips: pd.DataFrame,
-    persons_attributes: Union[pd.DataFrame, None] = None,
-    hhs_attributes: Union[pd.DataFrame, None] = None,
-    include_loc=False,
-    sort_by_seq: Union[bool, None] = None,
-):
-    """Complex travel diray reader. Will try to infer home activiity and tour based purposes.
-    :param trips: DataFrame
-    :param persons_attributes: DataFrame
-    :param hhs_attributes: DataFrame
-    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
-    :param sort_by_seq=None, optionally force trip sorting as True or False
-    :return: core.Population.
+    persons_attributes: Optional[pd.DataFrame] = None,
+    hhs_attributes: Optional[pd.DataFrame] = None,
+    include_loc: bool = False,
+    sort_by_seq: Optional[bool] = None,
+) -> core.Population:
+    """Complex travel diray reader.
+
+    Will try to infer home activiity and tour based purposes.
+
+    Args:
+        trips (pd.DataFrame):
+        persons_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        hhs_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        include_loc (bool, optional): optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns). Defaults to False.
+        sort_by_seq (Optional[bool], optional): optionally force trip sorting as True or False. Defaults to None.
+
+    Returns:
+        core.Population:
     """
     population = build_population(
         trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
@@ -587,22 +604,30 @@ def tour_based_travel_diary_read(
 
 def trip_based_travel_diary_read(
     trips: pd.DataFrame,
-    persons_attributes: Union[pd.DataFrame, None] = None,
-    hhs_attributes: Union[pd.DataFrame, None] = None,
-    include_loc=False,
-    sort_by_seq: Union[bool, None] = None,
-):
-    """Turn Activity Plan tabular data inputs (derived from travel survey and attributes) into core population
-    format. This is a variation of the standard load_travel_diary() method because it does not require
-    activity inference. However all plans are expected to be tour based, so assumed to start and end at home.
+    persons_attributes: Optional[pd.DataFrame] = None,
+    hhs_attributes: Optional[pd.DataFrame] = None,
+    include_loc: bool = False,
+    sort_by_seq: Optional[bool] = None,
+) -> core.Population:
+    """Turn Activity Plan tabular data inputs into core population format.
+
+    Tabular data inputs are derived from travel survey and attributes.
+
+    This is a variation of the standard load_travel_diary() method because it does not require activity inference.
+    However all plans are expected to be tour based, so assumed to start and end at home.
     We expect broadly the same data schema except rather than trip 'purpose' we use trips 'activity'.
-    :param trips: DataFrame
-    :param persons_attributes: DataFrame
-    :param hhs_attributes: DataFrame
-    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
-    :param sort_by_seq=None, optionally force trip sorting as True or False
-    :return: core.Population.
+
+    Args:
+        trips (pd.DataFrame):
+        persons_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        hhs_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        include_loc (bool, optional): optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns). Defaults to False.
+        sort_by_seq (Optional[bool], optional): optionally force trip sorting as True or False. Defaults to None.
+
+    Returns:
+        core.Population:
     """
+
     population = build_population(
         trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
     )
@@ -679,22 +704,27 @@ def trip_based_travel_diary_read(
 
 def from_to_travel_diary_read(
     trips: pd.DataFrame,
-    persons_attributes: Union[pd.DataFrame, None] = None,
-    hhs_attributes: Union[pd.DataFrame, None] = None,
-    include_loc=False,
-    sort_by_seq: Union[bool, None] = False,
-):
-    """Turn Diary Plan tabular data inputs (derived from travel survey and attributes) into core population
-    format. This is a variation of the standard load_travel_diary() method because it does not require
-    activity inference or home location.
-    We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity)
-    and dact (destination activity).
-    :param trips: DataFrame
-    :param persons_attributes: DataFrame
-    :param hhs_attributes: DataFrame
-    :return: core.Population
-    :param include_loc=False, bool, optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns)
-    :param sort_by_seq=None, optionally force trip sorting as True or False.
+    persons_attributes: Optional[pd.DataFrame] = None,
+    hhs_attributes: Optional[pd.DataFrame] = None,
+    include_loc: bool = False,
+    sort_by_seq: Optional[bool] = False,
+) -> core.Population:
+    """Turn Diary Plan tabular data inputs into core population format.
+
+    Tabular data derived from travel survey and attributes.
+
+    This is a variation of the standard load_travel_diary() method because it does not require activity inference or home location.
+    We expect broadly the same data schema except rather than purp (purpose) we use trips oact (origin activity) and dact (destination activity).
+
+    Args:
+        trips (pd.DataFrame):
+        persons_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        hhs_attributes (Optional[pd.DataFrame], optional): Defaults to None.
+        include_loc (bool, optional): optionally include location data as shapely Point geometries ('start_loc' and 'end_loc' columns) (Default value = False). Defaults to False.
+        sort_by_seq (Optional[bool], optional): optionally force trip sorting as True or False. Defaults to False.
+
+    Returns:
+        core.Population:
     """
     logger = logging.getLogger(__name__)
 
@@ -779,16 +809,24 @@ def from_to_travel_diary_read(
     return population
 
 
-def sample_population(trips_df, sample_perc, attributes_df=None, weight_col="freq"):
+def sample_population(
+    trips_df: pd.DataFrame,
+    sample_perc: float,
+    attributes_df: Optional[pd.DataFrame] = None,
+    weight_col: str = "freq",
+) -> pd.DataFrame:
     """Return the trips of a random sample of the travel population.
+
     We merge the trips and attribute datasets to enable probability weights based on population demographics.
 
-    :params DataFrame trips_df: Trips dataset
-    :params DataFrame attributes_df: Population attributes dataset.
-    :params float sample_perc: Sampling percentage
-    :params string weight_col: The field to use for probability weighting
+    Args:
+        trips_df (pd.DataFrame): Trips dataset
+        sample_perc (float): Sampling percentage
+        attributes_df (Optional[pd.DataFrame], optional): Population attributes dataset. Defaults to None.
+        weight_col (str, optional): The field to use for probability weighting. Defaults to "freq".
 
-    :return: Pandas DataFrame, a sampled version of the trips_df dataframe
+    Returns:
+        pd.DataFrame:  a sampled version of the `trips_df` dataframe
     """
     if attributes_df is not None:
         sample_pids = (

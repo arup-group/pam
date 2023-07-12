@@ -1,8 +1,10 @@
 import gzip
 import os
+from collections.abc import Iterator
 from datetime import datetime, timedelta
 from io import BytesIO
 from pathlib import Path
+from typing import Any, Union
 
 import numpy as np
 from lxml import etree
@@ -26,36 +28,58 @@ def parse_time(time):
     )
 
 
-def minutes_to_datetime(minutes: int):
+def minutes_to_datetime(minutes: int) -> datetime:
     """Convert minutes to datetime
-    :param minutes: int
-    :return: datetime.
+
+    Args:
+      minutes (int):
+
+    Returns:
+      datetime:
+
     """
     days, remainder = divmod(minutes, 24 * 60)
     hours, minutes = divmod(remainder, 60)
     return datetime(1900, 1, 1 + days, hours, minutes)
 
 
-def minutes_to_timedelta(minutes: int):
+def minutes_to_timedelta(minutes: int) -> timedelta:
     """Convert minutes to timedelta
-    :param minutes: int
-    :return: timedelta.
+
+    Args:
+      minutes (int):
+
+    Returns:
+      timedelta:
+
     """
     return timedelta(minutes=minutes)
 
 
-def datetime_string_to_datetime(string: str):
+def datetime_string_to_datetime(string: str) -> datetime:
     """Convert datetime formatted string to datetime
-    :param string: str "%Y-%m-%d %H:%M:%S"
-    :return: datetime.
+
+    Args:
+      string (str): Of the form "%Y-%m-%d %H:%M:%S".
+
+    Returns:
+      datetime:
+
     """
     return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 
-def datetime_to_matsim_time(dt):
-    """Convert datetime to matsim format time (08:27:33)
+def datetime_to_matsim_time(dt: datetime) -> str:
+    """Convert datetime to matsim format time (08:27:33).
+
     Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
-    return dt.strftime("%H:%M:%S").
+
+    Args:
+      dt (datetime):
+
+    Returns:
+      str:
+
     """
     return timedelta_to_matsim_time(dt - START_OF_DAY)
 
@@ -64,31 +88,66 @@ def matsim_time_to_datetime(string: str) -> datetime:
     """Convert matsim format time (08:27:33) to datetime.
     Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
 
-    :param string: Time from start of the simulation (%H:%M:%S)
+    Args:
+      string (str): Time from start of the simulation (%H:%M:%S)
+
+    Returns:
+      datetime:
     """
     return safe_strptime(string)
 
 
-def timedelta_to_matsim_time(td):
-    """Convert datetime timedelta object to matsim string format (00:00:00)."""
+def timedelta_to_matsim_time(td: timedelta) -> str:
+    """Convert datetime timedelta object to matsim string format (00:00:00).
+
+    Args:
+      td (timedelta):
+
+    Returns:
+      str:
+    """
     hours, remainder = divmod(td.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
     return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
 
-def dt_to_s(dt):
-    """Convert datetime to seconds since start of day."""
+def dt_to_s(dt: datetime) -> int:
+    """Convert datetime to seconds since start of day.
+
+    Args:
+      dt (datetime):
+
+    Returns:
+      int:
+
+    """
     return (((dt.hour * 60) + dt.minute) * 60) + dt.second
 
 
-def td_to_s(td):
-    """Convert timedelta to seconds since start of day."""
+def td_to_s(td: timedelta) -> int:
+    """Convert timedelta to seconds since start of day.
+
+    Args:
+      td (timedelta):
+
+    Returns:
+      int:
+
+    """
     return (td.days * 86400) + td.seconds
 
 
-def safe_strptime(mt):
-    """Safely parse string into datetime, can cope with time strings in format hh:mm:ss
-    if hh > 23 then adds a day.
+def safe_strptime(mt: str) -> datetime:
+    """Safely parse string into datetime.
+
+    Can cope with time strings in format hh:mm:ss if hh > 23 then adds a day.
+
+    Args:
+      mt (str):
+
+    Returns:
+      datetime:
+
     """
     units = mt.split(":")
     if len(units) == 3:
@@ -121,11 +180,15 @@ def matsim_duration_to_hours(mt):
     return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())
 
 
-def get_linestring(from_point, to_point):
+def get_linestring(from_point: Union[Point, CellId], to_point: Union[Point, CellId]) -> LineString:
     """Makes a shapely.geometry.LineString out of two points
-    :param from_point: shapely.geometry.Point or s2sphere.CellId
-    :param to_point: shapely.geometry.Point or s2sphere.CellId
-    :return:
+
+    Args:
+      from_point (Union[Point, CellId]):
+      to_point (Union[Point, CellId]):
+
+    Returns:
+      LineString:
     """
     if all(isinstance(p, CellId) for p in [from_point, to_point]):
         from_point = from_point.to_lat_lng()
@@ -141,11 +204,16 @@ def get_linestring(from_point, to_point):
     return LineString([from_point, to_point])
 
 
-def get_elems(path, tag):
+def get_elems(path: str, tag: str) -> Iterator[Any]:
     """Wrapper for unzipping and dealing with xml namespaces
-    :param path: xml path string
-    :param tag: The tag type to extract , e.g. 'link'
-    :return: Generator of elements.
+
+    Args:
+      path (str): xml path string
+      tag (str): The tag type to extract , e.g. 'link'
+
+    Returns:
+      Iterator[Any]: Generator of elements.
+
     """
     target = try_unzip(path)
     tag = get_tag(target, tag)
@@ -153,11 +221,16 @@ def get_elems(path, tag):
     return parse_elems(target, tag)
 
 
-def parse_elems(target, tag):
+def parse_elems(target: Union[BytesIO, str], tag: str) -> Iterator[Any]:
     """Traverse the given XML tree, retrieving the elements of the specified tag.
-    :param target: Target xml, either BytesIO object or string path
-    :param tag: The tag type to extract , e.g. 'link'
-    :return: Generator of elements.
+
+    Args:
+      target (Union[BytesIO, str]): Target xml.
+      tag (str): The tag type to extract , e.g. 'link'.
+
+    Returns:
+      Iterator[Any]: Generator of elements.
+
     """
     doc = etree.iterparse(target, tag=tag)
     for _, element in doc:
@@ -168,10 +241,15 @@ def parse_elems(target, tag):
     del doc
 
 
-def try_unzip(path):
+def try_unzip(path: str) -> Union[BytesIO, str]:
     """Attempts to unzip xml at given path, if fails, returns path
-    :param path: xml path string
-    :return: either BytesIO object or string path.
+
+    Args:
+      path (str): xml path string
+
+    Returns:
+      Union[BytesIO, str]:
+
     """
     try:
         with gzip.open(path) as unzipped:
@@ -182,11 +260,20 @@ def try_unzip(path):
         return path
 
 
-def get_tag(target, tag):
-    """Check for namespace declaration. If they exists return tag string
-    with namespace [''] ie {namespaces['']}tag. If no namespaces declared
-    return original tag
-    TODO Not working with iterparse, generated elem also have ns which is dealt with later.
+def get_tag(target: Union[BytesIO, str], tag: str) -> str:
+    """Check for namespace declaration.
+
+    If they exists return tag string with namespace [''] ie {namespaces['']} tag. If no namespaces declared
+
+    TODO: Not working with iterparse, generated elem also have ns which is dealt with later.
+
+    Args:
+      target (Union[BytesIO, str]):
+      tag (str):
+
+    Returns:
+      str:
+
     """
     nsmap = {}
     doc = etree.iterparse(target, events=("end", "start-ns"))
@@ -205,10 +292,15 @@ def get_tag(target, tag):
         return tag
 
 
-def strip_namespace(elem):
+def strip_namespace(elem: str) -> str:
     """Strips namespaces from given xml element
-    :param elem: xml element
-    :return: xml element.
+
+    Args:
+      elem (str): xml element
+
+    Returns:
+      str: xml element.
+
     """
     if elem.tag.startswith("{"):
         elem.tag = elem.tag.split("}", 1)[1]  # strip namespace
@@ -221,8 +313,16 @@ def strip_namespace(elem):
         strip_namespace(child)
 
 
-def create_crs_attribute(coordinate_reference_system):
-    """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS."""
+def create_crs_attribute(coordinate_reference_system: str) -> Any:
+    """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS.
+
+    Args:
+      coordinate_reference_system (str):
+
+    Returns:
+      Any:
+
+    """
     attributes_element = et.Element("attributes")
     crs_attribute = et.SubElement(
         attributes_element,

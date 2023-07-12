@@ -23,9 +23,20 @@ def apply_jitter_to_plan(plan: Plan, jitter: timedelta, min_duration: timedelta)
 
 
 def jitter_activity(plan: Plan, i: int, jitter: timedelta, min_duration: timedelta):
-    """Jitter duration of given activity at index i. Remaining activities and legs after activity are also shifted.
+    """Jitter duration of given activity at index i.
+
+    Remaining activities and legs after activity are also shifted.
     Leg durations are not changed.
     Subsequent activity durations are equally change to maintain 24hr plan.
+
+    Args:
+        plan (Plan):
+        i (int):
+        jitter (timedelta):
+        min_duration (timedelta):
+
+    Raises:
+        UserWarning: index `i` of `plan` must be of type `Activity`.
     """
     act = plan[i]
     if not isinstance(act, Activity):
