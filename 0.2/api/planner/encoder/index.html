@@ -2470,7 +2470,7 @@
 
 
 <h2 id="pam.planner.encoder.Encoder" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">Encoder</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">travel_act</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;travel&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+<code class="highlight language-python"><span class="n">Encoder</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">travel_act</span><span class="o">=</span><span class="s1">&#39;travel&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.Encoder" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2569,7 +2569,7 @@
 
 
 <h3 id="pam.planner.encoder.Encoder.decode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span></code>
+<code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.Encoder.decode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -2592,7 +2592,7 @@
 
 
 <h3 id="pam.planner.encoder.Encoder.encode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.Encoder.encode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -2615,7 +2615,7 @@
 
 
 <h3 id="pam.planner.encoder.Encoder.get_mapping" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span></code>
+<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -2683,8 +2683,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="n">StringCharacterEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanCharacterEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -2702,7 +2702,7 @@
 
 
 <h3 id="pam.planner.encoder.PlanCharacterEncoder.encode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlanCharacterEncoder.encode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -2776,7 +2776,7 @@
 
 
 <h2 id="pam.planner.encoder.PlanEncoder" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">PlanEncoder</span><span class="p">(</span><span class="n">activity_encoder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StringCharacterEncoder</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+<code class="highlight language-python"><span class="n">PlanEncoder</span><span class="p">(</span><span class="n">activity_encoder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlanEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2848,8 +2848,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -2867,7 +2867,7 @@
 
 
 <h3 id="pam.planner.encoder.PlanEncoder.add_plan_component" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">add_plan_component</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Plan</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+<code class="highlight language-python"><span class="n">add_plan_component</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">act</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -2910,7 +2910,7 @@
 
 
 <h3 id="pam.planner.encoder.PlanEncoder.decode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">encoded_plan</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Plan</span></code>
+<code class="highlight language-python"><span class="n">decode</span><span class="p">(</span><span class="n">encoded_plan</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlanEncoder.decode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -3052,8 +3052,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="n">StringIntEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanOneHotEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3071,7 +3071,7 @@
 
 
 <h3 id="pam.planner.encoder.PlanOneHotEncoder.encode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlanOneHotEncoder.encode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -3190,8 +3190,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="n">PlanCharacterEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansCharacterEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3217,7 +3217,7 @@ and the column indicates the minute of the day.</p>
 
 
 <h2 id="pam.planner.encoder.PlansEncoder" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">PlansEncoder</span><span class="p">(</span><span class="n">activity_classes</span><span class="p">:</span> <span class="nb">set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+<code class="highlight language-python"><span class="n">PlansEncoder</span><span class="p">(</span><span class="n">activity_classes</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlansEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -3252,8 +3252,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">dtype</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansEncoder.dtype" class="headerlink" title="Permanent link">#</a></h3>
@@ -3291,8 +3291,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3310,7 +3310,7 @@ and the column indicates the minute of the day.</p>
 
 
 <h3 id="pam.planner.encoder.PlansEncoder.encode" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plans</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></code>
+<code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plans</span><span class="p">)</span></code>
 
 <a href="#pam.planner.encoder.PlansEncoder.encode" class="headerlink" title="Permanent link">#</a></h3>
 
@@ -3383,8 +3383,8 @@ and the third indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="n">PlanOneHotEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansOneHotEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3442,7 +3442,7 @@ and the third indicates the minute of the day.</p>
 
 
 <h3 id="pam.planner.encoder.StringCharacterEncoder.get_mapping" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span></code>
+<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -3517,7 +3517,7 @@ and the third indicates the minute of the day.</p>
 
 
 <h3 id="pam.planner.encoder.StringIntEncoder.get_mapping" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span></code>
+<code class="highlight language-python"><span class="n">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>

@@ -1901,7 +1901,7 @@
 
 
 <h2 id="pam.samplers.time.apply_jitter_to_plan" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">apply_jitter_to_plan</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">jitter</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">apply_jitter_to_plan</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">jitter</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">)</span></code>
 
 <a href="#pam.samplers.time.apply_jitter_to_plan" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -1913,57 +1913,54 @@ Activity durations are jittered in sequence order. At each step the activity
 is jittered according to the maximum jitter and minimum duration of all activities
 in the plan.</p>
 
-  <p><strong>Parameters:</strong></p>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
+        <th><b>PARAMETER</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
         <tr>
           <td><code>plan</code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-          </td>
-          <td>
+          <td class="doc-param-details">
             <div class="doc-md-description">
               <p>plan to be jittered</p>
             </div>
-          </td>
-          <td>
-              <em>required</em>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                </span>
+            </p>
           </td>
         </tr>
         <tr>
           <td><code>jitter</code></td>
-          <td>
-                <code><span title="datetime.timedelta">timedelta</span></code>
-          </td>
-          <td>
+          <td class="doc-param-details">
             <div class="doc-md-description">
               <p>maximum jitter</p>
             </div>
-          </td>
-          <td>
-              <em>required</em>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></code>
+                </span>
+            </p>
           </td>
         </tr>
         <tr>
           <td><code>min_duration</code></td>
-          <td>
-                <code><span title="datetime.timedelta">timedelta</span></code>
-          </td>
-          <td>
+          <td class="doc-param-details">
             <div class="doc-md-description">
               <p>minimum activity duration.</p>
             </div>
-          </td>
-          <td>
-              <em>required</em>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></code>
+                </span>
+            </p>
           </td>
         </tr>
     </tbody>
@@ -2011,16 +2008,107 @@ in the plan.</p>
 
 
 <h2 id="pam.samplers.time.jitter_activity" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">jitter_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">jitter</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">jitter_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">jitter</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">)</span></code>
 
 <a href="#pam.samplers.time.jitter_activity" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
   
-      <p>Jitter duration of given activity at index i. Remaining activities and legs after activity are also shifted.
+      <p>Jitter duration of given activity at index i.</p>
+<p>Remaining activities and legs after activity are also shifted.
 Leg durations are not changed.
 Subsequent activity durations are equally change to maintain 24hr plan.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>PARAMETER</b></th>
+        <th><b>DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>plan</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>i</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>jitter</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>min_duration</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>RAISES</b></th>
+        <th><b>DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+            <span class="doc-raises-annotation">
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#UserWarning">UserWarning</a></code>
+            </span>
+          </td>
+          <td class="doc-raises-details">
+            <div class="doc-md-description">
+              <p>index <code>i</code> of <code>plan</code> must be of type <code>Activity</code>.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>pam/samplers/time.py</code></summary>
@@ -2061,44 +2149,66 @@ Subsequent activity durations are equally change to maintain 24hr plan.</p>
 <span class="normal"><a href="#__codelineno-0-59">59</a></span>
 <span class="normal"><a href="#__codelineno-0-60">60</a></span>
 <span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">def</span> <span class="nf">jitter_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">jitter</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">):</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Jitter duration of given activity at index i. Remaining activities and legs after activity are also shifted.</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">    Leg durations are not changed.</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">    Subsequent activity durations are equally change to maintain 24hr plan.</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>    <span class="n">act</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">Activity</span><span class="p">):</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected type of Activity for act, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">act</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="n">prev_duration</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="n">min_end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">min_duration</span><span class="p">,</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">jitter</span><span class="p">)</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">allowance</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span>
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># legs</span>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>        <span class="n">allowance</span> <span class="o">=</span> <span class="o">-</span><span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># acts</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="n">allowance</span> <span class="o">=</span> <span class="o">-</span><span class="n">min_duration</span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">def</span> <span class="nf">jitter_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">jitter</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">min_duration</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">):</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Jitter duration of given activity at index i.</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">    Remaining activities and legs after activity are also shifted.</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    Leg durations are not changed.</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">    Subsequent activity durations are equally change to maintain 24hr plan.</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">        plan (Plan):</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="sd">        i (int):</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">        jitter (timedelta):</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        min_duration (timedelta):</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">    Raises:</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="sd">        UserWarning: index `i` of `plan` must be of type `Activity`.</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="n">act</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">Activity</span><span class="p">):</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected type of Activity for act, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">act</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">max_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">allowance</span><span class="p">,</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span> <span class="o">+</span> <span class="n">jitter</span><span class="p">)</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">jitter_range</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="n">max_end</span> <span class="o">-</span> <span class="n">min_end</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">prev_duration</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 </span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">jitter</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">randrange</span><span class="p">(</span><span class="n">jitter_range</span><span class="p">))</span>
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="n">new_duration</span> <span class="o">=</span> <span class="n">min_end</span> <span class="o">-</span> <span class="n">act</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">jitter</span>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="n">change</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_duration</span> <span class="o">-</span> <span class="n">prev_duration</span><span class="p">)</span> <span class="o">/</span> <span class="n">tail</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">shift_duration</span><span class="p">(</span><span class="n">new_duration</span><span class="p">)</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># shift first tail leg</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># tail acts</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shift_duration</span><span class="p">(</span><span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="n">change</span><span class="p">)</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># leg</span>
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>    <span class="c1"># final act</span>
-</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">END_OF_DAY</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">min_end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">min_duration</span><span class="p">,</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">jitter</span><span class="p">)</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="n">allowance</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># legs</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">allowance</span> <span class="o">=</span> <span class="o">-</span><span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># acts</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="n">allowance</span> <span class="o">=</span> <span class="o">-</span><span class="n">min_duration</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="n">max_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">allowance</span><span class="p">,</span> <span class="n">act</span><span class="o">.</span><span class="n">end_time</span> <span class="o">+</span> <span class="n">jitter</span><span class="p">)</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>    <span class="n">jitter_range</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="n">max_end</span> <span class="o">-</span> <span class="n">min_end</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="n">jitter</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">randrange</span><span class="p">(</span><span class="n">jitter_range</span><span class="p">))</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>    <span class="n">new_duration</span> <span class="o">=</span> <span class="n">min_end</span> <span class="o">-</span> <span class="n">act</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">jitter</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>    <span class="n">change</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_duration</span> <span class="o">-</span> <span class="n">prev_duration</span><span class="p">)</span> <span class="o">/</span> <span class="n">tail</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">shift_duration</span><span class="p">(</span><span class="n">new_duration</span><span class="p">)</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># shift first tail leg</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># tail acts</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">shift_duration</span><span class="p">(</span><span class="n">plan</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="n">change</span><span class="p">)</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>        <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># leg</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="c1"># final act</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">END_OF_DAY</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>

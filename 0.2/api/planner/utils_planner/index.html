@@ -1943,7 +1943,7 @@
 
 
 <h2 id="pam.planner.utils_planner.apply_mode_to_home_chain" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">apply_mode_to_home_chain</span><span class="p">(</span><span class="n">act</span><span class="p">:</span> <span class="n">Activity</span><span class="p">,</span> <span class="n">trmode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">apply_mode_to_home_chain</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">trmode</span><span class="p">)</span></code>
 
 <a href="#pam.planner.utils_planner.apply_mode_to_home_chain" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -1952,8 +1952,45 @@
   
       <p>Apply a transport mode across a home-based trip chain,
 which comprises the specified activity.</p>
-<p>:param act: The activity that is part of the trip chain.
-:param trmode: The mode to apply to each leg of the chain.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>PARAMETER</b></th>
+        <th><b>DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>act</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>The activity that is part of the trip chain.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>trmode</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>The mode to apply to each leg of the chain.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
@@ -1981,31 +2018,33 @@ which comprises the specified activity.</p>
 <span class="normal"><a href="#__codelineno-0-59">59</a></span>
 <span class="normal"><a href="#__codelineno-0-60">60</a></span>
 <span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="k">def</span> <span class="nf">apply_mode_to_home_chain</span><span class="p">(</span><span class="n">act</span><span class="p">:</span> <span class="n">Activity</span><span class="p">,</span> <span class="n">trmode</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="k">def</span> <span class="nf">apply_mode_to_home_chain</span><span class="p">(</span><span class="n">act</span><span class="p">:</span> <span class="n">Activity</span><span class="p">,</span> <span class="n">trmode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a transport mode across a home-based trip chain,</span>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">    which comprises the specified activity.</span>
 </span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="sd">    :param act: The activity that is part of the trip chain.</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="sd">    :param trmode: The mode to apply to each leg of the chain.</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="k">if</span> <span class="s2">&quot;next&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">act</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>            <span class="s2">&quot;Plan is not linked. Please use `pam.operations.cropping.link_plan` to link activities and legs.&quot;</span>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="p">)</span>
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="c1"># apply forwards</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="n">elem</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">next</span>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">while</span> <span class="p">(</span><span class="n">elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">act</span> <span class="o">!=</span> <span class="s2">&quot;home&quot;</span><span class="p">):</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>            <span class="n">elem</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">trmode</span>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="n">elem</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">next</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>    <span class="c1"># apply backwards</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="n">elem</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">previous</span>
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">while</span> <span class="p">(</span><span class="n">elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">act</span> <span class="o">!=</span> <span class="s2">&quot;home&quot;</span><span class="p">):</span>
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
-</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>            <span class="n">elem</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">trmode</span>
-</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>        <span class="n">elem</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">previous</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="sd">        act (Activity): The activity that is part of the trip chain.</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="sd">        trmode (str): The mode to apply to each leg of the chain.</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="k">if</span> <span class="s2">&quot;next&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">act</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>            <span class="s2">&quot;Plan is not linked. Please use `pam.operations.cropping.link_plan` to link activities and legs.&quot;</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>        <span class="p">)</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="c1"># apply forwards</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="n">elem</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">next</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="k">while</span> <span class="p">(</span><span class="n">elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">act</span> <span class="o">!=</span> <span class="s2">&quot;home&quot;</span><span class="p">):</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>            <span class="n">elem</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">trmode</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="n">elem</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">next</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="c1"># apply backwards</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="n">elem</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">previous</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>    <span class="k">while</span> <span class="p">(</span><span class="n">elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">act</span> <span class="o">!=</span> <span class="s2">&quot;home&quot;</span><span class="p">):</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>            <span class="n">elem</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">trmode</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">elem</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">previous</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2017,7 +2056,7 @@ which comprises the specified activity.</p>
 
 
 <h2 id="pam.planner.utils_planner.calculate_mnl_probabilities" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">calculate_mnl_probabilities</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+<code class="highlight language-python"><span class="n">calculate_mnl_probabilities</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>
 
 <a href="#pam.planner.utils_planner.calculate_mnl_probabilities" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2044,7 +2083,7 @@ which comprises the specified activity.</p>
 
 
 <h2 id="pam.planner.utils_planner.get_trip_chains" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_trip_chains</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">,</span> <span class="n">act</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;home&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Activity</span><span class="p">,</span> <span class="n">Leg</span><span class="p">]]]</span></code>
+<code class="highlight language-python"><span class="n">get_trip_chains</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;home&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.planner.utils_planner.get_trip_chains" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2095,7 +2134,7 @@ which comprises the specified activity.</p>
 
 
 <h2 id="pam.planner.utils_planner.get_validate" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></code>
 
 <a href="#pam.planner.utils_planner.get_validate" class="headerlink" title="Permanent link">#</a></h2>
 
@@ -2106,17 +2145,17 @@ which comprises the specified activity.</p>
 
       <details class="quote">
         <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-65">65</a></span>
-<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-66">66</a></span>
 <span class="normal"><a href="#__codelineno-0-67">67</a></span>
 <span class="normal"><a href="#__codelineno-0-68">68</a></span>
 <span class="normal"><a href="#__codelineno-0-69">69</a></span>
-<span class="normal"><a href="#__codelineno-0-70">70</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="k">def</span> <span class="nf">get_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get an object&#39;s attribute, or raise an error if its value is None.&quot;&quot;&quot;</span>
-</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has not been set yet&quot;</span><span class="p">)</span>
-</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>    <span class="k">return</span> <span class="n">attr</span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="k">def</span> <span class="nf">get_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get an object&#39;s attribute, or raise an error if its value is None.&quot;&quot;&quot;</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has not been set yet&quot;</span><span class="p">)</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="k">return</span> <span class="n">attr</span>
 </span></code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -2128,7 +2167,7 @@ which comprises the specified activity.</p>
 
 
 <h2 id="pam.planner.utils_planner.sample_weighted" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">sample_weighted</span><span class="p">(</span><span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span></code>
+<code class="highlight language-python"><span class="n">sample_weighted</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span></code>
 
 <a href="#pam.planner.utils_planner.sample_weighted" class="headerlink" title="Permanent link">#</a></h2>
 
