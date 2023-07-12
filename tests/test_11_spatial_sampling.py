@@ -1,12 +1,8 @@
-import os
-
 import pytest
 
 from pam.samplers import spatial
 
-geojson_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_geometry.geojson")
-)
+geojson_path = pytest.test_data_dir / "test_geometry.geojson"
 
 
 @pytest.fixture

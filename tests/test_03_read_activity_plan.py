@@ -1,16 +1,10 @@
-import os
-
 import pandas as pd
 import pytest
 
 from pam.read import trip_based_travel_diary_read
 
-test_activities_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_activity_plans.csv")
-)
-test_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
-)
+test_activities_path = pytest.test_data_dir / "test_activity_plans.csv"
+test_attributes_path = pytest.test_data_dir / "simple_persons_data.csv"
 
 
 @pytest.fixture

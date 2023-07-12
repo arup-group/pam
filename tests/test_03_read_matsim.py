@@ -1,19 +1,11 @@
-import os
-
 import pytest
 
 from pam.activity import Plan
 from pam.read import load_attributes_map, read_matsim, stream_matsim_persons
 
-test_trips_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plans.xml")
-)
-test_tripsv12_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-)
-test_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_attributes.xml")
-)
+test_trips_path = pytest.test_data_dir / "test_matsim_plans.xml"
+test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
+test_attributes_path = pytest.test_data_dir / "test_matsim_attributes.xml"
 
 
 def test_load_attributes_map():
@@ -82,12 +74,8 @@ def test_remove_pt_interactions():
     assert person.has_valid_plan
 
 
-test_bad_trips_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_plan.xml")
-)
-test_bad_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_bad_attributes.xml")
-)
+test_bad_trips_path = pytest.test_data_dir / "test_matsim_bad_plan.xml"
+test_bad_attributes_path = pytest.test_data_dir / "test_matsim_bad_attributes.xml"
 
 
 def test_read_plan_with_negative_durations():

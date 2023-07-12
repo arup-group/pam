@@ -15,6 +15,10 @@ from pam.variables import END_OF_DAY
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 
+def pytest_configure(config):
+    pytest.test_data_dir = TEST_DATA_DIR
+
+
 @pytest.fixture(scope="session")
 def test_trips_path():
     return TEST_DATA_DIR / "test_matsim_plans.xml"
