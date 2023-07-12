@@ -331,3 +331,9 @@ def test_safe_strpdelta():
     assert utils.safe_strpdelta("10:10") == timedelta(hours=10, minutes=10, seconds=0)
     assert utils.safe_strpdelta("24:00") == timedelta(hours=24, minutes=0, seconds=0)
     assert utils.safe_strpdelta("25:00") == timedelta(hours=25, minutes=0, seconds=0)
+    with pytest.raises(UserWarning):
+        utils.safe_strpdelta("25:00:00:00")
+        utils.safe_strpdelta(0)
+        utils.safe_strpdelta("25-00-00")
+        utils.safe_strpdelta("250000")
+        
