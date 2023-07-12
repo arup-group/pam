@@ -81,7 +81,7 @@ def minutes_to_timedelta(minutes: int) -> timedelta:
 
 
 def datetime_to_matsim_time(dt: datetime) -> str:
-    """Convert datetime to matsim format time (hh:mm:ss).
+    """Convert datetime to matsim format time (`hh:mm:ss`).
 
     Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
 
@@ -89,19 +89,19 @@ def datetime_to_matsim_time(dt: datetime) -> str:
         dt (datetime): datetime
 
     Returns:
-        str: MATSim time format (hh:mm:ss)
+        str: MATSim time format (`hh:mm:ss`)
     """
     return timedelta_to_matsim_time(dt - START_OF_DAY)
 
 
 def timedelta_to_matsim_time(td: timedelta) -> str:
-    """Convert datetime timedelta object to matsim string format (hh:mm:ss).
+    """Convert datetime timedelta object to matsim string format (`hh:mm:ss`).
 
     Args:
         td (timedelta): timedelta
 
     Returns:
-        str: MATSim time string (hh:mm:ss)
+        str: MATSim time string (`hh:mm:ss`)
     """
     hours, remainder = divmod(td.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
@@ -109,7 +109,7 @@ def timedelta_to_matsim_time(td: timedelta) -> str:
 
 
 def matsim_time_to_datetime(string: str) -> datetime:
-    """Convert matsim format time (hh:mm:ss) to datetime.
+    """Convert matsim format time (`hh:mm:ss`) to datetime.
 
     Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
 
@@ -149,10 +149,10 @@ def td_to_s(td: timedelta) -> int:
 def safe_strptime(mt: str) -> datetime:
     """Safely parse string into datetime.
 
-    Can cope with time strings in format hh:mm:ss if hh > 24 then adds a day.
+    Can cope with time strings in format `hh:mm:ss` if hh > 24 then adds a day.
 
     Args:
-        mt (str): MATSim time string (hh:mm:ss or hh::mm)
+        mt (str): MATSim time string (`hh:mm:ss` or `hh:mm`)
 
     Returns:
         datetime: datetime
@@ -163,10 +163,10 @@ def safe_strptime(mt: str) -> datetime:
 def safe_strpdelta(mt: str) -> timedelta:
     """Parse string into timedelta.
 
-    Can cope with time strings in format hh:mm:ss or hh:mm.
+    Can cope with time strings in format `hh:mm:ss` or `hh:mm`.
 
     Args:
-        mt (str): MATSim time string (hh:mm:ss or hh::mm)
+        mt (str): MATSim time string (`hh:mm:ss` or `hh:mm`)
 
     Raises:
         UserWarning: Incorrect formatted input
@@ -197,10 +197,10 @@ def timedelta_to_hours(td: timedelta) -> float:
 
 
 def matsim_duration_to_hours(mt: str) -> int:
-    """Turn MATSim time string (hh:mm:ss or hh::mm) into hours.
+    """Turn MATSim time string (`hh:mm:ss` or `hh:mm`) into hours.
 
     Args:
-        mt (str): MATSim time string (hh:mm:ss or hh::mm)
+        mt (str): MATSim time string (`hh:mm:ss` or `hh:mm`)
 
     Raises:
         UserWarning: Incorrect formatted input
