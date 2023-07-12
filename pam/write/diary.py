@@ -1,5 +1,10 @@
+from __future__ import annotations
+
 import os
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 import geopandas as gp
 import pandas as pd
@@ -10,18 +15,23 @@ from pam.utils import create_local_dir
 
 
 def to_csv(
-    population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
+    population: Population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
 ) -> None:
-    """Write a population to disk as tabular data in csv format. Outputs are:
+    """Write a population to disk as tabular data in csv format.
+
+    Outputs saved to file are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
+
+    Args:
+      population (Population):
+      dir (str): path to output directory
+      crs (Optional[str]): population coordinate system (generally we use local grid systems). Defaults to None.
+      to_crs (Optional[str]): output crs, defaults for use in kepler. Defaults to "EPSG:4326".
+
     """
     create_local_dir(dir)
 
@@ -110,18 +120,22 @@ def to_csv(
 
 
 def dump(
-    population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
+    population: Population, dir: str, crs: Optional[str] = None, to_crs: Optional[str] = "EPSG:4326"
 ) -> None:
-    """Write a population to disk as tabular data in csv format. Outputs are:
+    """Write a population to disk as tabular data in csv format.
+
+    Outputs saved to file are:
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
+
+    Args:
+      population (Population):
+      dir (str): path to output directory
+      crs (Optional[str]): population coordinate system (generally we use local grid systems). Defaults to None.
+      to_crs (Optional[str]): output crs, defaults for use in kepler. Defaults to "EPSG:4326".
     """
     to_csv(population=population, dir=dir, crs=crs, to_crs=to_crs)
 
@@ -143,23 +157,26 @@ def save_csv(df, path):
 
 
 def write_population_csvs(
-    list_of_populations: list,
+    list_of_populations: list[Population],
     dir: str,
     crs: Optional[str] = None,
     to_crs: Optional[str] = "EPSG:4326",
 ) -> None:
-    """ "
-    Write a list of populations to disk as tabular data in csv format. Outputs are:
+    """Write a list of populations to disk as tabular data in csv format.
+
+    Outputs saved to file are:
     - populations.csv: summary of populations
     - households.csv: household ids and attributes
     - people.csv: agent ids and attributes
     - legs.csv: activity plan trip records
     - activities.csv: corresponding plan activities
-    If activity locs (shapely.geometry.Point) data is available then geojsons will also be written.
-    :param population: core.Population
-    :param dir: str, path to output directory
-    :param crs: str, population coordinate system (generally we use local grid systems)
-    :param to_crs: str, default 'EPSG:4326', output crs, defaults for use in kepler.
+    If activity locs (shapely.Point) data is available then geojsons will also be written.
+
+    Args:
+      list_of_populations (list[Population]):
+      dir (str): path to output directory
+      crs (Optional[str]): population coordinate system (generally we use local grid systems). Defaults to None.
+      to_crs (Optional[str]): output crs, defaults for use in kepler. Defaults to "EPSG:4326".
     """
     create_local_dir(dir)
 

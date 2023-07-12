@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterator
 from datetime import timedelta
 from typing import Literal, Optional
 
@@ -135,7 +136,7 @@ def stream_matsim_persons(
     keep_non_selected: bool = False,
     leg_attributes: bool = True,
     leg_route: bool = True,
-) -> core.Person:
+) -> Iterator[core.Person]:
     """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support 'version 11' plans.
@@ -276,8 +277,7 @@ def parse_matsim_plan(
             leg_seq += 1
             trav_time = stage.get("trav_time")
             if trav_time is not None:
-                h, m, s = trav_time.split(":")
-                leg_duration = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                leg_duration = utils.safe_strpdelta(trav_time)
                 arrival_dt = departure_dt + leg_duration
             else:
                 arrival_dt = departure_dt  # todo this assumes 0 duration unless known
@@ -356,7 +356,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
     Returns:
         tuple[str, Route, dict]: mode, route, attributes
 
-    Examples:
+    Example:
         There are four known cases:
 
         === Unrouted ===

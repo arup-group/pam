@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import json
 import logging
+from collections.abc import Iterator
 from copy import copy
 from datetime import timedelta
-from typing import Optional
+from typing import Any, Literal, Optional, Union
+
+from numpy import datetime64
 
 import pam.utils as utils
 import pam.variables
@@ -56,8 +61,15 @@ class Plan:
             if isinstance(p, Leg):
                 yield p
 
-    def trips(self, ignore=["pt interaction", "pt_interaction"]) -> str:
-        """Yield plan trips based on ignoring certain activities."""
+    def trips(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> str:
+        """Yield plan trips based on ignoring certain activities.
+
+        Args:
+          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+
+        Returns:
+            str:
+        """
         if self.day:
             seq = 0
             modes = {}
@@ -89,8 +101,16 @@ class Plan:
                     distance = 0
                     seq += 1
 
-    def trip_legs(self, ignore=["pt interaction", "pt_interaction"]) -> str:
-        """Yield plan trips as lists of legs based on ignoring certain activities."""
+    def trip_legs(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> Iterator[str]:
+        """Yield plan trips as lists of legs based on ignoring certain activities.
+
+        Args:
+          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+
+        Yields:
+            Iterator[str]:
+
+        """
         if self.day:
             legs = []
             for component in self[1:]:
@@ -101,17 +121,19 @@ class Plan:
                     legs = []
 
     @property
-    def activity_classes(self):
+    def activity_classes(self) -> set:
         return set([a.act for a in self.activities])
 
     @property
-    def mode_classes(self):
+    def mode_classes(self) -> set:
         return set([leg.mode for leg in self.legs])
 
     @property
-    def closed(self):
-        """Check if plan starts and stops at the same facility (based on activity and location)
-        :return: Bool.
+    def closed(self) -> bool:
+        """Check if plan starts and stops at the same facility (based on activity and location).
+
+        Returns:
+            bool:
         """
         if self.day[0] == self.day[-1]:
             return True
@@ -188,10 +210,12 @@ class Plan:
                 return True
         return False
 
-    def add(self, p):
+    def add(self, p: Union[Activity, Leg, Trip, list[Activity, Leg, Trip]]) -> None:
         """Safely add a new component to the plan.
-        :param p:
-        :return:
+
+        Args:
+          p (Union[Activity, Leg, Trip, list[Activity, Leg, Trip]]): component to add.
+
         """
         if isinstance(p, list):
             for c in p:
@@ -221,9 +245,12 @@ class Plan:
     # validation methods
 
     @property
-    def valid_sequence(self):
+    def valid_sequence(self) -> bool:
         """Check sequence of Activities and Legs.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         if not isinstance(self.day[0], Activity):
             return False
@@ -242,18 +269,24 @@ class Plan:
         return True
 
     @property
-    def valid_start_of_day_time(self):
+    def valid_start_of_day_time(self) -> bool:
         """Check that start and end time of Activities and Legs are consistent.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         if not self.day[0].start_time == pam.variables.START_OF_DAY:
             return False
         return True
 
     @property
-    def valid_time_sequence(self):
+    def valid_time_sequence(self) -> bool:
         """Check that start and end time of Activities and Legs are consistent.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         for i in range(self.length - 1):
             if not self.day[i].end_time == self.day[i + 1].start_time:
@@ -261,18 +294,24 @@ class Plan:
         return True
 
     @property
-    def valid_end_of_day_time(self):
+    def valid_end_of_day_time(self) -> bool:
         """Check that start and end time of Activities and Legs are consistent.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         if not self.day[-1].end_time == pam.variables.END_OF_DAY:
             return False
         return True
 
     @property
-    def valid_locations(self):
+    def valid_locations(self) -> bool:
         """Check that locations are consistent across Activities and Legs.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         for i in range(1, self.length):
             component = self.day[i]
@@ -288,10 +327,13 @@ class Plan:
         return True
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """Check for sequence, time and location structure and consistency.
         Note that this also checks that plan ends at END_OF_DAY.
-        :return: bool.
+
+        Returns:
+            bool:
+
         """
         if self.valid_sequence and self.valid_time_sequence and self.valid_locations:
             return True
@@ -319,12 +361,18 @@ class Plan:
             raise PAMValidationLocationsError()
         return True
 
-    def position_of(self, target="home", search="last"):
+    def position_of(
+        self, target: str = "home", search: Literal["first", "last"] = "last"
+    ) -> Union[int, None]:
         """Return position of target activity type (either first or last depending on search).
-        Return None if not found.
-        :param target: str
-        :param search: str {'first', 'last'}
-        :return: {int, None}.
+
+        Args:
+            target (str, optional): Defaults to "home".
+            search (Literal['first', 'last'], optional): Defaults to "last".
+
+        Returns:
+            Union[int, None]: None if target activity type is not found.
+
         """
         if search == "last":
             last = None
@@ -354,6 +402,7 @@ class Plan:
         """Crop a plan to end of day (END_OF_DAY). Plan components that start after this
         time are removed. Activities that end after this time are trimmed. If the last component
         is a Leg, this leg is removed and the previous activity extended.
+
         """
         # crop plan beyond end of day
         for idx, component in list(self.reversed()):
@@ -395,17 +444,31 @@ class Plan:
                 component.start_location = copy(self.day[i - 1].location)
                 component.end_location = copy(self.day[i + 1].location)
 
-    def closed_duration(self, idx):
-        """Check duration of plan component at idx, if closed plan, combine first and last durations."""
+    def closed_duration(self, idx: int) -> datetime64:
+        """Check duration of plan component at idx, if closed plan, combine first and last durations.
+
+        Args:
+          idx (int): index along plan component to check.
+
+        Returns:
+            datetime64:
+        """
         if self.closed and (idx == 0 or idx == self.length - 1):
             return self.day[0].duration + self.day[-1].duration
         return self.day[idx].duration
 
-    def infer_activity_idxs(self, target, default=True):
-        """Infer idxs of home activity based on location. First pass looks to exclude other acts at home
-        location, second pass looks adds home idxs.
-        If a leg is found to start and end at the home location then the one with maximum duration
-        is included.
+    def infer_activity_idxs(self, target: Location, default: bool = True) -> set:
+        """Infer idxs of home activity based on location.
+
+        First pass looks to exclude other acts at home location, second pass adds home idxs.
+        If a leg is found to start and end at the home location then the one with maximum duration is included.
+
+        Args:
+          target (Location):
+          default (bool, optional): Defaults to True.
+
+        Returns:
+            set:
         """
         # todo untested for more than three possible home activities in a row.
         candidates = set()
@@ -431,11 +494,14 @@ class Plan:
 
         return candidates
 
-    def infer_activities_from_tour_purpose(self):
-        """Infer and set activity types based on trip purpose. Algorithm works like breadth first search,
+    def infer_activities_from_tour_purpose(self) -> None:
+        """Infer and set activity types based on trip purpose.
+
+        Algorithm works like breadth first search,
         initiated from inferred home locations. Search takes place in two stages, first pass forward,
         the backward. The next activity type is set based on the trip purpose. Pass forward is exhausted
         first, because it's assumed that this is how the diary is originally filled in.
+
         """
         # find home activities
         home_idxs = self.infer_activity_idxs(target=self.home)
@@ -525,9 +591,11 @@ class Plan:
                 self.day[seq].end_time = self.day[seq + 1].start_time
         self.day[-1].end_time = pam.variables.END_OF_DAY
 
-    def set_leg_purposes(self):
+    def set_leg_purposes(self) -> None:
         """Set leg purposes to destination activity.
+
         Skip 'pt interaction' activities.
+
         """
         for seq, component in enumerate(self):
             if isinstance(component, Leg):
@@ -551,14 +619,21 @@ class Plan:
         for seq, component in enumerate(self):
             print(f"{seq}:\t{component}")
 
-    def remove_activity(self, seq):
-        """Remove an activity from plan at given seq. Does not remove adjacent legs
-        Will also check if an activity is wrapped and remove accordingly. Returns (adjusted) idx
-        of previous (p_idx) and subsequent (s_idx) activities as a tuple. If there is no previous
-        or subsequent activity, ie a removed activity is at the start or end of an open plan,
-        then None can be returned. If all activities are removed then None, None is returned.
-        :param seq: int
-        :return: tuple.
+    def remove_activity(self, seq: int) -> tuple[Union[int, None], Union[int, None]]:
+        """Remove an activity from plan at given seq.
+
+        Does not remove adjacent legs.
+        Will also check if an activity is wrapped and remove accordingly. Returns
+
+        Args:
+          seq (int):
+
+        Returns:
+          tuple[Union[int, None], Union[int, None]]:
+            (adjusted) idx of previous (p_idx) and subsequent (s_idx) activities as a tuple.
+            If there is no previous or subsequent activity, ie a removed activity is at the start or end of an open plan, then None can be returned.
+            If all activities are removed then None, None is returned.
+
         """
         assert isinstance(self.day[seq], Activity)
 
@@ -599,12 +674,16 @@ class Plan:
             self.day.pop(seq)
             return seq - 2, seq + 1
 
-    def move_activity(self, seq, default="home", new_mode="walk"):
+    def move_activity(
+        self, seq: int, default: Union[Literal["home"], Location] = "home", new_mode: str = "walk"
+    ) -> None:
         """Changes Activity location and associated journeys
-        :param seq:
-                :param default: 'home' or pam.activity.Location
-                :param new_mode: access/egress journey switching to this mode. Ie 'walk'
-        :return: None.
+
+        Args:
+          seq (int):
+          default (Union[Literal["home"], Location], optional): Defaults to "home".
+          new_mode (str, optional): access/egress journey switching to this mode. Ie 'walk'. Defaults to "walk".
+
         """
         assert isinstance(self.day[seq], Activity)
 
@@ -628,14 +707,23 @@ class Plan:
             self.day[seq + 1].start_location = new_location
             self.mode_shift(seq + 1, new_mode)
 
-    def fill_plan(self, idx_start, idx_end, default="home"):
-        """Fill a plan after Activity has been removed. Plan is filled between given remaining
+    def fill_plan(
+        self, idx_start: Union[int, None], idx_end: Union[int, None], default: Any = "home"
+    ) -> True:
+        """Fill a plan after Activity has been removed.
+
+        Plan is filled between given remaining
         activity locations (idx_start and idx_end). Note that the plan will also have legs that
         need to be removed.
-        :param idx_start: location of previous Activity
-        :param idx_end: location of subsequent Activity
-        :param default: Not Used
-        :return: True.
+
+        Args:
+          idx_start (Union[int, None]): location of previous Activity.
+          idx_end (Union[int, None]): location of subsequent Activity.
+          default (Any, optional): Not Used. Defaults to "home".
+
+        Returns:
+          True:
+
         """
         self.logger.debug(f" fill_plan, {idx_start}->{idx_end}")
 
@@ -700,10 +788,12 @@ class Plan:
         self.join_activities(idx_start, idx_end)
         return True
 
-    def expand(self, pivot_idx):
+    def expand(self, pivot_idx: int) -> None:
         """Fill plan by expanding a pivot activity.
-        :param pivot_idx: int
-        :return: None.
+
+        Args:
+          pivot_idx (int):
+
         """
         # todo this isn't great - just pushes other activities to edges of day
 
@@ -717,11 +807,13 @@ class Plan:
 
         self.day[pivot_idx].end_time = new_time  # expand pivot
 
-    def join_activities(self, idx_start, idx_end):
+    def join_activities(self, idx_start: int, idx_end: int) -> None:
         """Join together two Activities with new Leg, expand last home activity.
-        :param idx_start:
-        :param idx_end:
-        :return:
+
+        Args:
+          idx_start (int):
+          idx_end (int):
+
         """
         self.day[idx_start + 1].end_location = self.day[idx_end - 1].end_location
         self.day[idx_start + 1].purp = self.day[idx_end - 1].purp
@@ -738,22 +830,26 @@ class Plan:
 
         self.expand(pivot_idx)
 
-    def combine_matching_activities(self, idx_start, idx_end):
+    def combine_matching_activities(self, idx_start: int, idx_end: int) -> None:
         """Combine two given activities into same activity, remove surplus Legs
-        :param idx_start:
-        :param idx_end:
-        :return:
+
+        Args:
+          idx_start (int):
+          idx_end (int):
+
         """
         self.day[idx_start].end_time = self.day[idx_end].end_time  # extend proceeding act
         self.day.pop(idx_end)  # remove subsequent activity
         self.day.pop(idx_end - 1)  # remove subsequent leg
         self.day.pop(idx_start + 1)  # remove proceeding leg
 
-    def combine_wrapped_activities(self, idx_start, idx_end):
+    def combine_wrapped_activities(self, idx_start: int, idx_end: int) -> None:
         """Combine two given activities that will wrap around day, remove surplus Legs
-        :param idx_start:
-        :param idx_end:
-        :return:
+
+        Args:
+          idx_start (int):
+          idx_end (int):
+
         """
         # extend proceeding act to end of day
         self.day[idx_start].end_time = pam.variables.END_OF_DAY
@@ -774,9 +870,11 @@ class Plan:
             )
         ]
 
-    def simplify_pt_trips(self):
-        """Remove pt interaction events (resulting from complex matsim plans), simplify legs
-        to single leg with mode = pt.
+    def simplify_pt_trips(self) -> None:
+        """Remove pt interaction events and simplify legs to single leg with mode = pt.
+
+        pt interaction events result from complex matsim plans.
+
         """
         pt_trip = False
         for idx, component in list(self.reversed()):
@@ -807,21 +905,22 @@ class Plan:
 
     def mode_shift(
         self,
-        seq,
+        seq: int,
         new_mode="walk",
         mode_speed={"car": 37, "bus": 10, "walk": 4, "cycle": 14, "pt": 23, "rail": 37},
         update_duration=False,
-    ):
+    ) -> None:
         """Changes mode for a leg, along with any legs in the same tour.
+
         Leg durations are adjusted to mode speed, and home activity durations revisited to fit within the 24-hr plan.
         Default speed values are from National Travel Survey data (NTS0303).
 
-        :params int seq: leg index in self.day
-        :params string new_mode: default mode shift
-        :params dict mode_speed: a dictionary of average mode speeds (kph)
-        :params bool update_duration: whether to update leg durations based on mode speed
+        Args:
+          seq (int): leg index in self.day
+          new_mode (string, optional): default mode shift. Defaults to "walk".
+          mode_speed (dict, optional): a dictionary of average mode speeds (kph). Defaults to {"car": 37, "bus": 10, "walk": 4, "cycle": 14, "pt": 23, "rail": 37}.
+          update_duration (bool, optional): whether to update leg durations based on mode speed. Defaults to False.
 
-        :return: None
         """
         assert isinstance(self.day[seq], Leg)
 
@@ -862,12 +961,13 @@ class Plan:
             if self.day[-1].end_time != END_OF_DAY:
                 self.day[-1].end_time = END_OF_DAY
 
-    def change_duration(self, seq, shift_duration):
-        """Change the duration of a leg and shift subsequent activities/legs forward
-        :params int seq: leg index in self.day
-        :params timedelta shift_duration: the number of seconds to change the leg duration by:
+    def change_duration(self, seq: int, shift_duration: timedelta) -> None:
+        """Change the duration of a leg and shift subsequent activities/legs forward.
 
-        :return: None
+        Args:
+            seq (int): leg index in self.day.
+            shift_duration (timedelta): the number of seconds to change the leg duration by.
+
         """
         # change leg duration
         self.day[seq].end_time = self.day[seq].end_time + shift_duration
@@ -877,11 +977,15 @@ class Plan:
             start_time = self.day[idx].start_time
             self.day[idx].shift_start_time(start_time + shift_duration)
 
-    def get_leg_tour(self, seq):
+    def get_leg_tour(self, seq: int) -> list:
         """Get the tour of a leg
-        :params int seq: plan sequence. Must be a leg sequence.
 
-        :return: a list of activities in a tour
+        Args:
+          seq (int): plan sequence. Must be a leg sequence.
+
+        Returns:
+          list: activities in a tour.
+
         """
         assert isinstance(self.day[seq], Leg)
 
@@ -903,34 +1007,48 @@ class PlanComponent:
     def hours(self):
         return pam.utils.timedelta_to_hours(self.end_time - self.start_time)
 
-    def shift_start_time(self, new_start_time):
-        """Given a new start time, set start time, set end time based on previous duration and
-        return new end time.
-        :param new_start_time: datetime
-        :return: datetime.
+    def shift_start_time(self, new_start_time: datetime64) -> datetime64:
+        """Given a new start time, set start time & end time based on previous duration.
+
+        Args:
+            new_start_time (datetime64):
+
+        Returns:
+            datetime64: new end time
+
         """
         duration = self.duration
         self.start_time = new_start_time
         self.end_time = new_start_time + duration
         return self.end_time
 
-    def shift_end_time(self, new_end_time):
-        """Given a new end time, set end time, set start time based on previous duration and
-        return new start time.
-        :param new_end_time: datetime
-        :return: datetime.
+    def shift_end_time(self, new_end_time: datetime64) -> datetime64:
+        """Given a new end time, set end time & start time based on previous duration.
+
+        Args:
+          new_end_time (datetime64):
+
+        Returns:
+          datetime64: new start time.
+
         """
         duration = self.duration
         self.end_time = new_end_time
         self.start_time = new_end_time - duration
         return self.start_time
 
-    def shift_duration(self, new_duration, new_start_time=None):
-        """Given a new duration and optionally start time, set start time, set end time based on duration and
-        return new end time.
-        :param new_duration: timedelta
-        :param new_start_time: datetime
-        :return: datetime.
+    def shift_duration(
+        self, new_duration: timedelta, new_start_time: Optional[datetime64] = None
+    ) -> datetime64:
+        """Given a new duration and optionally start time, set start time & set end time based on duration.
+
+        Args:
+          new_duration (timedelta):
+          new_start_time (datetime64, optional): Defaults to None.
+
+        Returns:
+          datetime64: new end time.
+
         """
         if new_start_time is not None:
             self.start_time = new_start_time

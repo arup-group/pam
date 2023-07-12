@@ -18,20 +18,25 @@ def assert_correct_activities_locations(person, ordered_activities_locations_lis
     assert person.plan[len(person.plan) - 1].end_time == END_OF_DAY
 
 
-def test_Policy_throws_exception_when_used(Bobby):
-    policy = policies.Policy()
-    with pytest.raises(NotImplementedError) as e:
-        policy.apply_to(Bobby)
-    assert "<class 'type'> is a base class" in str(e.value)
+@pytest.fixture()
+def dummy_modifier():
+    class MyModifier(modifiers.Modifier):
+        def __init__(self):
+            super().__init__()
+
+        def apply_to(self, *args, **kwargs):
+            super().apply_to(*args, **kwargs)
+
+    return MyModifier()
 
 
-def test_subclass_name_features_in_repr_string():
-    policy = policies.HouseholdPolicy(modifiers.Modifier(), 0.1)
+def test_subclass_name_features_in_repr_string(dummy_modifier):
+    policy = policies.HouseholdPolicy(dummy_modifier, 0.1)
     assert "{}".format(policy.__class__.__name__) in policy.__repr__()
 
 
-def test_subclass_name_features_in_str_string():
-    policy = policies.HouseholdPolicy(modifiers.Modifier(), 0.1)
+def test_subclass_name_features_in_str_string(dummy_modifier):
+    policy = policies.HouseholdPolicy(dummy_modifier, 0.1)
     assert "{}".format(policy.__class__.__name__) in policy.__str__()
 
 

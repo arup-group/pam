@@ -6,7 +6,12 @@ import pandas as pd
 
 class Zones:
     def __init__(self, data: pd.DataFrame) -> None:
-        """:param data: A dataframe with variables as columns and the zone as index"""
+        """
+
+        Args:
+            data (pd.DataFrame): A dataframe with variables as columns and the zone as index
+
+        """
         self.data = data
 
     def __getattr__(self, __name: str) -> np.array:

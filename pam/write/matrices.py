@@ -1,5 +1,10 @@
+from __future__ import annotations
+
 import os
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 import pandas as pd
 
@@ -8,23 +13,26 @@ from pam.utils import minutes_to_datetime as mtdt
 
 
 def write_od_matrices(
-    population,
+    population: Population,
     path: str,
     leg_filter: Optional[str] = None,
     person_filter: Optional[str] = None,
     time_minutes_filter: Optional[List[Tuple[int]]] = None,
 ) -> None:
     """Write a core population object to tabular O-D weighted matrices.
+
     Optionally segment matrices by leg attributes(mode/ purpose), person attributes or specific time periods.
     A single filter can be applied each time.
+
     TODO include freq (assume hh).
 
-    :param population: core.Population
-    :param path: directory to write OD matrix files
-    :param leg_filter: select between 'Mode', 'Purpose'
-    :param person_filter: select between given attribute categories (column names) from person attribute data
-    :param time_minutes_filter: a list of tuples to slice times,
-    e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]
+    Args:
+        population (Population):
+        path (str): directory to write OD matrix files
+        leg_filter (Optional[str], optional): select between 'Mode', 'Purpose'. Defaults to None.
+        person_filter (Optional[str], optional): select between given attribute categories (column names) from person attribute data. Defaults to None.
+        time_minutes_filter (Optional[List[Tuple[int]]], optional): a list of tuples to slice times, e.g. [(start_of_slicer_1, end_of_slicer_1), (start_of_slicer_2, end_of_slicer_2), ... ]. Defaults to None.
+
     """
     create_local_dir(path)
 
