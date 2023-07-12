@@ -336,4 +336,3 @@ def test_safe_strpdelta():
         utils.safe_strpdelta(0)
         utils.safe_strpdelta("25-00-00")
         utils.safe_strpdelta("250000")
-        
