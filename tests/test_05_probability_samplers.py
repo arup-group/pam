@@ -12,32 +12,31 @@ def SmithHousehold_alt(instantiate_household_with, Steve, Hilda):
     return instantiate_household_with([Steve, Hilda])
 
 
-def test_SamplingProbability_samples_when_random_below_prob_val(mocker):
-    mocker.patch.object(probability_samplers.SamplingProbability, "p", return_value=0.55)
+@pytest.fixture()
+def dummy_sampler():
+    class MySampler(probability_samplers.SamplingProbability):
+        def __init__(self, probability):
+            super().__init__(probability)
+
+        def p(self, p):
+            return self.probability
+
+    return MySampler(0.55)
+
+
+def test_SamplingProbability_samples_when_random_below_prob_val(mocker, dummy_sampler):
     mocker.patch.object(random, "random", return_value=0.5)
-    prob = probability_samplers.SamplingProbability(0.55)
-    assert prob.sample("")
+    assert dummy_sampler.sample("")
 
 
-def test_SamplingProbability_samples_when_random_equal_prob_val(mocker):
-    mocker.patch.object(probability_samplers.SamplingProbability, "p", return_value=0.55)
+def test_SamplingProbability_samples_when_random_equal_prob_val(mocker, dummy_sampler):
     mocker.patch.object(random, "random", return_value=0.55)
-    prob = probability_samplers.SamplingProbability(0.55)
-    assert not prob.sample("")
+    assert not dummy_sampler.sample("")
 
 
-def test_SamplingProbability_doesnt_sample_when_random_above_prob_val(mocker):
-    mocker.patch.object(probability_samplers.SamplingProbability, "p", return_value=0.55)
+def test_SamplingProbability_doesnt_sample_when_random_above_prob_val(mocker, dummy_sampler):
     mocker.patch.object(random, "random", return_value=0.65)
-    prob = probability_samplers.SamplingProbability(0.55)
-    assert not prob.sample("")
-
-
-def test_SamplingProbability_throws_exception_when_used_for_extracting_p():
-    prob = probability_samplers.SamplingProbability(0.55)
-    with pytest.raises(NotImplementedError) as e:
-        prob.p("")
-    assert "is a base class" in str(e.value)
+    assert not dummy_sampler.sample("")
 
 
 def test_SimpleProbability_p_always_returns_same_level_p():

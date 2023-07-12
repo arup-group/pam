@@ -17,11 +17,16 @@ def assert_correct_activities(person, ordered_activities_list):
     assert person.plan[len(person.plan) - 1].end_time == END_OF_DAY
 
 
-def test_Policy_throws_exception_when_used(Bobby):
-    policy = policies.PolicyLevel(modifiers.Modifier())
-    with pytest.raises(NotImplementedError) as e:
-        policy.apply_to(Bobby)
-    assert "<class 'type'> is a base class" in str(e.value)
+@pytest.fixture()
+def dummy_filter():
+    class MyFilter(filters.Filter):
+        def __init__(self):
+            super().__init__()
+
+        def satisfies_conditions(self, x):
+            super().satisfies_conditions(x)
+
+    return MyFilter()
 
 
 def test_HouseholdPolicy_verifies_for_appropriate_probabilities(mocker):
@@ -48,12 +53,12 @@ def test_HouseholdPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_sing
 
 
 def test_HouseholdPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(
-    mocker, SmithHousehold
+    mocker, SmithHousehold, dummy_filter
 ):
     mocker.patch.object(modifiers.RemoveActivity, "apply_to")
     mocker.patch.object(filters.Filter, "satisfies_conditions", return_value=False)
 
-    policy = policies.HouseholdPolicy(modifiers.RemoveActivity([""]), 0.5, filters.Filter())
+    policy = policies.HouseholdPolicy(modifiers.RemoveActivity([""]), 0.5, dummy_filter)
     household = SmithHousehold
 
     policy.apply_to(household)
@@ -132,12 +137,12 @@ def test_PersonPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_single_
 
 
 def test_PersonPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(
-    mocker, SmithHousehold
+    mocker, SmithHousehold, dummy_filter
 ):
     mocker.patch.object(modifiers.RemoveActivity, "apply_to")
     mocker.patch.object(filters.Filter, "satisfies_conditions", return_value=False)
 
-    policy = policies.PersonPolicy(modifiers.RemoveActivity([""]), 0.5, filters.Filter())
+    policy = policies.PersonPolicy(modifiers.RemoveActivity([""]), 0.5, dummy_filter)
     household = SmithHousehold
 
     policy.apply_to(household)
@@ -215,12 +220,12 @@ def test_ActivityPolicy_apply_to_delegates_to_modifier_policy_apply_to_for_singl
 
 
 def test_ActivityPolicy_does_nothing_if_attribute_filter_condition_not_satisfied(
-    mocker, SmithHousehold
+    mocker, SmithHousehold, dummy_filter
 ):
     mocker.patch.object(modifiers.RemoveActivity, "apply_to")
     mocker.patch.object(filters.Filter, "satisfies_conditions", return_value=False)
 
-    policy = policies.ActivityPolicy(modifiers.RemoveActivity([""]), 0.5, filters.Filter())
+    policy = policies.ActivityPolicy(modifiers.RemoveActivity([""]), 0.5, dummy_filter)
     household = SmithHousehold
 
     policy.apply_to(household)

@@ -1,15 +1,32 @@
-from typing import Callable, List, Optional
+from __future__ import annotations
+
+from collections.abc import Callable, Iterator
+from typing import TYPE_CHECKING, Optional, TypedDict
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 import pandas as pd
 
 
-def benchmarks(population):
-    """Yield bms.
+class BenchmarkDict(TypedDict):
+    dimensions: list[str]
+    data_fields: list[str]
+    colnames: list[str]
+    aggfunc: list[Callable]
 
-    :param pam.core.Population population: pam.core.Population
-    :yield pandas.DataFrame: benchmark
+
+def benchmarks(population: Population) -> Iterator[tuple[str, pd.DataFrame]]:
+    """Yield benchmarks.
+
+    Args:
+        population (Population):
+
+    Yields:
+        Iterator[tuple[str, pd.DataFrame]]: (filename, benchmark).
     """
-    bms = [
+
+    bms: list[tuple[str, BenchmarkDict]] = [
         (
             "mode_counts.csv",
             {
@@ -80,33 +97,39 @@ def benchmarks(population):
 
 
 def create_benchmark(
-    data,
-    dimensions: Optional[List[str]] = None,
-    data_fields: Optional[List[str]] = None,
-    aggfunc: List[Callable] = [len],
-    normalise_by=None,
-    colnames=None,
-):
+    data: pd.DataFrame,
+    dimensions: Optional[list[str]] = None,
+    data_fields: Optional[list[str]] = None,
+    aggfunc: list[Callable] = [len],
+    normalise_by: Optional[str] = None,
+    colnames: Optional[list[str]] = None,
+) -> pd.DataFrame:
     """Extract user-specified benchmarks from the population
-    :param pandas.DataFrame data: dataframe of trip or leg logs with required fields
-    :param list dimensions: Dimensions to group by. If None, return the disaggregate dataset
-    :params list data_fields: The data to summarise. If None, simply count the instances of each group
-    :params list of functions aggfunc: A set of functions to apply to each data_field, after grouping by the specified dimensions. For example: [len, sum], [sum, np.mean], [np.sum], etc
-    :params list normalise_by: convert calculated values to percentages across the specified -by this field- dimension(s)
-    :params list colnames: if different to None, rename the columns of the returned dataset.
 
-    :return: pandas.DataFrame
+    Args:
+        data (pd.DataFrame): dataframe of trip or leg logs with required fields.
+        dimensions (Optional[list[str]], optional): Dimensions to group by. If None, return the disaggregate dataset. Defaults to None.
+        data_fields (Optional[list[str]], optional): The data to summarise. If None, simply count the instances of each group. Defaults to None.
+        aggfunc (list[Callable], optional):
+            A set of functions to apply to each data field in `data_fields`, after grouping by the specified dimensions.
+            For example: [len, sum], [sum, np.mean], [np.sum].
+            Defaults to [len].
+        normalise_by (Optional[str], optional): If given, convert calculated values to percentages across the dimension(s) specified here. Defaults to None.
+        colnames (Optional[list[str]], optional): If given, rename the columns of the returned dataset. Defaults to None.
+
+    Returns:
+        pd.DataFrame:
     """
     df = data.copy()
 
-    ## aggregate across specified dimensions
+    # aggregate across specified dimensions
     if dimensions is not None:
         if data_fields is not None:
             df = df.groupby(dimensions)[data_fields].agg(aggfunc).fillna(0)
         else:
             df = df.value_counts(dimensions)
 
-    ## show as percentages
+    # show as percentages
     if normalise_by is not None:
         if normalise_by == "total":
             df = df / df.sum(axis=0)
@@ -114,11 +137,11 @@ def create_benchmark(
             df = df.groupby(level=normalise_by).transform(lambda x: x / x.sum())
     df = df.sort_index().reset_index()
 
-    ## flatten column MultiIndex
+    # flatten column MultiIndex
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.map("_".join).str.strip("_")
 
-    ## rename columns
+    # rename columns
     if colnames is not None:
         df.columns = colnames
 
@@ -127,7 +150,7 @@ def create_benchmark(
 
 #### benchmark wrappers:
 def mode_counts(population):
-    # number of trips by (euclidean) distance category
+    "number of trips by (euclidean) distance category."
     data = population.trips_df()
     return create_benchmark(
         data, dimensions=["mode"], data_fields=["freq"], colnames=["mode", "trips"], aggfunc=[sum]
@@ -135,7 +158,7 @@ def mode_counts(population):
 
 
 def distance_counts(population):
-    # number of trips by (euclidean) distance category
+    "number of trips by (euclidean) distance category."
     data = population.trips_df()
     return create_benchmark(
         data,
@@ -147,7 +170,7 @@ def distance_counts(population):
 
 
 def mode_distance_counts(population):
-    # number of trips by (euclidean) distance category and mode
+    "number of trips by (euclidean) distance category and mode."
     data = population.trips_df()
     return create_benchmark(
         data,
@@ -159,7 +182,7 @@ def mode_distance_counts(population):
 
 
 def duration_counts(population):
-    # number of trips by duration
+    "number of trips by duration."
     data = population.trips_df()
     return create_benchmark(
         data,
@@ -171,7 +194,7 @@ def duration_counts(population):
 
 
 def mode_duration_counts(population):
-    # number of trips by duration and mode
+    "number of trips by duration and mode."
     data = population.trips_df()
     return create_benchmark(
         data,
@@ -183,7 +206,7 @@ def mode_duration_counts(population):
 
 
 def departure_time_counts(population):
-    # number of trips by hour of departure
+    "number of trips by hour of departure."
     data = population.trips_df()
     return create_benchmark(
         data,
@@ -195,7 +218,7 @@ def departure_time_counts(population):
 
 
 def mode_purpose_counts(population):
-    # purpose split for each mode
+    "purpose split for each mode."
     data = population.trips_df()
     return create_benchmark(
         data,

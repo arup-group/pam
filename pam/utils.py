@@ -18,7 +18,9 @@ DEFAULT_GZIP_COMPRESSION = 6
 
 def parse_time(time: Union[int, str]) -> datetime:
     """Generic parse time into datetime.
-    Itegers are assumed to be minutes. Strings are assumed to be datetime formatted as (%Y-%m-%d %H:%M:%S).
+
+    Itegers are assumed to be minutes.
+    Strings are assumed to be datetime formatted as (%Y-%m-%d %H:%M:%S).
 
     Args:
         time (Union[int, str]): time
@@ -55,7 +57,7 @@ def minutes_to_datetime(minutes: int) -> datetime:
 
 
 def datetime_string_to_datetime(string: str) -> datetime:
-    """Convert datetime formatted string to datetime
+    """Convert datetime formatted string to datetime.
 
     Args:
         string (str): time string formatted "%Y-%m-%d %H:%M:%S"
@@ -79,7 +81,8 @@ def minutes_to_timedelta(minutes: int) -> timedelta:
 
 
 def datetime_to_matsim_time(dt: datetime) -> str:
-    """Convert datetime to matsim format time (hh:mm:ss)
+    """Convert datetime to matsim format time (hh:mm:ss).
+
     Datetimes beyond 1 day will be converted to hours, eg 25:00:00, for 1am the next day.
 
     Args:
@@ -107,6 +110,7 @@ def timedelta_to_matsim_time(td: timedelta) -> str:
 
 def matsim_time_to_datetime(string: str) -> datetime:
     """Convert matsim format time (hh:mm:ss) to datetime.
+
     Can read MATSim times for any day of a simulation (ie 25:00:00 is read as 01:00:00 of the next day).
 
     Args:
@@ -143,8 +147,9 @@ def td_to_s(td: timedelta) -> int:
 
 
 def safe_strptime(mt: str) -> datetime:
-    """Safely parse string into datetime, can cope with time strings in format hh:mm:ss
-    if hh > 24 then adds a day.
+    """Safely parse string into datetime.
+
+    Can cope with time strings in format hh:mm:ss if hh > 24 then adds a day.
 
     Args:
         mt (str): MATSim time string (hh:mm:ss or hh::mm)
@@ -156,9 +161,9 @@ def safe_strptime(mt: str) -> datetime:
 
 
 def safe_strpdelta(mt: str) -> timedelta:
-    """Parse string into timedelta, can cope with time strings in format hh:mm:ss or hh:mm
-    :param mt:
-    :return: timedelta
+    """Parse string into timedelta.
+
+    Can cope with time strings in format hh:mm:ss or hh:mm.
 
     Args:
         mt (str): MATSim time string (hh:mm:ss or hh::mm)
@@ -212,11 +217,11 @@ def matsim_duration_to_hours(mt: str) -> int:
 
 
 def get_linestring(from_point: Union[Point, CellId], to_point: Union[Point, CellId]) -> LineString:
-    """ "Makes a shapely.geometry.LineString out of two points.
+    """Makes a shapely.geometry.LineString out of two points.
 
     Args:
-        from_point (Point): shapely.geometry.Point or s2sphere.CellId
-        to_point (Point): shapely.geometry.Point or s2sphere.CellId
+        from_point (Union[Point, CellId]): shapely.geometry.Point or s2sphere.CellId
+        to_point (Union[Point, CellId])): shapely.geometry.Point or s2sphere.CellId
 
     Raises:
         TypeError: Failure to parse inputs
@@ -244,9 +249,6 @@ def get_elems(path: Union[str, Path], tag: str) -> Generator:
     Args:
         path (Union[str, Path]): xml path
         tag (str): The tag type to extract , e.g. 'link'
-
-    Returns:
-        Generator:  Generator of elements
 
     Yields:
         Generator:  Generator of elements
@@ -280,10 +282,10 @@ def try_unzip(path: Union[str, Path]) -> Union[BytesIO, str, Path]:
     """Attempts to unzip xml at given path, if fails, returns path
 
     Args:
-        path (Union[str, Path]): xml path
+        path (Union[str, Path]): xml path.
 
     Returns:
-        Union[BytesIO, str, Path]: BytesIO object or path if already unzipped
+        Union[BytesIO, str, Path]: BytesIO object or path if already unzipped.
     """
     try:
         with gzip.open(path) as unzipped:
@@ -295,17 +297,19 @@ def try_unzip(path: Union[str, Path]) -> Union[BytesIO, str, Path]:
 
 
 def get_tag(target: Union[BytesIO, str, Path], tag: str) -> str:
-    """Check for namespace declaration. If they exists return tag string
-    with namespace [''] ie {namespaces['']}tag. If no namespaces declared
-    return original tag.
-    TODO Not working with iterparse, generated elem also have ns which is dealt with later.
+    """Check for namespace declaration.
+
+    If they exists return tag string with namespace [''] ie {namespaces['']}tag.
+    If no namespaces declared return original tag.
+
+    TODO: Not working with iterparse, generated elem also have ns which is dealt with later.
 
     Args:
-        target (Union[BytesIO, str, Path]): Target xml, either BytesIO object or path
-        tag (str): The tag type to extract , e.g. 'link'
+        target (Union[BytesIO, str, Path]): Target xml, either BytesIO object or path.
+        tag (str): The tag type to extract , e.g. 'link'.
 
     Returns:
-        str: tag
+        str: tag.
     """
     nsmap = {}
     doc = et.iterparse(target, events=("end", "start-ns"))
@@ -346,7 +350,7 @@ def create_crs_attribute(coordinate_reference_system: str) -> et.Element:
     """Create a CRS attribute as expected by MATSim's ProjectionUtils.getCRS.
 
     Args:
-        coordinate_reference_system (str): coordinate reference system
+        coordinate_reference_system (str): coordinate reference system.
 
     Returns:
         et.Element: CRS attribute as xml element
@@ -365,7 +369,7 @@ def is_xml(location: Union[str, Path]) -> bool:
     """Checks if file is xml based on extension.
 
     Args:
-        location (Union[str, Path]): file path
+        location (Union[str, Path]): file path.
 
     Returns:
         bool: is xml?
