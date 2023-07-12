@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import random
-from typing import List
+from abc import ABC, abstractmethod
+from typing import Optional
 
 import pam.activity
 import pam.core
 
 
-class Modifier:
+class Modifier(ABC):
     """Base class for modifiers - these are classes which change
     activities in a person's plan.
 
@@ -22,13 +25,20 @@ class Modifier:
     def __init__(self):
         super().__init__()
 
+    @abstractmethod
     def apply_to(
         self,
         household: pam.core.Household,
-        person: pam.core.Person = None,
-        activity: pam.activity.Activity = None,
-    ):
-        raise NotImplementedError("{} is a base class".format(type(Modifier)))
+        person: Optional[pam.core.Person] = None,
+        activities: Optional[list[pam.activity.Activity]] = None,
+    ) -> None:
+        """Uses self.probability to decide if household/person/activity should be selected.
+
+        Args:
+            household (Household):
+            person (Optional[Person], optional): Defaults to None.
+            activities (Optional[list[Activity]], optional): Defaults to None.
+        """
 
     def __repr__(self):
         attribs = vars(self)
@@ -49,24 +59,22 @@ class Modifier:
 
 
 class RemoveActivity(Modifier):
-    """Removes specified activities.
+    def __init__(self, activities: list[str]):
+        """Removes specified activities.
 
-    Parameters
-    ----------
-    :param activities
-    List of activities to be removed.
-    """
+        Args:
+            activities (list[str]): List of activities to be removed.
 
-    def __init__(self, activities: List[str]):
+        """
         super().__init__()
         self.activities = activities
 
     def apply_to(
         self,
         household: pam.core.Household,
-        person: pam.core.Person = None,
-        activities: List[pam.activity.Activity] = None,
-    ):
+        person: Optional[pam.core.Person] = None,
+        activities: Optional[list[pam.activity.Activity]] = None,
+    ) -> None:
         if activities and person:
             self.remove_individual_activities(person, activities)
         elif person:
@@ -111,48 +119,49 @@ class RemoveActivity(Modifier):
 
 
 class AddActivity(Modifier):
-    """Adds specified activities.
+    def __init__(self, activities: list[str]):
+        """Adds specified activities.
 
-    Parameters
-    ----------
-    :param activities
-    List of activities to be added.
-    """
+        Args:
+            activities (list[str]): List of activities to be added.
 
-    def __init__(self, activities: List[str]):
-        super().__init__()
-        self.activities = activities
-
-    def apply_to(self, household, person=None, activities=None):
-        raise NotImplementedError("Watch this space")
-
-
-class ReduceSharedActivity(Modifier):
-    """Policy that needs to be applied on a household level. For activities
-    shared within a household (Activity.act (type of activity), start/end
-    times and locations match). Randomly assigns a person whose activities
-    will be retained and deletes the shared activities from other persons
-    in household.
-
-    Parameters
-    ----------
-    :param activities
-    List of activities that should be considered for sharing. Does not
-    require an exact match. E.g. if passed ['shop_food', 'shop_other']
-    if a household has an only 'shop_food' shared activity, that will
-    be reduced.
-    """
-
-    def __init__(self, activities: List[str]):
+        """
         super().__init__()
         self.activities = activities
 
     def apply_to(
         self,
         household: pam.core.Household,
-        person: pam.core.Person = None,
-        activities: List[pam.activity.Activity] = None,
-    ):
+        person: Optional[pam.core.Person] = None,
+        activities: Optional[list[pam.activity.Activity]] = None,
+    ) -> None:
+        raise NotImplementedError("Watch this space")
+
+
+class ReduceSharedActivity(Modifier):
+    def __init__(self, activities: list[str]) -> None:
+        """Policy that needs to be applied on a household level. For activities
+        shared within a household (Activity.act (type of activity), start/end
+        times and locations match). Randomly assigns a person whose activities
+        will be retained and deletes the shared activities from other persons
+        in household.
+
+        Args:
+            activities (list[str]):
+                List of activities that should be considered for sharing.
+                Does not require an exact match.
+                E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food' shared activity, that will be reduced.
+
+        """
+        super().__init__()
+        self.activities = activities
+
+    def apply_to(
+        self,
+        household: pam.core.Household,
+        person: Optional[pam.core.Person] = None,
+        activities: Optional[list[pam.activity.Activity]] = None,
+    ) -> None:
         if household and isinstance(household, pam.core.Household):
             self.remove_household_activities(household)
         else:
@@ -209,29 +218,22 @@ class ReduceSharedActivity(Modifier):
 
 
 class MoveActivityTourToHomeLocation(Modifier):
-    """Moves a tour of activities to home location. A tour is defined
-    as a list of activities sandwiched between two home activities.
+    def __init__(self, activities: list[str], location: str = "home", new_mode: str = "walk"):
+        """Moves a tour of activities to home location.
 
-    Parameters
-    ----------
-    :param activities
-    List of activities to be considered in a tour. Does not
-    require an exact match. E.g. if passed ['shop_food', 'shop_other']
-    if a person has a tour of only 'shop_food', the location of that
-    activity will be changed.
+        A tour is defined as a list of activities sandwiched between two home activities.
 
-    :param location, default 'home'
-    Location to which the tour should be moved.
+        Args:
+            activities:
+                List of activities to be considered in a tour.
+                Any combination of activities in activities sandwiched by home activities will be selected
+                Does not require an exact match.
+                E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_food', the location of that activity will be changed.
+            location (str): Location to which the tour should be moved. Defaults to "home".
+            new_mode (str): Mode used in the legs to/from the activity when we relocate the activity. Defaults to "walk".
 
-    :param new_mode, default 'walk'
-    Mode used in the legs to/from the activity when we relocate the activity
-    """
-
-    def __init__(self, activities: List[str], location: str = "home", new_mode: str = "walk"):
+        """
         super().__init__()
-        # list of activities defines the accepted activity tour,
-        # any combination of activities in activities sandwiched
-        # by home activities will be selected
         self.activities = activities
         self.default = location
         self.new_mode = new_mode
@@ -239,9 +241,9 @@ class MoveActivityTourToHomeLocation(Modifier):
     def apply_to(
         self,
         household: pam.core.Household,
-        person: pam.core.Person = None,
-        activities: List[pam.activity.Activity] = None,
-    ):
+        person: Optional[pam.core.Person] = None,
+        activities: Optional[list[pam.activity.Activity]] = None,
+    ) -> None:
         new_mode = self.new_mode
         if activities and person:
             self.move_individual_activities(person, activities, new_mode)

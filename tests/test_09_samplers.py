@@ -1,5 +1,5 @@
 import random
-from types import GeneratorType
+from collections.abc import Iterator
 
 import geopandas as gp
 import pandas as pd
@@ -362,7 +362,7 @@ def test_facility_dict_build():
     sampler = facility.FacilitySampler(facility_gdf, zones_gdf, ["home", "work", "education"])
     assert len(sampler.samplers) == 2
     assert sampler.samplers[0]["education"] is None
-    assert isinstance(sampler.samplers[0]["work"], GeneratorType)
+    assert isinstance(sampler.samplers[0]["work"], Iterator)
 
 
 def test_facility_sampler_normal():

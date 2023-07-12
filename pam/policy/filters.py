@@ -1,17 +1,20 @@
-from typing import Callable, Dict
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from typing import Literal
 
 import pam.activity
 import pam.core
 
 
-class Filter:
+class Filter(ABC):
     """Base class for attribute-based filters."""
 
     def __init__(self):
         pass
 
+    @abstractmethod
     def satisfies_conditions(self, x):
-        raise NotImplementedError("{} is a base class".format(type(Filter)))
+        "Check if object satisfies conditions to be filtered"
 
     def __repr__(self):
         attribs = vars(self)
@@ -32,23 +35,19 @@ class Filter:
 
 
 class PersonAttributeFilter(Filter):
-    """Helps filtering Person on specified attributes.
+    def __init__(
+        self, conditions: dict[str, Callable[[str], bool]], how: Literal["all", "any"] = "all"
+    ) -> None:
+        """Helps filtering Person on specified attributes.
 
-    Parameters
-    ----------
-    :param conditions
-    Dictionary of
-    key = person.attribute key
-    value = function that returns a boolean given the value at person.attribute[key]
+        Args:
+            conditions (dict[str, Callable[[str], bool]]):
+                Dictionary of key = person.attribute, value = function that returns a boolean given the value at person.attribute[key]
+            how (Literal["all", "any"]):
+                The level of rigour used to match conditions.
+                `all` means all conditions for a person need to be met. `any` means at least one condition needs to be met
 
-    :param how : {'all', 'any'}, default 'all'
-    The level of rigour used to match conditions
-
-    * all: means all conditions for a person need to be met
-    * any: means at least one condition needs to be met
-    """
-
-    def __init__(self, conditions: Dict[str, Callable[[str], bool]], how="all"):
+        """
         super().__init__()
         self.conditions = conditions
         self.how = how

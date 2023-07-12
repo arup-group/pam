@@ -1,6 +1,6 @@
 """Manages origin-destination data required by the planner module."""
 import itertools
-from typing import List, NamedTuple, Union
+from typing import NamedTuple, Union
 
 import numpy as np
 import pandas as pd
@@ -9,21 +9,25 @@ import pandas as pd
 class Labels(NamedTuple):
     """Data labels for the origin-destination dataset."""
 
-    vars: List
-    origin_zones: List
-    destination_zones: List
-    mode: List
+    vars: list
+    origin_zones: list
+    destination_zones: list
+    mode: list
 
 
 class OD:
     """Holds origin-destination matrices for a number of modes and variables."""
 
-    def __init__(self, data: np.ndarray, labels: Union[Labels, List, dict]) -> None:
-        """:param data: A multi-dimensional numpy array of the origin-destination data.
-        - First dimension: variable (ie travel time, distance, etc)
-        - Second dimension: origin zone
-        - Third dimension: destination zone
-        - Fourth dimension: mode (ie car, bus, etc)
+    def __init__(self, data: np.ndarray, labels: Union[Labels, list, dict]) -> None:
+        """
+        Args:
+            data (np.ndarray):
+                A multi-dimensional numpy array of the origin-destination data.
+                - First dimension: variable (ie travel time, distance, etc)
+                - Second dimension: origin zone
+                - Third dimension: destination zone
+                - Fourth dimension: mode (ie car, bus, etc)
+            labels (Union[Labels, list, dict]):
         """
         self.data = data
         self.labels = self.parse_labels(labels)
@@ -41,7 +45,7 @@ class OD:
             )
 
     @staticmethod
-    def parse_labels(labels: Union[Labels, List, dict]) -> Labels:
+    def parse_labels(labels: Union[Labels, list, dict]) -> Labels:
         """Parse labels as a named tuple."""
         if not isinstance(labels, Labels):
             if isinstance(labels, list):
@@ -86,7 +90,7 @@ class ODMatrix(NamedTuple):
 
 class ODFactory:
     @classmethod
-    def from_matrices(cls, matrices: List[ODMatrix]) -> OD:
+    def from_matrices(cls, matrices: list[ODMatrix]) -> OD:
         """Creates an OD instance from a list of ODMatrices."""
         # collect dimensions
         labels = cls.prepare_labels(matrices)
@@ -101,7 +105,7 @@ class ODFactory:
         return OD(data=od, labels=labels)
 
     @staticmethod
-    def prepare_labels(matrices: List[ODMatrix]) -> Labels:
+    def prepare_labels(matrices: list[ODMatrix]) -> Labels:
         labels = Labels(
             vars=list(pd.unique([mat.var for mat in matrices])),
             origin_zones=matrices[0].origin_zones,
@@ -111,7 +115,7 @@ class ODFactory:
         return labels
 
     @staticmethod
-    def check(matrices: List[ODMatrix], labels: Labels) -> None:
+    def check(matrices: list[ODMatrix], labels: Labels) -> None:
         # all matrices follow the same zoning system and are equal size
         for mat in matrices:
             assert mat.origin_zones == labels.origin_zones, "Please check zone labels"

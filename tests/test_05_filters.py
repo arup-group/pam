@@ -4,14 +4,7 @@ import pytest
 
 from pam.activity import Activity
 from pam.core import Household, Person
-from pam.policy.filters import Filter, PersonAttributeFilter
-
-
-def test_Filter_throws_exception_when_used(Bobby):
-    attrib_filter = Filter()
-    with pytest.raises(NotImplementedError) as e:
-        attrib_filter.satisfies_conditions(Bobby)
-    assert "<class 'type'> is a base class" in str(e.value)
+from pam.policy.filters import PersonAttributeFilter
 
 
 def test_subclass_name_features_in_repr_string():

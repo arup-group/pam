@@ -1,11 +1,13 @@
 import random
-from typing import Callable, Union
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from typing import Optional, Union
 
 import pam.activity
 import pam.core
 
 
-class SamplingProbability:
+class SamplingProbability(ABC):
     """Base class for probabilistic samplers."""
 
     def __init__(self, probability: Union[float, int]):
@@ -35,21 +37,18 @@ class SamplingProbability:
     def sample(self, x):
         return random.random() < self.p(x)
 
+    @abstractmethod
     def p(self, x):
-        raise NotImplementedError("{} is a base class".format(type(SamplingProbability)))
+        "Compute probability"
 
 
 class SimpleProbability(SamplingProbability):
-    """A probabilistic sampler which returns value of probability
-    at the same level as the input (household/person/activity).
+    def __init__(self, probability: Union[float, int]) -> None:
+        """A probabilistic sampler which returns value of probability at the same level as the input (household/person/activity).
 
-    Parameters
-    ----------
-    :param probability
-    A float/int: 0<probability<=1
-    """
-
-    def __init__(self, probability):
+        Args:
+            probability (Union[float, int]): 0<probability<=1.
+        """
         super().__init__(probability)
 
     def p(self, x):
@@ -57,20 +56,18 @@ class SimpleProbability(SamplingProbability):
 
 
 class HouseholdProbability(SamplingProbability):
-    """A probabilistic sampler which evaluates value of probability
-    at household level based on probability for a household.
-
-    Parameters
-    ----------
-    :param probability
-    A float/int: 0<probability<=1 or a function which given input of
-    pam.core.Household returns a float/int: 0<probability<=1
-    corresponding to the likelihood of the household being sampled.
-    """
-
     def __init__(
-        self, probability: Union[float, int, Callable[[pam.core.Household], float]], kwargs=None
-    ):
+        self,
+        probability: Union[float, int, Callable[[pam.core.Household], float]],
+        kwargs: Optional[dict] = None,
+    ) -> None:
+        """A probabilistic sampler which evaluates value of probability at household level based on probability for a household.
+
+        Args:
+            probability (Union[float, int, Callable[[pam.core.Household], float]]):
+                0<probability<=1, or a function which given input of pam.core.Household returns a float/int: 0<probability<=1 corresponding to the likelihood of the household being sampled.
+            kwargs (Optional[dict], optional): Keyword arguments to add when calling `probability`, if it is a Callable. Defaults to None.
+        """
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -96,21 +93,18 @@ class HouseholdProbability(SamplingProbability):
 
 
 class PersonProbability(SamplingProbability):
-    """A probabilistic sampler which evaluates value of probability
-    at household and person level based on probability for a
-    person.
-
-    Parameters
-    ----------
-    :param probability
-    A float/int: 0<probability<=1 or a function which given input of
-    pam.core.Person returns a float/int: 0<probability<=1
-    corresponding to the likelihood of the person being sampled.
-    """
-
     def __init__(
-        self, probability: Union[float, int, Callable[[pam.core.Person], float]], kwargs=None
-    ):
+        self,
+        probability: Union[float, int, Callable[[pam.core.Person], float]],
+        kwargs: Optional[dict] = None,
+    ) -> None:
+        """A probabilistic sampler which evaluates value of probability at household and person level based on probability for a person.
+
+        Args:
+            probability (Union[float, int, Callable[[pam.core.Person], float]]):
+                0<probability<=1 or a function which given input of pam.core.Person returns a float/int: 0<probability<=1 corresponding to the likelihood of the person being sampled.
+            kwargs (Optional[dict], optional): Keyword arguments to add when calling `probability`, if it is a Callable. Defaults to None.
+        """
         super().__init__(probability)
         assert isinstance(self.probability, float) or callable(self.probability)
         if kwargs is None:
@@ -139,24 +133,20 @@ class PersonProbability(SamplingProbability):
 
 
 class ActivityProbability(SamplingProbability):
-    """A probabilistic sampler which evaluates value of probability
-    at household, person and activity level based on probability
-    for an activity.
-
-    Parameters
-    ----------
-    :param probability
-    A float/int: 0<probability<=1 or a function which given input of
-    pam.core.Activity returns a float/int: 0<probability<=1
-    corresponding to the likelihood of the activity being sampled.
-    """
-
     def __init__(
         self,
         activities: list,
         probability: Union[float, int, Callable[[pam.activity.Activity], float]],
-        kwargs=None,
-    ):
+        kwargs: Optional[dict] = None,
+    ) -> None:
+        """A probabilistic sampler which evaluates value of probability at household, person and activity level based on probability for an activity.
+
+        Args:
+            activities (list): List of activities.
+            probability (Union[float, int, Callable[[pam.activity.Activity]]]):
+                A float/int: 0<probability<=1 or a function which given input of pam.core.Activity returns a float/int: 0<probability<=1 corresponding to the likelihood of the activity being sampled.
+            kwargs (Optional[dict], optional): Keyword arguments to add when calling `probability`, if it is a Callable. Defaults to None.
+        """
         super().__init__(probability)
         self.activities = activities
         assert isinstance(self.probability, float) or callable(self.probability)
