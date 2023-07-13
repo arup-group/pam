@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -295,44 +296,109 @@ def test_parser_does_not_delete_current_element(test_trips_pathv12):
             assert element.getparent()[0] != element
 
 
-def test_safe_strptime():
-    assert utils.safe_strptime("00:00:00") == datetime(
-        year=1900, month=1, day=1, hour=0, minute=0, second=0
-    )
-    assert utils.safe_strptime("10:10:10") == datetime(
-        year=1900, month=1, day=1, hour=10, minute=10, second=10
-    )
-    assert utils.safe_strptime("24:00:00") == datetime(
-        year=1900, month=1, day=2, hour=0, minute=0, second=0
-    )
-    assert utils.safe_strptime("25:00:00") == datetime(
-        year=1900, month=1, day=2, hour=1, minute=0, second=0
-    )
-    assert utils.safe_strptime("00:00") == datetime(
-        year=1900, month=1, day=1, hour=0, minute=0, second=0
-    )
-    assert utils.safe_strptime("10:10") == datetime(
-        year=1900, month=1, day=1, hour=10, minute=10, second=0
-    )
-    assert utils.safe_strptime("24:00") == datetime(
-        year=1900, month=1, day=2, hour=0, minute=0, second=0
-    )
-    assert utils.safe_strptime("25:00") == datetime(
-        year=1900, month=1, day=2, hour=1, minute=0, second=0
+@pytest.mark.parametrize(
+    ["input", "expected_times"],
+    [
+        ("00:00:00", (1, 0, 0, 0)),
+        ("10:10:10", (1, 10, 10, 10)),
+        ("24:00:00", (2, 0, 0, 0)),
+        ("25:00:00", (2, 1, 0, 0)),
+        ("00:00", (1, 0, 0, 0)),
+        ("10:10", (1, 10, 10, 0)),
+        ("24:00", (2, 0, 0, 0)),
+        ("25:00", (2, 1, 0, 0)),
+    ],
+)
+def test_safe_strptime(input, expected_times):
+    day, hour, minute, second = expected_times
+    assert utils.safe_strptime(input) == datetime(
+        year=1900, month=1, day=day, hour=hour, minute=minute, second=second
     )
 
 
-def test_safe_strpdelta():
-    assert utils.safe_strpdelta("00:00:00") == timedelta(hours=0, minutes=0, seconds=0)
-    assert utils.safe_strpdelta("10:10:10") == timedelta(hours=10, minutes=10, seconds=10)
-    assert utils.safe_strpdelta("24:00:00") == timedelta(hours=24, minutes=0, seconds=0)
-    assert utils.safe_strpdelta("25:00:00") == timedelta(hours=25, minutes=0, seconds=0)
-    assert utils.safe_strpdelta("00:00") == timedelta(hours=0, minutes=0, seconds=0)
-    assert utils.safe_strpdelta("10:10") == timedelta(hours=10, minutes=10, seconds=0)
-    assert utils.safe_strpdelta("24:00") == timedelta(hours=24, minutes=0, seconds=0)
-    assert utils.safe_strpdelta("25:00") == timedelta(hours=25, minutes=0, seconds=0)
+@pytest.mark.parametrize(
+    ["input", "expected_times"],
+    [
+        ("00:00:00", (0, 0, 0)),
+        ("10:10:10", (10, 10, 10)),
+        ("24:00:00", (24, 0, 0)),
+        ("25:00:00", (25, 0, 0)),
+        ("00:00", (0, 0, 0)),
+        ("10:10", (10, 10, 0)),
+        ("24:00", (24, 0, 0)),
+        ("25:00", (25, 0, 0)),
+    ],
+)
+def test_safe_strpdelta(input, expected_times):
+    hour, minute, second = expected_times
+    assert utils.safe_strpdelta(input) == timedelta(hours=hour, minutes=minute, seconds=second)
+
+
+@pytest.mark.parametrize("input", ["25:00:00:00", "0", "25-00-00", "250000"])
+def test_safe_strpdelta_malformed_input(input):
     with pytest.raises(UserWarning):
-        utils.safe_strpdelta("25:00:00:00")
-        utils.safe_strpdelta(0)
-        utils.safe_strpdelta("25-00-00")
-        utils.safe_strpdelta("250000")
+        utils.safe_strpdelta(input)
+
+
+@pytest.mark.parametrize(
+    ["file", "is_xml"],
+    [
+        ("foo.xml", True),
+        ("foo/bar.xml", True),
+        ("~/foo.bar.xml", True),
+        (r"foo\bar.xml", True),
+        ("foo_xml.txt", False),
+        ("bar.xml.zip", False),
+    ],
+)
+@pytest.mark.parametrize("wrapper", [str, Path])
+def test_is_xml(file, is_xml, wrapper):
+    assert utils.is_xml(wrapper(file)) is is_xml
+
+
+@pytest.mark.parametrize("minutes", [-1, 0, 1, 10, 1e2, 1.0])
+def test_minutes_to_timedelta(minutes):
+    assert utils.minutes_to_timedelta(minutes) == timedelta(minutes=int(minutes))
+
+
+@pytest.mark.parametrize(["minutes", "seconds"], [(0.2, 12), (1.2, 72)])
+def test_non_int_minutes_to_timedelta(minutes, seconds):
+    assert utils.minutes_to_timedelta(minutes) == timedelta(seconds=seconds)
+
+
+@pytest.mark.parametrize(
+    ["input", "expected_hours"],
+    [
+        ("00:00:00", 0),
+        ("10:10:10", 10.1694),
+        ("24:00:00", 24),
+        ("25:00:00", 25),
+        ("00:00", 0),
+        ("10:10", 10.1666),
+        ("24:00", 24),
+        ("25:00", 25),
+    ],
+)
+def test_matsim_duration_to_hours(input, expected_hours):
+    assert utils.matsim_duration_to_hours(input) == pytest.approx(expected_hours, rel=1e-4)
+
+
+@pytest.mark.parametrize(
+    ["a", "expected"],
+    [
+        (0, datetime(1900, 1, 1, 0, 0)),
+        (1, datetime(1900, 1, 1, 0, 1)),
+        (60, datetime(1900, 1, 1, 1, 0)),
+        (np.int64(60), datetime(1900, 1, 1, 1, 0)),
+        (np.int32(60), datetime(1900, 1, 1, 1, 0)),
+        ("1900-01-01 13:00:00", datetime(1900, 1, 1, 13, 0)),
+    ],
+)
+def test_parse_time(a, expected):
+    assert utils.parse_time(a) == expected
+
+
+@pytest.mark.parametrize(["input", "input_type"], [(1.0, "float"), (0.1, "float"), (True, "bool")])
+def test_parse_time_fail(input, input_type):
+    with pytest.raises(TypeError, match=f"Cannot parse {input} of type <class '{input_type}'>*"):
+        utils.parse_time(input)
