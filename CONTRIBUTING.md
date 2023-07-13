@@ -94,11 +94,12 @@ When adding docstrings, we request you use the [Google docstring style](https://
 - [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and github `compare` link (at the bottom of the page).
 - [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag. 
 - [ ] Create a release pull request to verify that the conda package builds successfully.
-- [ ] Once teh PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
+- [ ] Once the PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
 
 ### Post-release
 
-- [ ] Update the changelog, adding a new `[Unreleased]` heading, and update `pyproject.toml` to the next version appended with `.dev0`, in preparation for the next main commit.
+- [ ] Update the changelog, adding a new `[Unreleased]` heading.
+- [ ] Update `pyproject.toml` to the next version appended with `.dev0`, in preparation for the next main commit.
 
 
 <!--- --8<-- [end:docs] -->
