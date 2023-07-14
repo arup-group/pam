@@ -24,6 +24,9 @@ pip install --no-deps .
 We do not recommend trying to install PAM directly with pip (e.g. in a virtual environment) as you need to first install underlying native geospatial libraries, the method for which differs by operating system.
 If you choose to install into a virtual environment, ensure you have `libgdal` and `libspatialindex` installed on your device before installing with pip. 
 
+## Installing optional 'planner' requirements
+PAM has some exploratory research modules. These have some dependencies that are not included in the base installation. If you are using these extensions then you can include their dependencies using `pip install -e './pam[research]'`. 
+
 ## Running the example notebooks
 If you have followed the non-developer installation instructions above, you will need to install `jupyter` into your `pam` environment to run the [example notebooks](https://github.com/arup-group/pam/tree/main/examples):
 
