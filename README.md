@@ -46,15 +46,15 @@ supply or utility demand.
 <!--- --8<-- [end:docs] -->
 ## Installation
 
-The PAM package is available on Anaconda.
-To install it, we recommend following these steps:
+The PAM package is not yet indexed online.
+To install it, we recommend the following:
 
-1. Install [Mambaforge](https://mamba.readthedocs.io/en/latest/installation.html).
-2. Create a conda/mamba environment and install PAM into it:
-
-```
-mamba create -n pam -c city-modelling-lab pam
+``` shell
+git clone git@github.com:arup-group/pam.git
+cd pam
+mamba create -n pam -c city-modelling-lab --file requirements/base.txt
 mamba activate pam
+pip install --no-deps .
 ```
 
 For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/0.2/installation/).

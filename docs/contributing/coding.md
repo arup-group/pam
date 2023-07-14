@@ -7,26 +7,25 @@ This means we would like help with profiling and implementing parallel compute, 
 
 ## Setting up a development environment
 
-To create a development environment for PAM, with all libraries required for development and quality assurance installed:
-
-It is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
+To create a development environment for PAM, with all libraries required for development and quality assurance installed, it is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
 
 1. Install mamba with the [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) executable for your operating system.
 2. Open the command line (or the "miniforge prompt" in Windows).
-3. Download (a.k.a., clone) the PAM respository: `git clone git@github.com:arup-group/pam.git`
-4. Create the PAM mamba environment: `mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt`
-5. Activate the PAM mamba environment: `mamba activate pam`
-6. Install the PAM package into the environment, in editible mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e ./pam`
+3. Download (a.k.a., clone) the PAM repository: `git clone git@github.com:arup-group/pam.git`
+4. Change into the `pam` directory: `cd pam`
+5. Create the PAM mamba environment: `mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt`
+6. Activate the PAM mamba environment: `mamba activate pam`
+7. Install the PAM package into the environment, in editable mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e ./pam`
 
 All together:
 
 ``` shell
 git clone git@github.com:arup-group/pam.git
+cd pam
 mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt
 mamba activate pam
 pip install --no-deps -e ./pam
 ```
-
 
 If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`
 Either way, you should add your environment as a jupyter kernel, so the example notebooks can run in the tests: `ipython kernel install --user --name=pam`
