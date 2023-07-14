@@ -46,7 +46,7 @@ test:
     - {{ dep.lower().replace(" ", "") }}
     {% endfor %}
   commands:
-    - pytest tests/
+    - pytest --cov-reset --cov=pam tests/
 
 
 about:
