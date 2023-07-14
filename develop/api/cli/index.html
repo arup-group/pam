@@ -1,0 +1,2723 @@
+<!--Add download button to all pages built from jupyter notebooks-->
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../CHANGELOG/">
+      
+      
+        <link rel="next" href="../activity/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>Command line interface - Population Activity Modeller (PAM)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../static/extras.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Population Activity Modeller (PAM)" class="md-header__button md-logo" aria-label="Population Activity Modeller (PAM)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Population Activity Modeller (PAM)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Command line interface
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Population Activity Modeller (PAM)" class="md-nav__button md-logo" aria-label="Population Activity Modeller (PAM)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Population Activity Modeller (PAM)
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/arup-group/pam/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../read_data/" class="md-nav__link">
+        Reading data
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../activity_plans/" class="md-nav__link">
+        Activity plans
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modelling_policy_impact/" class="md-nav__link">
+        Modelling the impact of policies on populations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/01_PAM_Getting_Started/" class="md-nav__link">
+        PAM - Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/02_Population_Basics/" class="md-nav__link">
+        Population Basics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/03_Example_Generate_Random_Population/" class="md-nav__link">
+        Generating a random population for West London
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/04_Example_Ingest_NTS_Diaries/" class="md-nav__link">
+        Converting the National Travel Survey into a Simple MATSim Format Population
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/05_PAM_Policies_Walk_Through/" class="md-nav__link">
+        Modifying the population using simple policies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/06_PAM_Complex_Policies/" class="md-nav__link">
+        Modifying the population using complex policies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/07_PAM_Point_Sampling/" class="md-nav__link">
+        Geometry Sampling in PAM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/08_PAM_Population_Activity_Plots/" class="md-nav__link">
+        Plotting activity times
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/09_Travel_Plots/" class="md-nav__link">
+        Plot Activity Plan Travel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/10_Advanced_Spatial-Sampling_Demo/" class="md-nav__link">
+        Facility sampling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/11_Advanced_Plan_Rescheduling/" class="md-nav__link">
+        Plan rescheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/12_Advanced_Adding_Vehicles/" class="md-nav__link">
+        Adding vehicles to the plans
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/13_Advanced_Freight_Synthesis/" class="md-nav__link">
+        Freight synthesis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/14_Advanced_Plan_Cropping/" class="md-nav__link">
+        Plan cropping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/15_Advanced_Choice/" class="md-nav__link">
+        Applying a location and mode choice model to populations
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/">Contributing</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/coding/" class="md-nav__link">
+        Coding contributions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/non_coding/" class="md-nav__link">
+        Non-coding contributions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CHANGELOG/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Command line interface
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Command line interface
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pam" class="md-nav__link">
+    pam
+  </a>
+  
+    <nav class="md-nav" aria-label="pam">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pam-combine" class="md-nav__link">
+    combine
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-crop" class="md-nav__link">
+    crop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-report" class="md-nav__link">
+    report
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-sample" class="md-nav__link">
+    sample
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-wipe-all-links" class="md-nav__link">
+    wipe-all-links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-wipe-links" class="md-nav__link">
+    wipe-links
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2" id="__nav_9_2_label" tabindex="0">
+          Python API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2">
+          <span class="md-nav__icon md-icon"></span>
+          Python API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../activity/" class="md-nav__link">
+        pam.activity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core/" class="md-nav__link">
+        pam.core
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../location/" class="md-nav__link">
+        pam.location
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scoring/" class="md-nav__link">
+        pam.scoring
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        pam.utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vehicle/" class="md-nav__link">
+        pam.vehicle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_7" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_7" id="__nav_9_2_7_label" tabindex="0">
+          pam.array
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          pam.array
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/decode/" class="md-nav__link">
+        pam.array.decode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/distance/" class="md-nav__link">
+        pam.array.distance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../array/encode/" class="md-nav__link">
+        pam.array.encode
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_8" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_8" id="__nav_9_2_8_label" tabindex="0">
+          pam.operations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          pam.operations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/combine/" class="md-nav__link">
+        pam.operations.combine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/cropping/" class="md-nav__link">
+        pam.operations.cropping
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_9" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_9" id="__nav_9_2_9_label" tabindex="0">
+          pam.optimise
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          pam.optimise
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimise/grid/" class="md-nav__link">
+        pam.optimise.grid
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimise/random/" class="md-nav__link">
+        pam.optimise.random
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_10" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_10" id="__nav_9_2_10_label" tabindex="0">
+          pam.planner
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          pam.planner
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/choice_location/" class="md-nav__link">
+        pam.planner.choice_location
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/clustering/" class="md-nav__link">
+        pam.planner.clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/encoder/" class="md-nav__link">
+        pam.planner.encoder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/od/" class="md-nav__link">
+        pam.planner.od
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/utils_planner/" class="md-nav__link">
+        pam.planner.utils_planner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../planner/zones/" class="md-nav__link">
+        pam.planner.zones
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_11" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_11" id="__nav_9_2_11_label" tabindex="0">
+          pam.plot
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_11">
+          <span class="md-nav__icon md-icon"></span>
+          pam.plot
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/plans/" class="md-nav__link">
+        pam.plot.plans
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/stats/" class="md-nav__link">
+        pam.plot.stats
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_12" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_12" id="__nav_9_2_12_label" tabindex="0">
+          pam.policy
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_12">
+          <span class="md-nav__icon md-icon"></span>
+          pam.policy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/filters/" class="md-nav__link">
+        pam.policy.filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/modifiers/" class="md-nav__link">
+        pam.policy.modifiers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/policies/" class="md-nav__link">
+        pam.policy.policies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy/probability_samplers/" class="md-nav__link">
+        pam.policy.probability_samplers
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_13" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_13" id="__nav_9_2_13_label" tabindex="0">
+          pam.read
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_13">
+          <span class="md-nav__icon md-icon"></span>
+          pam.read
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../read/diary/" class="md-nav__link">
+        pam.read.diary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../read/matsim/" class="md-nav__link">
+        pam.read.matsim
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_14" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_14" id="__nav_9_2_14_label" tabindex="0">
+          pam.report
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_14">
+          <span class="md-nav__icon md-icon"></span>
+          pam.report
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/benchmarks/" class="md-nav__link">
+        pam.report.benchmarks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/stringify/" class="md-nav__link">
+        pam.report.stringify
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/summary/" class="md-nav__link">
+        pam.report.summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_15" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_15" id="__nav_9_2_15_label" tabindex="0">
+          pam.samplers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_15">
+          <span class="md-nav__icon md-icon"></span>
+          pam.samplers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/attributes/" class="md-nav__link">
+        pam.samplers.attributes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/basic/" class="md-nav__link">
+        pam.samplers.basic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/facility/" class="md-nav__link">
+        pam.samplers.facility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/population/" class="md-nav__link">
+        pam.samplers.population
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/spatial/" class="md-nav__link">
+        pam.samplers.spatial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/time/" class="md-nav__link">
+        pam.samplers.time
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/tour/" class="md-nav__link">
+        pam.samplers.tour
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2_16" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_9_2_16" id="__nav_9_2_16_label" tabindex="0">
+          pam.write
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_2_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9_2_16">
+          <span class="md-nav__icon md-icon"></span>
+          pam.write
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/diary/" class="md-nav__link">
+        pam.write.diary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/matrices/" class="md-nav__link">
+        pam.write.matrices
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../write/matsim/" class="md-nav__link">
+        pam.write.matsim
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pam" class="md-nav__link">
+    pam
+  </a>
+  
+    <nav class="md-nav" aria-label="pam">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pam-combine" class="md-nav__link">
+    combine
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-crop" class="md-nav__link">
+    crop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-report" class="md-nav__link">
+    report
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-sample" class="md-nav__link">
+    sample
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-wipe-all-links" class="md-nav__link">
+    wipe-all-links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam-wipe-links" class="md-nav__link">
+    wipe-links
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+
+
+
+                  
+
+  
+  
+
+
+<h1 id="cli-reference">CLI Reference<a class="headerlink" href="#cli-reference" title="Permanent link">#</a></h1>
+<p>This page provides documentation for our command line tools.</p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h2>
+<ul>
+<li>to get a summary or a MATSim plans file: <code>pam report summary tests/test_data/test_matsim_plansv12.xml</code>.</li>
+<li>plan cropping: <code>pam crop &lt;path_population_xml&gt; &lt;path_core_area_geojson&gt; &lt;path_output_directory&gt;</code>.</li>
+<li>down/up-sampling an xml population: <code>pam sample &lt;path_population_xml&gt; &lt;path_output_directory&gt; -s &lt;sample_percentage&gt; -v &lt;matsim_version&gt;</code>. For example, you can use: <code>pam sample tests/test_data/test_matsim_plansv12.xml tests/test_data/output/sampled -s 0.1</code> to create a downsampled (to 10%) version of the input (<code>test_matsim_plansv12.xml</code>) population.</li>
+<li>combining populations: <code>pam combine &lt;input_population_1&gt; &lt;input_population_2&gt; &lt;input_population_3...etc&gt; -o &lt;outpath_directory&gt; -m &lt;comment&gt; -v &lt;matsim_version&gt;</code>.</li>
+</ul>
+<h2 id="pam">pam<a class="headerlink" href="#pam" title="Permanent link">#</a></h2>
+<p>Population Activity Modeller (PAM) Command Line Tool.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pam [OPTIONS] COMMAND [ARGS]...
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--version</code></td>
+<td>boolean</td>
+<td>Show the version and exit.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-combine">pam combine<a class="headerlink" href="#pam-combine" title="Permanent link">#</a></h3>
+<p>Combine multiple populations (e.g. household, freight.. etc).</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pam combine [OPTIONS] [POPULATION_PATHS]...
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--comment</code>, <code>-c</code></td>
+<td>text</td>
+<td>A comment included in the output population.</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>--population_output</code>, <code>-o</code></td>
+<td>path</td>
+<td>Specify outpath for combined_population.xml, default is cwd</td>
+<td><code>combined_population.xml</code></td>
+</tr>
+<tr>
+<td><code>--force</code>, <code>-f</code></td>
+<td>boolean</td>
+<td>Forces overwrite of existing file.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-crop">pam crop<a class="headerlink" href="#pam-crop" title="Permanent link">#</a></h3>
+<p>Crop a population's plans outside a core area.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pam crop [OPTIONS] PATH_POPULATION_INPUT PATH_BOUNDARY DIR_POPULATION_OUTPUT
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--comment</code>, <code>-c</code></td>
+<td>text</td>
+<td>A comment included in the output population.</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>--buffer</code>, <code>-b</code></td>
+<td>integer</td>
+<td>A buffer distance to (optionally) apply to the core area shapefile.</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-report">pam report<a class="headerlink" href="#pam-report" title="Permanent link">#</a></h3>
+<p>Various reporting for MATSim formatted plans.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pam report [OPTIONS] COMMAND [ARGS]...
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="pam-report-benchmarks">pam report benchmarks<a class="headerlink" href="#pam-report-benchmarks" title="Permanent link">#</a></h4>
+<p>Write batch of benchmarks to directory.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pam report benchmarks [OPTIONS] POPULATION_INPUT_PATH OUTPUT_DIRECTORY
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sample_size</code>, <code>-s</code></td>
+<td>float</td>
+<td>Input sample size. Default 1. Required for downsampled populations. eg, use 0.1 for a 10% input population.</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="pam-report-stringify">pam report stringify<a class="headerlink" href="#pam-report-stringify" title="Permanent link">#</a></h4>
+<p>ASCII plot activity plans to terminal.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pam report stringify [OPTIONS] PATH_POPULATION_INPUT
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--colour</code> / <code>--bw</code></td>
+<td>boolean</td>
+<td>Choose a colour or grey-scale (bw) output, default 'colour'</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--width</code>, <code>-w</code></td>
+<td>integer</td>
+<td>Target character width for plot, default 72</td>
+<td><code>72</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to crop.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="pam-report-summary">pam report summary<a class="headerlink" href="#pam-report-summary" title="Permanent link">#</a></h4>
+<p>Summarise a population.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pam report summary [OPTIONS] PATH_POPULATION_INPUT
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--sample_size</code>, <code>-s</code></td>
+<td>float</td>
+<td>Input sample size. Default 1. For example, use 0.1 to apply a 10% weighting to the input population.</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>--attribute_key</code>, <code>-k</code></td>
+<td>text</td>
+<td>Optional population attribute key to segment output, eg 'subpopulation'.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--rich</code> / <code>--text</code></td>
+<td>boolean</td>
+<td>Formatted (for terminal) or regular text output (for .txt).</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-sample">pam sample<a class="headerlink" href="#pam-sample" title="Permanent link">#</a></h3>
+<p>Down- or up-sample a PAM population.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pam sample [OPTIONS] PATH_POPULATION_INPUT DIR_POPULATION_OUTPUT
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--comment</code>, <code>-c</code></td>
+<td>text</td>
+<td>A comment included in the output population.</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>--sample_size</code>, <code>-s</code></td>
+<td>text</td>
+<td>The sample size, eg, use 0.1 to produce a 10% version of the input population.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, defaults to 'hid'.</td>
+<td><code>hid</code></td>
+</tr>
+<tr>
+<td><code>--seed</code></td>
+<td>text</td>
+<td>Random seed.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-wipe-all-links">pam wipe-all-links<a class="headerlink" href="#pam-wipe-all-links" title="Permanent link">#</a></h3>
+<p>Clear all link information from agent plans. Including routes and activity locations.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pam wipe-all-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--comment</code>, <code>-c</code></td>
+<td>text</td>
+<td>A comment included in the output population.</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pam-wipe-links">pam wipe-links<a class="headerlink" href="#pam-wipe-links" title="Permanent link">#</a></h3>
+<p>Clear selected link information from agent plans. Includes routes and activity locations.</p>
+<p>eg: <code>pam wipe-links INPUT_PLANS.xml OUTPUT_PLANS.xml link_a link_b link_c</code></p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>pam wipe-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>               [LINKS]...
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code>, <code>--debug</code></td>
+<td>boolean</td>
+<td>Switch on debug verbosity.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--keep_non_selected</code> / <code>--selected_only</code></td>
+<td>boolean</td>
+<td>Optionally keep (read and write) non selected plans.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--leg_route</code> / <code>--no_leg_route</code></td>
+<td>boolean</td>
+<td>Optionally turn off reading of leg_route.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--leg_attributes</code> / <code>--no_leg_attributes</code></td>
+<td>boolean</td>
+<td>Optionally turn of reading of leg_attributes.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--crop</code> / <code>--no_crop</code></td>
+<td>boolean</td>
+<td>Crop or don't crop plans to 24 hours, defaults to no_crop.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--autocomplete</code> / <code>--no_autocomplete</code></td>
+<td>boolean</td>
+<td>Optionally turn off autocomplete, not recommended.</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>--simplify_pt_trips</code></td>
+<td>boolean</td>
+<td>Optionally simplify transit legs into single trip.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--household_key</code>, <code>-h</code></td>
+<td>text</td>
+<td>Household key, such as 'hid', default None.</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>--matsim_version</code>, <code>-v</code></td>
+<td>integer</td>
+<td>MATSim plan format, default 12.</td>
+<td><code>12</code></td>
+</tr>
+<tr>
+<td><code>--comment</code>, <code>-c</code></td>
+<td>text</td>
+<td>A comment included in the output population.</td>
+<td>``</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes"], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
