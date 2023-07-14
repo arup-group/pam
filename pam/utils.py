@@ -42,23 +42,23 @@ def parse_time(time: Union[int, str]) -> datetime:
         )
 
 
-def minutes_to_datetime(minutes: float) -> datetime:
+def minutes_to_datetime(minutes: Union[int, float]) -> datetime:
     """Convert minutes to datetime.
 
     Args:
-        minutes (float): minutes
+        minutes (Union[int, float]): minutes.
 
     Returns:
         datetime: datetime
     """
-    return datetime.strptime("0", "%H") + minutes_to_timedelta(minutes)
+    return START_OF_DAY + minutes_to_timedelta(minutes)
 
 
 def datetime_string_to_datetime(string: str) -> datetime:
     """Convert datetime formatted string to datetime.
 
     Args:
-        string (str): time string formatted "%Y-%m-%d %H:%M:%S"
+        string (str): time string formatted "%Y-%m-%d %H:%M:%S".
 
     Returns:
         datetime: datetime
@@ -66,11 +66,11 @@ def datetime_string_to_datetime(string: str) -> datetime:
     return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 
-def minutes_to_timedelta(minutes: float) -> timedelta:
+def minutes_to_timedelta(minutes: Union[int, float]) -> timedelta:
     """Convert minutes to timedelta.
 
     Args:
-        minutes (float): minutes
+        minutes (Union[int, float]): minutes.
 
     Returns:
         timedelta: timedelta
@@ -396,7 +396,7 @@ def create_local_dir(directory: Union[str, Path]):
 
 
 def xml_tree(content: et.Element) -> str:
-    """Retrun pretty formatted string of xml tree.
+    """Return pretty formatted string of xml tree.
 
     Args:
         content (et.Element): xml
