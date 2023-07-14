@@ -86,7 +86,6 @@ When adding docstrings, we request you use the [Google docstring style](https://
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
 - [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
-- [ ] Ensure all requirements are up to date and that the files in the `requirements` directory are in sync with the `environment.yml` file.
 
 ### Create release
 

@@ -19,8 +19,12 @@ jobs:
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
-        environment-file: environment.yml
-        init-shell: bash
+        environment-name: pam-linux-311
+        environment-file: requirements/base.txt
+        create-args: >-
+            -c city-modelling-lab
+            -f requirements/dev.txt
+            python=3.11
         post-cleanup: all
         cache-environment: true
 
