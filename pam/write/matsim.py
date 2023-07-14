@@ -5,6 +5,8 @@ import os
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional, Set
 
+import importlib_resources
+
 if TYPE_CHECKING:
     from pam.core import Population
 
@@ -262,16 +264,12 @@ def add_attribute(attributes, k, v):
 
 
 def object_attributes_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "objectattributes_v1.dtd")
-    )
+    dtd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "objectattributes_v1.dtd"
     return et.DTD(dtd_path)
 
 
 def population_v6_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd")
-    )
+    dtd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "population_v6.dtd"
     return et.DTD(dtd_path)
 
 

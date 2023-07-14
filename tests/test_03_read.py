@@ -6,12 +6,8 @@ import pytest
 from pam.core import Household, Population
 from pam.read import load_pickle, load_travel_diary
 
-test_trips_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_travel_diaries.csv")
-)
-test_attributes_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/simple_persons_data.csv")
-)
+test_trips_path = (pytest.test_data_dir / "simple_travel_diaries.csv").as_posix()
+test_attributes_path = (pytest.test_data_dir / "simple_persons_data.csv").as_posix()
 
 
 @pytest.fixture

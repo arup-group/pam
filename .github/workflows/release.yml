@@ -1,0 +1,76 @@
+name: Publish
+
+on:
+  release:
+    types: [released]
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+permissions:
+  contents: write
+      
+jobs:
+  conda-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: mamba-org/setup-micromamba@v1
+      with:
+        micromamba-version: latest
+        environment-name: pam-condaupload
+        create-args: >-
+            python=3.11
+            anaconda-client
+        post-cleanup: all
+    
+    - name: Download built conda package ready for upload on release
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        name: conda-build-${{ github.ref_name }}
+        workflow: pre-release.yml
+        path: ${{ runner.temp }}/conda_builds
+    
+    - name: Get version without the v
+      run: |
+        TAG=${{ github.ref_name }}
+        echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+      
+    - name: Upload to anaconda
+      env:
+        ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+      run: anaconda upload ${{ runner.temp }}/conda_builds/pam-${{ env.VERSION }}-*.tar.bz2
+
+  docs-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0  # used to build docs into the gh-pages branch without losing branch history. See https://github.com/jimporter/mike/issues/49
+
+    - uses: mamba-org/setup-micromamba@v1
+      with:
+        micromamba-version: latest
+        environment-name: pam-docs
+        environment-file: requirements/base.txt
+        create-args: >-
+            -c city-modelling-lab
+            -f requirements/dev.txt
+            python=3.11
+        post-cleanup: all
+        cache-environment: true
+
+    - name: install PAM to access the api-gen plugin
+      run: |
+        pip install --no-dependencies -e .
+
+    - name: Setup doc deploy
+      run: |
+        git config --global user.name Docs deploy
+        git config --global user.email docs@dummy.bot.com
+        
+    - name: deploy docs to gh-pages branch
+      run: |
+        mike deploy --push --update-aliases ${{ github.ref_name }} latest
+        mike set-default --push latest

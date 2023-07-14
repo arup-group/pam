@@ -46,13 +46,15 @@ supply or utility demand.
 <!--- --8<-- [end:docs] -->
 ## Installation
 
-The PAM package is not yet indexed on pypi or anaconda, so to install it, we recommend following these steps:
+The PAM package is not yet indexed online.
+To install it, we recommend the following:
 
-```
+``` shell
 git clone git@github.com:arup-group/pam.git
-mamba env create -f pam/environment.yml
+cd pam
+mamba create -n pam -c city-modelling-lab --file requirements/base.txt
 mamba activate pam
-pip install --no-deps -e ./pam
+pip install --no-deps .
 ```
 
 For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/0.2/installation/).
@@ -74,12 +76,12 @@ You can also run these checks yourself at any time to ensure staged changes are 
 - `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
 - `pytest -p memray -m "high_mem" --no-cov` (not available on Windows) - after installing memray (`mamba install memray pytest-memray`), test that memory and time performance does not exceed benchmarks.
 
-For more information, see our [documentation](https://arup-group.github.io/pam/contributing/coding).
+For more information, see our [documentation](https://arup-group.github.io/pam/contributing/coding/).
 
 ## Building the documentation
 
 If you are unable to access the online documentation, you can build the documentation locally.
-First, [install PAM](#installation), then deploy the documentation using [mike](https://github.com/jimporter/mike):
+First, [install a development environment of PAM](https://arup-group.github.io/pam/contributing/coding/), then deploy the documentation using [mike](https://github.com/jimporter/mike):
 
 ```
 mike deploy 0.2
