@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
+- Scitkit and Levenshtein dependencies made optional as "research" dependencies ('pip install .[research]').
 - Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
 - **internal** development toolkit, moving from internal scripts to pytest plugins ([#193]).

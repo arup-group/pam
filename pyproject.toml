@@ -105,6 +105,7 @@ generate-api = "mkdocs_plugins.api_generator:AddAPIPlugin"
 
 [tool.setuptools.dynamic.optional-dependencies]
 dev = { file = ["requirements/dev.txt"] }
+research = { file = ["requirements/research.txt"] }
 
 [project.urls]
 repository = "https://github.com/arup-group/pam"

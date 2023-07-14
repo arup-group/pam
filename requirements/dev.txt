@@ -11,3 +11,5 @@ pytest-cov < 5
 pytest-mock < 4
 pytest-timeout < 3
 pytest-xdist < 4
+python-Levenshtein >= 0.21, < 0.22
+scikit-learn >= 1.2, < 2
