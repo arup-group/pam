@@ -1,28 +1,13 @@
 import os
-from datetime import datetime
 
 import pandas as pd
 import pytest
 
 from pam.core import Household, Population
 from pam.read import load_pickle, load_travel_diary
-from pam.utils import parse_time
 
 test_trips_path = (pytest.test_data_dir / "simple_travel_diaries.csv").as_posix()
 test_attributes_path = (pytest.test_data_dir / "simple_persons_data.csv").as_posix()
-
-
-testdata = [
-    (0, datetime(1900, 1, 1, 0, 0)),
-    (1, datetime(1900, 1, 1, 0, 1)),
-    (60, datetime(1900, 1, 1, 1, 0)),
-    ("1900-01-01 13:00:00", datetime(1900, 1, 1, 13, 0)),
-]
-
-
-@pytest.mark.parametrize("a,expected", testdata)
-def test_time_parse(a, expected):
-    assert parse_time(a) == expected
 
 
 @pytest.fixture

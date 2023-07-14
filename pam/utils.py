@@ -19,7 +19,7 @@ DEFAULT_GZIP_COMPRESSION = 6
 def parse_time(time: Union[int, str]) -> datetime:
     """Generic parse time into datetime.
 
-    Itegers are assumed to be minutes.
+    Integers are assumed to be minutes.
     Strings are assumed to be datetime formatted as (%Y-%m-%d %H:%M:%S).
 
     Args:
@@ -32,35 +32,33 @@ def parse_time(time: Union[int, str]) -> datetime:
         datetime: datetime
     """
 
-    if isinstance(time, int) or isinstance(time, np.int64):
+    if isinstance(time, (int, np.integer)) and not isinstance(time, bool):
         return minutes_to_datetime(time)
-    if isinstance(time, str):
+    elif isinstance(time, str):
         return datetime_string_to_datetime(time)
-    raise UserWarning(
-        f"Cannot parse {time} of type {type(time)} that is not int (assuming minutes) or str (%Y-%m-%d %H:%M:%S)"
-    )
+    else:
+        raise TypeError(
+            f"Cannot parse {time} of type {type(time)} that is not int (assuming minutes) or str (%Y-%m-%d %H:%M:%S)"
+        )
 
 
-def minutes_to_datetime(minutes: int) -> datetime:
+def minutes_to_datetime(minutes: Union[int, float]) -> datetime:
     """Convert minutes to datetime.
 
     Args:
-        minutes (int): minutes
+        minutes (Union[int, float]): minutes.
 
     Returns:
         datetime: datetime
     """
-    days, remainder = divmod(minutes, 24 * 60)
-    hours, minutes = divmod(remainder, 60)
-    # TODO refactor to reuse timedelta
-    return datetime(1900, 1, 1 + days, hours, minutes)
+    return START_OF_DAY + minutes_to_timedelta(minutes)
 
 
 def datetime_string_to_datetime(string: str) -> datetime:
     """Convert datetime formatted string to datetime.
 
     Args:
-        string (str): time string formatted "%Y-%m-%d %H:%M:%S"
+        string (str): time string formatted "%Y-%m-%d %H:%M:%S".
 
     Returns:
         datetime: datetime
@@ -68,16 +66,16 @@ def datetime_string_to_datetime(string: str) -> datetime:
     return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 
-def minutes_to_timedelta(minutes: int) -> timedelta:
+def minutes_to_timedelta(minutes: Union[int, float]) -> timedelta:
     """Convert minutes to timedelta.
 
     Args:
-        minutes (int): minutes
+        minutes (Union[int, float]): minutes.
 
     Returns:
         timedelta: timedelta
     """
-    return timedelta(minutes=minutes)
+    return timedelta(minutes=float(minutes))
 
 
 def datetime_to_matsim_time(dt: datetime) -> str:
@@ -196,7 +194,7 @@ def timedelta_to_hours(td: timedelta) -> float:
     return td.total_seconds() / 3600
 
 
-def matsim_duration_to_hours(mt: str) -> int:
+def matsim_duration_to_hours(mt: str) -> float:
     """Turn MATSim time string (`hh:mm:ss` or `hh:mm`) into hours.
 
     Args:
@@ -208,12 +206,8 @@ def matsim_duration_to_hours(mt: str) -> int:
     Returns:
         int: hours as integer
     """
-    mt = mt.split(":")
-    if len(mt) == 3:
-        return int(mt.pop()) / 3600 + int(mt.pop()) / 60 + int(mt.pop())
-    if len(mt) == 2:
-        return int(mt.pop()) / 60 + int(mt.pop())
-    raise UserWarning(f"Unrecognised timedelta format: {mt}")
+    td = safe_strpdelta(mt)
+    return timedelta_to_hours(td)
 
 
 def get_linestring(from_point: Union[Point, CellId], to_point: Union[Point, CellId]) -> LineString:
@@ -402,7 +396,7 @@ def create_local_dir(directory: Union[str, Path]):
 
 
 def xml_tree(content: et.Element) -> str:
-    """Retrun pretty formatted string of xml tree.
+    """Return pretty formatted string of xml tree.
 
     Args:
         content (et.Element): xml
