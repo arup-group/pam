@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
 - **internal** development toolkit, moving from internal scripts to pytest plugins ([#193]).
+- **internal** fixed broken CI builds by upgrading the Slack notifications GitHub action in use ([#223]).
 
 ### Removed
 - Example data files not accessed by any example notebook ([#196]).
