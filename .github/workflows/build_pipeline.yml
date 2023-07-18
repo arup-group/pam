@@ -133,7 +133,7 @@ jobs:
 
     - name: Send build success notification
       if: success()
-      uses: rtCamp/action-slack-notify@v2.0.0
+      uses: rtCamp/action-slack-notify@v2.2.0
       env:
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
         SLACK_TITLE: Build Success
@@ -144,7 +144,7 @@ jobs:
 
     - name: Send build failure notification
       if: failure()
-      uses: rtCamp/action-slack-notify@v2.0.0
+      uses: rtCamp/action-slack-notify@v2.2.0
       env:
         SLACK_COLOR: '#FF0000'
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed
