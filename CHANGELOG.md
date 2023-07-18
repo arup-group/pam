@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
-- Minor changes to docs for zsh users (eg `pip install '.[dev]'`)([#219]).
+- Fix for #221, improved "pt simplification" ([#222])
 - Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
 - **internal** development toolkit, moving from internal scripts to pytest plugins ([#193]).
@@ -74,7 +74,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
-[#219]: https://github.com/arup-group/pam/pull/219
+[#222]: https://github.com/arup-group/pam/pull/222
 [#211]: https://github.com/arup-group/pam/pull/211
 [#210]: https://github.com/arup-group/pam/pull/210
 [#207]: https://github.com/arup-group/pam/pull/207
