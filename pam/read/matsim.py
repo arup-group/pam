@@ -449,7 +449,20 @@ def get_attributes_from_person(elem):
     ident = elem.xpath("@id")[0]
     attributes = {}
     for attr in elem.xpath("./attributes/attribute"):
-        attributes[attr.get("name")] = attr.text
+        data = attr.get("class")
+        if data == "java.lang.String":
+            attributes[attr.get("name")] = attr.text
+        elif data == "java.lang.Boolean":
+            attributes[attr.get("name")] = attr.text == "true"
+        elif data == "java.lang.Integer":
+            attributes[attr.get("name")] = int(attr.text)
+        elif data == "java.lang.Double":
+            attributes[attr.get("name")] = float(attr)
+        elif data == "org.matsim.vehicles.PersonVehicles":
+            attributes[attr.get("name")] = attr.text
+        # last try:
+        else:
+            attributes[attr.get("name")] = attr.text
     return ident, attributes
 
 
