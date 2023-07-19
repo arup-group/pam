@@ -21,3 +21,4 @@ repos:
 
 ci:  # https://pre-commit.ci/
   autofix_prs: false
+  autoupdate_schedule: monthly
