@@ -61,25 +61,51 @@ class Plan:
             if isinstance(p, Leg):
                 yield p
 
-    def simplify_pt_trips(self, skip=["pt interaction", "pt_interaction"]) -> None:
-        """Remove pt interaction events and simplify legs to single leg with mode.
+    def simplify_pt_trips(self, ignore=["pt interaction", "pt_interaction"]) -> None:
+        """Remove public transit (pt) interaction events and simplify associated legs to single legs with
+        dominant mode. Dominant mode is based on max (total) distance by each mode.
 
-        pt interaction events result from complex matsim plans.
+        For example, given the following trip:
 
-        """
-        if set(skip).intersection(self.activity_classes):
-            self.day = list(self.tripify(skip=skip))
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
 
-    def tripify(
-        self, skip: list[str] = ["pt interaction", "pt_interaction"]
-    ) -> Iterator[PlanComponent]:
-        """Yield plan trips and activities based on ignoring certain activities.
+        Is simplified to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
 
         Args:
-          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
+
+        """
+        if set(ignore).intersection(self.activity_classes):
+            self.day = list(self.tripify(ignore=ignore))
+
+    def tripify(
+        self, ignore: list[str] = ["pt interaction", "pt_interaction"]
+    ) -> Iterator[PlanComponent]:
+        """Iterate through plan components removing public transit (pt) interaction events and simplifying
+        associated legs to single leg with dominant mode. Where dominant mode is based on max (total) distance
+        by each mode for that trip.
+
+        For example, given the following trip:
+
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
+
+        Is "tripified" to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
+
+        Args:
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
 
         Returns:
-            Iterator: PlanComponents
+            Iterator[PlanComponent]
         """
         if self.day:
             seq = 0
@@ -93,7 +119,7 @@ class Plan:
                     distance += component.distance
                     attributes = component.attributes  # trips collect attributes from last leg
                 if isinstance(component, Activity):
-                    if component.act not in skip:
+                    if component.act not in ignore:
                         while True:
                             if modes:
                                 yield Leg(
@@ -120,13 +146,26 @@ class Plan:
                         seq += 1
 
     def trips(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> str:
-        """Yield plan trips based on ignoring certain activities.
+        """Iterate through plan trips. Multi-modal leg trips are simplified to single trip with dominant mode.
+        Where dominant mode is based on max (total) distance by each mode for that trip. The logic is based on
+        the removal of public transit interaction activities.
+
+        For example, given the following legs:
+
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
+
+        Is simplified to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
 
         Args:
-          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
 
         Returns:
-            str:
+            Iterator[Trip]
         """
         if self.day:
             seq = 0
@@ -162,13 +201,14 @@ class Plan:
                     seq += 1
 
     def trip_legs(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> Iterator[str]:
-        """Yield plan trips as lists of legs based on ignoring certain activities.
+        """Yield plan trips as lists of legs. Trips are based on sequences of activity types used to separate
+        legs within the same trip. The logic is based on the removal of public transit interaction activities.
 
         Args:
-          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
 
         Yields:
-            Iterator[str]:
+            Iterator[str]
 
         """
         if self.day:

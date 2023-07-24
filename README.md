@@ -57,7 +57,7 @@ mamba activate pam
 pip install --no-deps .
 ```
 
-For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/0.2/installation/).
+For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest/installation/).
 
 ## Contributing
 
@@ -75,12 +75,12 @@ You can also run these checks yourself at any time to ensure staged changes are 
 - `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
 - `pytest -p memray -m "high_mem" --no-cov` (not available on Windows) - after installing memray (`mamba install memray pytest-memray`), test that memory and time performance does not exceed benchmarks.
 
-For more information, see our [documentation](https://arup-group.github.io/pam/0.2/contributing/coding/).
+For more information, see our [documentation](https://arup-group.github.io/pam/latest/contributing/coding/).
 
 ## Building the documentation
 
 If you are unable to access the online documentation, you can build the documentation locally.
-First, [install a development environment of PAM](https://arup-group.github.io/pam/0.2/contributing/coding/), then deploy the documentation using [mike](https://github.com/jimporter/mike):
+First, [install a development environment of PAM](https://arup-group.github.io/pam/latest/contributing/coding/), then deploy the documentation using [mike](https://github.com/jimporter/mike):
 
 ```
 mike deploy 0.2
