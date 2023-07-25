@@ -2060,7 +2060,7 @@ This means we would like help with profiling and implementing parallel compute, 
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>pam
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pam<span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt<span class="w"> </span>--file<span class="w"> </span>requirements/dev.txt
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mamba<span class="w"> </span>activate<span class="w"> </span>pam
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>-e<span class="w"> </span>./pam
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>-e<span class="w"> </span>.
 </span></code></pre></div>
 <p>If installing directly with pip, you can install these libraries using the <code>dev</code> option, i.e., <code>pip install -e ./pam[dev]</code>
 Either way, you should add your environment as a jupyter kernel, so the example notebooks can run in the tests: <code>ipython kernel install --user --name=pam</code></p>
