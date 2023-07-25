@@ -1,4 +1,3 @@
-import os
 import random
 
 import numpy as np
@@ -15,9 +14,7 @@ from pam.planner.utils_planner import (
 )
 from pam.read import read_matsim
 
-test_plans_experienced = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data/test_matsim_experienced_plans_v12.xml")
-)
+test_plans_experienced = pytest.test_data_dir / "test_matsim_experienced_plans_v12.xml"
 
 
 @pytest.fixture

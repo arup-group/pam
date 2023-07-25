@@ -5,7 +5,8 @@ import logging
 import pickle
 import random
 from collections import defaultdict
-from typing import Any, Generator, Optional, Union
+from collections.abc import Iterator
+from typing import Any, Optional, Union
 
 import geopandas as gpd
 import pandas as pd
@@ -82,7 +83,7 @@ class Population:
             for pid, person in household.people.items():
                 yield hid, pid, person
 
-    def plans(self) -> Generator[activity.Plan, None, None]:
+    def plans(self) -> Iterator[activity.Plan]:
         """Iterator for plans in poulation."""
         for hid, household in self.households.items():
             for pid, person in household.people.items():
@@ -189,19 +190,19 @@ class Population:
 
     def rebuild_vehicles_manager(self):
         """
-        (Re)build veh population from agents.
+        (Re)build vehicle population from agents.
         """
         self.vehicles_manager.clear_vehs()
-        self._build_vehicles_manager()
+        self.update_vehicles_manager()
 
-    def _build_vehicles_manager(self):
+    def update_vehicles_manager(self):
         """
-        Update veh population from agents.
+        Update vehicle population from agents.
         """
         vehs = {}
         for _, _, _, veh in self.vehicles():
             if veh.vid in vehs:
-                raise PAMVehicleIdError("Failed to build due to duplicate veh id: {veh.vid}")
+                raise PAMVehicleIdError("Failed to build due to duplicate vehicle id: {veh.vid}")
             vehs[veh.vid] = veh
         self.vehicles_manager.vehicles.update(vehs)
         if not self.vehicles_manager.is_consistent():
@@ -232,7 +233,7 @@ class Population:
     def add_veh_type(self, vehicle_type: VehicleType):
         self.vehicles_manager.add_type(vehicle_type)
 
-    def safe_add_veh_to_agent(self, hid: str, pid: str, mode: str, v: Vehicle) -> bool:
+    def add_veh_to_agent(self, hid: str, pid: str, mode: str, v: Vehicle) -> bool:
         if v.type_id not in self.vehicles_manager:
             raise UserWarning(f"Unable to add vehicle with unknown type: '{v.type_id}'.")
         self.households[hid][pid].vehicles[mode] = v
@@ -253,7 +254,7 @@ class Population:
     def electric_vehicle_charger_types(self):
         chargers = set()
         for _, _, _, v in self.evs():
-            chargers |= set(v.charger_types.split(","))
+            chargers.update(v.charger_types.split(","))
         return chargers
 
     def random_household(self):
@@ -882,10 +883,9 @@ class Household:
     def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
         """Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household.
 
-        Keyword Args: Keyword arguments for pam.plot.plans.build_person_travel_geodataframe
+        Keyword Args: Keyword arguments for plot.plans.build_person_travel_geodataframe
             from_epsg (str): coordinate system the plans are currently in
-            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify
-                from_epsg as well to use this.
+            to_epsg (str): coordinate system you want the geo dataframe to be projected to, optional, you need to specify from_epsg as well to use this.
 
         Returns:
             geopandas.GeoDataFrame:  with columns for household id (hid) and person id (pid).
@@ -964,8 +964,8 @@ class Person:
         self,
         pid,
         freq=None,
-        attributes={},
-        vehicles: dict[str:Vehicle] = {},
+        attributes: dict = {},
+        vehicles: dict[str, Vehicle] = {},
         home_location: Optional[Location] = None,
         home_area=None,
         home_loc=None,
@@ -1141,10 +1141,11 @@ class Person:
         return self.plan.mode_classes
 
     @property
-    def has_valid_plan(self):
+    def has_valid_plan(self) -> bool:
         """Check sequence of Activities and Legs.
 
-        :return: True.
+        Returns:
+            bool:
         """
         return self.plan.is_valid
 
@@ -1153,30 +1154,33 @@ class Person:
         self.plan.validate()
         return True
 
-    def validate_sequence(self):
+    def validate_sequence(self) -> True:
         """Check sequence of Activities and Legs.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_sequence:
             raise PAMSequenceValidationError(f"Person {self.pid} has invalid plan sequence")
 
         return True
 
-    def validate_times(self):
+    def validate_times(self) -> True:
         """Check sequence of Activity and Leg times.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_time_sequence:
             raise PAMInvalidTimeSequenceError(f"Person {self.pid} has invalid plan times")
 
         return True
 
-    def validate_locations(self):
+    def validate_locations(self) -> True:
         """Check sequence of Activity and Leg locations.
 
-        :return: True.
+        Returns:
+            True:
         """
         if not self.plan.valid_locations:
             raise PAMValidationLocationsError(f"Person {self.pid} has invalid plan locations")
@@ -1184,10 +1188,11 @@ class Person:
         return True
 
     @property
-    def closed_plan(self):
+    def closed_plan(self) -> bool:
         """Check if plan starts and stops at the same facility (based on activity and location).
 
-        :return: Bool.
+        Returns:
+            bool:
         """
         return self.plan.closed
 

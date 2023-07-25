@@ -8,7 +8,7 @@ from pam.core import Person
 from pam.activity import Leg, Activity
 from pam
 
-person = Person('Tony', attributes = {'age': 9, 'phylosophy': 'stoicism'})
+person = Person('Tony', attributes = {'age': 9, 'philosophy': 'stoicism'})
 
 person.add(
     Activity(
@@ -63,7 +63,7 @@ person.print()
 A key component of this project is the conversion of Travel Diaries to Activity Plans.
 We define a Travel Diary as a sequence of travel legs from zone to zone for a given purpose over a single day.
 The Activity Plan takes these legs and infers the activity types between.
-Example activity types are `home`, `work`, `education`, `excort_education` and so on.
+Example activity types are `home`, `work`, `education`, `escort_education` and so on.
 
 Activity Plan chains can be pretty complex, consider for example a business person attending meetings in many different locations and stopping to eat and shop.
 We always require the plan to last 24 hours and start and stop with an activity.
@@ -89,7 +89,7 @@ But have to be careful with our logic, as travel between different activities lo
 
 Activity Plans are represented in this project as regular python `lists()`, containing **ordered** `activity.Activity` and `activity.Leg` objects.
 Plans must start and end with a `activity.Activity`.
-Two `activity.Actvity` objects must be seperated by a `core.Leg`.
+Two `activity.Actvity` objects must be separated by a `core.Leg`.
 
 Plans belong to `core.People` which belong to `core.Households` which belong to a `core.Population`. For example:
 
@@ -98,7 +98,7 @@ from pam.core import Population, Household, Person
 from pam.activity import Activity, Leg
 
 population = Population()  # init
-household = HouseHold(hid=1)  # hid is household id
+household = Household(hid=1)  # hid is household id
 person = Person(pid=1)  # pid is person id
 person.add(
     Activity(seq=1, act='home', area='a', start_time=0, end_time=450)  # time in minutes

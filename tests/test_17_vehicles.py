@@ -1,3 +1,4 @@
+import importlib_resources
 import lxml
 import pytest
 
@@ -162,8 +163,21 @@ def test_manager_iters(manager):
     assert set([k for k, v in manager.evs()]) == {"ev_0", "ev_1"}
 
 
+@pytest.fixture
+def vehicles_v2_xsd():
+    xsd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "vehicleDefinitions_v2.0.xsd"
+    xml_schema_doc = lxml.etree.parse(xsd_path)
+    yield lxml.etree.XMLSchema(xml_schema_doc)
+
+
 def test_ev_charger_types(manager):
     assert manager.charger_types() == {"default"}
+
+
+@pytest.fixture
+def electric_vehicles_v1_dtd():
+    dtd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "electric_vehicles_v1.dtd"
+    yield lxml.etree.DTD(dtd_path)
 
 
 def test_manager_is_consistent(manager):
@@ -321,6 +335,16 @@ def test_writing_electric_vehicles_results_in_valid_xml_file(
         f"Doc generated at {evs_path} is not valid against DTD "
         f"due to {electric_vehicles_v1_dtd.error_log.filter_from_errors()}"
     )
+
+
+@pytest.fixture
+def ev_population_xml_path():
+    return pytest.test_data_dir / "vehicles" / "ev_population.xml"
+
+
+@pytest.fixture
+def all_vehicle_xml_path():
+    return pytest.test_data_dir / "vehicles" / "all_vehicles.xml"
 
 
 def test_read_write_xml_consistently(all_vehicle_xml_path, electric_vehicles_xml_path, tmp_path):

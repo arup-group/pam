@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on: 
+  push:
+    branches:
+      - "**"
 
 defaults:
   run:
@@ -17,10 +20,14 @@ jobs:
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
-        environment-file: environment.yml
+        environment-name: pam-win
+        environment-file: requirements/base.txt
+        create-args: >-
+          -f requirements/dev.txt
+          -c city-modelling-lab
+          python=3.11
         post-cleanup: all
         cache-environment: true
-        create-args: python=3.11
     - name: install PAM
       run: |
         pip install --no-dependencies -e .
@@ -35,10 +42,14 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           micromamba-version: latest
-          environment-file: environment.yml
+          environment-name: pam-linux-39
+          environment-file: requirements/base.txt
+          create-args: >-
+              -c city-modelling-lab
+              -f requirements/dev.txt
+              python=3.9
           post-cleanup: all
           cache-environment: true
-          create-args: python=3.9
   
       - name: install PAM
         run: |
@@ -57,10 +68,14 @@ jobs:
     - uses: mamba-org/setup-micromamba@v1
       with:
         micromamba-version: latest
-        environment-file: environment.yml
+        environment-name: pam-linux-311
+        environment-file: requirements/base.txt
+        create-args: >-
+            -c city-modelling-lab
+            -f requirements/dev.txt
+            python=3.11
         post-cleanup: all
         cache-environment: true
-        create-args: python=3.11
 
     - name: install PAM
       run: |
@@ -82,11 +97,11 @@ jobs:
         
     - name: Test that docs build
       if: github.ref != 'refs/heads/main'
-      run: mike deploy 0.2
+      run: mike deploy develop
 
     - name: deploy docs to gh-pages branch
       if: github.ref == 'refs/heads/main'
-      run: mike deploy --push 0.2
+      run: mike deploy --push develop
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -118,7 +133,7 @@ jobs:
 
     - name: Send build success notification
       if: success()
-      uses: rtCamp/action-slack-notify@v2.0.0
+      uses: rtCamp/action-slack-notify@v2.2.0
       env:
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has succeeded
         SLACK_TITLE: Build Success
@@ -129,7 +144,7 @@ jobs:
 
     - name: Send build failure notification
       if: failure()
-      uses: rtCamp/action-slack-notify@v2.0.0
+      uses: rtCamp/action-slack-notify@v2.2.0
       env:
         SLACK_COLOR: '#FF0000'
         SLACK_MESSAGE: ${{ github.repository }} build ${{ github.run_number }} launched by ${{ github.actor }} has failed

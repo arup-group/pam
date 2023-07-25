@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+from collections.abc import Iterator
 from datetime import timedelta
 from typing import Literal, Optional
 
@@ -90,7 +91,7 @@ have attributes or be able to use a household attribute id. Check this is intend
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
             logger.warning(
-                "It is not required to load attributes from a separate path for version 11."
+                "It is not required to load attributes from a separate path after version 11."
             )
         attributes = load_attributes_map(attributes_path)
 
@@ -127,16 +128,16 @@ have attributes or be able to use a household attribute id. Check this is intend
 def stream_matsim_persons(
     plans_path: str,
     attributes: dict = {},
-    vehicles_manager: Optional[VehicleManager] = VehicleManager(),
+    vehicles_manager: Optional[VehicleManager] = None,
     weight: int = 100,
-    version: int = 12,
+    version: Literal[11, 12] = 12,
     simplify_pt_trips: bool = False,
     autocomplete: bool = True,
     crop: bool = False,
     keep_non_selected: bool = False,
     leg_attributes: bool = True,
     leg_route: bool = True,
-) -> core.Person:
+) -> Iterator[core.Person]:
     """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
     This allows this function to support "version 11" plans.
@@ -148,8 +149,8 @@ def stream_matsim_persons(
             path to matsim format xml
         attributes (dict, optional):
             map of person attributes, only required for v11. Defaults to {}.
-        vehicles (VehicleManager, optional):
-            map of vehciles. Defaults to {}.
+        vehicles_manager (VehicleManager, optional):
+            Population vehicles manager. Defaults to None.
         weight (int, optional):
             path to matsim electric_vehicles xml. Defaults to 100.
         version (Literal[11, 12], optional):
@@ -175,6 +176,9 @@ def stream_matsim_persons(
     """
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
+
+    if vehicles_manager is None:
+        vehicles_manager = VehicleManager()
 
     for person_xml in utils.get_elems(plans_path, "person"):
         if version == 11:
@@ -363,7 +367,7 @@ def unpack_leg_v12(leg) -> tuple[str, Route, dict]:
     Returns:
         tuple[str, Route, dict]: mode, route, attributes
 
-    Examples:
+    Example:
         There are four known cases:
 
         === Unrouted ===
@@ -456,20 +460,21 @@ def get_attributes_from_person(elem):
     ident = elem.xpath("@id")[0]
     attributes = {}
     for attr in elem.xpath("./attributes/attribute"):
-        data = attr.get("class")
-        if data == "java.lang.String":
-            attributes[attr.get("name")] = attr.text
-        elif data == "java.lang.Boolean":
-            attributes[attr.get("name")] = attr.text == "true"
-        elif data == "java.lang.Integer":
-            attributes[attr.get("name")] = int(attr.text)
-        elif data == "java.lang.Double":
-            attributes[attr.get("name")] = float(attr)
-        elif data == "org.matsim.vehicles.PersonVehicles":
-            attributes[attr.get("name")] = parse_veh_attribute(attr.text)
+        attribute_type = attr.get("class")
+        attribute_name = attr.get("name")
+        if attribute_type == "java.lang.String":
+            attributes[attribute_name] = attr.text
+        elif attribute_type == "java.lang.Boolean":
+            attributes[attribute_name] = attr.text.lower() == "true"
+        elif attribute_type == "java.lang.Integer":
+            attributes[attribute_name] = int(attr.text)
+        elif attribute_type == "java.lang.Double":
+            attributes[attribute_name] = float(attr)
+        elif attribute_type == "org.matsim.vehicles.PersonVehicles":
+            attributes[attribute_name] = parse_veh_attribute(attr.text)
         # last try:
         else:
-            attributes[attr.get("name")] = attr.text
+            attributes[attribute_name] = attr.text
     return ident, attributes
 
 

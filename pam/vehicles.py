@@ -1,19 +1,21 @@
-from dataclasses import dataclass
-from lxml import etree as et
-from typing import Optional, Union, TypeVar, Type
 import logging
-from enum import Enum
+from dataclasses import dataclass
+from typing import Optional, Union
+
+from lxml import etree as et
+
 import pam.utils as utils
 from pam import PAMVehicleIdError
-
 
 # Vehicle classes to represent Vehicles based on MATSim DTD files:
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
 # https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
 
 
-@dataclass(frozen=True)
+@dataclass
 class CapacityType:
+    """Vehicle capacity data with read/write methods."""
+
     seats: int = 4  # persons
     standingRoomInPersons: int = 0  # persons
 
@@ -36,6 +38,8 @@ class CapacityType:
 
 @dataclass
 class VehicleType:
+    """Vehicle type data with read/write methods."""
+
     length: float = 7.5  # metres
     width: float = 1.0  # metres
     networkMode: str = "car"
@@ -46,7 +50,9 @@ class VehicleType:
 
     @classmethod
     def from_xml_elem(cls, elem):
-        attribs = {attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem}
+        attribs = {
+            attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem
+        }
         return (
             elem.get("id"),
             cls(
@@ -69,10 +75,7 @@ class VehicleType:
             xf.write(et.Element("length", {"meter": str(self.length)}))
             xf.write(et.Element("width", {"meter": str(self.width)}))
             xf.write(
-                et.Element(
-                    "passengerCarEquivalents",
-                    {"pce": str(self.passengerCarEquivalents)},
-                )
+                et.Element("passengerCarEquivalents", {"pce": str(self.passengerCarEquivalents)})
             )
             xf.write(et.Element("networkMode", {"networkMode": str(self.networkMode)}))
             xf.write(et.Element("flowEfficiencyFactor", {"factor": str(self.flowEfficiencyFactor)}))
@@ -80,6 +83,8 @@ class VehicleType:
 
 @dataclass
 class BaseVehicle:
+    """Vehicle parent data class, holds required vehicle data (id and type) and read/write methods."""
+
     vid: str
     type_id: str
 
@@ -87,7 +92,12 @@ class BaseVehicle:
         xf.write(et.Element("vehicle", {"id": str(self.vid), "type": str(self.type_id)}))
 
     def to_atribute(self, xf):
-        xf.write(et.Element("attribute", {"class": "org.matsim.vehicles.PersonVehicles", "type": str(self.type_id)}))
+        xf.write(
+            et.Element(
+                "attribute",
+                {"class": "org.matsim.vehicles.PersonVehicles", "type": str(self.type_id)},
+            )
+        )
 
 
 @dataclass
@@ -97,6 +107,8 @@ class Vehicle(BaseVehicle):
 
 @dataclass
 class ElectricVehicle(BaseVehicle):
+    """Electric vehicle data representation. Required for MATSim EV extension."""
+
     type_id: str
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
@@ -119,15 +131,11 @@ class ElectricVehicle(BaseVehicle):
 
 class VehicleManager:
     """
-    Container and general methods for a 'vehicle population'.
-    'veh_types' is a dictionary of vehicle types.
-    'vehs' and 'evs' are both dictionaries mapping veh ids ('vids') to vehicles.
-    Vehicles may be either regular Vehicles which simple hold a reference to vehicle type.
-    Or ElectricVehicles which additionally contain EV specific attributes such as charge state.
+    Vehicles representation, responsible for read/write from MATSim vehicles files.
     """
 
-    veh_types: dict
-    vehicles: dict
+    veh_types: dict[str, VehicleType]
+    vehicles: dict[str, BaseVehicle]
 
     def __init__(self) -> None:
         self.veh_types = {}
@@ -153,12 +161,16 @@ class VehicleManager:
         elif isinstance(v, Vehicle):
             self.add_veh(v)
         else:
-            raise UserWarning(f"Unsupported type {type(v)}, please use 'Union[Vehicle, ElectricVehicle]'.")
+            raise UserWarning(
+                f"Unsupported type {type(v)}, please use 'Union[Vehicle, ElectricVehicle]'."
+            )
 
     def __getitem__(self, k) -> Vehicle:
         return self.vehicles[k]
 
-    def get(self, k: str, default: Union[Vehicle, ElectricVehicle] = None) -> Union[Vehicle, ElectricVehicle]:
+    def get(
+        self, k: str, default: Union[Vehicle, ElectricVehicle] = None
+    ) -> Union[Vehicle, ElectricVehicle]:
         return self.vehicles.get(k, default)
 
     def len(self):
@@ -200,10 +212,17 @@ class VehicleManager:
         veh_types = set(self.veh_types.keys())
         for k, v in self.vehs():
             if v.type_id not in veh_types:
-                raise PAMVehicleIdError(f"Failed to find veh type of id '{v}', specified for veh id '{k}'.")
+                raise PAMVehicleIdError(
+                    f"Failed to find veh type of id '{v}', specified for veh id '{k}'."
+                )
         return True
 
     def redundant_types(self) -> dict:
+        """Check for ununsed vehicle types.
+
+        Returns:
+            dict: unused types.
+        """
         unused = {}
         veh_types = set(self.veh_types.keys())
         veh_veh_types = set([v.type_id for k, v in self.vehs()])
@@ -219,12 +238,20 @@ class VehicleManager:
         self.vehicles = {}
 
     def from_xml(self, vehs_path: str, evs_path: Optional[str] = None):
+        """Reads MATSim vehicles from https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
+        and reads electric_vehicles from https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
+        Requires a vehicles file to load an evs file because the electric vehicle type is expected to be defined in
+        the vehicles input.
+
+        Args:
+            vehs_path (str): path to matsim all_vehicles xml file
+            evs_path (Optional[str], optional): optional path to matsim electric_vehicles xml file. Defaults to None.
+
+        Raises:
+            UserWarning: Cannot load evs without a vehs file.
+            UserWarning: Fails consistency check.
         """
-        Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        and reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-        :param vehs_path: path to matsim all_vehicles xml file
-        :param evs_path: optional path to matsim electric_vehicles xml file
-        """
+
         if not vehs_path and evs_path:
             raise UserWarning("Cannot load an evs file without a vehs file.")
         self.types_from_xml(vehs_path)
@@ -234,34 +261,46 @@ class VehicleManager:
         if not self.is_consistent():
             raise UserWarning("Inputs not consistent, refer to log.")
 
-    def types_from_xml(self, path):
+    def types_from_xml(self, path: str):
+        """Reads vehicle types from MATSim vehicles file (https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
+
+        Args:
+            path (str): path to matsim all_vehicles xml file
         """
-        Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        :param path: path to matsim all_vehicles xml file
-        :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
-        """
-        vehs = dict(VehicleType.from_xml_elem(elem) for elem in utils.get_elems(path, "vehicleType"))
+        vehs = dict(
+            VehicleType.from_xml_elem(elem) for elem in utils.get_elems(path, "vehicleType")
+        )
         keys = set(vehs) & set(self.veh_types)
         if keys:
-            PAMVehicleIdError(f"Failed to read types from xml due to duplicate keys: {keys}")
+            raise PAMVehicleIdError(
+                f"Failed to read types from xml due to duplicate keys with existing types: {keys}"
+            )
         self.veh_types.update(vehs)
 
-    def vehs_from_xml(self, path):
+    def vehs_from_xml(self, path: str):
+        """Reads vehicles from MATSim vehicles file (https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
+
+        Args:
+            path (str): path to matsim all_vehicles xml file
         """
-        Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        :param path: path to matsim all_vehicles xml file
-        :return: dictionary of all vehicles: {ID: pam.vehicle.Vehicle class object}
-        """
+
         vehs = {
             elem.get("id"): Vehicle(vid=elem.get("id"), type_id=elem.get("type"))
             for elem in utils.get_elems(path, "vehicle")
         }
         keys = set(vehs) & set(self.vehicles)
         if keys:
-            PAMVehicleIdError(f"Failed to read vehs from xml due to duplicate keys: {keys}")
+            raise PAMVehicleIdError(
+                f"Failed to read vehs from xml due to duplicate keys with existing: {keys}"
+            )
         self.vehicles.update(vehs)
 
     def evs_from_xml(self, path):
+        """Reads vehicles from MATSim vehicles file (https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
+
+        Args:
+            path (str): path to matsim all_vehicles xml file
+        """
         evs = {}
         for vehicle_elem in utils.get_elems(path, "vehicle"):
             attribs = dict(vehicle_elem.attrib)
@@ -272,27 +311,21 @@ class VehicleManager:
             evs[vid] = ElectricVehicle(vid=vid, type_id=vehicle_type, **attribs)
         keys = set(evs) & set(self.vehicles)
         if keys:
-            PAMVehicleIdError(f"Failed to read evs from xml due to duplicate keys: {keys}")
+            PAMVehicleIdError(
+                f"Failed to read evs from xml due to duplicate keys with existing: {keys}"
+            )
         self.vehicles.update(evs)
 
-    def to_xml(
-        self,
-        vehs_path: str,
-        evs_path: Optional[str] = None,
-    ):
+    def to_xml(self, vehs_path: str, evs_path: Optional[str] = None):
         self.to_veh_xml(vehs_path)
         if evs_path:
             self.to_ev_xml(evs_path)
 
-    def to_veh_xml(
-        self,
-        path,
-    ):
-        """
-        Writes all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
-        for MATSim
-        :param path: name of output file, defaults to 'all_vehicles.xml`
-        :return: None
+    def to_veh_xml(self, path: str):
+        """Writes MATSim vehicles file as per https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd.
+
+        Args:
+            path (str): name of output file.
         """
         with et.xmlfile(path, encoding="utf-8") as xf:
             xf.write_declaration()
@@ -310,12 +343,11 @@ class VehicleManager:
                 for _, veh in self.vehs():
                     veh.to_xml(xf)
 
-    def to_ev_xml(self, path):
-        """
-        Writes electric vehciles file to following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
-        for MATSim
-        :param path: name of output file
-        :return: None
+    def to_ev_xml(self, path: str):
+        """Writes MATSim electric vehciles file as per https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
+
+        Args:
+            path (str): name of output file
         """
         with et.xmlfile(path, encoding="utf-8") as xf:
             logging.info(f"Writing electric vehicles to {path}")

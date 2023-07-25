@@ -4,7 +4,12 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
+
+import importlib_resources
+
+if TYPE_CHECKING:
+    from pam.core import Population
 
 from lxml import etree as et
 
@@ -24,22 +29,25 @@ def write_matsim(
     comment: Optional[str] = None,
     household_key: Optional[str] = "hid",
     keep_non_selected: bool = False,
-    coordinate_reference_system: str = None,
+    coordinate_reference_system: Optional[str] = None,
 ) -> None:
     """Write a core population to matsim population v6 xml format.
-    Note that this requires activity locs to be set (shapely.geometry.Point).
+    Note that this requires activity locs to be set (shapely.Point).
 
-    :param population: core.Population, population to be writen to disk
-    :param plans_path: {str, Path}, output path (.xml or .xml.gz)
-    :param attributes_path: legacy parameter, does not have an effect
-    :param vehs_path: {str, Path, None}, default None, path to output vehicle file
-    :param evs_path: {str, Path, None}, default None, path to output ev file
-    :param version: legacy parameter, does not have an effect
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, optionally add household id to person attributes, default 'hid'
-    :param keep_non_selected: bool, default False
-    :param coordinate_reference_system: {str, None}, default None, optionally add CRS attribute to xml outputs
-    :return: None
+    Args:
+        population (Population): population to be writen to disk
+        plans_path (str): output path (.xml or .xml.gz)
+        attributes_path (Optional[str], optional): legacy parameter, does not have an effect. Defaults to None.
+        param vehs_path (Union[str, Path, None]): path to output vehicle file. Defaults to None.
+        param evs_path (Union[str, Path, None]): path to output ev file. Defaults to None.
+        version (Optional[int], optional): legacy parameter, does not have an effect. Defaults to None.
+        comment (Optional[str], optional): default None, optionally add a comment string to the xml outputs. Defaults to None.
+        household_key (Optional[str], optional): optionally add household id to person attributes. Defaults to "hid".
+        keep_non_selected (bool, optional): Defaults to False.
+        coordinate_reference_system (Optional[str], optional): optionally add CRS attribute to xml outputs. Defaults to None.
+
+    Raises:
+        UserWarning: If population includes vehicles, `vehicles_dir` must be defined.
     """
     if version is not None:
         logging.warning('parameter "version" is no longer supported by write_matsim()')
@@ -66,18 +74,23 @@ def write_matsim(
 
 
 class Writer:
-    """Context Manager for writing to xml. Designed to handle the boilerplate xml.
-    For example:
-    `with pam.write.matsim.Writer(PATH) as writer:
-        for hid, household in population:
-            writer.add_hh(household)
-    `
-    For example:
-    `with pam.write.matsim.Writer(OUT_PATH) as writer:
-        for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
-            pam.samplers.time.apply_jitter_to_plan(person.plan)
-            writer.add_person(household)
-    `.
+    """Context Manager for writing to xml.
+
+    Designed to handle the boilerplate xml.
+
+    Example:
+        ``` python
+        with pam.write.matsim.Writer(PATH) as writer:
+            for hid, household in population:
+                writer.add_hh(household)
+        ```
+
+        ``` python
+        with pam.write.matsim.Writer(OUT_PATH) as writer:
+            for person in pam.read.matsim.stream_matsim_persons(IN_PATH):
+                pam.samplers.time.apply_jitter_to_plan(person.plan)
+                writer.add_person(household)
+        ```
     """
 
     def __init__(
@@ -136,7 +149,7 @@ class Writer:
 
 
 def write_matsim_population_v6(
-    population,
+    population: Population,
     path: str,
     household_key: Optional[str] = "hid",
     comment: Optional[str] = None,
@@ -144,11 +157,14 @@ def write_matsim_population_v6(
     coordinate_reference_system: str = None,
 ) -> None:
     """Write matsim population v6 xml (persons plans and attributes combined).
-    :param population: core.Population, population to be writen to disk
-    :param path: str, output path (.xml or .xml.gz)
-    :param comment: {str, None}, default None, optionally add a comment string to the xml outputs
-    :param household_key: {str, None}, default 'hid'
-    :param keep_non_selected: bool, default False.
+
+    Args:
+        population (Population): population to be writen to disk
+        path (str): output path (.xml or .xml.gz)
+        household_key (Optional[str], optional): Defaults to "hid".
+        comment (Optional[str], optional): optionally add a comment string to the xml outputs. Defaults to None.
+        keep_non_selected (bool, optional): Defaults to False.
+        coordinate_reference_system (str, optional): Defaults to None.
     """
     with Writer(
         path=path,
@@ -265,14 +281,10 @@ def add_attribute(attributes, k, v):
 
 
 def object_attributes_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "objectattributes_v1.dtd")
-    )
+    dtd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "objectattributes_v1.dtd"
     return et.DTD(dtd_path)
 
 
 def population_v6_dtd():
-    dtd_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "fixtures", "dtd", "population_v6.dtd")
-    )
+    dtd_path = importlib_resources.files("pam") / "fixtures" / "dtd" / "population_v6.dtd"
     return et.DTD(dtd_path)

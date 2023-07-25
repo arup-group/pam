@@ -86,19 +86,19 @@ When adding docstrings, we request you use the [Google docstring style](https://
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
 - [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
-- [ ] Ensure all requirements are up to date and that the files in the `requirements` directory are in sync with the `environment.yml` file.
 
 ### Create release
 
-- [ ] Bump the version number in `setup.py`
+- [ ] Bump the version number in `pyproject.toml`
 - [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and github `compare` link (at the bottom of the page).
-- [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag, push both to GitHub
-- [ ] Create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
+- [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag. 
+- [ ] Create a release pull request to verify that the conda package builds successfully.
+- [ ] Once the PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
 
 ### Post-release
 
-- [ ] Update the changelog, adding a new `[Unreleased]` heading, and update `setup.py` to the next version appended with `-dev`, in preparation for the next main commit.
-- [ ] If bumping the major or minor version (`X`/`Y` in `X.Y.Z`), update the documentation version in the `build_pipeline` GitHub action (e.g., `mike deploy 0.2` -> `mike deploy 0.3`) and push an update to the pointer for the `latest` documentation from your own device: `mike deploy --push --update-aliases X.Y latest`.
+- [ ] Update the changelog, adding a new `[Unreleased]` heading.
+- [ ] Update `pyproject.toml` to the next version appended with `.dev0`, in preparation for the next main commit.
 
 
 <!--- --8<-- [end:docs] -->

@@ -1,13 +1,9 @@
-import os
-
 import pytest
 
 from pam.read import read_matsim
 from pam.scoring import CharyparNagelPlanScorer
 
-TEST_EXPERIENCED_PLANS_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "test_data", "test_matsim_experienced_plans_v12.xml")
-)
+TEST_EXPERIENCED_PLANS_PATH = pytest.test_data_dir / "test_matsim_experienced_plans_v12.xml"
 
 
 def test_score_plan_monetary_cost(default_config):

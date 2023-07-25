@@ -74,6 +74,7 @@ plugins:
       handlers:
         python:
           options:
+            docstring_section_style: spacy
             show_bases: true
             filters:
               - "!^_"
@@ -82,6 +83,12 @@ plugins:
             show_signature_annotations: true
             signature_crossrefs: true
             show_root_toc_entry: false
+            show_signature_annotations: false
+          import:
+            - https://docs.python.org/3/objects.inv
+            - https://shapely.readthedocs.io/en/stable/objects.inv
+            - https://pandas.pydata.org/docs/objects.inv
+            - https://geopandas.org/en/stable/objects.inv
   - search
 watch: 
   - pam

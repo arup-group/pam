@@ -1,0 +1,58 @@
+{% set pyproject = load_file_data('../pyproject.toml', from_recipe_dir=True) %}
+{% set requirements = load_file_regex(load_file='../requirements/base.txt', regex_pattern="", from_recipe_dir=True) %}
+{% set requirements_dev = load_file_regex(load_file='../requirements/dev.txt', regex_pattern="", from_recipe_dir=True) %}
+
+package:
+  name: {{ pyproject.project.name }}
+  version: {{ pyproject.project.version }}
+
+source:
+  path: ..
+
+build:
+  # Add the line
+  # "skip: True  # [not win]" to limit to Windows.
+  # "skip: True  # [py<35]" to limit python version
+  script: {{ PYTHON }} -m pip install --no-deps --ignore-installed -vv .
+  noarch: python
+
+  {% if "scripts" in pyproject.project.keys() %}
+  entry_points:
+    {% for entry, script in pyproject.project.scripts.items() %}
+      - {{ entry }} = {{ script }}
+    {% endfor %}
+  {% endif %}
+
+requirements:
+  host:
+    - python
+    - pip
+    {% for dep in pyproject['build-system'].requires %}
+    - {{ dep.lower().replace(" ", "") }}
+    {% endfor %}
+  run:
+    - python {{ pyproject.project['requires-python'] }}
+    # dependencies are defined in the requirements directory.
+    {% for dep in requirements.string.split("\n") %}
+    - {{ dep.lower().replace(" ", "") }}
+    {% endfor %}
+
+test:
+  source_files:
+    - tests
+    - pyproject.toml
+  requires:
+    {% for dep in requirements_dev.string.split("\n") %}
+    - {{ dep.lower().replace(" ", "") }}
+    {% endfor %}
+  commands:
+    - pytest --cov-reset --cov=pam tests/
+
+
+about:
+  home: {{ pyproject.project.urls.repository }}
+  dev_url: {{ pyproject.project.urls.repository }}
+  doc_url: {{ pyproject.project.urls.documentation }}
+  summary: {{ pyproject.project.description }}
+  license: {{ pyproject.project.license.text }}
+  license_file: LICENSE 

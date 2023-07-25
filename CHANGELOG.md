@@ -18,16 +18,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
+
 ### Added
-- Python 3.9 support ([#192]).
+- Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211])
+- Python versions 3.9 to 3.11 support ([#192], [#210]).
 - Documentation, now available at https://arup-group.github.io/pam ([#197]).
 - **internal** [Codecov](https://codecov.io) and [pre-commit](https://pre-commit.ci/) CI bots ([#202]).
 - **internal** Github action job to build PAM and run tests on a Windows machine ([#192]).
+- **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
-- Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192]).
+- Minor changes to docs for zsh users (eg `pip install '.[dev]'`)([#219]).
+- Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
 - **internal** development toolkit, moving from internal scripts to pytest plugins ([#193]).
+- **internal** fixed broken CI builds by upgrading the Slack notifications GitHub action in use ([#223]).
 
 ### Removed
 - Example data files not accessed by any example notebook ([#196]).
@@ -70,6 +77,11 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#222]: https://github.com/arup-group/pam/pull/222
+[#219]: https://github.com/arup-group/pam/pull/219
+[#211]: https://github.com/arup-group/pam/pull/211
+[#210]: https://github.com/arup-group/pam/pull/210
+[#207]: https://github.com/arup-group/pam/pull/207
 [#202]: https://github.com/arup-group/pam/pull/202
 [#201]: https://github.com/arup-group/pam/pull/201
 [#199]: https://github.com/arup-group/pam/pull/199

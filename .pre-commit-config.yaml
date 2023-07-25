@@ -9,12 +9,12 @@ repos:
         args: ["--maxkb=1000"]
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
 
   - repo: https://github.com/astral-sh/ruff-pre-commit  # https://beta.ruff.rs/docs/usage/#github-action
-    rev: v0.0.275
+    rev: v0.0.278
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]

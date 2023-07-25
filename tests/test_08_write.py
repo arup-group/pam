@@ -219,9 +219,7 @@ def test_write_plans_xml_assert_contents(tmp_path):
 
 
 def test_read_write_consistent(tmp_path):
-    test_tripsv12_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-    )
+    test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
     population = read_matsim(test_tripsv12_path, version=12)
     location = tmp_path / "test.xml"
     location2 = tmp_path / "test2.xml"
@@ -234,9 +232,7 @@ def test_read_write_consistent(tmp_path):
 
 
 def test_read_write_non_selected_plans_inconsistently(tmp_path):
-    test_tripsv12_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-    )
+    test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
     population = read_matsim(test_tripsv12_path, version=12, crop=False, keep_non_selected=True)
     location = str(tmp_path / "test.xml.gz")
     write_matsim(
@@ -252,9 +248,7 @@ def test_read_write_non_selected_plans_inconsistently(tmp_path):
 
 
 def test_read_write_non_selected_plans_consistently(tmp_path):
-    test_tripsv12_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "test_data/test_matsim_plansv12.xml")
-    )
+    test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
     population = read_matsim(test_tripsv12_path, version=12, crop=False, keep_non_selected=True)
     location = str(tmp_path / "test.xml.gz")
     write_matsim(

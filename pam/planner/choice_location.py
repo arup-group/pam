@@ -1,9 +1,10 @@
 """Location and mode choice models for activity modelling."""
 import itertools
 import logging
+from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Callable, List, NamedTuple, Optional, Union
+from typing import Literal, NamedTuple, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -39,9 +40,9 @@ class ChoiceIdx(NamedTuple):
 class ChoiceSet(NamedTuple):
     """MNL Choice set."""
 
-    idxs: List[ChoiceIdx]
+    idxs: list[ChoiceIdx]
     u_choices: np.array
-    choice_labels: List[ChoiceLabel]
+    choice_labels: list[ChoiceLabel]
 
 
 @dataclass
@@ -60,7 +61,7 @@ class SelectionSet:
             func1d=self.func_probabilities, axis=1, arr=self.choice_set.u_choices
         )
 
-    def sample(self) -> List:
+    def sample(self) -> list:
         """Sample from a set of alternative options."""
         sampled = np.apply_along_axis(func1d=self.func_sampling, axis=1, arr=self.probabilities)
         sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
@@ -68,7 +69,7 @@ class SelectionSet:
         return sampled_labels
 
     @property
-    def selections(self) -> List[ChoiceLabel]:
+    def selections(self) -> list[ChoiceLabel]:
         if self._selections is None:
             self.sample()
         return self._selections
@@ -76,16 +77,19 @@ class SelectionSet:
 
 @dataclass
 class ChoiceConfiguration:
-    """:param u: The utility function specification, defined as a string.
-        The string may point to household, person, act, leg,
-            od, or zone data.
+    """
+
+    Attributes:
+      u (str, optional):
+        The utility function specification.
+        The string may point to household, person, act, leg, od, or zone data.
         It can also include values and/or mathematical operations.
-        Parameters may be passed as single values, or as lists
-            (with each element in the list corresponding to one of the modes in the OD object)
-        For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60)
-    :param scope: The scope of the function (for example, work activities).
-    :param func_probabilities: The function for calculating the probability of each alternative
-    :param func_sampling: The function for sampling across alternatives, ie softmax
+        Parameters may be passed as single values, or as lists (with each element in the list corresponding to one of the modes in the OD object).
+        For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']>60).
+        Defaults to None.
+      scope (str, optional): The scope of the function (for example, work activities). Defaults to None.
+      func_probabilities (Callable, optional): The function for calculating the probability of each alternative. Defaults to None.
+      func_sampling (Callable, optional): The function for sampling across alternatives, ie softmax. Defaults to None.
     """
 
     u: Optional[str] = None
@@ -93,8 +97,13 @@ class ChoiceConfiguration:
     func_probabilities: Optional[Callable] = None
     func_sampling: Optional[Callable] = None
 
-    def validate(self, vars: List[str]) -> None:
-        """Return an error if a value has not been set."""
+    def validate(self, vars: list[str]) -> None:
+        """
+
+        Args:
+          vars (list[str]):
+
+        """
         for var in vars:
             if getattr(self, var) is None:
                 raise ValueError(f"Setting {var} has not been set yet")
@@ -104,9 +113,11 @@ class ChoiceModel:
     def __init__(self, population: Population, od: OD, zones: Union[pd.DataFrame, Zones]) -> None:
         """Choice model interface.
 
-        :param population: A PAM population.
-        :param od: An object holding origin-destination.
-        :param zones: Zone-level data.
+        Args:
+            population (Population): A PAM population.
+            od (OD): An object holding origin-destination.
+            zones (Union[pd.DataFrame, Zones]): Zone-level data.
+
         """
         self.logger = logging.getLogger(__name__)
         self.population = population
@@ -124,10 +135,12 @@ class ChoiceModel:
         elif isinstance(zones, pd.DataFrame):
             return Zones(data=zones.copy())
 
-    def configure(self, **kwargs) -> None:
+    def configure(self, **kwargs: Optional[Union[str, Callable]]) -> None:
         """Specify the model.
 
-        :Keyword Arguments: Parameters of the ChoiceConfiguration class.
+        Args:
+          **kwargs (Optional[Union[str, Callable]]): Parameters of the ChoiceConfiguration class.
+
         """
         for k, v in kwargs.items():
             if type(v) == str:
@@ -137,19 +150,23 @@ class ChoiceModel:
         self.logger.info(self.configuration)
 
     def apply(
-        self, apply_location=True, apply_mode=True, once_per_agent=True, apply_mode_to="chain"
-    ):
+        self,
+        apply_location: bool = True,
+        apply_mode: bool = True,
+        once_per_agent: bool = True,
+        apply_mode_to: Literal["chain", "previous_leg"] = "chain",
+    ) -> None:
         """Apply the choice model to the PAM population,
             updating the activity locations and mode choices in scope.
 
-        :param apply_location: Whether to update activities' location
-        :param apply_mode: Whether to update travel modes
-        :param once_per_agent: If True, the same selected option
-            is applied to all activities within scope of an agent.
-        :param apply_mode_to: `chain` or `previous_leg`:
-            Whether to apply the mode to the entire trip chain
-            that contains the activity,
-            or the leg preceding the activity.
+        Args:
+          apply_location (bool, optional): Whether to update activities' location. Defaults to True.
+          apply_mode (bool, optional): Whether to update travel modes. Defaults to True.
+          once_per_agent (bool, optional): If True, the same selected option is applied to all activities within scope of an agent. Defaults to True.
+          apply_mode_to (Literal["chain", "previous_leg"]):
+            Whether to apply the mode to the entire trip chain that contains the activity, or the leg preceding the activity.
+            Defaults to "chain".
+
         """
         self.logger.info("Applying choice model...")
         self.logger.info(f"Configuration: \n{self.configuration}")

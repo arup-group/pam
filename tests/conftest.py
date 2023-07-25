@@ -1,5 +1,4 @@
-from pathlib import Path
-
+import importlib_resources
 import lxml
 import numpy as np
 import pandas as pd
@@ -13,8 +12,8 @@ from pam.planner.od import OD
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
-TEST_DATA_DIR = Path(__file__).parent / "test_data"
-FIXTURES_DIR = Path(__file__).parent.parent / "pam" / "fixtures"
+TEST_DATA_DIR = importlib_resources.files("pam").parent / "tests" / "test_data"
+FIXTURES_DIR = importlib_resources.files("pam") / "fixtures"
 
 
 @pytest.fixture(scope="session")
@@ -43,6 +42,10 @@ def all_vehicle_xml_path():
 @pytest.fixture(scope="session")
 def electric_vehicles_xml_path():
     return TEST_DATA_DIR / "vehicles" / "electric_vehicles.xml"
+
+
+def pytest_configure(config):
+    pytest.test_data_dir = TEST_DATA_DIR
 
 
 @pytest.fixture(scope="session")

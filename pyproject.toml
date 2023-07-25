@@ -61,3 +61,52 @@ max-complexity = 10
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
+
+[tool.setuptools.packages.find]
+include = ["pam*", "mkdocs_plugins*"]
+
+[tool.setuptools.package-data]
+pam = ["fixtures/**/*"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pam"
+authors = [{ name = "Fred Shone", email = "fred.shone@arup.com" }]
+maintainers = [
+    { name = "Michael Fitzmaurice", email = "michael.fitzmaurice@arup.com" },
+    { name = "Kasia Kozlowska", email = "kasia.kozlowska@arup.com" },
+    { name = "Theodore Chatziioannou", email = "theodore.chatziioannou@arup.com" },
+    { name = "Bryn Pickering", email = "17178478+brynpickering@users.noreply.github.com" },
+]
+description = "The Population activity Modeller (PAM) is a python API for activity sequence modelling."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["agent-based modelling", "sequence model", "matsim"]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+version = "0.2.5.dev0"
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements/base.txt"] }
+
+[project.scripts]
+pam = "pam.cli:cli"
+
+[project.entry-points."mkdocs.plugins"]
+generate-api = "mkdocs_plugins.api_generator:AddAPIPlugin"
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = { file = ["requirements/dev.txt"] }
+
+[project.urls]
+repository = "https://github.com/arup-group/pam"
+documentation = "https://arup-group.github.io/pam"
+changelog = "https://github.com/arup-group/pam/blob/main/CHANGELOG.md"
