@@ -349,7 +349,7 @@ class TourPlanner:
 
         # extract d_facility 
         d_locations = []
-        for d in [d['destination_facility'] for d in d_locations]:
+        for d in [d['destination_facility'] for d in d_seq]:
             d_locations.append([d.x, d.y])
         d_locations = np.array(d_locations)
 
