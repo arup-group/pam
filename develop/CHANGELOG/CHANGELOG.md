@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
+
 ### Added
 - Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211])
 - Python versions 3.9 to 3.11 support ([#192], [#210]).
@@ -73,6 +76,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#222]: https://github.com/arup-group/pam/pull/222
 [#211]: https://github.com/arup-group/pam/pull/211
 [#210]: https://github.com/arup-group/pam/pull/210
 [#207]: https://github.com/arup-group/pam/pull/207
