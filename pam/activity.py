@@ -61,14 +61,111 @@ class Plan:
             if isinstance(p, Leg):
                 yield p
 
-    def trips(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> str:
-        """Yield plan trips based on ignoring certain activities.
+    def simplify_pt_trips(self, ignore=["pt interaction", "pt_interaction"]) -> None:
+        """Remove public transit (pt) interaction events and simplify associated legs to single legs with
+        dominant mode. Dominant mode is based on max (total) distance by each mode.
+
+        For example, given the following trip:
+
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
+
+        Is simplified to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
 
         Args:
-          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
+
+        """
+        if set(ignore).intersection(self.activity_classes):
+            self.day = list(self.tripify(ignore=ignore))
+
+    def tripify(
+        self, ignore: list[str] = ["pt interaction", "pt_interaction"]
+    ) -> Iterator[PlanComponent]:
+        """Iterate through plan components removing public transit (pt) interaction events and simplifying
+        associated legs to single leg with dominant mode. Where dominant mode is based on max (total) distance
+        by each mode for that trip.
+
+        For example, given the following trip:
+
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
+
+        Is "tripified" to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
+
+        Args:
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
 
         Returns:
-            str:
+            Iterator[PlanComponent]
+        """
+        if self.day:
+            seq = 0
+            modes = {}
+            start_location = self.day[0].location
+            start_time = self.day[0].end_time
+            distance = 0
+            for component in self:
+                if isinstance(component, Leg):
+                    modes[component.mode] = modes.get(component.mode, 0) + component.distance
+                    distance += component.distance
+                    attributes = component.attributes  # trips collect attributes from last leg
+                if isinstance(component, Activity):
+                    if component.act not in ignore:
+                        while True:
+                            if modes:
+                                yield Leg(
+                                    seq=seq,
+                                    mode=max(modes, key=modes.get),
+                                    start_area=start_location.area,
+                                    end_area=component.location.area,
+                                    start_link=start_location.link,
+                                    end_link=component.location.link,
+                                    start_loc=start_location.loc,
+                                    end_loc=component.location.loc,
+                                    start_time=start_time,
+                                    end_time=component.start_time,
+                                    distance=distance,
+                                    purp=component.act,
+                                    attributes=attributes,
+                                )
+                            yield component
+                            break
+                        modes = {}
+                        start_location = component.location
+                        start_time = component.end_time
+                        distance = 0
+                        seq += 1
+
+    def trips(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> str:
+        """Iterate through plan trips. Multi-modal leg trips are simplified to single trip with dominant mode.
+        Where dominant mode is based on max (total) distance by each mode for that trip. The logic is based on
+        the removal of public transit interaction activities.
+
+        For example, given the following legs:
+
+            home =walk=> pt interaction =bus=> pt interaction =walk=> work
+
+        Is simplified to:
+
+            home =bus=> work
+
+        (In this example we are assuming that bus was used to travel further than the two walk legs). The final
+        bus leg duration and distance are taken from the accumulated walk and bus leg durations and distances.
+
+        Args:
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
+
+        Returns:
+            Iterator[Trip]
         """
         if self.day:
             seq = 0
@@ -80,6 +177,7 @@ class Plan:
                 if isinstance(component, Leg):
                     modes[component.mode] = modes.get(component.mode, 0) + component.distance
                     distance += component.distance
+                    attributes = component.attributes
                 elif component.act not in ignore:
                     yield Trip(
                         seq=seq,
@@ -94,6 +192,7 @@ class Plan:
                         end_time=component.start_time,
                         distance=distance,
                         purp=component.act,
+                        attributes=attributes,
                     )
                     modes = {}
                     start_location = component.location
@@ -102,13 +201,14 @@ class Plan:
                     seq += 1
 
     def trip_legs(self, ignore: list[str] = ["pt interaction", "pt_interaction"]) -> Iterator[str]:
-        """Yield plan trips as lists of legs based on ignoring certain activities.
+        """Yield plan trips as lists of legs. Trips are based on sequences of activity types used to separate
+        legs within the same trip. The logic is based on the removal of public transit interaction activities.
 
         Args:
-          ignore (list[str], optional): activities to ignore. Defaults to ["pt interaction", "pt_interaction"].
+          ignore (list[str], optional): activities to remove. Defaults to ["pt interaction", "pt_interaction"].
 
         Yields:
-            Iterator[str]:
+            Iterator[str]
 
         """
         if self.day:
@@ -870,29 +970,6 @@ class Plan:
             )
         ]
 
-    def simplify_pt_trips(self) -> None:
-        """Remove pt interaction events and simplify legs to single leg with mode = pt.
-
-        pt interaction events result from complex matsim plans.
-
-        """
-        pt_trip = False
-        for idx, component in list(self.reversed()):
-            if component.act == "pt interaction":  # this is a pt trip
-                if not pt_trip:  # this is a new pt leg
-                    trip_end_time = self[idx + 1].end_time
-                    trip_end_location = self[idx + 1].end_location
-
-                pt_trip = True
-                self.day.pop(idx + 1)
-                self.day.pop(idx)
-            else:
-                if pt_trip:  # this is the start of the pt trip - modify the first leg
-                    self[idx].mode = "pt"
-                    self[idx].end_time = trip_end_time
-                    self[idx].end_location = trip_end_location
-                pt_trip = False
-
     def get_home_duration(self):
         """Get the total duration of home activities."""
         # total time spent at home
@@ -1159,7 +1236,8 @@ class Leg(PlanComponent):
             self.start_location == other.start_location
             and self.end_location == other.end_location
             and self.mode == other.mode
-            and self.duration == other.duration
+            and self.start_time == other.start_time
+            and self.end_time == other.end_time
         )
 
     @property
