@@ -24,7 +24,7 @@ git clone git@github.com:arup-group/pam.git
 cd pam
 mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt
 mamba activate pam
-pip install --no-deps -e ./pam
+pip install --no-deps -e .
 ```
 
 If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`

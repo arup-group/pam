@@ -64,8 +64,7 @@ For more detailed instructions, see our [documentation](https://arup-group.githu
 There are many ways to make both technical and non-technical contributions to PAM.
 Before making contributions to the PAM source code, see our contribution guidelines and follow the instructions below to install and work in a test environment.
 
-If you have followed the recommended installation instructions, all libraries required for development and quality assurance will already be installed. 
-If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`
+You can install the optional dev libraries using the `dev` option, i.e., `pip install -e '.[dev]'`
 
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
 while you work:
