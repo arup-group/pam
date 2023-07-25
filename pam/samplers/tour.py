@@ -3,12 +3,12 @@ import warnings
 from typing import Any, Iterable, Optional, Union
 
 import geopandas as gp
+import networkx as nx
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from shapely.geometry import Point
 from scipy.spatial import distance_matrix
-import networkx as nx
+from shapely.geometry import Point
 
 from pam.activity import Activity, Leg
 from pam.samplers.facility import FacilitySampler
@@ -334,6 +334,10 @@ class TourPlanner:
             # once d_zone is selected, select a specific point location for d_activity
             d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
+            # prevent the depot from being sampled as a delivery
+            while d_facility == o_loc:
+                d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
+
             # append to a dictionary to sequence destinations
             d_seq.append(
                 {
@@ -347,19 +351,19 @@ class TourPlanner:
         # extact o_loc coordinates into array
         o_location = np.array([[o_loc.x, o_loc.y]])
 
-        # extract d_facility 
+        # extract d_facility
         d_locations = []
-        for d in [d['destination_facility'] for d in d_seq]:
+        for d in [d["destination_facility"] for d in d_seq]:
             d_locations.append([d.x, d.y])
         d_locations = np.array(d_locations)
 
         # Greedy TSP to minimise total travelled distance for visiting all sampled delivery locations
-        # approximated from reduce compute time
+        # approximated from reduce compute time
         locs = np.concatenate([o_location, d_locations], 0)
         dist_matrix = distance_matrix(locs, locs)
         distance_graph = nx.from_numpy_array(dist_matrix)
         seq = nx.algorithms.approximation.greedy_tsp(distance_graph, source=0)
-        
+
         # use `seq` to re-order `d_locs` into an ordered list of dictionaries
         # remove o_loc (first and last stop) from sequence & adjust sequence range
         seq = seq[1:-1]
