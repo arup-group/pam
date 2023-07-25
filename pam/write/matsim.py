@@ -179,6 +179,7 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
     person_xml = et.Element("person", {"id": str(pid)})
 
     attributes = et.SubElement(person_xml, "attributes", {})
+
     for k, v in person.attributes.items():
         if k == "vehicles":  # todo make something more robust for future 'special' classes
             attribute = et.SubElement(
