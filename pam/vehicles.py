@@ -91,14 +91,6 @@ class BaseVehicle:
     def to_xml(self, xf):
         xf.write(et.Element("vehicle", {"id": str(self.vid), "type": str(self.type_id)}))
 
-    def to_atribute(self, xf):
-        xf.write(
-            et.Element(
-                "attribute",
-                {"class": "org.matsim.vehicles.PersonVehicles", "type": str(self.type_id)},
-            )
-        )
-
 
 @dataclass
 class Vehicle(BaseVehicle):

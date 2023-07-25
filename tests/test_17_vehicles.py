@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import importlib_resources
 import lxml
 import pytest
@@ -149,8 +151,16 @@ def test_manager_contains(manager):
 
 def test_manager_equals(manager):
     assert manager == manager
-    other = VehicleManager()
-    assert manager != other
+    other1 = VehicleManager()
+    assert manager != other1
+    other2 = deepcopy(manager)
+    other2.vehicles["new"] = Vehicle("new", "new")
+    assert manager != other2
+
+
+def test_clear_types(manager):
+    manager.clear_types()
+    assert manager.veh_types == {}
 
 
 def test_manager_length(manager):
@@ -193,6 +203,12 @@ def test_manager_inconsistent_vehs(manager):
 def test_manager_redundant_veh_types(manager):
     manager.veh_types["taxi"] = VehicleType()
     assert manager.redundant_types() == {"taxi": VehicleType()}
+
+
+def test_raise_when_read_evs_but_no_vehs(electric_vehicles_xml_path):
+    with pytest.raises(UserWarning):
+        manager = VehicleManager()
+        manager.from_xml(vehs_path=None, evs_path=electric_vehicles_xml_path)
 
 
 def test_reading_all_vehicles_file(all_vehicle_xml_path):

@@ -185,19 +185,29 @@ class Population:
         return dict(attributes)
 
     def assign_vehicles(self, manager: VehicleManager):
+        """Assign all vehciles to Population from the vehicles manager.
+        This method removes the vehicles attribute from each person and uses it to populate
+        Person.vehicles variable. This method is used by read.matsim to transfer regular vehicles
+        and electric vehicles from MATSim xml formats to each Person.
+
+        Args:
+            manager (VehicleManager): Vehicles.
+        """
         for _, _, person in self.people():
             person.assign_vehicle(manager)
 
     def rebuild_vehicles_manager(self):
         """
-        (Re)build vehicle population from agents.
+        (Re)build vehicle population from persons. This method adds all Population vehicles from each
+        Person and adds them to the Population.vehicles_manager. This method is used by write.matsim
+        to write regular vehicles and electric vehicles to MATSim xml formats.
         """
         self.vehicles_manager.clear_vehs()
         self.update_vehicles_manager()
 
     def update_vehicles_manager(self):
         """
-        Update vehicle population from agents.
+        Update vehicle population from persons.
         """
         vehs = {}
         for _, _, _, veh in self.vehicles():
@@ -208,16 +218,32 @@ class Population:
         if not self.vehicles_manager.is_consistent():
             raise UserWarning("Failed consistency check refer to logs.")
 
-    def vehicle_types(self):
+    def vehicle_types(self) -> Iterator[str, VehicleType]:
+        """
+        Yields:
+            Iterator[str, VehicleType]: Iterator of (vehicle type id, vehicle type data).
+        """
         for veh_type in self.vehicles_manager.veh_types():
             yield veh_type.id, veh_type
 
-    def vehicles(self):
+    def vehicles(self) -> Iterator[str, str, str, Vehicle]:
+        """Return iterator of all vehicles in population, prepended with household id, person id
+        and mode.
+
+        Yields:
+            Iterator[str, str, str, Vehicle]: Iterator of (hid, pid, mode, vehicle)
+        """
         for hid, pid, p in self.people():
             for mode, veh in p.vehicles.items():
                 yield hid, pid, mode, veh
 
     def evs(self):
+        """Return iterator of all electric vehicles in population, prepended with household id,
+        person id and mode.
+
+        Yields:
+            Iterator[str, str, str, ElectricVehicle]: Iterator of (hid, pid, mode, vehicle)
+        """
         for hid, pid, p in self.people():
             for mode, veh in p.evs():
                 yield hid, pid, mode, veh
@@ -228,28 +254,33 @@ class Population:
 
     @property
     def has_electric_vehicles(self):
-        return bool(self.evs())
+        return bool(self.evs().__next__()())
 
     def add_veh_type(self, vehicle_type: VehicleType):
+        """Add a vehcile type to the population vehicles manager.
+
+        Args:
+            vehicle_type (VehicleType): Vehicle type to be added.
+        """
         self.vehicles_manager.add_type(vehicle_type)
 
-    def add_veh_to_agent(self, hid: str, pid: str, mode: str, v: Vehicle) -> bool:
-        if v.type_id not in self.vehicles_manager:
-            raise UserWarning(f"Unable to add vehicle with unknown type: '{v.type_id}'.")
-        self.households[hid][pid].vehicles[mode] = v
+    def add_veh_to_agent(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
+        """Add vehicle of given mode to person, based on hid and pid. Method checks that
+        vehicle type is available, otherwise raises UserWarning.
 
-    @property
-    def has_uniquely_indexed_vehicle_types(self):
-        # checks indexing of vehicle types in population
-        vehicle_types = self.vehicles_manager()
-        all_vehicle_type_ids = [vt.id for vt in vehicle_types]
-        unique_vehicle_type_ids = set(all_vehicle_type_ids)
-        return len(all_vehicle_type_ids) == len(unique_vehicle_type_ids)
+        Args:
+            hid (str): Household id
+            pid (str): Person id
+            mode (str): Mode of vehicle
+            vehicle (Vehicle): Vehicle to add
 
-    def vehicles_manager(self):
-        v_types = {p.vehicles.vehicle_type for _, _, p in self.people() if p.vehicles is not None}
-        for vt in v_types:
-            yield vt
+        Raises:
+            UserWarning: Unknown vehicle type.
+
+        """
+        if vehicle.type_id not in self.vehicles_manager:
+            raise UserWarning(f"Unable to add vehicle with unknown type: '{vehicle.type_id}'.")
+        self.households[hid][pid].vehicles[mode] = vehicle
 
     def electric_vehicle_charger_types(self):
         chargers = set()
@@ -393,7 +424,7 @@ class Population:
         )
 
     def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
-        """Builds geopandas.GeoDataFrame for travel Legs found for all agents in the Population.
+        """Builds geopandas.GeoDataFrame for travel Legs found for all persons in the Population.
 
         Keyword Args: Keyword arguments for plot.build_person_travel_geodataframe.
             from_epsg (str): coordinate system the plans are currently in
@@ -881,7 +912,7 @@ class Household:
         plot.plot_household(self, **kwargs)
 
     def build_travel_geodataframe(self, **kwargs) -> gpd.GeoDataFrame:
-        """Builds geopandas.GeoDataFrame for travel Legs found for agents within a Household.
+        """Builds geopandas.GeoDataFrame for travel Legs found for persons within a Household.
 
         Keyword Args: Keyword arguments for plot.plans.build_person_travel_geodataframe
             from_epsg (str): coordinate system the plans are currently in
@@ -902,7 +933,7 @@ class Household:
         return gdf
 
     def plot_travel_plotly(self, epsg: str = "epsg:4326", **kwargs) -> None:
-        """Uses plotly's Scattermapbox to plot agents' travel.
+        """Uses plotly's Scattermapbox to plot persons' travel.
 
         Args:
             epsg (str): coordinate system the plans spatial information is in, e.g. 'epsg:27700'
@@ -965,7 +996,7 @@ class Person:
         pid,
         freq=None,
         attributes: dict = {},
-        vehicles: dict[str, Vehicle] = {},
+        vehicles: Optional[dict[str, Vehicle]] = None,
         home_location: Optional[Location] = None,
         home_area=None,
         home_loc=None,
@@ -973,11 +1004,17 @@ class Person:
         self.pid = pid
         self.person_freq = freq
         self.attributes = attributes
-        self.vehicles = vehicles
+
+        if vehicles is not None:
+            self.vehicles = vehicles
+        else:
+            self.vehicles = {}
+
         if home_location is not None:
             self.home_location = home_location
         else:
             self.home_location = Location()
+
         if home_area:
             self.home_location.area = home_area
         if home_loc:
@@ -1039,6 +1076,14 @@ class Person:
         self.plan.home_location.loc = loc
 
     def assign_vehicles(self, manager: VehicleManager):
+        """Assign vehicles to person from vehicles manager.
+        This method removes the vehicles attribute from the agent and uses it to populate
+        Person.vehicles variable. This method is used by read.matsim to transfer regular vehicles
+        and electric vehicles from MATSim xml formats to each Person.
+
+        Args:
+            manager (VehicleManager): Population vehicles.
+        """
         self.vehicles = {
             mode: manager.pop(vid) for mode, vid in self.attributes.pop("vehicles", {}).items()
         }
@@ -1251,7 +1296,7 @@ class Person:
         return plot.build_person_travel_geodataframe(self, **kwargs)
 
     def plot_travel_plotly(self, epsg: str = "epsg:4326", **kwargs) -> go.Figure:
-        """Uses plotly's Scattermapbox to plot agents' travel.
+        """Uses plotly's Scattermapbox to plot persons' travel.
 
         Args:
             epsg (str, optional): coordinate system the plans spatial information is in, e.g. 'epsg:27700'. Defaults to "epsg:4326".
