@@ -17,7 +17,7 @@
         <link rel="next" href="../../write/diary/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
       
       
 
@@ -2506,7 +2506,7 @@
 
 
 <h2 id="pam.samplers.tour.ActivityDuration" class="doc doc-heading">
-        <code>ActivityDuration</code>
+          <code>ActivityDuration</code>
 
 
 <a href="#pam.samplers.tour.ActivityDuration" class="headerlink" title="Permanent link">#</a></h2>
@@ -2519,10 +2519,10 @@
 The last function activity_duration combines these three functions to output parameters that help build tour plans.</p>
 
 
-
   
 
   <div class="doc doc-children">
+
 
 
 
@@ -2547,11 +2547,13 @@ The last function activity_duration combines these three functions to output par
       <p>Returns estimated Activity duration.</p>
 <p>Duration is a combination of previous three functions to return parameters for next activity in Plan.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2564,7 +2566,7 @@ The last function activity_duration combines these three functions to output par
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -2578,7 +2580,7 @@ The last function activity_duration combines these three functions to output par
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -2654,6 +2656,8 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -2677,9 +2681,9 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-232">232</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-232">232</a></span>
 <span class="normal"><a href="#__codelineno-0-233">233</a></span>
 <span class="normal"><a href="#__codelineno-0-234">234</a></span>
 <span class="normal"><a href="#__codelineno-0-235">235</a></span>
@@ -2745,10 +2749,11 @@ The last function activity_duration combines these three functions to output par
 </span><span id="__span-0-263"><a id="__codelineno-0-263" name="__codelineno-0-263"></a>
 </span><span id="__span-0-264"><a id="__codelineno-0-264" name="__codelineno-0-264"></a>    <span class="k">return</span> <span class="n">stop_duration</span><span class="p">,</span> <span class="n">start_tm</span><span class="p">,</span> <span class="n">end_tm</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2764,18 +2769,19 @@ The last function activity_duration combines these three functions to output par
   
       <p>Models distance between two shapely points.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-201">201</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-201">201</a></span>
 <span class="normal"><a href="#__codelineno-0-202">202</a></span>
 <span class="normal"><a href="#__codelineno-0-203">203</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a><span class="k">def</span> <span class="nf">model_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.4</span><span class="p">):</span>
 </span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Models distance between two shapely points.&quot;&quot;&quot;</span>
 </span><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a>    <span class="k">return</span> <span class="n">o</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2790,11 +2796,13 @@ The last function activity_duration combines these three functions to output par
   <div class="doc doc-contents ">
   
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2833,6 +2841,8 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -2860,9 +2870,9 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-205">205</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-205">205</a></span>
 <span class="normal"><a href="#__codelineno-0-206">206</a></span>
 <span class="normal"><a href="#__codelineno-0-207">207</a></span>
 <span class="normal"><a href="#__codelineno-0-208">208</a></span>
@@ -2886,10 +2896,11 @@ The last function activity_duration combines these three functions to output par
 </span><span id="__span-0-215"><a id="__codelineno-0-215" name="__codelineno-0-215"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-0-216"><a id="__codelineno-0-216" name="__codelineno-0-216"></a>    <span class="k">return</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">speed</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2905,11 +2916,13 @@ The last function activity_duration combines these three functions to output par
   
       <p>Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2966,6 +2979,8 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -2993,9 +3008,9 @@ The last function activity_duration combines these three functions to output par
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-218">218</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-218">218</a></span>
 <span class="normal"><a href="#__codelineno-0-219">219</a></span>
 <span class="normal"><a href="#__codelineno-0-220">220</a></span>
 <span class="normal"><a href="#__codelineno-0-221">221</a></span>
@@ -3021,7 +3036,7 @@ The last function activity_duration combines these three functions to output par
 </span><span id="__span-0-229"><a id="__codelineno-0-229" name="__codelineno-0-229"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-0-230"><a id="__codelineno-0-230" name="__codelineno-0-230"></a>    <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="n">mini</span><span class="p">,</span> <span class="nb">min</span><span class="p">([</span><span class="n">time</span><span class="p">,</span> <span class="n">maxi</span><span class="p">])])</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -3050,14 +3065,15 @@ The last function activity_duration combines these three functions to output par
       <p>Object for initiating and sampling from frequency weighted distributing.
 This object includes three samplers: a single sample, multiple samples, or sample based on a threshold value
 (requires a threshold matrix).</p>
-
   
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3070,7 +3086,7 @@ This object includes three samplers: a single sample, multiple samples, or sampl
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>, <a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a>]</code>
+                    <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>, <span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>]</code>
                 </span>
             </p>
           </td>
@@ -3103,7 +3119,7 @@ Defaults to None.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a>]</code>
+                    <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>]</code>
                 </span>
                 <span class="doc-param-default">
                   <b>DEFAULT:</b> 
@@ -3133,9 +3149,9 @@ Defaults to None.</p>
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-135">135</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-135">135</a></span>
 <span class="normal"><a href="#__codelineno-0-136">136</a></span>
 <span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span>
@@ -3183,7 +3199,7 @@ Defaults to None.</p>
 </span><span id="__span-0-157"><a id="__codelineno-0-157" name="__codelineno-0-157"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">threshold_matrix</span> <span class="o">=</span> <span class="n">threshold_matrix</span>
 </span><span id="__span-0-158"><a id="__codelineno-0-158" name="__codelineno-0-158"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">threshold_value</span> <span class="o">=</span> <span class="n">threshold_value</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -3273,6 +3289,7 @@ Defaults to None.</p>
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -3285,6 +3302,8 @@ Defaults to None.</p>
 
   <div class="doc doc-contents ">
   
+
+
 
   <table>
     <thead>
@@ -3313,9 +3332,9 @@ Defaults to None.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-160">160</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-160">160</a></span>
 <span class="normal"><a href="#__codelineno-0-161">161</a></span>
 <span class="normal"><a href="#__codelineno-0-162">162</a></span>
 <span class="normal"><a href="#__codelineno-0-163">163</a></span>
@@ -3331,10 +3350,11 @@ Defaults to None.</p>
 </span><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167"></a>    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3349,11 +3369,13 @@ Defaults to None.</p>
   <div class="doc doc-contents ">
   
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3377,6 +3399,8 @@ Defaults to None.</p>
         </tr>
     </tbody>
   </table>
+
+
 
   <table>
     <thead>
@@ -3405,9 +3429,9 @@ Defaults to None.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-169">169</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-169">169</a></span>
 <span class="normal"><a href="#__codelineno-0-170">170</a></span>
 <span class="normal"><a href="#__codelineno-0-171">171</a></span>
 <span class="normal"><a href="#__codelineno-0-172">172</a></span>
@@ -3429,10 +3453,11 @@ Defaults to None.</p>
 </span><span id="__span-0-178"><a id="__codelineno-0-178" name="__codelineno-0-178"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-0-179"><a id="__codelineno-0-179" name="__codelineno-0-179"></a>    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3448,9 +3473,9 @@ Defaults to None.</p>
   
       <p>Returns a sampler of a distribution that has been reduced based on a threshold value.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-181">181</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-181">181</a></span>
 <span class="normal"><a href="#__codelineno-0-182">182</a></span>
 <span class="normal"><a href="#__codelineno-0-183">183</a></span>
 <span class="normal"><a href="#__codelineno-0-184">184</a></span>
@@ -3476,7 +3501,7 @@ Defaults to None.</p>
 </span><span id="__span-0-192"><a id="__codelineno-0-192" name="__codelineno-0-192"></a>            <span class="nb">list</span><span class="p">(</span><span class="n">d_threshold</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">weights</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">d_threshold</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">]),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span>
 </span><span id="__span-0-193"><a id="__codelineno-0-193" name="__codelineno-0-193"></a>        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -3504,16 +3529,17 @@ Defaults to None.</p>
   
       <p>Defines a distribution, a sampler, and plots based on input values. The resulting distribution can be sampled
 for inputs required to build an agent plan (i.e, time of day, repetition of activities).</p>
-
   
       <p>Builds a dict distribution based on bins (i.e, hours) and pivots (i.e, hourly demand).</p>
 <p>Where the input pivot does not specify a value, values are estimated within the bin range by interpolation.</p>
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3566,9 +3592,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
 <span class="normal"><a href="#__codelineno-0-75"> 75</a></span>
 <span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
 <span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
@@ -3636,7 +3662,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bins</span><span class="p">:</span>
 </span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">dist_sum</span><span class="p">)</span> <span class="o">*</span> <span class="n">total</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -3669,6 +3695,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -3683,9 +3710,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Plots distribution to validate the distribution aligns with expected hourly demand.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-114">114</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-114">114</a></span>
 <span class="normal"><a href="#__codelineno-0-115">115</a></span>
 <span class="normal"><a href="#__codelineno-0-116">116</a></span>
 <span class="normal"><a href="#__codelineno-0-117">117</a></span>
@@ -3705,10 +3732,11 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122"></a>
 </span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123"></a>    <span class="k">return</span> <span class="n">fig</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3722,13 +3750,13 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-125">125</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-125">125</a></span>
 <span class="normal"><a href="#__codelineno-0-126">126</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-125"><a id="__codelineno-0-125" name="__codelineno-0-125"></a><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126"></a>    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -3755,14 +3783,15 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 
   
       <p>Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method.</p>
-
   
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3831,7 +3860,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>, <a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a>]</code>
+                    <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>, <span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>]</code>
                 </span>
             </p>
           </td>
@@ -3917,9 +3946,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-270">270</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-270">270</a></span>
 <span class="normal"><a href="#__codelineno-0-271">271</a></span>
 <span class="normal"><a href="#__codelineno-0-272">272</a></span>
 <span class="normal"><a href="#__codelineno-0-273">273</a></span>
@@ -3993,7 +4022,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-305"><a id="__codelineno-0-305" name="__codelineno-0-305"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">o_activity</span> <span class="o">=</span> <span class="n">activity_params</span><span class="p">[</span><span class="s2">&quot;o_activity&quot;</span><span class="p">]</span>
 </span><span id="__span-0-306"><a id="__codelineno-0-306" name="__codelineno-0-306"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">d_activity</span> <span class="o">=</span> <span class="n">activity_params</span><span class="p">[</span><span class="s2">&quot;d_activity&quot;</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -4216,6 +4245,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -4230,11 +4260,13 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>The agent returns to their origin activity, from their most recent stop to the origin location.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -4275,7 +4307,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -4303,7 +4335,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -4324,6 +4356,8 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
         </tr>
     </tbody>
   </table>
+
+
 
   <table>
     <thead>
@@ -4352,9 +4386,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-447">447</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-447">447</a></span>
 <span class="normal"><a href="#__codelineno-0-448">448</a></span>
 <span class="normal"><a href="#__codelineno-0-449">449</a></span>
 <span class="normal"><a href="#__codelineno-0-450">450</a></span>
@@ -4444,10 +4478,11 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-490"><a id="__codelineno-0-490" name="__codelineno-0-490"></a>
 </span><span id="__span-0-491"><a id="__codelineno-0-491" name="__codelineno-0-491"></a>    <span class="k">return</span> <span class="n">end_tm</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -4463,11 +4498,13 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Add activity to tour plan. This will add an activity to the agent plan after each leg within the tour.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -4522,7 +4559,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -4558,6 +4595,8 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -4585,9 +4624,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-352">352</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-352">352</a></span>
 <span class="normal"><a href="#__codelineno-0-353">353</a></span>
 <span class="normal"><a href="#__codelineno-0-354">354</a></span>
 <span class="normal"><a href="#__codelineno-0-355">355</a></span>
@@ -4691,10 +4730,11 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-402"><a id="__codelineno-0-402" name="__codelineno-0-402"></a>
 </span><span id="__span-0-403"><a id="__codelineno-0-403" name="__codelineno-0-403"></a>    <span class="k">return</span> <span class="n">end_tm</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -4710,11 +4750,13 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -4833,6 +4875,8 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -4860,9 +4904,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-405">405</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-405">405</a></span>
 <span class="normal"><a href="#__codelineno-0-406">406</a></span>
 <span class="normal"><a href="#__codelineno-0-407">407</a></span>
 <span class="normal"><a href="#__codelineno-0-408">408</a></span>
@@ -4944,10 +4988,11 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-444"><a id="__codelineno-0-444" name="__codelineno-0-444"></a>
 </span><span id="__span-0-445"><a id="__codelineno-0-445" name="__codelineno-0-445"></a>    <span class="k">return</span> <span class="n">end_tm</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -4963,11 +5008,13 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Apply the above functions to the agent to build a plan.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -4994,7 +5041,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code>shapely.<a class="autorefs autorefs-external" title="shapely.Point" href="https://shapely.readthedocs.io/en/stable/reference/shapely.Point.html#shapely.Point">Point</a></code>
+                    <code>shapely.<span title="shapely.Point">Point</span></code>
                 </span>
             </p>
           </td>
@@ -5030,9 +5077,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-493">493</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-493">493</a></span>
 <span class="normal"><a href="#__codelineno-0-494">494</a></span>
 <span class="normal"><a href="#__codelineno-0-495">495</a></span>
 <span class="normal"><a href="#__codelineno-0-496">496</a></span>
@@ -5190,10 +5237,11 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-570"><a id="__codelineno-0-570" name="__codelineno-0-570"></a>        <span class="n">end_tm</span><span class="o">=</span><span class="n">end_tm</span><span class="p">,</span>
 </span><span id="__span-0-571"><a id="__codelineno-0-571" name="__codelineno-0-571"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -5209,6 +5257,8 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Creates a sequence for a number of stops. Sequence is determined by distance from origin.</p>
 <p>TODO - Method to sequence stops with different logic (i.e, minimise distance between stops).</p>
+
+
 
   <table>
     <thead>
@@ -5233,9 +5283,9 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-308">308</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-308">308</a></span>
 <span class="normal"><a href="#__codelineno-0-309">309</a></span>
 <span class="normal"><a href="#__codelineno-0-310">310</a></span>
 <span class="normal"><a href="#__codelineno-0-311">311</a></span>
@@ -5321,7 +5371,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
 </span><span id="__span-0-349"><a id="__codelineno-0-349" name="__codelineno-0-349"></a>
 </span><span id="__span-0-350"><a id="__codelineno-0-350" name="__codelineno-0-350"></a>    <span class="k">return</span> <span class="n">o_loc</span><span class="p">,</span> <span class="n">d_zones</span><span class="p">,</span> <span class="n">d_locs</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -5349,16 +5399,17 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   
       <p>Object to build a dataframe that produces both spatial and statistical plots to validate the tour origin and
 destinations align with input data.</p>
-
   
       <p>Create a dataframe that counts the number of origin and destination activities.</p>
 <p>Merge this against the density information from the input origin and destination samplers.</p>
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -5371,7 +5422,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a></code>
+                    <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -5385,7 +5436,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><span title="geopandas">gp</span>.<a class="autorefs autorefs-external" title="geopandas.GeoDataFrame" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame">GeoDataFrame</a></code>
+                    <code><span title="geopandas">gp</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -5399,7 +5450,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a></code>
+                    <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -5413,7 +5464,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a></code>
+                    <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -5477,9 +5528,9 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-579">579</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-579">579</a></span>
 <span class="normal"><a href="#__codelineno-0-580">580</a></span>
 <span class="normal"><a href="#__codelineno-0-581">581</a></span>
 <span class="normal"><a href="#__codelineno-0-582">582</a></span>
@@ -5647,7 +5698,7 @@ destinations align with input data.</p>
 </span><span id="__span-0-661"><a id="__codelineno-0-661" name="__codelineno-0-661"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">od_density</span><span class="p">[</span><span class="s2">&quot;destination_trip_density&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">od_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d_activity</span><span class="si">}</span><span class="s2">_density&quot;</span><span class="p">]</span>
 </span><span id="__span-0-662"><a id="__codelineno-0-662" name="__codelineno-0-662"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -5680,6 +5731,7 @@ destinations align with input data.</p>
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -5694,11 +5746,13 @@ destinations align with input data.</p>
   
       <p>Compares density of input origin/destination activities and trips. As density of locations increases, so should trips.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -5761,6 +5815,8 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -5784,9 +5840,9 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-700">700</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-700">700</a></span>
 <span class="normal"><a href="#__codelineno-0-701">701</a></span>
 <span class="normal"><a href="#__codelineno-0-702">702</a></span>
 <span class="normal"><a href="#__codelineno-0-703">703</a></span>
@@ -5866,10 +5922,11 @@ destinations align with input data.</p>
 </span><span id="__span-0-738"><a id="__codelineno-0-738" name="__codelineno-0-738"></a>
 </span><span id="__span-0-739"><a id="__codelineno-0-739" name="__codelineno-0-739"></a>    <span class="k">return</span> <span class="n">fig</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -5885,11 +5942,13 @@ destinations align with input data.</p>
   
       <p>Creates a spatial plot of the difference between input and output densities.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -5942,6 +6001,8 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -5965,9 +6026,9 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-741">741</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-741">741</a></span>
 <span class="normal"><a href="#__codelineno-0-742">742</a></span>
 <span class="normal"><a href="#__codelineno-0-743">743</a></span>
 <span class="normal"><a href="#__codelineno-0-744">744</a></span>
@@ -6023,10 +6084,11 @@ destinations align with input data.</p>
 </span><span id="__span-0-767"><a id="__codelineno-0-767" name="__codelineno-0-767"></a>
 </span><span id="__span-0-768"><a id="__codelineno-0-768" name="__codelineno-0-768"></a>    <span class="k">return</span> <span class="n">fig</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -6042,11 +6104,13 @@ destinations align with input data.</p>
   
       <p>Creates a spatial plot between input densities and resulting trips to validate trips spatially align with input densities.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -6127,6 +6191,8 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -6150,9 +6216,9 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-664">664</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-664">664</a></span>
 <span class="normal"><a href="#__codelineno-0-665">665</a></span>
 <span class="normal"><a href="#__codelineno-0-666">666</a></span>
 <span class="normal"><a href="#__codelineno-0-667">667</a></span>
@@ -6222,7 +6288,7 @@ destinations align with input data.</p>
 </span><span id="__span-0-697"><a id="__codelineno-0-697" name="__codelineno-0-697"></a>
 </span><span id="__span-0-698"><a id="__codelineno-0-698" name="__codelineno-0-698"></a>    <span class="k">return</span> <span class="n">fig</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -6234,6 +6300,7 @@ destinations align with input data.</p>
   </div>
 
 </div>
+
 
 
 <div class="doc doc-object doc-function">
@@ -6250,11 +6317,13 @@ destinations align with input data.</p>
   
       <p>Calculate the spatial density of input activity.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -6267,7 +6336,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><span title="geopandas">gp</span>.<a class="autorefs autorefs-external" title="geopandas.GeoDataFrame" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame">GeoDataFrame</a></code>
+                    <code><span title="geopandas">gp</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -6281,7 +6350,7 @@ destinations align with input data.</p>
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><span title="geopandas">gp</span>.<a class="autorefs autorefs-external" title="geopandas.GeoDataFrame" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame">GeoDataFrame</a></code>
+                    <code><span title="geopandas">gp</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -6321,6 +6390,8 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -6332,7 +6403,7 @@ destinations align with input data.</p>
         <tr>
           <td>
               <span class="doc-returns-annotation">
-                  <code><span title="geopandas">gp</span>.<a class="autorefs autorefs-external" title="geopandas.GeoDataFrame" href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame">GeoDataFrame</a></code>
+                  <code><span title="geopandas">gp</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
               </span>
           </td>
           <td class="doc-returns-details">
@@ -6344,9 +6415,9 @@ destinations align with input data.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/samplers/tour.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-17">17</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-17">17</a></span>
 <span class="normal"><a href="#__codelineno-0-18">18</a></span>
 <span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
@@ -6446,7 +6517,7 @@ destinations align with input data.</p>
 </span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>
 </span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="k">return</span> <span class="n">density</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>

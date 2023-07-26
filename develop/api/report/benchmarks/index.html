@@ -17,7 +17,7 @@
         <link rel="next" href="../stringify/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
       
       
 
@@ -2080,16 +2080,15 @@
 
 
 <h2 id="pam.report.benchmarks.BenchmarkDict" class="doc doc-heading">
-        <code>BenchmarkDict</code>
+          <code>BenchmarkDict</code>
 
 
 <a href="#pam.report.benchmarks.BenchmarkDict" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-external" title="typing.TypedDict" href="https://docs.python.org/3/library/typing.html#typing.TypedDict">TypedDict</a></code></p>
-
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-external" title="typing.TypedDict" href="https://docs.python.org/3/library/typing.html#typing.TypedDict">TypedDict</a></code></p>
 
 
 
@@ -2190,6 +2189,7 @@
 </div>
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -2204,11 +2204,13 @@
   
       <p>Yield benchmarks.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2228,6 +2230,8 @@
         </tr>
     </tbody>
   </table>
+
+
 
   <table>
     <thead>
@@ -2252,9 +2256,9 @@
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
 <span class="normal"><a href="#__codelineno-0-22">22</a></span>
@@ -2410,10 +2414,11 @@
 </span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95"></a>    <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="n">bms</span><span class="p">:</span>
 </span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96"></a>        <span class="k">yield</span> <span class="n">path</span><span class="p">,</span> <span class="n">create_benchmark</span><span class="p">(</span><span class="n">trips</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2429,11 +2434,13 @@
   
       <p>Extract user-specified benchmarks from the population</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2446,7 +2453,7 @@
             <p>
                 <span class="doc-param-annotation">
                   <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a></code>
+                    <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
                 </span>
             </p>
           </td>
@@ -2546,6 +2553,8 @@ Defaults to [len].</p>
     </tbody>
   </table>
 
+
+
   <table>
     <thead>
       <tr>
@@ -2557,7 +2566,7 @@ Defaults to [len].</p>
         <tr>
           <td>
               <span class="doc-returns-annotation">
-                  <code><a class="autorefs autorefs-external" title="pandas" href="https://pandas.pydata.org/docs/index.html#module-pandas">pd</a>.<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a></code>
+                  <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
               </span>
           </td>
           <td class="doc-returns-details">
@@ -2569,9 +2578,9 @@ Defaults to [len].</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
 <span class="normal"><a href="#__codelineno-0-100">100</a></span>
 <span class="normal"><a href="#__codelineno-0-101">101</a></span>
 <span class="normal"><a href="#__codelineno-0-102">102</a></span>
@@ -2671,10 +2680,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-147"><a id="__codelineno-0-147" name="__codelineno-0-147"></a>
 </span><span id="__span-0-148"><a id="__codelineno-0-148" name="__codelineno-0-148"></a>    <span class="k">return</span> <span class="n">df</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2690,9 +2700,9 @@ Defaults to [len].</p>
   
       <p>number of trips by hour of departure.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-208">208</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-208">208</a></span>
 <span class="normal"><a href="#__codelineno-0-209">209</a></span>
 <span class="normal"><a href="#__codelineno-0-210">210</a></span>
 <span class="normal"><a href="#__codelineno-0-211">211</a></span>
@@ -2712,10 +2722,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-216"><a id="__codelineno-0-216" name="__codelineno-0-216"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-217"><a id="__codelineno-0-217" name="__codelineno-0-217"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2731,9 +2742,9 @@ Defaults to [len].</p>
   
       <p>number of trips by (euclidean) distance category.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-160">160</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-160">160</a></span>
 <span class="normal"><a href="#__codelineno-0-161">161</a></span>
 <span class="normal"><a href="#__codelineno-0-162">162</a></span>
 <span class="normal"><a href="#__codelineno-0-163">163</a></span>
@@ -2753,10 +2764,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-169"><a id="__codelineno-0-169" name="__codelineno-0-169"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2772,9 +2784,9 @@ Defaults to [len].</p>
   
       <p>number of trips by duration.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-184">184</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-184">184</a></span>
 <span class="normal"><a href="#__codelineno-0-185">185</a></span>
 <span class="normal"><a href="#__codelineno-0-186">186</a></span>
 <span class="normal"><a href="#__codelineno-0-187">187</a></span>
@@ -2794,10 +2806,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-192"><a id="__codelineno-0-192" name="__codelineno-0-192"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-193"><a id="__codelineno-0-193" name="__codelineno-0-193"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2813,9 +2826,9 @@ Defaults to [len].</p>
   
       <p>number of trips by (euclidean) distance category.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-152">152</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-152">152</a></span>
 <span class="normal"><a href="#__codelineno-0-153">153</a></span>
 <span class="normal"><a href="#__codelineno-0-154">154</a></span>
 <span class="normal"><a href="#__codelineno-0-155">155</a></span>
@@ -2827,10 +2840,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156"></a>        <span class="n">data</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">],</span> <span class="n">data_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">],</span> <span class="n">colnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;trips&quot;</span><span class="p">],</span> <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">]</span>
 </span><span id="__span-0-157"><a id="__codelineno-0-157" name="__codelineno-0-157"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2846,9 +2860,9 @@ Defaults to [len].</p>
   
       <p>number of trips by (euclidean) distance category and mode.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-172">172</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-172">172</a></span>
 <span class="normal"><a href="#__codelineno-0-173">173</a></span>
 <span class="normal"><a href="#__codelineno-0-174">174</a></span>
 <span class="normal"><a href="#__codelineno-0-175">175</a></span>
@@ -2868,10 +2882,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-180"><a id="__codelineno-0-180" name="__codelineno-0-180"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-181"><a id="__codelineno-0-181" name="__codelineno-0-181"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2887,9 +2902,9 @@ Defaults to [len].</p>
   
       <p>number of trips by duration and mode.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-196">196</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-196">196</a></span>
 <span class="normal"><a href="#__codelineno-0-197">197</a></span>
 <span class="normal"><a href="#__codelineno-0-198">198</a></span>
 <span class="normal"><a href="#__codelineno-0-199">199</a></span>
@@ -2909,10 +2924,11 @@ Defaults to [len].</p>
 </span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-205"><a id="__codelineno-0-205" name="__codelineno-0-205"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2928,9 +2944,9 @@ Defaults to [len].</p>
   
       <p>purpose split for each mode.</p>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-220">220</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/report/benchmarks.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-220">220</a></span>
 <span class="normal"><a href="#__codelineno-0-221">221</a></span>
 <span class="normal"><a href="#__codelineno-0-222">222</a></span>
 <span class="normal"><a href="#__codelineno-0-223">223</a></span>
@@ -2950,7 +2966,7 @@ Defaults to [len].</p>
 </span><span id="__span-0-228"><a id="__codelineno-0-228" name="__codelineno-0-228"></a>        <span class="n">aggfunc</span><span class="o">=</span><span class="p">[</span><span class="nb">sum</span><span class="p">],</span>
 </span><span id="__span-0-229"><a id="__codelineno-0-229" name="__codelineno-0-229"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>

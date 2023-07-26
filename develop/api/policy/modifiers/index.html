@@ -17,7 +17,7 @@
         <link rel="next" href="../policies/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
       
       
 
@@ -2414,18 +2414,19 @@
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
-
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
 
   
       <p>Adds specified activities.</p>
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2446,9 +2447,9 @@
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-122">122</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-122">122</a></span>
 <span class="normal"><a href="#__codelineno-0-123">123</a></span>
 <span class="normal"><a href="#__codelineno-0-124">124</a></span>
 <span class="normal"><a href="#__codelineno-0-125">125</a></span>
@@ -2466,7 +2467,7 @@
 </span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">activities</span> <span class="o">=</span> <span class="n">activities</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -2499,6 +2500,7 @@
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -2511,9 +2513,9 @@
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-132">132</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-132">132</a></span>
 <span class="normal"><a href="#__codelineno-0-133">133</a></span>
 <span class="normal"><a href="#__codelineno-0-134">134</a></span>
 <span class="normal"><a href="#__codelineno-0-135">135</a></span>
@@ -2527,7 +2529,7 @@
 </span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138"></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Watch this space&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -2551,8 +2553,8 @@
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-external" title="abc.ABC" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-external" title="abc.ABC" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
 
   
       <p>Base class for modifiers - these are classes which change
@@ -2565,18 +2567,18 @@ Activity - apply change to individual activity in a person's plan</p>
 only works on a household level as the activites for removal need to be
 shared within a household.</p>
 
-
-          <details class="quote">
-            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
   <div class="doc doc-children">
+
 
 
 
@@ -2604,11 +2606,13 @@ shared within a household.</p>
   
       <p>Uses self.probability to decide if household/person/activity should be selected.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2665,9 +2669,9 @@ shared within a household.</p>
     </tbody>
   </table>
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-28">28</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-28">28</a></span>
 <span class="normal"><a href="#__codelineno-0-29">29</a></span>
 <span class="normal"><a href="#__codelineno-0-30">30</a></span>
 <span class="normal"><a href="#__codelineno-0-31">31</a></span>
@@ -2695,10 +2699,11 @@ shared within a household.</p>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">        activities (Optional[list[Activity]], optional): Defaults to None.</span>
 </span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2712,13 +2717,13 @@ shared within a household.</p>
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-57">57</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-57">57</a></span>
 <span class="normal"><a href="#__codelineno-0-58">58</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -2742,19 +2747,20 @@ shared within a household.</p>
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
-
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
 
   
       <p>Moves a tour of activities to home location.</p>
 <p>A tour is defined as a list of activities sandwiched between two home activities.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2814,9 +2820,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-221">221</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-221">221</a></span>
 <span class="normal"><a href="#__codelineno-0-222">222</a></span>
 <span class="normal"><a href="#__codelineno-0-223">223</a></span>
 <span class="normal"><a href="#__codelineno-0-224">224</a></span>
@@ -2854,7 +2860,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-238"><a id="__codelineno-0-238" name="__codelineno-0-238"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">location</span>
 </span><span id="__span-0-239"><a id="__codelineno-0-239" name="__codelineno-0-239"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">new_mode</span> <span class="o">=</span> <span class="n">new_mode</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -2925,6 +2931,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -2937,9 +2944,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-241">241</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-241">241</a></span>
 <span class="normal"><a href="#__codelineno-0-242">242</a></span>
 <span class="normal"><a href="#__codelineno-0-243">243</a></span>
 <span class="normal"><a href="#__codelineno-0-244">244</a></span>
@@ -2975,10 +2982,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a>            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">household</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">person</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">activities</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Household</span><span class="p">))</span>
 </span><span id="__span-0-258"><a id="__codelineno-0-258" name="__codelineno-0-258"></a>        <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -2992,9 +3000,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-301">301</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-301">301</a></span>
 <span class="normal"><a href="#__codelineno-0-302">302</a></span>
 <span class="normal"><a href="#__codelineno-0-303">303</a></span>
 <span class="normal"><a href="#__codelineno-0-304">304</a></span>
@@ -3006,10 +3014,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-305"><a id="__codelineno-0-305" name="__codelineno-0-305"></a>            <span class="k">return</span> <span class="kc">True</span>
 </span><span id="__span-0-306"><a id="__codelineno-0-306" name="__codelineno-0-306"></a>    <span class="k">return</span> <span class="kc">False</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3023,9 +3032,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-286">286</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-286">286</a></span>
 <span class="normal"><a href="#__codelineno-0-287">287</a></span>
 <span class="normal"><a href="#__codelineno-0-288">288</a></span>
 <span class="normal"><a href="#__codelineno-0-289">289</a></span>
@@ -3039,10 +3048,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-291"><a id="__codelineno-0-291" name="__codelineno-0-291"></a>            <span class="n">matching_tours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tour</span><span class="p">)</span>
 </span><span id="__span-0-292"><a id="__codelineno-0-292" name="__codelineno-0-292"></a>    <span class="k">return</span> <span class="n">matching_tours</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3056,9 +3066,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-260">260</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-260">260</a></span>
 <span class="normal"><a href="#__codelineno-0-261">261</a></span>
 <span class="normal"><a href="#__codelineno-0-262">262</a></span>
 <span class="normal"><a href="#__codelineno-0-263">263</a></span>
@@ -3074,10 +3084,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-266"><a id="__codelineno-0-266" name="__codelineno-0-266"></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part_of_tour</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">tours</span><span class="p">):</span>
 </span><span id="__span-0-267"><a id="__codelineno-0-267" name="__codelineno-0-267"></a>                    <span class="n">person</span><span class="o">.</span><span class="n">move_activity</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">,</span> <span class="n">new_mode</span><span class="o">=</span><span class="n">new_mode</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3091,18 +3102,19 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-282">282</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-282">282</a></span>
 <span class="normal"><a href="#__codelineno-0-283">283</a></span>
 <span class="normal"><a href="#__codelineno-0-284">284</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-282"><a id="__codelineno-0-282" name="__codelineno-0-282"></a><span class="k">def</span> <span class="nf">move_household_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">household</span><span class="p">,</span> <span class="n">new_mode</span><span class="o">=</span><span class="s2">&quot;walk&quot;</span><span class="p">):</span>
 </span><span id="__span-0-283"><a id="__codelineno-0-283" name="__codelineno-0-283"></a>    <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">household</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="__span-0-284"><a id="__codelineno-0-284" name="__codelineno-0-284"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">move_person_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">new_mode</span><span class="o">=</span><span class="n">new_mode</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3116,9 +3128,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-269">269</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-269">269</a></span>
 <span class="normal"><a href="#__codelineno-0-270">270</a></span>
 <span class="normal"><a href="#__codelineno-0-271">271</a></span>
 <span class="normal"><a href="#__codelineno-0-272">272</a></span>
@@ -3130,10 +3142,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-273"><a id="__codelineno-0-273" name="__codelineno-0-273"></a>
 </span><span id="__span-0-274"><a id="__codelineno-0-274" name="__codelineno-0-274"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">move_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">is_a_selected_activity</span><span class="p">,</span> <span class="n">new_mode</span><span class="o">=</span><span class="n">new_mode</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3147,9 +3160,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-276">276</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-276">276</a></span>
 <span class="normal"><a href="#__codelineno-0-277">277</a></span>
 <span class="normal"><a href="#__codelineno-0-278">278</a></span>
 <span class="normal"><a href="#__codelineno-0-279">279</a></span>
@@ -3159,10 +3172,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-279"><a id="__codelineno-0-279" name="__codelineno-0-279"></a>
 </span><span id="__span-0-280"><a id="__codelineno-0-280" name="__codelineno-0-280"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">move_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">return_true</span><span class="p">,</span> <span class="n">new_mode</span><span class="o">=</span><span class="n">new_mode</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3176,9 +3190,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-294">294</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-294">294</a></span>
 <span class="normal"><a href="#__codelineno-0-295">295</a></span>
 <span class="normal"><a href="#__codelineno-0-296">296</a></span>
 <span class="normal"><a href="#__codelineno-0-297">297</a></span>
@@ -3190,7 +3204,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 </span><span id="__span-0-298"><a id="__codelineno-0-298" name="__codelineno-0-298"></a>                <span class="k">return</span> <span class="kc">True</span>
 </span><span id="__span-0-299"><a id="__codelineno-0-299" name="__codelineno-0-299"></a>    <span class="k">return</span> <span class="kc">False</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -3214,9 +3228,8 @@ E.g. if passed ['shop_food', 'shop_other'] if a person has a tour of only 'shop_
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
-
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
 
   
       <p>Policy that needs to be applied on a household level. For activities
@@ -3225,11 +3238,13 @@ times and locations match). Randomly assigns a person whose activities
 will be retained and deletes the shared activities from other persons
 in household.</p>
 
+
+
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3252,9 +3267,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-142">142</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-142">142</a></span>
 <span class="normal"><a href="#__codelineno-0-143">143</a></span>
 <span class="normal"><a href="#__codelineno-0-144">144</a></span>
 <span class="normal"><a href="#__codelineno-0-145">145</a></span>
@@ -3286,7 +3301,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </span><span id="__span-0-157"><a id="__codelineno-0-157" name="__codelineno-0-157"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">activities</span> <span class="o">=</span> <span class="n">activities</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -3319,6 +3334,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -3331,9 +3347,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-159">159</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-159">159</a></span>
 <span class="normal"><a href="#__codelineno-0-160">160</a></span>
 <span class="normal"><a href="#__codelineno-0-161">161</a></span>
 <span class="normal"><a href="#__codelineno-0-162">162</a></span>
@@ -3361,10 +3377,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-171"><a id="__codelineno-0-171" name="__codelineno-0-171"></a>            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">household</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">person</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">activities</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Household</span><span class="p">))</span>
 </span><span id="__span-0-172"><a id="__codelineno-0-172" name="__codelineno-0-172"></a>        <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3378,16 +3395,17 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-203">203</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-203">203</a></span>
 <span class="normal"><a href="#__codelineno-0-204">204</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a><span class="k">def</span> <span class="nf">is_activity_for_removal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 </span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">act</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activities</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3401,9 +3419,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-210">210</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-210">210</a></span>
 <span class="normal"><a href="#__codelineno-0-211">211</a></span>
 <span class="normal"><a href="#__codelineno-0-212">212</a></span>
 <span class="normal"><a href="#__codelineno-0-213">213</a></span>
@@ -3419,10 +3437,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-216"><a id="__codelineno-0-216" name="__codelineno-0-216"></a>                <span class="n">people_with_shared_acts_for_removal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
 </span><span id="__span-0-217"><a id="__codelineno-0-217" name="__codelineno-0-217"></a>    <span class="k">return</span> <span class="n">people_with_shared_acts_for_removal</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3436,9 +3455,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-174">174</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-174">174</a></span>
 <span class="normal"><a href="#__codelineno-0-175">175</a></span>
 <span class="normal"><a href="#__codelineno-0-176">176</a></span>
 <span class="normal"><a href="#__codelineno-0-177">177</a></span>
@@ -3468,10 +3487,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-187"><a id="__codelineno-0-187" name="__codelineno-0-187"></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a>            <span class="n">seq</span> <span class="o">+=</span> <span class="mi">1</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3485,9 +3505,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-190">190</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-190">190</a></span>
 <span class="normal"><a href="#__codelineno-0-191">191</a></span>
 <span class="normal"><a href="#__codelineno-0-192">192</a></span>
 <span class="normal"><a href="#__codelineno-0-193">193</a></span>
@@ -3511,10 +3531,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-200"><a id="__codelineno-0-200" name="__codelineno-0-200"></a>                <span class="k">if</span> <span class="n">person</span> <span class="o">!=</span> <span class="n">person_retaining_activities</span><span class="p">:</span>
 </span><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a>                    <span class="bp">self</span><span class="o">.</span><span class="n">remove_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">acts_for_removal</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3528,15 +3549,15 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
 <span class="normal"><a href="#__codelineno-0-207">207</a></span>
 <span class="normal"><a href="#__codelineno-0-208">208</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-206"><a id="__codelineno-0-206" name="__codelineno-0-206"></a><span class="k">def</span> <span class="nf">shared_activities_for_removal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">household</span><span class="p">):</span>
 </span><span id="__span-0-207"><a id="__codelineno-0-207" name="__codelineno-0-207"></a>    <span class="n">shared_activities</span> <span class="o">=</span> <span class="n">household</span><span class="o">.</span><span class="n">shared_activities</span><span class="p">()</span>
 </span><span id="__span-0-208"><a id="__codelineno-0-208" name="__codelineno-0-208"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">act</span> <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">shared_activities</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_activity_for_removal</span><span class="p">(</span><span class="n">act</span><span class="p">)]</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
@@ -3560,18 +3581,19 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
-
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="pam.policy.modifiers.Modifier" href="#pam.policy.modifiers.Modifier">Modifier</a></code></p>
 
   
       <p>Removes specified activities.</p>
+
+
 
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b>DESCRIPTION</b></th>
+        <th><b> DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3592,9 +3614,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-62">62</a></span>
+              <details class="quote">
+                <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-62">62</a></span>
 <span class="normal"><a href="#__codelineno-0-63">63</a></span>
 <span class="normal"><a href="#__codelineno-0-64">64</a></span>
 <span class="normal"><a href="#__codelineno-0-65">65</a></span>
@@ -3612,7 +3634,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">activities</span> <span class="o">=</span> <span class="n">activities</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+              </details>
 
   
 
@@ -3645,6 +3667,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
 
 
+
 <div class="doc doc-object doc-function">
 
 
@@ -3657,9 +3680,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72">72</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72">72</a></span>
 <span class="normal"><a href="#__codelineno-0-73">73</a></span>
 <span class="normal"><a href="#__codelineno-0-74">74</a></span>
 <span class="normal"><a href="#__codelineno-0-75">75</a></span>
@@ -3693,10 +3716,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a>            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">household</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">person</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">activities</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Household</span><span class="p">))</span>
 </span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a>        <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3710,16 +3734,17 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-117">117</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-117">117</a></span>
 <span class="normal"><a href="#__codelineno-0-118">118</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117"></a><span class="k">def</span> <span class="nf">is_activity_for_removal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 </span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118"></a>    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">act</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activities</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3733,9 +3758,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-90">90</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-90">90</a></span>
 <span class="normal"><a href="#__codelineno-0-91">91</a></span>
 <span class="normal"><a href="#__codelineno-0-92">92</a></span>
 <span class="normal"><a href="#__codelineno-0-93">93</a></span>
@@ -3753,10 +3778,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98"></a>            <span class="n">seq</span> <span class="o">+=</span> <span class="mi">1</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3770,18 +3796,19 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-113">113</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-113">113</a></span>
 <span class="normal"><a href="#__codelineno-0-114">114</a></span>
 <span class="normal"><a href="#__codelineno-0-115">115</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113"></a><span class="k">def</span> <span class="nf">remove_household_activities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">household</span><span class="p">):</span>
 </span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114"></a>    <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">household</span><span class="o">.</span><span class="n">people</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 </span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">remove_person_activities</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3795,9 +3822,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-100">100</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-100">100</a></span>
 <span class="normal"><a href="#__codelineno-0-101">101</a></span>
 <span class="normal"><a href="#__codelineno-0-102">102</a></span>
 <span class="normal"><a href="#__codelineno-0-103">103</a></span>
@@ -3809,10 +3836,11 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>
 </span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">remove_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">is_a_selected_activity</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
+
 
 <div class="doc doc-object doc-function">
 
@@ -3826,9 +3854,9 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 
   <div class="doc doc-contents ">
 
-      <details class="quote">
-        <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-107">107</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/policy/modifiers.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-107">107</a></span>
 <span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
 <span class="normal"><a href="#__codelineno-0-110">110</a></span>
@@ -3838,7 +3866,7 @@ E.g. if passed ['shop_food', 'shop_other'] if a household has an only 'shop_food
 </span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110"></a>
 </span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">remove_activities</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">return_true</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-      </details>
+          </details>
   </div>
 
 </div>
