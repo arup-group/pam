@@ -319,6 +319,7 @@ class TourPlanner:
         o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
 
         d_seq = []
+        sampled_d_facilities = []
 
         for j in range(self.stops):
             # If threshold matrix is none, sample a random d_zone, else select a d_zone within threshold value
@@ -335,7 +336,16 @@ class TourPlanner:
             d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
             # prevent the depot from being sampled as a delivery
-            while d_facility == o_loc:
+            while d_facility == o_loc or d_facility in sampled_d_facilities:
+                if self.threshold_matrix is None:
+                    d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
+                else:
+                    d_zone = FrequencySampler(
+                        dist=self.d_dist,
+                        freq=self.d_freq,
+                        threshold_matrix=self.threshold_matrix.loc[self.o_zone],
+                        threshold_value=self.threshold_value,
+                    ).threshold_sample()
                 d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
             # append to a dictionary to sequence destinations
