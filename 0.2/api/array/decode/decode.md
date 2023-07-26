@@ -1,2 +1,0 @@
-
-::: pam.array.decode
