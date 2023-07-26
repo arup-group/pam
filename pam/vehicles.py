@@ -12,7 +12,7 @@ from pam import PAMVehicleIdError
 # https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
 
 
-@dataclass
+@dataclass(frozen=True)
 class CapacityType:
     """Vehicle capacity data with read/write methods."""
 
