@@ -112,13 +112,12 @@ class Population:
             f"Cannot check if population contains object type: {type(other)}, please provide a Household or Person."
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: Population):
         """Check for equality of two populations, equality is based on equal attributes and activity plans of all household and household members. Identifiers (eg hid and pid) are disregarded."""
         if not isinstance(other, Population):
-            self.logger.warning(
+            raise UserWarning(
                 f"Cannot compare population to non population: ({type(other)}), please provide a Population."
             )
-            return False
         if not len(self) == len(other):
             return False
         if not self.stats == other.stats:
@@ -184,18 +183,6 @@ class Population:
                 attributes[k] = set(list(attributes[k])[:show])
         return dict(attributes)
 
-    def assign_vehicles(self, manager: VehicleManager):
-        """Assign all vehciles to Population from the vehicles manager.
-        This method removes the vehicles attribute from each person and uses it to populate
-        Person.vehicles variable. This method is used by read.matsim to transfer regular vehicles
-        and electric vehicles from MATSim xml formats to each Person.
-
-        Args:
-            manager (VehicleManager): Vehicles.
-        """
-        for _, _, person in self.people():
-            person.assign_vehicle(manager)
-
     def rebuild_vehicles_manager(self):
         """
         (Re)build vehicle population from persons. This method adds all Population vehicles from each
@@ -223,8 +210,8 @@ class Population:
         Yields:
             Iterator[str, VehicleType]: Iterator of (vehicle type id, vehicle type data).
         """
-        for veh_type in self.vehicles_manager.veh_types():
-            yield veh_type.id, veh_type
+        for k, v in self.vehicles_manager.types():
+            yield k, v
 
     def vehicles(self) -> Iterator[str, str, str, Vehicle]:
         """Return iterator of all vehicles in population, prepended with household id, person id
@@ -250,19 +237,20 @@ class Population:
 
     @property
     def has_vehicles(self) -> bool:
-        return bool(self.vehicles().__next__()())
+        return next(self.vehicles(), None) is not None
 
     @property
     def has_electric_vehicles(self):
-        return bool(self.evs().__next__()())
+        return next(self.evs(), None) is not None
 
-    def add_veh_type(self, vehicle_type: VehicleType):
+    def add_veh_type(self, type_id: str, vehicle_type: VehicleType):
         """Add a vehcile type to the population vehicles manager.
 
         Args:
+            type_id (str): Vehicle type uid.
             vehicle_type (VehicleType): Vehicle type to be added.
         """
-        self.vehicles_manager.add_type(vehicle_type)
+        self.vehicles_manager.add_type(type_id, vehicle_type)
 
     def add_veh_to_agent(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
         """Add vehicle of given mode to person, based on hid and pid. Method checks that
@@ -281,12 +269,6 @@ class Population:
         if vehicle.type_id not in self.vehicles_manager:
             raise UserWarning(f"Unable to add vehicle with unknown type: '{vehicle.type_id}'.")
         self.households[hid][pid].vehicles[mode] = vehicle
-
-    def electric_vehicle_charger_types(self):
-        chargers = set()
-        for _, _, _, v in self.evs():
-            chargers.update(v.charger_types.split(","))
-        return chargers
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]

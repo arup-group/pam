@@ -465,3 +465,69 @@ def test_read_edit_veh_write(
         "Stevie", "defaultElectricVehicleType"
     )
     assert duplicate["Eddy"]["Eddy"].vehicles["car"] == Vehicle("Eddy", "defaultVehicleType")
+
+
+# @pytest.fixture()
+# def manager(car_type, lorry_type):
+#     manager = VehicleManager()
+#     manager.add_type("car", car_type)
+#     manager.add_type("lorry", lorry_type)
+#     for i in range(2):
+#         veh = Vehicle(f"car_{i}", "car")
+#         manager[f"car_{i}"] = veh
+#     for i in range(2):
+#         veh = ElectricVehicle(f"ev_{i}", "car")
+#         manager[f"ev_{i}"] = veh
+#     for i in range(1):
+#         veh = Vehicle(f"freight_{i}", "lorry")
+#         manager[f"freight_{i}"] = veh
+#     return manager
+def test_population_vehicles_types(manager):
+    population = Population()
+    population.vehicles_manager = manager
+    assert set([k for k, v in population.vehicle_types()]) == {"car", "lorry"}
+
+
+def test_iter_evs(car_type):
+    population = Population()
+    population.add_veh_type("car", car_type)
+    for i in range(2):
+        person = Person(i)
+        person.vehicles = {"car": ElectricVehicle(f"car_{i}", "car")}
+        population.add(person)
+    for i in range(2, 4):
+        person = Person(i)
+        person.vehicles = {"car": Vehicle(f"car_{i}", "car")}
+        population.add(person)
+    population.vehicles_manager = manager
+    assert list(population.evs()) == [
+        (0, 0, "car", ElectricVehicle("car_0", "car")),
+        (1, 1, "car", ElectricVehicle("car_1", "car")),
+    ]
+
+
+def test_population_has_vehs(manager):
+    population = Population()
+    population.add(Person(0))
+    assert not population.has_vehicles
+    population.add(Person(0, vehicles={"car": Vehicle("0", "car")}))
+    assert not population.has_electric_vehicles
+    assert population.has_vehicles
+    population.add(Person(1, vehicles={"car": ElectricVehicle("1", "car")}))
+    assert population.has_electric_vehicles
+
+
+def test_add_veh_to_agent_fail_due_to_missing_type(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    with pytest.raises(UserWarning):
+        population.add_veh_to_agent(0, 0, "car", Vehicle("0", "truck"))
+
+
+def test_add_veh_to_agent(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    with pytest.raises(UserWarning):
+        population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))

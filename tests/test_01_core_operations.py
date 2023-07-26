@@ -48,6 +48,25 @@ def test_get_last_leg_empty():
     assert p.last_leg is None
 
 
+def test_population_add():
+    pop = Population()
+    hh1 = Household("1")
+    p1 = Person("1")
+    hh1.add(p1)
+    pop.add(hh1)
+    assert "1" in pop.households
+
+    hh2 = Household("2")
+    p2 = Person("2")
+    hh2.add(p2)
+    hh3 = Household("3")
+    p3 = Person("3")
+    hh3.add(p3)
+
+    pop.add([hh2, hh3])
+    assert set(pop.households) == {"1", "2", "3"}
+
+
 def test_population_iadd_population():
     pop1 = Population()
     hh1 = Household("1")
@@ -590,6 +609,12 @@ def test_hhs_not_equal_with_diff_persons_attributes():
     hh5.add(p5)
 
     assert not hh1 == hh5
+
+
+def test_population_equals_wrong_types():
+    pop1 = Population()
+    with pytest.raises(UserWarning):
+        pop1 == 3
 
 
 def test_populations_equal_given_same_population():
