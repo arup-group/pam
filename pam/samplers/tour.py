@@ -348,6 +348,9 @@ class TourPlanner:
                     ).threshold_sample()
                 d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
+            # append select d_facility to sampled list for tracking
+            sampled_d_facilities.append(d_facility)
+
             # append to a dictionary to sequence destinations
             d_seq.append(
                 {
@@ -371,6 +374,8 @@ class TourPlanner:
         # approximated from reduce compute time
         locs = np.concatenate([o_location, d_locations], 0)
         dist_matrix = distance_matrix(locs, locs)
+        # print(d_seq)
+        # print(dist_matrix)
         distance_graph = nx.from_numpy_array(dist_matrix)
         seq = nx.algorithms.approximation.greedy_tsp(distance_graph, source=0)
 
