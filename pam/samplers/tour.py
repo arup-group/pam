@@ -307,6 +307,25 @@ class TourPlanner:
         self.o_activity = activity_params["o_activity"]
         self.d_activity = activity_params["d_activity"]
 
+    def d_zone_sample_choice(self) -> str:
+        """Samples a delivery zone (d_zone) as a string, dependent on the presence of a threshold matrix
+
+        Returns:
+            str: d_zone
+
+        """
+        if self.threshold_matrix is None:
+            d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
+        else:
+            d_zone = FrequencySampler(
+                dist=self.d_dist,
+                freq=self.d_freq,
+                threshold_matrix=self.threshold_matrix.loc[self.o_zone],
+                threshold_value=self.threshold_value,
+            ).threshold_sample()
+
+        return d_zone
+
     def sequence_stops(self) -> tuple[list, list, list]:
         """Creates a sequence for a number of stops. Sequence is determined by distance from origin.
 
@@ -323,29 +342,13 @@ class TourPlanner:
 
         for j in range(self.stops):
             # If threshold matrix is none, sample a random d_zone, else select a d_zone within threshold value
-            if self.threshold_matrix is None:
-                d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
-            else:
-                d_zone = FrequencySampler(
-                    dist=self.d_dist,
-                    freq=self.d_freq,
-                    threshold_matrix=self.threshold_matrix.loc[self.o_zone],
-                    threshold_value=self.threshold_value,
-                ).threshold_sample()
+            d_zone = TourPlanner.d_zone_sample_choice(self)
             # once d_zone is selected, select a specific point location for d_activity
             d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
-            # prevent the depot from being sampled as a delivery
+            # prevent the depot from being sampled as a delivery or duplicate sampling of delivery locations
             while d_facility == o_loc or d_facility in sampled_d_facilities:
-                if self.threshold_matrix is None:
-                    d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
-                else:
-                    d_zone = FrequencySampler(
-                        dist=self.d_dist,
-                        freq=self.d_freq,
-                        threshold_matrix=self.threshold_matrix.loc[self.o_zone],
-                        threshold_value=self.threshold_value,
-                    ).threshold_sample()
+                d_zone = TourPlanner.d_zone_sample_choice(self)
                 d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
             # append select d_facility to sampled list for tracking
