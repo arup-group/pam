@@ -1,7 +1,9 @@
 
 # Installation
 
-It is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
+## Setting up a user environment
+
+As a PAM user, it is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
 
 1. Install mamba with the [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) executable for your operating system.
 2. Open the command line (or the "miniforge prompt" in Windows).
@@ -18,7 +20,7 @@ All together:
 We do not recommend trying to install PAM directly with pip (e.g. in a virtual environment) as you need to first install underlying native geospatial libraries, the method for which differs by operating system.
 If you choose to install into a virtual environment, ensure you have `libgdal` and `libspatialindex` installed on your device before installing with pip. 
 
-## Running the example notebooks
+### Running the example notebooks
 If you have followed the non-developer installation instructions above, you will need to install `jupyter` into your `pam` environment to run the [example notebooks](https://github.com/arup-group/pam/tree/main/examples):
 
 ``` shell
@@ -33,7 +35,7 @@ ipython kernel install --user --name=pam
 jupyter notebook
 ```
 
-## Choosing a different environment name
+### Choosing a different environment name
 If you would like to use a different name to `pam` for your mamba environment, the installation becomes (where `[my-env-name]` is your preferred name for the environment):
 
 ``` shell
@@ -48,4 +50,4 @@ The install instructions are slightly different to create a development environm
 
 --8<-- "README.md:docs-install-dev"
 
-For installation instructions specific to developing the PAM codebase, see our [development documentation][setting-up-a-development-environment].
+For more detailed installation instructions specific to developing the PAM codebase, see our [development documentation][setting-up-a-development-environment].
