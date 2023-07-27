@@ -13,21 +13,15 @@ To create a development environment for PAM, with all libraries required for dev
 2. Open the command line (or the "miniforge prompt" in Windows).
 3. Download (a.k.a., clone) the PAM repository: `git clone git@github.com:arup-group/pam.git`
 4. Change into the `pam` directory: `cd pam`
-5. Create the PAM mamba environment: `mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt`
+5. Create the PAM mamba environment: `mamba create -n pam -c conda-forge -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt`
 6. Activate the PAM mamba environment: `mamba activate pam`
-7. Install the PAM package into the environment, in editable mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e ./pam`
+7. Install the PAM package into the environment, in editable mode and ignoring dependencies (we have dealt with those when creating the mamba environment): `pip install --no-deps -e .`
 
 All together:
 
-``` shell
-git clone git@github.com:arup-group/pam.git
-cd pam
-mamba create -n pam -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt
-mamba activate pam
-pip install --no-deps -e .
-```
+--8<-- "README.md:docs-install-dev"
 
-If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e ./pam[dev]`
+If installing directly with pip, you can install these libraries using the `dev` option, i.e., `pip install -e '.[dev]'`
 Either way, you should add your environment as a jupyter kernel, so the example notebooks can run in the tests: `ipython kernel install --user --name=pam`
 
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase while you work:
