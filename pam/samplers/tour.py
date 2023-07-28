@@ -326,17 +326,7 @@ class TourPlanner:
 
         return d_zone
 
-    def sequence_stops(self) -> tuple[list, list, list]:
-        """Creates a sequence for a number of stops. Sequence is determined by distance from origin.
-
-        TODO - Method to sequence stops with different logic (i.e, minimise distance between stops).
-
-        Returns:
-          tuple[list, list, list]: (o_loc, d_zones, d_locs).
-
-        """
-        o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
-
+    def sample_destinations(self, o_loc):
         d_seq = []
         sampled_d_facilities = []
 
@@ -363,7 +353,9 @@ class TourPlanner:
                     "distance": ActivityDuration().model_distance(o_loc, d_facility),
                 }
             )
+        return d_seq
 
+    def create_distance_matrix(self, o_loc, d_seq):
         # extact o_loc coordinates into array
         o_location = np.array([[o_loc.x, o_loc.y]])
 
@@ -377,16 +369,39 @@ class TourPlanner:
         # approximated from reduce compute time
         locs = np.concatenate([o_location, d_locations], 0)
         dist_matrix = distance_matrix(locs, locs)
-        # print(d_seq)
-        # print(dist_matrix)
+
+        return dist_matrix
+
+    def approx_greedy_tsp(self, dist_matrix):
         distance_graph = nx.from_numpy_array(dist_matrix)
         seq = nx.algorithms.approximation.greedy_tsp(distance_graph, source=0)
 
+        return seq
+
+    def reorder_deliveries(self, d_seq, seq):
         # use `seq` to re-order `d_locs` into an ordered list of dictionaries
         # remove o_loc (first and last stop) from sequence & adjust sequence range
         seq = seq[1:-1]
         seq = [x - 1 for x in seq]
         d_seq = [d_seq[order] for order in seq]
+
+        return d_seq
+
+    def sequence_stops(self) -> tuple[list, list, list]:
+        """Creates a sequence for a number of stops. Sequence is determined by approximated greedy TSP
+
+        Returns:
+          tuple[list, list, list]: (o_loc, d_zones, d_locs).
+
+        """
+        o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
+
+        d_seq = TourPlanner.sample_destinations(self, o_loc)
+        dist_matrix = TourPlanner.create_distance_matrix(self, o_loc, d_seq)
+
+        seq = TourPlanner.approx_greedy_tsp(self, dist_matrix)
+
+        d_seq = TourPlanner.reorder_deliveries(self, d_seq, seq)
 
         # sort distance: furthest facility to closest facility to origin facility. The final stop should be closest to origin.
         d_zones = [item.get("destination_zone") for item in d_seq]

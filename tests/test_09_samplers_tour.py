@@ -303,6 +303,16 @@ def agent_plan(hour_sampler, minute_sampler, delivery_density, df_od, facility_s
     )
 
 
+@pytest.fixture
+def d_facility_sampling(agent_plan):
+    agent_plan_test = agent_plan
+    o_loc = agent_plan_test.facility_sampler.sample(
+        agent_plan_test.o_zone, agent_plan_test.o_activity
+    )
+    d_seq = tour.TourPlanner.sample_destinations(agent_plan_test, o_loc)
+    return o_loc, d_seq
+
+
 @pytest.fixture(scope="function")
 def agent():
     agent_id = "LGV_1"
@@ -321,6 +331,36 @@ def od_density(trips, zones_gdf, depot_density, delivery_density):
         o_freq="density",
         d_freq="density",
     )
+
+
+def test_unique_stops(agent_plan, d_facility_sampling):
+    o_loc, d_seq = d_facility_sampling
+
+    # test for duplicate delivery locations in d_seq
+    deliveries = set()
+    for d in d_seq:
+        d_point = d["destination_facility"]
+        assert d_point not in deliveries, "Duplicate point found in d_seq"
+        deliveries.add(d_point)
+
+    # test if o_loc is in d_seq
+    assert o_loc not in deliveries, "o_loc has been sampled as a delivery location"
+
+
+def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
+    agent_plan_test = agent_plan
+    o_loc, d_seq = d_facility_sampling
+
+    dist_matrix = tour.TourPlanner.create_distance_matrix(agent_plan_test, o_loc, d_seq)
+    # Check for zero distances between different points
+    for i in range(dist_matrix.shape[0]):
+        for j in range(dist_matrix.shape[1]):
+            if i != j:  # Check for non-diagonal entries
+                (
+                    dist_matrix[i, j],
+                    0,
+                    "Zero distance found between different points in dist_matrix",
+                )
 
 
 def test_sequence_stops_length(agent_plan):
