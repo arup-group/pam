@@ -3172,10 +3172,14 @@ print_activity_locs(population, act_scope="work")</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">data_zones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="s2">&quot;jobs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="s2">&quot;schools&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="n">data_zones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="s2">&quot;jobs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="s2">&quot;schools&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span>
+    <span class="s2">&quot;zone&quot;</span>
+<span class="p">)</span>
 <span class="n">data_zones</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">data_zones = pd.DataFrame({"zone": ["a", "b"], "jobs": [100, 200], "schools": [3, 1]}).set_index("zone")
+<div id="cell-4" class="clipboard-copy-txt">data_zones = pd.DataFrame({"zone": ["a", "b"], "jobs": [100, 200], "schools": [3, 1]}).set_index(
+    "zone"
+)
 data_zones</div>
         
         </div>
@@ -3287,7 +3291,7 @@ data_zones</div>
         <span class="n">ODMatrix</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;bus&quot;</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span> <span class="p">[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">30</span><span class="p">]])),</span>
         <span class="n">ODMatrix</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="s2">&quot;car&quot;</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])),</span>
         <span class="n">ODMatrix</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="s2">&quot;bus&quot;</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">zone_labels</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])),</span>
-    <span class="p">],</span>
+    <span class="p">]</span>
 <span class="p">)</span>
 <span class="n">od</span>
 </pre></div>
@@ -3298,7 +3302,7 @@ od = ODFactory.from_matrices(
         ODMatrix("time", "bus", zone_labels, zone_labels, np.array([[30, 45], [45, 30]])),
         ODMatrix("distance", "car", zone_labels, zone_labels, np.array([[5, 8], [8, 5]])),
         ODMatrix("distance", "bus", zone_labels, zone_labels, np.array([[5, 9], [9, 5]])),
-    ],
+    ]
 )
 od</div>
         
@@ -3473,7 +3477,7 @@ distance - bus:
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1207f6ca0&gt;, func_sampling=&lt;function sample_weighted at 0x1207f6e50&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
 </pre>
 </div>
 </div>
@@ -3569,7 +3573,7 @@ planner.configure(u=u, scope=scope)</div>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1207f6ca0&gt;, func_sampling=&lt;function sample_weighted at 0x1207f6e50&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
 </pre>
 </div>
 </div>
@@ -3641,7 +3645,7 @@ print("\nChoice set utilities: \n", choice_set.u_choices)</div>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Activities in scope: 
- [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x1207fe850&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x1207feca0&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x120b3c640&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x120b3e250&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x120b3e1c0&gt;)]
+ [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae52d10&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae536d0&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x15ae58b10&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x15ae5a210&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae3ff10&gt;)]
 
 Alternatives: 
  [ChoiceLabel(destination=&#39;a&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;a&#39;, mode=&#39;bus&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;bus&#39;)]
@@ -3720,7 +3724,7 @@ print("Sampled choices: \n", planner._selections.selections)</div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Applying choice model...
 INFO:pam.planner.choice_location:Configuration: 
-ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1207f6ca0&gt;, func_sampling=&lt;function sample_weighted at 0x1207f6e50&gt;)
+ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
 INFO:pam.planner.choice_location:Choice model application complete.
 </pre>
 </div>

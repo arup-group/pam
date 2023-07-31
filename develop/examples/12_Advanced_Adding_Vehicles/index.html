@@ -2933,6 +2933,7 @@ Licensed under the Apache License, Version 2.0.
             </div>
             <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 
 <span class="kn">import</span> <span class="nn">pam</span>
@@ -2941,6 +2942,7 @@ Licensed under the Apache License, Version 2.0.
 </pre></div>
 <div id="cell-1" class="clipboard-copy-txt">import logging
 import os
+import random
 from pprint import pprint
 
 import pam
@@ -3123,9 +3125,7 @@ default_vehicle_type = pam.vehicle.VehicleType("default_car")</div>
                     </div>
                 </clipboard-copy>
             </div>
-            <div class="highlight-ipynb hl-python "><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-
-<span class="k">for</span> <span class="n">_hid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
+            <div class="highlight-ipynb hl-python "><pre><span></span><span class="k">for</span> <span class="n">_hid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
     <span class="k">if</span> <span class="s2">&quot;car&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">mode_classes</span> <span class="ow">and</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
         <span class="c1"># let&#39;s give a vehicle to this person</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
@@ -3133,9 +3133,7 @@ default_vehicle_type = pam.vehicle.VehicleType("default_car")</div>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">p</span><span class="o">.</span><span class="n">assign_vehicle</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">Vehicle</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">default_vehicle_type</span><span class="p">))</span>
 </pre></div>
-<div id="cell-5" class="clipboard-copy-txt">import random
-
-for _hid, pid, p in pop.people():
+<div id="cell-5" class="clipboard-copy-txt">for _hid, pid, p in pop.people():
     if "car" in p.mode_classes and random.random() < 0.5:
         # let's give a vehicle to this person
         if random.random() < 0.5:
@@ -3209,7 +3207,15 @@ for _hid, pid, p in pop.people():
  &#39;charger_types&#39;: &#39;default&#39;,
  &#39;id&#39;: &#39;id&#39;,
  &#39;initial_soc&#39;: 60,
- &#39;vehicle_type&#39;: VehicleType(id=&#39;defaultElectricVehicleType&#39;, length=7.5, width=1.0, networkMode=&#39;car&#39;, capacity=CapacityType(seats=4, standingRoomInPersons=0), description=&#39;personal_vehicle&#39;, passengerCarEquivalents=1.0, flowEfficiencyFactor=1.0)}
+ &#39;vehicle_type&#39;: VehicleType(id=&#39;defaultElectricVehicleType&#39;,
+                             length=7.5,
+                             width=1.0,
+                             networkMode=&#39;car&#39;,
+                             capacity=CapacityType(seats=4,
+                                                   standingRoomInPersons=0),
+                             description=&#39;personal_vehicle&#39;,
+                             passengerCarEquivalents=1.0,
+                             flowEfficiencyFactor=1.0)}
 </pre>
 </div>
 </div>
@@ -3264,7 +3270,7 @@ for _hid, pid, p in pop.people():
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>3</pre>
+<pre>5</pre>
 </div>
 
 </div>
@@ -3383,7 +3389,7 @@ INFO:root:Saving vehicles to ./tmp
 INFO:root:Writing all vehicles to ./tmp/all_vehicles.xml
 INFO:root:Population includes electric vehicles
 INFO:root:Writing electric vehicles to ./tmp/electric_vehicles.xml
-INFO:root:Found 3 electric vehicles with unique charger types: {&#39;default&#39;}. Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd if you&#39;re running a simulation using org.matsim.contrib.ev
+INFO:root:Found 5 electric vehicles with unique charger types: {&#39;default&#39;}. Ensure you generate a chargers xml file: https://www.matsim.org/files/dtd/chargers_v1.dtd if you&#39;re running a simulation using org.matsim.contrib.ev
 </pre>
 </div>
 </div>
