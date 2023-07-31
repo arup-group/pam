@@ -17,7 +17,7 @@
         <link rel="next" href="../read_data/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -265,16 +265,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#setting-up-a-user-environment" class="md-nav__link">
+    Setting up a user environment
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up a user environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#running-the-example-notebooks" class="md-nav__link">
     Running the example notebooks
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#choosing-a-different-environment-name" class="md-nav__link">
     Choosing a different environment name
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1849,16 +1862,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#setting-up-a-user-environment" class="md-nav__link">
+    Setting up a user environment
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up a user environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#running-the-example-notebooks" class="md-nav__link">
     Running the example notebooks
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#choosing-a-different-environment-name" class="md-nav__link">
     Choosing a different environment name
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1891,26 +1917,27 @@
 
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h1>
-<p>It is easiest to install PAM using a <a href="https://mamba.readthedocs.io/en/latest/index.html">mamba</a> environment, as follows:</p>
+<h2 id="setting-up-a-user-environment">Setting up a user environment<a class="headerlink" href="#setting-up-a-user-environment" title="Permanent link">#</a></h2>
+<p>As a PAM user, it is easiest to install PAM using the <a href="https://mamba.readthedocs.io/en/latest/index.html">mamba</a> package manager, as follows:</p>
 <ol>
 <li>Install mamba with the <a href="https://github.com/conda-forge/miniforge#mambaforge">Mambaforge</a> executable for your operating system.</li>
 <li>Open the command line (or the "miniforge prompt" in Windows).</li>
 <li>Download (a.k.a., clone) the PAM repository: <code>git clone git@github.com:arup-group/pam.git</code></li>
 <li>Change into the <code>pam</code> directory: <code>cd pam</code></li>
-<li>Create the PAM mamba environment: <code>mamba create -n pam -c city-modelling-lab --file requirements/base.txt</code></li>
+<li>Create the PAM mamba environment: <code>mamba create -n pam -c conda-forge -c city-modelling-lab --file requirements/base.txt</code></li>
 <li>Activate the PAM mamba environment: <code>mamba activate pam</code></li>
 <li>Install the PAM package into the environment, ignoring dependencies (we have dealt with those when creating the mamba environment): <code>pip install --no-deps .</code></li>
 </ol>
 <p>All together:</p>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:arup-group/pam.git
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>pam
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pam<span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pam<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mamba<span class="w"> </span>activate<span class="w"> </span>pam
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>.
 </span></code></pre></div>
 <p>We do not recommend trying to install PAM directly with pip (e.g. in a virtual environment) as you need to first install underlying native geospatial libraries, the method for which differs by operating system.
 If you choose to install into a virtual environment, ensure you have <code>libgdal</code> and <code>libspatialindex</code> installed on your device before installing with pip. </p>
-<h2 id="running-the-example-notebooks">Running the example notebooks<a class="headerlink" href="#running-the-example-notebooks" title="Permanent link">#</a></h2>
+<h3 id="running-the-example-notebooks">Running the example notebooks<a class="headerlink" href="#running-the-example-notebooks" title="Permanent link">#</a></h3>
 <p>If you have followed the non-developer installation instructions above, you will need to install <code>jupyter</code> into your <code>pam</code> environment to run the <a href="https://github.com/arup-group/pam/tree/main/examples">example notebooks</a>:</p>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mamba<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>pam<span class="w"> </span>jupyter
 </span></code></pre></div>
@@ -1919,14 +1946,21 @@ If you choose to install into a virtual environment, ensure you have <code>libgd
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ipython<span class="w"> </span>kernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>pam
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>jupyter<span class="w"> </span>notebook
 </span></code></pre></div>
-<h2 id="choosing-a-different-environment-name">Choosing a different environment name<a class="headerlink" href="#choosing-a-different-environment-name" title="Permanent link">#</a></h2>
+<h3 id="choosing-a-different-environment-name">Choosing a different environment name<a class="headerlink" href="#choosing-a-different-environment-name" title="Permanent link">#</a></h3>
 <p>If you would like to use a different name to <code>pam</code> for your mamba environment, the installation becomes (where <code>[my-env-name]</code> is your preferred name for the environment):</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span><span class="o">[</span>my-env-name<span class="o">]</span><span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span><span class="o">[</span>my-env-name<span class="o">]</span><span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mamba<span class="w"> </span>activate<span class="w"> </span><span class="o">[</span>my-env-name<span class="o">]</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>ipython<span class="w"> </span>kernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=[</span>my-env-name<span class="o">]</span>
 </span></code></pre></div>
 <h2 id="setting-up-a-development-environment">Setting up a development environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permanent link">#</a></h2>
-<p>For installation instructions specific to developing the PAM codebase, see our <a class="autorefs autorefs-internal" href="../contributing/coding/#setting-up-a-development-environment">development documentation</a>.</p>
+<p>The install instructions are slightly different to create a development environment compared to a user environment:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:arup-group/pam.git
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">cd</span><span class="w"> </span>pam
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pam<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>-c<span class="w"> </span>city-modelling-lab<span class="w"> </span>--file<span class="w"> </span>requirements/base.txt<span class="w"> </span>--file<span class="w"> </span>requirements/dev.txt
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mamba<span class="w"> </span>activate<span class="w"> </span>pam
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--no-deps<span class="w"> </span>-e<span class="w"> </span>.
+</span></code></pre></div>
+<p>For more detailed installation instructions specific to developing the PAM codebase, see our <a class="autorefs autorefs-internal" href="../contributing/coding/#setting-up-a-development-environment">development documentation</a>.</p>
 
 
 

@@ -17,7 +17,7 @@
         <link rel="next" href="../utils/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2239,12 +2239,13 @@
 
   <div class="doc doc-contents ">
 
+
   
       <p>Charypar-Nagel plan scorer.</p>
 
-              <details class="quote">
-                <summary>Source code in <code>pam/scoring.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-49">49</a></span>
+          <details class="quote">
+            <summary>Source code in <code>pam/scoring.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-49">49</a></span>
 <span class="normal"><a href="#__codelineno-0-50">50</a></span>
 <span class="normal"><a href="#__codelineno-0-51">51</a></span>
 <span class="normal"><a href="#__codelineno-0-52">52</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2252,7 +2253,7 @@
 </span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 </span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span> <span class="o">=</span> <span class="n">cnfg</span>
 </span></code></pre></div></td></tr></table></div>
-              </details>
+          </details>
 
   
 
@@ -2291,8 +2292,8 @@
 <code class="highlight language-python"><span class="n">example_config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;mUM&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;utilityOfLineSwitch&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;performing&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;waiting&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;waitingPt&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;lateArrival&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;earlyDeparture&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;work&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;08:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;latestStartTime&#39;</span><span class="p">:</span> <span class="s1">&#39;09:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;earliestEndTime&#39;</span><span class="p">:</span> <span class="s1">&#39;16:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;01:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;home&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;12:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;minimalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;05:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;shop&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;typicalDuration&#39;</span><span class="p">:</span> <span class="s1">&#39;00:30:00&#39;</span><span class="p">,</span> <span class="s1">&#39;openingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;06:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;closingTime&#39;</span><span class="p">:</span> <span class="s1">&#39;20:00:00&#39;</span><span class="p">},</span> <span class="s1">&#39;car&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;dailyMonetaryConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;dailyUtilityConstant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfDistance&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;marginalUtilityOfTravelling&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;monetaryDistanceRate&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.0001</span><span class="p">},</span> <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;constant&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">}}}</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.scoring.CharyparNagelPlanScorer.example_config" class="headerlink" title="Permanent link">#</a></h3>
@@ -2324,7 +2325,6 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
@@ -2337,9 +2337,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-172">172</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-172">172</a></span>
 <span class="normal"><a href="#__codelineno-0-173">173</a></span>
 <span class="normal"><a href="#__codelineno-0-174">174</a></span>
 <span class="normal"><a href="#__codelineno-0-175">175</a></span>
@@ -2355,11 +2355,10 @@
 </span><span id="__span-0-178"><a id="__codelineno-0-178" name="__codelineno-0-178"></a>    <span class="p">)</span>
 </span><span id="__span-0-179"><a id="__codelineno-0-179" name="__codelineno-0-179"></a>    <span class="k">return</span> <span class="n">wrapped_act</span><span class="p">,</span> <span class="n">non_wrapped</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2373,9 +2372,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-234">234</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-234">234</a></span>
 <span class="normal"><a href="#__codelineno-0-235">235</a></span>
 <span class="normal"><a href="#__codelineno-0-236">236</a></span>
 <span class="normal"><a href="#__codelineno-0-237">237</a></span>
@@ -2443,11 +2442,10 @@
 </span><span id="__span-0-266"><a id="__codelineno-0-266" name="__codelineno-0-266"></a>
 </span><span id="__span-0-267"><a id="__codelineno-0-267" name="__codelineno-0-267"></a>    <span class="k">return</span> <span class="n">performing</span> <span class="o">*</span> <span class="n">typical_dur</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="n">typical_dur</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">prio</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2461,9 +2459,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-291">291</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-291">291</a></span>
 <span class="normal"><a href="#__codelineno-0-292">292</a></span>
 <span class="normal"><a href="#__codelineno-0-293">293</a></span>
 <span class="normal"><a href="#__codelineno-0-294">294</a></span>
@@ -2479,11 +2477,10 @@
 </span><span id="__span-0-297"><a id="__codelineno-0-297" name="__codelineno-0-297"></a>            <span class="p">)</span>
 </span><span id="__span-0-298"><a id="__codelineno-0-298" name="__codelineno-0-298"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2497,9 +2494,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-282">282</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-282">282</a></span>
 <span class="normal"><a href="#__codelineno-0-283">283</a></span>
 <span class="normal"><a href="#__codelineno-0-284">284</a></span>
 <span class="normal"><a href="#__codelineno-0-285">285</a></span>
@@ -2515,11 +2512,10 @@
 </span><span id="__span-0-288"><a id="__codelineno-0-288" name="__codelineno-0-288"></a>            <span class="p">)</span>
 </span><span id="__span-0-289"><a id="__codelineno-0-289" name="__codelineno-0-289"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2533,17 +2529,16 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-315">315</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-315">315</a></span>
 <span class="normal"><a href="#__codelineno-0-316">316</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-315"><a id="__codelineno-0-315" name="__codelineno-0-315"></a><span class="k">def</span> <span class="nf">mode_constant_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
 </span><span id="__span-0-316"><a id="__codelineno-0-316" name="__codelineno-0-316"></a>    <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2557,9 +2552,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-307">307</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-307">307</a></span>
 <span class="normal"><a href="#__codelineno-0-308">308</a></span>
 <span class="normal"><a href="#__codelineno-0-309">309</a></span>
 <span class="normal"><a href="#__codelineno-0-310">310</a></span>
@@ -2573,11 +2568,10 @@
 </span><span id="__span-0-312"><a id="__codelineno-0-312" name="__codelineno-0-312"></a>            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;waitingPt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">waiting</span>
 </span><span id="__span-0-313"><a id="__codelineno-0-313" name="__codelineno-0-313"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2591,9 +2585,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-181">181</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-181">181</a></span>
 <span class="normal"><a href="#__codelineno-0-182">182</a></span>
 <span class="normal"><a href="#__codelineno-0-183">183</a></span>
 <span class="normal"><a href="#__codelineno-0-184">184</a></span>
@@ -2611,11 +2605,10 @@
 </span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a>        <span class="p">]</span>
 </span><span id="__span-0-189"><a id="__codelineno-0-189" name="__codelineno-0-189"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2629,9 +2622,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-140">140</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-140">140</a></span>
 <span class="normal"><a href="#__codelineno-0-141">141</a></span>
 <span class="normal"><a href="#__codelineno-0-142">142</a></span>
 <span class="normal"><a href="#__codelineno-0-143">143</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140"></a><span class="k">def</span> <span class="nf">score_day_mode_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -2639,11 +2632,10 @@
 </span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a>        <span class="n">cnfg</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dailyMonetaryConstant&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2657,9 +2649,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-224">224</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-224">224</a></span>
 <span class="normal"><a href="#__codelineno-0-225">225</a></span>
 <span class="normal"><a href="#__codelineno-0-226">226</a></span>
 <span class="normal"><a href="#__codelineno-0-227">227</a></span>
@@ -2677,11 +2669,10 @@
 </span><span id="__span-0-231"><a id="__codelineno-0-231" name="__codelineno-0-231"></a>        <span class="p">]</span>
 </span><span id="__span-0-232"><a id="__codelineno-0-232" name="__codelineno-0-232"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2697,13 +2688,11 @@
   
       <p>Score a pam.core.Person Plan.</p>
 
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2760,8 +2749,6 @@
     </tbody>
   </table>
 
-
-
   <table>
     <thead>
       <tr>
@@ -2789,9 +2776,9 @@
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-54">54</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-54">54</a></span>
 <span class="normal"><a href="#__codelineno-0-55">55</a></span>
 <span class="normal"><a href="#__codelineno-0-56">56</a></span>
 <span class="normal"><a href="#__codelineno-0-57">57</a></span>
@@ -2829,11 +2816,10 @@
 </span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="n">cnfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cnfg</span><span class="p">[</span><span class="n">subpop</span><span class="p">]</span>
 </span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span> <span class="n">plan_cost</span><span class="o">=</span><span class="n">plan_costs</span><span class="p">,</span> <span class="n">cnfg</span><span class="o">=</span><span class="n">cnfg</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2849,13 +2835,11 @@
   
       <p>Score a pam.activity.Plan.</p>
 
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2908,8 +2892,6 @@
     </tbody>
   </table>
 
-
-
   <table>
     <thead>
       <tr>
@@ -2937,9 +2919,9 @@
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
 <span class="normal"><a href="#__codelineno-0-75">75</a></span>
 <span class="normal"><a href="#__codelineno-0-76">76</a></span>
 <span class="normal"><a href="#__codelineno-0-77">77</a></span>
@@ -2975,11 +2957,10 @@
 </span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a>        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_plan_daily</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span>
 </span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2993,9 +2974,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-145">145</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-145">145</a></span>
 <span class="normal"><a href="#__codelineno-0-146">146</a></span>
 <span class="normal"><a href="#__codelineno-0-147">147</a></span>
 <span class="normal"><a href="#__codelineno-0-148">148</a></span>
@@ -3047,11 +3028,10 @@
 </span><span id="__span-0-169"><a id="__codelineno-0-169" name="__codelineno-0-169"></a>
 </span><span id="__span-0-170"><a id="__codelineno-0-170" name="__codelineno-0-170"></a>    <span class="k">return</span> <span class="n">score</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3065,19 +3045,18 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-136">136</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-136">136</a></span>
 <span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136"></a><span class="k">def</span> <span class="nf">score_plan_daily</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 </span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137"></a>    <span class="n">modes</span> <span class="o">=</span> <span class="n">plan</span><span class="o">.</span><span class="n">mode_classes</span>
 </span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138"></a>    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">score_day_mode_use</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">])</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3091,9 +3070,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-191">191</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-191">191</a></span>
 <span class="normal"><a href="#__codelineno-0-192">192</a></span>
 <span class="normal"><a href="#__codelineno-0-193">193</a></span>
 <span class="normal"><a href="#__codelineno-0-194">194</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-191"><a id="__codelineno-0-191" name="__codelineno-0-191"></a><span class="k">def</span> <span class="nf">score_plan_legs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">):</span>
@@ -3101,11 +3080,10 @@
 </span><span id="__span-0-193"><a id="__codelineno-0-193" name="__codelineno-0-193"></a>        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">score_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">legs</span><span class="p">]</span>
 </span><span id="__span-0-194"><a id="__codelineno-0-194" name="__codelineno-0-194"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3119,9 +3097,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-131">131</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-131">131</a></span>
 <span class="normal"><a href="#__codelineno-0-132">132</a></span>
 <span class="normal"><a href="#__codelineno-0-133">133</a></span>
 <span class="normal"><a href="#__codelineno-0-134">134</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="k">def</span> <span class="nf">score_plan_monetary_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_cost</span><span class="p">,</span> <span class="n">cnfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -3129,11 +3107,10 @@
 </span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133"></a>        <span class="k">return</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">plan_cost</span>
 </span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3149,13 +3126,11 @@
   
       <p>Calculates utility of line switch.</p>
 
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -3190,8 +3165,6 @@
     </tbody>
   </table>
 
-
-
   <table>
     <thead>
       <tr>
@@ -3219,9 +3192,9 @@
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-196">196</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-196">196</a></span>
 <span class="normal"><a href="#__codelineno-0-197">197</a></span>
 <span class="normal"><a href="#__codelineno-0-198">198</a></span>
 <span class="normal"><a href="#__codelineno-0-199">199</a></span>
@@ -3275,11 +3248,10 @@
 </span><span id="__span-0-221"><a id="__codelineno-0-221" name="__codelineno-0-221"></a>    <span class="n">cost</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">transits</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;utilityOfLineSwitch&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="__span-0-222"><a id="__codelineno-0-222" name="__codelineno-0-222"></a>    <span class="k">return</span> <span class="n">cost</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3293,9 +3265,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
 <span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
 <span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
 <span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
@@ -3369,11 +3341,10 @@
 </span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128"></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Travel_distance_score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">travel_distance_score</span><span class="p">(</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">cnfg</span><span class="o">=</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 </span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a>            <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3387,9 +3358,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-300">300</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-300">300</a></span>
 <span class="normal"><a href="#__codelineno-0-301">301</a></span>
 <span class="normal"><a href="#__codelineno-0-302">302</a></span>
 <span class="normal"><a href="#__codelineno-0-303">303</a></span>
@@ -3401,11 +3372,10 @@
 </span><span id="__span-0-304"><a id="__codelineno-0-304" name="__codelineno-0-304"></a>            <span class="k">return</span> <span class="n">cnfg</span><span class="p">[</span><span class="s2">&quot;earlyDeparture&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">minimal_duration</span> <span class="o">-</span> <span class="n">activity</span><span class="o">.</span><span class="n">hours</span><span class="p">)</span>
 </span><span id="__span-0-305"><a id="__codelineno-0-305" name="__codelineno-0-305"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3419,9 +3389,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-324">324</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-324">324</a></span>
 <span class="normal"><a href="#__codelineno-0-325">325</a></span>
 <span class="normal"><a href="#__codelineno-0-326">326</a></span>
 <span class="normal"><a href="#__codelineno-0-327">327</a></span>
@@ -3431,11 +3401,10 @@
 </span><span id="__span-0-327"><a id="__codelineno-0-327" name="__codelineno-0-327"></a>        <span class="o">+</span> <span class="p">(</span><span class="n">cnfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mUM&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;monetaryDistanceRate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
 </span><span id="__span-0-328"><a id="__codelineno-0-328" name="__codelineno-0-328"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3449,9 +3418,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-318">318</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-318">318</a></span>
 <span class="normal"><a href="#__codelineno-0-319">319</a></span>
 <span class="normal"><a href="#__codelineno-0-320">320</a></span>
 <span class="normal"><a href="#__codelineno-0-321">321</a></span>
@@ -3461,11 +3430,10 @@
 </span><span id="__span-0-321"><a id="__codelineno-0-321" name="__codelineno-0-321"></a>        <span class="n">duration</span> <span class="o">-=</span> <span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">boarding_time</span> <span class="o">-</span> <span class="n">leg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>    <span class="k">return</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">cnfg</span><span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marginalUtilityOfTravelling&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3479,9 +3447,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/scoring.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-269">269</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/scoring.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-269">269</a></span>
 <span class="normal"><a href="#__codelineno-0-270">270</a></span>
 <span class="normal"><a href="#__codelineno-0-271">271</a></span>
 <span class="normal"><a href="#__codelineno-0-272">272</a></span>
@@ -3505,7 +3473,7 @@
 </span><span id="__span-0-279"><a id="__codelineno-0-279" name="__codelineno-0-279"></a>        <span class="k">return</span> <span class="n">waiting</span> <span class="o">*</span> <span class="p">((</span><span class="n">opening_dt</span> <span class="o">-</span> <span class="n">start_dt</span><span class="p">)</span> <span class="o">/</span> <span class="n">td</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 </span><span id="__span-0-280"><a id="__codelineno-0-280" name="__codelineno-0-280"></a>    <span class="k">return</span> <span class="mf">0.0</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>

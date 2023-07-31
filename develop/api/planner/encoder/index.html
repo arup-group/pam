@@ -17,7 +17,7 @@
         <link rel="next" href="../od/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2478,9 +2478,10 @@
   <div class="doc doc-contents ">
 
 
-              <details class="quote">
-                <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
 <span class="normal"><a href="#__codelineno-0-22">22</a></span>
@@ -2492,7 +2493,7 @@
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">label_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mapping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
 </span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">code_label</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_code</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 </span></code></pre></div></td></tr></table></div>
-              </details>
+          </details>
 
   
 
@@ -2509,7 +2510,7 @@
 
 
 <h3 id="pam.planner.encoder.Encoder.code_label" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">code_label</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">kfor</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_code</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></code>
+<code class="highlight language-python"><span class="n">code_label</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">kfor</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_code</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -2563,7 +2564,6 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
@@ -2576,17 +2576,16 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-29">29</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-29">29</a></span>
 <span class="normal"><a href="#__codelineno-0-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_label</span><span class="p">[</span><span class="n">code</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2600,17 +2599,16 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-26">26</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 </span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_code</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2628,15 +2626,15 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="k">def</span> <span class="nf">get_mapping</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
 </span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -2654,15 +2652,16 @@
 
 
 <h2 id="pam.planner.encoder.PlanCharacterEncoder" class="doc doc-heading">
-          <code>PlanCharacterEncoder</code>
+        <code>PlanCharacterEncoder</code>
 
 
 <a href="#pam.planner.encoder.PlanCharacterEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlanEncoder" href="#pam.planner.encoder.PlanEncoder">PlanEncoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlanEncoder" href="#pam.planner.encoder.PlanEncoder">PlanEncoder</a></code></p>
+
 
 
 
@@ -2684,8 +2683,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="n">StringCharacterEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanCharacterEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -2695,7 +2694,6 @@
   </div>
 
 </div>
-
 
 
 
@@ -2713,9 +2711,9 @@
   
       <p>Convert a pam plan to a character sequence.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-110">110</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-110">110</a></span>
 <span class="normal"><a href="#__codelineno-0-111">111</a></span>
 <span class="normal"><a href="#__codelineno-0-112">112</a></span>
 <span class="normal"><a href="#__codelineno-0-113">113</a></span>
@@ -2731,11 +2729,10 @@
 </span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116"></a>
 </span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2753,15 +2750,15 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-119">119</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-119">119</a></span>
 <span class="normal"><a href="#__codelineno-0-120">120</a></span>
 <span class="normal"><a href="#__codelineno-0-121">121</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120"></a><span class="k">def</span> <span class="nf">get_seq</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 </span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121"></a>    <span class="k">return</span> <span class="n">x</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -2787,9 +2784,10 @@
   <div class="doc doc-contents ">
 
 
-              <details class="quote">
-                <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-60">60</a></span>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-60">60</a></span>
 <span class="normal"><a href="#__codelineno-0-61">61</a></span>
 <span class="normal"><a href="#__codelineno-0-62">62</a></span>
 <span class="normal"><a href="#__codelineno-0-63">63</a></span>
@@ -2811,7 +2809,7 @@
 </span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please provide appropriate activity labels or encodings&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-              </details>
+          </details>
 
   
 
@@ -2850,8 +2848,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -2861,7 +2859,6 @@
   </div>
 
 </div>
-
 
 
 
@@ -2881,9 +2878,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72">72</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72">72</a></span>
 <span class="normal"><a href="#__codelineno-0-73">73</a></span>
 <span class="normal"><a href="#__codelineno-0-74">74</a></span>
 <span class="normal"><a href="#__codelineno-0-75">75</a></span>
@@ -2903,11 +2900,10 @@
 </span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a>            <span class="p">)</span>
 </span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81"></a>        <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2923,9 +2919,9 @@
   
       <p>Decode a sequence to a new PAM plan.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
 <span class="normal"><a href="#__codelineno-0-87"> 87</a></span>
 <span class="normal"><a href="#__codelineno-0-88"> 88</a></span>
 <span class="normal"><a href="#__codelineno-0-89"> 89</a></span>
@@ -2955,11 +2951,10 @@
 </span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>
 </span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>    <span class="k">return</span> <span class="n">plan</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2973,17 +2968,16 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-83">83</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-83">83</a></span>
 <span class="normal"><a href="#__codelineno-0-84">84</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84"></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3001,15 +2995,15 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-102">102</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-102">102</a></span>
 <span class="normal"><a href="#__codelineno-0-103">103</a></span>
 <span class="normal"><a href="#__codelineno-0-104">104</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103"></a><span class="k">def</span> <span class="nf">get_seq</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 </span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -3027,15 +3021,16 @@
 
 
 <h2 id="pam.planner.encoder.PlanOneHotEncoder" class="doc doc-heading">
-          <code>PlanOneHotEncoder</code>
+        <code>PlanOneHotEncoder</code>
 
 
 <a href="#pam.planner.encoder.PlanOneHotEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlanEncoder" href="#pam.planner.encoder.PlanEncoder">PlanEncoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlanEncoder" href="#pam.planner.encoder.PlanEncoder">PlanEncoder</a></code></p>
+
 
 
 
@@ -3057,8 +3052,8 @@
 <code class="highlight language-python"><span class="n">activity_encoder_class</span> <span class="o">=</span> <span class="n">StringIntEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlanOneHotEncoder.activity_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3068,7 +3063,6 @@
   </div>
 
 </div>
-
 
 
 
@@ -3088,9 +3082,9 @@
 where the row indicates the activity
 and the column indicates the minute of the day.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
 <span class="normal"><a href="#__codelineno-0-128">128</a></span>
 <span class="normal"><a href="#__codelineno-0-129">129</a></span>
 <span class="normal"><a href="#__codelineno-0-130">130</a></span>
@@ -3118,11 +3112,10 @@ and the column indicates the minute of the day.</p>
 </span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139"></a>
 </span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -3140,15 +3133,15 @@ and the column indicates the minute of the day.</p>
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-142">142</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-142">142</a></span>
 <span class="normal"><a href="#__codelineno-0-143">143</a></span>
 <span class="normal"><a href="#__codelineno-0-144">144</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143"></a><span class="k">def</span> <span class="nf">get_seq</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 </span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144"></a>    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -3166,15 +3159,16 @@ and the column indicates the minute of the day.</p>
 
 
 <h2 id="pam.planner.encoder.PlansCharacterEncoder" class="doc doc-heading">
-          <code>PlansCharacterEncoder</code>
+        <code>PlansCharacterEncoder</code>
 
 
 <a href="#pam.planner.encoder.PlansCharacterEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlansEncoder" href="#pam.planner.encoder.PlansEncoder">PlansEncoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlansEncoder" href="#pam.planner.encoder.PlansEncoder">PlansEncoder</a></code></p>
+
 
 
 
@@ -3196,8 +3190,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="n">PlanCharacterEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansCharacterEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3231,13 +3225,14 @@ and the column indicates the minute of the day.</p>
   <div class="doc doc-contents ">
 
 
-              <details class="quote">
-                <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-151">151</a></span>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-151">151</a></span>
 <span class="normal"><a href="#__codelineno-0-152">152</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-151"><a id="__codelineno-0-151" name="__codelineno-0-151"></a><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">activity_classes</span><span class="p">:</span> <span class="nb">set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-152"><a id="__codelineno-0-152" name="__codelineno-0-152"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">plan_encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plans_encoder_class</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">activity_classes</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-              </details>
+          </details>
 
   
 
@@ -3257,8 +3252,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">dtype</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansEncoder.dtype" class="headerlink" title="Permanent link">#</a></h3>
@@ -3296,8 +3291,8 @@ and the column indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="kc">None</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3307,7 +3302,6 @@ and the column indicates the minute of the day.</p>
   </div>
 
 </div>
-
 
 
 
@@ -3325,9 +3319,9 @@ and the column indicates the minute of the day.</p>
   
       <p>Encode all plans to a stacked numpy array.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-154">154</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-154">154</a></span>
 <span class="normal"><a href="#__codelineno-0-155">155</a></span>
 <span class="normal"><a href="#__codelineno-0-156">156</a></span>
 <span class="normal"><a href="#__codelineno-0-157">157</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-154"><a id="__codelineno-0-154" name="__codelineno-0-154"></a><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plans</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Plan</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -3335,7 +3329,7 @@ and the column indicates the minute of the day.</p>
 </span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="n">plans_encoded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">plan_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">plans</span><span class="p">])</span>
 </span><span id="__span-0-157"><a id="__codelineno-0-157" name="__codelineno-0-157"></a>    <span class="k">return</span> <span class="n">plans_encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -3353,21 +3347,22 @@ and the column indicates the minute of the day.</p>
 
 
 <h2 id="pam.planner.encoder.PlansOneHotEncoder" class="doc doc-heading">
-          <code>PlansOneHotEncoder</code>
+        <code>PlansOneHotEncoder</code>
 
 
 <a href="#pam.planner.encoder.PlansOneHotEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlansEncoder" href="#pam.planner.encoder.PlansEncoder">PlansEncoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.PlansEncoder" href="#pam.planner.encoder.PlansEncoder">PlansEncoder</a></code></p>
 
   
       <p>Encode plans to a 3D numpy array,
 where the first axis indicates the person,
 the second indicates the activity,
 and the third indicates the minute of the day.</p>
+
 
 
   
@@ -3388,8 +3383,8 @@ and the third indicates the minute of the day.</p>
 <code class="highlight language-python"><span class="n">plans_encoder_class</span> <span class="o">=</span> <span class="n">PlanOneHotEncoder</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.planner.encoder.PlansOneHotEncoder.plans_encoder_class" class="headerlink" title="Permanent link">#</a></h3>
@@ -3415,24 +3410,24 @@ and the third indicates the minute of the day.</p>
 
 
 <h2 id="pam.planner.encoder.StringCharacterEncoder" class="doc doc-heading">
-          <code>StringCharacterEncoder</code>
+        <code>StringCharacterEncoder</code>
 
 
 <a href="#pam.planner.encoder.StringCharacterEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.Encoder" href="#pam.planner.encoder.Encoder">Encoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.Encoder" href="#pam.planner.encoder.Encoder">Encoder</a></code></p>
 
   
       <p>Encodes strings as single characters.</p>
 
 
+
   
 
   <div class="doc doc-children">
-
 
 
 
@@ -3458,9 +3453,9 @@ and the third indicates the minute of the day.</p>
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-40">40</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-40">40</a></span>
 <span class="normal"><a href="#__codelineno-0-41">41</a></span>
 <span class="normal"><a href="#__codelineno-0-42">42</a></span>
 <span class="normal"><a href="#__codelineno-0-43">43</a></span>
@@ -3472,7 +3467,7 @@ and the third indicates the minute of the day.</p>
 </span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a>        <span class="n">encoded</span><span class="p">[</span><span class="n">act</span><span class="p">]</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">65</span><span class="p">)</span>
 </span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -3490,24 +3485,24 @@ and the third indicates the minute of the day.</p>
 
 
 <h2 id="pam.planner.encoder.StringIntEncoder" class="doc doc-heading">
-          <code>StringIntEncoder</code>
+        <code>StringIntEncoder</code>
 
 
 <a href="#pam.planner.encoder.StringIntEncoder" class="headerlink" title="Permanent link">#</a></h2>
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.Encoder" href="#pam.planner.encoder.Encoder">Encoder</a></code></p>
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.encoder.Encoder" href="#pam.planner.encoder.Encoder">Encoder</a></code></p>
 
   
       <p>Encodes strings as integers.</p>
 
 
+
   
 
   <div class="doc doc-children">
-
 
 
 
@@ -3533,9 +3528,9 @@ and the third indicates the minute of the day.</p>
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/planner/encoder.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/planner/encoder.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
 <span class="normal"><a href="#__codelineno-0-52">52</a></span>
 <span class="normal"><a href="#__codelineno-0-53">53</a></span>
 <span class="normal"><a href="#__codelineno-0-54">54</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="nd">@staticmethod</span>
@@ -3543,7 +3538,7 @@ and the third indicates the minute of the day.</p>
 </span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="n">encoded</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">)}</span>
 </span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>

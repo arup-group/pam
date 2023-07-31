@@ -17,7 +17,7 @@
         <link rel="next" href="../../optimise/grid/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -2094,7 +2094,6 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
@@ -2109,9 +2108,9 @@
   
       <p>Create a leg between two activities.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-140">140</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-140">140</a></span>
 <span class="normal"><a href="#__codelineno-0-141">141</a></span>
 <span class="normal"><a href="#__codelineno-0-142">142</a></span>
 <span class="normal"><a href="#__codelineno-0-143">143</a></span>
@@ -2139,11 +2138,10 @@
 </span><span id="__span-0-152"><a id="__codelineno-0-152" name="__codelineno-0-152"></a>    <span class="n">leg</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">next_act</span>
 </span><span id="__span-0-153"><a id="__codelineno-0-153" name="__codelineno-0-153"></a>    <span class="k">return</span> <span class="n">leg</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2159,9 +2157,9 @@
   
       <p>Crop a leg to a boundary.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86">86</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86">86</a></span>
 <span class="normal"><a href="#__codelineno-0-87">87</a></span>
 <span class="normal"><a href="#__codelineno-0-88">88</a></span>
 <span class="normal"><a href="#__codelineno-0-89">89</a></span>
@@ -2179,11 +2177,10 @@
 </span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="n">leg</span><span class="o">.</span><span class="n">end_location</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">end_location</span>
 </span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="n">leg</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">end_location</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2200,9 +2197,9 @@
       <p>Crop a plan in a way that exludes any external-external movement (and the corresponding activities).
 If no plan components are left in scope, the plan will have a single "external" activity.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-116">116</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-116">116</a></span>
 <span class="normal"><a href="#__codelineno-0-117">117</a></span>
 <span class="normal"><a href="#__codelineno-0-118">118</a></span>
 <span class="normal"><a href="#__codelineno-0-119">119</a></span>
@@ -2220,11 +2217,10 @@ If no plan components are left in scope, the plan will have a single "external" 
 </span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123"></a>        <span class="n">day</span> <span class="o">=</span> <span class="n">empty_day</span><span class="p">()</span>
 </span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124"></a>    <span class="n">plan</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">day</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2238,9 +2234,9 @@ If no plan components are left in scope, the plan will have a single "external" 
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
 <span class="normal"><a href="#__codelineno-0-128">128</a></span>
 <span class="normal"><a href="#__codelineno-0-129">129</a></span>
 <span class="normal"><a href="#__codelineno-0-130">130</a></span>
@@ -2262,11 +2258,10 @@ If no plan components are left in scope, the plan will have a single "external" 
 </span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136"></a>    <span class="p">]</span>
 </span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137"></a>    <span class="k">return</span> <span class="n">day</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2282,9 +2277,9 @@ If no plan components are left in scope, the plan will have a single "external" 
   
       <p>Check if an activity/leg should be kept.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-108">108</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
 <span class="normal"><a href="#__codelineno-0-110">110</a></span>
 <span class="normal"><a href="#__codelineno-0-111">111</a></span>
@@ -2296,11 +2291,10 @@ If no plan components are left in scope, the plan will have a single "external" 
 </span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">Leg</span><span class="p">):</span>
 </span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113"></a>        <span class="k">return</span> <span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">previous</span> <span class="ow">in</span> <span class="n">kept_activities</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">next</span> <span class="ow">in</span> <span class="n">kept_activities</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2316,9 +2310,9 @@ If no plan components are left in scope, the plan will have a single "external" 
   
       <p>Get a list of the activities to keep after cropping external-external movements.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
 <span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
 <span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
 <span class="normal"><a href="#__codelineno-0-100">100</a></span>
@@ -2336,11 +2330,10 @@ If no plan components are left in scope, the plan will have a single "external" 
 </span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>                    <span class="n">kept_activities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
 </span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="k">return</span> <span class="n">kept_activities</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2356,9 +2349,9 @@ If no plan components are left in scope, the plan will have a single "external" 
   
       <p>Get the (euclidean) geometry of a leg.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
 <span class="normal"><a href="#__codelineno-0-75">75</a></span>
 <span class="normal"><a href="#__codelineno-0-76">76</a></span>
 <span class="normal"><a href="#__codelineno-0-77">77</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="k">def</span> <span class="nf">get_leg_path</span><span class="p">(</span><span class="n">leg</span><span class="p">:</span> <span class="n">Leg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineString</span><span class="p">:</span>
@@ -2366,11 +2359,10 @@ If no plan components are left in scope, the plan will have a single "external" 
 </span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76"></a>    <span class="n">path</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">([</span><span class="n">leg</span><span class="o">.</span><span class="n">start_location</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">leg</span><span class="o">.</span><span class="n">end_location</span><span class="o">.</span><span class="n">loc</span><span class="p">])</span>
 </span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="k">return</span> <span class="n">path</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2387,9 +2379,9 @@ If no plan components are left in scope, the plan will have a single "external" 
       <p>Infill missing legs.
 If there is no leg between two activities, a new one is created linking them.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-156">156</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-156">156</a></span>
 <span class="normal"><a href="#__codelineno-0-157">157</a></span>
 <span class="normal"><a href="#__codelineno-0-158">158</a></span>
 <span class="normal"><a href="#__codelineno-0-159">159</a></span>
@@ -2415,11 +2407,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 </span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168"></a>        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2435,9 +2426,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Check whether a leg touches an area defined by a boundary.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-80">80</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-80">80</a></span>
 <span class="normal"><a href="#__codelineno-0-81">81</a></span>
 <span class="normal"><a href="#__codelineno-0-82">82</a></span>
 <span class="normal"><a href="#__codelineno-0-83">83</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="k">def</span> <span class="nf">leg_intersects</span><span class="p">(</span><span class="n">leg</span><span class="p">:</span> <span class="n">Leg</span><span class="p">,</span> <span class="n">boundary</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -2445,11 +2436,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="n">path</span> <span class="o">=</span> <span class="n">get_leg_path</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
 </span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2465,9 +2455,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Link a plan: each activity/leg gets a pointer to the previous/next plan component.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-194">194</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-194">194</a></span>
 <span class="normal"><a href="#__codelineno-0-195">195</a></span>
 <span class="normal"><a href="#__codelineno-0-196">196</a></span>
 <span class="normal"><a href="#__codelineno-0-197">197</a></span>
@@ -2507,11 +2497,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-212"><a id="__codelineno-0-212" name="__codelineno-0-212"></a>        <span class="n">p</span><span class="o">.</span><span class="n">start_location</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">previous</span><span class="o">.</span><span class="n">location</span>
 </span><span id="__span-0-213"><a id="__codelineno-0-213" name="__codelineno-0-213"></a>        <span class="n">p</span><span class="o">.</span><span class="n">end_location</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">location</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2527,9 +2516,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Link the plan components of every agent in the population.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-216">216</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-216">216</a></span>
 <span class="normal"><a href="#__codelineno-0-217">217</a></span>
 <span class="normal"><a href="#__codelineno-0-218">218</a></span>
 <span class="normal"><a href="#__codelineno-0-219">219</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-216"><a id="__codelineno-0-216" name="__codelineno-0-216"></a><span class="k">def</span> <span class="nf">link_population</span><span class="p">(</span><span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2537,11 +2526,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-218"><a id="__codelineno-0-218" name="__codelineno-0-218"></a>    <span class="k">for</span> <span class="n">hid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">population</span><span class="o">.</span><span class="n">people</span><span class="p">():</span>
 </span><span id="__span-0-219"><a id="__codelineno-0-219" name="__codelineno-0-219"></a>        <span class="n">link_plan</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">plan</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2555,9 +2543,9 @@ If there is no leg between two activities, a new one is created linking them.</p
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-187">187</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-187">187</a></span>
 <span class="normal"><a href="#__codelineno-0-188">188</a></span>
 <span class="normal"><a href="#__codelineno-0-189">189</a></span>
 <span class="normal"><a href="#__codelineno-0-190">190</a></span>
@@ -2567,11 +2555,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-190"><a id="__codelineno-0-190" name="__codelineno-0-190"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-191"><a id="__codelineno-0-191" name="__codelineno-0-191"></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2587,9 +2574,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Rename all external-area activities as "external".</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-177">177</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-177">177</a></span>
 <span class="normal"><a href="#__codelineno-0-178">178</a></span>
 <span class="normal"><a href="#__codelineno-0-179">179</a></span>
 <span class="normal"><a href="#__codelineno-0-180">180</a></span>
@@ -2599,11 +2586,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-180"><a id="__codelineno-0-180" name="__codelineno-0-180"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">boundary</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">act</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">loc</span><span class="p">):</span>
 </span><span id="__span-0-181"><a id="__codelineno-0-181" name="__codelineno-0-181"></a>            <span class="n">act</span><span class="o">.</span><span class="n">act</span> <span class="o">=</span> <span class="s2">&quot;external&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2630,13 +2616,11 @@ If there is no leg between two activities, a new one is created linking them.</p
 <li><strong>optional</strong> Crop the leg geometries to start/stop at the core area boundaries</li>
 </ol>
 </details>
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2707,9 +2691,9 @@ If there is no leg between two activities, a new one is created linking them.</p
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-38">38</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-38">38</a></span>
 <span class="normal"><a href="#__codelineno-0-39">39</a></span>
 <span class="normal"><a href="#__codelineno-0-40">40</a></span>
 <span class="normal"><a href="#__codelineno-0-41">41</a></span>
@@ -2777,11 +2761,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>        <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">legs</span><span class="p">:</span>
 </span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>            <span class="n">crop_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">boundary</span><span class="p">)</span>  <span class="c1"># crop leg geometry</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2797,9 +2780,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Simplify external plans across a population.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-12">12</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
 <span class="normal"><a href="#__codelineno-0-14">14</a></span>
 <span class="normal"><a href="#__codelineno-0-15">15</a></span>
@@ -2847,11 +2830,10 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="k">for</span> <span class="n">hid</span> <span class="ow">in</span> <span class="n">remove_hhs</span><span class="p">:</span>
 </span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>        <span class="k">del</span> <span class="n">population</span><span class="o">.</span><span class="n">households</span><span class="p">[</span><span class="n">hid</span><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2867,9 +2849,9 @@ If there is no leg between two activities, a new one is created linking them.</p
   
       <p>Extend start/end activity times to the start/end of day.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/operations/cropping.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-171">171</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/operations/cropping.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-171">171</a></span>
 <span class="normal"><a href="#__codelineno-0-172">172</a></span>
 <span class="normal"><a href="#__codelineno-0-173">173</a></span>
 <span class="normal"><a href="#__codelineno-0-174">174</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-171"><a id="__codelineno-0-171" name="__codelineno-0-171"></a><span class="k">def</span> <span class="nf">stretch_times</span><span class="p">(</span><span class="n">plan</span><span class="p">:</span> <span class="n">Plan</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2877,7 +2859,7 @@ If there is no leg between two activities, a new one is created linking them.</p
 </span><span id="__span-0-173"><a id="__codelineno-0-173" name="__codelineno-0-173"></a>    <span class="n">plan</span><span class="o">.</span><span class="n">day</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">START_OF_DAY</span>
 </span><span id="__span-0-174"><a id="__codelineno-0-174" name="__codelineno-0-174"></a>    <span class="n">plan</span><span class="o">.</span><span class="n">day</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">END_OF_DAY</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>

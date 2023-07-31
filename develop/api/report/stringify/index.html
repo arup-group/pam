@@ -17,7 +17,7 @@
         <link rel="next" href="../summary/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -1976,9 +1976,10 @@
   <div class="doc doc-contents ">
 
 
-              <details class="quote">
-                <summary>Source code in <code>pam/report/stringify.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/report/stringify.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
 <span class="normal"><a href="#__codelineno-0-22">22</a></span>
@@ -1988,7 +1989,7 @@
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">inf_yield</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bw_queue</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-              </details>
+          </details>
 
   
 
@@ -2008,8 +2009,8 @@
 <code class="highlight language-python"><span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;travel&#39;</span><span class="p">:</span> <span class="mi">232</span><span class="p">}</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
 <a href="#pam.report.stringify.ActColour.mapping" class="headerlink" title="Permanent link">#</a></h3>
@@ -2019,7 +2020,6 @@
   </div>
 
 </div>
-
 
 
 
@@ -2035,9 +2035,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/report/stringify.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/report/stringify.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
@@ -2045,7 +2045,7 @@
 </span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">[</span><span class="n">act</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">)</span>
 </span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[38;5;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">[</span><span class="n">act</span><span class="p">]</span><span class="si">}</span><span class="s2">m</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
@@ -2057,7 +2057,6 @@
   </div>
 
 </div>
-
 
 
 <div class="doc doc-object doc-function">
@@ -2072,9 +2071,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/report/stringify.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/report/stringify.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">def</span> <span class="nf">inf_yield</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
@@ -2082,11 +2081,10 @@
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">queue</span><span class="p">:</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>            <span class="k">yield</span> <span class="n">i</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2100,17 +2098,16 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/report/stringify.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/report/stringify.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
 <span class="normal"><a href="#__codelineno-0-52">52</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="k">def</span> <span class="nf">stringify_plan</span><span class="p">(</span><span class="n">plan_array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">colourer</span><span class="p">):</span>
 </span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">colourer</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="n">mapping</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;▇&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plan_array</span><span class="p">])</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2124,9 +2121,9 @@
 
   <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>pam/report/stringify.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-31">31</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/report/stringify.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-31">31</a></span>
 <span class="normal"><a href="#__codelineno-0-32">32</a></span>
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span>
@@ -2162,7 +2159,7 @@
 </span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">encoder</span><span class="o">.</span><span class="n">act_to_index</span><span class="p">:</span>
 </span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colourer</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="n">act</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;▇▇▇▇▇▇▇▇▇▇&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">act</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>

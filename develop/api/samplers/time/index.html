@@ -17,7 +17,7 @@
         <link rel="next" href="../tour/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
@@ -25,7 +25,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.eebd395e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
       
 
@@ -1896,7 +1896,6 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
@@ -1914,13 +1913,11 @@ Activity durations are jittered in sequence order. At each step the activity
 is jittered according to the maximum jitter and minimum duration of all activities
 in the plan.</p>
 
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -1969,9 +1966,9 @@ in the plan.</p>
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/time.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/samplers/time.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
@@ -2001,11 +1998,10 @@ in the plan.</p>
 </span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">plan</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="n">jitter_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="n">jitter</span><span class="p">,</span> <span class="n">min_duration</span><span class="o">=</span><span class="n">min_duration</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
@@ -2024,13 +2020,11 @@ in the plan.</p>
 Leg durations are not changed.
 Subsequent activity durations are equally change to maintain 24hr plan.</p>
 
-
-
   <table>
     <thead>
       <tr>
         <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
+        <th><b>DESCRIPTION</b></th>
       </tr>
     </thead>
     <tbody>
@@ -2093,8 +2087,6 @@ Subsequent activity durations are equally change to maintain 24hr plan.</p>
     </tbody>
   </table>
 
-
-
   <table>
     <thead>
       <tr>
@@ -2118,9 +2110,9 @@ Subsequent activity durations are equally change to maintain 24hr plan.</p>
     </tbody>
   </table>
 
-          <details class="quote">
-            <summary>Source code in <code>pam/samplers/time.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
+      <details class="quote">
+        <summary>Source code in <code>pam/samplers/time.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
@@ -2218,7 +2210,7 @@ Subsequent activity durations are equally change to maintain 24hr plan.</p>
 </span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="n">time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shift_start_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
 </span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">END_OF_DAY</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
+      </details>
   </div>
 
 </div>
