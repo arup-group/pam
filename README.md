@@ -46,28 +46,38 @@ supply or utility demand.
 <!--- --8<-- [end:docs] -->
 ## Installation
 
-The PAM package is not yet indexed online.
-To install it, we recommend the following:
+To install PAM, we recommend using the [mamba](https://mamba.readthedocs.io/en/latest/index.html) package manager:
 
+### As a user
+<!--- --8<-- [start:docs-install-user] -->
 ``` shell
 git clone git@github.com:arup-group/pam.git
 cd pam
-mamba create -n pam -c city-modelling-lab --file requirements/base.txt
+mamba create -n pam -c conda-forge -c city-modelling-lab --file requirements/base.txt
 mamba activate pam
 pip install --no-deps .
 ```
-
+<!--- --8<-- [end:docs-install-user] -->
+### As a developer
+<!--- --8<-- [start:docs-install-dev] -->
+``` shell
+git clone git@github.com:arup-group/pam.git
+cd pam
+mamba create -n pam -c conda-forge -c city-modelling-lab --file requirements/base.txt --file requirements/dev.txt
+mamba activate pam
+pip install --no-deps -e .
+```
+<!--- --8<-- [end:docs-install-dev] -->
 For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest/installation/).
 
 ## Contributing
 
 There are many ways to make both technical and non-technical contributions to PAM.
-Before making contributions to the PAM source code, see our contribution guidelines and follow the instructions below to install and work in a test environment.
+Before making contributions to the PAM source code, see our contribution guidelines and follow the [development install instructions](#as-a-developer).
 
-You can install the optional dev libraries using the `dev` option, i.e., `pip install -e '.[dev]'`
+If you are using `pip` to install PAM instead of the recommended `mamba`, you can install the optional test and documentation libraries using the `dev` option, i.e., `pip install -e '.[dev]'`
 
-If you plan to make changes to the code then please make regular use of the following tools to verify the codebase
-while you work:
+If you plan to make changes to the code then please make regular use of the following tools to verify the codebase while you work:
 
 - `pre-commit`: run `pre-commit install` in your command line to load inbuilt checks that will run every time you commit your changes. 
 The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the [pep8 standard](https://peps.python.org/pep-0008/). 
