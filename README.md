@@ -46,8 +46,7 @@ supply or utility demand.
 <!--- --8<-- [end:docs] -->
 ## Installation
 
-The PAM package is not yet indexed online.
-To install it, we recommend the following:
+To install PAM, we recommend using the [mamba](https://mamba.readthedocs.io/en/latest/index.html) package manager:
 
 ### As a user
 <!--- --8<-- [start:docs-install-user] -->

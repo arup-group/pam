@@ -7,7 +7,7 @@ This means we would like help with profiling and implementing parallel compute, 
 
 ## Setting up a development environment
 
-To create a development environment for PAM, with all libraries required for development and quality assurance installed, it is easiest to install PAM using a [mamba](https://mamba.readthedocs.io/en/latest/index.html) environment, as follows:
+To create a development environment for PAM, with all libraries required for development and quality assurance installed, it is easiest to install PAM using the [mamba](https://mamba.readthedocs.io/en/latest/index.html) package manager, as follows:
 
 1. Install mamba with the [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) executable for your operating system.
 2. Open the command line (or the "miniforge prompt" in Windows).
