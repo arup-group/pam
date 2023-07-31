@@ -1,6 +1,6 @@
 import random
 import warnings
-from typing import Any, Iterable, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import geopandas as gp
 import networkx as nx
@@ -308,12 +308,12 @@ class TourPlanner:
         self.d_activity = activity_params["d_activity"]
 
     def d_zone_sample_choice(self) -> str:
-        """Samples a delivery zone (d_zone) as a string, dependent on the presence of a threshold matrix
+        """Samples a destination zone (d_zone) as a string, dependent on the presence of a threshold matrix.
 
         Returns:
             str: d_zone
 
-        """
+        """ ""
         if self.threshold_matrix is None:
             d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
         else:
@@ -326,17 +326,25 @@ class TourPlanner:
 
         return d_zone
 
-    def sample_destinations(self, o_loc):
+    def sample_destinations(self, o_loc) -> List[Dict[str, Any]]:
+        """Samples destinations and prevents repeated sampling of destinations, and prevents origin from be sampled as a destination
+
+        Args:
+            o_loc (Point): shapely.geometry.Point representing the sampled origin location.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing information about each stop in the tour.
+        """
         d_seq = []
         sampled_d_facilities = []
 
-        for j in range(self.stops):
+        for stop in range(self.stops):
             # If threshold matrix is none, sample a random d_zone, else select a d_zone within threshold value
             d_zone = TourPlanner.d_zone_sample_choice(self)
             # once d_zone is selected, select a specific point location for d_activity
             d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
 
-            # prevent the depot from being sampled as a delivery or duplicate sampling of delivery locations
+            # prevent the depot from being sampled as a delivery (destination) or duplicate sampling of delivery (destination) locations
             while d_facility == o_loc or d_facility in sampled_d_facilities:
                 d_zone = TourPlanner.d_zone_sample_choice(self)
                 d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
@@ -347,7 +355,7 @@ class TourPlanner:
             # append to a dictionary to sequence destinations
             d_seq.append(
                 {
-                    "stops": j,
+                    "stops": stop,
                     "destination_zone": d_zone,
                     "destination_facility": d_facility,
                     "distance": ActivityDuration().model_distance(o_loc, d_facility),
@@ -355,15 +363,21 @@ class TourPlanner:
             )
         return d_seq
 
-    def create_distance_matrix(self, o_loc, d_seq):
-        # extact o_loc coordinates into array
+    def create_distance_matrix(self, o_loc, d_seq) -> np.ndarray:
+        """Create a distance matrix between the origin location and a list of destinations.
+
+        Args:
+            o_loc (Point): shapely.geometry.Point representing the sampled origin location.
+            d_seq (List[Dict[str, Any]]): A list of dictionaries containing information about each stop in the tour.
+
+        Returns:
+            np.ndarray: 2D NumPy array representing the distance matrix between origin and destinations.
+        """
+        # extract o_loc coordinates into array
         o_location = np.array([[o_loc.x, o_loc.y]])
 
         # extract d_facility
-        d_locations = []
-        for d in [d["destination_facility"] for d in d_seq]:
-            d_locations.append([d.x, d.y])
-        d_locations = np.array(d_locations)
+        d_locations = np.array([[d.x, d.y] for d in [d["destination_facility"] for d in d_seq]])
 
         # Greedy TSP to minimise total travelled distance for visiting all sampled delivery locations
         # approximated from reduce compute time
@@ -372,18 +386,33 @@ class TourPlanner:
 
         return dist_matrix
 
-    def approx_greedy_tsp(self, dist_matrix):
+    def approx_greedy_tsp(self, dist_matrix) -> List[int]:
+        """Approximate solution to the Travelling Saleman Problem using the GreedyTSP algorithm.
+
+        Args:
+            dist_matrix (np.ndarray): 2D NumPy array representing the distance matrix between origin and destinations.
+
+        Returns:
+            List[int]: List of integers representing the optimised sequence of stops.
+        """
         distance_graph = nx.from_numpy_array(dist_matrix)
         seq = nx.algorithms.approximation.greedy_tsp(distance_graph, source=0)
 
         return seq
 
-    def reorder_deliveries(self, d_seq, seq):
+    def reorder_destinations(self, d_seq, seq) -> List[Dict[str, Any]]:
+        """Reorder the destinations based on the provided sequence.
+
+        Args:
+            d_seq (List[Dict[str, Any]]): A list of dictionaries containing information about each stop (destination) in the tour.
+            seq (List[int]): List of integers representing the optimised sequence of stops.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries representing the reordered stops (destinations)
+        """
         # use `seq` to re-order `d_locs` into an ordered list of dictionaries
         # remove o_loc (first and last stop) from sequence & adjust sequence range
-        seq = seq[1:-1]
-        seq = [x - 1 for x in seq]
-        d_seq = [d_seq[order] for order in seq]
+        d_seq = [d_seq[order - 1] for order in seq[1:-1]]
 
         return d_seq
 
@@ -401,11 +430,11 @@ class TourPlanner:
 
         seq = TourPlanner.approx_greedy_tsp(self, dist_matrix)
 
-        d_seq = TourPlanner.reorder_deliveries(self, d_seq, seq)
+        d_optimised_seq = TourPlanner.reorder_destinations(self, d_seq, seq)
 
         # sort distance: furthest facility to closest facility to origin facility. The final stop should be closest to origin.
-        d_zones = [item.get("destination_zone") for item in d_seq]
-        d_locs = [item.get("destination_facility") for item in d_seq]
+        d_zones = [item.get("destination_zone") for item in d_optimised_seq]
+        d_locs = [item.get("destination_facility") for item in d_optimised_seq]
 
         return o_loc, d_zones, d_locs
 

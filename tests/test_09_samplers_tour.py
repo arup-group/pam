@@ -343,6 +343,16 @@ def test_unique_stops(agent_plan, d_facility_sampling):
         assert d_point not in deliveries, "Duplicate point found in d_seq"
         deliveries.add(d_point)
 
+
+def test_origin_not_in_stops(agent_plan, d_facility_sampling):
+    o_loc, d_seq = d_facility_sampling
+
+    # test for duplicate delivery locations in d_seq
+    deliveries = set()
+    for d in d_seq:
+        d_point = d["destination_facility"]
+        deliveries.add(d_point)
+
     # test if o_loc is in d_seq
     assert o_loc not in deliveries, "o_loc has been sampled as a delivery location"
 
