@@ -279,7 +279,7 @@ class TourPlanner:
         hour: int,
         minute: int,
         o_zone: str,
-        d_dist: Union[Iterable, pd.DataFrame],
+        d_dist: pd.DataFrame,
         d_freq: Union[str, Iterable],
         facility_sampler: FacilitySampler,
         activity_params: dict[str, str],
