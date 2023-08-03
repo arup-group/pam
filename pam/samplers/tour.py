@@ -195,7 +195,7 @@ class FrequencySampler:
             )[0]
 
 
-class ActivityDuration:
+class DurationEstimator:
     """Object to estimate the distance, journey time, and stop time of activities.
     The last function activity_duration combines these three functions to output parameters that help build tour plans.
     """
@@ -358,7 +358,7 @@ class TourPlanner:
                     "stops": stop,
                     "destination_zone": d_zone,
                     "destination_facility": d_facility,
-                    "distance": ActivityDuration().model_distance(o_loc, d_facility),
+                    "distance": DurationEstimator().model_distance(o_loc, d_facility),
                 }
             )
         return d_seq
@@ -509,8 +509,8 @@ class TourPlanner:
           o_loc (shapely.point): origin facility of leg
           d_zone (str): destination zone of leg
           d_loc (shapely.point): destination facility of leg
-          start_tm (int): obtained from ActivityDuration object
-          end_tm (int): obtained from ActivityDuration object
+          start_tm (int): obtained from DurationEstimator object
+          end_tm (int): obtained from DurationEstimator object
 
         Returns:
           int: new end_tm after leg is added to plan.
@@ -542,14 +542,14 @@ class TourPlanner:
           o_loc (shapely.Point): origin facility of leg & activity
           d_zone (str): destination zone of leg & activity
           d_loc (shapely.Point): destination facility of leg & activity
-          end_tm (int): obtained from ActivityDuration object
+          end_tm (int): obtained from DurationEstimator object
 
         Returns:
           int: end_tm after returning to origin.
 
         """
-        trip_distance = ActivityDuration().model_distance(o_loc, d_loc)
-        trip_duration = ActivityDuration().model_journey_time(trip_distance)
+        trip_distance = DurationEstimator().model_distance(o_loc, d_loc)
+        trip_duration = DurationEstimator().model_journey_time(trip_distance)
 
         start_tm = end_tm
         end_tm = end_tm + int(trip_duration / 60)
@@ -598,7 +598,7 @@ class TourPlanner:
         )
 
         for k in range(self.stops):
-            stop_duration, start_tm, end_tm = ActivityDuration().model_activity_duration(
+            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
                 o_loc, d_locs[k], end_tm
             )
             if (mtdt(end_tm) >= END_OF_DAY) | (
