@@ -333,7 +333,7 @@ def od_density(trips, zones_gdf, depot_density, delivery_density):
     )
 
 
-def test_unique_stops(agent_plan, d_facility_sampling):
+def test_unique_stops(d_facility_sampling):
     o_loc, d_seq = d_facility_sampling
 
     # test for duplicate delivery locations in d_seq
@@ -344,7 +344,7 @@ def test_unique_stops(agent_plan, d_facility_sampling):
         deliveries.add(d_point)
 
 
-def test_origin_not_in_stops(agent_plan, d_facility_sampling):
+def test_origin_not_in_stops(d_facility_sampling):
     o_loc, d_seq = d_facility_sampling
 
     # test for duplicate delivery locations in d_seq
@@ -366,11 +366,9 @@ def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
     for i in range(dist_matrix.shape[0]):
         for j in range(dist_matrix.shape[1]):
             if i != j:  # Check for non-diagonal entries
-                (
-                    dist_matrix[i, j],
-                    0,
-                    "Zero distance found between different points in dist_matrix",
-                )
+                assert (
+                    dist_matrix[i, j] != 0
+                ), "Zero distance found between different points in dist_matrix"
 
 
 def test_sequence_stops_length(agent_plan):

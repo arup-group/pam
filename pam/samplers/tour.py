@@ -379,8 +379,6 @@ class TourPlanner:
         # extract d_facility
         d_locations = np.array([[d.x, d.y] for d in [d["destination_facility"] for d in d_seq]])
 
-        # Greedy TSP to minimise total travelled distance for visiting all sampled delivery locations
-        # approximated from reduce compute time
         locs = np.concatenate([o_location, d_locations], 0)
         dist_matrix = distance_matrix(locs, locs)
 
