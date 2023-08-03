@@ -269,7 +269,7 @@ class DurationEstimator:
 class TourPlanner:
     """Object for agents to efficiently plan their tours by sequencing stops and adding activities and legs.
 
-    The TourPlanner optimizes the sequence of stops using a Greedy Travelling Salesman Problem (TSP) algorithem based on Eucledian distances between sampled stops.
+    The TourPlanner optimises the sequence of stops using a Greedy Travelling Salesman Problem (TSP) algorithm based on Eucledian distances between sampled stops.
     It takes into account origin and destination zones, facility distributions, and other relevant parameters to build a tour plan for agents.
     """
 
