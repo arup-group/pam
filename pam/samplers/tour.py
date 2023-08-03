@@ -1,11 +1,13 @@
 import random
 import warnings
-from typing import Any, Iterable, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import geopandas as gp
+import networkx as nx
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from scipy.spatial import distance_matrix
 from shapely.geometry import Point
 
 from pam.activity import Activity, Leg
@@ -193,7 +195,7 @@ class FrequencySampler:
             )[0]
 
 
-class ActivityDuration:
+class DurationEstimator:
     """Object to estimate the distance, journey time, and stop time of activities.
     The last function activity_duration combines these three functions to output parameters that help build tour plans.
     """
@@ -265,7 +267,11 @@ class ActivityDuration:
 
 
 class TourPlanner:
-    """Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method."""
+    """Object for agents to efficiently plan their tours by sequencing stops and adding activities and legs.
+
+    The TourPlanner optimises the sequence of stops using a Greedy Travelling Salesman Problem (TSP) algorithm based on Eucledian distances between sampled stops.
+    It takes into account origin and destination zones, facility distributions, and other relevant parameters to build a tour plan for agents.
+    """
 
     def __init__(
         self,
@@ -273,7 +279,7 @@ class TourPlanner:
         hour: int,
         minute: int,
         o_zone: str,
-        d_dist: Union[Iterable, pd.DataFrame],
+        d_dist: pd.DataFrame,
         d_freq: Union[str, Iterable],
         facility_sampler: FacilitySampler,
         activity_params: dict[str, str],
@@ -305,10 +311,117 @@ class TourPlanner:
         self.o_activity = activity_params["o_activity"]
         self.d_activity = activity_params["d_activity"]
 
-    def sequence_stops(self) -> tuple[list, list, list]:
-        """Creates a sequence for a number of stops. Sequence is determined by distance from origin.
+    def d_zone_sample_choice(self) -> str:
+        """Samples a destination zone (d_zone) as a string, dependent on the presence of a threshold matrix.
 
-        TODO - Method to sequence stops with different logic (i.e, minimise distance between stops).
+        Returns:
+            str: d_zone
+
+        """ ""
+        if self.threshold_matrix is None:
+            d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
+        else:
+            d_zone = FrequencySampler(
+                dist=self.d_dist,
+                freq=self.d_freq,
+                threshold_matrix=self.threshold_matrix.loc[self.o_zone],
+                threshold_value=self.threshold_value,
+            ).threshold_sample()
+
+        return d_zone
+
+    def sample_destinations(self, o_loc) -> List[Dict[str, Any]]:
+        """Samples destinations and prevents repeated sampling of destinations, and prevents origin from be sampled as a destination
+
+        Args:
+            o_loc (Point): shapely.geometry.Point representing the sampled origin location.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing information about each stop in the tour.
+        """
+        d_seq = []
+        sampled_d_facilities = []
+
+        for stop in range(self.stops):
+            # If threshold matrix is none, sample a random d_zone, else select a d_zone within threshold value
+            d_zone = TourPlanner.d_zone_sample_choice(self)
+            # once d_zone is selected, select a specific point location for d_activity
+            d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
+
+            # prevent the depot from being sampled as a delivery (destination) or duplicate sampling of delivery (destination) locations
+            while d_facility == o_loc or d_facility in sampled_d_facilities:
+                d_zone = TourPlanner.d_zone_sample_choice(self)
+                d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
+
+            # append select d_facility to sampled list for tracking
+            sampled_d_facilities.append(d_facility)
+
+            # append to a dictionary to sequence destinations
+            d_seq.append(
+                {
+                    "stops": stop,
+                    "destination_zone": d_zone,
+                    "destination_facility": d_facility,
+                    "distance": DurationEstimator().model_distance(o_loc, d_facility),
+                }
+            )
+        return d_seq
+
+    def create_distance_matrix(self, o_loc, d_seq) -> np.ndarray:
+        """Create a distance matrix between the origin location and a list of destinations.
+
+        Args:
+            o_loc (Point): shapely.geometry.Point representing the sampled origin location.
+            d_seq (List[Dict[str, Any]]): A list of dictionaries containing information about each stop in the tour.
+
+        Returns:
+            np.ndarray: 2D NumPy array representing the distance matrix between origin and destinations.
+        """
+        # extract o_loc coordinates into array
+        o_location = np.array([[o_loc.x, o_loc.y]])
+
+        # extract d_facility
+        d_locations = np.array(
+            [[location.x, location.y] for location in [d["destination_facility"] for d in d_seq]]
+        )
+
+        locs = np.concatenate([o_location, d_locations], 0)
+        dist_matrix = distance_matrix(locs, locs)
+
+        return dist_matrix
+
+    def approx_greedy_tsp(self, dist_matrix) -> List[int]:
+        """Approximate solution to the Travelling Saleman Problem using the GreedyTSP algorithm.
+
+        Args:
+            dist_matrix (np.ndarray): 2D NumPy array representing the distance matrix between origin and destinations.
+
+        Returns:
+            List[int]: List of integers representing the optimised sequence of stops.
+        """
+        distance_graph = nx.from_numpy_array(dist_matrix)
+        seq = nx.algorithms.approximation.greedy_tsp(distance_graph, source=0)
+
+        return seq
+
+    def reorder_destinations(self, d_seq, seq) -> List[Dict[str, Any]]:
+        """Reorder the destinations based on the provided sequence.
+
+        Args:
+            d_seq (List[Dict[str, Any]]): A list of dictionaries containing information about each stop (destination) in the tour.
+            seq (List[int]): List of integers representing the optimised sequence of stops.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries representing the reordered stops (destinations)
+        """
+        # use `seq` to re-order `d_locs` into an ordered list of dictionaries
+        # remove o_loc (first and last stop) from sequence & adjust sequence range
+        d_seq = [d_seq[order - 1] for order in seq[1:-1]]
+
+        return d_seq
+
+    def sequence_stops(self) -> tuple[list, list, list]:
+        """Creates a sequence for a number of stops. Sequence is determined by approximated greedy TSP
 
         Returns:
           tuple[list, list, list]: (o_loc, d_zones, d_locs).
@@ -316,36 +429,16 @@ class TourPlanner:
         """
         o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
 
-        d_seq = []
+        d_seq = TourPlanner.sample_destinations(self, o_loc)
+        dist_matrix = TourPlanner.create_distance_matrix(self, o_loc, d_seq)
 
-        for j in range(self.stops):
-            # If threshold matrix is none, sample a random d_zone, else select a d_zone within threshold value
-            if self.threshold_matrix is None:
-                d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
-            else:
-                d_zone = FrequencySampler(
-                    dist=self.d_dist,
-                    freq=self.d_freq,
-                    threshold_matrix=self.threshold_matrix.loc[self.o_zone],
-                    threshold_value=self.threshold_value,
-                ).threshold_sample()
-            # once d_zone is selected, select a specific point location for d_activity
-            d_facility = self.facility_sampler.sample(d_zone, self.d_activity)
+        seq = TourPlanner.approx_greedy_tsp(self, dist_matrix)
 
-            # append to a dictionary to sequence destinations
-            d_seq.append(
-                {
-                    "stops": j,
-                    "destination_zone": d_zone,
-                    "destination_facility": d_facility,
-                    "distance": ActivityDuration().model_distance(o_loc, d_facility),
-                }
-            )
+        d_optimised_seq = TourPlanner.reorder_destinations(self, d_seq, seq)
 
         # sort distance: furthest facility to closest facility to origin facility. The final stop should be closest to origin.
-        d_seq = sorted(d_seq, key=lambda item: item.get("distance"), reverse=True)
-        d_zones = [item.get("destination_zone") for item in d_seq]
-        d_locs = [item.get("destination_facility") for item in d_seq]
+        d_zones = [item.get("destination_zone") for item in d_optimised_seq]
+        d_locs = [item.get("destination_facility") for item in d_optimised_seq]
 
         return o_loc, d_zones, d_locs
 
@@ -422,8 +515,8 @@ class TourPlanner:
           o_loc (shapely.point): origin facility of leg
           d_zone (str): destination zone of leg
           d_loc (shapely.point): destination facility of leg
-          start_tm (int): obtained from ActivityDuration object
-          end_tm (int): obtained from ActivityDuration object
+          start_tm (int): obtained from DurationEstimator object
+          end_tm (int): obtained from DurationEstimator object
 
         Returns:
           int: new end_tm after leg is added to plan.
@@ -455,14 +548,14 @@ class TourPlanner:
           o_loc (shapely.Point): origin facility of leg & activity
           d_zone (str): destination zone of leg & activity
           d_loc (shapely.Point): destination facility of leg & activity
-          end_tm (int): obtained from ActivityDuration object
+          end_tm (int): obtained from DurationEstimator object
 
         Returns:
           int: end_tm after returning to origin.
 
         """
-        trip_distance = ActivityDuration().model_distance(o_loc, d_loc)
-        trip_duration = ActivityDuration().model_journey_time(trip_distance)
+        trip_distance = DurationEstimator().model_distance(o_loc, d_loc)
+        trip_duration = DurationEstimator().model_journey_time(trip_distance)
 
         start_tm = end_tm
         end_tm = end_tm + int(trip_duration / 60)
@@ -511,7 +604,7 @@ class TourPlanner:
         )
 
         for k in range(self.stops):
-            stop_duration, start_tm, end_tm = ActivityDuration().model_activity_duration(
+            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
                 o_loc, d_locs[k], end_tm
             )
             if (mtdt(end_tm) >= END_OF_DAY) | (
