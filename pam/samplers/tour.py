@@ -381,7 +381,9 @@ class TourPlanner:
         o_location = np.array([[o_loc.x, o_loc.y]])
 
         # extract d_facility
-        d_locations = np.array([[d.x, d.y] for d in [d["destination_facility"] for d in d_seq]])
+        d_locations = np.array(
+            [[location.x, location.y] for location in [d["destination_facility"] for d in d_seq]]
+        )
 
         locs = np.concatenate([o_location, d_locations], 0)
         dist_matrix = distance_matrix(locs, locs)
