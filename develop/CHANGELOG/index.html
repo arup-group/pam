@@ -2136,6 +2136,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <h2 id="unreleased"><a href="https://github.com/arup-group/pam/compare/v0.2.4...main">Unreleased</a><a class="headerlink" href="#unreleased" title="Permanent link">#</a></h2>
 <h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">#</a></h3>
 <ul>
+<li><code>TourPlanner</code> prevents sampling of duplicate destinations, and prevents origin being sampled as a destination (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
 <li>Fix for <a href="https://github.com/arup-group/pam/issues/221">#221</a>, improved "pt simplification" (<a href="https://github.com/arup-group/pam/pull/222">#222</a>)</li>
 </ul>
 <h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">#</a></h3>
@@ -2149,6 +2150,8 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 </ul>
 <h3 id="changed">Changed<a class="headerlink" href="#changed" title="Permanent link">#</a></h3>
 <ul>
+<li><code>ActivityDuration</code> class name changed to <code>DurationEstimator</code> (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
+<li><code>TourPlanner</code> class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
 <li>Minor changes to docs for zsh users (eg <code>pip install '.[dev]'</code>)(<a href="https://github.com/arup-group/pam/pull/219">#219</a>).</li>
 <li>Recommended installation instructions, to use <a href="https://mamba.readthedocs.io/en/latest/index.html">mamba</a> instead of pip (<a href="https://github.com/arup-group/pam/pull/192">#192</a>, <a href="https://github.com/arup-group/pam/pull/211">#211</a>).</li>
 <li><strong>internal</strong> Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports (<a href="https://github.com/arup-group/pam/pull/196">#196</a>, <a href="https://github.com/arup-group/pam/pull/201">#201</a>).</li>
