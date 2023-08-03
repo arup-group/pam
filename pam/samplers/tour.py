@@ -267,7 +267,11 @@ class DurationEstimator:
 
 
 class TourPlanner:
-    """Object to plan the tour of the agent. This includes sequencing the stops and adding the activity and leg via an apply method."""
+    """Object for agents to efficiently plan their tours by sequencing stops and adding activities and legs.
+
+    The TourPlanner optimizes the sequence of stops using a Greedy Travelling Salesman Problem (TSP) algorithem based on Eucledian distances between sampled stops.
+    It takes into account origin and destination zones, facility distributions, and other relevant parameters to build a tour plan for agents.
+    """
 
     def __init__(
         self,
