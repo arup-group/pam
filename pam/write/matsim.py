@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
+from warnings import warn
 
 import importlib_resources
 
@@ -22,9 +23,9 @@ from pam.utils import timedelta_to_matsim_time as tdtm
 def write_matsim(
     population,
     plans_path: Union[Path, str],
-    attributes_path: Union[Path, str, None] = None,
-    vehs_path: Union[Path, str, None] = None,
-    evs_path: Union[Path, str, None] = None,
+    attributes_path: Optional[Union[Path, str]] = None,
+    vehs_path: Optional[Union[Path, str]] = None,
+    evs_path: Optional[Union[Path, str]] = None,
     version: int = None,
     comment: Optional[str] = None,
     household_key: Optional[str] = "hid",
@@ -36,10 +37,10 @@ def write_matsim(
 
     Args:
         population (Population): population to be writen to disk
-        plans_path (str): output path (.xml or .xml.gz)
-        attributes_path (Optional[str], optional): legacy parameter, does not have an effect. Defaults to None.
-        param vehs_path (Union[str, Path, None]): path to output vehicle file. Defaults to None.
-        param evs_path (Union[str, Path, None]): path to output ev file. Defaults to None.
+        plans_path (Union[str, Path]): output path (.xml or .xml.gz)
+        attributes_path (Optional[Union[str, Path]], optional): legacy parameter, does not have an effect. Defaults to None.
+        vehs_path (Optional[Union[str, Path]], optional): path to output vehicle file. Defaults to None.
+        evs_path (Optional[Union[str, Path]], optional): path to output ev file. Defaults to None.
         version (Optional[int], optional): legacy parameter, does not have an effect. Defaults to None.
         comment (Optional[str], optional): default None, optionally add a comment string to the xml outputs. Defaults to None.
         household_key (Optional[str], optional): optionally add household id to person attributes. Defaults to "hid".
@@ -50,7 +51,9 @@ def write_matsim(
         UserWarning: If population includes vehicles, `vehicles_dir` must be defined.
     """
     if version is not None:
-        logging.warning('parameter "version" is no longer supported by write_matsim()')
+        warn(
+            'parameter "version" is no longer supported by write_matsim(), this will be removed in future release.'
+        )
     if attributes_path is not None:
         logging.warning('parameter "attributes_path" is no longer supported by write_matsim()')
     if vehs_path is None and evs_path is not None:
@@ -185,7 +188,7 @@ def create_person_element(pid, person, keep_non_selected: bool = False):
         attribute = et.SubElement(
             attributes,
             "attribute",
-            {"class": "org.matsim.vehicles.PersonVehicles", "name": str("vehicles")},
+            {"class": "org.matsim.vehicles.PersonVehicles", "name": "vehicles"},
         )
         attribute.text = str({k: v.vid for k, v in person.vehicles.items()}).replace("'", '"')
 

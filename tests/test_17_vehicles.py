@@ -168,9 +168,15 @@ def test_manager_length(manager):
 
 
 def test_manager_iters(manager):
-    assert set([k for k, v in manager.types()]) == {"car", "lorry"}
-    assert set([k for k, v in manager.vehs()]) == {"car_0", "car_1", "freight_0", "ev_0", "ev_1"}
-    assert set([k for k, v in manager.evs()]) == {"ev_0", "ev_1"}
+    assert set([k for k, v in manager.veh_types.items()]) == {"car", "lorry"}
+    assert set([k for k, v in manager.vehicles.items()]) == {
+        "car_0",
+        "car_1",
+        "freight_0",
+        "ev_0",
+        "ev_1",
+    }
+    assert set([k for k, v in manager.evs.items()]) == {"ev_0", "ev_1"}
 
 
 @pytest.fixture
@@ -467,25 +473,10 @@ def test_read_edit_veh_write(
     assert duplicate["Eddy"]["Eddy"].vehicles["car"] == Vehicle("Eddy", "defaultVehicleType")
 
 
-# @pytest.fixture()
-# def manager(car_type, lorry_type):
-#     manager = VehicleManager()
-#     manager.add_type("car", car_type)
-#     manager.add_type("lorry", lorry_type)
-#     for i in range(2):
-#         veh = Vehicle(f"car_{i}", "car")
-#         manager[f"car_{i}"] = veh
-#     for i in range(2):
-#         veh = ElectricVehicle(f"ev_{i}", "car")
-#         manager[f"ev_{i}"] = veh
-#     for i in range(1):
-#         veh = Vehicle(f"freight_{i}", "lorry")
-#         manager[f"freight_{i}"] = veh
-#     return manager
 def test_population_vehicles_types(manager):
     population = Population()
     population.vehicles_manager = manager
-    assert set([k for k, v in population.vehicle_types()]) == {"car", "lorry"}
+    assert set(population.vehicle_types.keys()) == {"car", "lorry"}
 
 
 def test_iter_evs(car_type):
@@ -525,9 +516,49 @@ def test_add_veh_to_agent_fail_due_to_missing_type(manager):
         population.add_veh_to_agent(0, 0, "car", Vehicle("0", "truck"))
 
 
-def test_add_veh_to_agent(manager):
+def test_add_veh_to_agent_fails_due_to_duplicate(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
     with pytest.raises(UserWarning):
-        population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+        population.add_veh_to_agent(0, 0, "taxi", Vehicle("0", "car"))
+
+
+def test_add_veh_to_agent_ok(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    assert population[0][0].vehicles["car"] == Vehicle("0", "car")
+
+
+def test_add_veh_to_agent_ok_with_overwrite(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "lorry"))
+    assert population[0][0].vehicles["car"] == Vehicle("0", "lorry")
+
+
+def test_population_check_vehicles(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    assert population.check_vehicles()
+    population[0][0].vehicles["car"] = Vehicle("0", "flying_car")
+    with pytest.raises(PAMVehicleIdError):
+        population.check_vehicles()
+
+
+def test_update_vehicles_manager(manager):
+    population = Population()
+    population.add(Person(0))
+    population.vehicles_manager = manager
+    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.update_vehicles_manager()
+    population[0][0].vehicles["car"] = Vehicle("0", "flying_car")
+    with pytest.raises(PAMVehicleIdError):
+        population.update_vehicles_manager()

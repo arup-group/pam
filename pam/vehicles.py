@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
-from dataclasses import dataclass
-from typing import Optional, Union
+from dataclasses import dataclass, field
+from typing import Optional
 
 from lxml import etree as et
 
@@ -12,9 +14,14 @@ from pam import PAMVehicleIdError
 # https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd
 
 
-@dataclass(frozen=True)
+@dataclass
 class CapacityType:
-    """Vehicle capacity data with read/write methods."""
+    """Vehicle capacity dataclass with read/write methods.
+
+    Attributes:
+        seats (int): Seats in/on vehicle.
+        standingRoomInPersons (int): Standing room in/on vehicle.
+    """
 
     seats: int = 4  # persons
     standingRoomInPersons: int = 0  # persons
@@ -38,18 +45,36 @@ class CapacityType:
 
 @dataclass
 class VehicleType:
-    """Vehicle type data with read/write methods."""
+    """Vehicle type data with read/write methods.
+
+    Attributes:
+        length (float): Vehicle length in m.
+        width (float): Vehicle width in m.
+        networkMode (str): MATSim network mode (used for routing).
+        capacity (CapacityType): Vehicle seating and standing capacity.
+        description (str): Vehicle description.
+        passengerCarEquivalents (float): Vehicle size as passenger car equivalents (PCUs).
+        flowEfficiencyFactor (float): Vehicle flow efficiency factor.
+    """
 
     length: float = 7.5  # metres
     width: float = 1.0  # metres
     networkMode: str = "car"
-    capacity: CapacityType = CapacityType()
+    capacity: CapacityType = field(default_factory=CapacityType)
     description: str = "personal_vehicle"
     passengerCarEquivalents: float = 1.0
     flowEfficiencyFactor: float = 1.0
 
     @classmethod
-    def from_xml_elem(cls, elem):
+    def from_xml_elem(cls, elem: et.Element) -> VehicleType:
+        """Construct VehicleType from MATSim xml element.
+
+        Args:
+            elem (et.Element): MATSim formatted vehicle type xml element.
+
+        Returns:
+            VehicleType: Vehicle type dataclass.
+        """
         attribs = {
             attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem
         }
@@ -66,7 +91,13 @@ class VehicleType:
             ),
         )
 
-    def to_xml(self, xf, tid: str):
+    def to_xml(self, xf: et.Element, tid: str) -> None:
+        """Write vehicle type to MATSim formatted xml.
+
+        Args:
+            xf (et.Element): Parent xml element.
+            tid (str): Type id.
+        """
         with xf.element("vehicleType", {"id": tid}):
             rec = et.Element("description")
             rec.text = self.description
@@ -82,31 +113,48 @@ class VehicleType:
 
 
 @dataclass
-class BaseVehicle:
-    """Vehicle parent data class, holds required vehicle data (id and type) and read/write methods."""
+class Vehicle:
+    """Vehicle parent data class, holds required vehicle data (id and type) and read/write methods.
+
+    Attributes:
+        vid (str): Unique vehicle identifier.
+        type_id (str): Type of vehicle, eg "default_car".
+    """
 
     vid: str
     type_id: str
 
-    def to_xml(self, xf):
+    def to_xml(self, xf: et.Element) -> None:
+        """Write vehicle to MATSim formatted xml.
+
+        Args:
+            xf (et.Element): Parent xml element.
+        """
         xf.write(et.Element("vehicle", {"id": str(self.vid), "type": str(self.type_id)}))
 
 
 @dataclass
-class Vehicle(BaseVehicle):
-    pass
+class ElectricVehicle(Vehicle):
+    """Electric vehicle data representation. Required for MATSim EV extension.
 
+    Attributes:
+        vid (str): Unique vehicle identifier.
+        type_id (str): Type of vehicle, eg "default_car".
+        battery_capacity (float): Charge capacity.
+        initial_soc (float): Initial state of charge.
+        charger_types (str): Types of chargers vehicle may use.
+    """
 
-@dataclass
-class ElectricVehicle(BaseVehicle):
-    """Electric vehicle data representation. Required for MATSim EV extension."""
-
-    type_id: str
     battery_capacity: float = 60  # kWh
     initial_soc: float = battery_capacity  # kWh
     charger_types: str = "default"  # supported charger types; comma-separated list: 'default,other'
 
-    def to_ev_xml(self, xf):
+    def to_ev_xml(self, xf) -> None:
+        """Write vehicle to MATSim formatted xml.
+
+        Args:
+            xf (et.Element): Parent xml element.
+        """
         xf.write(
             et.Element(
                 "vehicle",
@@ -123,22 +171,40 @@ class ElectricVehicle(BaseVehicle):
 
 class VehicleManager:
     """
-    Vehicles representation, responsible for read/write from MATSim vehicles files.
+    Vehicles and vehicle types representation, responsible for read/write from MATSim vehicles files.
+
+    Attributes:
+        veh_types (dict[str, VehicleType]): Mapping of type ids to vehicle types data.
+        vehicles (dict[str, Vehicle]): Mapping of vehicle ids to vehicle data.
     """
 
     veh_types: dict[str, VehicleType]
-    vehicles: dict[str, BaseVehicle]
+    vehicles: dict[str, Vehicle]
 
     def __init__(self) -> None:
         self.veh_types = {}
         self.vehicles = {}
 
-    def add_type(self, k: str, vehicle_type: VehicleType):
+    def add_type(self, k: str, vehicle_type: VehicleType) -> None:
+        """Add vehicle type to manager.
+
+        Args:
+            k (str): Vehicle type key.
+            vehicle_type (VehicleType): Vehicle type dataclass.
+        """
         if k in self.veh_types:
             logging.info(f"Warning, overwriting existing vehicle type '{k}'.")
         self.veh_types[k] = vehicle_type
 
     def add_veh(self, v: Vehicle):
+        """Add vehicle to manager.
+
+        Args:
+            v (Vehicle): Vehicle dataclass.
+
+        Raises:
+            PAMVehicleIdError: Unknown vehicle type.
+        """
         if v.type_id not in self.veh_types:
             raise PAMVehicleIdError(
                 f"Failed to add vehicle: {v.vid}, the vehicle type '{v.type_id}' is an unknown veh type."
@@ -147,7 +213,7 @@ class VehicleManager:
             logging.info(f"Warning, overwriting existing vehicle: '{v.vid}'.")
         self.vehicles[v.vid] = v
 
-    def __setitem__(self, k: str, v: Union[Vehicle, ElectricVehicle]):
+    def __setitem__(self, k: str, v: Vehicle):
         if isinstance(v, ElectricVehicle):
             self.add_veh(v)
         elif isinstance(v, Vehicle):
@@ -160,12 +226,11 @@ class VehicleManager:
     def __getitem__(self, k) -> Vehicle:
         return self.vehicles[k]
 
-    def get(
-        self, k: str, default: Union[Vehicle, ElectricVehicle] = None
-    ) -> Union[Vehicle, ElectricVehicle]:
+    def get(self, k: str, default: Optional[Vehicle] = None) -> Optional[Vehicle]:
         return self.vehicles.get(k, default)
 
-    def len(self):
+    def len(self) -> int:
+        """Number of vehicles."""
         return len(self.vehicles)
 
     def __contains__(self, k: str):
@@ -181,28 +246,37 @@ class VehicleManager:
     def pop(self, vid):
         return self.vehicles.pop(vid)
 
-    def types(self):
-        for tid, t in self.veh_types.items():
-            yield tid, t
+    @property
+    def evs(self) -> dict[str, ElectricVehicle]:
+        """Return dictionary of electric vehicles in manager.
 
-    def vehs(self):
-        for veh_id, veh in self.vehicles.items():
-            yield veh_id, veh
+        Returns:
+            dict[str, ElectricVehicle]: Dictionary of electric vehicles.
+        """
+        return {vid: veh for vid, veh in self.vehicles.items() if isinstance(veh, ElectricVehicle)}
 
-    def evs(self):
-        for vid, veh in self.vehs():
-            if isinstance(veh, ElectricVehicle):
-                yield vid, veh
+    def charger_types(self) -> set[str]:
+        """Return set of electric charger types used by evs.
 
-    def charger_types(self):
+        Returns:
+            set[str]: Electric charger types.
+        """
         chargers = set()
-        for _, v in self.evs():
+        for v in self.evs.values():
             chargers |= set(v.charger_types.split(","))
         return chargers
 
     def is_consistent(self) -> bool:
+        """Check that manager vehicle population and types are consistent.
+
+        Raises:
+            PAMVehicleIdError: Unknown vehicle type.
+
+        Returns:
+            bool: Manager is consistent. Note that this doesn't check for unused types.
+        """
         veh_types = set(self.veh_types.keys())
-        for k, v in self.vehs():
+        for k, v in self.vehicles.items():
             if v.type_id not in veh_types:
                 raise PAMVehicleIdError(
                     f"Failed to find veh type of id '{v}', specified for veh id '{k}'."
@@ -217,16 +291,18 @@ class VehicleManager:
         """
         unused = {}
         veh_types = set(self.veh_types.keys())
-        veh_veh_types = set([v.type_id for k, v in self.vehs()])
+        veh_veh_types = set([v.type_id for v in self.vehicles.values()])
         for t in veh_types:
             if t not in veh_veh_types:
                 unused[t] = self.veh_types[t]
         return unused
 
     def clear_types(self):
+        """Remove all types from manager."""
         self.veh_types = {}
 
     def clear_vehs(self):
+        """Remove all vehciles from manager."""
         self.vehicles = {}
 
     def from_xml(self, vehs_path: str, evs_path: Optional[str] = None):
@@ -309,6 +385,12 @@ class VehicleManager:
         self.vehicles.update(evs)
 
     def to_xml(self, vehs_path: str, evs_path: Optional[str] = None):
+        """Write manager to MATSim formatted xml.
+
+        Args:
+            vehs_path (str): Write path for MATSim vehicles file.
+            evs_path (Optional[str], optional): Write path for MATSim electric vehicles file. Defaults to None.
+        """
         self.to_veh_xml(vehs_path)
         if evs_path:
             self.to_ev_xml(evs_path)
@@ -332,7 +414,7 @@ class VehicleManager:
                 for tid, vehicle_type in self.veh_types.items():
                     vehicle_type.to_xml(xf, tid)
                 logging.info(f"Writing vehicles to {path}")
-                for _, veh in self.vehs():
+                for veh in self.vehicles.values():
                     veh.to_xml(xf)
 
     def to_ev_xml(self, path: str):
@@ -347,5 +429,5 @@ class VehicleManager:
                 doctype='<!DOCTYPE vehicles SYSTEM "http://matsim.org/files/dtd/electric_vehicles_v1.dtd">'
             )
             with xf.element("vehicles"):
-                for _, veh in self.evs():
+                for veh in self.evs.values():
                     veh.to_ev_xml(xf)

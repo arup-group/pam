@@ -205,13 +205,30 @@ class Population:
         if not self.vehicles_manager.is_consistent():
             raise UserWarning("Failed consistency check refer to logs.")
 
-    def vehicle_types(self) -> Iterator[str, VehicleType]:
+    def check_vehicles(self) -> bool:
+        """Checks that all person vehicles have types defined by vehicles manager.
+
+        Raises:
+            PAMVehicleIdError: Undefined vehicle type in population.
+
+        Returns:
+            bool: Return true if all vehicle types are defined.
         """
-        Yields:
-            Iterator[str, VehicleType]: Iterator of (vehicle type id, vehicle type data).
+        veh_types = set(self.vehicles_manager.veh_types.keys())
+        for _, _, _, veh in self.vehicles():
+            if veh.type_id not in veh_types:
+                raise PAMVehicleIdError(
+                    f"Failed to find veh type of id '{veh.type_id}', specified for veh id '{veh.vid}'."
+                )
+        return True
+
+    @property
+    def vehicle_types(self) -> dict[str, VehicleType]:
         """
-        for k, v in self.vehicles_manager.types():
-            yield k, v
+        Returns:
+            dist[str, VehicleType]: Mapping of vehicle type id to vehicle type data.
+        """
+        return self.vehicles_manager.veh_types
 
     def vehicles(self) -> Iterator[str, str, str, Vehicle]:
         """Return iterator of all vehicles in population, prepended with household id, person id
@@ -253,8 +270,7 @@ class Population:
         self.vehicles_manager.add_type(type_id, vehicle_type)
 
     def add_veh_to_agent(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
-        """Add vehicle of given mode to person, based on hid and pid. Method checks that
-        vehicle type is available, otherwise raises UserWarning.
+        """Add vehicle of given mode to person, based on hid and pid. Method checks that id is unique and vehicle type is available, otherwise raises UserWarning.
 
         Args:
             hid (str): Household id
@@ -263,12 +279,22 @@ class Population:
             vehicle (Vehicle): Vehicle to add
 
         Raises:
+            UserWarning: Duplicate id.
             UserWarning: Unknown vehicle type.
 
         """
-        if vehicle.type_id not in self.vehicles_manager:
+        if vehicle.type_id not in self.vehicles_manager.veh_types:
             raise UserWarning(f"Unable to add vehicle with unknown type: '{vehicle.type_id}'.")
-        self.households[hid][pid].vehicles[mode] = vehicle
+        person_vehicles = self.households[hid][pid].vehicles
+        if not (
+            person_vehicles.get(mode) and person_vehicles[mode].vid == vehicle.vid
+        ):  # assume not replacing existing
+            # so check for duplicates
+            if vehicle.vid in set([v.vid for _, _, _, v in self.vehicles()]):
+                raise UserWarning(
+                    f"Unable to add vehicle with duplicate vehicle id (vid): {vehicle.vid}"
+                )
+        person_vehicles[mode] = vehicle
 
     def random_household(self):
         return self.households[random.choice(list(self.households))]
@@ -1100,7 +1126,7 @@ class Person:
             return len(list(self.legs))
         return 0
 
-    def vehicles(self):
+    def iter_vehicles(self):
         for mode, veh in self.vehicles.items():
             yield mode, veh
 
