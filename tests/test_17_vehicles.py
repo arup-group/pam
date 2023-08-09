@@ -513,23 +513,23 @@ def test_add_veh_to_agent_fail_due_to_missing_type(manager):
     population.add(Person(0))
     population.vehicles_manager = manager
     with pytest.raises(UserWarning):
-        population.add_veh_to_agent(0, 0, "car", Vehicle("0", "truck"))
+        population.add_veh(0, 0, "car", Vehicle("0", "truck"))
 
 
 def test_add_veh_to_agent_fails_due_to_duplicate(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh(0, 0, "car", Vehicle("0", "car"))
     with pytest.raises(UserWarning):
-        population.add_veh_to_agent(0, 0, "taxi", Vehicle("0", "car"))
+        population.add_veh(0, 0, "taxi", Vehicle("0", "car"))
 
 
 def test_add_veh_to_agent_ok(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh(0, 0, "car", Vehicle("0", "car"))
     assert population[0][0].vehicles["car"] == Vehicle("0", "car")
 
 
@@ -537,8 +537,8 @@ def test_add_veh_to_agent_ok_with_overwrite(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "lorry"))
+    population.add_veh(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh(0, 0, "car", Vehicle("0", "lorry"))
     assert population[0][0].vehicles["car"] == Vehicle("0", "lorry")
 
 
@@ -546,7 +546,7 @@ def test_population_check_vehicles(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh(0, 0, "car", Vehicle("0", "car"))
     assert population.check_vehicles()
     population[0][0].vehicles["car"] = Vehicle("0", "flying_car")
     with pytest.raises(PAMVehicleIdError):
@@ -557,7 +557,7 @@ def test_update_vehicles_manager(manager):
     population = Population()
     population.add(Person(0))
     population.vehicles_manager = manager
-    population.add_veh_to_agent(0, 0, "car", Vehicle("0", "car"))
+    population.add_veh(0, 0, "car", Vehicle("0", "car"))
     population.update_vehicles_manager()
     population[0][0].vehicles["car"] = Vehicle("0", "flying_car")
     with pytest.raises(PAMVehicleIdError):

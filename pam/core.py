@@ -269,7 +269,7 @@ class Population:
         """
         self.vehicles_manager.add_type(type_id, vehicle_type)
 
-    def add_veh_to_agent(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
+    def add_veh(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
         """Add vehicle of given mode to person, based on hid and pid. Method checks that id is unique and vehicle type is available, otherwise raises UserWarning.
 
         Args:
