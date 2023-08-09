@@ -41,7 +41,7 @@ def load_travel_diary(
     # TODO check for required col headers and give useful error?
 
     logger = logging.getLogger(__name__)
-    print("hello", "there")
+
     if isinstance(trips, str):
         logger.warning(f"Attempting to load trips dataframe from path: {trips}")
         trips = pd.read_csv(trips)

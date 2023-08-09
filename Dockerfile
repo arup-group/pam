@@ -6,4 +6,4 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 RUN pip install --no-deps -e .
 
-ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "ipython"]
+ENTRYPOINT ["/usr/local/bin/_entrypoint.sh"]

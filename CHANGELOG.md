@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
 
 ### Added
@@ -31,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
+- `ActivityDuration` class name changed to `DurationEstimator` ([#231]).
+- `TourPlanner` class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot ([#231]).
 - Minor changes to docs for zsh users (eg `pip install '.[dev]'`)([#219]).
 - Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
@@ -78,9 +81,10 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
-[#215]: https://github.com/arup-group/pam/pull/215
+[#231]: https://github.com/arup-group/pam/pull/231
 [#222]: https://github.com/arup-group/pam/pull/222
 [#219]: https://github.com/arup-group/pam/pull/219
+[#215]: https://github.com/arup-group/pam/pull/215
 [#211]: https://github.com/arup-group/pam/pull/211
 [#210]: https://github.com/arup-group/pam/pull/210
 [#207]: https://github.com/arup-group/pam/pull/207
