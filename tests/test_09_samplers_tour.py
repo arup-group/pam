@@ -34,13 +34,13 @@ def facility_gdf():
     points = [
         Point((0, 1000)),
         Point((0, 2000)),
-        Point((100, 2000)),
-        Point((1000, 2000)),
-        Point((2000, 1)),
-        Point((2000, 2)),
-        Point((2000, 3000)),
-        Point((2000, 4000)),
-        Point((4000, 4000)),
+        Point((1000, 1000)),
+        Point((2000, 2000)),
+        Point((2000, 1000)),
+        Point((3000, 3000)),
+        Point((5000, 4000)),
+        Point((5000, 5000)),
+        Point((6000, 4000)),
     ]
     return gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -70,9 +70,9 @@ def facility_zone(facility_gdf, zones_gdf):
 @pytest.fixture
 def df_od(zones_gdf):
     od_matrix = [
-        [0, 2.82842712, 5.65685425],
-        [2.82842712, 0, 2.82842712],
-        [5.65685425, 2.82842712, 0],
+        [0, 2828.427125, 5656.854249],
+        [2828.427125, 0, 2828.427125],
+        [5656.854249, 2828.427125, 0],
     ]
     return pd.DataFrame(od_matrix, index=zones_gdf.index, columns=zones_gdf.index)
 
@@ -133,9 +133,7 @@ def trips():
     )
 
 
-# %%
-
-
+# %% testing Tour plan inputs (distance, distributions)
 def test_model_distance_value():
     assert tour.DurationEstimator().model_distance(Point((0, 0)), Point((3, 4)), scale=1) == 5
 
@@ -228,8 +226,8 @@ def test_facility_density_normalised_raises_warning_inf_values(facility_zone, zo
 
 
 def test_dzone_sampler_dzone_d_density_zero(delivery_density, df_od):
-    o_zone = 3
-    threshold_value = 2
+    o_zone = 2
+    threshold_value = 2000
 
     with pytest.warns(
         UserWarning, match="No destinations within this threshold value, change threshold"
@@ -304,7 +302,7 @@ def o_zone(depot_sampler):
 @pytest.fixture
 def agent_plan(hour_sampler, minute_sampler, delivery_density, df_od, facility_sampler, o_zone):
     stops = 2
-    threshold_value = 6
+    threshold_value = 5000
 
     return tour.TourPlanner(
         stops=stops,
@@ -321,10 +319,9 @@ def agent_plan(hour_sampler, minute_sampler, delivery_density, df_od, facility_s
 
 
 @pytest.fixture
-def agent_plan_no_threshold(
-    hour_sampler, minute_sampler, delivery_density, facility_sampler, o_zone
-):
+def agent_plan_no_threshold(hour_sampler, minute_sampler, delivery_density, facility_sampler):
     stops = 2
+    o_zone = 2
 
     return tour.TourPlanner(
         stops=stops,
@@ -339,10 +336,18 @@ def agent_plan_no_threshold(
 
 
 @pytest.fixture
-def d_facility_sampling(agent_plan):
-    o_loc = agent_plan.facility_sampler.sample(agent_plan.o_zone, agent_plan.o_activity)
-    d_seq = tour.TourPlanner.sample_destinations(agent_plan, o_loc)
+def d_facility_sampling(agent_plan_no_threshold):
+    o_loc = agent_plan_no_threshold.facility_sampler.sample(
+        agent_plan_no_threshold.o_zone, agent_plan_no_threshold.o_activity
+    )
+    d_seq = tour.TourPlanner.sample_destinations(agent_plan_no_threshold, o_loc)
     return o_loc, d_seq
+
+
+@pytest.fixture
+def sequenced_stops(agent_plan_no_threshold):
+    o_loc, d_zones, d_locs = agent_plan_no_threshold.sequence_stops()
+    return o_loc, d_zones, d_locs
 
 
 @pytest.fixture(scope="function")
@@ -389,10 +394,10 @@ def test_origin_not_in_stops(d_facility_sampling):
     assert o_loc not in deliveries, "o_loc has been sampled as a delivery location"
 
 
-def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
+def test_distance_matrix_is_complete(agent_plan_no_threshold, d_facility_sampling):
     o_loc, d_seq = d_facility_sampling
 
-    dist_matrix = tour.TourPlanner.create_distance_matrix(agent_plan, o_loc, d_seq)
+    dist_matrix = tour.TourPlanner.create_distance_matrix(agent_plan_no_threshold, o_loc, d_seq)
     # Check for zero distances between different points
     for i in range(dist_matrix.shape[0]):
         for j in range(dist_matrix.shape[1]):
@@ -402,44 +407,42 @@ def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
                 ), "Zero distance found between different points in dist_matrix"
 
 
-def test_sequence_stops_length(agent_plan):
-    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+def test_sequence_stops_length(sequenced_stops):
+    o_loc, d_zones, d_locs = sequenced_stops
 
     assert len(d_locs) == 2
 
 
-def test_destination_sample_no_threshold(agent_plan):
-    d_zone = tour.TourPlanner.d_zone_sample_choice(agent_plan)
-
-    assert d_zone == 2
-
-
-def test_activity_endtm_depot(agent, agent_plan, hour_sampler, minute_sampler, o_zone):
-    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+def test_activity_endtm_depot(agent, agent_plan_no_threshold, hour_sampler, minute_sampler, o_zone):
+    o_loc = Point(2000, 2000)
+    # d_zones = [1,3]
+    # d_locs = [Point(0, 2000), Point(5000, 4000)]
     time_params = {"hour": hour_sampler.sample(), "minute": minute_sampler.sample()}
-    end_tm = agent_plan.add_tour_activity(
+    end_tm = agent_plan_no_threshold.add_tour_activity(
         agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type="depot", time_params=time_params
     )
 
     assert end_tm == ((time_params["hour"] * 60) + time_params["minute"])
 
 
-def test_activity_endtm_notdepot(agent, agent_plan, hour_sampler, minute_sampler, o_zone):
+def test_activity_endtm_notdepot(
+    agent, agent_plan_no_threshold, hour_sampler, minute_sampler, o_zone
+):
     # ensure end_tm is calculated for the instance where tour is neither to depot or origin.
 
-    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+    o_loc = Point(2000, 2000)
     time_params = {"end_tm": hour_sampler.sample(), "stop_duration": minute_sampler.sample()}
-    end_tm = agent_plan.add_tour_activity(
+    end_tm = agent_plan_no_threshold.add_tour_activity(
         agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type="not_depot", time_params=time_params
     )
 
     assert end_tm == (time_params["end_tm"] + int(time_params["stop_duration"] / 60))
 
 
-def test_activity_endtm_returnorigin(agent, agent_plan):
-    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
+def test_activity_endtm_returnorigin(agent, agent_plan_no_threshold):
+    o_loc = Point(2000, 2000)
     time_params = {"start_tm": 0, "end_tm": END_OF_DAY}
-    end_tm = agent_plan.add_tour_activity(
+    end_tm = agent_plan_no_threshold.add_tour_activity(
         agent=agent,
         k=0,
         zone=o_zone,
@@ -451,15 +454,17 @@ def test_activity_endtm_returnorigin(agent, agent_plan):
     assert end_tm == END_OF_DAY
 
 
-def test_final_activity_return_depot(agent, agent_plan):
-    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
-    agent_plan.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+def test_final_activity_return_depot(agent, agent_plan_no_threshold):
+    o_loc = Point(2000, 2000)
+    d_zones = [1, 3]
+    d_locs = [Point(0, 2000), Point(5000, 4000)]
+    agent_plan_no_threshold.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
 
     assert agent.plan[len(agent.plan) - 1].act == "depot"
 
 
 @pytest.fixture
-def agent_plan_end_of_day(delivery_density, df_od, facility_sampler, o_zone):
+def agent_plan_end_of_day(delivery_density, facility_sampler, o_zone):
     stops = 3
 
     return tour.TourPlanner(
