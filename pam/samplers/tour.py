@@ -496,15 +496,19 @@ class TourPlanner:
         return end_tm
 
     def add_tour_leg(self, agent, k, o_zone, o_loc, d_zone, d_loc, start_tm, end_tm):
-        """Leg to Next Delivery.
-        :params agent: agent for which the leg will be added to Plan
-        :params k: when used in a for loop, k populates the next sequence value
-        :params o_zone: origin zone of leg
-        :params o_loc: origin facility of leg
-        :params d_zone: destination zone of leg
-        :params d_loc: destination facility of leg
-        :params start_tm, end_tm: obtained from ActivityDuration object
-        :returns: new end_tm after leg is added to plan.
+        """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
+        Args:
+          agent (str): agent for which the leg will be added to Plan
+          k (Iterable): when used in a for loop, k populates the next sequence value
+          o_zone (str): origin zone of leg
+          o_loc (shapely.point): origin facility of leg
+          d_zone (str): destination zone of leg
+          d_loc (shapely.point): destination facility of leg
+          start_tm (int): obtained from DurationEstimator object
+          end_tm (int): obtained from DurationEstimator object
+
+        Returns:
+          int: new end_tm after leg is added to plan.
         """
         agent.add(
             Leg(
