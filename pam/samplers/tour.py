@@ -527,10 +527,11 @@ class TourPlanner:
 
     def apply(self, agent, o_loc, d_zones, d_locs):
         """Apply the above functions to the agent to build a plan.
-        :params agent: agent to build a plan fory
-        :params o_loc: origin facility of leg & activity
-        :params d_zones: destination zones of leg & activity
-        :params d_locs: destination facilities of leg & activity.
+        Args:
+          agent (str): agent to build a plan fory
+          o_loc (shapely.Point): origin facility of leg & activity
+          d_zones (list): destination zones of leg & activity
+          d_locs (list): destination facilities of leg & activity.
         """
         time_params = {"hour": self.hour, "minute": self.minute}
         # first activity
