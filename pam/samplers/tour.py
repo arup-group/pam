@@ -367,7 +367,7 @@ class TourPlanner:
             )
         return d_seq
 
-    def create_distance_matrix(self, o_loc, d_seq) -> np.ndarray:
+    def create_distance_matrix(self, o_loc: Point, d_seq: list) -> np.ndarray:
         """Create a distance matrix between the origin location and a list of destinations.
 
         Args:
@@ -495,7 +495,17 @@ class TourPlanner:
 
         return end_tm
 
-    def add_tour_leg(self, agent, k, o_zone, o_loc, d_zone, d_loc, start_tm, end_tm):
+    def add_tour_leg(
+        self,
+        agent: str,
+        k: Iterable,
+        o_zone: str,
+        o_loc: Point,
+        d_zone: str,
+        d_loc: Point,
+        start_tm: int,
+        end_tm: int,
+    ):
         """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
         Args:
           agent (str): agent for which the leg will be added to Plan
@@ -525,7 +535,7 @@ class TourPlanner:
 
         return end_tm
 
-    def apply(self, agent, o_loc, d_zones, d_locs):
+    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list):
         """Apply the above functions to the agent to build a plan.
         Args:
           agent (str): agent to build a plan fory
