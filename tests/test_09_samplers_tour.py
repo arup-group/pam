@@ -415,8 +415,6 @@ def test_sequence_stops_length(sequenced_stops):
 
 def test_activity_endtm_depot(agent, agent_plan_no_threshold, hour_sampler, minute_sampler, o_zone):
     o_loc = Point(2000, 2000)
-    # d_zones = [1,3]
-    # d_locs = [Point(0, 2000), Point(5000, 4000)]
     time_params = {"hour": hour_sampler.sample(), "minute": minute_sampler.sample()}
     end_tm = agent_plan_no_threshold.add_tour_activity(
         agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type="depot", time_params=time_params
@@ -429,7 +427,6 @@ def test_activity_endtm_notdepot(
     agent, agent_plan_no_threshold, hour_sampler, minute_sampler, o_zone
 ):
     # ensure end_tm is calculated for the instance where tour is neither to depot or origin.
-
     o_loc = Point(2000, 2000)
     time_params = {"end_tm": hour_sampler.sample(), "stop_duration": minute_sampler.sample()}
     end_tm = agent_plan_no_threshold.add_tour_activity(
