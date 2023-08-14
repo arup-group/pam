@@ -145,6 +145,23 @@ def test_model_journey_time_value():
     assert tour.DurationEstimator().model_journey_time(50000, 40000 / 3600) == 4500
 
 
+def test_distribution_total_none():
+    bins = range(0, 3)
+    pivots = {0: 1, 2: 1}
+    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots)
+
+    assert sum(dist.demand.values()) == 3
+
+
+def test_distribution_total_not_zero():
+    bins = range(0, 3)
+    pivots = {0: 1, 2: 1}
+    total = 30
+    dist = tour.PivotDistributionSampler(bins=bins, pivots=pivots, total=total)
+
+    assert sum(dist.demand.values()) == 30
+
+
 def test_distribution_uniform():
     bins = range(0, 3)
     pivots = {0: 1, 2: 1}
@@ -304,12 +321,27 @@ def agent_plan(hour_sampler, minute_sampler, delivery_density, df_od, facility_s
 
 
 @pytest.fixture
-def d_facility_sampling(agent_plan):
-    agent_plan_test = agent_plan
-    o_loc = agent_plan_test.facility_sampler.sample(
-        agent_plan_test.o_zone, agent_plan_test.o_activity
+def agent_plan_no_threshold(
+    hour_sampler, minute_sampler, delivery_density, facility_sampler, o_zone
+):
+    stops = 2
+
+    return tour.TourPlanner(
+        stops=stops,
+        hour=hour_sampler.sample(),
+        minute=minute_sampler.sample(),
+        o_zone=o_zone,
+        d_dist=delivery_density,
+        d_freq="density",
+        facility_sampler=facility_sampler,
+        activity_params={"o_activity": "depot", "d_activity": "delivery"},
     )
-    d_seq = tour.TourPlanner.sample_destinations(agent_plan_test, o_loc)
+
+
+@pytest.fixture
+def d_facility_sampling(agent_plan):
+    o_loc = agent_plan.facility_sampler.sample(agent_plan.o_zone, agent_plan.o_activity)
+    d_seq = tour.TourPlanner.sample_destinations(agent_plan, o_loc)
     return o_loc, d_seq
 
 
@@ -358,10 +390,9 @@ def test_origin_not_in_stops(d_facility_sampling):
 
 
 def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
-    agent_plan_test = agent_plan
     o_loc, d_seq = d_facility_sampling
 
-    dist_matrix = tour.TourPlanner.create_distance_matrix(agent_plan_test, o_loc, d_seq)
+    dist_matrix = tour.TourPlanner.create_distance_matrix(agent_plan, o_loc, d_seq)
     # Check for zero distances between different points
     for i in range(dist_matrix.shape[0]):
         for j in range(dist_matrix.shape[1]):
@@ -372,25 +403,22 @@ def test_distance_matrix_is_complete(agent_plan, d_facility_sampling):
 
 
 def test_sequence_stops_length(agent_plan):
-    agent_plan_test = agent_plan
-    o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
+    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
 
     assert len(d_locs) == 2
 
 
-def test_activity_endtm_depot(agent, agent_plan, hour_sampler, minute_sampler, o_zone):
-    agent_test = agent
-    agent_plan_test = agent_plan
+def test_destination_sample_no_threshold(agent_plan):
+    d_zone = tour.TourPlanner.d_zone_sample_choice(agent_plan)
 
-    o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
+    assert d_zone == 2
+
+
+def test_activity_endtm_depot(agent, agent_plan, hour_sampler, minute_sampler, o_zone):
+    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
     time_params = {"hour": hour_sampler.sample(), "minute": minute_sampler.sample()}
-    end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test,
-        k=0,
-        zone=o_zone,
-        loc=o_loc,
-        activity_type="depot",
-        time_params=time_params,
+    end_tm = agent_plan.add_tour_activity(
+        agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type="depot", time_params=time_params
     )
 
     assert end_tm == ((time_params["hour"] * 60) + time_params["minute"])
@@ -399,31 +427,20 @@ def test_activity_endtm_depot(agent, agent_plan, hour_sampler, minute_sampler, o
 def test_activity_endtm_notdepot(agent, agent_plan, hour_sampler, minute_sampler, o_zone):
     # ensure end_tm is calculated for the instance where tour is neither to depot or origin.
 
-    agent_test = agent
-    agent_plan_test = agent_plan
-
-    o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
+    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
     time_params = {"end_tm": hour_sampler.sample(), "stop_duration": minute_sampler.sample()}
-    end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test,
-        k=0,
-        zone=o_zone,
-        loc=o_loc,
-        activity_type="not_depot",
-        time_params=time_params,
+    end_tm = agent_plan.add_tour_activity(
+        agent=agent, k=0, zone=o_zone, loc=o_loc, activity_type="not_depot", time_params=time_params
     )
 
     assert end_tm == (time_params["end_tm"] + int(time_params["stop_duration"] / 60))
 
 
 def test_activity_endtm_returnorigin(agent, agent_plan):
-    agent_test = agent
-    agent_plan_test = agent_plan
-
-    o_loc, d_zones, d_locs = agent_plan_test.sequence_stops()
+    o_loc, d_zones, d_locs = agent_plan.sequence_stops()
     time_params = {"start_tm": 0, "end_tm": END_OF_DAY}
-    end_tm = agent_plan_test.add_tour_activity(
-        agent=agent_test,
+    end_tm = agent_plan.add_tour_activity(
+        agent=agent,
         k=0,
         zone=o_zone,
         loc=o_loc,
@@ -463,7 +480,8 @@ def test_end_of_day_agent_return_depot_by_end_of_day(agent, agent_plan_end_of_da
     d_locs = [Point(2000, 3), Point(2000, 4), Point(0, 2000)]
     agent_plan_end_of_day.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
 
-    assert agent.last_leg.end_time <= END_OF_DAY
+    assert agent.last_leg.end_time < END_OF_DAY
+    assert agent.last_activity.act == "depot"
     # a plan with 3 stops has 5 activities, but this agent needs to cut plan short
     assert agent.num_activities < 5
 
