@@ -505,7 +505,7 @@ class TourPlanner:
         d_loc: Point,
         start_tm: int,
         end_tm: int,
-    ):
+    ) -> int:
         """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
         Args:
           agent (str): agent for which the leg will be added to Plan
@@ -535,7 +535,7 @@ class TourPlanner:
 
         return end_tm
 
-    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list):
+    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list) -> None:
         """Apply the above functions to the agent to build a plan.
         Args:
           agent (str): agent to build a plan fory
