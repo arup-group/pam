@@ -567,6 +567,27 @@ class TourPlanner:
                 if time_after_next_stop > END_OF_DAY:
                     # agent stays at origin
                     break
+                else:
+                    end_tm = self.add_tour_leg(
+                        agent=agent,
+                        k=k,
+                        o_zone=self.o_zone,
+                        o_loc=o_loc,
+                        d_zone=d_zones[k],
+                        d_loc=d_locs[k],
+                        start_tm=start_orig,
+                        end_tm=end_orig,
+                    )
+
+                    time_params = {"end_tm": end_orig, "stop_duration": duration_orig}
+                    end_tm = self.add_tour_activity(
+                        agent=agent,
+                        k=k,
+                        zone=d_zones[k],
+                        loc=d_locs[k],
+                        activity_type=self.d_activity,
+                        time_params=time_params,
+                    )
             else:
                 # parameters for DurationEstimator between current stop and next stop
                 stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
@@ -580,7 +601,7 @@ class TourPlanner:
                     # return to origin
                     end_tm = self.add_tour_leg(
                         agent=agent,
-                        k=k + 1,
+                        k=k,
                         o_zone=d_zones[k],
                         o_loc=d_locs[k],
                         d_zone=self.o_zone,
@@ -592,7 +613,7 @@ class TourPlanner:
                     time_params = {"start_tm": end_tm, "end_tm": END_OF_DAY}
                     end_tm = self.add_tour_activity(
                         agent=agent,
-                        k=k + 1,
+                        k=k,
                         zone=self.o_zone,
                         loc=o_loc,
                         activity_type="return_origin",
@@ -603,9 +624,9 @@ class TourPlanner:
                     # progress to next leg
                     end_tm = self.add_tour_leg(
                         agent=agent,
-                        k=k + 1,
-                        o_zone=self.o_zone,
-                        o_loc=o_loc,
+                        k=k,
+                        o_zone=d_zones[k - 1],
+                        o_loc=d_locs[k - 1],
                         d_zone=d_zones[k],
                         d_loc=d_locs[k],
                         start_tm=start_tm,
@@ -615,7 +636,7 @@ class TourPlanner:
                     time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
                     end_tm = self.add_tour_activity(
                         agent=agent,
-                        k=k + 1,
+                        k=k,
                         zone=d_zones[k],
                         loc=d_locs[k],
                         activity_type=self.d_activity,
