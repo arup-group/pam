@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- `TourPlanner` now ensures all agents modify plans to return to origin.
 - `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
 

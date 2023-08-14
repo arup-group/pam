@@ -32,15 +32,15 @@ def facility_gdf():
         }
     )
     points = [
-        Point((1, 1)),
-        Point((1, 2)),
-        Point((1, 3)),
-        Point((1, 4)),
-        Point((2, 1)),
-        Point((2, 2)),
-        Point((2, 3)),
-        Point((2, 4)),
-        Point((4, 6)),
+        Point((0, 1000)),
+        Point((0, 2000)),
+        Point((100, 2000)),
+        Point((1000, 2000)),
+        Point((2000, 1)),
+        Point((2000, 2)),
+        Point((2000, 3000)),
+        Point((2000, 4000)),
+        Point((4000, 4000)),
     ]
     return gp.GeoDataFrame(facility_df, geometry=points)
 
@@ -49,9 +49,9 @@ def facility_gdf():
 def zones_gdf():
     zones_df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6], "area": [7, 8, 9]})
     polys = [
-        Polygon(((0, 0), (0, 2), (2, 2), (2, 0))),
-        Polygon(((2, 2), (2, 4), (4, 4), (4, 2))),
-        Polygon(((4, 4), (4, 6), (6, 6), (6, 4))),
+        Polygon(((0, 0), (0, 2000), (2000, 2000), (2000, 0))),
+        Polygon(((2000, 2000), (2000, 4000), (4000, 4000), (4000, 2000))),
+        Polygon(((4000, 4000), (4000, 6000), (6000, 6000), (6000, 4000))),
     ]
 
     gdf = gp.GeoDataFrame(zones_df, geometry=polys)
@@ -439,6 +439,33 @@ def test_final_activity_return_depot(agent, agent_plan):
     agent_plan.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
 
     assert agent.plan[len(agent.plan) - 1].act == "depot"
+
+
+@pytest.fixture
+def agent_plan_end_of_day(delivery_density, df_od, facility_sampler, o_zone):
+    stops = 3
+
+    return tour.TourPlanner(
+        stops=stops,
+        hour=23,
+        minute=45,
+        o_zone=o_zone,
+        d_dist=delivery_density,
+        d_freq="density",
+        facility_sampler=facility_sampler,
+        activity_params={"o_activity": "depot", "d_activity": "delivery"},
+    )
+
+
+def test_end_of_day_agent_return_depot_by_end_of_day(agent, agent_plan_end_of_day):
+    o_loc = Point(2000, 1)
+    d_zones = [1, 1, 1]
+    d_locs = [Point(2000, 3), Point(2000, 4), Point(0, 2000)]
+    agent_plan_end_of_day.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    assert agent.last_leg.end_time <= END_OF_DAY
+    # a plan with 3 stops has 5 activities, but this agent needs to cut plan short
+    assert agent.num_activities < 5
 
 
 def test_validatetourod_no_duplicates(depot_density, od_density, delivery_density):

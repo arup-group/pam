@@ -495,32 +495,16 @@ class TourPlanner:
 
         return end_tm
 
-    def add_tour_leg(
-        self,
-        agent: str,
-        k: Iterable,
-        o_zone: str,
-        o_loc: Point,
-        d_zone: str,
-        d_loc: Point,
-        start_tm: int,
-        end_tm: int,
-    ) -> int:
-        """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
-
-        Args:
-          agent (str): agent for which the leg will be added to Plan
-          k (Iterable): when used in a for loop, k populates the next sequence value
-          o_zone (str): origin zone of leg
-          o_loc (shapely.point): origin facility of leg
-          d_zone (str): destination zone of leg
-          d_loc (shapely.point): destination facility of leg
-          start_tm (int): obtained from DurationEstimator object
-          end_tm (int): obtained from DurationEstimator object
-
-        Returns:
-          int: new end_tm after leg is added to plan.
-
+    def add_tour_leg(self, agent, k, o_zone, o_loc, d_zone, d_loc, start_tm, end_tm):
+        """Leg to Next Delivery.
+        :params agent: agent for which the leg will be added to Plan
+        :params k: when used in a for loop, k populates the next sequence value
+        :params o_zone: origin zone of leg
+        :params o_loc: origin facility of leg
+        :params d_zone: destination zone of leg
+        :params d_loc: destination facility of leg
+        :params start_tm, end_tm: obtained from ActivityDuration object
+        :returns: new end_tm after leg is added to plan.
         """
         agent.add(
             Leg(
@@ -537,61 +521,12 @@ class TourPlanner:
 
         return end_tm
 
-    def add_return_origin(
-        self, agent: str, k: Iterable, o_loc: Point, d_zone: str, d_loc: Point, end_tm: int
-    ) -> int:
-        """The agent returns to their origin activity, from their most recent stop to the origin location.
-
-        Args:
-          agent (str): agent for which the leg & activity will be added to Plan
-          k (Iterable): when used in a for loop, k populates the next sequence valuey
-          o_loc (shapely.Point): origin facility of leg & activity
-          d_zone (str): destination zone of leg & activity
-          d_loc (shapely.Point): destination facility of leg & activity
-          end_tm (int): obtained from DurationEstimator object
-
-        Returns:
-          int: end_tm after returning to origin.
-
-        """
-        trip_distance = DurationEstimator().model_distance(o_loc, d_loc)
-        trip_duration = DurationEstimator().model_journey_time(trip_distance)
-
-        start_tm = end_tm
-        end_tm = end_tm + int(trip_duration / 60)
-
-        end_tm = self.add_tour_leg(
-            agent=agent,
-            k=k,
-            o_zone=d_zone,
-            o_loc=d_loc,
-            d_zone=self.o_zone,
-            d_loc=o_loc,
-            start_tm=start_tm,
-            end_tm=end_tm,
-        )
-
-        time_params = {"start_tm": end_tm, "end_tm": END_OF_DAY}
-        end_tm = self.add_tour_activity(
-            agent=agent,
-            k=k,
-            zone=self.o_zone,
-            loc=o_loc,
-            activity_type="return_origin",
-            time_params=time_params,
-        )
-
-        return end_tm
-
-    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list) -> None:
+    def apply(self, agent, o_loc, d_zones, d_locs):
         """Apply the above functions to the agent to build a plan.
-
-        Args:
-          agent (str): agent to build a plan fory
-          o_loc (shapely.Point): origin facility of leg & activity
-          d_zones (list): destination zones of leg & activity
-          d_locs (list): destination facilities of leg & activity.
-
+        :params agent: agent to build a plan fory
+        :params o_loc: origin facility of leg & activity
+        :params d_zones: destination zones of leg & activity
+        :params d_locs: destination facilities of leg & activity.
         """
         time_params = {"hour": self.hour, "minute": self.minute}
         end_tm = self.add_tour_activity(
@@ -604,47 +539,79 @@ class TourPlanner:
         )
 
         for k in range(self.stops):
-            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
+            # parameters for DurationEstimator between origin and next stop
+            duration, start_orig, end_orig = DurationEstimator().model_activity_duration(
                 o_loc, d_locs[k], end_tm
             )
-            if (mtdt(end_tm) >= END_OF_DAY) | (
-                mtdt(end_tm + int(stop_duration / 60)) >= END_OF_DAY
-            ):
-                break
-            elif k == 0:
-                end_tm = self.add_tour_leg(
-                    agent=agent,
-                    k=k,
-                    o_zone=self.o_zone,
-                    o_loc=o_loc,
-                    d_zone=d_zones[k],
-                    d_loc=d_locs[k],
-                    start_tm=start_tm,
-                    end_tm=end_tm,
-                )
-
-                time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
-                end_tm = self.add_tour_activity(
-                    agent=agent,
-                    k=k,
-                    zone=d_zones[k],
-                    loc=d_locs[k],
-                    activity_type=self.d_activity,
-                    time_params=time_params,
-                )
+            if k == 0:
+                # if first stop, set parameters to be from origin
+                origin_params = {"ozone": self.o_zone, "o_loc": o_loc}
+                next_leg_params = {
+                    "duration": duration,
+                    "start_tm": start_orig,
+                    "end_tm": end_orig,
+                    "travel_to_origin": (end_orig - start_orig),
+                }
             else:
+                # if following stop, parameters to go to next leg
+                stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
+                    d_locs[k - 1], d_locs[k], end_tm
+                )
+                origin_params = {"ozone": d_zones[k - 1], "o_loc": d_locs[k]}
+                next_leg_params = {
+                    "duration": stop_duration,
+                    "start_tm": start_tm,
+                    "end_tm": end_tm,
+                    "travel_to_origin": (end_orig - start_orig),
+                }
+
+            # the variable to determine if end of day is reached
+            time_after_next_stop = mtdt(
+                next_leg_params["end_tm"]
+                + int(next_leg_params["duration"] / 60)
+                + next_leg_params["travel_to_origin"]
+            )
+
+            if (k == 0) & (time_after_next_stop > END_OF_DAY):
+                # agent stays at origin
+                break
+            elif (k == (self.stops - 1)) | (time_after_next_stop > END_OF_DAY):
+                # return to origin
                 end_tm = self.add_tour_leg(
                     agent=agent,
                     k=k,
-                    o_zone=d_zones[k - 1],
-                    o_loc=d_locs[k - 1],
-                    d_zone=d_zones[k],
-                    d_loc=d_locs[k],
+                    o_zone=d_zones[k],
+                    o_loc=d_locs[k],
+                    d_zone=self.o_zone,
+                    d_loc=o_loc,
                     start_tm=start_tm,
                     end_tm=end_tm,
                 )
 
-                time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
+                time_params = {"start_tm": end_tm, "end_tm": END_OF_DAY}
+                end_tm = self.add_tour_activity(
+                    agent=agent,
+                    k=k,
+                    zone=self.o_zone,
+                    loc=o_loc,
+                    activity_type="return_origin",
+                    time_params=time_params,
+                )
+                break
+            else:
+                # progress to next leg
+                end_tm = self.add_tour_leg(
+                    agent=agent,
+                    k=k,
+                    o_zone=origin_params["ozone"],
+                    o_loc=origin_params["o_loc"],
+                    d_zone=d_zones[k],
+                    d_loc=d_locs[k],
+                    start_tm=next_leg_params["start_tm"],
+                    end_tm=next_leg_params["end_tm"],
+                )
+
+                time_params = {"end_tm": end_tm, "stop_duration": next_leg_params["duration"]}
                 end_tm = self.add_tour_activity(
                     agent=agent,
                     k=k,
@@ -653,15 +620,6 @@ class TourPlanner:
                     activity_type=self.d_activity,
                     time_params=time_params,
                 )
-
-        end_tm = self.add_return_origin(
-            agent=agent,
-            k=self.stops,
-            o_loc=o_loc,
-            d_zone=d_zones[self.stops - 1],
-            d_loc=d_locs[self.stops - 1],
-            end_tm=end_tm,
-        )
 
 
 class ValidateTourOD:
