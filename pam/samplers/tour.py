@@ -568,6 +568,7 @@ class TourPlanner:
                     # agent stays at origin
                     break
                 else:
+                    # proceed to next stop
                     end_tm = self.add_tour_leg(
                         agent=agent,
                         k=k,
@@ -599,6 +600,10 @@ class TourPlanner:
 
                 if (k == (self.stops - 1)) | (time_after_next_stop > END_OF_DAY):
                     # return to origin
+                    stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
+                        d_locs[k], o_loc, end_tm
+                    )
+
                     end_tm = self.add_tour_leg(
                         agent=agent,
                         k=k,
