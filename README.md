@@ -1,4 +1,6 @@
-# Population Activity Modeller (PAM)
+ ![PAM](resources/logos/large.png)
+
+# Population Activity Modeller
 
 ![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg) 
 [![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
@@ -7,43 +9,56 @@
 <!--- the "--8<--" html comments define what part of the README to add to the index page of the documentation -->
 <!--- --8<-- [start:docs] -->
 
-PAM is a python API for activity sequence modelling. Primary features:
+PAM is a python library for population **activity sequence** modelling. Example use cases:
 
-- common format read/write including MATSim xml
-- sequence inference from travel diary data
-- rules based sequence modification
-- sequence visualisation
-- facility sampling
-- research extensions
+- **Read** an existing population then **write** to a new format.
+- **Modify** an existing population, for example to model activity locations.
+- **Create** your own activity-based model.
 
-PAM was originally called the "Pandemic Activity Modifier". It was built in response to COVID-19, to better and more quickly update models for behaviour changes from lockdown policies than existing aggregate models.
+PAM supports common travel and activity formats, including MATSim.
+
+## Activity Sequences?
+
+Population **activity sequences** (sometimes called **activity plans**) are used to model the activities (where and when people are at home, work, education and so on) and associated travel of a population:
+
+ ![PAM](resources/example-activity-plans.png)
+
+Activity sequences are used by transport planners to model travel demand, but can also be used in other domains, such as for virus transmission or energy use modelling.
+
+## Brief History
+
+PAM was originally built and shared to rapidly modify existing activity models to respond to pandemic lock-down scenarios.
 
  ![PAM](resources/PAM-motivation.png)
 
-**Who is this for?** PAM is intended for use by any modeller or planner using trip diary data or activity plans.
-**What can this do?** PAM provides an API and examples for modifying activity plans, for example, based on COVID-19 lockdown scenarios.
-
-## Features
-
-This project is not a new activity model. Instead it to seeks to adjust existing activity
-representations, already derived from exiting models or survey data:
+This functionality used a **read-modify-write** pattern. Where modifications are made by applying **policies**. Example policies might be (a) infected persons quarantine at home, (b) only critical workers travel to work, and (c) everyone shops locally.
 
 ![PAM](resources/PAM-features.png)
 
-(i) **Read/Load** input data (eg travel diary) to household and person Activity Plans.
 
-(ii) **Modify** the Activity Plans for new social and government policy scenarios (eg
-remove education activities for non key worker households). Crucially PAM facilitates
-application of detailed policies at the person and household level, while still respecting
-the logic of arbitrarily complex activity chains.
+## Features
 
-(iii) **Output** to useful formats for activity based models or regular transport models. Facilitate preliminary **Analysis** and **Validation** of changes.
+### Activity Modelling
 
-This work is primarily intended for transport modellers, to make quick transport demand
-scenarios. But it may also be useful for other activity based demand modelling such as for goods
-supply or utility demand.
+In addition to the original **read-modify-write** pattern and functionality, PAM has modules for:
+
+- location modelling
+- discretionary activity modelling
+- mode choice modelling
+- facility sampling
+- vehicle ownership
+
+More generally the core PAM data structure and modules can be used as a library to support your own use cases, including building your own activity-based model.
+
+### MATSim
+
+PAM fully supports the [MATSim](https://www.matsim.org/) population/plans format. This includes vehicles, unselected plans, leg routes and leg attributes. A core use case of PAM is to ***read-modify-write*** *experienced plans* from MATSim. This can allow new MATSim scenarios to be *"warm started"* from existing scenarios, significantly reducing MATSim compute time.
 
 <!--- --8<-- [end:docs] -->
+## Documentation
+
+For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest) and [example notebooks](https://github.com/arup-group/pam/tree/main/examples).
+
 ## Installation
 
 To install PAM, we recommend using the [mamba](https://mamba.readthedocs.io/en/latest/index.html) package manager:
