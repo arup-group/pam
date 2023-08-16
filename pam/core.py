@@ -1083,7 +1083,7 @@ class Person:
         self.home_location.loc = loc
         self.plan.home_location.loc = loc
 
-    def assign_vehicles(self, manager: VehicleManager):
+    def assign_vehicles_from_manager(self, manager: VehicleManager):
         """Assign vehicles to person from vehicles manager.
         This method removes the vehicles attribute from the agent and uses it to populate
         Person.vehicles variable. This method is used by read.matsim to transfer regular vehicles

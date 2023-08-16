@@ -247,14 +247,14 @@ def test_reading_electric_vehicles(all_vehicle_xml_path, electric_vehicles_xml_p
 
 def test_assign_vehicles_to_person(manager):
     person = Person("0", attributes={"subpopulation": "default", "vehicles": {"car": "car_0"}})
-    person.assign_vehicles(manager)
+    person.assign_vehicles_from_manager(manager)
     assert "car_0" not in manager
     assert person.vehicles == {"car": Vehicle("car_0", "car")}
 
 
 def test_assign_evs_to_person(manager):
     person = Person("0", attributes={"subpopulation": "default", "vehicles": {"car": "ev_0"}})
-    person.assign_vehicles(manager)
+    person.assign_vehicles_from_manager(manager)
     assert "ev_0" not in manager
     assert person.vehicles == {"car": ElectricVehicle("ev_0", "car")}
 
@@ -263,7 +263,7 @@ def test_assign_multiple_vehs_to_person(manager):
     person = Person(
         "0", attributes={"subpopulation": "default", "vehicles": {"ev": "ev_0", "car": "car_0"}}
     )
-    person.assign_vehicles(manager)
+    person.assign_vehicles_from_manager(manager)
     assert "car_0" not in manager
     assert "ev_0" not in manager
     assert person.vehicles["ev"] == ElectricVehicle("ev_0", "car")
