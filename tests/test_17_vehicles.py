@@ -4,7 +4,7 @@ import importlib_resources
 import lxml
 import pytest
 
-from pam import PAMVehicleIdError
+from pam import PAMVehicleIdError, PAMVehicleTypeError
 from pam.core import Person, Population
 from pam.read.matsim import read_matsim
 from pam.vehicles import ElectricVehicle, Vehicle, VehicleManager, VehicleType
@@ -13,26 +13,41 @@ from pam.write.matsim import write_matsim
 
 @pytest.fixture()
 def car_type():
-    return VehicleType()
+    return VehicleType("car")
 
 
 @pytest.fixture()
 def lorry_type():
-    return VehicleType(passengerCarEquivalents=3.0)
+    return VehicleType("lorry", passengerCarEquivalents=3.0)
 
 
 def test_veh_manager_add_type(car_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
-    assert "car" in manager.veh_types
+    manager.add_type(car_type)
+    assert "car" in manager._veh_types
 
 
 def test_veh_manager_add_type_again(car_type, lorry_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
-    manager.add_type("lorry", lorry_type)
-    manager.add_type("car", car_type)
-    assert "car" in manager.veh_types
+    manager.add_type(car_type)
+    manager.add_type(lorry_type)
+    manager.add_type(car_type)
+    assert "car" in manager._veh_types
+
+
+def test_veh_manager_remove_type(car_type, lorry_type):
+    manager = VehicleManager()
+    manager.add_type(car_type)
+    manager.add_type(lorry_type)
+    manager.remove_type("lorry")
+    assert "lorry" not in manager._veh_types
+
+
+def test_veh_manager_remove_missing_type(car_type, lorry_type):
+    manager = VehicleManager()
+    manager.add_type(car_type)
+    with pytest.raises(PAMVehicleTypeError):
+        manager.remove_type("lorry")
 
 
 def test_create_car():
@@ -48,13 +63,13 @@ def test_create_ev():
 def test_add_veh_failure_due_to_unknown_type():
     manager = VehicleManager()
     veh1 = Vehicle("1", "car")
-    with pytest.raises(PAMVehicleIdError):
+    with pytest.raises(PAMVehicleTypeError):
         manager.add_veh(veh1)
 
 
 def test_add_veh(car_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
+    manager.add_type(car_type)
     veh1 = Vehicle("1", "car")
     manager.add_veh(veh1)
     assert "1" in manager
@@ -63,13 +78,13 @@ def test_add_veh(car_type):
 def test_add_ev_failure_due_to_unknown_type():
     manager = VehicleManager()
     veh1 = ElectricVehicle("1", "car")
-    with pytest.raises(PAMVehicleIdError):
+    with pytest.raises(PAMVehicleTypeError):
         manager.add_veh(veh1)
 
 
 def test_add_ev(car_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
+    manager.add_type(car_type)
     veh1 = ElectricVehicle("1", "car")
     manager.add_veh(veh1)
     assert "1" in manager
@@ -84,13 +99,13 @@ def test_set_veh_fails_due_to_unknown_type():
 def test_set_veh_fails_due_to_missing_type():
     manager = VehicleManager()
     veh1 = Vehicle("1", "car")
-    with pytest.raises(PAMVehicleIdError):
+    with pytest.raises(PAMVehicleTypeError):
         manager["1"] = veh1
 
 
 def test_set_veh(car_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
+    manager.add_type(car_type)
     veh1 = Vehicle("1", "car")
     manager["1"] = veh1
     assert "1" in manager
@@ -98,7 +113,7 @@ def test_set_veh(car_type):
 
 def test_set_ev(car_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
+    manager.add_type(car_type)
     veh1 = ElectricVehicle("1", "car")
     manager["1"] = veh1
     assert "1" in manager
@@ -107,8 +122,8 @@ def test_set_ev(car_type):
 @pytest.fixture()
 def manager(car_type, lorry_type):
     manager = VehicleManager()
-    manager.add_type("car", car_type)
-    manager.add_type("lorry", lorry_type)
+    manager.add_type(car_type)
+    manager.add_type(lorry_type)
     for i in range(2):
         veh = Vehicle(f"car_{i}", "car")
         manager[f"car_{i}"] = veh
@@ -154,13 +169,13 @@ def test_manager_equals(manager):
     other1 = VehicleManager()
     assert manager != other1
     other2 = deepcopy(manager)
-    other2.vehicles["new"] = Vehicle("new", "new")
+    other2._vehicles["new"] = Vehicle("new", "new")
     assert manager != other2
 
 
 def test_clear_types(manager):
     manager.clear_types()
-    assert manager.veh_types == {}
+    assert manager._veh_types == {}
 
 
 def test_manager_length(manager):
@@ -168,8 +183,8 @@ def test_manager_length(manager):
 
 
 def test_manager_iters(manager):
-    assert set([k for k, v in manager.veh_types.items()]) == {"car", "lorry"}
-    assert set([k for k, v in manager.vehicles.items()]) == {
+    assert set([k for k, v in manager._veh_types.items()]) == {"car", "lorry"}
+    assert set([k for k, v in manager._vehicles.items()]) == {
         "car_0",
         "car_1",
         "freight_0",
@@ -201,14 +216,14 @@ def test_manager_is_consistent(manager):
 
 
 def test_manager_inconsistent_vehs(manager):
-    manager.vehicles["taxi_0"] = Vehicle("taxi_0", "taxi")
+    manager._vehicles["taxi_0"] = Vehicle("taxi_0", "taxi")
     with pytest.raises(PAMVehicleIdError):
         manager.is_consistent()
 
 
 def test_manager_redundant_veh_types(manager):
-    manager.veh_types["taxi"] = VehicleType()
-    assert manager.redundant_types() == {"taxi": VehicleType()}
+    manager._veh_types["taxi"] = VehicleType("taxi")
+    assert manager.redundant_types() == {"taxi": VehicleType("taxi")}
 
 
 def test_raise_when_read_evs_but_no_vehs(electric_vehicles_xml_path):
@@ -220,11 +235,11 @@ def test_raise_when_read_evs_but_no_vehs(electric_vehicles_xml_path):
 def test_reading_all_vehicles_file(all_vehicle_xml_path):
     manager = VehicleManager()
     manager.from_xml(all_vehicle_xml_path)
-    assert manager.veh_types == {
-        "defaultVehicleType": VehicleType(),
-        "defaultElectricVehicleType": VehicleType(),
+    assert manager._veh_types == {
+        "defaultVehicleType": VehicleType("defaultVehicleType"),
+        "defaultElectricVehicleType": VehicleType("defaultElectricVehicleType"),
     }
-    assert manager.vehicles == {
+    assert manager._vehicles == {
         "Eddy": Vehicle("Eddy", "defaultElectricVehicleType"),
         "Stevie": Vehicle("Stevie", "defaultVehicleType"),
         "Vladya": Vehicle("Vladya", "defaultVehicleType"),
@@ -234,11 +249,11 @@ def test_reading_all_vehicles_file(all_vehicle_xml_path):
 def test_reading_electric_vehicles(all_vehicle_xml_path, electric_vehicles_xml_path):
     manager = VehicleManager()
     manager.from_xml(all_vehicle_xml_path, electric_vehicles_xml_path)
-    assert manager.veh_types == {
-        "defaultVehicleType": VehicleType(),
-        "defaultElectricVehicleType": VehicleType(),
+    assert manager._veh_types == {
+        "defaultVehicleType": VehicleType("defaultVehicleType"),
+        "defaultElectricVehicleType": VehicleType("defaultElectricVehicleType"),
     }
-    assert manager.vehicles == {
+    assert manager._vehicles == {
         "Eddy": ElectricVehicle("Eddy", "defaultElectricVehicleType"),
         "Stevie": Vehicle("Stevie", "defaultVehicleType"),
         "Vladya": Vehicle("Vladya", "defaultVehicleType"),
@@ -272,8 +287,8 @@ def test_assign_multiple_vehs_to_person(manager):
 
 def test_rebuild_manager_fails_due_to_missing_type():
     population = Population()
-    population.vehicles_manager = VehicleManager()
-    population.vehicles_manager.add_type("car", VehicleType())
+    population._vehicles_manager = VehicleManager()
+    population._vehicles_manager.add_type(VehicleType("car"))
 
     person = Person("0", attributes={"subpopulation": "default"})
     person.vehicles = {"big_car": Vehicle("0", "big_car")}
@@ -285,8 +300,8 @@ def test_rebuild_manager_fails_due_to_missing_type():
 
 def test_rebuild_manager_fails_due_to_duplicates():
     population = Population()
-    population.vehicles_manager = VehicleManager()
-    population.vehicles_manager.add_type("car", VehicleType())
+    population._vehicles_manager = VehicleManager()
+    population._vehicles_manager.add_type(VehicleType("car"))
 
     personA = Person("0", attributes={"subpopulation": "default"})
     personA.vehicles = {"car0": Vehicle("car0", "car")}
@@ -301,22 +316,22 @@ def test_rebuild_manager_fails_due_to_duplicates():
 
 def test_rebuild_manager_single_agent(manager):
     population = Population()
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
 
     person = Person("0", attributes={"subpopulation": "default"})
     person.vehicles = {"car": Vehicle("0", "car")}
     population.add(person)
 
     population.rebuild_vehicles_manager()
-    assert population.vehicles_manager.vehicles == {"0": Vehicle("0", "car")}
-    assert population.vehicles_manager.redundant_types() == {
-        "lorry": VehicleType(passengerCarEquivalents=3.0)
+    assert population._vehicles_manager._vehicles == {"0": Vehicle("0", "car")}
+    assert population._vehicles_manager.redundant_types() == {
+        "lorry": VehicleType("lorry", passengerCarEquivalents=3.0)
     }
 
 
 def test_rebuild_manager_multi_agent(manager):
     population = Population()
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
 
     personA = Person("0", attributes={"subpopulation": "default"})
     personA.vehicles = {"0": Vehicle("0", "car")}
@@ -331,12 +346,12 @@ def test_rebuild_manager_multi_agent(manager):
     population.add(personC)
 
     population.rebuild_vehicles_manager()
-    assert population.vehicles_manager.vehicles == {
+    assert population._vehicles_manager._vehicles == {
         "0": Vehicle("0", "car"),
         "1": Vehicle("1", "lorry"),
         "2": ElectricVehicle("2", "car"),
     }
-    assert population.vehicles_manager.redundant_types() == {}
+    assert population._vehicles_manager.redundant_types() == {}
 
 
 def test_writing_all_vehicles_results_in_valid_xml_file(manager, tmp_path, vehicles_v2_xsd):
@@ -388,11 +403,11 @@ def test_read_vehs_into_population(
         all_vehicles_path=all_vehicle_xml_path,
         electric_vehicles_path=electric_vehicles_xml_path,
     )
-    assert population.vehicles_manager.veh_types == {
-        "defaultVehicleType": VehicleType(),
-        "defaultElectricVehicleType": VehicleType(),
+    assert population._vehicles_manager._veh_types == {
+        "defaultVehicleType": VehicleType("defaultVehicleType"),
+        "defaultElectricVehicleType": VehicleType("defaultElectricVehicleType"),
     }
-    assert population.vehicles_manager.vehicles == {}
+    assert population._vehicles_manager._vehicles == {}
 
     # check vehicles attribute is removed
     for pid in ["Eddy", "Stevie", "Vladya"]:
@@ -431,7 +446,7 @@ def test_read_edit_size_write(
         all_vehicles_path=all_vehicle_xml_path,
         electric_vehicles_path=electric_vehicles_xml_path,
     )
-    population.vehicles_manager.veh_types[
+    population._vehicles_manager._veh_types[
         "defaultElectricVehicleType"
     ].passengerCarEquivalents = 1.2
     plans_path = tmp_path / "plans.xml"
@@ -442,7 +457,7 @@ def test_read_edit_size_write(
         plans_path=plans_path, all_vehicles_path=vehs_path, electric_vehicles_path=evs_path
     )
     assert (
-        duplicate.vehicles_manager.veh_types["defaultElectricVehicleType"].passengerCarEquivalents
+        duplicate._vehicles_manager._veh_types["defaultElectricVehicleType"].passengerCarEquivalents
         == 1.2
     )
 
@@ -475,13 +490,13 @@ def test_read_edit_veh_write(
 
 def test_population_vehicles_types(manager):
     population = Population()
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     assert set(population.vehicle_types.keys()) == {"car", "lorry"}
 
 
 def test_iter_evs(car_type):
     population = Population()
-    population.add_veh_type("car", car_type)
+    population.add_veh_type(car_type)
     for i in range(2):
         person = Person(i)
         person.vehicles = {"car": ElectricVehicle(f"car_{i}", "car")}
@@ -490,7 +505,7 @@ def test_iter_evs(car_type):
         person = Person(i)
         person.vehicles = {"car": Vehicle(f"car_{i}", "car")}
         population.add(person)
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     assert list(population.evs()) == [
         (0, 0, "car", ElectricVehicle("car_0", "car")),
         (1, 1, "car", ElectricVehicle("car_1", "car")),
@@ -511,7 +526,7 @@ def test_population_has_vehs(manager):
 def test_add_veh_to_agent_fail_due_to_missing_type(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     with pytest.raises(UserWarning):
         population.add_veh(0, 0, "car", Vehicle("0", "truck"))
 
@@ -519,7 +534,7 @@ def test_add_veh_to_agent_fail_due_to_missing_type(manager):
 def test_add_veh_to_agent_fails_due_to_duplicate(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     population.add_veh(0, 0, "car", Vehicle("0", "car"))
     with pytest.raises(UserWarning):
         population.add_veh(0, 0, "taxi", Vehicle("0", "car"))
@@ -528,7 +543,7 @@ def test_add_veh_to_agent_fails_due_to_duplicate(manager):
 def test_add_veh_to_agent_ok(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     population.add_veh(0, 0, "car", Vehicle("0", "car"))
     assert population[0][0].vehicles["car"] == Vehicle("0", "car")
 
@@ -536,7 +551,7 @@ def test_add_veh_to_agent_ok(manager):
 def test_add_veh_to_agent_ok_with_overwrite(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     population.add_veh(0, 0, "car", Vehicle("0", "car"))
     population.add_veh(0, 0, "car", Vehicle("0", "lorry"))
     assert population[0][0].vehicles["car"] == Vehicle("0", "lorry")
@@ -545,7 +560,7 @@ def test_add_veh_to_agent_ok_with_overwrite(manager):
 def test_population_check_vehicles(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     population.add_veh(0, 0, "car", Vehicle("0", "car"))
     assert population.check_vehicles()
     population[0][0].vehicles["car"] = Vehicle("0", "flying_car")
@@ -556,7 +571,7 @@ def test_population_check_vehicles(manager):
 def test_update_vehicles_manager(manager):
     population = Population()
     population.add(Person(0))
-    population.vehicles_manager = manager
+    population._vehicles_manager = manager
     population.add_veh(0, 0, "car", Vehicle("0", "car"))
     population.update_vehicles_manager()
     population[0][0].vehicles["car"] = Vehicle("0", "flying_car")

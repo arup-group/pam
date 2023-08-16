@@ -84,7 +84,7 @@ have attributes or be able to use a household attribute id. Check this is intend
         logger.debug(f"Loading vehicles from {all_vehicles_path}")
         if electric_vehicles_path:
             logger.debug(f"Loading EVs from {electric_vehicles_path}")
-        population.vehicles_manager.from_xml(all_vehicles_path, electric_vehicles_path)
+        population._vehicles_manager.from_xml(all_vehicles_path, electric_vehicles_path)
 
     attributes = {}
     if attributes_path:
@@ -98,7 +98,7 @@ have attributes or be able to use a household attribute id. Check this is intend
     for person in stream_matsim_persons(
         plans_path,
         attributes=attributes,
-        vehicles_manager=population.vehicles_manager,
+        vehicles_manager=population._vehicles_manager,
         weight=weight,
         version=version,
         simplify_pt_trips=simplify_pt_trips,

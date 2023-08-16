@@ -36,7 +36,7 @@ class Population:
         self.name = name
         self.logger = logging.getLogger(__name__)
         self.households = {}
-        self.vehicles_manager = VehicleManager()
+        self._vehicles_manager = VehicleManager()
 
     def add(self, target: list[Union[Household, Person, list]]) -> None:
         """Add houeshold/person, or a list of households/persons to the population.
@@ -189,7 +189,7 @@ class Population:
         Person and adds them to the Population.vehicles_manager. This method is used by write.matsim
         to write regular vehicles and electric vehicles to MATSim xml formats.
         """
-        self.vehicles_manager.clear_vehs()
+        self._vehicles_manager.clear_vehs()
         self.update_vehicles_manager()
 
     def update_vehicles_manager(self):
@@ -201,8 +201,8 @@ class Population:
             if veh.vid in vehs:
                 raise PAMVehicleIdError("Failed to build due to duplicate vehicle id: {veh.vid}")
             vehs[veh.vid] = veh
-        self.vehicles_manager.vehicles.update(vehs)
-        if not self.vehicles_manager.is_consistent():
+        self._vehicles_manager._vehicles.update(vehs)
+        if not self._vehicles_manager.is_consistent():
             raise UserWarning("Failed consistency check refer to logs.")
 
     def check_vehicles(self) -> bool:
@@ -214,7 +214,7 @@ class Population:
         Returns:
             bool: Return true if all vehicle types are defined.
         """
-        veh_types = set(self.vehicles_manager.veh_types.keys())
+        veh_types = set(self._vehicles_manager._veh_types.keys())
         for _, _, _, veh in self.vehicles():
             if veh.type_id not in veh_types:
                 raise PAMVehicleIdError(
@@ -228,7 +228,7 @@ class Population:
         Returns:
             dist[str, VehicleType]: Mapping of vehicle type id to vehicle type data.
         """
-        return self.vehicles_manager.veh_types
+        return self._vehicles_manager._veh_types
 
     def vehicles(self) -> Iterator[str, str, str, Vehicle]:
         """Return iterator of all vehicles in population, prepended with household id, person id
@@ -260,14 +260,21 @@ class Population:
     def has_electric_vehicles(self):
         return next(self.evs(), None) is not None
 
-    def add_veh_type(self, type_id: str, vehicle_type: VehicleType):
+    def add_veh_type(self, vehicle_type: VehicleType):
         """Add a vehcile type to the population vehicles manager.
 
         Args:
-            type_id (str): Vehicle type uid.
             vehicle_type (VehicleType): Vehicle type to be added.
         """
-        self.vehicles_manager.add_type(type_id, vehicle_type)
+        self._vehicles_manager.add_type(vehicle_type)
+
+    def remove_vehicle_type(self, tid: str):
+        """Remove vehicle type from vehicles manager.
+
+        Args:
+            tid (str): Vehicle type id.
+        """
+        self._vehicles_manager.remove_type(tid)
 
     def add_veh(self, hid: str, pid: str, mode: str, vehicle: Vehicle):
         """Add vehicle of given mode to person, based on hid and pid. Method checks that id is unique and vehicle type is available, otherwise raises UserWarning.
@@ -283,7 +290,7 @@ class Population:
             UserWarning: Unknown vehicle type.
 
         """
-        if vehicle.type_id not in self.vehicles_manager.veh_types:
+        if vehicle.type_id not in self._vehicles_manager._veh_types:
             raise UserWarning(f"Unable to add vehicle with unknown type: '{vehicle.type_id}'.")
         person_vehicles = self.households[hid][pid].vehicles
         if not (

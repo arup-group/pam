@@ -30,5 +30,9 @@ class PAMVehicleIdError(PAMValidationError):
     """Custom exception raised for Vehicle not matching Person ID."""
 
 
+class PAMVehicleTypeError(PAMValidationError):
+    """Custom exception raised for Vehicle type error."""
+
+
 class InvalidMATSimError(PAMValidationError):
     """Custom exception raised for invalid MATSim."""
