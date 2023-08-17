@@ -261,7 +261,7 @@ class Population:
         return next(self.evs(), None) is not None
 
     def add_veh_type(self, vehicle_type: VehicleType):
-        """Add a vehcile type to the population vehicles manager.
+        """Add a vehicle type to the population vehicles manager.
 
         Args:
             vehicle_type (VehicleType): Vehicle type to be added.
