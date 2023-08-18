@@ -3,6 +3,10 @@
 <population>
 
     <person id="Eddy">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">evs</attribute>
+            <attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car": "Eddy"}</attribute>
+		</attributes>
         <plan selected="yes">
             <activity end_time="07:24:52" type="home" x="515226" y="188222"/>
             <leg mode="car"/>
@@ -13,6 +17,10 @@
     </person>
 
     <person id="Stevie">
+		<attributes>
+			<attribute name="subpopulation" class="java.lang.String">default</attribute>
+            <attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car": "Stevie"}</attribute>
+		</attributes>
         <plan selected="yes">
             <activity end_time="07:24:52" type="home" x="515226" y="188222"/>
             <leg mode="car"/>
@@ -23,6 +31,10 @@
     </person>
 
     <person id="Vladya">
+    	<attributes>
+			<attribute name="subpopulation" class="java.lang.String">default</attribute>
+            <attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car": "Vladya"}</attribute>
+		</attributes>
         <plan selected="yes">
             <activity end_time="07:24:52" type="home" x="515226" y="188222"/>
             <leg mode="car"/>

@@ -142,7 +142,7 @@ def get_attributes(population, show: int = 10, key=None, value=None) -> dict:
         for k, v in person.attributes.items():
             if k == key:
                 continue
-            attributes[k].add(v)
+            attributes[k].add(str(v))
     for k, v in attributes.items():
         if len(v) > show:
             attributes[k] = "---"

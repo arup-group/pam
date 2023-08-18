@@ -1,7 +1,14 @@
 import pytest
+from lxml import etree as et
 
 from pam.activity import Plan
-from pam.read import load_attributes_map, read_matsim, stream_matsim_persons
+from pam.read import (
+    get_attributes_from_person,
+    load_attributes_map,
+    parse_veh_attribute,
+    read_matsim,
+    stream_matsim_persons,
+)
 
 test_trips_path = pytest.test_data_dir / "test_matsim_plans.xml"
 test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
@@ -92,7 +99,7 @@ def test_parse_v12_matsim():
         "subpopulation": "rich",
         "age": "yes",
         "hid": "A",
-        "vehicles": '{"car":"chris"}',
+        "vehicles": {"car": "chris"},
     }
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
@@ -113,7 +120,7 @@ def test_parse_v12_matsim_with_hh_ids():
         "subpopulation": "rich",
         "age": "yes",
         "hid": "A",
-        "vehicles": '{"car":"chris"}',
+        "vehicles": {"car": "chris"},
     }
     legs = list(person.plan.legs)
     assert legs[0].mode == "car"
@@ -183,3 +190,23 @@ def test_stream_transit_v12_matsim():
     assert legs[1].route.transit.get("accessFacilityId") == "home_stop_out"
     assert legs[1].route.transit.get("egressFacilityId") == "work_stop_in"
     assert legs[1].route.network_route == []
+
+
+def test_parse_veh_attribute():
+    assert parse_veh_attribute('{"car":"chris"}') == {"car": "chris"}
+
+
+def test_get_attributes_from_person():
+    text = """<person id="chris">
+    <attributes>
+        <attribute name="hid" class="java.lang.String">A</attribute>
+        <attribute name="subpopulation" class="java.lang.String">rich</attribute>
+        <attribute name="age" class="java.lang.String">yes</attribute>
+        <attribute name="vehicles" class="org.matsim.vehicles.PersonVehicles">{"car":"chris"}</attribute>
+    </attributes>
+</person>"""
+    elem = et.fromstring(text)
+    pid, attributes = get_attributes_from_person(elem)
+    assert pid == "chris"
+    assert attributes["hid"] == "A"
+    assert attributes["vehicles"] == {"car": "chris"}

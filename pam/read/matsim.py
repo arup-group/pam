@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Iterator
 from datetime import timedelta
@@ -12,7 +13,7 @@ import pam.core as core
 import pam.utils as utils
 from pam.activity import Route, RouteV11
 from pam.variables import START_OF_DAY
-from pam.vehicle import ElectricVehicle, Vehicle, VehicleType
+from pam.vehicles import VehicleManager
 
 
 def read_matsim(
@@ -79,25 +80,25 @@ have attributes or be able to use a household attribute id. Check this is intend
 """
         )
 
-    vehicles = {}
     if all_vehicles_path:
         logger.debug(f"Loading vehicles from {all_vehicles_path}")
-        vehicles = read_vehicles(all_vehicles_path, electric_vehicles_path)
-        # todo what if we only supply electric vehicles path?
+        if electric_vehicles_path:
+            logger.debug(f"Loading EVs from {electric_vehicles_path}")
+        population._vehicles_manager.from_xml(all_vehicles_path, electric_vehicles_path)
 
     attributes = {}
     if attributes_path:
         logger.debug(f"Loading attributes from {attributes_path}")
         if (version == 12) and (attributes_path is not None):
             logger.warning(
-                "It is not required to load attributes from a separate path for version 11."
+                "It is not required to load attributes from a separate path after version 11."
             )
         attributes = load_attributes_map(attributes_path)
 
     for person in stream_matsim_persons(
         plans_path,
         attributes=attributes,
-        vehicles=vehicles,
+        vehicles_manager=population._vehicles_manager,
         weight=weight,
         version=version,
         simplify_pt_trips=simplify_pt_trips,
@@ -127,7 +128,7 @@ have attributes or be able to use a household attribute id. Check this is intend
 def stream_matsim_persons(
     plans_path: str,
     attributes: dict = {},
-    vehicles: dict = {},
+    vehicles_manager: Optional[VehicleManager] = None,
     weight: int = 100,
     version: Literal[11, 12] = 12,
     simplify_pt_trips: bool = False,
@@ -139,7 +140,7 @@ def stream_matsim_persons(
 ) -> Iterator[core.Person]:
     """Stream a MATSim format population into core.Person objects.
     Expects agent attributes (and vehicles) to be supplied as optional dictionaries.
-    This allows this function to support 'version 11' plans.
+    This allows this function to support "version 11" plans.
 
     TODO: a v12 only method could also stream attributes and would use less memory
 
@@ -148,8 +149,8 @@ def stream_matsim_persons(
             path to matsim format xml
         attributes (dict, optional):
             map of person attributes, only required for v11. Defaults to {}.
-        vehicles (dict, optional):
-            map of vehciles. Defaults to {}.
+        vehicles_manager (VehicleManager, optional):
+            Population vehicles manager. Defaults to None.
         weight (int, optional):
             path to matsim electric_vehicles xml. Defaults to 100.
         version (Literal[11, 12], optional):
@@ -176,6 +177,9 @@ def stream_matsim_persons(
     if version not in [11, 12]:
         raise UserWarning("Version must be set to 11 or 12.")
 
+    if vehicles_manager is None:
+        vehicles_manager = VehicleManager()
+
     for person_xml in utils.get_elems(plans_path, "person"):
         if version == 11:
             person_id = person_xml.xpath("@id")[0]
@@ -183,8 +187,15 @@ def stream_matsim_persons(
         else:
             person_id, agent_attributes = get_attributes_from_person(person_xml)
 
-        vehicle = vehicles.get(person_id, None)
-        person = core.Person(person_id, attributes=agent_attributes, freq=weight, vehicle=vehicle)
+        # remove vehicle attribute from agent and create person vehicles dictionary
+        person_vehs = {}
+        if vehicles_manager.len():
+            agent_vehs = agent_attributes.pop("vehicles", {})
+            person_vehs = {mode: vehicles_manager.pop(vid) for mode, vid in agent_vehs.items()}
+
+        person = core.Person(
+            person_id, attributes=agent_attributes, freq=weight, vehicles=person_vehs
+        )
 
         for plan_xml in person_xml:
             if plan_xml.get("selected") == "yes":
@@ -460,11 +471,15 @@ def get_attributes_from_person(elem):
         elif attribute_type == "java.lang.Double":
             attributes[attribute_name] = float(attr)
         elif attribute_type == "org.matsim.vehicles.PersonVehicles":
-            attributes[attribute_name] = attr.text
+            attributes[attribute_name] = parse_veh_attribute(attr.text)
         # last try:
         else:
             attributes[attribute_name] = attr.text
     return ident, attributes
+
+
+def parse_veh_attribute(text) -> dict:
+    return json.loads(text)
 
 
 def get_attributes_from_legs(elem):
@@ -493,81 +508,3 @@ def selected_plans(plans_path):
         for plan in person:
             if plan.get("selected") == "yes":
                 yield person.get("id"), plan
-
-
-def read_vehicles(all_vehicles_path: str, electric_vehicles_path: Optional[str] = None) -> dict:
-    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd and electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
-
-    Args:
-        all_vehicles_path (str): path to matsim all_vehicles xml file
-        electric_vehicles_path (Optional[str], optional): path to matsim electric_vehicles xml. Defaults to None.
-
-    Returns:
-        dict: dictionary of all vehicles `{ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}`
-    """
-    vehicles = read_all_vehicles_file(all_vehicles_path)
-    if electric_vehicles_path:
-        vehicles = read_electric_vehicles_file(electric_vehicles_path, vehicles)
-    return vehicles
-
-
-def read_all_vehicles_file(path: str) -> dict:
-    """Reads all_vehicles file following format https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd.
-
-    Args:
-        path (str): path to matsim all_vehicles xml file
-    Returns:
-        dict: dictionary of all vehicles `{ID: pam.vehicle.Vehicle class object}`
-    """
-    vehicles = {}
-    vehicle_types = {}
-
-    for vehicle_type_elem in utils.get_elems(path, "vehicleType"):
-        vehicle_types[vehicle_type_elem.get("id")] = VehicleType.from_xml_elem(vehicle_type_elem)
-
-    for vehicle_elem in utils.get_elems(path, "vehicle"):
-        vehicles[vehicle_elem.get("id")] = Vehicle(
-            id=vehicle_elem.get("id"), vehicle_type=vehicle_types[vehicle_elem.get("type")]
-        )
-
-    return vehicles
-
-
-def read_electric_vehicles_file(path: str, vehicles: dict = None) -> dict:
-    """Reads electric_vehicles file following format https://www.matsim.org/files/dtd/electric_vehicles_v1.dtd.
-
-    Args:
-        path (str): path to matsim electric_vehicles xml
-        vehicles (dict, optional):
-            dictionary of `{ID: pam.vehicle.Vehicle}` objects, some of which may need to be updated to ElectricVehicle based on contents of the electric_vehicles xml file.
-            If None, vehicles will default to the VehicleType defaults. Defaults to None.
-
-    Raises:
-        RuntimeError: Vehicle types must match for the same vehicle ID.
-
-    Returns:
-        dict:  dictionary of all vehicles: {ID: pam.vehicle.Vehicle or pam.vehicle.ElectricVehicle class object}
-    """
-    if vehicles is None:
-        logging.warning(
-            "All Vehicles dictionary was not passed. This will result in defaults for Vehicle Types"
-            "Definitions assumed by the Electric Vehicles"
-        )
-        vehicles = {}
-    for vehicle_elem in utils.get_elems(path, "vehicle"):
-        attribs = dict(vehicle_elem.attrib)
-        id = attribs.pop("id")
-        attribs["battery_capacity"] = float(attribs["battery_capacity"])
-        attribs["initial_soc"] = float(attribs["initial_soc"])
-        if id in vehicles:
-            elem_vehicle_type = attribs.pop("vehicle_type")
-            vehicle_type = vehicles[id].vehicle_type
-            if elem_vehicle_type != vehicle_type.id:
-                raise RuntimeError(
-                    f"Electric vehicle: {id} has mis-matched vehicle type "
-                    f"defined: {elem_vehicle_type} != {vehicle_type.id}"
-                )
-        else:
-            vehicle_type = VehicleType(id=attribs.pop("vehicle_type"))
-        vehicles[id] = ElectricVehicle(id=id, vehicle_type=vehicle_type, **attribs)
-    return vehicles

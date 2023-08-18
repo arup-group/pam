@@ -1,5 +1,5 @@
-from pathlib import Path
-
+import importlib_resources
+import lxml
 import numpy as np
 import pandas as pd
 import pytest
@@ -12,7 +12,36 @@ from pam.planner.od import OD
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
-TEST_DATA_DIR = Path(__file__).parent / "test_data"
+TEST_DATA_DIR = importlib_resources.files("pam").parent / "tests" / "test_data"
+FIXTURES_DIR = importlib_resources.files("pam") / "fixtures"
+
+
+@pytest.fixture(scope="session")
+def vehicles_v2_xsd():
+    xsd_path = FIXTURES_DIR / "dtd" / "vehicleDefinitions_v2.0.xsd"
+    xml_schema_doc = lxml.etree.parse(xsd_path)
+    yield lxml.etree.XMLSchema(xml_schema_doc)
+
+
+@pytest.fixture(scope="session")
+def electric_vehicles_v1_dtd():
+    dtd_path = FIXTURES_DIR / "dtd" / "electric_vehicles_v1.dtd"
+    yield lxml.etree.DTD(dtd_path)
+
+
+@pytest.fixture(scope="session")
+def ev_population_xml_path():
+    return TEST_DATA_DIR / "vehicles" / "ev_population.xml"
+
+
+@pytest.fixture(scope="session")
+def all_vehicle_xml_path():
+    return TEST_DATA_DIR / "vehicles" / "all_vehicles.xml"
+
+
+@pytest.fixture(scope="session")
+def electric_vehicles_xml_path():
+    return TEST_DATA_DIR / "vehicles" / "electric_vehicles.xml"
 
 
 def pytest_configure(config):

@@ -221,10 +221,13 @@ def test_write_plans_xml_assert_contents(tmp_path):
 def test_read_write_consistent(tmp_path):
     test_tripsv12_path = pytest.test_data_dir / "test_matsim_plansv12.xml"
     population = read_matsim(test_tripsv12_path, version=12)
-    location = str(tmp_path / "test.xml.gz")
+    location = tmp_path / "test.xml"
+    location2 = tmp_path / "test2.xml"
     write_matsim(population=population, plans_path=location, comment="test", household_key=None)
-    expected_file = "{}/test.xml.gz".format(tmp_path)
-    population2 = read_matsim(expected_file, version=12)
+    population2 = read_matsim(location, version=12)
+    write_matsim(population=population2, plans_path=location2, comment="test", household_key=None)
+    assert population._vehicles_manager == population2._vehicles_manager
+    assert population["chris"]["chris"].attributes == population2["chris"]["chris"].attributes
     assert population == population2
 
 

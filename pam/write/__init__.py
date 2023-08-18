@@ -6,10 +6,7 @@ from pam.write.matsim import (
     create_person_element,
     object_attributes_dtd,
     population_v6_dtd,
-    write_all_vehicles,
-    write_electric_vehicles,
     write_matsim,
     write_matsim_population_v6,
     write_plan,
-    write_vehicles,
 )
