@@ -17,20 +17,28 @@ def reschedule(
     patience: int = 1000,
 ):
     best_score = plans_scorer.score_plan(plan, config)
-    print(f"Initial best score at iteration 0: {best_score}")
+    initial_score = best_score
     best_scores = {0: best_score}
     stopper = Stopper(horizon=horizon, sensitivity=sensitivity)
-    for n in range(patience):
+    for n in range(patience + 1):
         proposed_plan = random_mutate_activity_durations(plan, copy=True)
         score = plans_scorer.score_plan(proposed_plan, config)
         if score > best_score:
-            print(f"New best score at iteration {n}: {score}")
             best_scores[n] = score
             best_score = score
             plan = proposed_plan
             if not stopper.ok(score):
+                print_report(initial_score, best_score, n)
                 return plan, best_scores
+    print_report(initial_score, best_score, n)
     return plan, best_scores
+
+
+def print_report(initial_score, best_score, n):
+    if best_score > initial_score:
+        print(f"Score improved from {initial_score} to {best_score} in {n} steps.")
+    else:
+        print(f"Failed to improve score from initial {initial_score} in {n} steps.")
 
 
 def random_mutate_activity_durations(plan: Plan, copy=True):
@@ -67,6 +75,5 @@ class Stopper:
         if len(self.record) > self.horizon:
             self.record.pop(0)
             if self.record[-1] - self.record[0] < self.sensitivity:
-                print("Stopping early")
                 return False
         return True

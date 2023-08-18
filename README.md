@@ -35,7 +35,6 @@ This functionality used a **read-modify-write** pattern. Where modifications are
 
 ![PAM](resources/PAM-features.png)
 
-
 ## Features
 
 ### Activity Modelling

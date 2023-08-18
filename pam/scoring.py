@@ -90,7 +90,7 @@ class CharyparNagelPlanScorer:
             + self.score_plan_daily(plan, cnfg)
         )
 
-    def summary(self, person, subpopulation="subpopulation"):
+    def print_summary(self, person, subpopulation="subpopulation"):
         print(f"Total plan score: {self.score_person(person)}")
         config = self.cnfg[person.attributes[subpopulation]]
         print(f"Total activities score: {self.score_plan_activities(person.plan, cnfg=config)}")
@@ -305,7 +305,6 @@ class CharyparNagelPlanScorer:
         return 0.0
 
     def pt_waiting_time_score(self, leg, cnfg):
-        print("BT", leg.boarding_time)
         if cnfg.get("waitingPt") and leg.boarding_time:
             waiting = (leg.boarding_time - leg.start_time) / td(hours=1)
             if waiting > 0:

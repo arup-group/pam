@@ -58,6 +58,14 @@ max-complexity = 10
 # Ignore `E402` (import violations) and `F401` (unused imports) in all `__init__.py` files
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["E402", "F401"]
+"*.ipynb" = ["E402"]
+
+# Ignore `E402` for all notebooks
+[tool.nbqa.addopts]
+ruff = [
+    "--extend-ignore=E402"
+]
+
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"

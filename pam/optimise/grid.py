@@ -3,13 +3,16 @@ from datetime import timedelta
 
 from pam.activity import Plan
 from pam.scoring import CharyparNagelPlanScorer
+from pam.variables import START_OF_DAY
 
 
 def grid_search(
-    plan: Plan, plans_scorer=CharyparNagelPlanScorer, config: dict = {}, step: int = 300
+    plan: Plan, plans_scorer=CharyparNagelPlanScorer, config: dict = {}, step: int = 900, copy=True
 ):
-    best_score = plans_scorer.score_plan(plan, config)
-    recorder = Recorder(best_score, plan)
+    if copy:
+        plan = deepcopy(plan)
+    initial_score = plans_scorer.score_plan(plan, config)
+    recorder = Recorder(initial_score, plan)
 
     traverse(
         scorer=plans_scorer,
@@ -20,36 +23,44 @@ def grid_search(
         leg_index=0,
         recorder=recorder,
     )
-
+    print_report(initial_score, recorder.best_score, step)
     return recorder.best_score, recorder.best_plan
+
+
+def print_report(initial_score, best_score, n):
+    if best_score > initial_score:
+        print(f"Score improved from {initial_score} to {best_score} using step size {n}s.")
+    else:
+        print(f"Failed to improve score from initial {initial_score} using step size {n}s.")
 
 
 def latest_start_time(plan, leg_index):
     allowance = 24 * 60 * 60
-    for c in plan[leg_index * 2 + 1 :: 2]:
+    for c in plan[(leg_index * 2) + 1 :: 2]:
         allowance -= c.duration.seconds
     return allowance
 
 
 def traverse(scorer, config, plan, step, earliest, leg_index, recorder):
-    if leg_index * 2 + 1 == len(plan):
+    ## exit condition
+    if leg_index * 2 + 2 >= len(plan):
         recorder.update(scorer.score_plan(plan, cnfg=config), plan)
         return None
 
-    latest = latest_start_time(plan, leg_index)
-    for start in range(earliest, latest + step, step):
+    latest_start = latest_start_time(plan, leg_index)
+    for earliest in range(earliest, latest_start + step, step):
         activity = plan[leg_index * 2]
         leg = plan[leg_index * 2 + 1]
         next_activity = plan[leg_index * 2 + 2]
-        activity.end_time = activity.start_time + timedelta(seconds=start)
+        activity.end_time = START_OF_DAY + timedelta(seconds=earliest)
         leg.end_time = leg.shift_start_time(activity.end_time)
         next_activity.start_time = leg.end_time
 
         traverse(
             scorer=scorer,
             config=config,
-            plan=plan,
-            earliest=start + plan[leg_index * 2 + 1].duration.seconds,
+            plan=deepcopy(plan),
+            earliest=earliest + step,  # + plan[leg_index * 2 + 1].duration.seconds,
             leg_index=leg_index + 1,
             step=step,
             recorder=recorder,
