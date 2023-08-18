@@ -1,4 +1,6 @@
 # %% import packages
+import datetime
+
 import geopandas as gp
 import pandas as pd
 import pytest
@@ -455,7 +457,11 @@ def test_final_activity_return_depot(agent, agent_plan_no_threshold):
     o_loc = Point(2000, 2000)
     d_zones = [1, 3]
     d_locs = [Point(0, 2000), Point(5000, 4000)]
-    agent_plan_no_threshold.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    d_plan_zones, d_plan_locs = agent_plan_no_threshold.finalise_stop_plan(o_loc, d_zones, d_locs)
+    agent_plan_no_threshold.apply(
+        agent=agent, o_loc=o_loc, d_zones=d_plan_zones, d_locs=d_plan_locs
+    )
 
     assert agent.plan[len(agent.plan) - 1].act == "depot"
 
@@ -480,12 +486,46 @@ def test_end_of_day_agent_return_depot_by_end_of_day(agent, agent_plan_end_of_da
     o_loc = Point(2000, 1)
     d_zones = [1, 1, 1]
     d_locs = [Point(2000, 3), Point(2000, 4), Point(0, 2000)]
-    agent_plan_end_of_day.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+    d_plan_zones, d_plan_locs = agent_plan_end_of_day.finalise_stop_plan(o_loc, d_zones, d_locs)
+    agent_plan_end_of_day.apply(agent=agent, o_loc=o_loc, d_zones=d_plan_zones, d_locs=d_plan_locs)
 
     assert agent.last_leg.end_time < END_OF_DAY
     assert agent.last_activity.act == "depot"
     # a plan with 3 stops has 5 activities, but this agent needs to cut plan short
     assert agent.num_activities < 5
+
+
+@pytest.fixture
+def agent_plan_reschedule(delivery_density, facility_sampler, o_zone):
+    stops = 3
+
+    return tour.TourPlanner(
+        stops=stops,
+        hour=23,
+        minute=55,
+        o_zone=o_zone,
+        d_dist=delivery_density,
+        d_freq="density",
+        facility_sampler=facility_sampler,
+        activity_params={"o_activity": "depot", "d_activity": "delivery"},
+    )
+
+
+def test_agent_leaves_hour_earlier(agent, agent_plan_reschedule):
+    o_loc = Point(2000, 1)
+    d_zones = [1, 1, 1]
+    d_locs = [Point(2000, 3), Point(2000, 4), Point(0, 2000)]
+    agent_plan_reschedule.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+    end_tm_before_finalise = agent.last_leg.end_time
+
+    agent = Person("LGV_2", attributes={"subpopulation": "lgv", "CarType": "lgv", "CarCO2": "lgv"})
+    print("different agent")
+    d_plan_zones, d_plan_locs = agent_plan_reschedule.finalise_stop_plan(o_loc, d_zones, d_locs)
+    print("finalised stops")
+    agent_plan_reschedule.apply(agent=agent, o_loc=o_loc, d_zones=d_plan_zones, d_locs=d_plan_locs)
+    end_tm_after_finalise = agent.last_leg.end_time
+
+    assert (end_tm_before_finalise - end_tm_after_finalise) == datetime.timedelta(seconds=3600)
 
 
 def test_validatetourod_no_duplicates(depot_density, od_density, delivery_density):
