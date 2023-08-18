@@ -639,4 +639,4 @@ def test_get_atributes():
     hh.add(Person("1", attributes={"subpopulation": "A", "age": 10}))
     hh.add(Person("2", attributes={"subpopulation": "C", "age": 30}))
     pop.add(hh)
-    assert pop.attributes == {"subpopulation": {"A", "B", "C"}, "age": {10, 20, 30}}
+    assert pop.attributes == {"subpopulation": {"A", "B", "C"}, "age": {"10", "20", "30"}}
