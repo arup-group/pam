@@ -10,7 +10,21 @@ from pam.core import Person
 from pam.variables import TRANSIT_MODES
 
 
-class CharyparNagelPlanScorer:
+class PlanScorer:
+    """Object for scoring agent plans."""
+
+    def __init__(self, cnfg) -> None:
+        self.logger = logging.getLogger(__name__)
+        self.cnfg = cnfg
+
+    def score_person() -> float:
+        raise NotImplementedError
+
+    def score_plan() -> float:
+        raise NotImplementedError
+
+
+class CharyparNagelPlanScorer(PlanScorer):
     example_config = {
         "default": {
             "mUM": 10,
@@ -46,16 +60,8 @@ class CharyparNagelPlanScorer:
         }
     }
 
-    def __init__(self, cnfg) -> None:
-        """Charypar-Nagel plan scorer."""
-        self.logger = logging.getLogger(__name__)
-        self.cnfg = cnfg
-
     def score_person(
-        self,
-        person: Person,
-        subpopulation: str = "subpopulation",
-        plan_costs: Optional[float] = None,
+        self, person: Person, key: str = "subpopulation", plan_costs: Optional[float] = None
     ) -> float:
         """Score a pam.core.Person Plan.
 
@@ -67,7 +73,7 @@ class CharyparNagelPlanScorer:
         Returns:
             float: score
         """
-        subpop = person.attributes[subpopulation]
+        subpop = person.attributes[key]
         cnfg = self.cnfg[subpop]
         return self.score_plan(person.plan, plan_cost=plan_costs, cnfg=cnfg)
 

@@ -2,13 +2,29 @@ from copy import deepcopy
 from datetime import timedelta
 
 from pam.activity import Plan
-from pam.scoring import CharyparNagelPlanScorer
+from pam.scoring import PlanScorer
 from pam.variables import START_OF_DAY
 
 
 def grid_search(
-    plan: Plan, plans_scorer=CharyparNagelPlanScorer, config: dict = {}, step: int = 900, copy=True
-):
+    plan: Plan, plans_scorer: PlanScorer, config: dict = {}, step: int = 900, copy=True
+) -> (float, Plan):
+    """Checks all permutations of a plan's activity start times and durations, finds plan
+    that has maximum score, based on the given scorer. The precision and size of the grid is based
+    on the given step (seconds). Smaller steps increase the grid size.
+
+    Trip durations are assumed fixed and activity sequence is not changed.
+
+    Args:
+        plan (Plan): Input plan.
+        plans_scorer (PlanScorer): Plans scorer object.
+        config (Dict): PlansScorer config. Defaults to {}.
+        step (int): Grid size in seconds. Defaults to 900.
+        copy (Bool): Create a copy of the input plan. Defaults to True.
+
+    Returns:
+        (Plan, float): Best plan found and score of best plan.
+    """
     if copy:
         plan = deepcopy(plan)
     initial_score = plans_scorer.score_plan(plan, config)
@@ -24,7 +40,7 @@ def grid_search(
         recorder=recorder,
     )
     print_report(initial_score, recorder.best_score, step)
-    return recorder.best_score, recorder.best_plan
+    return recorder.best_plan, recorder.best_score
 
 
 def print_report(initial_score, best_score, n):
@@ -34,14 +50,10 @@ def print_report(initial_score, best_score, n):
         print(f"Failed to improve score from initial {initial_score} using step size {n}s.")
 
 
-def latest_start_time(plan, leg_index):
-    allowance = 24 * 60 * 60
-    for c in plan[(leg_index * 2) + 1 :: 2]:
-        allowance -= c.duration.seconds
-    return allowance
-
-
 def traverse(scorer, config, plan, step, earliest, leg_index, recorder):
+    """Traverse all possible grid permutations by enumerating all trip start times of first trip
+    and recursively all following trips in sequence.
+    """
     ## exit condition
     if leg_index * 2 + 2 >= len(plan):
         recorder.update(scorer.score_plan(plan, cnfg=config), plan)
@@ -65,6 +77,13 @@ def traverse(scorer, config, plan, step, earliest, leg_index, recorder):
             step=step,
             recorder=recorder,
         )
+
+
+def latest_start_time(plan, leg_index):
+    allowance = 24 * 60 * 60
+    for c in plan[(leg_index * 2) + 1 :: 2]:
+        allowance -= c.duration.seconds
+    return allowance
 
 
 class Recorder:

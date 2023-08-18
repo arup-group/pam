@@ -4,18 +4,33 @@ from datetime import timedelta
 from numpy import random
 
 from pam.activity import Plan
-from pam.scoring import CharyparNagelPlanScorer
+from pam.scoring import PlanScorer
 from pam.variables import END_OF_DAY
 
 
 def reschedule(
     plan: Plan,
-    plans_scorer=CharyparNagelPlanScorer,
+    plans_scorer: PlanScorer,
     config: dict = {},
     horizon: int = 5,
     sensitivity: float = 0.01,
     patience: int = 1000,
-):
+) -> (Plan, float):
+    """Randomly search for an improved plan sequence based on given plans_scorer.
+
+    This is not seriously suggested as a sensible approach, it is supplied for example only.
+
+    Args:
+        plan (Plan): Input plan.
+        plans_scorer (PlanScorer): Plans scorer.
+        config (dict): plans_scorer configuration. Defaults to {}.
+        horizon (int): Early stopper horizon. Defaults to 5.
+        sensitivity (float): Early stopper sensitivity. Defaults to 0.01.
+        patience (int): Defaults to 1000.
+
+    Returns:
+        (Plan, float): best plan found and best score.
+    """
     best_score = plans_scorer.score_plan(plan, config)
     initial_score = best_score
     best_scores = {0: best_score}
@@ -27,7 +42,7 @@ def reschedule(
             best_scores[n] = score
             best_score = score
             plan = proposed_plan
-            if not stopper.ok(score):
+            if stopper.stop(score):
                 print_report(initial_score, best_score, n)
                 return plan, best_scores
     print_report(initial_score, best_score, n)
@@ -42,6 +57,7 @@ def print_report(initial_score, best_score, n):
 
 
 def random_mutate_activity_durations(plan: Plan, copy=True):
+    """Rearrange input plan into random new plan, maintaining activity sequence and trip durations."""
     allowance = 24 * 60 * 60  # seconds
     for leg in plan.legs:
         allowance -= leg.duration.total_seconds()
@@ -65,15 +81,19 @@ def random_mutate_activity_durations(plan: Plan, copy=True):
 
 
 class Stopper:
+    """Early stopping mechanism. Maintains last n scores, where n is equal to "horizon".
+    Triggers an early stop if change across horizon is less than given sensitivity.
+    """
+
     def __init__(self, horizon=5, sensitivity=0.01) -> None:
         self.record = []
         self.horizon = horizon
         self.sensitivity = sensitivity
 
-    def ok(self, score):
+    def stop(self, score):
         self.record.append(score)
         if len(self.record) > self.horizon:
             self.record.pop(0)
-            if self.record[-1] - self.record[0] < self.sensitivity:
-                return False
-        return True
+            if abs(self.record[-1] - self.record[0]) < self.sensitivity:
+                return True
+        return False

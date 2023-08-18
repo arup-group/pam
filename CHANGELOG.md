@@ -19,12 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- optimise.grid.grid_search fixed ([#239]).
 - `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
 
 ### Added
-- Support for MATSim vehicles files ([#215])
-- Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211])
+- MATSim warm starting example ([#239]).
+- Support for MATSim vehicles files ([#215]).
+- Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211]).
 - Python versions 3.9 to 3.11 support ([#192], [#210]).
 - Documentation, now available at https://arup-group.github.io/pam ([#197]).
 - **internal** [Codecov](https://codecov.io) and [pre-commit](https://pre-commit.ci/) CI bots ([#202]).
@@ -32,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
+- Documentation and examples improved ([#239]).
 - `ActivityDuration` class name changed to `DurationEstimator` ([#231]).
 - `TourPlanner` class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot ([#231]).
 - Minor changes to docs for zsh users (eg `pip install '.[dev]'`)([#219]).
@@ -81,6 +84,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#239]: https://github.com/arup-group/pam/pull/239
 [#231]: https://github.com/arup-group/pam/pull/231
 [#222]: https://github.com/arup-group/pam/pull/222
 [#219]: https://github.com/arup-group/pam/pull/219
