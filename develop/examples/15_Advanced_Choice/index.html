@@ -507,7 +507,7 @@
   
     <li class="md-nav__item">
       <a href="../12_Advanced_Adding_Vehicles/" class="md-nav__link">
-        Adding vehicles to the plans
+        Adding vehicles to plans
       </a>
     </li>
   
@@ -892,8 +892,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/vehicle/" class="md-nav__link">
-        pam.vehicle
+      <a href="../../api/vehicles/" class="md-nav__link">
+        pam.vehicles
       </a>
     </li>
   
@@ -3477,7 +3477,7 @@ distance - bus:
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1623db600&gt;, func_sampling=&lt;function sample_weighted at 0x1623e8400&gt;)
 </pre>
 </div>
 </div>
@@ -3573,7 +3573,7 @@ planner.configure(u=u, scope=scope)</div>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Updated model configuration
-INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
+INFO:pam.planner.choice_location:ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1623db600&gt;, func_sampling=&lt;function sample_weighted at 0x1623e8400&gt;)
 </pre>
 </div>
 </div>
@@ -3645,7 +3645,7 @@ print("\nChoice set utilities: \n", choice_set.u_choices)</div>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Activities in scope: 
- [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae52d10&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae536d0&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x15ae58b10&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x15ae5a210&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x15ae3ff10&gt;)]
+ [ChoiceIdx(pid=&#39;chris&#39;, hid=&#39;chris&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x16240ca90&gt;), ChoiceIdx(pid=&#39;fatema&#39;, hid=&#39;fatema&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x16240d590&gt;), ChoiceIdx(pid=&#39;fred&#39;, hid=&#39;fred&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x16240e990&gt;), ChoiceIdx(pid=&#39;gerry&#39;, hid=&#39;gerry&#39;, seq=3, act=&lt;pam.activity.Activity object at 0x1623fe4d0&gt;), ChoiceIdx(pid=&#39;nick&#39;, hid=&#39;nick&#39;, seq=1, act=&lt;pam.activity.Activity object at 0x16240eb50&gt;)]
 
 Alternatives: 
  [ChoiceLabel(destination=&#39;a&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;a&#39;, mode=&#39;bus&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;car&#39;), ChoiceLabel(destination=&#39;b&#39;, mode=&#39;bus&#39;)]
@@ -3724,7 +3724,7 @@ print("Sampled choices: \n", planner._selections.selections)</div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>INFO:pam.planner.choice_location:Applying choice model...
 INFO:pam.planner.choice_location:Configuration: 
-ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x15ae28b80&gt;, func_sampling=&lt;function sample_weighted at 0x15ae28c20&gt;)
+ChoiceConfiguration(u=&#34;[0,-1]+(np.array([0,2])*(person.attributes[&#39;subpopulation&#39;]==&#39;poor&#39;))+([-0.05,-0.07]*od[&#39;time&#39;,person.home.area])+(0.4*np.log(zones[&#39;jobs&#39;]))\n&#34;, scope=&#34;act.act==&#39;work&#39;&#34;, func_probabilities=&lt;function calculate_mnl_probabilities at 0x1623db600&gt;, func_sampling=&lt;function sample_weighted at 0x1623e8400&gt;)
 INFO:pam.planner.choice_location:Choice model application complete.
 </pre>
 </div>
