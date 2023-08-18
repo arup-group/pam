@@ -226,7 +226,7 @@ def test_read_write_consistent(tmp_path):
     write_matsim(population=population, plans_path=location, comment="test", household_key=None)
     population2 = read_matsim(location, version=12)
     write_matsim(population=population2, plans_path=location2, comment="test", household_key=None)
-    assert population.vehicles_manager == population2.vehicles_manager
+    assert population._vehicles_manager == population2._vehicles_manager
     assert population["chris"]["chris"].attributes == population2["chris"]["chris"].attributes
     assert population == population2
 

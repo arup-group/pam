@@ -73,7 +73,7 @@ def write_matsim(
         logging.info("Building population vehicles output.")
         # rebuild vehicles output from population
         population.rebuild_vehicles_manager()
-        population.vehicles_manager.to_xml(vehs_path, evs_path)
+        population._vehicles_manager.to_xml(vehs_path, evs_path)
 
 
 class Writer:

@@ -7,7 +7,7 @@ from typing import Optional
 from lxml import etree as et
 
 import pam.utils as utils
-from pam import PAMVehicleIdError
+from pam import PAMVehicleIdError, PAMVehicleTypeError
 
 # Vehicle classes to represent Vehicles based on MATSim DTD files:
 # https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
@@ -48,6 +48,7 @@ class VehicleType:
     """Vehicle type data with read/write methods.
 
     Attributes:
+        id (str): type id.
         length (float): Vehicle length in m.
         width (float): Vehicle width in m.
         networkMode (str): MATSim network mode (used for routing).
@@ -57,6 +58,7 @@ class VehicleType:
         flowEfficiencyFactor (float): Vehicle flow efficiency factor.
     """
 
+    id: str
     length: float = 7.5  # metres
     width: float = 1.0  # metres
     networkMode: str = "car"
@@ -78,27 +80,25 @@ class VehicleType:
         attribs = {
             attrib.tag.replace("{http://www.matsim.org/files/dtd}", ""): attrib for attrib in elem
         }
-        return (
-            elem.get("id"),
-            cls(
-                length=float(attribs["length"].attrib["meter"]),
-                width=float(attribs["width"].attrib["meter"]),
-                passengerCarEquivalents=float(attribs["passengerCarEquivalents"].attrib["pce"]),
-                networkMode=attribs["networkMode"].attrib["networkMode"],
-                flowEfficiencyFactor=float(attribs["flowEfficiencyFactor"].attrib["factor"]),
-                capacity=CapacityType.from_xml_elem(attribs["capacity"]),
-                description=attribs["description"].text,
-            ),
+        return cls(
+            id=elem.get("id"),
+            length=float(attribs["length"].attrib["meter"]),
+            width=float(attribs["width"].attrib["meter"]),
+            passengerCarEquivalents=float(attribs["passengerCarEquivalents"].attrib["pce"]),
+            networkMode=attribs["networkMode"].attrib["networkMode"],
+            flowEfficiencyFactor=float(attribs["flowEfficiencyFactor"].attrib["factor"]),
+            capacity=CapacityType.from_xml_elem(attribs["capacity"]),
+            description=attribs["description"].text,
         )
 
-    def to_xml(self, xf: et.Element, tid: str) -> None:
+    def to_xml(self, xf: et.Element) -> None:
         """Write vehicle type to MATSim formatted xml.
 
         Args:
             xf (et.Element): Parent xml element.
             tid (str): Type id.
         """
-        with xf.element("vehicleType", {"id": tid}):
+        with xf.element("vehicleType", {"id": self.id}):
             rec = et.Element("description")
             rec.text = self.description
             xf.write(rec)
@@ -174,27 +174,36 @@ class VehicleManager:
     Vehicles and vehicle types representation, responsible for read/write from MATSim vehicles files.
 
     Attributes:
-        veh_types (dict[str, VehicleType]): Mapping of type ids to vehicle types data.
-        vehicles (dict[str, Vehicle]): Mapping of vehicle ids to vehicle data.
+        _veh_types (dict[str, VehicleType]): Mapping of type ids to vehicle types data.
+        _vehicles (dict[str, Vehicle]): Mapping of vehicle ids to vehicle data.
     """
 
-    veh_types: dict[str, VehicleType]
-    vehicles: dict[str, Vehicle]
+    _veh_types: dict[str, VehicleType]
+    _vehicles: dict[str, Vehicle]
 
     def __init__(self) -> None:
-        self.veh_types = {}
-        self.vehicles = {}
+        self._veh_types = {}
+        self._vehicles = {}
 
-    def add_type(self, k: str, vehicle_type: VehicleType) -> None:
+    def add_type(self, vehicle_type: VehicleType) -> None:
         """Add vehicle type to manager.
 
         Args:
-            k (str): Vehicle type key.
             vehicle_type (VehicleType): Vehicle type dataclass.
         """
-        if k in self.veh_types:
-            logging.info(f"Warning, overwriting existing vehicle type '{k}'.")
-        self.veh_types[k] = vehicle_type
+        if vehicle_type.id in self._veh_types:
+            logging.info(f"Warning, overwriting existing vehicle type '{vehicle_type.id}'.")
+        self._veh_types[vehicle_type.id] = vehicle_type
+
+    def remove_type(self, tid: str):
+        """Remove vehicle type.
+
+        Args:
+            tid (str): Vehicle type id.
+        """
+        logging.info("Warning, removing a vehicle type may invalidate your vehicles.")
+        if self._veh_types.pop(tid, None) is None:
+            raise PAMVehicleTypeError(f"Failed to remove vehicle type {tid}, id not found.")
 
     def add_veh(self, v: Vehicle):
         """Add vehicle to manager.
@@ -205,13 +214,13 @@ class VehicleManager:
         Raises:
             PAMVehicleIdError: Unknown vehicle type.
         """
-        if v.type_id not in self.veh_types:
-            raise PAMVehicleIdError(
+        if v.type_id not in self._veh_types:
+            raise PAMVehicleTypeError(
                 f"Failed to add vehicle: {v.vid}, the vehicle type '{v.type_id}' is an unknown veh type."
             )
-        if v.vid in self.vehicles:
+        if v.vid in self._vehicles:
             logging.info(f"Warning, overwriting existing vehicle: '{v.vid}'.")
-        self.vehicles[v.vid] = v
+        self._vehicles[v.vid] = v
 
     def __setitem__(self, k: str, v: Vehicle):
         if isinstance(v, ElectricVehicle):
@@ -224,27 +233,27 @@ class VehicleManager:
             )
 
     def __getitem__(self, k) -> Vehicle:
-        return self.vehicles[k]
+        return self._vehicles[k]
 
     def get(self, k: str, default: Optional[Vehicle] = None) -> Optional[Vehicle]:
-        return self.vehicles.get(k, default)
+        return self._vehicles.get(k, default)
 
     def len(self) -> int:
         """Number of vehicles."""
-        return len(self.vehicles)
+        return len(self._vehicles)
 
     def __contains__(self, k: str):
-        return k in self.vehicles
+        return k in self._vehicles
 
     def __eq__(self, other):
-        if not self.veh_types == other.veh_types:
+        if not self._veh_types == other._veh_types:
             return False
-        if not self.vehicles == other.vehicles:
+        if not self._vehicles == other._vehicles:
             return False
         return True
 
     def pop(self, vid):
-        return self.vehicles.pop(vid)
+        return self._vehicles.pop(vid)
 
     @property
     def evs(self) -> dict[str, ElectricVehicle]:
@@ -253,7 +262,7 @@ class VehicleManager:
         Returns:
             dict[str, ElectricVehicle]: Dictionary of electric vehicles.
         """
-        return {vid: veh for vid, veh in self.vehicles.items() if isinstance(veh, ElectricVehicle)}
+        return {vid: veh for vid, veh in self._vehicles.items() if isinstance(veh, ElectricVehicle)}
 
     def charger_types(self) -> set[str]:
         """Return set of electric charger types used by evs.
@@ -275,8 +284,8 @@ class VehicleManager:
         Returns:
             bool: Manager is consistent. Note that this doesn't check for unused types.
         """
-        veh_types = set(self.veh_types.keys())
-        for k, v in self.vehicles.items():
+        veh_types = set(self._veh_types.keys())
+        for k, v in self._vehicles.items():
             if v.type_id not in veh_types:
                 raise PAMVehicleIdError(
                     f"Failed to find veh type of id '{v}', specified for veh id '{k}'."
@@ -290,20 +299,20 @@ class VehicleManager:
             dict: unused types.
         """
         unused = {}
-        veh_types = set(self.veh_types.keys())
-        veh_veh_types = set([v.type_id for v in self.vehicles.values()])
+        veh_types = set(self._veh_types.keys())
+        veh_veh_types = set([v.type_id for v in self._vehicles.values()])
         for t in veh_types:
             if t not in veh_veh_types:
-                unused[t] = self.veh_types[t]
+                unused[t] = self._veh_types[t]
         return unused
 
     def clear_types(self):
         """Remove all types from manager."""
-        self.veh_types = {}
+        self._veh_types = {}
 
     def clear_vehs(self):
         """Remove all vehciles from manager."""
-        self.vehicles = {}
+        self._vehicles = {}
 
     def from_xml(self, vehs_path: str, evs_path: Optional[str] = None):
         """Reads MATSim vehicles from https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd
@@ -336,14 +345,15 @@ class VehicleManager:
             path (str): path to matsim all_vehicles xml file
         """
         vehs = dict(
-            VehicleType.from_xml_elem(elem) for elem in utils.get_elems(path, "vehicleType")
+            (elem.get("id"), VehicleType.from_xml_elem(elem))
+            for elem in utils.get_elems(path, "vehicleType")
         )
-        keys = set(vehs) & set(self.veh_types)
+        keys = set(vehs) & set(self._veh_types)
         if keys:
             raise PAMVehicleIdError(
                 f"Failed to read types from xml due to duplicate keys with existing types: {keys}"
             )
-        self.veh_types.update(vehs)
+        self._veh_types.update(vehs)
 
     def vehs_from_xml(self, path: str):
         """Reads vehicles from MATSim vehicles file (https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
@@ -356,12 +366,12 @@ class VehicleManager:
             elem.get("id"): Vehicle(vid=elem.get("id"), type_id=elem.get("type"))
             for elem in utils.get_elems(path, "vehicle")
         }
-        keys = set(vehs) & set(self.vehicles)
+        keys = set(vehs) & set(self._vehicles)
         if keys:
             raise PAMVehicleIdError(
                 f"Failed to read vehs from xml due to duplicate keys with existing: {keys}"
             )
-        self.vehicles.update(vehs)
+        self._vehicles.update(vehs)
 
     def evs_from_xml(self, path):
         """Reads vehicles from MATSim vehicles file (https://www.matsim.org/files/dtd/vehicleDefinitions_v2.0.xsd).
@@ -377,12 +387,12 @@ class VehicleManager:
             attribs["battery_capacity"] = float(attribs["battery_capacity"])
             attribs["initial_soc"] = float(attribs["initial_soc"])
             evs[vid] = ElectricVehicle(vid=vid, type_id=vehicle_type, **attribs)
-        keys = set(evs) & set(self.vehicles)
+        keys = set(evs) & set(self._vehicles)
         if keys:
             PAMVehicleIdError(
                 f"Failed to read evs from xml due to duplicate keys with existing: {keys}"
             )
-        self.vehicles.update(evs)
+        self._vehicles.update(evs)
 
     def to_xml(self, vehs_path: str, evs_path: Optional[str] = None):
         """Write manager to MATSim formatted xml.
@@ -411,10 +421,10 @@ class VehicleManager:
             }
             with xf.element("vehicleDefinitions", vehicleDefinitions_attribs):
                 logging.info(f"Writing vehicle types to {path}")
-                for tid, vehicle_type in self.veh_types.items():
-                    vehicle_type.to_xml(xf, tid)
+                for vehicle_type in self._veh_types.values():
+                    vehicle_type.to_xml(xf)
                 logging.info(f"Writing vehicles to {path}")
-                for veh in self.vehicles.values():
+                for veh in self._vehicles.values():
                     veh.to_xml(xf)
 
     def to_ev_xml(self, path: str):
