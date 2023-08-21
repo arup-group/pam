@@ -1,4 +1,4 @@
- ![PAM](resources/logos/large.png)
+ ![PAM](resources/logos/title.png)
 
 # Population Activity Modeller
 
