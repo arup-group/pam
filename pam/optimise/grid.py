@@ -6,6 +6,17 @@ from pam.scoring import PlanScorer
 from pam.variables import START_OF_DAY
 
 
+class Recorder:
+    def __init__(self, initial_score, initial_plan) -> None:
+        self.best_plan = initial_plan
+        self.best_score = initial_score
+
+    def update(self, score, plan):
+        if score >= self.best_score:
+            self.best_score = score
+            self.best_plan = deepcopy(plan)
+
+
 def grid_search(
     plan: Plan, plans_scorer: PlanScorer, config: dict = {}, step: int = 900, copy=True
 ) -> (float, Plan):
@@ -43,14 +54,22 @@ def grid_search(
     return recorder.best_plan, recorder.best_score
 
 
-def print_report(initial_score, best_score, n):
+def print_report(initial_score: float, best_score: float, n: int):
     if best_score > initial_score:
         print(f"Score improved from {initial_score} to {best_score} using step size {n}s.")
     else:
         print(f"Failed to improve score from initial {initial_score} using step size {n}s.")
 
 
-def traverse(scorer, config, plan, step, earliest, leg_index, recorder):
+def traverse(
+    scorer: PlanScorer,
+    config: dict,
+    plan: Plan,
+    step: int,
+    earliest: int,
+    leg_index: int,
+    recorder: Recorder,
+):
     """Traverse all possible grid permutations by enumerating all trip start times of first trip
     and recursively all following trips in sequence.
     """
@@ -79,19 +98,8 @@ def traverse(scorer, config, plan, step, earliest, leg_index, recorder):
         )
 
 
-def latest_start_time(plan, leg_index):
+def latest_start_time(plan: Plan, leg_index: int):
     allowance = 24 * 60 * 60
     for c in plan[(leg_index * 2) + 1 :: 2]:
         allowance -= c.duration.seconds
     return allowance
-
-
-class Recorder:
-    def __init__(self, initial_score, initial_plan) -> None:
-        self.best_plan = initial_plan
-        self.best_score = initial_score
-
-    def update(self, score, plan):
-        if score >= self.best_score:
-            self.best_score = score
-            self.best_plan = deepcopy(plan)

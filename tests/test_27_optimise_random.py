@@ -1,7 +1,11 @@
 """Tests for pam/optimise/random.py"""
 import pytest
 
+from pam.activity import Activity, Leg, Plan
 from pam.optimise import random
+from pam.scoring import PlanScorer
+from pam.utils import minutes_to_datetime as mtdt
+from pam.variables import END_OF_DAY
 
 
 @pytest.fixture
@@ -47,3 +51,53 @@ class TestStopper:
         for i in [1, 2, 2.01, 2.02]:
             stopper.stop(i)
         assert stopper.record == [2, 2.01, 2.02]
+
+
+@pytest.fixture
+def plan():
+    plan = Plan()
+    plan.day = [
+        Activity(act="home", area=1, start_time=mtdt(0), end_time=mtdt(420)),
+        Leg(start_time=mtdt(420), end_time=mtdt(480)),
+        Activity(act="shop", area=2, start_time=mtdt(480), end_time=mtdt(510)),
+        Leg(start_time=mtdt(510), end_time=mtdt(570)),
+        Activity(act="work", area=3, start_time=mtdt(570), end_time=mtdt(960)),
+        Leg(start_time=mtdt(960), end_time=mtdt(1020)),
+        Activity(act="home", area=1, start_time=mtdt(1020), end_time=END_OF_DAY),
+    ]
+    return plan
+
+
+def test_random_mutate_activity_durations_return_valid_sequence(plan):
+    for _ in range(10):
+        plan = random.random_mutate_activity_durations(plan, copy=False)
+        assert plan.valid_sequence
+        assert plan.valid_time_sequence
+
+
+@pytest.fixture
+def dummy_scorer():
+    class DummyScorer(PlanScorer):
+        def __init__(self, score=0):
+            self.score = score
+
+        def score_plan(self, plan: Plan, cnfg: dict) -> float:
+            self.score += 1
+            return self.score - 1
+
+    return DummyScorer(1)
+
+
+def test_reschedule_no_patience(dummy_scorer, plan):
+    # 0 patience is actually one iteration
+    new_plan, best_scores = random.reschedule(plan, dummy_scorer, {}, patience=0)
+    assert best_scores == {0: 2}
+    assert new_plan.valid_sequence
+    assert new_plan.valid_time_sequence
+
+
+def test_reschedule(dummy_scorer, plan):
+    new_plan, best_scores = random.reschedule(plan, dummy_scorer, {}, patience=2)
+    assert best_scores == {0: 2, 1: 3, 2: 4}
+    assert new_plan.valid_sequence
+    assert new_plan.valid_time_sequence

@@ -3,6 +3,7 @@ import pytest
 
 from pam.activity import Activity, Leg, Plan
 from pam.optimise import grid
+from pam.scoring import PlanScorer
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
@@ -35,7 +36,8 @@ class TestRecorder:
         assert id(recorder.best_plan.home_location) != id(best_plan.home_location)
 
 
-def test_latest_start_time():
+@pytest.fixture
+def plan():
     plan = Plan()
     plan.day = [
         Activity(act="home", area=1, start_time=mtdt(0), end_time=mtdt(420)),
@@ -46,6 +48,40 @@ def test_latest_start_time():
         Leg(start_time=mtdt(960), end_time=mtdt(1020)),
         Activity(act="home", area=1, start_time=mtdt(1020), end_time=END_OF_DAY),
     ]
+    return plan
+
+
+def test_latest_start_time(plan):
     assert grid.latest_start_time(plan, 0) == 75600
     assert grid.latest_start_time(plan, 1) == 79200
     assert grid.latest_start_time(plan, 2) == 82800
+
+
+@pytest.fixture
+def dummy_scorer():
+    class DummyScorer(PlanScorer):
+        def __init__(self, score=0):
+            self.score = score
+
+        def score_plan(self, plan: Plan, cnfg: dict) -> float:
+            return self.score
+
+    return DummyScorer(1)
+
+
+def test_traverse_exit(dummy_scorer, plan, recorder):
+    assert recorder.best_score == 0
+    assert grid.traverse(dummy_scorer, {}, plan, 1, 0, 3, recorder) is None
+    assert recorder.best_score == 1
+
+
+def test_traverse_single(dummy_scorer, plan, recorder):
+    assert recorder.best_score == 0
+    assert grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 2, recorder) is None
+    assert recorder.best_score == 1
+
+
+def test_traverse_double(dummy_scorer, plan, recorder):
+    assert recorder.best_score == 0
+    assert grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 1, recorder) is None
+    assert recorder.best_score == 1
