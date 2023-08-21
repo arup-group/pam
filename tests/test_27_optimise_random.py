@@ -16,34 +16,34 @@ class TestStopper:
         assert stopper.sensitivity == 0.03
 
     def test_adds_to_record(self, stopper):
-        assert stopper.ok(1) is True
+        assert stopper.stop(1) is False
         assert stopper.record == [1]
 
     def test_adds_to_already_populated_record(self, stopper):
-        stopper.ok(1)
-        stopper.ok(1.02)
-        stopper.ok(2)
+        stopper.stop(1)
+        stopper.stop(1.02)
+        stopper.stop(2)
         assert stopper.record == [1, 1.02, 2]
 
     def test_pops_oldest_value_when_record_exceeds_horizon_length(self, stopper):
         for i in [1, 2, 3, 4]:
-            stopper.ok(i)
+            stopper.stop(i)
         assert stopper.record == [2, 3, 4]
 
     def test_ok_is_true_when_sensitivity_value_not_breached(self, stopper):
         for i in [1, 2, 3, 4]:
-            assert stopper.ok(i) is True
+            assert stopper.stop(i) is False
 
     def test_ok_is_false_when_sensitivity_value_breached_and_record_exceeds_horizon_length(
         self, stopper
     ):
         for i in [1, 2, 2.01]:
-            assert stopper.ok(i) is True
-        assert stopper.ok(2.02) is False
+            assert stopper.stop(i) is False
+        assert stopper.stop(2.02) is True
 
     def test_pops_oldest_when_sensitivity_value_breached_and_record_exceeds_horizon_length(
         self, stopper
     ):
         for i in [1, 2, 2.01, 2.02]:
-            stopper.ok(i)
+            stopper.stop(i)
         assert stopper.record == [2, 2.01, 2.02]
