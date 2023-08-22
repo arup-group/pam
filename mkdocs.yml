@@ -6,21 +6,24 @@ nav:
   - Activity plans: activity_plans.md
   - Modelling the impact of policies on populations: modelling_policy_impact.md
   - Examples:
-    - PAM Getting Started: examples/01_PAM_Getting_Started.ipynb
-    - Population Basics: examples/02_Population_Basics.ipynb
-    - Example Generate Random Population: examples/03_Example_Generate_Random_Population.ipynb
-    - Example Ingest NTS Diaries: examples/04_Example_Ingest_NTS_Diaries.ipynb
-    - PAM Policies Walk Through: examples/05_PAM_Policies_Walk_Through.ipynb
-    - PAM Complex Policies: examples/06_PAM_Complex_Policies.ipynb
-    - PAM Point Sampling: examples/07_PAM_Point_Sampling.ipynb
-    - PAM Population Activity Plots: examples/08_PAM_Population_Activity_Plots.ipynb
-    - Travel Plots: examples/09_Travel_Plots.ipynb
-    - Advanced Spatial-Sampling Demo: examples/10_Advanced_Spatial-Sampling_Demo.ipynb
-    - Advanced Plan Rescheduling: examples/11_Advanced_Plan_Rescheduling.ipynb
-    - Advanced Adding Vehicles: examples/12_Advanced_Adding_Vehicles.ipynb
-    - Advanced Freight Synthesis: examples/13_Advanced_Freight_Synthesis.ipynb
-    - Advanced Plan Cropping: examples/14_Advanced_Plan_Cropping.ipynb
-    - Advanced Choice: examples/15_Advanced_Choice.ipynb
+    - examples/01_basics.ipynb
+    - examples/02a_tabular_read_write.ipynb
+    - examples/02b_matsim_read_write.ipynb
+    - examples/03_read_modify_write.ipynb
+    - examples/04_point_sampling.ipynb
+    - examples/05_activity_plots.ipynb
+    - examples/05_policies_walk_through.ipynb
+    - examples/06_travel_plots.ipynb
+    - examples/07_travel_survey_to_matsim.ipynb
+    - examples/08_toy_matsim_population.ipynb
+    - examples/09_advanced_policies.ipynb
+    - examples/10_advanced_spatial_sampling.ipynb
+    - examples/11_Advanced_Plan_Rescheduling.ipynb
+    - examples/12_Advanced_Adding_Vehicles.ipynb
+    - examples/13_Advanced_Freight_Synthesis.ipynb
+    - examples/14_Advanced_Plan_Cropping.ipynb
+    - examples/15_advanced_choice_modelling.ipynb
+    - examples/16_advanced_matsim_warmstarting.ipynb
   - Contributing: 
     - contributing/index.md
     - Coding contributions: contributing/coding.md
