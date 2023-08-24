@@ -8,8 +8,10 @@ from mkdocs.structure.files import File
 @mkdocs.plugins.event_priority(50)
 def on_files(files: list, config: dict, **kwargs):
     """Link top-level files to mkdocs files."""
-    for file in Path("./examples").glob("*.ipynb"):
+    for file in sorted(Path("./examples").glob("*.ipynb")):
         files.append(_new_file(file, config))
+        nav_reference = [idx for idx in config["nav"] if set(idx.keys()) == {"Examples"}][0]
+        nav_reference["Examples"].append(file.as_posix())
     for file in Path("./resources").glob("**/*.*"):
         files.append(_new_file(file, config))
     files.append(_new_file("./CHANGELOG.md", config))

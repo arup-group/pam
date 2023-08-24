@@ -5,22 +5,7 @@ nav:
   - Reading data: read_data.md
   - Activity plans: activity_plans.md
   - Modelling the impact of policies on populations: modelling_policy_impact.md
-  - Examples:
-    - PAM Getting Started: examples/01_PAM_Getting_Started.ipynb
-    - Population Basics: examples/02_Population_Basics.ipynb
-    - Example Generate Random Population: examples/03_Example_Generate_Random_Population.ipynb
-    - Example Ingest NTS Diaries: examples/04_Example_Ingest_NTS_Diaries.ipynb
-    - PAM Policies Walk Through: examples/05_PAM_Policies_Walk_Through.ipynb
-    - PAM Complex Policies: examples/06_PAM_Complex_Policies.ipynb
-    - PAM Point Sampling: examples/07_PAM_Point_Sampling.ipynb
-    - PAM Population Activity Plots: examples/08_PAM_Population_Activity_Plots.ipynb
-    - Travel Plots: examples/09_Travel_Plots.ipynb
-    - Advanced Spatial-Sampling Demo: examples/10_Advanced_Spatial-Sampling_Demo.ipynb
-    - Advanced Plan Rescheduling: examples/11_Advanced_Plan_Rescheduling.ipynb
-    - Advanced Adding Vehicles: examples/12_Advanced_Adding_Vehicles.ipynb
-    - Advanced Freight Synthesis: examples/13_Advanced_Freight_Synthesis.ipynb
-    - Advanced Plan Cropping: examples/14_Advanced_Plan_Cropping.ipynb
-    - Advanced Choice: examples/15_Advanced_Choice.ipynb
+  - Examples: [] # this will be filled in automatically to include reference to all the notebooks 
   - Contributing: 
     - contributing/index.md
     - Coding contributions: contributing/coding.md
@@ -69,6 +54,7 @@ plugins:
       allow_errors: false
       kernel_name: pam
       include_source: True
+      execute: true
   - mkdocstrings:
       default_handler: python
       handlers:
