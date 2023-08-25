@@ -196,75 +196,42 @@ class FrequencySampler:
             )[0]
 
 
-class DurationEstimator:
-    """Object to estimate the distance, journey time, and stop time of activities.
-    The last function activity_duration combines these three functions to output parameters that help build tour plans.
+# class DurationEstimator:
+#     """Object to estimate the distance, journey time, and stop time of activities.
+#     The last function activity_duration combines these three functions to output parameters that help build tour plans.
+#     """
+def model_distance(o, d, scale=1.4):
+    """Models distance between two shapely points."""
+    return o.distance(d) * scale
+
+
+def model_journey_time(distance: Union[float, int], speed: float = 50000 / 3600) -> float:
     """
 
-    def model_distance(self, o, d, scale=1.4):
-        """Models distance between two shapely points."""
-        return o.distance(d) * scale
+    Args:
+        distance (Union[float, int]): Distance in metres.
+        speed (float, optional): Speed in metres/second. Defaults to 50000 / 3600 (50km/hr).
 
-    def model_journey_time(self, distance: Union[float, int], speed: float = 50000 / 3600) -> float:
-        """
+    Returns:
+        float: Modelled journey time.
 
-        Args:
-          distance (Union[float, int]): Distance in metres.
-          speed (float, optional): Speed in metres/second. Defaults to 50000 / 3600 (50km/hr).
+    """
+    return distance / speed
 
-        Returns:
-          float: Modelled journey time.
 
-        """
-        return distance / speed
+def model_activity_time(time: int, maxi: int = 3600, mini: int = 600) -> int:
+    """Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
 
-    def model_stop_time(self, time: int, maxi: int = 3600, mini: int = 600) -> int:
-        """Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
+    Args:
+        time (int): Time in seconds.
+        maxi (int, optional): maximum time for a journey. Defaults to 3600.
+        mini (int, optional): minimum time for a journey. Defaults to 600.
 
-        Args:
-          time (int): Time in seconds.
-          maxi (int, optional): maximum time for a journey. Defaults to 3600.
-          mini (int, optional): minimum time for a journey. Defaults to 600.
+    Returns:
+        int: maximum value between minimum time or the minimum of journey time and maximum time.
 
-        Returns:
-          int: maximum value between minimum time or the minimum of journey time and maximum time.
-
-        """
-        return max([mini, min([time, maxi])])
-
-    def model_activity_duration(
-        self,
-        o_loc: Point,
-        d_loc: Point,
-        end_tm: int,
-        speed: Union[int, float] = 50000 / 3600,
-        maxi: int = 3600,
-        mini: int = 600,
-    ) -> tuple[int, int, int]:
-        """Returns estimated Activity duration.
-
-        Duration is a combination of previous three functions to return parameters for next activity in Plan.
-
-        Args:
-          o_loc (shapely.Point): origin facility.
-          d_loc (shapely.Point): destination facility.
-          end_tm (int): most recent end time of previous leg.
-          speed (Union[int, float], optional): Speed of vehicle in metres/second. Defaults to 50000 / 3600 (50km/hr).
-          maxi (int, optional): maximum stop time in seconds. Defaults to 3600.
-          mini (int, optional): minimum stop time in seconds. Defaults to 600.
-
-        Returns:
-          tuple[int, int, int]: (stop_duration, start_tm, end_tm) for new activity.
-
-        """
-        trip_distance = self.model_distance(o_loc, d_loc)
-        trip_duration = self.model_journey_time(trip_distance, speed)
-        stop_duration = self.model_stop_time(trip_duration, maxi, mini)
-
-        start_tm = end_tm
-        end_tm = end_tm + int(trip_duration / 60)
-
-        return stop_duration, start_tm, end_tm
+    """
+    return max([mini, min([time, maxi])])
 
 
 class TourPlanner:
@@ -365,7 +332,7 @@ class TourPlanner:
                     "stops": stop,
                     "destination_zone": d_zone,
                     "destination_facility": d_facility,
-                    "distance": DurationEstimator().model_distance(o_loc, d_facility),
+                    "distance": model_distance(o_loc, d_facility),
                 }
             )
         return d_seq
@@ -463,40 +430,40 @@ class TourPlanner:
         finalise plans for agents
 
         """
-        start_tm = 0
         end_tm = self.hour * 60 + self.minute
         d_plan_zones = []
         d_plan_locs = []
+        all_stops = [o_loc] + d_locs
 
         # calculate end_tm after each stop
-        for k in range(len(d_locs)):
-            if k == 0:
-                previous_stop = o_loc
-                # get time from origin to first stop
-            else:
-                previous_stop = d_locs[k - 1]
-                # get time from previous stop to next stop
-            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
-                previous_stop, d_locs[k], end_tm
-            )
+        for orig, dest, d_zone in zip(all_stops, d_locs, d_zones):
+            trip_distance = model_distance(orig, dest)
+            trip_duration = model_journey_time(trip_distance)
+            activity_duration = model_activity_time(trip_duration)
 
-            origin_duration, start_origin, end_origin = DurationEstimator().model_activity_duration(
-                d_locs[k], o_loc, end_tm
-            )
-            return_origin_time = end_origin - start_origin
-            # time after arriving at stop k + stop duration at k + time to return to origin
-            time_after_next_stop = end_tm + int(stop_duration / 60) + return_origin_time
+            # time for activity
+            end_tm = end_tm + int(trip_duration / 60) + int(activity_duration / 60)
 
-            if time_after_next_stop <= 1440:
+            # time to return to origin after activity
+            return_trip_distance = model_distance(dest, o_loc)
+            return_trip_duration = model_journey_time(return_trip_distance)
+            return_trip = end_tm + int(return_trip_duration / 60)
+
+            if return_trip <= 1440:
                 # there is enough time to return to origin, so add these stops to plan.
-                d_plan_zones.append(d_zones[k])
-                d_plan_locs.append(d_locs[k])
-            end_tm = end_tm + int(stop_duration / 60)
+                d_plan_zones.append(d_zone)
+                d_plan_locs.append(dest)
+            end_tm = end_tm + int(activity_duration / 60)
 
         if len(d_plan_locs) == 0:
             self.logger.warning("reschedule agent plan to leave an hour earlier")
             self.hour = self.hour - 1
-            d_plan_zones, d_plan_locs = self.finalise_stop_plan(o_loc, d_zones, d_locs)
+            if self.hour < 0:
+                self.logger.warning("no feasible destinations from this origin zone, skipping plan")
+                d_plan_zones, d_plan_locs = None
+            else:
+                d_plan_zones, d_plan_locs = self.finalise_stop_plan(o_loc, d_zones, d_locs)
+
         return d_plan_zones, d_plan_locs
 
     def add_tour_activity(
@@ -624,9 +591,13 @@ class TourPlanner:
             else:
                 previous_zone = d_zones[k - 1]
                 previous_loc = d_locs[k - 1]
-            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
-                previous_loc, d_locs[k], end_tm
-            )
+
+            start_tm = end_tm
+            trip_distance = model_distance(previous_loc, d_locs[k])
+            trip_duration = model_journey_time(trip_distance)
+            activity_duration = model_activity_time(trip_duration)
+            end_tm = end_tm + int(trip_duration / 60)
+
             end_tm = self.add_tour_leg(
                 agent=agent,
                 k=k,
@@ -638,7 +609,7 @@ class TourPlanner:
                 end_tm=end_tm,
             )
 
-            time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
+            time_params = {"end_tm": end_tm, "stop_duration": activity_duration}
             end_tm = self.add_tour_activity(
                 agent=agent,
                 k=k,
@@ -648,9 +619,12 @@ class TourPlanner:
                 time_params=time_params,
             )
         # returning to origin
-        stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
-            d_locs[len(d_locs) - 1], o_loc, end_tm
-        )
+
+        start_tm = end_tm
+        trip_distance = model_distance(d_locs[len(d_locs) - 1], o_loc)
+        trip_duration = model_journey_time(trip_distance)
+        end_tm = end_tm + int(trip_duration / 60)
+
         end_tm = self.add_tour_leg(
             agent=agent,
             k=k + 1,

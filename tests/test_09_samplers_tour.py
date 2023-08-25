@@ -137,12 +137,12 @@ def trips():
 
 # %% testing Tour plan inputs (distance, distributions)
 def test_model_distance_value():
-    assert tour.DurationEstimator().model_distance(Point((0, 0)), Point((3, 4)), scale=1) == 5
+    assert tour.model_distance(Point((0, 0)), Point((3, 4)), scale=1) == 5
 
 
 def test_model_journey_time_value():
-    assert tour.DurationEstimator().model_journey_time(1000, 10) == 100
-    assert tour.DurationEstimator().model_journey_time(50000, 40000 / 3600) == 4500
+    assert tour.model_journey_time(1000, 10) == 100
+    assert tour.model_journey_time(50000, 40000 / 3600) == 4500
 
 
 def test_distribution_total_none():
