@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Fix for cropping as per issue [#241](https://github.com/arup-group/pam/issues/241) ([#240]).
 - `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
 
@@ -81,6 +82,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#240]: https://github.com/arup-group/pam/pull/240
 [#231]: https://github.com/arup-group/pam/pull/231
 [#222]: https://github.com/arup-group/pam/pull/222
 [#219]: https://github.com/arup-group/pam/pull/219
