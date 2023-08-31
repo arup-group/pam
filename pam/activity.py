@@ -509,6 +509,7 @@ class Plan:
             if component.start_time > pam.variables.END_OF_DAY:
                 self.logger.debug("Cropping plan components")
                 self.day = self.day[:idx]
+            else:
                 break
 
         # crop plan that is out of sequence
