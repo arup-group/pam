@@ -196,10 +196,6 @@ class FrequencySampler:
             )[0]
 
 
-# class DurationEstimator:
-#     """Object to estimate the distance, journey time, and stop time of activities.
-#     The last function activity_duration combines these three functions to output parameters that help build tour plans.
-#     """
 def model_distance(o, d, scale=1.4):
     """Models distance between two shapely points."""
     return o.distance(d) * scale
