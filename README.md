@@ -56,7 +56,7 @@ PAM fully supports the [MATSim](https://www.matsim.org/) population/plans format
 <!--- --8<-- [end:docs] -->
 ## Documentation
 
-For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest) and [example notebooks](https://github.com/arup-group/pam/tree/main/examples).
+For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest).
 
 ## Installation
 

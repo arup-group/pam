@@ -1,5 +1,7 @@
 --8<-- "README.md:docs"
 
+ ![PAM](resources/logos/title.png)
+
 ## Why Activity Plans?
 
  ![example-activity-plans](resources/example-activity-plans.png)

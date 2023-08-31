@@ -20,7 +20,9 @@ class Recorder:
 def grid_search(
     plan: Plan, plans_scorer: PlanScorer, config: dict = {}, step: int = 900, copy=True
 ) -> (float, Plan):
-    """Checks all permutations of a plan's activity start times and durations, finds plan
+    """Grid search for optimum plan schedule.
+
+    Checks all permutations of a plan's activity start times and durations, finds plan
     that has maximum score, based on the given scorer. The precision and size of the grid is based
     on the given step (seconds). Smaller steps increase the grid size.
 
