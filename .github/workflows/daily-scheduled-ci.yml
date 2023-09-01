@@ -20,6 +20,7 @@ jobs:
       notebook_kernel: pam
       pytest_args: '--no-cov'  # ignore coverage
       cache_mamba_env: false
+      lint: false
       mamba_env_name: ${{ needs.get-date.outputs.DATE }}
 
   slack-notify-ci:

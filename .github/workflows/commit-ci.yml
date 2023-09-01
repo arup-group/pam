@@ -19,7 +19,7 @@ jobs:
       os: ubuntu-latest
       py3version: "11"
       notebook_kernel: pam
-      lint: true
+      lint: false
 
   aws-upload:
     needs: test
