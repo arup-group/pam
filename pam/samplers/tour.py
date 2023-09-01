@@ -408,60 +408,6 @@ class TourPlanner:
 
         return o_loc, d_zones, d_locs
 
-    def finalise_stop_plan(self, o_loc, d_zones, d_locs) -> tuple[list, list]:
-        """
-        Finalise the stop plan to ensure agent can return to origin by end of day. This function
-        iterates through the sequenced stops and determines if the end_tm after returning to origin is beyond the end of day.
-        If so, it does not include the previous stop in the finalised list of locations each agent will go to.
-        If an agent is not able to go to one stop before returning to the origin, the agent is rescheduled to leave an
-        hour earlier.
-
-        Args:
-            o_loc (Point): A point location of the origin.
-            d_zones (List[str]): A list of zones for each stop (destination) in the tour.
-            d_locs (List[Point]): A list of point locations for each stop (destination) in the tour.
-
-        Returns:
-            List[Dict[str, Any]]: A list of dictionaries representing the reordered stops (destinations)
-        finalise plans for agents
-
-        """
-        end_tm = self.hour * 60 + self.minute
-        d_plan_zones = []
-        d_plan_locs = []
-        all_stops = [o_loc] + d_locs
-
-        # calculate end_tm after each stop
-        for orig, dest, d_zone in zip(all_stops, d_locs, d_zones):
-            trip_distance = model_distance(orig, dest)
-            trip_duration = model_journey_time(trip_distance)
-            activity_duration = model_activity_time(trip_duration)
-
-            # time for activity
-            end_tm = end_tm + int(trip_duration / 60) + int(activity_duration / 60)
-
-            # time to return to origin after activity
-            return_trip_distance = model_distance(dest, o_loc)
-            return_trip_duration = model_journey_time(return_trip_distance)
-            return_trip = end_tm + int(return_trip_duration / 60)
-
-            if return_trip <= 1440:
-                # there is enough time to return to origin, so add these stops to plan.
-                d_plan_zones.append(d_zone)
-                d_plan_locs.append(dest)
-            end_tm = end_tm + int(activity_duration / 60)
-
-        if len(d_plan_locs) == 0:
-            self.logger.warning("reschedule agent plan to leave an hour earlier")
-            self.hour = self.hour - 1
-            if self.hour < 0:
-                self.logger.warning("no feasible destinations from this origin zone, skipping plan")
-                d_plan_zones, d_plan_locs = None
-            else:
-                d_plan_zones, d_plan_locs = self.finalise_stop_plan(o_loc, d_zones, d_locs)
-
-        return d_plan_zones, d_plan_locs
-
     def add_tour_activity(
         self, agent: str, k: Iterable, zone: str, loc: Point, activity_type: str, time_params: dict
     ) -> int:
