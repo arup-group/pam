@@ -1,0 +1,35 @@
+name: Build docs
+
+on: 
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+    - tests/**
+
+jobs:
+  docs-test:
+    if: github.ref != 'refs/heads/main'
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
+    with:
+      deploy_type: test
+      notebook_kernel: pam
+
+  docs-update-latest:
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/main'
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
+    with:
+      deploy_type: update_latest
+      notebook_kernel: pam
+
+  slack-notify-ci-failure:
+    needs: [docs-test, docs-update-latest]
+    if: always() && contains(needs.*.result, 'failure')
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
+    secrets: inherit
+    with:
+      result: 'failure'
+      channel: pam-feed
+      message: Docs Build

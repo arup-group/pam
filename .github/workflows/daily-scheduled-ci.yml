@@ -1,61 +1,32 @@
-name: Daily PAM CI Build
+name: Daily CI Build
 
 on:
   schedule:
     - cron: '23 14 * * 1-5'
-
-defaults:
-  run:
-    shell: bash -l {0}
     
 jobs:
-  build:
+  get-date:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Add date to github output env
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-    - uses: mamba-org/setup-micromamba@v1
-      with:
-        micromamba-version: latest
-        environment-name: pam-linux-311
-        environment-file: requirements/base.txt
-        create-args: >-
-            -c city-modelling-lab
-            -f requirements/dev.txt
-            python=3.11
-        post-cleanup: all
-        cache-environment: true
+  test:
+    needs: get-date
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
+    with:
+      os: ubuntu-latest
+      py3version: "11"
+      notebook_kernel: pam
+      pytest_args: '--no-cov'  # ignore coverage
+      cache_mamba_env: false
+      mamba_env_name: ${{ needs.get-date.outputs.DATE }}
 
-    - name: Install PAM
-      run: |
-        pip install --no-deps -e .
-        python -m ipykernel install --user --name pam
-  
-    - name: Run tests
-      run: pytest --no-cov
-
-    - name: Send build success notification
-      if: success()
-      uses: rtCamp/action-slack-notify@v2.2.0
-      env:
-        SLACK_MESSAGE: ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has succeeded
-        SLACK_TITLE: Daily CI Build Success
-        SLACK_CHANNEL: pam-feeds
-        SLACK_USERNAME: GitHub Build Bot
-        SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-
-    - name: Send build failure notification
-      if: failure()
-      uses: rtCamp/action-slack-notify@v2.2.0
-      env:
-        SLACK_COLOR: '#FF0000'
-        SLACK_LINK_NAMES: true
-        SLACK_MESSAGE: '<!here> ${{ github.repository }} Daily scheduled CI Build ${{ github.run_number }} has failed'
-        SLACK_TITLE: Daily CI Build Failure!
-        SLACK_CHANNEL: pam-feeds
-        SLACK_USERNAME: GitHub Build Bot
-        SLACK_ICON: https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-12-19/288981919427_f45f04edd92902a96859_512.png
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+  slack-notify-ci:
+    needs: test
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
+    secrets: inherit
+    with:
+      result: needs.test.result
+      channel: pam-feed
+      message: Daily CI action

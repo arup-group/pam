@@ -1,0 +1,46 @@
+name: Minimal CI
+
+on: 
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - LICENSE
+      - CONTRIBUTING.md
+      - docs/**
+      - mkdocs.yml  
+
+jobs:
+  test:
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
+    with:
+      os: ubuntu-latest
+      py3version: "11"
+      notebook_kernel: pam
+      lint: true
+
+  aws-upload:
+    needs: test
+    if: needs.test.result == 'success'
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/aws-upload.yml@main
+    secrets: inherit 
+
+  slack-notify-ci:
+    needs: test
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
+    secrets: inherit
+    with:
+      result: needs.test.result
+      channel: pam-feed
+      message: Commit CI action
+      
+  slack-notify-aws:
+    needs: aws-upload
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
+    secrets: inherit
+    with:
+      result: needs.aws-upload.result
+      channel: pam-feed
+      message: AWS upload action
