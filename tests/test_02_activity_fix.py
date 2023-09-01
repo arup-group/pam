@@ -33,6 +33,36 @@ def test_crop_act_past_end_of_day():
     assert plan.day[-1].end_time == END_OF_DAY
 
 
+def test_crop_two_acts_past_end_of_day():
+    plan = Plan()
+    plan.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="A",
+            end_area="B",
+            start_time=mtdt(600),
+            end_time=mtdt(12020),
+        )
+    )
+    plan.add(Activity(seq=3, act="work", area="B", start_time=mtdt(12020), end_time=mtdt(12030)))
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="B",
+            end_area="A",
+            start_time=mtdt(12030),
+            end_time=mtdt(12050),
+        )
+    )
+    plan.add(Activity(seq=1, act="home", area="A", start_time=mtdt(12050), end_time=mtdt(12060)))
+    plan.crop()
+    assert plan.length == 1
+    assert plan.day[-1].end_time == END_OF_DAY
+
+
 def test_crop_leg_past_end_of_day():
     plan = Plan()
     plan.add(Activity(seq=1, act="home", area="A", start_time=mtdt(0), end_time=mtdt(600)))
