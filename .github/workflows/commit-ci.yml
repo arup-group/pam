@@ -1,6 +1,6 @@
 name: Minimal CI
 
-on: 
+on:
   push:
     branches:
       - "**"
@@ -10,7 +10,7 @@ on:
       - LICENSE
       - CONTRIBUTING.md
       - docs/**
-      - mkdocs.yml  
+      - mkdocs.yml
 
 jobs:
   test:
@@ -25,7 +25,7 @@ jobs:
     needs: test
     if: needs.test.result == 'success'
     uses: arup-group/actions-city-modelling-lab/.github/workflows/aws-upload.yml@main
-    secrets: inherit 
+    secrets: inherit
 
   slack-notify-ci:
     needs: test
@@ -35,7 +35,7 @@ jobs:
       result: needs.test.result
       channel: pam-feed
       message: Commit CI action
-      
+
   slack-notify-aws:
     needs: aws-upload
     uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main

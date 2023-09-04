@@ -3,7 +3,7 @@ name: Daily CI Build
 on:
   schedule:
     - cron: '23 14 * * 1-5'
-    
+
 jobs:
   get-date:
     runs-on: ubuntu-latest

@@ -1,6 +1,6 @@
 name: Build docs
 
-on: 
+on:
   push:
     branches:
       - "**"
