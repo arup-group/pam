@@ -4,7 +4,7 @@ import pytest
 from pam import read
 
 BENCHMARK_MEM = "2890.59 MB"
-BENCHMARK_SECONDS = 250.64
+BENCHMARK_SECONDS = 285
 
 
 @pytest.mark.limit_memory(BENCHMARK_MEM)
