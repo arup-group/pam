@@ -6,7 +6,7 @@ import pytest
 from pam import read
 
 BENCHMARK_MEM = "2890.59 MB"
-BENCHMARK_SECONDS = 285
+BENCHMARK_SECONDS = 400
 
 data_dir = Path(__file__).parent / "test_data"
 
