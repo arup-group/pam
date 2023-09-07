@@ -20,6 +20,7 @@ jobs:
       py3version: "11"
       notebook_kernel: pam
       lint: false
+      upload_to_codecov: false
 
   aws-upload:
     needs: test
