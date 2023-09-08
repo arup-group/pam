@@ -39,7 +39,7 @@ You can also run these checks yourself at any time to ensure staged changes are 
 ### Rapid-fire testing
 The following options allow you to strip down the test suite to the bare essentials:
 
-1. The test suite includes unit tests and integration tests (in the form of jupyter notebooks found in the `examples` directory). 
+1. The test suite includes unit tests and integration tests (in the form of jupyter notebooks found in the `examples` directory).
 The integration tests can be slow, so if you want to avoid them during development, you should run `pytest tests/`.
 2. You can avoid generating coverage reports, by adding the `--no-cov` argument: `pytest --no-cov`.
 3. By default, the tests run with up to two parallel threads, to increase this to e.g. 4 threads: `pytest -n4`.
@@ -55,11 +55,17 @@ pytest tests/ --no-cov -n4
     You cannot debug failing tests and have your tests run in parallel, you will need to set `-n0` if using the `--pdb` flag
 
 ### Memory profiling
+
+!!! note
+    When you open a pull request (PR), one of the GitHub actions will run memory profiling for you.
+    This means you don't *have* to do any profiling locally.
+    However, if you can, it is still good practice to do so as you will catch issues earlier.
+
 PAM can be memory intensive; we like to ensure that any development to the core code does not exacerbate this.
 If you are running on a UNIX device (i.e., **not** on Windows), you can test whether any changes you have made adversely impact memory and time performance as follows:
 
 1. Install [memray](https://bloomberg.github.io/memray/index.html) in your `pam` mamba environment: `mamba install memray pytest-memray`.
-2. Run the memory profiling integration test: `pytest -p memray -m "high_mem" --no-cov`. 
+2. Run the memory profiling integration test: `pytest -p memray -m "high_mem" --no-cov`.
 3. Optionally, to visualise the memory allocation, run `pytest -p memray -m "high_mem" --no-cov --memray-bin-path=[my_path] --memray-bin-prefix=[my_prefix]` - where you must define `[my_path]` and `[my_prefix]` - followed by `memray flamegraph [my_path]/[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.bin`.
 You will then find the HTML report at `[my_path]/memray-flamegraph-[my_prefix]-tests-test_100_memory_profiling.py-test_activity_loader.html`.
 

@@ -85,7 +85,7 @@ def test_score_person(config, Anna):
 def test_summary(config, Anna):
     scorer = CharyparNagelPlanScorer(cnfg=config)
     try:
-        scorer.summary(Anna)
+        scorer.print_summary(Anna)
     except (RuntimeError, TypeError, NameError, OSError, ValueError):
         pytest.fail("Error")
 
