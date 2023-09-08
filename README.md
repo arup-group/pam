@@ -1,13 +1,13 @@
- ![PAM](resources/logos/title.png)
+<!--- the "--8<--" html comments define what part of the README to add to the index page of the documentation -->
+<!--- --8<-- [start:docs] -->
+
+![PAM](resources/logos/title.png)
 
 # Population Activity Modeller
 
-![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg) 
+![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg)
 [![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
 [![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e)
-
-<!--- the "--8<--" html comments define what part of the README to add to the index page of the documentation -->
-<!--- --8<-- [start:docs] -->
 
 PAM is a python library for population **activity sequence** modelling. Example use cases:
 
@@ -93,8 +93,8 @@ If you are using `pip` to install PAM instead of the recommended `mamba`, you ca
 
 If you plan to make changes to the code then please make regular use of the following tools to verify the codebase while you work:
 
-- `pre-commit`: run `pre-commit install` in your command line to load inbuilt checks that will run every time you commit your changes. 
-The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the [pep8 standard](https://peps.python.org/pep-0008/). 
+- `pre-commit`: run `pre-commit install` in your command line to load inbuilt checks that will run every time you commit your changes.
+The checks are: 1. check no large files have been staged, 2. lint python files for major errors, 3. format python files to conform with the [pep8 standard](https://peps.python.org/pep-0008/).
 You can also run these checks yourself at any time to ensure staged changes are clean by simple calling `pre-commit`.
 - `pytest` - run the unit test suite, check test coverage, and test that the example notebooks successfully run.
 - `pytest -p memray -m "high_mem" --no-cov` (not available on Windows) - after installing memray (`mamba install memray pytest-memray`), test that memory and time performance does not exceed benchmarks.

@@ -24,18 +24,20 @@ nav:
     - examples/14_Advanced_Plan_Cropping.ipynb
     - examples/15_advanced_choice_modelling.ipynb
     - examples/16_advanced_matsim_warmstarting.ipynb
-  - Contributing: 
+  - Contributing:
     - contributing/index.md
     - Coding contributions: contributing/coding.md
     - Non-coding contributions: contributing/non_coding.md
   - Changelog: CHANGELOG.md
-  - Reference: 
+  - Reference:
     - Command line interface: api/cli.md
-theme: 
+theme:
   name: material
   custom_dir: docs/overrides
   features:
     - navigation.indexes
+  logo: resources/logos/small.png
+  favicon: resources/logos/mini.png
 repo_url: https://github.com/arup-group/pam/
 site_dir: .docs
 markdown_extensions:
@@ -93,11 +95,10 @@ plugins:
             - https://pandas.pydata.org/docs/objects.inv
             - https://geopandas.org/en/stable/objects.inv
   - search
-watch: 
+watch:
   - pam
 extra_css:
   - static/extras.css
 extra:
   version:
     provider: mike
- 
