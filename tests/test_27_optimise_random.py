@@ -87,7 +87,7 @@ def dummy_scorer():
             return self.score - 1
 
         def score_person(
-            self, person: Person, key: str = "subpopulation", plan_costs: float | None = None
+            self, person: Person, key: str = "subpopulation", plan_costs=None
         ) -> float:
             return super().score_person(person, key, plan_costs)
 
