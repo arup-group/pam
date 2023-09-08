@@ -8,7 +8,7 @@ minversion = "6.0"
 # `-m 'not high_mem'` - Do not run tests marked as consuming large amounts of memory (call `-m "high_mem"` in CLI to invert this; only `high_mem` marked tests will be run)
 # `-p no:memray` - Do not use the memray memory profiling plugin (call `-p memray` in CLI to switch on memory profiling)
 addopts = "-rav --strict-markers -n2 --nbmake --nbmake-kernel=pam --cov --cov-report=xml --cov-config=pyproject.toml -m 'not high_mem' -p no:memray"
-testpaths = ["tests", "examples", "mkdocs_plugins"]
+testpaths = ["tests", "examples"]
 # to mark a test, decorate it with `@pytest.mark.[marker-name]`
 markers = ["high_mem", "limit_memory"]
 filterwarnings = [
@@ -18,7 +18,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 branch = true
-source = ["pam/", "mkdocs_plugins/"]
+source = ["pam/"]
 
 [tool.coverage.report]
 fail_under = 89
@@ -63,7 +63,7 @@ max-complexity = 10
 docstring-quotes = "double"
 
 [tool.setuptools.packages.find]
-include = ["pam*", "mkdocs_plugins*"]
+include = ["pam*"]
 
 [tool.setuptools.package-data]
 pam = ["fixtures/**/*"]
@@ -99,9 +99,6 @@ dependencies = { file = ["requirements/base.txt"] }
 
 [project.scripts]
 pam = "pam.cli:cli"
-
-[project.entry-points."mkdocs.plugins"]
-generate-api = "mkdocs_plugins.api_generator:AddAPIPlugin"
 
 [tool.setuptools.dynamic.optional-dependencies]
 dev = { file = ["requirements/dev.txt"] }

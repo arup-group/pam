@@ -5,15 +5,15 @@ nav:
   - Reading data: read_data.md
   - Activity plans: activity_plans.md
   - Modelling the impact of policies on populations: modelling_policy_impact.md
-  - Examples: [] # this will be filled in automatically to include reference to all the notebooks 
-  - Contributing: 
+  - Examples: [] # this will be filled in automatically to include reference to all the notebooks
+  - Contributing:
     - contributing/index.md
     - Coding contributions: contributing/coding.md
     - Non-coding contributions: contributing/non_coding.md
   - Changelog: CHANGELOG.md
-  - Reference: 
+  - Reference:
     - Command line interface: api/cli.md
-theme: 
+theme:
   name: material
   custom_dir: docs/overrides
   features:
@@ -43,18 +43,12 @@ hooks:
   - docs/static/hooks.py
 plugins:
   - autorefs
-  - generate-api:
-      package_dir: "pam"
-      api_dir: "api"
-      skip:
-          - pam/cli.py
-          - pam/variables.py
   - mkdocs-jupyter:
       include: ["examples/*.ipynb"]
       allow_errors: false
       kernel_name: pam
       include_source: True
-      execute: true
+      execute: false
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -76,11 +70,10 @@ plugins:
             - https://pandas.pydata.org/docs/objects.inv
             - https://geopandas.org/en/stable/objects.inv
   - search
-watch: 
+watch:
   - pam
 extra_css:
   - static/extras.css
 extra:
   version:
     provider: mike
- 
