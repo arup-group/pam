@@ -2,6 +2,7 @@
 import pytest
 
 from pam.activity import Activity, Leg, Plan
+from pam.core import Person
 from pam.optimise import grid
 from pam.scoring import PlanScorer
 from pam.utils import minutes_to_datetime as mtdt
@@ -63,25 +64,30 @@ def dummy_scorer():
         def __init__(self, score=0):
             self.score = score
 
-        def score_plan(self, plan: Plan, cnfg: dict) -> float:
+        def score_plan(self, plan: Plan, cnfg: dict, plan_cost=None) -> float:
             return self.score
+
+        def score_person(
+            self, person: Person, key: str = "subpopulation", plan_costs: float | None = None
+        ) -> float:
+            return super().score_person(person, key, plan_costs)
 
     return DummyScorer(1)
 
 
 def test_traverse_exit(dummy_scorer, plan, recorder):
     assert recorder.best_score == 0
-    assert grid.traverse(dummy_scorer, {}, plan, 1, 0, 3, recorder) is None
+    grid.traverse(dummy_scorer, {}, plan, 1, 0, 3, recorder)
     assert recorder.best_score == 1
 
 
 def test_traverse_single(dummy_scorer, plan, recorder):
     assert recorder.best_score == 0
-    assert grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 2, recorder) is None
+    grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 2, recorder)
     assert recorder.best_score == 1
 
 
 def test_traverse_double(dummy_scorer, plan, recorder):
     assert recorder.best_score == 0
-    assert grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 1, recorder) is None
+    grid.traverse(dummy_scorer, {}, plan, 7200, 72000, 1, recorder)
     assert recorder.best_score == 1

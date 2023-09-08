@@ -7,18 +7,30 @@ from pam.variables import START_OF_DAY
 
 
 class Recorder:
-    def __init__(self, initial_score, initial_plan) -> None:
+    def __init__(self, initial_score: float, initial_plan: Plan) -> None:
+        """Mechanism for recording grid optimiser progress.
+
+        Args:
+            initial_score (float): Initial plan score.
+            initial_plan (Plan): Initial plan.
+        """
         self.best_plan = initial_plan
         self.best_score = initial_score
 
-    def update(self, score, plan):
+    def update(self, score: float, plan: Plan):
+        """Update with new score and plan.
+
+        Args:
+            score (float): Latest plan score.
+            plan (Plan): Latest plan.
+        """
         if score >= self.best_score:
             self.best_score = score
             self.best_plan = deepcopy(plan)
 
 
 def grid_search(
-    plan: Plan, plans_scorer: PlanScorer, config: dict = {}, step: int = 900, copy=True
+    plan: Plan, plans_scorer: PlanScorer, config: dict, step: int = 900, copy=True
 ) -> (float, Plan):
     """Grid search for optimum plan schedule.
 
@@ -31,7 +43,7 @@ def grid_search(
     Args:
         plan (Plan): Input plan.
         plans_scorer (PlanScorer): Plans scorer object.
-        config (Dict): PlansScorer config. Defaults to {}.
+        config (Dict): PlansScorer config.
         step (int): Grid size in seconds. Defaults to 900.
         copy (Bool): Create a copy of the input plan. Defaults to True.
 

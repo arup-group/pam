@@ -2,6 +2,7 @@
 import pytest
 
 from pam.activity import Activity, Leg, Plan
+from pam.core import Person
 from pam.optimise import random
 from pam.scoring import PlanScorer
 from pam.utils import minutes_to_datetime as mtdt
@@ -81,9 +82,14 @@ def dummy_scorer():
         def __init__(self, score=0):
             self.score = score
 
-        def score_plan(self, plan: Plan, cnfg: dict) -> float:
+        def score_plan(self, plan: Plan, cnfg: dict, plan_cost=None) -> float:
             self.score += 1
             return self.score - 1
+
+        def score_person(
+            self, person: Person, key: str = "subpopulation", plan_costs: float | None = None
+        ) -> float:
+            return super().score_person(person, key, plan_costs)
 
     return DummyScorer(1)
 

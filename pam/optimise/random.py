@@ -81,11 +81,14 @@ def random_mutate_activity_durations(plan: Plan, copy=True):
 
 
 class Stopper:
-    """Early stopping mechanism. Maintains last n scores, where n is equal to "horizon".
-    Triggers an early stop if change across horizon is less than given sensitivity.
-    """
-
     def __init__(self, horizon=5, sensitivity=0.01) -> None:
+        """Early stopping mechanism. Maintains last n scores, where n is equal to "horizon".
+        Triggers an early stop if change across horizon is less than given sensitivity.
+
+        Args:
+            horizon (int, optional): length of stored history. Defaults to 5.
+            sensitivity (float, optional): stopping tolerance. Defaults to 0.01.
+        """
         self.record = []
         self.horizon = horizon
         self.sensitivity = sensitivity

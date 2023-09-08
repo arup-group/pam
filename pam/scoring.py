@@ -1,4 +1,5 @@
 import logging
+from abc import ABC, abstractmethod
 from datetime import timedelta as td
 from typing import Optional
 
@@ -10,18 +11,43 @@ from pam.core import Person
 from pam.variables import TRANSIT_MODES
 
 
-class PlanScorer:
-    """Object for scoring agent plans."""
+class PlanScorer(ABC):
+    def __init__(self, cnfg: dict) -> None:
+        """Object for scoring agent plans. This is a prelim interface.
 
-    def __init__(self, cnfg) -> None:
+        Args:
+            cnfg (dict): scoring configuration.
+        """
         self.logger = logging.getLogger(__name__)
         self.cnfg = cnfg
 
-    def score_person() -> float:
-        raise NotImplementedError
+    @abstractmethod
+    def score_person(
+        self, person: Person, key: str = "subpopulation", plan_costs: Optional[float] = None
+    ) -> float:
+        """Score person.
 
-    def score_plan() -> float:
-        raise NotImplementedError
+        Args:
+            person (Person): Person to be scores.
+            key (str, optional): Person attribute key used for config segmentation ("subpopulations"). Defaults to "subpopulation".
+            plan_costs (Optional[float], optional): Monetary costs, such as tolls. Defaults to None.
+
+        Returns:
+            float: Score.
+        """
+
+    @abstractmethod
+    def score_plan(self, plan: Plan, cnfg: dict, plan_cost: Optional[float] = None) -> float:
+        """Score plan.
+
+        Args:
+            plan (Plan): Plan to be scored.
+            cnfg (dict): Scorer configuration.
+            plan_cost (Optional[float], optional): Monetary costs, such as tolls. Defaults to None.
+
+        Returns:
+            float: Score.
+        """
 
 
 class CharyparNagelPlanScorer(PlanScorer):
