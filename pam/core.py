@@ -54,7 +54,7 @@ class Population:
         elif isinstance(target, Household):
             self.households[target.hid] = target
         elif isinstance(target, Person):
-            self.logger.warning(
+            self.logger.debug(
                 (
                     "Directly adding a Person to a Population requires a Household.",
                     f"Auto creating a household {target.pid} for person {target.pid}, check this is intended.",

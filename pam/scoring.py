@@ -1,4 +1,5 @@
 import logging
+from abc import ABC, abstractmethod
 from datetime import timedelta as td
 from typing import Optional
 
@@ -10,7 +11,46 @@ from pam.core import Person
 from pam.variables import TRANSIT_MODES
 
 
-class CharyparNagelPlanScorer:
+class PlanScorer(ABC):
+    def __init__(self, cnfg: dict) -> None:
+        """Object for scoring agent plans. This is a prelim interface.
+
+        Args:
+            cnfg (dict): scoring configuration.
+        """
+        self.logger = logging.getLogger(__name__)
+        self.cnfg = cnfg
+
+    @abstractmethod
+    def score_person(
+        self, person: Person, key: str = "subpopulation", plan_costs: Optional[float] = None
+    ) -> float:
+        """Score person.
+
+        Args:
+            person (Person): Person to be scores.
+            key (str, optional): Person attribute key used for config segmentation ("subpopulations"). Defaults to "subpopulation".
+            plan_costs (Optional[float], optional): Monetary costs, such as tolls. Defaults to None.
+
+        Returns:
+            float: Score.
+        """
+
+    @abstractmethod
+    def score_plan(self, plan: Plan, cnfg: dict, plan_cost: Optional[float] = None) -> float:
+        """Score plan.
+
+        Args:
+            plan (Plan): Plan to be scored.
+            cnfg (dict): Scorer configuration.
+            plan_cost (Optional[float], optional): Monetary costs, such as tolls. Defaults to None.
+
+        Returns:
+            float: Score.
+        """
+
+
+class CharyparNagelPlanScorer(PlanScorer):
     example_config = {
         "default": {
             "mUM": 10,
@@ -46,16 +86,8 @@ class CharyparNagelPlanScorer:
         }
     }
 
-    def __init__(self, cnfg) -> None:
-        """Charypar-Nagel plan scorer."""
-        self.logger = logging.getLogger(__name__)
-        self.cnfg = cnfg
-
     def score_person(
-        self,
-        person: Person,
-        subpopulation: str = "subpopulation",
-        plan_costs: Optional[float] = None,
+        self, person: Person, key: str = "subpopulation", plan_costs: Optional[float] = None
     ) -> float:
         """Score a pam.core.Person Plan.
 
@@ -67,7 +99,7 @@ class CharyparNagelPlanScorer:
         Returns:
             float: score
         """
-        subpop = person.attributes[subpopulation]
+        subpop = person.attributes[key]
         cnfg = self.cnfg[subpop]
         return self.score_plan(person.plan, plan_cost=plan_costs, cnfg=cnfg)
 
@@ -90,7 +122,7 @@ class CharyparNagelPlanScorer:
             + self.score_plan_daily(plan, cnfg)
         )
 
-    def summary(self, person, subpopulation="subpopulation"):
+    def print_summary(self, person, subpopulation="subpopulation"):
         print(f"Total plan score: {self.score_person(person)}")
         config = self.cnfg[person.attributes[subpopulation]]
         print(f"Total activities score: {self.score_plan_activities(person.plan, cnfg=config)}")
@@ -305,7 +337,6 @@ class CharyparNagelPlanScorer:
         return 0.0
 
     def pt_waiting_time_score(self, leg, cnfg):
-        print("BT", leg.boarding_time)
         if cnfg.get("waitingPt") and leg.boarding_time:
             waiting = (leg.boarding_time - leg.start_time) / td(hours=1)
             if waiting > 0:

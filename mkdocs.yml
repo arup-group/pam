@@ -18,6 +18,8 @@ theme:
   custom_dir: docs/overrides
   features:
     - navigation.indexes
+  logo: resources/logos/small.png
+  favicon: resources/logos/mini.png
 repo_url: https://github.com/arup-group/pam/
 site_dir: .docs
 markdown_extensions:
