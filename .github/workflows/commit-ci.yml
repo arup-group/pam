@@ -14,6 +14,7 @@ on:
 
 jobs:
   test:
+    if: github.event_name != 'pull_request'
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
     with:
       os: ubuntu-latest

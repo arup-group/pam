@@ -4,10 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    types:
-      - opened
-      - ready_for_review
-      - review_requested
     paths-ignore:
       - README.md
       - CHANGELOG.md
@@ -47,11 +43,3 @@ jobs:
     with:
       py3version: "11"
       upload_flamegraph: true
-
-  docs:
-    permissions:
-      contents: write
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
-    with:
-      deploy_type: test
-      notebook_kernel: pam

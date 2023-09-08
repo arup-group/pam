@@ -5,7 +5,7 @@ on:
     branches:
       - "**"
     paths-ignore:
-    - tests/**
+      - tests/**
 
 jobs:
   docs-test:
