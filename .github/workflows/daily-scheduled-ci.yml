@@ -26,6 +26,7 @@ jobs:
 
   slack-notify-ci:
     needs: test
+    if: always()
     uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
     secrets: inherit
     with:
