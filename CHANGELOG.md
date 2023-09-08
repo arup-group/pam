@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recommended installation instructions, to use [mamba](https://mamba.readthedocs.io/en/latest/index.html) instead of pip ([#192], [#211]).
 - **internal** Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports ([#196], [#201]).
 - **internal** development toolkit, moving from internal scripts to pytest plugins ([#193]).
-- **internal** fixed broken CI builds by upgrading the Slack notifications GitHub action in use ([#223]).
+- **internal** CI actions link to reusable ones from `arup-group/actions-city-modelling-lab/`, including new memory profiling and multi-OS / python version tests ([#243]).
 
 ### Removed
 - Example data files not accessed by any example notebook ([#196]).
@@ -75,7 +75,7 @@ This version is a pre-release
 
 ## [v0.2.0] - 2023-05-10
 
-This is the first version of PAM which follows semantic versioning and can be considered the first _official_ release of the package. 
+This is the first version of PAM which follows semantic versioning and can be considered the first _official_ release of the package.
 
 
 [unreleased]: https://github.com/arup-group/pam/compare/v0.2.4...main
@@ -88,6 +88,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [#240]: https://github.com/arup-group/pam/pull/240
 [#239]: https://github.com/arup-group/pam/pull/239
 [#231]: https://github.com/arup-group/pam/pull/231
+[#243]: https://github.com/arup-group/pam/pull/243
 [#222]: https://github.com/arup-group/pam/pull/222
 [#219]: https://github.com/arup-group/pam/pull/219
 [#215]: https://github.com/arup-group/pam/pull/215

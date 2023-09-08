@@ -11,12 +11,12 @@ Some of the resources to look at if you're interested in contributing:
 
 By contributing to PAM, i.e. through opening a pull request, you represent that your contributions are your own original work and that you have the right to license them, and you agree that your contributions are licensed under the MIT license.
 
-## Reporting bugs and requesting features 
+## Reporting bugs and requesting features
 
 You can open an issue on GitHub to report bugs or request new PAM features.
 Follow these links to submit your issue:
 
-- [Report bugs or other problems while running PAM](https://github.com/arup-group/pam/issues/new?template=BUG-REPORT.yml). 
+- [Report bugs or other problems while running PAM](https://github.com/arup-group/pam/issues/new?template=BUG-REPORT.yml).
 If reporting an error, please include a full traceback in your issue.
 
 - [Request features that PAM does not already include](https://github.com/arup-group/pam/issues/new?template=FEATURE-REQUEST.yml).
@@ -67,11 +67,11 @@ Start reading our code and you'll get the hang of it.
 
 We mostly follow the official [Style Guide for Python Code (PEP8)](https://www.python.org/dev/peps/pep-0008/).
 
-We have chosen to use the uncompromising code formatter [`black`](https://github.com/psf/black/) and the linter [`ruff`](https://beta.ruff.rs/docs/).  
-When run from the root directory of this repo, `pyproject.toml` should ensure that formatting and linting fixes are in line with our custom preferences (e.g., 100 character maximum line length).  
-The philosophy behind using `black` is to have uniform style throughout the project dictated by code.  
-Since `black` is designed to minimise diffs, and make patches more human readable, this also makes code reviews more efficient.  
-To make this a smooth experience, you should run `pre-commit install` after setting up your development environment, so that `black` makes all the necessary fixes to your code each time you commit, and so that `ruff` will highlight any errors in your code. 
+We have chosen to use the uncompromising code formatter [`black`](https://github.com/psf/black/) and the linter [`ruff`](https://beta.ruff.rs/docs/).
+When run from the root directory of this repo, `pyproject.toml` should ensure that formatting and linting fixes are in line with our custom preferences (e.g., 100 character maximum line length).
+The philosophy behind using `black` is to have uniform style throughout the project dictated by code.
+Since `black` is designed to minimise diffs, and make patches more human readable, this also makes code reviews more efficient.
+To make this a smooth experience, you should run `pre-commit install` after setting up your development environment, so that `black` makes all the necessary fixes to your code each time you commit, and so that `ruff` will highlight any errors in your code.
 If you prefer, you can also set up your IDE to run these two tools whenever you save your files, and to have `ruff` highlight erroneous code directly as you type.
 Take a look at their documentation for more information on configuring this.
 
@@ -82,7 +82,6 @@ When adding docstrings, we request you use the [Google docstring style](https://
 
 ### Pre-release
 
-- [ ] Make sure all unit and integration tests pass (`pytest` and `pytest -p memray -m "high_mem" --no-cov` if you are able to use memray - see [memory-profiling][] for more info).
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
 - [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
@@ -91,7 +90,7 @@ When adding docstrings, we request you use the [Google docstring style](https://
 
 - [ ] Bump the version number in `pyproject.toml`
 - [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and github `compare` link (at the bottom of the page).
-- [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag. 
+- [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag.
 - [ ] Create a release pull request to verify that the conda package builds successfully.
 - [ ] Once the PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
 
