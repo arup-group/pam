@@ -5,7 +5,8 @@
 
 # Population Activity Modeller
 
-![CIbadge](https://github.com/arup-group/pam//workflows/CI/badge.svg)
+![PullRequestCIbadge](https://github.com/arup-group/pam/actions/workflows/pr-ci.yml/badge.svg)
+![DailyCIbadge](https://github.com/arup-group/pam/actions/workflows/daily-scheduled-ci.yml/badge.svg)
 [![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
 [![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e)
 
