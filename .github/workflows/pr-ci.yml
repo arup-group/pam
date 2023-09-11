@@ -35,7 +35,7 @@ jobs:
       py3version: "11"
       notebook_kernel: pam
       lint: false
-      pytest_args: 'tests/ mkdocs_plugins/'  # ignore example notebooks
+      pytest_args: 'tests/'  # ignore example notebooks
       upload_to_codecov: true
 
   memory-profile:
