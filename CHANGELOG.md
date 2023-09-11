@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Fix readme CI badge ([#248])
 - Fix for cropping as per issue [#241](https://github.com/arup-group/pam/issues/241) ([#240]).
 - optimise.grid.grid_search fixed ([#239]).
 - `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
@@ -85,8 +86,8 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#248]: https://github.com/arup-group/pam/pull/248
 [#240]: https://github.com/arup-group/pam/pull/240
-[#239]: https://github.com/arup-group/pam/pull/239
 [#231]: https://github.com/arup-group/pam/pull/231
 [#243]: https://github.com/arup-group/pam/pull/243
 [#222]: https://github.com/arup-group/pam/pull/222
