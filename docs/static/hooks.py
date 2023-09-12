@@ -26,14 +26,14 @@ def on_files(files: list, config: dict, **kwargs):
     return files
 
 
-def _new_file(path: Path, config: str, src_dir: str = ".") -> File:
+def _new_file(path: Path, config: dict, src_dir: str = ".") -> File:
     """Link a file out in the wilderness to a filename in the documentation directory hierarchy.
 
     Args:
         path (Path):
             Path (relative to "src_dir") to file that you want to bring into the documentation directory.
             In the documentation directory, this same path with apply (e.g., `[src_dir]/path/to/file.md` will become `[docs_dir]/path/to/file.md`)
-        config (str): mkdocs config dictionary.
+        config (dict): mkdocs config dictionary.
         src_dir (str, optional):
             Path in which to find the file you want to bring into the docs directory. Defaults to ".".
 
