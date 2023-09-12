@@ -264,8 +264,8 @@ class Plan:
             return self.day[idx]
         return default
 
-    def plot(self, kwargs=None):
-        plot.plot_plan(self, kwargs)
+    def plot(self, **kwargs):
+        plot.plot_plan(self, **kwargs)
 
     def activity_tours(self):
         tours = []

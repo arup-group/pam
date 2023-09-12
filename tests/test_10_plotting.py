@@ -30,10 +30,14 @@ from pam.plot.stats import (
 from pam.policy import policies
 
 
-def test_build_person_dataframe(person_heh):
-    df = build_person_df(person_heh)
-    assert len(df) == 5
-    assert list(df.act) == ["Home", "Travel", "Education", "Travel", "Home"]
+@pytest.fixture
+def person_df(person_heh):
+    return build_person_df(person_heh)
+
+
+def test_build_person_dataframe(person_df):
+    assert len(person_df) == 5
+    assert list(person_df.act) == ["Home", "Travel", "Education", "Travel", "Home"]
 
 
 def test_build_cmap_dict():
@@ -178,12 +182,29 @@ def test_plot_travel_plans_for_household(instantiate_household_with, cyclist, pt
     assert [dat.name for dat in fig.data] == ["bike", "pt", "transit_walk"]
 
 
-def test_plot_activities(person_heh):
-    df = build_person_df(person_heh)
+def test_plot_activities(person_df):
     try:
-        plot_activities(df)
+        plot_activities(person_df)
     except (RuntimeError, TypeError, NameError, OSError, ValueError):
         pytest.fail("Error")
+
+
+def test_plot_activities_with_cmap(person_df):
+    plot_activities(
+        person_df, cmap={"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
+    )
+
+
+def test_plot_activities_with_label_fontsize_partial(person_df):
+    plot_activities(person_df, label_fontsize={"Home": 20})
+
+
+def test_plot_activities_with_label_fontsize_full(person_df):
+    plot_activities(person_df, label_fontsize={"Home": 20, "Education": 5, "Travel": 15})
+
+
+def test_plot_activities_with_new_width(person_df):
+    plot_activities(person_df, width=40)
 
 
 def test_plot_activity_breakdown_returns_axis(population_heh):
