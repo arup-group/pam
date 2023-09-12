@@ -1,1 +1,0 @@
-Directory to customise the mkdocs "material" theme. See [here](https://squidfunk.github.io/mkdocs-material/customization) for more detail.

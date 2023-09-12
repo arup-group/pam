@@ -96,7 +96,6 @@ class VehicleType:
 
         Args:
             xf (et.Element): Parent xml element.
-            tid (str): Type id.
         """
         with xf.element("vehicleType", {"id": self.id}):
             rec = et.Element("description")
