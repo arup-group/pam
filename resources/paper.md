@@ -8,19 +8,14 @@ tags:
 authors:
   - name: Fred Shone
     orcid: 0009-0008-1079-0081
-    equal-contrib: true
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Theodore Chatziioannou
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Bryn Pickering
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - name: Kasia Kozlowska
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
   - names: Michael Fitzmaurice
-    equal-contrib: true # (This is how you can denote equal contributions between multiple authors)
     affiliation: 1
 affiliations:
  - name: Arup, City Modelling Lab
@@ -28,10 +23,6 @@ affiliations:
 date: 12 September 2023
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-# aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-# aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
@@ -50,6 +41,6 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 # Acknowledgements
 
-We acknowledge all past, present and future contributions, including code, documentation, issues and feedback. We also acknowledge funding and support from Arup.
+We acknowledge all past, present, and future contributions, including code, documentation, issues and feedback. We also acknowledge funding and support from Arup.
 
 # References
