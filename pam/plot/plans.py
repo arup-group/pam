@@ -127,11 +127,12 @@ loc attribute defined with a shapely.Point or s2sphere.CellId.
             "d_stop": leg.route.transit.get("egressFacilityId"),
             "network_route": leg.route.network_route,
         }
+
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
             df = pd.concat([df, pd.Series(_leg_dict)], ignore_index=True, axis=1)
 
-    df = df.T
+    df = df.T.infer_objects()
     df["pid"] = person.pid
     df = GeoDataFrame(df, geometry="geometry")
     if from_epsg:
