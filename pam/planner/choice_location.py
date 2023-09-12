@@ -143,7 +143,7 @@ class ChoiceModel:
 
         """
         for k, v in kwargs.items():
-            if type(v) == str:
+            if isinstance(v, str):
                 v = v.replace(" ", "")
             setattr(self.configuration, k, v)
         self.logger.info("Updated model configuration")

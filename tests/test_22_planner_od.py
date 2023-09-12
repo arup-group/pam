@@ -43,7 +43,7 @@ def test_od_slicing_is_correctly_encoded(od):
 
 
 def test_class_represantation_is_string(od):
-    assert type(od.__repr__()) == str
+    assert isinstance(od.__repr__(), str)
 
 
 def test_matrix_dimensions_stay_the_same(od):
