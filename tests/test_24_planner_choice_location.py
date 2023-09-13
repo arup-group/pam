@@ -187,7 +187,7 @@ def test_match_diversion_probabilities(discretionary_trip_od: DiscretionaryTripO
 
 def test_match_attraction_probabilities(discretionary_trip_od: DiscretionaryTripOD):
     assert approx(discretionary_trip_od.attraction_p, abs=0.005) == [
-        250, 333, 500]
+        0.231, 0.306, 0.463]
 
 
 def test_match_destination_probabilities(discretionary_trip_od: DiscretionaryTripOD):

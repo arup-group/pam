@@ -49,6 +49,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example data files not accessed by any example notebook ([#196]).
 - **internal** Unused scripts that were outside the source code directory ([#199]).
 
+## [v0.2.5] - 2023-09-13
+This version is a pre-release
+
+### Added
+- Time-space prism method for selecting the location of non-mandatory activities ([#252](https://github.com/arup-group/pam/pull/252)).
+
 ## [v0.2.4] - 2023-06-08
 This version is a pre-release
 
