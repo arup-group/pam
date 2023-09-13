@@ -46,7 +46,7 @@ Activity modelling is also a key component of agent-based modelling approaches s
 # Statement of need
 
 `PAM` is a python package providing a pythonic API for creating and/or working with activity-based synthetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats.
-The `PAM` API allows uses to create and/or manipulate activity sequences using intuitive objects and methods.
+The `PAM` API allows users to create and/or manipulate activity sequences using intuitive objects and methods.
 This allows researchers and practitioners to experiment with activity modelling approaches and quickly build synthetic populations to use in downstream applications, such as simulations.
 
 `PAM` is intended for use by those wanting to (i) build their own activity model, (ii) modify existing synthetic populations to create new scenarios, and (iii) work with the agent-based modelling tool MATSim.
