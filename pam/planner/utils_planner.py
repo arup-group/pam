@@ -38,6 +38,28 @@ def get_trip_chains(plan: Plan, act: str = "home") -> List[List[Union[Activity, 
     return chains
 
 
+def get_trip_chains_either_anchor(
+    plan: Plan, 
+    acts: List[str] = LONG_TERM_ACTIVITIES
+    ) -> List[List[Union[Activity, Leg]]]:
+    """Get trip chains starting and/OR ending at a long-term activity.
+    Similar to get_trip_chains, but can slice plans on multiple activity types.
+    """
+    chains = []
+    chain = []
+    for elem in plan.day:
+        if isinstance(elem, Activity) and elem.act in acts:
+            if len(chain) > 0:
+                chains.append(chain+[elem])
+                chain = []
+        chain.append(elem)
+
+    if len(chain) > 1:
+        chains += [chain] # add any remaining trips until the end of the day
+
+    return chains
+
+
 def apply_mode_to_home_chain(act: Activity, trmode: str) -> None:
     """Apply a transport mode across a home-based trip chain,
     which comprises the specified activity.

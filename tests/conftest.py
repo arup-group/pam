@@ -9,7 +9,7 @@ from pam import read
 from pam.activity import Activity, Leg, Plan
 from pam.core import Household, Person, Population
 from pam.location import Location
-from pam.planner.od import OD
+from pam.planner.od import OD, ODFactory, ODMatrix
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
@@ -1152,6 +1152,22 @@ def labels():
 @pytest.fixture
 def od(data_od, labels):
     od = OD(data=data_od, labels=labels)
+    return od
+
+
+@pytest.fixture
+def od_discretionary():
+    zone_labels = ("h", "b", "w")
+    od = ODFactory.from_matrices(
+        [
+            ODMatrix("time", "car", zone_labels, zone_labels, np.array([[20, 30, 40], [30, 10, 30], [40, 30, 20]])),
+            ODMatrix("time", "bus", zone_labels, zone_labels, np.array([[30, 40, 45], [40, 10, 40], [45, 40, 30]])),
+            ODMatrix("distance", "car", zone_labels, zone_labels, np.array([[5, 6, 8], [6, 2, 6], [8, 6, 5]])),
+            ODMatrix("distance", "bus", zone_labels, zone_labels, np.array([[5, 7, 9], [7, 2, 7], [9, 7, 5]])),
+            ODMatrix("od_probs", "car", zone_labels, zone_labels, np.array([[500, 333, 250], [333, 1000, 333], [250, 333, 500]])),
+            ODMatrix("od_probs", "bus", zone_labels, zone_labels, np.array([[333, 250, 222], [250, 1000, 250], [222, 250, 333]])),
+        ]
+    )
     return od
 
 
