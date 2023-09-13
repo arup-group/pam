@@ -67,7 +67,8 @@ class SelectionSet:
 
     def sample(self) -> list:
         """Sample from a set of alternative options."""
-        sampled = np.apply_along_axis(func1d=self.func_sampling, axis=1, arr=self.probabilities)
+        sampled = np.apply_along_axis(
+            func1d=self.func_sampling, axis=1, arr=self.probabilities)
         sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
         self._selections = sampled_labels
         return sampled_labels
@@ -128,7 +129,8 @@ class ChoiceModel:
         link_population(self.population)
         self.od = od
         self.zones = self.parse_zone_data(zones)
-        self.zones.data = self.zones.data.loc[list(od.labels.destination_zones)]
+        self.zones.data = self.zones.data.loc[list(
+            od.labels.destination_zones)]
         self.configuration = ChoiceConfiguration()
         self._selections = None
 
@@ -212,7 +214,8 @@ class ChoiceModel:
 
         idxs = []
         u_choices = []
-        choice_labels = list(itertools.product(od.labels.destination_zones, od.labels.mode))
+        choice_labels = list(itertools.product(
+            od.labels.destination_zones, od.labels.mode))
         choice_labels = [ChoiceLabel(*x) for x in choice_labels]
 
         # iterate across activities
@@ -269,17 +272,23 @@ class DiscretionaryTrips:
         self._od = od
 
     def update_plan(self):
+        """Update the locations (in-place) of each non-mandatory activity location in the plan.
+
+        Returns:
+            None
+        """
         trip_chains = get_trip_chains_either_anchor(self._plan)
         for trip_chain in trip_chains:
-            convert_single_anchor_roundtrip(trip_chain) # if only one achor, convert to round-trip
+            # if only one achor, convert to round-trip
+            convert_single_anchor_roundtrip(trip_chain)
             act_names = get_act_names(trip_chain)
             if len(act_names) > 2:
-                if act_names[0]!=act_names[-1]:
+                if act_names[0] != act_names[-1]:
                     DiscretionaryTripOD(
                         trip_chain=trip_chain,
                         od=self._od
                     ).update_plan()
-                else:                    
+                else:
                     DiscretionaryTripRound(
                         trip_chain=trip_chain,
                         od=self._od
@@ -329,6 +338,10 @@ class DiscretionaryTrip:
         Update the PAM activity locations of the first activity activity 
             in the trip chain,
             and continue downstream until the entire chain is solved.
+
+        Returns:
+            None
+
         """
         if len(self.act_names) > 2:
             assert isinstance(self._trip_chain[0], Activity)
@@ -370,11 +383,14 @@ class DiscretionaryTripRound(DiscretionaryTrip):
     """
 
     def choose_destination(self) -> str:
-        """
-        Choose a destination for the discretionary activity
+        """Selects a destination for the discretionary activity
+
+        Returns:
+            str: Selected destination zone name.
         """
         assert isinstance(self._trip_chain[1], Leg)
-        destination_p = self._od['od_probs', self.anchor_zone_start, :, self.trmode]
+        destination_p = self._od['od_probs',
+                                 self.anchor_zone_start, :, self.trmode]
         destination_p = destination_p / destination_p.sum()
         zone = sample_weighted(destination_p)
         area = self._od.labels.destination_zones[zone]
@@ -415,9 +431,14 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     def leg_ratios(self) -> np.array:
         """
         Get the impedance ratio between the fist leg candidate locations
-            and the corresponding total distance (anchor->discretionary->anchor)
+            and the corresponding total distance (anchor->discretionary->anchor).
+
+        Returns:
+            np.array: An array of the leg time ratios for each candidate intermediate destination.
+
         """
-        imp_first_leg = self._od['time', self.anchor_zone_start, :, self.trmode]
+        imp_first_leg = self._od['time',
+                                 self.anchor_zone_start, :, self.trmode]
         imp_second_leg = self._od['time', :, self.anchor_zone_end, self.trmode]
         leg_ratio = imp_first_leg / (imp_first_leg+imp_second_leg)
 
@@ -426,7 +447,11 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     @property
     def leg_ratio_p(self) -> np.array:
         """
-        Get destination probabilities given the leg ratio
+        Get destination probabilities given the leg ratio.
+
+        Returns:
+            np.array: An array of the leg time ratio probabilities for each candidate intermediate destination.
+
         """
         return self.pdf_leg_ratio(
             leg_ratios=self.leg_ratios,
@@ -437,18 +462,29 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     def diversion_factors(self) -> np.array:
         """
         Calculate the diversion factor for each potential destination
-            (as compared to a direct trip between anchors)
+            (as compared to a direct trip between anchors).
+
+        Returns:
+            np.array: An array of the time diversion factors for each candidate intermediate destination.
+
         """
         imp_tour = self._od['time', self.anchor_zone_start, :, self.trmode] + \
             self._od['time', :, self.anchor_zone_end, self.trmode]
         imp_direct = self._od['time', self.anchor_zone_start,
-                                        self.anchor_zone_end, self.trmode]
+                              self.anchor_zone_end, self.trmode]
         diversion_factors = imp_tour / imp_direct
 
         return diversion_factors
 
     @property
     def diversion_p(self):
+        """Diversion factor probabilities
+
+
+        Returns:
+            np.array: An array of the time diversion factor probabilities for each candidate intermediate destination.
+
+        """
         return self.pdf_leg_diversion(
             self.diversion_factors,
             max_diversion_factor=2.1
@@ -456,14 +492,23 @@ class DiscretionaryTripOD(DiscretionaryTrip):
 
     @property
     def attraction_p(self):
+        """Attraction probabilities
+
+        Returns:
+            None
+        """
         probs = self._od['od_probs', self.anchor_zone_start, :, self.trmode]
         probs = probs / probs.sum()
         return probs
 
     @property
     def destination_p(self) -> np.array:
-        """
-        Get the destination probabilities
+        """Get the destination probabilities.
+        Combines the leg ratio, diversion, and attraction factors probabilities
+            by calculating their product.
+
+        Returns:
+            np.array: Final destination probabilities.
         """
         p = self.leg_ratio_p * \
             self.diversion_p * \
@@ -472,8 +517,10 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         return p
 
     def choose_destination(self) -> str:
-        """
-        Choose a destination for the discretionary activity
+        """Selects a destination for the discretionary activity
+
+        Returns:
+            str: Selected destination zone name.
         """
         zone = sample_weighted(self.destination_p)
         area = self._od.labels.destination_zones[zone]
