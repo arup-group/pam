@@ -375,6 +375,7 @@ class DiscretionaryTripRound(DiscretionaryTrip):
         """
         assert isinstance(self._trip_chain[1], Leg)
         destination_p = self._od['od_probs', self.anchor_zone_start, :, self.trmode]
+        destination_p = destination_p / destination_p.sum()
         zone = sample_weighted(destination_p)
         area = self._od.labels.destination_zones[zone]
 
@@ -455,7 +456,9 @@ class DiscretionaryTripOD(DiscretionaryTrip):
 
     @property
     def attraction_p(self):
-        return self._od['od_probs', self.anchor_zone_start, :, self.trmode]
+        probs = self._od['od_probs', self.anchor_zone_start, :, self.trmode]
+        probs = probs / probs.sum()
+        return probs
 
     @property
     def destination_p(self) -> np.array:
