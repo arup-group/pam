@@ -11,8 +11,12 @@ from pam.planner.utils_planner import (
     get_trip_chains,
     get_validate,
     sample_weighted,
+    get_first_leg_time_ratio,
+    get_act_names,
+    convert_single_anchor_roundtrip
 )
 from pam.read import read_matsim
+from pam.variables import LONG_TERM_ACTIVITIES
 
 test_plans_experienced = pytest.test_data_dir / "test_matsim_experienced_plans_v12.xml"
 
@@ -80,3 +84,20 @@ def test_nonset_attribute_raises_error():
     a = A()
     with pytest.raises(ValueError):
         get_validate(a, "b")
+
+
+def test_leg_time_ratio(plan_home_work_shop_home):
+    chain = get_trip_chains(plan_home_work_shop_home)[-1]
+    assert get_first_leg_time_ratio(chain) == 0.2
+
+
+def test_act_names(plan_home_work_shop_home):
+    names = get_act_names(plan_home_work_shop_home)
+    assert names == ['home', 'work', 'shop', 'home']
+
+
+def test_single_anchor_complete(plan_other_work_shop_other):
+    chains = get_trip_chains(plan_other_work_shop_other, act='work')
+    for chain in chains:    
+        convert_single_anchor_roundtrip(chain)
+        assert chain[0]==chain[-1]
