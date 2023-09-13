@@ -41,7 +41,7 @@ This is a key shift from more simplified approaches and can be used to potential
 
 Activity modelling is also a key component of agent-based modelling approaches such as MATSim [@MATSim:2016].
 
-![Example activity sequences.\label{fig:Example activity sequences}](example-activity-plans.png)
+![Example activity sequences.\label{fig:Example activity sequences}](../example-activity-plans.png)
 
 # Statement of need
 
