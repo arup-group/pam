@@ -41,13 +41,13 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 # Statement of need
 
-`PAM` is a python package providing a pythonic API for creating and/or working with activity-based sythetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats. The `PAM` API allows creation and/or manipulation of activity sequences using intuitive objects and methods. This allows researchers and practitioners to more easilly experiment with activity-modelling approaches or more quickly build synthetic populations for other work, such as simulations.
+`PAM` is a python package providing a pythonic API for creating and/or working with activity-based synthetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats. The `PAM` API allows creation and/or manipulation of activity sequences using intuitive objects and methods. This allows researchers and practitioners to, more easily, experiment with activity-modelling approaches or more quickly build synthetic populations for other work, such as simulations.
 
 `PAM` is intended for use by those wanting to (i) building their own activity model, (ii) read, modify and/or write existing synthetic populations to create new scenarios, and (ii) work with the agent-based modelling tool MATSim. `PAM` provides example notebooks of these applications, and common features are exposed via a CLI.
 
-# Development History
+# Development history
 
-`PAM` was originally conceived and built at the start of the global COVID-19 pandemic, to allow for the assessment of change resulting from goverment quarantining and lock-down policies. The project was originally called `Pandemic Activity Modifier` and applied for the rapid updating of existing transport demand models using `policies` [@Medium]. Updated transport demand could then be used for transport simulation using MATSim and virus transmission modelling using EpiSim [@Episim].
+`PAM` was originally conceived and built at the start of the global COVID-19 pandemic, to allow for the assessment of change resulting from government quarantining and lock-down policies. The project was originally called `Pandemic Activity Modifier` and was applied for the rapid updating of existing transport demand models using `policies`, as descrbed by @Medium. Updated transport demand could then be used for transport simulation using MATSim and virus transmission modelling using EpiSim [@Episim].
 
 This application is still supported but now generalised to provide broader application for activity modelling, for practitioners and researchers, such as by @Castro:2023. The project is now called the `Population Activity Modeller`.
 
