@@ -37,6 +37,8 @@ Activity modelling is a growing paradigm used for these models, in which individ
 
 Activity modelling is also a key component of agent-based modelling approaches such as MATSim [@MATSim:2016].
 
+![Example activity sequences.\label{fig:Example activity sequences}](example-activity-plans.png)
+
 # Statement of need
 
 `PAM` is a python package providing a pythonic API for creating and/or working with activity-based sythetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats. The `PAM` API allows creation and/or manipulation of activity sequences using intuitive objects and methods. This allows researchers and practitioners to more easilly experiment with activity-modelling approaches or more quickly build synthetic populations for other work, such as simulations.
@@ -47,7 +49,7 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 `PAM` was originally conceived and built at the start of the global COVID-19 pandemic, to allow for the assessment of change resulting from goverment quarantining and lock-down policies. The project was originally called `Pandemic Activity Modifier` and applied for the rapid updating of existing transport demand models using `policies` [@Medium]. Updated transport demand could then be used for transport simulation using MATSim and virus transmission modelling using EpiSim [@Episim].
 
-This application is still supported but now generalised to provide broader application for activity modelling, for practitioners and researchers [@Castro]. The project is now called the `Population Activity Modeller`.
+This application is still supported but now generalised to provide broader application for activity modelling, for practitioners and researchers, such as by @Castro:2023. The project is now called the `Population Activity Modeller`.
 
 # Acknowledgements
 
