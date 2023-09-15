@@ -1,6 +1,6 @@
-from copy import deepcopy
 import datetime
 import random
+from copy import deepcopy
 from typing import List, Union
 
 import numpy as np
@@ -39,9 +39,8 @@ def get_trip_chains(plan: Plan, act: str = "home") -> List[List[Union[Activity, 
 
 
 def get_trip_chains_either_anchor(
-    plan: Plan, 
-    acts: List[str] = LONG_TERM_ACTIVITIES
-    ) -> List[List[Union[Activity, Leg]]]:
+    plan: Plan, acts: List[str] = LONG_TERM_ACTIVITIES
+) -> List[List[Union[Activity, Leg]]]:
     """Get trip chains starting and/OR ending at a long-term activity.
     Similar to get_trip_chains, but can slice plans on multiple activity types.
     """
@@ -50,12 +49,12 @@ def get_trip_chains_either_anchor(
     for elem in plan.day:
         if isinstance(elem, Activity) and elem.act in acts:
             if len(chain) > 0:
-                chains.append(chain+[elem])
+                chains.append(chain + [elem])
                 chain = []
         chain.append(elem)
 
     if len(chain) > 1:
-        chains += [chain] # add any remaining trips until the end of the day
+        chains += [chain]  # add any remaining trips until the end of the day
 
     return chains
 
@@ -119,8 +118,7 @@ def get_first_leg_time_ratio(chain: List[Union[Activity, Leg]]) -> float:
         float: the first leg duration ratio
 
     """
-    durations = [
-        x.duration/datetime.timedelta(seconds=1) for x in chain if isinstance(x, Leg)]
+    durations = [x.duration / datetime.timedelta(seconds=1) for x in chain if isinstance(x, Leg)]
     ratio = durations[0] / sum(durations)
 
     return ratio
@@ -134,7 +132,7 @@ def convert_single_anchor_roundtrip(chain: List[Union[Activity, Leg]]) -> None:
     The addition of the "return" elements is done in-place.
 
     Args:
-        chain: a chain of activity and legs between two long-term activities 
+        chain: a chain of activity and legs between two long-term activities
 
     Returns:
         None
@@ -154,7 +152,7 @@ def convert_single_anchor_roundtrip(chain: List[Union[Activity, Leg]]) -> None:
     elif chain[-1].act not in LONG_TERM_ACTIVITIES and chain[0].act not in LONG_TERM_ACTIVITIES:
         act = deepcopy(chain[0])
         leg = deepcopy(chain[1])
-        act.act = 'home'
+        act.act = "home"
         leg.start_location = act.location
         chain.insert(0, leg)
         chain.insert(0, act)

@@ -4,7 +4,7 @@ import logging
 from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Literal, NamedTuple, Optional, Union, List
+from typing import List, Literal, NamedTuple, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -16,11 +16,11 @@ from pam.planner.od import OD
 from pam.planner.utils_planner import (
     apply_mode_to_home_chain,
     calculate_mnl_probabilities,
-    sample_weighted,
-    get_first_leg_time_ratio,
-    get_act_names,
     convert_single_anchor_roundtrip,
-    get_trip_chains_either_anchor
+    get_act_names,
+    get_first_leg_time_ratio,
+    get_trip_chains_either_anchor,
+    sample_weighted,
 )
 from pam.planner.zones import Zones
 
@@ -67,8 +67,7 @@ class SelectionSet:
 
     def sample(self) -> list:
         """Sample from a set of alternative options."""
-        sampled = np.apply_along_axis(
-            func1d=self.func_sampling, axis=1, arr=self.probabilities)
+        sampled = np.apply_along_axis(func1d=self.func_sampling, axis=1, arr=self.probabilities)
         sampled_labels = [self.choice_set.choice_labels[x] for x in sampled]
         self._selections = sampled_labels
         return sampled_labels
@@ -129,8 +128,7 @@ class ChoiceModel:
         link_population(self.population)
         self.od = od
         self.zones = self.parse_zone_data(zones)
-        self.zones.data = self.zones.data.loc[list(
-            od.labels.destination_zones)]
+        self.zones.data = self.zones.data.loc[list(od.labels.destination_zones)]
         self.configuration = ChoiceConfiguration()
         self._selections = None
 
@@ -214,8 +212,7 @@ class ChoiceModel:
 
         idxs = []
         u_choices = []
-        choice_labels = list(itertools.product(
-            od.labels.destination_zones, od.labels.mode))
+        choice_labels = list(itertools.product(od.labels.destination_zones, od.labels.mode))
         choice_labels = [ChoiceLabel(*x) for x in choice_labels]
 
         # iterate across activities
@@ -284,15 +281,9 @@ class DiscretionaryTrips:
             act_names = get_act_names(trip_chain)
             if len(act_names) > 2:
                 if act_names[0] != act_names[-1]:
-                    DiscretionaryTripOD(
-                        trip_chain=trip_chain,
-                        od=self._od
-                    ).update_plan()
+                    DiscretionaryTripOD(trip_chain=trip_chain, od=self._od).update_plan()
                 else:
-                    DiscretionaryTripRound(
-                        trip_chain=trip_chain,
-                        od=self._od
-                    ).update_plan()
+                    DiscretionaryTripRound(trip_chain=trip_chain, od=self._od).update_plan()
 
 
 class DiscretionaryTrip:
@@ -306,16 +297,12 @@ class DiscretionaryTrip:
         c) O->discretionary->discretionary->O
         d) O->discretionary->discretionary->D
 
-    Chains with multiple discretionary trips are solved 
+    Chains with multiple discretionary trips are solved
         recursively, updating the first location each time,
-        and then keeping it fixed as we solve downstream.       
+        and then keeping it fixed as we solve downstream.
     """
 
-    def __init__(
-        self,
-        trip_chain: List[Union[Activity, Leg]],
-        od: OD
-    ) -> None:
+    def __init__(self, trip_chain: List[Union[Activity, Leg]], od: OD) -> None:
         self._trip_chain = trip_chain
         self._od = od
         self.act_names = get_act_names(trip_chain)
@@ -335,7 +322,7 @@ class DiscretionaryTrip:
 
     def update_plan(self):
         """
-        Update the PAM activity locations of the first activity activity 
+        Update the PAM activity locations of the first activity activity
             in the trip chain,
             and continue downstream until the entire chain is solved.
 
@@ -359,24 +346,18 @@ class DiscretionaryTrip:
             if self.act_names[0] == self.act_names[-1]:
                 # continue downstream recursively
                 # with a round-trip selection
-                DiscretionaryTripRound(
-                    trip_chain=self._trip_chain[2:],
-                    od=self._od
-                ).update_plan()
+                DiscretionaryTripRound(trip_chain=self._trip_chain[2:], od=self._od).update_plan()
             # otherwise, if it is a trip chain with two anchors:
             else:
                 # continue downstream recursively
                 # the newly-selected location now becomes the first anchor
-                DiscretionaryTripOD(
-                    trip_chain=self._trip_chain[2:],
-                    od=self._od
-                ).update_plan()
+                DiscretionaryTripOD(trip_chain=self._trip_chain[2:], od=self._od).update_plan()
 
 
 class DiscretionaryTripRound(DiscretionaryTrip):
     """
     Location choice for a single discretionary trip,
-        where we have the same anchor at the start and end of the chain. 
+        where we have the same anchor at the start and end of the chain.
 
     The class infers the location of the first discretionary
         activity in the trip chain.
@@ -389,8 +370,7 @@ class DiscretionaryTripRound(DiscretionaryTrip):
             str: Selected destination zone name.
         """
         assert isinstance(self._trip_chain[1], Leg)
-        destination_p = self._od['od_probs',
-                                 self.anchor_zone_start, :, self.trmode]
+        destination_p = self._od["od_probs", self.anchor_zone_start, :, self.trmode]
         destination_p = destination_p / destination_p.sum()
         zone = sample_weighted(destination_p)
         area = self._od.labels.destination_zones[zone]
@@ -401,7 +381,7 @@ class DiscretionaryTripRound(DiscretionaryTrip):
 class DiscretionaryTripOD(DiscretionaryTrip):
     """
     Location choice for a single discretionary trip,
-        where we have different anchors at the start and end of the chain. 
+        where we have different anchors at the start and end of the chain.
 
     The class infers the location of the first trip in the trip chain.
 
@@ -419,7 +399,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     def pdf_leg_ratio(leg_ratios: np.array, observed_ratio: float) -> np.array:
         return np.interp(leg_ratios, [0, observed_ratio, 1], [0, 1, 0])
 
-    @ staticmethod
+    @staticmethod
     def pdf_leg_diversion(diversions: np.array, max_diversion_factor: float = 2.1) -> np.array:
         return np.interp(diversions, [1, max_diversion_factor], [1, 0])
 
@@ -437,10 +417,9 @@ class DiscretionaryTripOD(DiscretionaryTrip):
             np.array: An array of the leg time ratios for each candidate intermediate destination.
 
         """
-        imp_first_leg = self._od['time',
-                                 self.anchor_zone_start, :, self.trmode]
-        imp_second_leg = self._od['time', :, self.anchor_zone_end, self.trmode]
-        leg_ratio = imp_first_leg / (imp_first_leg+imp_second_leg)
+        imp_first_leg = self._od["time", self.anchor_zone_start, :, self.trmode]
+        imp_second_leg = self._od["time", :, self.anchor_zone_end, self.trmode]
+        leg_ratio = imp_first_leg / (imp_first_leg + imp_second_leg)
 
         return leg_ratio
 
@@ -454,8 +433,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
 
         """
         return self.pdf_leg_ratio(
-            leg_ratios=self.leg_ratios,
-            observed_ratio=self.observed_leg_ratio
+            leg_ratios=self.leg_ratios, observed_ratio=self.observed_leg_ratio
         )
 
     @property
@@ -468,10 +446,11 @@ class DiscretionaryTripOD(DiscretionaryTrip):
             np.array: An array of the time diversion factors for each candidate intermediate destination.
 
         """
-        imp_tour = self._od['time', self.anchor_zone_start, :, self.trmode] + \
-            self._od['time', :, self.anchor_zone_end, self.trmode]
-        imp_direct = self._od['time', self.anchor_zone_start,
-                              self.anchor_zone_end, self.trmode]
+        imp_tour = (
+            self._od["time", self.anchor_zone_start, :, self.trmode]
+            + self._od["time", :, self.anchor_zone_end, self.trmode]
+        )
+        imp_direct = self._od["time", self.anchor_zone_start, self.anchor_zone_end, self.trmode]
         diversion_factors = imp_tour / imp_direct
 
         return diversion_factors
@@ -485,10 +464,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
             np.array: An array of the time diversion factor probabilities for each candidate intermediate destination.
 
         """
-        return self.pdf_leg_diversion(
-            self.diversion_factors,
-            max_diversion_factor=2.1
-        )
+        return self.pdf_leg_diversion(self.diversion_factors, max_diversion_factor=2.1)
 
     @property
     def attraction_p(self):
@@ -497,7 +473,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         Returns:
             None
         """
-        probs = self._od['od_probs', self.anchor_zone_start, :, self.trmode]
+        probs = self._od["od_probs", self.anchor_zone_start, :, self.trmode]
         probs = probs / probs.sum()
         return probs
 
@@ -510,9 +486,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         Returns:
             np.array: Final destination probabilities.
         """
-        p = self.leg_ratio_p * \
-            self.diversion_p * \
-            self.attraction_p
+        p = self.leg_ratio_p * self.diversion_p * self.attraction_p
         p /= p.sum()
         return p
 

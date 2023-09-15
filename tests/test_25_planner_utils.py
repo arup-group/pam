@@ -8,15 +8,14 @@ from pam.operations.cropping import link_population
 from pam.planner.utils_planner import (
     apply_mode_to_home_chain,
     calculate_mnl_probabilities,
+    convert_single_anchor_roundtrip,
+    get_act_names,
+    get_first_leg_time_ratio,
     get_trip_chains,
     get_validate,
     sample_weighted,
-    get_first_leg_time_ratio,
-    get_act_names,
-    convert_single_anchor_roundtrip
 )
 from pam.read import read_matsim
-from pam.variables import LONG_TERM_ACTIVITIES
 
 test_plans_experienced = pytest.test_data_dir / "test_matsim_experienced_plans_v12.xml"
 
@@ -93,11 +92,11 @@ def test_leg_time_ratio(plan_home_work_shop_home):
 
 def test_act_names(plan_home_work_shop_home):
     names = get_act_names(plan_home_work_shop_home)
-    assert names == ['home', 'work', 'shop', 'home']
+    assert names == ["home", "work", "shop", "home"]
 
 
 def test_single_anchor_complete(plan_other_work_shop_other):
-    chains = get_trip_chains(plan_other_work_shop_other, act='work')
-    for chain in chains:    
+    chains = get_trip_chains(plan_other_work_shop_other, act="work")
+    for chain in chains:
         convert_single_anchor_roundtrip(chain)
-        assert chain[0]==chain[-1]
+        assert chain[0] == chain[-1]
