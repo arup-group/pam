@@ -225,8 +225,12 @@ def plot_activities(
 
         # Labels
         rects = ax.patches
+
         for x, y, rect, label in zip(label_x, label_y, rects, labels):
-            if label == "Travel":
+            r, g, b, _ = rect.get_facecolor()
+            # see https://en.wikipedia.org/wiki/Relative_luminance
+            luminance = (r * 0.2126 + g * 0.7152 + b * 0.0722) * 255
+            if luminance < 140:
                 color = "white"
             else:
                 color = "black"
@@ -263,6 +267,8 @@ def plot_activities(
 
         ax.set_title(f"Person ID: {pid}", fontsize=10 * fontscale)
         ax.get_yaxis().set_visible(False)
+        ax.set_xticks(range(25))
+        ax.set_xlim(right=24)
         for side in ["top", "right", "bottom", "left"]:
             ax.spines[side].set_visible(False)
 
@@ -270,7 +276,7 @@ def plot_activities(
         legend_elements = []
         for act, color in cmap.items():
             legend_elements.append(Patch(facecolor=color, edgecolor="black", label=act))
-        plt.legend(
+        fig.legend(
             handles=legend_elements,
             ncol=len(legend_elements),
             prop={"size": 12 * fontscale},
@@ -280,13 +286,10 @@ def plot_activities(
             borderaxespad=0.0,
         )
 
-    plt.xticks(range(25))
-    plt.xlim(right=24)
-
-    plt.tight_layout()
-
     if path is not None:
-        plt.savefig(path)
+        fig.savefig(path, bbox_inches="tight")
+
+    return fig, axs
 
 
 def plot_travel_plans(

@@ -1,10 +1,11 @@
 from copy import deepcopy
 
-import matplotlib
 import numpy as np
 import pandas as pd
 import pytest
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.legend import Legend
 from plotly.graph_objs import Scattermapbox
 from shapely.geometry import Point
 
@@ -183,33 +184,60 @@ def test_plot_travel_plans_for_household(instantiate_household_with, cyclist, pt
 
 
 def test_plot_activities(person_df):
-    try:
-        plot_activities(person_df)
-    except (RuntimeError, TypeError, NameError, OSError, ValueError):
-        pytest.fail("Error")
+    fig, ax = plot_activities(person_df)
+    assert isinstance(ax, Axes)
+    assert isinstance(fig, Figure)
+    assert any(isinstance(i, Legend) for i in fig.get_children())
+
+
+def test_plot_activities_no_legend(person_df):
+    fig, ax = plot_activities(person_df, legend=False)
+    assert not any(isinstance(i, Legend) for i in fig.get_children())
 
 
 def test_plot_activities_with_cmap(person_df):
-    plot_activities(
-        person_df, cmap={"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
-    )
+    cmap = {"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
+    fig, ax = plot_activities(person_df, cmap=cmap)
+    for idx, patch in enumerate(ax.patches):
+        label = ax.texts[idx].get_text()
+        fc = patch.get_facecolor()
+        assert cmap[label] + (1,) == fc
+
+
+def test_plot_activities_fontcolor(person_df):
+    cmap = {"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
+    expected_fontcolor = {"Home": "black", "Education": "white", "Travel": "white"}
+    fig, ax = plot_activities(person_df, cmap=cmap)
+    for text in ax.texts:
+        assert text.get_color() == expected_fontcolor[text.get_text()]
 
 
 def test_plot_activities_with_label_fontsize_partial(person_df):
-    plot_activities(person_df, label_fontsize={"Home": 20})
+    fontsizes = {"Home": 20}
+    fig, ax = plot_activities(person_df, label_fontsize={"Home": 20})
+    for text in ax.texts:
+        assert text.get_fontsize() == fontsizes.get(text.get_text(), 10)
 
 
 def test_plot_activities_with_label_fontsize_full(person_df):
-    plot_activities(person_df, label_fontsize={"Home": 20, "Education": 5, "Travel": 15})
+    fontsizes = {"Home": 20, "Education": 5, "Travel": 15}
+    fig, ax = plot_activities(person_df, label_fontsize=fontsizes)
+    for text in ax.texts:
+        assert text.get_fontsize() == fontsizes[text.get_text()]
 
 
 def test_plot_activities_with_new_width(person_df):
-    plot_activities(person_df, width=40)
+    width = 40
+    scaled_fontsize = 10 * width / 16  # default width is 16, so scaled proportional to it
+    fig, ax = plot_activities(person_df, width=40)
+
+    assert fig.get_figwidth() == 40
+    assert ax.title.get_fontsize() == scaled_fontsize
 
 
 def test_plot_activity_breakdown_returns_axis(population_heh):
     ax = plot_activity_breakdown_area(list(population_heh.plans()), population_heh.activity_classes)
-    assert isinstance(ax, matplotlib.axes._axes.Axes)
+    assert isinstance(ax, Axes)
 
 
 def test_plot_activity_breakdown_tiles_shape(population_heh):
