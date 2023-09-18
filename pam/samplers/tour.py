@@ -1,4 +1,3 @@
-import logging
 import random
 import warnings
 from typing import Any, Dict, Iterable, List, Optional, Union
@@ -14,7 +13,7 @@ from shapely.geometry import Point
 from pam.activity import Activity, Leg
 from pam.samplers.facility import FacilitySampler
 from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
+from pam.variables import END_OF_DAY, EXPECTED_EUCLIDEAN_SPEEDS
 
 
 def create_density_gdf(
@@ -201,7 +200,9 @@ def model_distance(o, d, scale=1.4):
     return o.distance(d) * scale
 
 
-def model_journey_time(distance: Union[float, int], speed: float = 50000 / 3600) -> float:
+def model_journey_time(
+    distance: Union[float, int], speed: float = EXPECTED_EUCLIDEAN_SPEEDS["freight"]
+) -> float:
     """
 
     Args:
@@ -275,8 +276,6 @@ class TourPlanner:
         self.o_activity = activity_params["o_activity"]
         self.d_activity = activity_params["d_activity"]
 
-        self.logger = logging.getLogger(__name__)
-
     def d_zone_sample_choice(self) -> str:
         """Samples a destination zone (d_zone) as a string, dependent on the presence of a threshold matrix.
 
@@ -285,7 +284,7 @@ class TourPlanner:
 
         """ ""
         if self.threshold_matrix is None:
-            d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
+            d_zone = FrequencySampler(self.d_dist, self.d_freq).sample()
         else:
             d_zone = FrequencySampler(
                 dist=self.d_dist,
@@ -386,7 +385,7 @@ class TourPlanner:
 
         return d_seq
 
-    def sequence_stops(self) -> tuple[Point, list, list]:
+    def sequence_stops(self) -> tuple[Point, list[Point], list[Point]]:
         """Creates a sequence for a number of stops. Sequence is determined by approximated greedy TSP
 
         Returns:
@@ -570,8 +569,8 @@ class TourPlanner:
         end_tm = self.add_tour_leg(
             agent=agent,
             k=k + 1,
-            o_zone=d_zones[len(d_locs) - 1],
-            o_loc=d_locs[len(d_locs) - 1],
+            o_zone=d_zones[-1],
+            o_loc=d_locs[-1],
             d_zone=self.o_zone,
             d_loc=o_loc,
             start_tm=start_tm,

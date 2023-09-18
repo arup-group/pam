@@ -15,6 +15,7 @@ EXPECTED_EUCLIDEAN_SPEEDS = {
     "subway": 15 * 1000 / 3600,
     "walk": 5 * 1000 / 3600,
     "cycle": 15 * 1000 / 3600,
+    "freight": 50 * 1000 / 3600,
 }  # mode speeds expressed as *euclidean* meters per second
 
 TRANSIT_MODES = ["bus", "rail", "pt", "subway"]  # modes for which the maximum walk distance applies
