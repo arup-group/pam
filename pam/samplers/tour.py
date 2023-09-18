@@ -284,7 +284,7 @@ class TourPlanner:
 
         """ ""
         if self.threshold_matrix is None:
-            d_zone = FrequencySampler(self.d_dist, self.d_freq).sample()
+            d_zone = FrequencySampler(self.d_dist.index, self.d_dist[self.d_freq]).sample()
         else:
             d_zone = FrequencySampler(
                 dist=self.d_dist,
