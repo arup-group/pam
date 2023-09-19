@@ -22,6 +22,7 @@ from shapely.errors import ShapelyDeprecationWarning
 import pam.activity as activity
 import pam.utils as utils
 from pam.planner import encoder
+from pam.variables import DEFAULT_ACTIVITIES_FONTSIZE, DEFAULT_ACTIVITIES_PLOT_WIDTH
 
 
 def plot_person(person, **kwargs):
@@ -166,9 +167,9 @@ def build_cmap(df: pd.DataFrame) -> dict:
 def plot_activities(
     df: pd.DataFrame,
     cmap: Optional[dict] = None,
-    width: int = 16,
+    width: int = DEFAULT_ACTIVITIES_PLOT_WIDTH,
     legend: bool = True,
-    label_fontsize: Union[dict, int] = 10,
+    label_fontsize: Optional[Union[dict, int]] = None,
     path: Optional[Union[str, Path]] = None,
 ) -> None:
     """Plot activity plans from pandas dataframe.
@@ -176,14 +177,15 @@ def plot_activities(
     Args:
         df (pd.DataFrame): Input activity plan data
         cmap (Optional[dict], optional): Map from activity to colour. If not given, random colours will be applied from `Set3`. Defaults to None.
-        width (int, optional): Figure width. Defaults to 16.
+        width (int, optional): Figure width. Defaults to DEFAULT_ACTIVITIES_PLOT_WIDTH.
         legend (bool, optional): If True, a legend will be added to the bottom of the figure. Defaults to True.
-        label_fontsize (Union[dict, int], optional): Set fontsize of activity / trip labels using a mapping or a single value to apply to all labels. This can be a partial mapping, with those _not_ defined defaulting to a fontsize of 10. Defaults to 10.
+        label_fontsize (Union[dict, int], optional): Set fontsize of activity / trip labels using a mapping or a single value to apply to all labels. This can be a partial mapping, with those _not_ defined defaulting to a fontsize of DEFAULT_ACTIVITIES_FONTSIZE. Defaults to None.
         path (Optional[str  |  Path], optional): If given, path to which the figure should be saved. Defaults to None.
     """
     if cmap is None:
         cmap = build_cmap(df)
-    fontscale = width / 16
+    fontscale = width / DEFAULT_ACTIVITIES_PLOT_WIDTH
+    scaled_fontsize = DEFAULT_ACTIVITIES_FONTSIZE * fontscale
 
     df["color"] = df["act"].map(cmap)
     pids = df["pid"].unique()
@@ -235,11 +237,13 @@ def plot_activities(
             else:
                 color = "black"
             if isinstance(label_fontsize, dict):
-                fontsize = label_fontsize.get(label, 10)
+                _fontsize = label_fontsize.get(label, scaled_fontsize)
+            elif label_fontsize is not None:
+                _fontsize = label_fontsize
             else:
-                fontsize = label_fontsize
+                _fontsize = scaled_fontsize
 
-            scaled_rect_width = rect.get_width() * width / 16
+            scaled_rect_width = rect.get_width() * width / DEFAULT_ACTIVITIES_PLOT_WIDTH
 
             if scaled_rect_width >= 2:
                 ax.text(
@@ -248,7 +252,7 @@ def plot_activities(
                     label,
                     ha="center",
                     va="center",
-                    fontdict={"color": color, "size": fontsize, "weight": "regular"},
+                    fontdict={"color": color, "size": _fontsize, "weight": "regular"},
                 )
             elif scaled_rect_width >= 0.5:
                 ax.text(
@@ -259,16 +263,17 @@ def plot_activities(
                     va="center",
                     fontdict={
                         "color": color,
-                        "size": fontsize,
+                        "size": _fontsize,
                         "weight": "regular",
                         "rotation": 90,
                     },
                 )
 
-        ax.set_title(f"Person ID: {pid}", fontsize=10 * fontscale)
+        ax.set_title(f"Person ID: {pid}", fontsize=scaled_fontsize)
         ax.get_yaxis().set_visible(False)
         ax.set_xticks(range(25))
         ax.set_xlim(right=24)
+        ax.tick_params(axis="x", which="major", labelsize=scaled_fontsize)
         for side in ["top", "right", "bottom", "left"]:
             ax.spines[side].set_visible(False)
 
@@ -279,12 +284,14 @@ def plot_activities(
         fig.legend(
             handles=legend_elements,
             ncol=len(legend_elements),
-            prop={"size": 12 * fontscale},
+            prop={"size": 1.2 * scaled_fontsize},
             frameon=False,
-            bbox_to_anchor=(0.5, -0.5),
+            bbox_to_anchor=(0.5, 0),
             loc="upper center",
             borderaxespad=0.0,
+            borderpad=0,
         )
+    fig.tight_layout()
 
     if path is not None:
         fig.savefig(path, bbox_inches="tight")
