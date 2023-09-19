@@ -315,10 +315,23 @@ class DiscretionaryTrip(ABC):
         self.anchor_zone_end = trip_chain[-1].location.area
         self.trmode = trip_chain[1].mode
 
+        # some checks
+        if len(trip_chain) % 2 == 0:
+            raise ValueError(
+                "Trip chain must have an odd number of elements as it is a sequence of activities joined by trip legs"
+            )
+        if not all(isinstance(i, Leg) for i in trip_chain[1::2]):
+            raise TypeError("Each odd element in the trip chain should be a leg")
+        if not all(isinstance(i, Activity) for i in trip_chain[::2]):
+            raise TypeError("Each even element in the trip chain should be an activity")
+
     @abstractclassmethod
     def choose_destination(self):
-        # implemented in the DiscretionaryTripRound and
-        # DiscretionaryTripOD subclasses
+        """Selects a destination for the discretionary activity
+
+        Returns:
+            str: Selected destination zone name.
+        """
         raise NotImplementedError
 
     def update_plan(self):
@@ -332,11 +345,6 @@ class DiscretionaryTrip(ABC):
 
         """
         if len(self.act_names) > 2:
-            assert isinstance(self._trip_chain[0], Activity)
-            assert isinstance(self._trip_chain[1], Leg)
-            assert isinstance(self._trip_chain[2], Activity)
-            assert isinstance(self._trip_chain[3], Leg)
-
             # update locations
             area = self.choose_destination()
             self._trip_chain[2].location.area = area
@@ -369,11 +377,6 @@ class DiscretionaryTripRound(DiscretionaryTrip):
     """
 
     def choose_destination(self) -> str:
-        """Selects a destination for the discretionary activity
-
-        Returns:
-            str: Selected destination zone name.
-        """
         assert isinstance(self._trip_chain[1], Leg)
         destination_p = self._od["od_probs", self.anchor_zone_start, :, self.trmode]
         destination_p = destination_p / destination_p.sum()
@@ -496,11 +499,6 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         return p
 
     def choose_destination(self) -> str:
-        """Selects a destination for the discretionary activity
-
-        Returns:
-            str: Selected destination zone name.
-        """
         zone = sample_weighted(self.destination_p)
         area = self._od.labels.destination_zones[zone]
 
