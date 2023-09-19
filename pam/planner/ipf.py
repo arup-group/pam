@@ -186,7 +186,7 @@ def sample_population(encodings, dist, sample_pool) -> Population:
                     raise ValueError(f"Missing category in seed population: {missing_cat}")
                 else:
                     # sample persons from the appropriate demographic group
-                    persons = random.choices(sample_pool[*code], k=sample_size)
+                    persons = random.choices(sample_pool[code], k=sample_size)
                     # add to the population
                     for person in persons:
                         person_new = deepcopy(person)
