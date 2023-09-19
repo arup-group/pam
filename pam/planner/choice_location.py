@@ -1,7 +1,7 @@
 """Location and mode choice models for activity modelling."""
 import itertools
 import logging
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
@@ -325,14 +325,13 @@ class DiscretionaryTrip(ABC):
         if not all(isinstance(i, Activity) for i in trip_chain[::2]):
             raise TypeError("Each even element in the trip chain should be an activity")
 
-    @abstractclassmethod
+    @abstractmethod
     def choose_destination(self):
         """Selects a destination for the discretionary activity
 
         Returns:
             str: Selected destination zone name.
         """
-        raise NotImplementedError
 
     def update_plan(self):
         """
