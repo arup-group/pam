@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211]).
 - Python versions 3.9 to 3.11 support ([#192], [#210]).
 - Documentation, now available at https://arup-group.github.io/pam ([#197]).
+- Time-space prism method for selecting the location of non-mandatory activities ([#252](https://github.com/arup-group/pam/pull/252)).
 - **internal** [Codecov](https://codecov.io) and [pre-commit](https://pre-commit.ci/) CI bots ([#202]).
 - **internal** Github action job to build PAM and run tests on a Windows machine ([#192]).
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Example data files not accessed by any example notebook ([#196]).
 - **internal** Unused scripts that were outside the source code directory ([#199]).
+
 
 ## [v0.2.4] - 2023-06-08
 This version is a pre-release
