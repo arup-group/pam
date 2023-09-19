@@ -51,7 +51,7 @@ def get_max_error(X: np.ndarray, marginals: list[np.array]) -> float:
     """Get the maximum absolute percentage between a matrix and a set of marginals.
 
     Args:
-        X (np.array): nput matrix
+        X (np.array): Input matrix
         marginals (list[np.array]): a list of marginals
 
     Returns:
