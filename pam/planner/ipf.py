@@ -1,7 +1,13 @@
+import random
 import warnings
+from collections import defaultdict
+from copy import deepcopy
 from typing import Optional
 
 import numpy as np
+import pandas as pd
+
+from pam.core import Person, Population
 
 
 def safe_divide(x: np.array, y: np.array) -> np.array:
@@ -86,3 +92,92 @@ def ipf(
         iters += 1
 
     return X_fitted
+
+
+def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[list[np.array]]]:
+    """Prepare zone marginals in the required format.
+
+    Args:
+        zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
+            The dataframe columns should follow this convention: `variable|class`,
+            for example: `age|minor, age|adult, income|low, income|high, ....`
+
+    Returns:
+        tuple[dict, dict[list[np.array]]]: Zone encodings and marginals.
+    """
+    df_marginals = zone_data.copy()
+    df_marginals.columns = pd.MultiIndex.from_tuples(
+        [tuple(x.split("|")) for x in df_marginals.columns]
+    )
+
+    encodings = defaultdict(list)
+    for x, y in df_marginals.columns:
+        encodings[x].append(y)
+
+    marginals = {}
+    for i, irow in df_marginals.iterrows():
+        marginals[i] = irow.groupby(level=0).apply(np.array).loc[list(encodings.keys())].tolist()
+
+    return dict(encodings), marginals
+
+
+def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[np.ndarray]]:
+    """Generate joint distributions that match zone marginals.
+
+    Args:
+        zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
+            The dataframe columns should follow this convention: `variable|class`,
+            for example: `age|minor, age|adult, income|low, income|high, ....`
+
+    Returns:
+        tuple[dict, np.ndarray]: Encodings and a matrix of the joint distributions
+    """
+    encodings, marginals = prepare_zone_marginals(zone_data)
+    dist = {}
+    for zone, zone_marginals in marginals.items():
+        # start with a small value in each cell
+        X = np.zeros(tuple(map(len, zone_marginals))) + 0.001
+        # apply iterative proportinal fitting
+        fitted = ipf(X, zone_marginals)
+        fitted = fitted.round(0).astype(int)
+        dist[zone] = fitted
+
+    return encodings, dist
+
+
+def encode_population(population: Population, encodings: dict) -> dict[list[Person]]:
+    pool = defaultdict(list)
+    for hid, pid, person in population.people():
+        code = tuple([v.index(person.attributes[k]) for k, v in encodings.items()])
+        pool[code].append(person)
+
+    return dict(pool)
+
+
+def sample_population(encodings, dist, encoded_population) -> Population:
+    pop_fitted = Population()
+    n = 0
+    for zone, zone_dist in dist.items():
+        for code, sample_size in np.ndenumerate(zone_dist):
+            if sample_size:
+                if code not in encoded_population:
+                    k = list(encodings.keys())
+                    missing_cat = [([k[i], encodings[k[i]][j]]) for i, j in enumerate(code)]
+                    raise ValueError(f"Missing category in seed population: {missing_cat}")
+                else:
+                    persons = random.choices(encoded_population[*code], k=sample_size)
+                    for person in persons:
+                        person_new = deepcopy(person)
+                        person_new.pid = f"{person_new.pid}-{n}"
+                        person_new.attributes["hzone"] = zone
+                        pop_fitted.add(person_new)
+                        n += 1
+
+    return pop_fitted
+
+
+def generate_population(population: Population, zone_data: pd.DataFrame) -> Population:
+    encodings, dist = generate_joint_distributions(zone_data)
+    encoded_population = encode_population(population, encodings)
+    pop = sample_population(encodings, dist, encoded_population)
+    return pop
