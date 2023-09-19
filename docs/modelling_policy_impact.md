@@ -103,6 +103,7 @@ Remove or reduce education based tours/trips including escorts:
 
 - Remove or reduce discretionary activities such as leisure
 - Move tours closer to home
+- Select the location of discretionary activities, in relation to "anchor"/"mandatory" activities
 
 ## In-progress modifiers/policies
 
