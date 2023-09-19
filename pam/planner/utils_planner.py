@@ -1,7 +1,7 @@
 import datetime
 import random
 from copy import deepcopy
-from typing import List, Union
+from typing import Union
 
 import numpy as np
 
@@ -9,7 +9,7 @@ from pam.activity import Activity, Leg, Plan
 from pam.variables import LONG_TERM_ACTIVITIES
 
 
-def calculate_mnl_probabilities(x: Union[np.array, List]) -> np.array:
+def calculate_mnl_probabilities(x: Union[np.array, list]) -> np.array:
     """Calculates MNL probabilities from a set of alternatives."""
     return np.exp(x) / np.exp(x).sum()
 
@@ -21,7 +21,7 @@ def sample_weighted(weights: np.array) -> int:
     return random.choices(range(len(weights)), weights=weights, k=1)[0]
 
 
-def get_trip_chains(plan: Plan, act: str = "home") -> List[List[Union[Activity, Leg]]]:
+def get_trip_chains(plan: Plan, act: str = "home") -> list[list[Union[Activity, Leg]]]:
     """Get trip chains starting and/or ending at a long-term activity."""
     chains = []
     chain = []
@@ -39,8 +39,8 @@ def get_trip_chains(plan: Plan, act: str = "home") -> List[List[Union[Activity, 
 
 
 def get_trip_chains_either_anchor(
-    plan: Plan, acts: List[str] = LONG_TERM_ACTIVITIES
-) -> List[List[Union[Activity, Leg]]]:
+    plan: Plan, acts: list[str] = LONG_TERM_ACTIVITIES
+) -> list[list[Union[Activity, Leg]]]:
     """Get trip chains starting and/OR ending at a long-term activity.
     Similar to get_trip_chains, but can slice plans on multiple activity types.
     """
@@ -95,7 +95,7 @@ def get_validate(obj, name: str):
     return attr
 
 
-def get_act_names(seqs: List[Union[Activity, Leg]]) -> List[str]:
+def get_act_names(seqs: list[Union[Activity, Leg]]) -> list[str]:
     """
     Get the activity names of a plan.
 
@@ -108,7 +108,7 @@ def get_act_names(seqs: List[Union[Activity, Leg]]) -> List[str]:
     return [x.act for x in seqs if isinstance(x, Activity)]
 
 
-def get_first_leg_time_ratio(chain: List[Union[Activity, Leg]]) -> float:
+def get_first_leg_time_ratio(chain: list[Union[Activity, Leg]]) -> float:
     """Get the ratio of the first leg duration to the total trip chain duration.
 
     Args:
@@ -124,7 +124,7 @@ def get_first_leg_time_ratio(chain: List[Union[Activity, Leg]]) -> float:
     return ratio
 
 
-def convert_single_anchor_roundtrip(chain: List[Union[Activity, Leg]]) -> None:
+def convert_single_anchor_roundtrip(chain: list[Union[Activity, Leg]]) -> None:
     """If a trip chain only has one anchor, make it a round-trip.
     - If only the start activity is an anchor, it appends a return trip to the start location.
     - If only the end activity is an anchor, it inserts a first leg from the end activity location.

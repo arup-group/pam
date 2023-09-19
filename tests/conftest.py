@@ -1320,7 +1320,7 @@ def plan_home_work_home_shop_home():
             seq=3,
             mode="car",
             start_area="h",
-            end_area="b",
+            end_area="c",
             start_loc=Point(0, 0),
             end_loc=Point(1, 2),
             start_time=mtdt(19 * 60),
@@ -1398,7 +1398,7 @@ def plan_home_work_shop_home():
             seq=2,
             mode="car",
             start_area="w",
-            end_area="a",
+            end_area="c",
             start_loc=Point(1, 2),
             end_loc=Point(0, 0),
             start_time=mtdt(17 * 60),
@@ -1476,7 +1476,7 @@ def plan_other_work_shop_other():
             seq=2,
             mode="car",
             start_area="w",
-            end_area="a",
+            end_area="c",
             start_loc=Point(1, 2),
             end_loc=Point(0, 0),
             start_time=mtdt(17 * 60),
@@ -1821,7 +1821,7 @@ def plan_home_shop_shop_home_shop_shop_home():
         Activity(
             seq=4,
             act="home",
-            area="b",
+            area="h",
             loc=Point(0, 0),
             start_time=mtdt(8 * 60),
             end_time=mtdt(12 * 60),
@@ -1902,7 +1902,12 @@ def plan_home_shop_shop_work_shop_shop_home():
     plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
     plan.add(
         Activity(
-            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+            seq=1,
+            act="home",
+            area="h",
+            loc=Point(10, 10),
+            start_time=mtdt(0),
+            end_time=mtdt(2 * 60),
         )
     )
     plan.add(
@@ -1911,7 +1916,7 @@ def plan_home_shop_shop_work_shop_shop_home():
             mode="car",
             start_area="h",
             end_area="z",
-            start_loc=Point(0, 0),
+            start_loc=Point(10, 10),
             end_loc=Point(1, 2),
             start_time=mtdt(2 * 60),
             end_time=mtdt(3 * 60),
@@ -2022,9 +2027,9 @@ def plan_home_shop_shop_work_shop_shop_home():
             start_area="z",
             end_area="h",
             start_loc=Point(1, 1),
-            end_loc=Point(0, 0),
+            end_loc=Point(10, 10),
             start_time=mtdt(17 * 60),
-            end_time=mtdt(18 * 60),
+            end_time=mtdt(21 * 60),
         )
     )
     plan.add(
@@ -2032,7 +2037,7 @@ def plan_home_shop_shop_work_shop_shop_home():
             seq=7,
             act="home",
             area="h",
-            loc=Point(0, 0),
+            loc=Point(10, 10),
             start_time=mtdt(21 * 60),
             end_time=END_OF_DAY,
         )

@@ -1,10 +1,11 @@
 """Location and mode choice models for activity modelling."""
 import itertools
 import logging
+from abc import ABC, abstractclassmethod
 from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import List, Literal, NamedTuple, Optional, Union
+from typing import Literal, NamedTuple, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -286,23 +287,25 @@ class DiscretionaryTrips:
                     DiscretionaryTripRound(trip_chain=trip_chain, od=self._od).update_plan()
 
 
-class DiscretionaryTrip:
-    """
-    Location choice for discretionary trips
-        in a trip chain
+class DiscretionaryTrip(ABC):
+    def __init__(self, trip_chain: list[Union[Activity, Leg]], od: OD) -> None:
+        """
+        Location choice for discretionary trips
+            in a trip chain
 
-    Cases:
-        a) O->discretionary->O (DiscretionaryTripRound)
-        b) O->discretionary->D (DiscretionaryTripOD)
-        c) O->discretionary->discretionary->O
-        d) O->discretionary->discretionary->D
+        Cases:
+            a) O->discretionary->O (DiscretionaryTripRound)
+            b) O->discretionary->D (DiscretionaryTripOD)
+            c) O->discretionary->discretionary->O
+            d) O->discretionary->discretionary->D
 
-    Chains with multiple discretionary trips are solved
-        recursively, updating the first location each time,
-        and then keeping it fixed as we solve downstream.
-    """
+        Chains with multiple discretionary trips are solved
+            recursively, updating the first location each time,
+            and then keeping it fixed as we solve downstream.
 
-    def __init__(self, trip_chain: List[Union[Activity, Leg]], od: OD) -> None:
+        Args:
+            list[Union[Activity, Leg]]: A trip chain between two long-term activities.
+        """
         self._trip_chain = trip_chain
         self._od = od
         self.act_names = get_act_names(trip_chain)
@@ -312,9 +315,7 @@ class DiscretionaryTrip:
         self.anchor_zone_end = trip_chain[-1].location.area
         self.trmode = trip_chain[1].mode
 
-        # self.anchor_zone_start = self._od.encode(self.anchor_area_start)
-        # self.anchor_zone_end = self._od.encode(self.anchor_area_end)
-
+    @abstractclassmethod
     def choose_destination(self):
         # implemented in the DiscretionaryTripRound and
         # DiscretionaryTripOD subclasses
@@ -352,6 +353,10 @@ class DiscretionaryTrip:
                 # continue downstream recursively
                 # the newly-selected location now becomes the first anchor
                 DiscretionaryTripOD(trip_chain=self._trip_chain[2:], od=self._od).update_plan()
+
+    @property
+    def od(self):
+        return self._od
 
 
 class DiscretionaryTripRound(DiscretionaryTrip):

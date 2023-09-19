@@ -163,7 +163,7 @@ def test_match_leg_ratio_probabilities(discretionary_trip_od: DiscretionaryTripO
 
 
 def test_match_diversion_probabilities(discretionary_trip_od: DiscretionaryTripOD):
-    assert approx(discretionary_trip_od.diversion_p, abs=0.05) == [0.545, 0.545, 0.545]
+    assert approx(discretionary_trip_od.diversion_p, abs=0.005) == [0.545, 0.545, 0.545]
 
 
 def test_match_attraction_probabilities(discretionary_trip_od: DiscretionaryTripOD):
@@ -171,7 +171,7 @@ def test_match_attraction_probabilities(discretionary_trip_od: DiscretionaryTrip
 
 
 def test_match_destination_probabilities(discretionary_trip_od: DiscretionaryTripOD):
-    assert approx(discretionary_trip_od.destination_p, abs=0.005) == [
+    assert approx(discretionary_trip_od.destination_p, abs=0.00000005) == [
         0.14289797,
         0.28551015,
         0.57159188,
