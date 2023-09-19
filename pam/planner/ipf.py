@@ -108,13 +108,19 @@ def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[str, lis
     return encodings, marginals
 
 
-def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[str, np.ndarray]]:
+def generate_joint_distributions(
+    zone_data: pd.DataFrame,
+    tolerance: Optional[float] = 0.001,
+    max_iterations: Optional[int] = 10**3,
+) -> tuple[dict, dict[str, np.ndarray]]:
     """Generate joint demographic distributions that match zone marginals.
 
     Args:
         zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
             The dataframe columns should follow this convention: `variable|class`,
             for example: `age|minor, age|adult, income|low, income|high, ....`
+        tolerance (Optional[float], optional): Max accepted percentage difference to the targets. Defaults to 0.001.
+        max_iterations (Optional[int], optional): Max number of iterations. Defaults to 10**3.
 
     Returns:
         tuple[dict, dict[np.ndarray]]: Encodings and a matrix of the joint distributions.
@@ -125,7 +131,7 @@ def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[st
         # start with a small value in each cell
         X = np.zeros(tuple(map(len, zone_marginals))) + 0.001
         # apply iterative proportinal fitting
-        fitted = ipf(X, zone_marginals)
+        fitted = ipf(X, zone_marginals, tolerance=tolerance, max_iterations=max_iterations)
         fitted = fitted.round(0).astype(int)
         dist[zone] = fitted
 
@@ -185,7 +191,12 @@ def sample_population(encodings, dist, sample_pool) -> Population:
     return pop_fitted
 
 
-def generate_population(population: Population, zone_data: pd.DataFrame) -> Population:
+def generate_population(
+    population: Population,
+    zone_data: pd.DataFrame,
+    tolerance: Optional[float] = 0.001,
+    max_iterations: Optional[int] = 10**3,
+) -> Population:
     """Resample a population and assign its person to zones,
         so that the distributions in the `zone_data` dataset are met.
 
@@ -195,12 +206,16 @@ def generate_population(population: Population, zone_data: pd.DataFrame) -> Popu
         zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
             The dataframe columns should follow this convention: `variable|class`,
             for example: `age|minor, age|adult, income|low, income|high, ....`
+        tolerance (Optional[float], optional): Max accepted percentage difference to the targets. Defaults to 0.001.
+        max_iterations (Optional[int], optional): Max number of iterations. Defaults to 10**3.
 
     Returns:
         Population: A new population that matches marginals in each zone.
             The household location of each agent is defined under person.attributes['hzone']
     """
-    encodings, dist = generate_joint_distributions(zone_data)
+    encodings, dist = generate_joint_distributions(
+        zone_data, tolerance=tolerance, max_iterations=max_iterations
+    )
     sample_pool = get_sample_pool(population, encodings)
     pop_fitted = sample_population(encodings, dist, sample_pool)
 
