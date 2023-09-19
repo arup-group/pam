@@ -94,7 +94,7 @@ def ipf(
     return X_fitted
 
 
-def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[list[np.array]]]:
+def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[str, list[np.array]]]:
     """Prepare zone marginals in the required format.
 
     Args:
@@ -118,11 +118,11 @@ def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[list[np.
     for i, irow in df_marginals.iterrows():
         marginals[i] = irow.groupby(level=0).apply(np.array).loc[list(encodings.keys())].tolist()
 
-    return dict(encodings), marginals
+    return encodings, marginals
 
 
-def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[np.ndarray]]:
-    """Generate joint distributions that match zone marginals.
+def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[str, np.ndarray]]:
+    """Generate joint demographic distributions that match zone marginals.
 
     Args:
         zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
@@ -130,7 +130,7 @@ def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[np
             for example: `age|minor, age|adult, income|low, income|high, ....`
 
     Returns:
-        tuple[dict, np.ndarray]: Encodings and a matrix of the joint distributions
+        tuple[dict, dict[np.ndarray]]: Encodings and a matrix of the joint distributions.
     """
     encodings, marginals = prepare_zone_marginals(zone_data)
     dist = {}
@@ -145,27 +145,49 @@ def generate_joint_distributions(zone_data: pd.DataFrame) -> tuple[dict, dict[np
     return encodings, dist
 
 
-def encode_population(population: Population, encodings: dict) -> dict[list[Person]]:
-    pool = defaultdict(list)
+def get_sample_pool(population: Population, encodings: dict) -> dict[tuple, list[Person]]:
+    """Prepares the sample pool for each demographic category.
+
+    Args:
+        population (Population): The input PAM population object.
+        encodings (dict): Variable encodings generated with `prepare_zone_marginals`.
+
+    Returns:
+        dict[tuple, list[Person]]: The sample pool.
+            Its index comprises the distribution matrix coordinates (index) for each demographic category.
+            Its values consist of the PAM persons belonging in each category.
+    """
+    person_pool = defaultdict(list)
     for hid, pid, person in population.people():
         code = tuple([v.index(person.attributes[k]) for k, v in encodings.items()])
-        pool[code].append(person)
+        person_pool[code].append(person)
 
-    return dict(pool)
+    return person_pool
 
 
-def sample_population(encodings, dist, encoded_population) -> Population:
+def sample_population(encodings, dist, sample_pool) -> Population:
+    """Sample a population.
+
+    Raises:
+        ValueError: Zero-cell issue (trying to sample from a category with no seed samples)
+
+    Returns:
+        Population: A resampled PAM population.
+    """
     pop_fitted = Population()
     n = 0
     for zone, zone_dist in dist.items():
         for code, sample_size in np.ndenumerate(zone_dist):
             if sample_size:
-                if code not in encoded_population:
+                if code not in sample_pool:
+                    # zero cell issue: raise an error
                     k = list(encodings.keys())
                     missing_cat = [([k[i], encodings[k[i]][j]]) for i, j in enumerate(code)]
                     raise ValueError(f"Missing category in seed population: {missing_cat}")
                 else:
-                    persons = random.choices(encoded_population[*code], k=sample_size)
+                    # sample persons from the appropriate demographic group
+                    persons = random.choices(sample_pool[*code], k=sample_size)
+                    # add to the population
                     for person in persons:
                         person_new = deepcopy(person)
                         person_new.pid = f"{person_new.pid}-{n}"
@@ -177,7 +199,22 @@ def sample_population(encodings, dist, encoded_population) -> Population:
 
 
 def generate_population(population: Population, zone_data: pd.DataFrame) -> Population:
+    """Resample a population and assign its person to zones,
+        so that the distributions in the `zone_data` dataset are met.
+
+    Args:
+        population (Population): A PAM population.
+            Its person attributes should include the controls in the zone data
+        zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
+            The dataframe columns should follow this convention: `variable|class`,
+            for example: `age|minor, age|adult, income|low, income|high, ....`
+
+    Returns:
+        Population: A new population that matches marginals in each zone.
+            The household location of each agent is defined under person.attributes['hzone']
+    """
     encodings, dist = generate_joint_distributions(zone_data)
-    encoded_population = encode_population(population, encodings)
-    pop = sample_population(encodings, dist, encoded_population)
-    return pop
+    sample_pool = get_sample_pool(population, encodings)
+    pop_fitted = sample_population(encodings, dist, sample_pool)
+
+    return pop_fitted

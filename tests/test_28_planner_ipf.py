@@ -68,7 +68,7 @@ def test_zone_data_preprocessing(zone_data):
 
 def test_encoded_population_sizes(population, zone_data):
     encodings, marginals = ipf.prepare_zone_marginals(zone_data)
-    encoded_population = ipf.encode_population(population, encodings)
+    encoded_population = ipf.get_sample_pool(population, encodings)
     assert len(encoded_population[(0, 0)]) == 1  # rich-yes: chris
     # poor - no: fatema, fred, gerry
     assert len(encoded_population[(2, 1)]) == 3
