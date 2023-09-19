@@ -8,20 +8,7 @@ import numpy as np
 import pandas as pd
 
 from pam.core import Person, Population
-
-
-def safe_divide(x: np.array, y: np.array) -> np.array:
-    """Safely divide two arrays. When dividing by zero, the result is set to zero.
-
-
-    Args:
-        x (np.array): Nominator array.
-        y (np.array): Denominator array.
-
-    Returns:
-        np.array: Divided array.
-    """
-    return np.divide(x, y, out=np.zeros(x.shape, dtype=np.float64), where=y != 0)
+from pam.planner.utils_planner import safe_divide
 
 
 def get_scaling_factor(X: np.ndarray, sel_dim: int, marginals: np.array) -> np.ndarray:

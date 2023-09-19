@@ -158,3 +158,17 @@ def convert_single_anchor_roundtrip(chain: list[Union[Activity, Leg]]) -> None:
         chain.insert(0, act)
         chain.append(leg)
         chain.append(act)
+
+
+def safe_divide(x: np.array, y: np.array) -> np.array:
+    """Safely divide two arrays. When dividing by zero, the result is set to zero.
+
+
+    Args:
+        x (np.array): Numerator array.
+        y (np.array): Denominator array.
+
+    Returns:
+        np.array: Divided array.
+    """
+    return np.divide(x, y, out=np.zeros(x.shape, dtype=np.float64), where=y != 0)
