@@ -87,15 +87,18 @@ def prepare_zone_marginals(zone_data: pd.DataFrame) -> tuple[dict, dict[str, lis
     Args:
         zone_data (pd.DataFrame): Zone data, with the zone label as the dataframe index.
             The dataframe columns should follow this convention: `variable|class`,
-            for example: `age|minor, age|adult, income|low, income|high, ....`
+            for example: `age|minor, age|adult, income|low, income|high, ....`/
+            Alternatively, the user can provide a multi-index column format,
+            where the first level represents the variable, and the second the class.
 
     Returns:
         tuple[dict, dict[list[np.array]]]: Zone encodings and marginals.
     """
     df_marginals = zone_data.copy()
-    df_marginals.columns = pd.MultiIndex.from_tuples(
-        [tuple(x.split("|")) for x in df_marginals.columns]
-    )
+    if df_marginals.columns.nlevels != 2:
+        df_marginals.columns = pd.MultiIndex.from_tuples(
+            [tuple(x.split("|")) for x in df_marginals.columns]
+        )
 
     encodings = defaultdict(list)
     for x, y in df_marginals.columns:
@@ -158,8 +161,15 @@ def get_sample_pool(population: Population, encodings: dict) -> dict[tuple, list
     return person_pool
 
 
-def sample_population(encodings, dist, sample_pool) -> Population:
+def sample_population(
+    encodings: dict, dist: dict[str, np.ndarray], sample_pool: dict[tuple, list[Person]]
+) -> Population:
     """Sample a population.
+
+    Args:
+        encodings (str): Variable encodings generated with `prepare_zone_marginals`.
+        dist (dict[str, np.ndarray]): Joint distribution matrix.
+        sample_pool (dict[tuple, list[Person]]): The person sample pool generated wtih `get_sample_pool`.
 
     Raises:
         ValueError: Zero-cell issue (trying to sample from a category with no seed samples)
