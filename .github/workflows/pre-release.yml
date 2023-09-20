@@ -9,4 +9,4 @@ jobs:
   conda-build:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-build.yml@main
     with:
-      package_name: pam
+      package_name: arup-pam
