@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Python versions 3.9 to 3.11 support ([#192], [#210]).
 - Documentation, now available at https://arup-group.github.io/pam ([#197]).
 - Time-space prism method for selecting the location of non-mandatory activities ([#252](https://github.com/arup-group/pam/pull/252)).
+- Simple IPF approach for generating synthetic populations ([#253]).
 - **internal** [Codecov](https://codecov.io) and [pre-commit](https://pre-commit.ci/) CI bots ([#202]).
 - **internal** Github action job to build PAM and run tests on a Windows machine ([#192]).
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
