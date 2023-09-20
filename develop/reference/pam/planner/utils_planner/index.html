@@ -359,6 +359,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -758,6 +760,26 @@
   
   <span class="md-ellipsis">
     Applying a location model to discretionary activities
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../examples/18_advanced_ipf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
   </span>
   
 
@@ -1454,6 +1476,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -1533,6 +1557,26 @@
   
   <span class="md-ellipsis">
     pam.planner.encoder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ipf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pam.planner.ipf
   </span>
   
 
@@ -1661,6 +1705,13 @@
         <li class="md-nav__item">
   <a href="#pam.planner.utils_planner.get_validate" class="md-nav__link">
     get_validate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pam.planner.utils_planner.safe_divide" class="md-nav__link">
+    safe_divide()
   </a>
   
 </li>
@@ -2531,6 +2582,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pam.planner.utils_planner.safe_divide" class="md-nav__link">
+    safe_divide()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pam.planner.utils_planner.sample_weighted" class="md-nav__link">
     sample_weighted()
   </a>
@@ -3224,6 +3282,119 @@ Similar to get_trip_chains, but can slice plans on multiple activity types.</p>
 </span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> has not been set yet&quot;</span><span class="p">)</span>
 </span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95"></a>    <span class="k">return</span> <span class="n">attr</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h2 id="pam.planner.utils_planner.safe_divide" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">safe_divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></code>
+
+<a href="#pam.planner.utils_planner.safe_divide" class="headerlink" title="Permanent link">#</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Safely divide two arrays. When dividing by zero, the result is set to zero.</p>
+
+
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>PARAMETER</b></th>
+        <th><b> DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>x</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>Numerator array.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>Denominator array.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>RETURNS</b></th>
+        <th><b>DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+              <span class="doc-returns-annotation">
+                  <code><span title="numpy.array">array</span></code>
+              </span>
+          </td>
+          <td class="doc-returns-details">
+            <div class="doc-md-description">
+              <p>np.array: Divided array.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-163">163</a></span>
+<span class="normal"><a href="#__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#__codelineno-0-172">172</a></span>
+<span class="normal"><a href="#__codelineno-0-173">173</a></span>
+<span class="normal"><a href="#__codelineno-0-174">174</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-163"><a id="__codelineno-0-163" name="__codelineno-0-163"></a><span class="k">def</span> <span class="nf">safe_divide</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+</span><span id="__span-0-164"><a id="__codelineno-0-164" name="__codelineno-0-164"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Safely divide two arrays. When dividing by zero, the result is set to zero.</span>
+</span><span id="__span-0-165"><a id="__codelineno-0-165" name="__codelineno-0-165"></a>
+</span><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166"></a>
+</span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168"></a><span class="sd">        x (np.array): Numerator array.</span>
+</span><span id="__span-0-169"><a id="__codelineno-0-169" name="__codelineno-0-169"></a><span class="sd">        y (np.array): Denominator array.</span>
+</span><span id="__span-0-170"><a id="__codelineno-0-170" name="__codelineno-0-170"></a>
+</span><span id="__span-0-171"><a id="__codelineno-0-171" name="__codelineno-0-171"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-172"><a id="__codelineno-0-172" name="__codelineno-0-172"></a><span class="sd">        np.array: Divided array.</span>
+</span><span id="__span-0-173"><a id="__codelineno-0-173" name="__codelineno-0-173"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-174"><a id="__codelineno-0-174" name="__codelineno-0-174"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">where</span><span class="o">=</span><span class="n">y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
           </details>
   </div>
