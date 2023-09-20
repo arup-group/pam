@@ -20,7 +20,7 @@ EXPECTED_EUCLIDEAN_SPEEDS = {
 TRANSIT_MODES = ["bus", "rail", "pt", "subway"]  # modes for which the maximum walk distance applies
 SMALL_VALUE = 0.000001
 
-LONG_TERM_ACTIVITIES = ["work", "school", "education"]
+LONG_TERM_ACTIVITIES = ["work", "school", "education", "home"]
 
 DEFAULT_ACTIVITIES_PLOT_WIDTH = 16
 DEFAULT_ACTIVITIES_FONTSIZE = 10

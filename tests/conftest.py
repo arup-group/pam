@@ -6,9 +6,10 @@ import pytest
 from shapely.geometry import Point
 
 from pam import read
-from pam.activity import Activity, Leg
+from pam.activity import Activity, Leg, Plan
 from pam.core import Household, Person, Population
-from pam.planner.od import OD
+from pam.location import Location
+from pam.planner.od import OD, ODFactory, ODMatrix
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
@@ -1152,3 +1153,894 @@ def labels():
 def od(data_od, labels):
     od = OD(data=data_od, labels=labels)
     return od
+
+
+@pytest.fixture
+def od_discretionary():
+    zone_labels = ("h", "b", "w")
+    od = ODFactory.from_matrices(
+        [
+            ODMatrix(
+                "time",
+                "car",
+                zone_labels,
+                zone_labels,
+                np.array([[20, 30, 40], [30, 10, 30], [40, 30, 20]]),
+            ),
+            ODMatrix(
+                "time",
+                "bus",
+                zone_labels,
+                zone_labels,
+                np.array([[30, 40, 45], [40, 10, 40], [45, 40, 30]]),
+            ),
+            ODMatrix(
+                "distance",
+                "car",
+                zone_labels,
+                zone_labels,
+                np.array([[5, 6, 8], [6, 2, 6], [8, 6, 5]]),
+            ),
+            ODMatrix(
+                "distance",
+                "bus",
+                zone_labels,
+                zone_labels,
+                np.array([[5, 7, 9], [7, 2, 7], [9, 7, 5]]),
+            ),
+            ODMatrix(
+                "od_probs",
+                "car",
+                zone_labels,
+                zone_labels,
+                np.array([[500, 333, 250], [333, 1000, 333], [250, 333, 500]]),
+            ),
+            ODMatrix(
+                "od_probs",
+                "bus",
+                zone_labels,
+                zone_labels,
+                np.array([[333, 250, 222], [250, 1000, 250], [222, 250, 333]]),
+            ),
+        ]
+    )
+    return od
+
+
+@pytest.fixture
+def plan_home_work_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="w",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="w",
+            end_area="h",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(18 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_work_home_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="w",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="w",
+            end_area="h",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(18 * 60),
+            end_time=mtdt(19 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="h",
+            end_area="c",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(19 * 60),
+            end_time=mtdt(20 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(20 * 60),
+            end_time=mtdt(22 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="c",
+            end_area="h",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(22 * 60),
+            end_time=mtdt(23 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=5,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(23 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_work_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="w",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="w",
+            end_area="c",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(18 * 60),
+            end_time=mtdt(19 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="h",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(19 * 60),
+            end_time=mtdt(22 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(22 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_other_work_shop_other():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="other", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="w",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="w",
+            end_area="c",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(18 * 60),
+            end_time=mtdt(19 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="h",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(19 * 60),
+            end_time=mtdt(22 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="other",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(22 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_work_shop_work_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="w",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(12 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="w",
+            end_area="c",
+            start_loc=Point(1, 2),
+            end_loc=Point(2, 2),
+            start_time=mtdt(12 * 60),
+            end_time=mtdt(13 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(13 * 60),
+            end_time=mtdt(14 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="w",
+            start_loc=Point(2, 2),
+            end_loc=Point(1, 2),
+            start_time=mtdt(14 * 60),
+            end_time=mtdt(15 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="work",
+            area="w",
+            loc=Point(1, 2),
+            start_time=mtdt(15 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="w",
+            end_area="h",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=5,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(21 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="b",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="shop",
+            area="b",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="h",
+            start_loc=Point(1, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(18 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_shop_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="b",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="shop",
+            area="b",
+            loc=Point(1, 2),
+            start_time=mtdt(6 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_loc=Point(1, 2),
+            end_loc=Point(2, 2),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(18 * 60),
+            end_time=mtdt(20 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="h",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(20 * 60),
+            end_time=mtdt(21 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(21 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_shop_shop_home_shop_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1, act="home", area="h", loc=Point(0, 0), start_time=mtdt(0), end_time=mtdt(5 * 60)
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="b",
+            start_loc=Point(0, 0),
+            end_loc=Point(1, 2),
+            start_time=mtdt(2 * 60),
+            end_time=mtdt(3 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="shop",
+            area="b",
+            loc=Point(1, 2),
+            start_time=mtdt(3 * 60),
+            end_time=mtdt(4 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="b",
+            end_area="c",
+            start_loc=Point(1, 2),
+            end_loc=Point(2, 2),
+            start_time=mtdt(4 * 60),
+            end_time=mtdt(5 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="c",
+            end_area="h",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(7 * 60),
+            end_time=mtdt(8 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(8 * 60),
+            end_time=mtdt(12 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="h",
+            end_area="c",
+            start_loc=Point(0, 0),
+            end_loc=Point(2, 2),
+            start_time=mtdt(12 * 60),
+            end_time=mtdt(13 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=5,
+            act="shop",
+            area="c",
+            loc=Point(2, 2),
+            start_time=mtdt(13 * 60),
+            end_time=mtdt(14 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=5,
+            mode="car",
+            start_area="c",
+            end_area="b",
+            start_loc=Point(2, 2),
+            end_loc=Point(1, 1),
+            start_time=mtdt(14 * 60),
+            end_time=mtdt(15 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=6,
+            act="shop",
+            area="b",
+            loc=Point(1, 1),
+            start_time=mtdt(15 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=6,
+            mode="car",
+            start_area="b",
+            end_area="h",
+            start_loc=Point(1, 1),
+            end_loc=Point(0, 0),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(18 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=7,
+            act="home",
+            area="h",
+            loc=Point(0, 0),
+            start_time=mtdt(21 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan
+
+
+@pytest.fixture
+def plan_home_shop_shop_work_shop_shop_home():
+    plan = Plan(home_area="h", home_location=Location(loc=Point(0, 0), area="h"))
+    plan.add(
+        Activity(
+            seq=1,
+            act="home",
+            area="h",
+            loc=Point(10, 10),
+            start_time=mtdt(0),
+            end_time=mtdt(2 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=1,
+            mode="car",
+            start_area="h",
+            end_area="z",
+            start_loc=Point(10, 10),
+            end_loc=Point(1, 2),
+            start_time=mtdt(2 * 60),
+            end_time=mtdt(3 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=2,
+            act="shop",
+            area="z",
+            loc=Point(1, 2),
+            start_time=mtdt(3 * 60),
+            end_time=mtdt(4 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=2,
+            mode="car",
+            start_area="z",
+            end_area="z",
+            start_loc=Point(1, 2),
+            end_loc=Point(2, 2),
+            start_time=mtdt(4 * 60),
+            end_time=mtdt(5 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=3,
+            act="shop",
+            area="z",
+            loc=Point(2, 2),
+            start_time=mtdt(5 * 60),
+            end_time=mtdt(6 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=3,
+            mode="car",
+            start_area="z",
+            end_area="w",
+            start_loc=Point(2, 2),
+            end_loc=Point(0, 0),
+            start_time=mtdt(7 * 60),
+            end_time=mtdt(8 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=4,
+            act="work",
+            area="w",
+            loc=Point(0, 0),
+            start_time=mtdt(8 * 60),
+            end_time=mtdt(12 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=4,
+            mode="car",
+            start_area="w",
+            end_area="z",
+            start_loc=Point(0, 0),
+            end_loc=Point(2, 2),
+            start_time=mtdt(12 * 60),
+            end_time=mtdt(13 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=5,
+            act="shop",
+            area="z",
+            loc=Point(2, 2),
+            start_time=mtdt(13 * 60),
+            end_time=mtdt(14 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=5,
+            mode="car",
+            start_area="z",
+            end_area="z",
+            start_loc=Point(2, 2),
+            end_loc=Point(1, 1),
+            start_time=mtdt(14 * 60),
+            end_time=mtdt(15 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=6,
+            act="shop",
+            area="z",
+            loc=Point(1, 1),
+            start_time=mtdt(15 * 60),
+            end_time=mtdt(17 * 60),
+        )
+    )
+    plan.add(
+        Leg(
+            seq=6,
+            mode="car",
+            start_area="z",
+            end_area="h",
+            start_loc=Point(1, 1),
+            end_loc=Point(10, 10),
+            start_time=mtdt(17 * 60),
+            end_time=mtdt(21 * 60),
+        )
+    )
+    plan.add(
+        Activity(
+            seq=7,
+            act="home",
+            area="h",
+            loc=Point(10, 10),
+            start_time=mtdt(21 * 60),
+            end_time=END_OF_DAY,
+        )
+    )
+
+    return plan

@@ -19,7 +19,7 @@ def test_strings_encoded_to_single_characters(acts):
     encoder = StringCharacterEncoder(acts)
     for act in acts:
         encoded = encoder.encode(act)
-        assert type(encoded) == str
+        assert isinstance(encoded, str)
         assert len(encoded) == 1
 
 
@@ -27,7 +27,7 @@ def test_strings_encoded_to_integers(acts):
     encoder = StringIntEncoder(acts)
     for act in acts:
         encoded = encoder.encode(act)
-        assert type(encoded) == int
+        assert isinstance(encoded, int)
 
 
 @pytest.mark.parametrize("encoder_class", [StringCharacterEncoder, StringIntEncoder])
@@ -86,4 +86,4 @@ def test_character_encoder_shape(Steve):
     plan_encoded = encoder.encode(plan)
 
     assert len(plan_encoded) == 24 * 60
-    assert type(plan_encoded) == str
+    assert isinstance(plan_encoded, str)

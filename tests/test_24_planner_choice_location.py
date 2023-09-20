@@ -1,10 +1,18 @@
 import random
+from copy import deepcopy
 
 import numpy as np
 import pytest
+from pytest import approx
 
-from pam.planner.choice_location import ChoiceConfiguration, ChoiceMNL, ChoiceModel
-from pam.planner.utils_planner import sample_weighted
+from pam.planner.choice_location import (
+    ChoiceConfiguration,
+    ChoiceMNL,
+    ChoiceModel,
+    DiscretionaryTripOD,
+    DiscretionaryTrips,
+)
+from pam.planner.utils_planner import get_trip_chains_either_anchor, sample_weighted
 
 
 @pytest.fixture
@@ -23,6 +31,21 @@ def choice_model(population_planner_choice, od, data_zones) -> ChoiceModel:
 @pytest.fixture
 def choice_model_mnl(population_planner_choice, od, data_zones) -> ChoiceModel:
     return ChoiceMNL(population_planner_choice, od, data_zones)
+
+
+@pytest.fixture
+def discretionary_trip_od(plan_home_work_shop_home, od_discretionary):
+    return DiscretionaryTripOD(
+        trip_chain=get_trip_chains_either_anchor(plan_home_work_shop_home)[-1], od=od_discretionary
+    )
+
+
+@pytest.fixture
+def discretionary_trip_od_multiple(plan_home_shop_shop_work_shop_shop_home, od_discretionary):
+    return DiscretionaryTripOD(
+        trip_chain=get_trip_chains_either_anchor(plan_home_shop_shop_work_shop_shop_home)[-1],
+        od=od_discretionary,
+    )
 
 
 def test_zones_are_aligned(population_planner_choice, od, data_zones):
@@ -132,3 +155,45 @@ def test_utility_calculation(choice_model_mnl):
         ),
         choice_model_mnl.get_choice_set().u_choices[0],
     )
+
+
+def test_match_leg_ratio_probabilities(discretionary_trip_od: DiscretionaryTripOD):
+    assert approx(discretionary_trip_od.leg_ratios, abs=0.005) == [0.667, 0.500, 0.333]
+    assert approx(discretionary_trip_od.leg_ratio_p, abs=0.005) == [0.444, 0.667, 0.889]
+
+
+def test_match_diversion_probabilities(discretionary_trip_od: DiscretionaryTripOD):
+    assert approx(discretionary_trip_od.diversion_p, abs=0.005) == [0.545, 0.545, 0.545]
+
+
+def test_match_attraction_probabilities(discretionary_trip_od: DiscretionaryTripOD):
+    assert approx(discretionary_trip_od.attraction_p, abs=0.005) == [0.231, 0.306, 0.463]
+
+
+def test_match_destination_probabilities(discretionary_trip_od: DiscretionaryTripOD):
+    assert approx(discretionary_trip_od.destination_p, abs=0.00000005) == [
+        0.14289797,
+        0.28551015,
+        0.57159188,
+    ]
+
+
+def test_all_discretionary_locations_updated(
+    plan_home_shop_shop_work_shop_shop_home, od_discretionary
+):
+    plan_prior = deepcopy(plan_home_shop_shop_work_shop_shop_home)
+
+    DiscretionaryTrips(
+        plan=plan_home_shop_shop_work_shop_shop_home, od=od_discretionary
+    ).update_plan()
+
+    activities_prior = list(plan_prior.activities)
+    activities_post = list(plan_home_shop_shop_work_shop_shop_home.activities)
+
+    # anchor positions have not changed
+    for i in [0, 3, 6]:
+        assert activities_prior[i].location.area == activities_post[i].location.area
+
+    # all discretionary locations should have changed
+    for i in [1, 2, 4, 5]:
+        assert activities_prior[i].location.area != activities_post[i].location.area

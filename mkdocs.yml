@@ -5,25 +5,7 @@ nav:
   - Reading data: read_data.md
   - Activity plans: activity_plans.md
   - Modelling the impact of policies on populations: modelling_policy_impact.md
-  - Examples:
-    - examples/01_basics.ipynb
-    - examples/02a_tabular_read_write.ipynb
-    - examples/02b_matsim_read_write.ipynb
-    - examples/03_read_modify_write.ipynb
-    - examples/04_point_sampling.ipynb
-    - examples/05_activity_plots.ipynb
-    - examples/05_policies_walk_through.ipynb
-    - examples/06_travel_plots.ipynb
-    - examples/07_travel_survey_to_matsim.ipynb
-    - examples/08_toy_matsim_population.ipynb
-    - examples/09_advanced_policies.ipynb
-    - examples/10_advanced_spatial_sampling.ipynb
-    - examples/11_Advanced_Plan_Rescheduling.ipynb
-    - examples/12_Advanced_Adding_Vehicles.ipynb
-    - examples/13_Advanced_Freight_Synthesis.ipynb
-    - examples/14_Advanced_Plan_Cropping.ipynb
-    - examples/15_advanced_choice_modelling.ipynb
-    - examples/16_advanced_matsim_warmstarting.ipynb
+  - Examples: [] # this will be filled in automatically to include reference to all the notebooks
   - Contributing:
     - contributing/index.md
     - Coding contributions: contributing/coding.md
@@ -63,17 +45,12 @@ hooks:
   - docs/static/hooks.py
 plugins:
   - autorefs
-  - generate-api:
-      package_dir: "pam"
-      api_dir: "api"
-      skip:
-          - pam/cli.py
-          - pam/variables.py
   - mkdocs-jupyter:
       include: ["examples/*.ipynb"]
       allow_errors: false
       kernel_name: pam
       include_source: True
+      execute: false
   - mkdocstrings:
       default_handler: python
       handlers:

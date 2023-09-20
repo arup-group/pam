@@ -8,6 +8,9 @@ from pam.operations.cropping import link_population
 from pam.planner.utils_planner import (
     apply_mode_to_home_chain,
     calculate_mnl_probabilities,
+    convert_single_anchor_roundtrip,
+    get_act_names,
+    get_first_leg_time_ratio,
     get_trip_chains,
     get_validate,
     sample_weighted,
@@ -80,3 +83,20 @@ def test_nonset_attribute_raises_error():
     a = A()
     with pytest.raises(ValueError):
         get_validate(a, "b")
+
+
+def test_leg_time_ratio(plan_home_work_shop_home):
+    chain = get_trip_chains(plan_home_work_shop_home)[-1]
+    assert get_first_leg_time_ratio(chain) == 0.2
+
+
+def test_act_names(plan_home_work_shop_home):
+    names = get_act_names(plan_home_work_shop_home)
+    assert names == ["home", "work", "shop", "home"]
+
+
+def test_single_anchor_complete(plan_other_work_shop_other):
+    chains = get_trip_chains(plan_other_work_shop_other, act="work")
+    for chain in chains:
+        convert_single_anchor_roundtrip(chain)
+        assert chain[0] == chain[-1]
