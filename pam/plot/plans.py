@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional
+from pathlib import Path
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     from pam.activity import Plan
@@ -21,6 +22,7 @@ from shapely.errors import ShapelyDeprecationWarning
 import pam.activity as activity
 import pam.utils as utils
 from pam.planner import encoder
+from pam.variables import DEFAULT_ACTIVITIES_FONTSIZE, DEFAULT_ACTIVITIES_PLOT_WIDTH
 
 
 def plot_person(person, **kwargs):
@@ -28,7 +30,7 @@ def plot_person(person, **kwargs):
     plot_activities(df, **kwargs)
 
 
-def plot_persons(persons, kwargs=None):
+def plot_persons(persons, **kwargs):
     df = pd.concat([build_person_df(person) for person in persons])
     plot_activities(df, **kwargs)
 
@@ -56,12 +58,9 @@ def build_plan_df(plan, pid="sample"):
     return df
 
 
-def plot_plan(plan, kwargs=None):
+def plot_plan(plan, **kwargs):
     df = build_plan_df(plan)
-    if kwargs is not None:
-        plot_activities(df, **kwargs)
-    else:
-        plot_activities(df)
+    plot_activities(df, **kwargs)
 
 
 def build_person_df(person):
@@ -155,7 +154,7 @@ def build_rgb_travel_cmap(df, colour_by):
     return d_color
 
 
-def build_cmap(df):
+def build_cmap(df: pd.DataFrame) -> dict:
     colors = plt.cm.Set3.colors[::-1]
     activities_unique = df["act"].unique()
     # repeat colours if unique items > 1
@@ -165,12 +164,28 @@ def build_cmap(df):
     return d_color
 
 
-def plot_activities(df, **kwargs):
-    """Plot activity plans from pandas dataframe."""
-    if "cmap" not in kwargs:
+def plot_activities(
+    df: pd.DataFrame,
+    cmap: Optional[dict] = None,
+    width: int = DEFAULT_ACTIVITIES_PLOT_WIDTH,
+    legend: bool = True,
+    label_fontsize: Optional[Union[dict, int]] = None,
+    path: Optional[Union[str, Path]] = None,
+) -> None:
+    """Plot activity plans from pandas dataframe.
+
+    Args:
+        df (pd.DataFrame): Input activity plan data
+        cmap (Optional[dict], optional): Map from activity to colour. If not given, random colours will be applied from `Set3`. Defaults to None.
+        width (int, optional): Figure width. Defaults to DEFAULT_ACTIVITIES_PLOT_WIDTH.
+        legend (bool, optional): If True, a legend will be added to the bottom of the figure. Defaults to True.
+        label_fontsize (Union[dict, int], optional): Set fontsize of activity / trip labels using a mapping or a single value to apply to all labels. This can be a partial mapping, with those _not_ defined defaulting to a fontsize of DEFAULT_ACTIVITIES_FONTSIZE. Defaults to None.
+        path (Optional[str  |  Path], optional): If given, path to which the figure should be saved. Defaults to None.
+    """
+    if cmap is None:
         cmap = build_cmap(df)
-    else:
-        cmap = kwargs["cmap"]
+    fontscale = width / DEFAULT_ACTIVITIES_PLOT_WIDTH
+    scaled_fontsize = DEFAULT_ACTIVITIES_FONTSIZE * fontscale
 
     df["color"] = df["act"].map(cmap)
     pids = df["pid"].unique()
@@ -178,7 +193,7 @@ def plot_activities(df, **kwargs):
     fig, axs = plt.subplots(
         len(pids),
         1,
-        figsize=(16, 3 + (1 * (len(pids) - 1))),
+        figsize=(width, 3 + (1 * (len(pids) - 1))),
         sharex=True,  # fudge to keep proportions about right
     )
 
@@ -212,58 +227,76 @@ def plot_activities(df, **kwargs):
 
         # Labels
         rects = ax.patches
+
         for x, y, rect, label in zip(label_x, label_y, rects, labels):
-            if label == "Travel":
+            r, g, b, _ = rect.get_facecolor()
+            # see https://en.wikipedia.org/wiki/Relative_luminance
+            luminance = (r * 0.2126 + g * 0.7152 + b * 0.0722) * 255
+            if luminance < 140:
                 color = "white"
             else:
                 color = "black"
+            if isinstance(label_fontsize, dict):
+                _fontsize = label_fontsize.get(label, scaled_fontsize)
+            elif label_fontsize is not None:
+                _fontsize = label_fontsize
+            else:
+                _fontsize = scaled_fontsize
 
-            if rect.get_width() >= 2:
+            scaled_rect_width = rect.get_width() * width / DEFAULT_ACTIVITIES_PLOT_WIDTH
+
+            if scaled_rect_width >= 2:
                 ax.text(
                     x,
                     y,
                     label,
                     ha="center",
                     va="center",
-                    fontdict={"color": color, "size": 10, "weight": "regular"},
+                    fontdict={"color": color, "size": _fontsize, "weight": "regular"},
                 )
-                continue
-            if rect.get_width() >= 0.5:
+            elif scaled_rect_width >= 0.5:
                 ax.text(
                     x,
                     y,
                     label,
                     ha="center",
                     va="center",
-                    fontdict={"color": color, "size": 10, "weight": "regular", "rotation": 90},
+                    fontdict={
+                        "color": color,
+                        "size": _fontsize,
+                        "weight": "regular",
+                        "rotation": 90,
+                    },
                 )
 
-        ax.set_title(f"Person ID: {pid}")
+        ax.set_title(f"Person ID: {pid}", fontsize=scaled_fontsize)
         ax.get_yaxis().set_visible(False)
+        ax.set_xticks(range(25))
+        ax.set_xlim(right=24)
+        ax.tick_params(axis="x", which="major", labelsize=scaled_fontsize)
         for side in ["top", "right", "bottom", "left"]:
             ax.spines[side].set_visible(False)
 
-    if kwargs.get("legend", True) is True:
+    if legend:
         legend_elements = []
         for act, color in cmap.items():
             legend_elements.append(Patch(facecolor=color, edgecolor="black", label=act))
-        plt.legend(
+        fig.legend(
             handles=legend_elements,
             ncol=len(legend_elements),
-            prop={"size": 12},
+            prop={"size": 1.2 * scaled_fontsize},
             frameon=False,
-            bbox_to_anchor=(0.5, -0.5),
+            bbox_to_anchor=(0.5, 0),
             loc="upper center",
             borderaxespad=0.0,
+            borderpad=0,
         )
+    fig.tight_layout()
 
-    plt.xticks(range(25))
-    plt.xlim(right=24)
+    if path is not None:
+        fig.savefig(path, bbox_inches="tight")
 
-    plt.tight_layout()
-
-    if kwargs.get("path") is not None:
-        plt.savefig(kwargs["path"])
+    return fig, axs
 
 
 def plot_travel_plans(
@@ -375,8 +408,8 @@ def plot_travel_plans(
 
 
 def plot_activity_breakdown_area(
-    plans: List[Plan],
-    activity_classes: Optional[List[str]] = None,
+    plans: list[Plan],
+    activity_classes: Optional[list[str]] = None,
     plans_encoder: Optional[type[encoder.PlanEncoder]] = None,
     normalize: bool = False,
     legend: bool = True,
@@ -387,8 +420,8 @@ def plot_activity_breakdown_area(
     Area plot of the breakdown of activities taking place every minute.
 
     Args:
-        plans (List[Plan]): A list of PAM plans.
-        activity_classes (Optional[List[str]], optional): A list of the activity labels to encode a plan from. Defaults to None.
+        plans (list[Plan]): A list of PAM plans.
+        activity_classes (Optional[list[str]], optional): A list of the activity labels to encode a plan from. Defaults to None.
         plans_encoder (Optional[type[encoder.PlanEncoder]], optional): A pre-encoded plan; alternative to passing `activity_classes`. Defaults to None.
         normalize (bool, optional): Whether to convert the y-axis to percentages. Defaults to False.
         legend (bool, optional): Whether to include the legend of activities in the plot. Defaults to True.
@@ -434,7 +467,7 @@ def plot_activity_breakdown_area(
 
 
 def plot_activity_breakdown_area_tiles(
-    plans: Dict[List[Plan]], activity_classes: List[str], figsize=(10, 8), **kwargs
+    plans: dict[list[Plan]], activity_classes: list[str], figsize=(10, 8), **kwargs
 ):
     """Tiled area plot of the breakdown of activities taking place every minute."""
     plans_encoder = encoder.PlansOneHotEncoder(activity_classes=activity_classes)

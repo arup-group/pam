@@ -1,10 +1,11 @@
 from copy import deepcopy
 
-import matplotlib
 import numpy as np
 import pandas as pd
 import pytest
+from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.legend import Legend
 from plotly.graph_objs import Scattermapbox
 from shapely.geometry import Point
 
@@ -28,12 +29,17 @@ from pam.plot.stats import (
     time_binner,
 )
 from pam.policy import policies
+from pam.variables import DEFAULT_ACTIVITIES_FONTSIZE, DEFAULT_ACTIVITIES_PLOT_WIDTH
 
 
-def test_build_person_dataframe(person_heh):
-    df = build_person_df(person_heh)
-    assert len(df) == 5
-    assert list(df.act) == ["Home", "Travel", "Education", "Travel", "Home"]
+@pytest.fixture
+def person_df(person_heh):
+    return build_person_df(person_heh)
+
+
+def test_build_person_dataframe(person_df):
+    assert len(person_df) == 5
+    assert list(person_df.act) == ["Home", "Travel", "Education", "Travel", "Home"]
 
 
 def test_build_cmap_dict():
@@ -178,17 +184,65 @@ def test_plot_travel_plans_for_household(instantiate_household_with, cyclist, pt
     assert [dat.name for dat in fig.data] == ["bike", "pt", "transit_walk"]
 
 
-def test_plot_activities(person_heh):
-    df = build_person_df(person_heh)
-    try:
-        plot_activities(df)
-    except (RuntimeError, TypeError, NameError, OSError, ValueError):
-        pytest.fail("Error")
+def test_plot_activities(person_df):
+    fig, ax = plot_activities(person_df)
+    assert isinstance(ax, Axes)
+    assert isinstance(fig, Figure)
+    assert any(isinstance(i, Legend) for i in fig.get_children())
+
+
+def test_plot_activities_no_legend(person_df):
+    fig, ax = plot_activities(person_df, legend=False)
+    assert not any(isinstance(i, Legend) for i in fig.get_children())
+
+
+def test_plot_activities_user_defined_cmap(person_df):
+    cmap = {"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
+    default_opacity = 1
+    fig, ax = plot_activities(person_df, cmap=cmap)
+    for idx, patch in enumerate(ax.patches):
+        label = ax.texts[idx].get_text()
+        fc = patch.get_facecolor()
+        # assertion is against rgba values (i.e., including an opacity value)
+        assert cmap[label] + (default_opacity,) == fc
+
+
+def test_plot_activities_expected_auto_fontcolor(person_df):
+    "Label fontcolour is selected based on perceived luminance of background colour"
+    cmap = {"Home": (1, 1, 1), "Education": (0, 0, 0), "Travel": (0.3, 0.3, 0.3)}
+    expected_fontcolor = {"Home": "black", "Education": "white", "Travel": "white"}
+    fig, ax = plot_activities(person_df, cmap=cmap)
+    for text in ax.texts:
+        assert text.get_color() == expected_fontcolor[text.get_text()]
+
+
+def test_plot_activities_non_default_label_fontsize_partial(person_df):
+    "All undefined fontsizes should default to the system default (scaled if fig width has changed from the default)"
+    fontsizes = {"Home": 20}
+    fig, ax = plot_activities(person_df, label_fontsize={"Home": 20})
+    for text in ax.texts:
+        assert text.get_fontsize() == fontsizes.get(text.get_text(), DEFAULT_ACTIVITIES_FONTSIZE)
+
+
+def test_plot_activities_non_default_label_fontsize_all(person_df):
+    fontsizes = {"Home": 20, "Education": 5, "Travel": 15}
+    fig, ax = plot_activities(person_df, label_fontsize=fontsizes)
+    for text in ax.texts:
+        assert text.get_fontsize() == fontsizes[text.get_text()]
+
+
+def test_plot_activities_non_default_fig_width(person_df):
+    width = 40
+    scaled_fontsize = DEFAULT_ACTIVITIES_FONTSIZE * width / DEFAULT_ACTIVITIES_PLOT_WIDTH
+    fig, ax = plot_activities(person_df, width=width)
+
+    assert fig.get_figwidth() == width
+    assert ax.title.get_fontsize() == scaled_fontsize
 
 
 def test_plot_activity_breakdown_returns_axis(population_heh):
     ax = plot_activity_breakdown_area(list(population_heh.plans()), population_heh.activity_classes)
-    assert isinstance(ax, matplotlib.axes._axes.Axes)
+    assert isinstance(ax, Axes)
 
 
 def test_plot_activity_breakdown_tiles_shape(population_heh):

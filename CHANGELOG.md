@@ -57,6 +57,7 @@ This version is a pre-release
 
 ### Added
 - Option to skip existing facility locations during facility sampling, by adding the `location_override` argument to the `population.sample_locs` method ([#190]).
+- More control over the look of activity plan plots, with keyword arguments for e.g. `Person.plot()` extended to allow figure width and per-activity label fontsizes to be updated.
 
 ## [v0.2.3] - 2023-06-07
 This version is a pre-release
