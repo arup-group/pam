@@ -13,7 +13,7 @@ from shapely.geometry import Point
 from pam.activity import Activity, Leg
 from pam.samplers.facility import FacilitySampler
 from pam.utils import minutes_to_datetime as mtdt
-from pam.variables import END_OF_DAY
+from pam.variables import END_OF_DAY, EXPECTED_EUCLIDEAN_SPEEDS
 
 
 def create_density_gdf(
@@ -195,75 +195,40 @@ class FrequencySampler:
             )[0]
 
 
-class DurationEstimator:
-    """Object to estimate the distance, journey time, and stop time of activities.
-    The last function activity_duration combines these three functions to output parameters that help build tour plans.
+def model_distance(o, d, scale=1.4):
+    """Models distance between two shapely points."""
+    return o.distance(d) * scale
+
+
+def model_journey_time(
+    distance: Union[float, int], speed: float = EXPECTED_EUCLIDEAN_SPEEDS["freight"]
+) -> float:
     """
 
-    def model_distance(self, o, d, scale=1.4):
-        """Models distance between two shapely points."""
-        return o.distance(d) * scale
+    Args:
+        distance (Union[float, int]): Distance in metres.
+        speed (float, optional): Speed in metres/second. Defaults to 50000 / 3600 (50km/hr).
 
-    def model_journey_time(self, distance: Union[float, int], speed: float = 50000 / 3600) -> float:
-        """
+    Returns:
+        float: Modelled journey time.
 
-        Args:
-          distance (Union[float, int]): Distance in metres.
-          speed (float, optional): Speed in metres/second. Defaults to 50000 / 3600 (50km/hr).
+    """
+    return distance / speed
 
-        Returns:
-          float: Modelled journey time.
 
-        """
-        return distance / speed
+def model_activity_time(time: int, maxi: int = 3600, mini: int = 600) -> int:
+    """Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
 
-    def model_stop_time(self, time: int, maxi: int = 3600, mini: int = 600) -> int:
-        """Returns a duration that is between the minimum amount of seconds, an input journey time, or maximum time.
+    Args:
+        time (int): Time in seconds.
+        maxi (int, optional): maximum time for a journey. Defaults to 3600.
+        mini (int, optional): minimum time for a journey. Defaults to 600.
 
-        Args:
-          time (int): Time in seconds.
-          maxi (int, optional): maximum time for a journey. Defaults to 3600.
-          mini (int, optional): minimum time for a journey. Defaults to 600.
+    Returns:
+        int: maximum value between minimum time or the minimum of journey time and maximum time.
 
-        Returns:
-          int: maximum value between minimum time or the minimum of journey time and maximum time.
-
-        """
-        return max([mini, min([time, maxi])])
-
-    def model_activity_duration(
-        self,
-        o_loc: Point,
-        d_loc: Point,
-        end_tm: int,
-        speed: Union[int, float] = 50000 / 3600,
-        maxi: int = 3600,
-        mini: int = 600,
-    ) -> tuple[int, int, int]:
-        """Returns estimated Activity duration.
-
-        Duration is a combination of previous three functions to return parameters for next activity in Plan.
-
-        Args:
-          o_loc (shapely.Point): origin facility.
-          d_loc (shapely.Point): destination facility.
-          end_tm (int): most recent end time of previous leg.
-          speed (Union[int, float], optional): Speed of vehicle in metres/second. Defaults to 50000 / 3600 (50km/hr).
-          maxi (int, optional): maximum stop time in seconds. Defaults to 3600.
-          mini (int, optional): minimum stop time in seconds. Defaults to 600.
-
-        Returns:
-          tuple[int, int, int]: (stop_duration, start_tm, end_tm) for new activity.
-
-        """
-        trip_distance = self.model_distance(o_loc, d_loc)
-        trip_duration = self.model_journey_time(trip_distance, speed)
-        stop_duration = self.model_stop_time(trip_duration, maxi, mini)
-
-        start_tm = end_tm
-        end_tm = end_tm + int(trip_duration / 60)
-
-        return stop_duration, start_tm, end_tm
+    """
+    return max([mini, min([time, maxi])])
 
 
 class TourPlanner:
@@ -362,12 +327,12 @@ class TourPlanner:
                     "stops": stop,
                     "destination_zone": d_zone,
                     "destination_facility": d_facility,
-                    "distance": DurationEstimator().model_distance(o_loc, d_facility),
+                    "distance": model_distance(o_loc, d_facility),
                 }
             )
         return d_seq
 
-    def create_distance_matrix(self, o_loc, d_seq) -> np.ndarray:
+    def create_distance_matrix(self, o_loc: Point, d_seq: list) -> np.ndarray:
         """Create a distance matrix between the origin location and a list of destinations.
 
         Args:
@@ -420,11 +385,11 @@ class TourPlanner:
 
         return d_seq
 
-    def sequence_stops(self) -> tuple[list, list, list]:
+    def sequence_stops(self) -> tuple[Point, list[Point], list[Point]]:
         """Creates a sequence for a number of stops. Sequence is determined by approximated greedy TSP
 
         Returns:
-          tuple[list, list, list]: (o_loc, d_zones, d_locs).
+          tuple[Point, list, list]: (o_loc, d_zones, d_locs).
 
         """
         o_loc = self.facility_sampler.sample(self.o_zone, self.o_activity)
@@ -507,7 +472,6 @@ class TourPlanner:
         end_tm: int,
     ) -> int:
         """Leg to Next Activity within the tour. This adds a leg to the agent plan after each activity is complete within the tour.
-
         Args:
           agent (str): agent for which the leg will be added to Plan
           k (Iterable): when used in a for loop, k populates the next sequence value
@@ -520,7 +484,6 @@ class TourPlanner:
 
         Returns:
           int: new end_tm after leg is added to plan.
-
         """
         agent.add(
             Leg(
@@ -537,34 +500,77 @@ class TourPlanner:
 
         return end_tm
 
-    def add_return_origin(
-        self, agent: str, k: Iterable, o_loc: Point, d_zone: str, d_loc: Point, end_tm: int
-    ) -> int:
-        """The agent returns to their origin activity, from their most recent stop to the origin location.
+    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list) -> None:
+        """Apply the above functions to the agent to build a plan.
+        1. Add first activity
+        2. cycle through d_plan and add leg/activity
+        3. add leg/activity to return to origin
 
         Args:
-          agent (str): agent for which the leg & activity will be added to Plan
-          k (Iterable): when used in a for loop, k populates the next sequence valuey
+          agent (str): agent to build a plan fory
           o_loc (shapely.Point): origin facility of leg & activity
-          d_zone (str): destination zone of leg & activity
-          d_loc (shapely.Point): destination facility of leg & activity
-          end_tm (int): obtained from DurationEstimator object
-
-        Returns:
-          int: end_tm after returning to origin.
-
+          d_zones (list): destination zones of leg & activity
+          d_locs (list): destination facilities of leg & activity.
         """
-        trip_distance = DurationEstimator().model_distance(o_loc, d_loc)
-        trip_duration = DurationEstimator().model_journey_time(trip_distance)
+
+        # add origin activity
+        time_params = {"hour": self.hour, "minute": self.minute}
+        # first activity
+        end_tm = self.add_tour_activity(
+            agent=agent,
+            k=1,
+            zone=self.o_zone,
+            loc=o_loc,
+            activity_type=self.o_activity,
+            time_params=time_params,
+        )
+        # add stops to plan
+        for k in range(len(d_locs)):
+            if k == 0:
+                previous_zone = self.o_zone
+                previous_loc = o_loc
+            else:
+                previous_zone = d_zones[k - 1]
+                previous_loc = d_locs[k - 1]
+
+            start_tm = end_tm
+            trip_distance = model_distance(previous_loc, d_locs[k])
+            trip_duration = model_journey_time(trip_distance)
+            activity_duration = model_activity_time(trip_duration)
+            end_tm = end_tm + int(trip_duration / 60)
+
+            end_tm = self.add_tour_leg(
+                agent=agent,
+                k=k,
+                o_zone=previous_zone,
+                o_loc=previous_loc,
+                d_zone=d_zones[k],
+                d_loc=d_locs[k],
+                start_tm=start_tm,
+                end_tm=end_tm,
+            )
+
+            time_params = {"end_tm": end_tm, "stop_duration": activity_duration}
+            end_tm = self.add_tour_activity(
+                agent=agent,
+                k=k,
+                zone=d_zones[k],
+                loc=d_locs[k],
+                activity_type=self.d_activity,
+                time_params=time_params,
+            )
+        # returning to origin
 
         start_tm = end_tm
+        trip_distance = model_distance(d_locs[len(d_locs) - 1], o_loc)
+        trip_duration = model_journey_time(trip_distance)
         end_tm = end_tm + int(trip_duration / 60)
 
         end_tm = self.add_tour_leg(
             agent=agent,
-            k=k,
-            o_zone=d_zone,
-            o_loc=d_loc,
+            k=k + 1,
+            o_zone=d_zones[-1],
+            o_loc=d_locs[-1],
             d_zone=self.o_zone,
             d_loc=o_loc,
             start_tm=start_tm,
@@ -579,88 +585,6 @@ class TourPlanner:
             loc=o_loc,
             activity_type="return_origin",
             time_params=time_params,
-        )
-
-        return end_tm
-
-    def apply(self, agent: str, o_loc: Point, d_zones: list, d_locs: list) -> None:
-        """Apply the above functions to the agent to build a plan.
-
-        Args:
-          agent (str): agent to build a plan fory
-          o_loc (shapely.Point): origin facility of leg & activity
-          d_zones (list): destination zones of leg & activity
-          d_locs (list): destination facilities of leg & activity.
-
-        """
-        time_params = {"hour": self.hour, "minute": self.minute}
-        end_tm = self.add_tour_activity(
-            agent=agent,
-            k=1,
-            zone=self.o_zone,
-            loc=o_loc,
-            activity_type=self.o_activity,
-            time_params=time_params,
-        )
-
-        for k in range(self.stops):
-            stop_duration, start_tm, end_tm = DurationEstimator().model_activity_duration(
-                o_loc, d_locs[k], end_tm
-            )
-            if (mtdt(end_tm) >= END_OF_DAY) | (
-                mtdt(end_tm + int(stop_duration / 60)) >= END_OF_DAY
-            ):
-                break
-            elif k == 0:
-                end_tm = self.add_tour_leg(
-                    agent=agent,
-                    k=k,
-                    o_zone=self.o_zone,
-                    o_loc=o_loc,
-                    d_zone=d_zones[k],
-                    d_loc=d_locs[k],
-                    start_tm=start_tm,
-                    end_tm=end_tm,
-                )
-
-                time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
-                end_tm = self.add_tour_activity(
-                    agent=agent,
-                    k=k,
-                    zone=d_zones[k],
-                    loc=d_locs[k],
-                    activity_type=self.d_activity,
-                    time_params=time_params,
-                )
-            else:
-                end_tm = self.add_tour_leg(
-                    agent=agent,
-                    k=k,
-                    o_zone=d_zones[k - 1],
-                    o_loc=d_locs[k - 1],
-                    d_zone=d_zones[k],
-                    d_loc=d_locs[k],
-                    start_tm=start_tm,
-                    end_tm=end_tm,
-                )
-
-                time_params = {"end_tm": end_tm, "stop_duration": stop_duration}
-                end_tm = self.add_tour_activity(
-                    agent=agent,
-                    k=k,
-                    zone=d_zones[k],
-                    loc=d_locs[k],
-                    activity_type=self.d_activity,
-                    time_params=time_params,
-                )
-
-        end_tm = self.add_return_origin(
-            agent=agent,
-            k=self.stops,
-            o_loc=o_loc,
-            d_zone=d_zones[self.stops - 1],
-            d_loc=d_locs[self.stops - 1],
-            end_tm=end_tm,
         )
 
 
