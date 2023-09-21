@@ -337,6 +337,23 @@ def agent_plan_no_threshold(hour_sampler, minute_sampler, delivery_density, faci
 
 
 @pytest.fixture
+def agent_plan_exceed_24hrs(delivery_density, facility_sampler):
+    stops = 2
+    o_zone = 2
+
+    return tour.TourPlanner(
+        stops=stops,
+        hour=23,
+        minute=45,
+        o_zone=o_zone,
+        d_dist=delivery_density,
+        d_freq="density",
+        facility_sampler=facility_sampler,
+        activity_params={"o_activity": "depot", "d_activity": "delivery"},
+    )
+
+
+@pytest.fixture
 def d_facility_sampling(agent_plan_no_threshold):
     o_loc = agent_plan_no_threshold.facility_sampler.sample(
         agent_plan_no_threshold.o_zone, agent_plan_no_threshold.o_activity
@@ -450,6 +467,29 @@ def test_activity_endtm_returnorigin(agent, agent_plan_no_threshold):
     )
 
     assert end_tm == END_OF_DAY
+
+
+def test_agent_first_activity_same_last_activity(agent, agent_plan_no_threshold):
+    o_loc, d_zones, d_locs = agent_plan_no_threshold.sequence_stops()
+    agent_plan_no_threshold.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    assert agent.first_activity == agent.last_activity.act
+
+
+def test_agent_last_leg_end_time_equal_last_activity_start(agent, agent_plan_no_threshold):
+    o_loc, d_zones, d_locs = agent_plan_no_threshold.sequence_stops()
+    agent_plan_no_threshold.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    assert agent.last_leg.end_time == agent.last_leg.start_time + agent.last_leg.duration
+    assert agent.last_leg.end_time == agent.last_activity.start_time
+
+
+def test_agent_exceed_24hrs_last_activity_beyond_endofday(agent, agent_plan_exceed_24hrs):
+    o_loc, d_zones, d_locs = agent_plan_exceed_24hrs.sequence_stops()
+    agent_plan_exceed_24hrs.apply(agent=agent, o_loc=o_loc, d_zones=d_zones, d_locs=d_locs)
+
+    assert agent.first_activity == agent.last_activity.act
+    assert agent.last_leg.end_time > END_OF_DAY
 
 
 def test_validatetourod_no_duplicates(depot_density, od_density, delivery_density):
