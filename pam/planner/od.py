@@ -106,10 +106,10 @@ class ODFactory:
     @staticmethod
     def prepare_labels(matrices: list[ODMatrix]) -> Labels:
         labels = Labels(
-            vars=list(set(mat.var for mat in matrices)),
+            vars=list(dict.fromkeys(mat.var for mat in matrices)),
             origin_zones=matrices[0].origin_zones,
             destination_zones=matrices[0].destination_zones,
-            mode=list(set(mat.mode for mat in matrices)),
+            mode=list(dict.fromkeys(mat.mode for mat in matrices)),
         )
         return labels
 

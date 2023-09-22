@@ -386,9 +386,10 @@ class DiscretionaryTripOD(DiscretionaryTrip):
 
     Methodology:
         We combine three conditions:
-            1. Distribution of leg compared to total trip
-            2. Diversion factor (compared to direct trips)
-            3. Zone attraction
+
+        1. Distribution of leg compared to total trip
+        2. Diversion factor (compared to direct trips)
+        3. Zone attraction
 
         Final probabilities are defined as (1) * (2) * (3) (and then normalised to sum up to 1).
 
