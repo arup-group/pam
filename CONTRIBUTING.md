@@ -83,7 +83,7 @@ When adding docstrings, we request you use the [Google docstring style](https://
 ### Pre-release
 
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
-- [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
+- [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current patch release of the form `X.Y.Z`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
 
 ### Create release

@@ -62,9 +62,7 @@ max-complexity = 10
 
 # Ignore `E402` for all notebooks
 [tool.nbqa.addopts]
-ruff = [
-    "--extend-ignore=E402"
-]
+ruff = ["--extend-ignore=E402"]
 
 
 [tool.ruff.flake8-quotes]
@@ -81,7 +79,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pam"
+name = "cml-pam"
 authors = [{ name = "Fred Shone", email = "fred.shone@arup.com" }]
 maintainers = [
     { name = "Michael Fitzmaurice", email = "michael.fitzmaurice@arup.com" },
@@ -100,7 +98,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dynamic = ["dependencies", "optional-dependencies"]
-version = "0.2.5.dev0"
+version = "0.3.0"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements/base.txt"] }

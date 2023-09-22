@@ -193,7 +193,7 @@ def plot_activities(
     fig, axs = plt.subplots(
         len(pids),
         1,
-        figsize=(width, 3 + (1 * (len(pids) - 1))),
+        figsize=(width, 0.5 + 1.25 * len(pids)),
         sharex=True,  # fudge to keep proportions about right
     )
 
@@ -289,7 +289,7 @@ def plot_activities(
             bbox_to_anchor=(0.5, 0),
             loc="upper center",
             borderaxespad=0.0,
-            borderpad=0,
+            borderpad=0.5,
         )
     fig.tight_layout()
 
