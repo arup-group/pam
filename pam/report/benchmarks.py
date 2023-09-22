@@ -125,7 +125,7 @@ def create_benchmark(
     # aggregate across specified dimensions
     if dimensions is not None:
         if data_fields is not None:
-            df = df.groupby(dimensions)[data_fields].agg(aggfunc).fillna(0)
+            df = df.groupby(dimensions, observed=False)[data_fields].agg(aggfunc).fillna(0)
         else:
             df = df.value_counts(dimensions)
 
