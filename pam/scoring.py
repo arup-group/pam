@@ -93,7 +93,7 @@ class CharyparNagelPlanScorer(PlanScorer):
 
         Args:
           person (Person):
-          subpopulation (str, optional): person attribute name for subpopulation. Defaults to "subpopulation".
+          key (str, optional): person attribute name for subpopulation. Defaults to "subpopulation".
           plan_costs (float, optional): Optionally add monetary costs such as tolls. Defaults to None.
 
         Returns:

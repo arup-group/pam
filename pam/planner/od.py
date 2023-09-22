@@ -3,7 +3,6 @@ import itertools
 from typing import NamedTuple, Union
 
 import numpy as np
-import pandas as pd
 
 
 class Labels(NamedTuple):
@@ -107,10 +106,10 @@ class ODFactory:
     @staticmethod
     def prepare_labels(matrices: list[ODMatrix]) -> Labels:
         labels = Labels(
-            vars=list(pd.unique([mat.var for mat in matrices])),
+            vars=list(set(mat.var for mat in matrices)),
             origin_zones=matrices[0].origin_zones,
             destination_zones=matrices[0].destination_zones,
-            mode=list(pd.unique([mat.mode for mat in matrices])),
+            mode=list(set(mat.mode for mat in matrices)),
         )
         return labels
 

@@ -261,20 +261,18 @@ class ChoiceMNL(ChoiceModel):
 
 
 class DiscretionaryTrips:
-    """
-    Solve discretionary trip location choice of a PAM plan
-    """
-
     def __init__(self, plan: Plan, od: OD) -> None:
+        """Solve discretionary trip location choice of a PAM plan.
+
+        Args:
+            plan (Plan): PAM plan.
+            od (OD): An object holding origin-destination matrices.
+        """
         self._plan = plan
         self._od = od
 
     def update_plan(self):
-        """Update the locations (in-place) of each non-mandatory activity location in the plan.
-
-        Returns:
-            None
-        """
+        """Update the locations (in-place) of each non-mandatory activity location in the plan."""
         trip_chains = get_trip_chains_either_anchor(self._plan)
         for trip_chain in trip_chains:
             # if only one achor, convert to round-trip
@@ -289,22 +287,20 @@ class DiscretionaryTrips:
 
 class DiscretionaryTrip(ABC):
     def __init__(self, trip_chain: list[Union[Activity, Leg]], od: OD) -> None:
-        """
-        Location choice for discretionary trips
-            in a trip chain
+        """Location choice for discretionary trips in a trip chain.
 
         Cases:
-            a) O->discretionary->O (DiscretionaryTripRound)
-            b) O->discretionary->D (DiscretionaryTripOD)
-            c) O->discretionary->discretionary->O
-            d) O->discretionary->discretionary->D
+            1. O->discretionary->O (DiscretionaryTripRound)
+            2. O->discretionary->D (DiscretionaryTripOD)
+            3. O->discretionary->discretionary->O
+            4. O->discretionary->discretionary->D
 
-        Chains with multiple discretionary trips are solved
-            recursively, updating the first location each time,
-            and then keeping it fixed as we solve downstream.
+        Chains with multiple discretionary trips are solved recursively,
+            updating the first location each time, and then keeping it fixed as we solve downstream.
 
         Args:
-            list[Union[Activity, Leg]]: A trip chain between two long-term activities.
+            trip_chain (list[Union[Activity, Leg]]): A trip chain between two long-term activities.
+            od (OD): An object holding origin-destination matrices.
         """
         self._trip_chain = trip_chain
         self._od = od
@@ -326,8 +322,8 @@ class DiscretionaryTrip(ABC):
             raise TypeError("Each even element in the trip chain should be an activity")
 
     @abstractmethod
-    def choose_destination(self):
-        """Selects a destination for the discretionary activity
+    def choose_destination(self) -> str:
+        """Selects a destination for the discretionary activity.
 
         Returns:
             str: Selected destination zone name.
@@ -335,13 +331,8 @@ class DiscretionaryTrip(ABC):
 
     def update_plan(self):
         """
-        Update the PAM activity locations of the first activity activity
-            in the trip chain,
-            and continue downstream until the entire chain is solved.
-
-        Returns:
-            None
-
+        Update the PAM activity locations of the first activity in the trip chain,
+        and continue downstream until the entire chain is solved.
         """
         if len(self.act_names) > 2:
             # update locations
@@ -362,20 +353,23 @@ class DiscretionaryTrip(ABC):
                 DiscretionaryTripOD(trip_chain=self._trip_chain[2:], od=self._od).update_plan()
 
     @property
-    def od(self):
+    def od(self) -> OD:
         return self._od
 
 
 class DiscretionaryTripRound(DiscretionaryTrip):
     """
-    Location choice for a single discretionary trip,
-        where we have the same anchor at the start and end of the chain.
+    Location choice for a single discretionary trip, where we have the same anchor at the start and end of the chain.
 
-    The class infers the location of the first discretionary
-        activity in the trip chain.
+    The class infers the location of the first discretionary activity in the trip chain.
     """
 
     def choose_destination(self) -> str:
+        """Selects a destination for the discretionary activity.
+
+        Returns:
+            str: Selected destination zone name.
+        """
         assert isinstance(self._trip_chain[1], Leg)
         destination_p = self._od["od_probs", self.anchor_zone_start, :, self.trmode]
         destination_p = destination_p / destination_p.sum()
@@ -386,19 +380,17 @@ class DiscretionaryTripRound(DiscretionaryTrip):
 
 
 class DiscretionaryTripOD(DiscretionaryTrip):
-    """
-    Location choice for a single discretionary trip,
-        where we have different anchors at the start and end of the chain.
+    """Location choice for a single discretionary trip, where we have different anchors at the start and end of the chain.
 
     The class infers the location of the first trip in the trip chain.
 
-    Methodology
-    We combine three conditions:
-      1) Distribution of leg compared to total trip
-      2) Diversion factor (compared to direct trips)
-      3) Zone attraction
-    Final probabilities are defined as (1) * (2) * (3)
-      (and then normalised to sum up to 1)
+    Methodology:
+        We combine three conditions:
+            1. Distribution of leg compared to total trip
+            2. Diversion factor (compared to direct trips)
+            3. Zone attraction
+
+        Final probabilities are defined as (1) * (2) * (3) (and then normalised to sum up to 1).
 
     """
 
@@ -446,8 +438,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     @property
     def diversion_factors(self) -> np.array:
         """
-        Calculate the diversion factor for each potential destination
-            (as compared to a direct trip between anchors).
+        Calculate the diversion factor for each potential destination (as compared to a direct trip between anchors).
 
         Returns:
             np.array: An array of the time diversion factors for each candidate intermediate destination.
@@ -463,9 +454,8 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         return diversion_factors
 
     @property
-    def diversion_p(self):
+    def diversion_p(self) -> np.array:
         """Diversion factor probabilities
-
 
         Returns:
             np.array: An array of the time diversion factor probabilities for each candidate intermediate destination.
@@ -475,11 +465,7 @@ class DiscretionaryTripOD(DiscretionaryTrip):
 
     @property
     def attraction_p(self):
-        """Attraction probabilities
-
-        Returns:
-            None
-        """
+        """Attraction probabilities."""
         probs = self._od["od_probs", self.anchor_zone_start, :, self.trmode]
         probs = probs / probs.sum()
         return probs
@@ -487,8 +473,8 @@ class DiscretionaryTripOD(DiscretionaryTrip):
     @property
     def destination_p(self) -> np.array:
         """Get the destination probabilities.
-        Combines the leg ratio, diversion, and attraction factors probabilities
-            by calculating their product.
+
+        Combines the leg ratio, diversion, and attraction factors probabilities by calculating their product.
 
         Returns:
             np.array: Final destination probabilities.
@@ -498,6 +484,11 @@ class DiscretionaryTripOD(DiscretionaryTrip):
         return p
 
     def choose_destination(self) -> str:
+        """Selects a destination for the discretionary activity.
+
+        Returns:
+            str: Selected destination zone name.
+        """
         zone = sample_weighted(self.destination_p)
         area = self._od.labels.destination_zones[zone]
 
