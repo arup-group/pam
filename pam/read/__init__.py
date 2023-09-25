@@ -8,7 +8,6 @@ from pam.read.diary import (
     add_persons_from_trips,
     build_population,
     from_to_travel_diary_read,
-    hh_person_df_to_dict,
     load_travel_diary,
     sample_population,
     tour_based_travel_diary_read,
