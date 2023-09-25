@@ -506,12 +506,13 @@ def tour_based_travel_diary_read(
         trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
     )
 
-    if "seq" in trips.columns:
-        trips = trips.set_index(["hid", "pid", "seq"])
-        if sort_by_seq is None:
-            sort_by_seq = True
-    else:
-        trips = trips.set_index(["hid", "pid"])
+    if sort_by_seq is None and "seq" in trips.columns:
+        sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
 
     if sort_by_seq:
         trips = trips.sort_index()
@@ -611,12 +612,13 @@ def trip_based_travel_diary_read(
         trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
     )
 
-    if "seq" in trips.columns:
-        trips = trips.set_index(["hid", "pid", "seq"])
-        if sort_by_seq is None:
-            sort_by_seq = True
-    else:
-        trips = trips.set_index(["hid", "pid"])
+    if sort_by_seq is None and "seq" in trips.columns:
+        sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
 
     if sort_by_seq:
         trips = trips.sort_index()
@@ -712,12 +714,17 @@ def from_to_travel_diary_read(
     population = build_population(
         trips=trips, persons_attributes=persons_attributes, hhs_attributes=hhs_attributes
     )
-    if "seq" in trips.columns:
-        trips = trips.set_index(["hid", "pid", "seq"])
-        if sort_by_seq is None or sort_by_seq:
-            trips = trips.sort_index()
-    else:
-        trips = trips.set_index(["hid", "pid"])
+
+    if sort_by_seq is None and "seq" in trips.columns:
+        sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
+
+    if sort_by_seq:
+        trips = trips.sort_index()
 
     for hid, household in population:
         for pid, person in household:
