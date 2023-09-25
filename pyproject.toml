@@ -97,11 +97,11 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies", "optional-dependencies"]
-version = "0.3.0"
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements/base.txt"] }
+version = { attr = "pam.__version__" }
 
 [project.scripts]
 pam = "pam.cli:cli"

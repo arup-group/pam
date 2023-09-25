@@ -26,18 +26,14 @@ body:
         - label: Linux
     validations:
       required: true
-  - type: dropdown
+  - type: textarea
     id: version
     attributes:
       label: Version
-      description: What version of PAM are you using?
-      options:
-        - 0.2.0
-        - 0.2.1
-        - 0.2.2
-        - 0.2.3
-        - 0.2.4
-        - 0.2.5-dev
+      description: What version of pam are you using?
+      placeholder: v0.3.0
+    validations:
+      required: false
   - type: textarea
     id: logs
     attributes:

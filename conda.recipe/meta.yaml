@@ -1,10 +1,11 @@
 {% set pyproject = load_file_data('../pyproject.toml', from_recipe_dir=True) %}
+{% set version = load_file_regex(load_file='../pam/__init__.py', regex_pattern="__version__ = \"([a-zA-Z0-9\.].*?)\"", from_recipe_dir=True) %}
 {% set requirements = load_file_regex(load_file='../requirements/base.txt', regex_pattern="", from_recipe_dir=True) %}
 {% set requirements_dev = load_file_regex(load_file='../requirements/dev.txt', regex_pattern="", from_recipe_dir=True) %}
 
 package:
   name: {{ pyproject.project.name }}
-  version: {{ pyproject.project.version }}
+  version: {{ version.group(1) }}
 
 source:
   path: ..
@@ -55,4 +56,4 @@ about:
   doc_url: {{ pyproject.project.urls.documentation }}
   summary: {{ pyproject.project.description }}
   license: {{ pyproject.project.license.text }}
-  license_file: LICENSE 
+  license_file: LICENSE

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import importlib_resources
 import lxml
 import numpy as np
@@ -13,7 +15,7 @@ from pam.planner.od import OD, ODFactory, ODMatrix
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 
-TEST_DATA_DIR = importlib_resources.files("pam").parent / "tests" / "test_data"
+TEST_DATA_DIR = Path(__file__).parent / "test_data"
 FIXTURES_DIR = importlib_resources.files("pam") / "fixtures"
 
 
