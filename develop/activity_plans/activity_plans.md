@@ -1,7 +1,7 @@
 # Activity Plans
 
 PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips').
-The main rules are (i) that plans must consist of sequences of alternate `pam.activity.Activity` and `pam.activity.Leg` objects and (ii) that a plan must start and end with an `Activity`:
+The main rules are (i) that plans must consist of sequences of alternate [][pam.activity.Activity] and [][pam.activity.Leg] objects and (ii) that a plan must start and end with an `Activity`:
 
 ``` python
 from pam.core import Person
@@ -130,9 +130,9 @@ This need not be a `home` activity, for example in the case of night workers.
 We have encountered many variations of sequences for plans, including wrapping and wrapping.
 Although they are generally edge cases, they exists and generally represent real people.
 We are therefore endeavoring to support all these cases in our plan modifiers.
-This is resulting some difficult to follow logic (eg `pam.activity.Plan.fill_plan()`).
+This is resulting some difficult to follow logic (e.g., [][pam.activity.Plan.fill_plan]).
 
 ## Plan cropping
-The `pam.cropping` module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
+The [`pam.operations.cropping`](reference/pam/operations/cropping.md) module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
 Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population.
-Examples of using the module can be found in the `18_plan_cropping.ipynb` notebook.
+Examples of using the module can be found in the [][plan-cropping] notebook.

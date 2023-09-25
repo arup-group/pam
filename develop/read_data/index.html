@@ -2550,8 +2550,8 @@ look at the core pam data structure for populations:</p>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">population</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </span></code></pre></div>
 <h2 id="read-methods">Read methods<a class="headerlink" href="#read-methods" title="Permanent link">#</a></h2>
-<p>The first step in any application is to load your data into the core pam format (pam.core.Population). We
-are trying to support common tabular formats ('travel diaries') using <code>pam.read.load_travel_diary</code>. A
+<p>The first step in any application is to load your data into the core pam format (<a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Population"></a>). We
+are trying to support common tabular formats ('travel diaries') using <a class="autorefs autorefs-internal" href="../reference/pam/read/diary/#pam.read.diary.load_travel_diary"></a>. A
 travel diary can be composed of three tables:</p>
 <ul>
 <li><code>trips</code> (required) -  a trip diary for all people in the population, with rows representing trips</li>
@@ -2713,7 +2713,7 @@ named <code>pid</code> (person ID) and <code>hid</code> (household ID) are used 
 - <code>seq</code> - trip sequence number, if omitted pam will assume that trips are already ordered
 - <code>hzone</code> - household zone</p>
 <p><strong>'trip purpose' vs 'tour purpose':</strong></p>
-<p>We've encountered a few different ways that trip purpose can be encoded. The preferred way being to encode a trip purpose as being the activity of the destination, so that a trip home would be encoded as <code>purp = home</code>. However we've also seen the more complex 'tour purpose' encoding, in which case a return trip from work to home is encoded as <code>purp = work</code>. Good news is that the <code>pam.read.load_travel_diary</code> will deal ok with either. But it's worth checking.</p>
+<p>We've encountered a few different ways that trip purpose can be encoded. The preferred way being to encode a trip purpose as being the activity of the destination, so that a trip home would be encoded as <code>purp = home</code>. However we've also seen the more complex 'tour purpose' encoding, in which case a return trip from work to home is encoded as <code>purp = work</code>. Good news is that the <a class="autorefs autorefs-internal" href="../reference/pam/read/diary/#pam.read.diary.load_travel_diary"></a> will deal ok with either. But it's worth checking.</p>
 <p><strong>Using persons_attributes and /or households_attributes</strong></p>
 <p>eg:</p>
 <p><code>persons.csv</code></p>
@@ -2793,7 +2793,7 @@ named <code>pid</code> (person ID) and <code>hid</code> (household ID) are used 
 </table>
 <p>If you are using persons_attributes (<code>persons_attributes</code>) this table must contain a <code>pid</code> field (person ID). If you are using persons_attributes (<code>households_attributes</code>) this table must contain a <code>hid</code> field (household ID). In both cases, the frequency field <code>freq</code> may be used. All other attributes can be included with column names to suit the attribute. Note that <code>hzone</code> (home zone) can optionally be provided in the attribute tables.</p>
 <p><strong>A note about 'freq':</strong></p>
-<p>Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using columns called <code>freq</code>. We generally assume a frequency to represent expected occurrences in a full population. For example if we use a person frequency (<code>person.freq</code>) the the sum of all these frequencies (<code>population.size</code>), will equal the expected population size.</p>
+<p>Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using columns called <code>freq</code>. We generally assume a frequency to represent expected occurrences in a full population. For example if we use a person frequency (<a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Person.freq"></a>) the the sum of all these frequencies (<a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Population.size"></a>), will equal the expected population size.</p>
 <p>Because it is quite common to provide a person or household <code>freq</code> in the trips table, there are two special options (<code>trip_freq_as_person_freq = True</code> and <code>trip_freq_as_hh_freq = True</code>) that can be used to pass the <code>freq</code> field from the trips table to either the people or households table instead.</p>
 <p>Generally PAM will assume when you want some weighted output, that it should use household frequencies. If these have not been set then PAM will assume that the household frequency is the average
 frequency of persons within the household. If person frequencies are not set the PAM will assume that the person frequency is the average frequency of legs within the persons plan. If you wish to adjust frequencies of a population then you should use the <code>set_freq()</code> method, eg:</p>
@@ -2803,8 +2803,11 @@ frequency of persons within the household. If person frequencies are not set the
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">person</span><span class="o">.</span><span class="n">set_freq</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">freq</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="readwriteother-formats">Read/Write/Other formats<a class="headerlink" href="#readwriteother-formats" title="Permanent link">#</a></h3>
-<p>PAM can read/write to tabular formats and MATSim xml (<code>pam.read.read_matsim</code> and <code>pam.write.write_matsim</code>). PAM can also write to segmented OD matrices using <code>pam.write.write_od_matrices</code>.</p>
-<p>Benchmark or summary data and cross-tabulations can be extracted with the <code>pam.write.write_benchmarks</code> method, passing as arguments the data field(s) to summarise, the dimension(s) to group by, and the aggregation function(s). For example <code>pam.write_benchmarks(population, dimensions = ['duration_category'], data_fields= ['freq'], aggfunc = [sum]</code> returns the frequency breakdown of trips' duration. The <code>write</code> module also provides a number of wrappers for frequently-used benchmarks under the <code>write_*****_benchmark</code> name.</p>
+<p>PAM can read/write to tabular formats and MATSim xml (<a class="autorefs autorefs-internal" href="../reference/pam/read/matsim/#pam.read.matsim.read_matsim"></a> and <a class="autorefs autorefs-internal" href="../reference/pam/write/matsim/#pam.write.matsim.write_matsim"></a>).
+PAM can also write to segmented OD matrices using <a class="autorefs autorefs-internal" href="../reference/pam/write/matrices/#pam.write.matrices.write_od_matrices"></a>.</p>
+<p>Benchmark or summary data and cross-tabulations can be extracted with the <a href="../api/cli/#pam-report-benchmarks">benchmarking CLI method</a>.
+For more fine-grain control, pandas dataframes for specific data field(s), dimension(s) and aggregation function(s) can be generated with <a class="autorefs autorefs-internal" href="../reference/pam/report/benchmarks/#pam.report.benchmarks.create_benchmark"></a>.
+For example <code>pam.report.benchmarks.create_benchmark(population.trips_df(), dimensions = ['duration_category'], data_fields= ['freq'], aggfunc = [sum]</code> returns the frequency breakdown of trips' duration.</p>
 <p>Please get in touch if you would like additional support or feel free to add your own.</p>
 
 

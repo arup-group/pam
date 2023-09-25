@@ -2587,8 +2587,8 @@
 
 
 <h1 id="modelling-the-impact-of-policies-on-populations">Modelling the impact of policies on populations<a class="headerlink" href="#modelling-the-impact-of-policies-on-populations" title="Permanent link">#</a></h1>
-<p>PAM uses <strong>policies</strong> to model change to a population. 
-For example, based on social distancing requirements we might want to reflect that people are expected to make less shared shopping trips or tours. 
+<p>PAM uses <strong>policies</strong> to model change to a population.
+For example, based on social distancing requirements we might want to reflect that people are expected to make less shared shopping trips or tours.
 We can do this using the following policy, if you want to define the policy from first principles:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">policy_reduce_shopping_activities</span> <span class="o">=</span> <span class="n">HouseholdPolicy</span><span class="p">(</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        <span class="n">ReduceSharedActivity</span><span class="p">([</span><span class="s1">&#39;shop&#39;</span><span class="p">,</span> <span class="s1">&#39;shop_food&#39;</span><span class="p">]),</span>
@@ -2606,23 +2606,23 @@ We can do this using the following policy, if you want to define the policy from
 <p>In general, a policy is defined in the following way:</p>
 <ol>
 <li>You first select the level at which is should be applied:<ul>
-<li><code>HouseholdPolicy</code></li>
-<li><code>PersonPolicy</code></li>
-<li><code>ActivityPolicy</code></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/policies/#pam.policy.policies.HouseholdPolicy">HouseholdPolicy</a></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/policies/#pam.policy.policies.PersonPolicy">PersonPolicy</a></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/policies/#pam.policy.policies.ActivityPolicy">ActivityPolicy</a></li>
 </ul>
 </li>
 <li>You then select the modifier, which performs the actions to a person's activities<ul>
-<li><code>RemoveActivity</code></li>
-<li><code>ReduceSharedActivity</code></li>
-<li><code>MoveActivityTourToHomeLocation</code></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/modifiers/#pam.policy.modifiers.RemoveActivity">RemoveActivity</a></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/modifiers/#pam.policy.modifiers.ReduceSharedActivity">ReduceSharedActivity</a></li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/policy/modifiers/#pam.policy.modifiers.MoveActivityTourToHomeLocation">MoveActivityTourToHomeLocation</a></li>
 </ul>
 </li>
 <li>
-<p>Finally, you give a likelihood value with which the policy should be applied with. 
+<p>Finally, you give a likelihood value with which the policy should be applied with.
     You have a few choices here:</p>
 <ul>
 <li>
-<p>a number greater than 0 and less or equal to 1. 
+<p>a number greater than 0 and less or equal to 1.
 This will be understood to be at the level at which the policy is applied.
 E.g. <code class="language-python highlight"><span class="n">PersonPolicy</span><span class="p">(</span><span class="n">RemoveActivity</span><span class="p">([</span><span class="s1">&#39;work&#39;</span><span class="p">]),</span> <span class="mf">0.5</span><span class="p">)</span></code> will give each person a fifty-fifty chance of having their work activities removed.</p>
 </li>
@@ -2631,7 +2631,7 @@ E.g. <code class="language-python highlight"><span class="n">PersonPolicy</span>
 E.g. <code class="language-python highlight"><span class="n">HouseholdPolicy</span><span class="p">(</span><span class="n">RemoveActivity</span><span class="p">([</span><span class="s1">&#39;work&#39;</span><span class="p">]),</span> <span class="n">PersonProbability</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span></code> will apply a probability of 0.5 per person in a household, and apply the policy to all persons within a household if selected.</p>
 </li>
 <li>
-<p>you can also pass a function that operates on a <code>core.Household</code>, <code>core.Person</code> or <code>core.Activity</code> object and returns a number between 0 and 1.
+<p>you can also pass a function that operates on a <a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Household">Household</a>, <a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Person">Person</a> or <a class="autorefs autorefs-internal" href="../reference/pam/activity/#pam.activity.Activity">Activity</a> object and returns a number between 0 and 1.
 E.g. if our function is:
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">sampler</span><span class="p">(</span><span class="n">person</span><span class="p">):</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;key_worker&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>

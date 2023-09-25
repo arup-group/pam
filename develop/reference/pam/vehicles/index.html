@@ -1266,8 +1266,29 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.type_id" class="md-nav__link">
+    type_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.vid" class="md-nav__link">
+    vid
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pam.vehicles.ElectricVehicle.to_ev_xml" class="md-nav__link">
     to_ev_xml()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.to_xml" class="md-nav__link">
+    to_xml()
   </a>
   
 </li>
@@ -2869,8 +2890,29 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.type_id" class="md-nav__link">
+    type_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.vid" class="md-nav__link">
+    vid
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pam.vehicles.ElectricVehicle.to_ev_xml" class="md-nav__link">
     to_ev_xml()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pam.vehicles.ElectricVehicle.to_xml" class="md-nav__link">
+    to_xml()
   </a>
   
 </li>
@@ -3563,6 +3605,46 @@
 
 </div>
 
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="pam.vehicles.ElectricVehicle.type_id" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">type_id</span><span class="p">:</span> <span class="nb">str</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#pam.vehicles.ElectricVehicle.type_id" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="pam.vehicles.ElectricVehicle.vid" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">vid</span><span class="p">:</span> <span class="nb">str</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#pam.vehicles.ElectricVehicle.vid" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
 
 
 
@@ -3645,6 +3727,70 @@
 </span><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166"></a>            <span class="p">},</span>
 </span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167"></a>        <span class="p">)</span>
 </span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h3 id="pam.vehicles.ElectricVehicle.to_xml" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">to_xml</span><span class="p">(</span><span class="n">xf</span><span class="p">)</span></code>
+
+<a href="#pam.vehicles.ElectricVehicle.to_xml" class="headerlink" title="Permanent link">#</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Write vehicle to MATSim formatted xml.</p>
+
+
+
+  <table>
+    <thead>
+      <tr>
+        <th><b>PARAMETER</b></th>
+        <th><b> DESCRIPTION</b></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>xf</code></td>
+          <td class="doc-param-details">
+            <div class="doc-md-description">
+              <p>Parent xml element.</p>
+            </div>
+            <p>
+                <span class="doc-param-annotation">
+                  <b>TYPE:</b>
+                    <code><span title="lxml.etree.Element">Element</span></code>
+                </span>
+            </p>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>pam/vehicles.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-126">126</a></span>
+<span class="normal"><a href="#__codelineno-0-127">127</a></span>
+<span class="normal"><a href="#__codelineno-0-128">128</a></span>
+<span class="normal"><a href="#__codelineno-0-129">129</a></span>
+<span class="normal"><a href="#__codelineno-0-130">130</a></span>
+<span class="normal"><a href="#__codelineno-0-131">131</a></span>
+<span class="normal"><a href="#__codelineno-0-132">132</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126"></a><span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xf</span><span class="p">:</span> <span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Write vehicle to MATSim formatted xml.</span>
+</span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128"></a>
+</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a><span class="sd">        xf (et.Element): Parent xml element.</span>
+</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132"></a>    <span class="n">xf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">et</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;vehicle&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vid</span><span class="p">),</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type_id</span><span class="p">)}))</span>
 </span></code></pre></div></td></tr></table></div>
           </details>
   </div>

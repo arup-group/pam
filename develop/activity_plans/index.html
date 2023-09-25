@@ -2520,7 +2520,7 @@
 
 <h1 id="activity-plans">Activity Plans<a class="headerlink" href="#activity-plans" title="Permanent link">#</a></h1>
 <p>PAM supports arbitrarily complex chains of activities connected by 'legs' (these are equivalent to 'trips').
-The main rules are (i) that plans must consist of sequences of alternate <code>pam.activity.Activity</code> and <code>pam.activity.Leg</code> objects and (ii) that a plan must start and end with an <code>Activity</code>:</p>
+The main rules are (i) that plans must consist of sequences of alternate <a class="autorefs autorefs-internal" href="../reference/pam/activity/#pam.activity.Activity"></a> and <a class="autorefs autorefs-internal" href="../reference/pam/activity/#pam.activity.Leg"></a> objects and (ii) that a plan must start and end with an <code>Activity</code>:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">pam.core</span> <span class="kn">import</span> <span class="n">Person</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">pam.activity</span> <span class="kn">import</span> <span class="n">Leg</span><span class="p">,</span> <span class="n">Activity</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span> <span class="nn">pam</span>
@@ -2629,11 +2629,11 @@ This need not be a <code>home</code> activity, for example in the case of night 
 <p>We have encountered many variations of sequences for plans, including wrapping and wrapping.
 Although they are generally edge cases, they exists and generally represent real people.
 We are therefore endeavoring to support all these cases in our plan modifiers.
-This is resulting some difficult to follow logic (eg <code>pam.activity.Plan.fill_plan()</code>).</p>
+This is resulting some difficult to follow logic (e.g., <a class="autorefs autorefs-internal" href="../reference/pam/activity/#pam.activity.Plan.fill_plan"></a>).</p>
 <h2 id="plan-cropping">Plan cropping<a class="headerlink" href="#plan-cropping" title="Permanent link">#</a></h2>
-<p>The <code>pam.cropping</code> module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
+<p>The <a href="../reference/pam/operations/cropping/"><code>pam.operations.cropping</code></a> module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
 Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population.
-Examples of using the module can be found in the <code>18_plan_cropping.ipynb</code> notebook.</p>
+Examples of using the module can be found in the <a class="autorefs autorefs-internal" href="../examples/14_Advanced_Plan_Cropping/#plan-cropping"></a> notebook.</p>
 
 
 
