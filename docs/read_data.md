@@ -24,8 +24,8 @@ population.print()
 
 ## Read methods
 
-The first step in any application is to load your data into the core pam format (pam.core.Population). We
-are trying to support common tabular formats ('travel diaries') using `pam.read.load_travel_diary`. A
+The first step in any application is to load your data into the core pam format ([][pam.core.Population]). We
+are trying to support common tabular formats ('travel diaries') using [][pam.read.load_travel_diary]. A
 travel diary can be composed of three tables:
 
 - `trips` (required) -  a trip diary for all people in the population, with rows representing trips
@@ -99,7 +99,7 @@ The `trips` input **may** also include the following fields:
 
 **'trip purpose' vs 'tour purpose':**
 
-We've encountered a few different ways that trip purpose can be encoded. The preferred way being to encode a trip purpose as being the activity of the destination, so that a trip home would be encoded as `purp = home`. However we've also seen the more complex 'tour purpose' encoding, in which case a return trip from work to home is encoded as `purp = work`. Good news is that the `pam.read.load_travel_diary` will deal ok with either. But it's worth checking.
+We've encountered a few different ways that trip purpose can be encoded. The preferred way being to encode a trip purpose as being the activity of the destination, so that a trip home would be encoded as `purp = home`. However we've also seen the more complex 'tour purpose' encoding, in which case a return trip from work to home is encoded as `purp = work`. Good news is that the [][pam.read.load_travel_diary] will deal ok with either. But it's worth checking.
 
 **Using persons_attributes and /or households_attributes**
 
@@ -125,7 +125,7 @@ If you are using persons_attributes (`persons_attributes`) this table must conta
 
 **A note about 'freq':**
 
-Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using columns called `freq`. We generally assume a frequency to represent expected occurrences in a full population. For example if we use a person frequency (`person.freq`) the the sum of all these frequencies (`population.size`), will equal the expected population size.
+Frequencies (aka 'weights') for trips, persons or households can optionally be added to the respective input tables using columns called `freq`. We generally assume a frequency to represent expected occurrences in a full population. For example if we use a person frequency ([][pam.core.Person.freq]) the the sum of all these frequencies ([][pam.core.Population.size]), will equal the expected population size.
 
 Because it is quite common to provide a person or household `freq` in the trips table, there are two special options (`trip_freq_as_person_freq = True` and `trip_freq_as_hh_freq = True`) that can be used to pass the `freq` field from the trips table to either the people or households table instead.
 
@@ -141,8 +141,11 @@ for pid, person in household:
 
 ### Read/Write/Other formats
 
-PAM can read/write to tabular formats and MATSim xml (`pam.read.read_matsim` and `pam.write.write_matsim`). PAM can also write to segmented OD matrices using `pam.write.write_od_matrices`.
+PAM can read/write to tabular formats and MATSim xml ([][pam.read.read_matsim] and [][pam.write.write_matsim]).
+PAM can also write to segmented OD matrices using [][pam.write.write_od_matrices].
 
-Benchmark or summary data and cross-tabulations can be extracted with the `pam.write.write_benchmarks` method, passing as arguments the data field(s) to summarise, the dimension(s) to group by, and the aggregation function(s). For example `pam.write_benchmarks(population, dimensions = ['duration_category'], data_fields= ['freq'], aggfunc = [sum]` returns the frequency breakdown of trips' duration. The `write` module also provides a number of wrappers for frequently-used benchmarks under the `write_*****_benchmark` name.
+Benchmark or summary data and cross-tabulations can be extracted with the [benchmarking CLI method](api/cli.md#pam-report-benchmarks).
+For more fine-grain control, pandas dataframes for specific data field(s), dimension(s) and aggregation function(s) can be generated with [][pam.report.benchmarks.create_benchmark].
+For example `pam.report.benchmarks.create_benchmark(population.trips_df(), dimensions = ['duration_category'], data_fields= ['freq'], aggfunc = [sum]` returns the frequency breakdown of trips' duration.
 
 Please get in touch if you would like additional support or feel free to add your own.

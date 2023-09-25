@@ -66,6 +66,7 @@ plugins:
             signature_crossrefs: true
             show_root_toc_entry: false
             show_signature_annotations: false
+            inherited_members: true
           import:
             - https://docs.python.org/3/objects.inv
             - https://shapely.readthedocs.io/en/stable/objects.inv
