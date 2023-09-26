@@ -10,9 +10,8 @@ BENCHMARK_SECONDS = 90
 
 data_dir = Path(__file__).parent / "test_data"
 
-pytest.fixture(scope="module")
 
-
+@pytest.fixture(scope="module")
 def trips_attrs():
     trips = pd.read_csv(data_dir / "extended_travel_diaries.csv.gz")
     attributes = pd.read_csv(data_dir / "extended_persons_data.csv.gz")
