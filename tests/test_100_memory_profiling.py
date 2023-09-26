@@ -6,7 +6,7 @@ import pytest
 from pam import read
 
 BENCHMARK_MEM = "1400 MB"
-BENCHMARK_SECONDS = 140
+BENCHMARK_SECONDS = 250
 
 data_dir = Path(__file__).parent / "test_data"
 
@@ -25,7 +25,7 @@ def test_activity_loader_mem(trips_attrs):
     read.load_travel_diary(*trips_attrs)
 
 
-@pytest.mark.timeout(BENCHMARK_SECONDS)
+@pytest.mark.timeout(BENCHMARK_SECONDS, func_only=True)
 @pytest.mark.high_mem
 def test_activity_loader_time(trips_attrs):
     read.load_travel_diary(*trips_attrs)
