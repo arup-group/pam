@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - optimise.grid.grid_search fixed ([#239]).
 - `TourPlanner` prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - Fix for [#221](https://github.com/arup-group/pam/issues/221), improved "pt simplification" ([#222])
+- Slow loading of data with e.g., [pam.read.load_travel_diary][pam.read.diary.load_travel_diary] when using pandas v2.1.1 (caused by `pandas.MultiIndex.groupby`, see [pandas issue #55256](https://github.com/pandas-dev/pandas/issues/55256)). ([#258])
 
 ### Added
 - MATSim warm starting example ([#239]).
@@ -90,6 +91,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#258]: https://github.com/arup-group/pam/pull/258
 [#248]: https://github.com/arup-group/pam/pull/248
 [#240]: https://github.com/arup-group/pam/pull/240
 [#231]: https://github.com/arup-group/pam/pull/231

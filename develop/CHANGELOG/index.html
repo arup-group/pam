@@ -2769,6 +2769,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>optimise.grid.grid_search fixed ([#239]).</li>
 <li><code>TourPlanner</code> prevents sampling of duplicate destinations, and prevents origin being sampled as a destination (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
 <li>Fix for <a href="https://github.com/arup-group/pam/issues/221">#221</a>, improved "pt simplification" (<a href="https://github.com/arup-group/pam/pull/222">#222</a>)</li>
+<li>Slow loading of data with e.g., <a class="autorefs autorefs-internal" href="../reference/pam/read/diary/#pam.read.diary.load_travel_diary">pam.read.load_travel_diary</a> when using pandas v2.1.1 (caused by <code>pandas.MultiIndex.groupby</code>, see <a href="https://github.com/pandas-dev/pandas/issues/55256">pandas issue #55256</a>). (<a href="https://github.com/arup-group/pam/pull/258">#258</a>)</li>
 </ul>
 <h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">#</a></h3>
 <ul>
