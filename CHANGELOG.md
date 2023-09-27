@@ -19,12 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v0.3.0] - 2023-09-25
 
 ### Fixed
-- Fix readme CI badge ([#248])
-- Fix for plan cropping as per issue [#241] ([#240]).
-- [][pam.optimise.grid.grid_search] fixed ([#239]).
+- readme CI badge ([#248])
+- plan cropping as per issue [#241] ([#240]).
+- [][pam.optimise.grid.grid_search] ([#239]).
 - [`TourPlanner`][pam.samplers.tour.TourPlanner] prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
-- Fix for [][pam.activity.Plan.simplify_pt_trips] as per issue [#221], improving "pt simplification" ([#222])
-
+- [][pam.activity.Plan.simplify_pt_trips] as per issue [#221], improving "pt simplification" ([#222])
+- Slow loading of data with e.g., [pam.read.load_travel_diary][pam.read.diary.load_travel_diary] when using pandas v2.1.1 (caused by `pandas.MultiIndex.groupby`, see [pandas issue #55256](https://github.com/pandas-dev/pandas/issues/55256)). ([#258])
 ### Added
 - MATSim warm starting example ([#239]).
 - Support for MATSim vehicles files ([#215]).
@@ -91,6 +91,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#258]: https://github.com/arup-group/pam/pull/258
 [#253]: https://github.com/arup-group/pam/pull/253
 [#252]: https://github.com/arup-group/pam/pull/252
 [#249]: https://github.com/arup-group/pam/pull/249

@@ -481,29 +481,6 @@ def add_persons_from_trips(population: core.Population, trips: Optional[pd.DataF
         household.add(person)
 
 
-def hh_person_df_to_dict(df: pd.DataFrame, key_hh: str, key_person: str) -> dict[pd.DataFrame]:
-    """Restructure a dataframe as a nested dictionary of dataframes.
-
-    The first level is the household index.
-    The second level is the person index.
-    The value is the dataframe slice corresponding to that person.
-
-    The dictionary structure allows for much faster access to a person's data.
-
-    Args:
-        df (pd.DataFrame): the pandas dataframe to reindex.
-        key_hh (str): the household key column name.
-        key_person (str): the person key column name.
-
-    Returns:
-        dict:
-    """
-    df_dict = {x: {} for x in df[key_hh].unique()}
-    for (hid, pid), person_data in df.groupby([key_hh, key_person]):
-        df_dict[hid][pid] = person_data
-    return df_dict
-
-
 def tour_based_travel_diary_read(
     trips: pd.DataFrame,
     persons_attributes: Optional[pd.DataFrame] = None,
@@ -513,7 +490,7 @@ def tour_based_travel_diary_read(
 ) -> core.Population:
     """Complex travel diray reader.
 
-    Will try to infer home activiity and tour based purposes.
+    Will try to infer home activity and tour based purposes.
 
     Args:
         trips (pd.DataFrame):
@@ -531,17 +508,20 @@ def tour_based_travel_diary_read(
 
     if sort_by_seq is None and "seq" in trips.columns:
         sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
 
     if sort_by_seq:
-        trips = trips.sort_values(["hid", "pid", "seq"])
-
-    trips_dict = hh_person_df_to_dict(trips, "hid", "pid")  # convert to dict for faster indexing
+        trips = trips.sort_index()
 
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
-
-            if not len(person_trips):
+            try:
+                person_trips = trips.loc[hid, pid]
+            except KeyError:
                 person.stay_at_home()
                 continue
 
@@ -561,7 +541,7 @@ def tour_based_travel_diary_read(
                 )
             )
 
-            for n, trip in person_trips.iterrows():
+            for seq, trip in person_trips.iterrows():
                 start_loc = None
                 end_loc = None
 
@@ -571,7 +551,7 @@ def tour_based_travel_diary_read(
 
                 person.add(
                     activity.Leg(
-                        seq=n,
+                        seq=seq,
                         purp=trip.purp.lower(),
                         mode=trip["mode"].lower(),
                         start_area=trip.ozone,
@@ -587,7 +567,7 @@ def tour_based_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
+                        seq=seq + 1,
                         act=None,
                         area=trip.dzone,
                         loc=end_loc,
@@ -634,17 +614,20 @@ def trip_based_travel_diary_read(
 
     if sort_by_seq is None and "seq" in trips.columns:
         sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
 
     if sort_by_seq:
-        trips = trips.sort_values(["hid", "pid", "seq"])
-
-    trips_dict = hh_person_df_to_dict(trips, "hid", "pid")  # convert to dict for faster indexing
+        trips = trips.sort_index()
 
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
-
-            if not len(person_trips):
+            try:
+                person_trips = trips.loc[hid, pid]
+            except KeyError:
                 person.stay_at_home()
                 continue
 
@@ -661,7 +644,7 @@ def trip_based_travel_diary_read(
                 )
             )
 
-            for n, trip in person_trips.iterrows():
+            for seq, trip in person_trips.iterrows():
                 start_loc = None
                 end_loc = None
                 if include_loc:
@@ -671,7 +654,7 @@ def trip_based_travel_diary_read(
 
                 person.add(
                     activity.Leg(
-                        seq=n,
+                        seq=seq,
                         purp=purpose,
                         mode=trip["mode"].lower(),
                         start_area=trip.ozone,
@@ -686,7 +669,7 @@ def trip_based_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
+                        seq=seq + 1,
                         act=purpose,
                         area=trip.dzone,
                         loc=end_loc,
@@ -734,17 +717,20 @@ def from_to_travel_diary_read(
 
     if sort_by_seq is None and "seq" in trips.columns:
         sort_by_seq = True
+    if "seq" not in trips.columns:
+        seq = trips.groupby(["hid", "pid"]).cumcount()
+        trips = trips.assign(seq=seq.values)
+
+    trips = trips.set_index(["hid", "pid", "seq"])
 
     if sort_by_seq:
-        trips = trips.sort_values(["hid", "pid", "seq"])
-
-    trips_dict = hh_person_df_to_dict(trips, "hid", "pid")  # convert to dict for faster indexing
+        trips = trips.sort_index()
 
     for hid, household in population:
         for pid, person in household:
-            person_trips = trips_dict.get(hid, {}).get(pid, pd.DataFrame())
-
-            if not len(person_trips):
+            try:
+                person_trips = trips.loc[hid, pid]
+            except KeyError:
                 person.stay_at_home()
                 continue
 
@@ -768,7 +754,7 @@ def from_to_travel_diary_read(
                 )
             )
 
-            for n, trip in person_trips.iterrows():
+            for seq, trip in person_trips.iterrows():
                 start_loc = None
                 end_loc = None
                 if include_loc:
@@ -778,7 +764,7 @@ def from_to_travel_diary_read(
 
                 person.add(
                     activity.Leg(
-                        seq=n,
+                        seq=seq,
                         purp=purpose,
                         mode=trip["mode"].lower(),
                         start_area=trip.ozone,
@@ -793,7 +779,7 @@ def from_to_travel_diary_read(
 
                 person.add(
                     activity.Activity(
-                        seq=n + 1,
+                        seq=seq + 1,
                         act=purpose,
                         area=trip.dzone,
                         loc=end_loc,
