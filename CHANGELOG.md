@@ -16,21 +16,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v0.3.0] - 2023-09-25
+## [v0.3.0] - 2023-09-27
 
 ### Fixed
+
 - readme CI badge ([#248])
 - plan cropping as per issue [#241] ([#240]).
 - [][pam.optimise.grid.grid_search] ([#239]).
 - [`TourPlanner`][pam.samplers.tour.TourPlanner] prevents sampling of duplicate destinations, and prevents origin being sampled as a destination ([#231]).
 - [][pam.activity.Plan.simplify_pt_trips] as per issue [#221], improving "pt simplification" ([#222])
 - Slow loading of data with e.g., [pam.read.load_travel_diary][pam.read.diary.load_travel_diary] when using pandas v2.1.1 (caused by `pandas.MultiIndex.groupby`, see [pandas issue #55256](https://github.com/pandas-dev/pandas/issues/55256)). ([#258])
+
 ### Added
+
 - MATSim warm starting example ([#239]).
 - Support for MATSim vehicles files ([#215]).
 - Anaconda package of PAM, available on the `city-modelling-lab` channel ([#211]).
 - Python versions 3.9 to 3.11 support ([#192], [#210]).
-- Documentation, now available at https://arup-group.github.io/pam ([#197]).
+- Documentation, now available at <https://arup-group.github.io/pam> ([#197]).
 - Time-space prism method for selecting the location of non-mandatory activities ([#252]).
 - Simple IPF approach for generating synthetic populations ([#253]).
 - More control over the look of activity plan plots, with keyword arguments for [][pam.plot.plot_activities] (accessed via e.g. [pam.core.Person.plot]) extended to allow figure width and per-activity label font sizes to be updated ([#249]).
@@ -39,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** Contribution guidelines and issue/pull request templates ([#207]).
 
 ### Changed
+
 - Documentation and examples improved ([#239]).
 - [`TourPlanner`][pam.samplers.tour.TourPlanner] class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot ([#231]).
 - Minor changes to docs for zsh users (eg `pip install '.[dev]'`)([#219]).
@@ -50,39 +54,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **internal** CI actions link to reusable ones from `arup-group/actions-city-modelling-lab/`, including new memory profiling and multi-OS / python version tests ([#243]).
 
 ### Removed
+
 - Example data files not accessed by any example notebook ([#196]).
 - `ActivityDuration` class, replaced with methods in [`TourPlanner`][pam.samplers.tour.TourPlanner] and in `pam.samplers.tour` ([#231]).
 - **internal** Unused scripts that were outside the source code directory ([#199]).
 
 ## [v0.2.4] - 2023-06-08
+
 This version is a pre-release
 
 ### Added
+
 - Option to skip existing facility locations during facility sampling, by adding the `location_override` argument to the [`sample_locs`][pam.core.Population.sample_locs] method ([#190]).
 
 ## [v0.2.3] - 2023-06-07
+
 This version is a pre-release
 
 ### Fixed
+
 - A bug when creating origin-destination (OD) matrices within the `ODFactory` class ([#191]).
 
 ## [v0.2.2] - 2023-05-30
 
 ### Added
+
 - Abstract mode and location choice modules, available within the `pam.planner.choice_location` module ([#189]).
 
 ### Changed
+
 - **internal** Docker base image to ensure successful CodeBuild CD pipeline builds ([#188]).
 
 ## [v0.2.1] - 2023-05-11
 
 ### Added
+
 - **internal** initialisation files, such that PAM submodules can be accessed after installing the repository as a package with pip ([#187]).
 
 ## [v0.2.0] - 2023-05-10
 
 This is the first version of PAM which follows semantic versioning and can be considered the first _official_ release of the package.
-
 
 [v0.3.0]: https://github.com/arup-group/pam/compare/v0.2.4...v0.3.0
 [v0.2.4]: https://github.com/arup-group/pam/compare/v0.2.3...v0.2.4
