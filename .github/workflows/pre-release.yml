@@ -8,5 +8,6 @@ on:
 jobs:
   conda-build:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-build.yml@main
+    secrets: inherit
     with:
-      package_name: pam
+      package_name: cml-pam

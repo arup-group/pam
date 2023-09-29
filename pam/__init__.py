@@ -1,3 +1,6 @@
+__version__ = "0.3.0"
+
+
 class PAMValidationError(Exception):
     """Custom exception raised for an Activity Plan validation Error."""
 

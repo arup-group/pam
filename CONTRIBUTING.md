@@ -83,12 +83,12 @@ When adding docstrings, we request you use the [Google docstring style](https://
 ### Pre-release
 
 - [ ] Re-run tutorial Jupyter notebooks (`pytest examples/ --overwrite`).
-- [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current minor release of the form `X.Y`).
+- [ ] Make sure documentation builds without errors (`mike deploy [version]`, where `[version]` is the current patch release of the form `X.Y.Z`).
 - [ ] Make sure the [changelog][changelog] is up-to-date, especially that new features and backward incompatible changes are clearly marked.
 
 ### Create release
 
-- [ ] Bump the version number in `pyproject.toml`
+- [ ] Bump the version number in `pam/__init__.py`
 - [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and github `compare` link (at the bottom of the page).
 - [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag.
 - [ ] Create a release pull request to verify that the conda package builds successfully.
@@ -97,7 +97,7 @@ When adding docstrings, we request you use the [Google docstring style](https://
 ### Post-release
 
 - [ ] Update the changelog, adding a new `[Unreleased]` heading.
-- [ ] Update `pyproject.toml` to the next version appended with `.dev0`, in preparation for the next main commit.
+- [ ] Update `pam/__init__.py` to the next version appended with `.dev0`, in preparation for the next main commit.
 
 
 <!--- --8<-- [end:docs] -->

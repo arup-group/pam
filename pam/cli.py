@@ -73,7 +73,7 @@ def comment_option(func):
     return func
 
 
-@click.version_option()
+@click.version_option(package_name="cml-pam")
 @click.group()
 def cli():
     """Population Activity Modeller (PAM) Command Line Tool."""

@@ -9,7 +9,7 @@ jobs:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-upload.yml@main
     secrets: inherit
     with:
-      package_name: pam
+      package_name: cml-pam
 
   docs-stable:
     permissions:
