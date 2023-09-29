@@ -1,0 +1,1 @@
+::: pam.array.encode
