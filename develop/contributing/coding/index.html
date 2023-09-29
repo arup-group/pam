@@ -2781,12 +2781,12 @@ When adding docstrings, we request you use the <a href="https://google.github.io
 <h3 id="pre-release">Pre-release<a class="headerlink" href="#pre-release" title="Permanent link">#</a></h3>
 <ul class="task-list">
 <li class="task-list-item"><input type="checkbox"/> Re-run tutorial Jupyter notebooks (<code>pytest examples/ --overwrite</code>).</li>
-<li class="task-list-item"><input type="checkbox"/> Make sure documentation builds without errors (<code>mike deploy [version]</code>, where <code>[version]</code> is the current minor release of the form <code>X.Y</code>).</li>
+<li class="task-list-item"><input type="checkbox"/> Make sure documentation builds without errors (<code>mike deploy [version]</code>, where <code>[version]</code> is the current patch release of the form <code>X.Y.Z</code>).</li>
 <li class="task-list-item"><input type="checkbox"/> Make sure the <a class="autorefs autorefs-internal" href="../../CHANGELOG/#changelog">changelog</a> is up-to-date, especially that new features and backward incompatible changes are clearly marked.</li>
 </ul>
 <h3 id="create-release">Create release<a class="headerlink" href="#create-release" title="Permanent link">#</a></h3>
 <ul class="task-list">
-<li class="task-list-item"><input type="checkbox"/> Bump the version number in <code>pyproject.toml</code></li>
+<li class="task-list-item"><input type="checkbox"/> Bump the version number in <code>pam/__init__.py</code></li>
 <li class="task-list-item"><input type="checkbox"/> Update the <a class="autorefs autorefs-internal" href="../../CHANGELOG/#changelog">changelog</a> with final version number of the form <code>vX.Y.Z</code>, release date, and github <code>compare</code> link (at the bottom of the page).</li>
 <li class="task-list-item"><input type="checkbox"/> Commit with message <code>Release vX.Y.Z</code>, then add a <code>vX.Y.Z</code> tag.</li>
 <li class="task-list-item"><input type="checkbox"/> Create a release pull request to verify that the conda package builds successfully.</li>
@@ -2795,7 +2795,7 @@ When adding docstrings, we request you use the <a href="https://google.github.io
 <h3 id="post-release">Post-release<a class="headerlink" href="#post-release" title="Permanent link">#</a></h3>
 <ul class="task-list">
 <li class="task-list-item"><input type="checkbox"/> Update the changelog, adding a new <code>[Unreleased]</code> heading.</li>
-<li class="task-list-item"><input type="checkbox"/> Update <code>pyproject.toml</code> to the next version appended with <code>.dev0</code>, in preparation for the next main commit.</li>
+<li class="task-list-item"><input type="checkbox"/> Update <code>pam/__init__.py</code> to the next version appended with <code>.dev0</code>, in preparation for the next main commit.</li>
 </ul>
 
 

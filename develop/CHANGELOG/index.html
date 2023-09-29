@@ -949,11 +949,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
-    Unreleased
+  <a href="#v030-2023-09-27" class="md-nav__link">
+    v0.3.0 - 2023-09-27
   </a>
   
-    <nav class="md-nav" aria-label="Unreleased">
+    <nav class="md-nav" aria-label="v0.3.0 - 2023-09-27">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2591,11 +2591,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
-    Unreleased
+  <a href="#v030-2023-09-27" class="md-nav__link">
+    v0.3.0 - 2023-09-27
   </a>
   
-    <nav class="md-nav" aria-label="Unreleased">
+    <nav class="md-nav" aria-label="v0.3.0 - 2023-09-27">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2761,51 +2761,53 @@ Security: in case of vulnerabilities.
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="unreleased"><a href="https://github.com/arup-group/pam/compare/v0.2.4...main">Unreleased</a><a class="headerlink" href="#unreleased" title="Permanent link">#</a></h2>
+<h2 id="v030-2023-09-27"><a href="https://github.com/arup-group/pam/compare/v0.2.4...v0.3.0">v0.3.0</a> - 2023-09-27<a class="headerlink" href="#v030-2023-09-27" title="Permanent link">#</a></h2>
 <h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">#</a></h3>
 <ul>
-<li>Fix readme CI badge (<a href="https://github.com/arup-group/pam/pull/248">#248</a>)</li>
-<li>Fix for cropping as per issue <a href="https://github.com/arup-group/pam/issues/241">#241</a> (<a href="https://github.com/arup-group/pam/pull/240">#240</a>).</li>
-<li>optimise.grid.grid_search fixed ([#239]).</li>
-<li><code>TourPlanner</code> prevents sampling of duplicate destinations, and prevents origin being sampled as a destination (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
-<li>Fix for <a href="https://github.com/arup-group/pam/issues/221">#221</a>, improved "pt simplification" (<a href="https://github.com/arup-group/pam/pull/222">#222</a>)</li>
+<li>readme CI badge (<a href="https://github.com/arup-group/pam/pull/248">#248</a>)</li>
+<li>plan cropping as per issue <a href="https://github.com/arup-group/pam/issues/241">#241</a> (<a href="https://github.com/arup-group/pam/pull/240">#240</a>).</li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/optimise/grid/#pam.optimise.grid.grid_search"></a> (<a href="https://github.com/arup-group/pam/pull/239">#239</a>).</li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/samplers/tour/#pam.samplers.tour.TourPlanner"><code>TourPlanner</code></a> prevents sampling of duplicate destinations, and prevents origin being sampled as a destination (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/activity/#pam.activity.Plan.simplify_pt_trips"></a> as per issue <a href="https://github.com/arup-group/pam/issues/221">#221</a>, improving "pt simplification" (<a href="https://github.com/arup-group/pam/pull/222">#222</a>)</li>
 <li>Slow loading of data with e.g., <a class="autorefs autorefs-internal" href="../reference/pam/read/diary/#pam.read.diary.load_travel_diary">pam.read.load_travel_diary</a> when using pandas v2.1.1 (caused by <code>pandas.MultiIndex.groupby</code>, see <a href="https://github.com/pandas-dev/pandas/issues/55256">pandas issue #55256</a>). (<a href="https://github.com/arup-group/pam/pull/258">#258</a>)</li>
 </ul>
 <h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">#</a></h3>
 <ul>
-<li>MATSim warm starting example ([#239]).</li>
+<li>MATSim warm starting example (<a href="https://github.com/arup-group/pam/pull/239">#239</a>).</li>
 <li>Support for MATSim vehicles files (<a href="https://github.com/arup-group/pam/pull/215">#215</a>).</li>
 <li>Anaconda package of PAM, available on the <code>city-modelling-lab</code> channel (<a href="https://github.com/arup-group/pam/pull/211">#211</a>).</li>
 <li>Python versions 3.9 to 3.11 support (<a href="https://github.com/arup-group/pam/pull/192">#192</a>, <a href="https://github.com/arup-group/pam/pull/210">#210</a>).</li>
-<li>Documentation, now available at https://arup-group.github.io/pam (<a href="https://github.com/arup-group/pam/pull/197">#197</a>).</li>
+<li>Documentation, now available at <a href="https://arup-group.github.io/pam">https://arup-group.github.io/pam</a> (<a href="https://github.com/arup-group/pam/pull/197">#197</a>).</li>
 <li>Time-space prism method for selecting the location of non-mandatory activities (<a href="https://github.com/arup-group/pam/pull/252">#252</a>).</li>
-<li>Simple IPF approach for generating synthetic populations ([#253]).</li>
+<li>Simple IPF approach for generating synthetic populations (<a href="https://github.com/arup-group/pam/pull/253">#253</a>).</li>
+<li>More control over the look of activity plan plots, with keyword arguments for <a class="autorefs autorefs-internal" href="../reference/pam/plot/plans/#pam.plot.plans.plot_activities"></a> (accessed via e.g. [pam.core.Person.plot]) extended to allow figure width and per-activity label font sizes to be updated (<a href="https://github.com/arup-group/pam/pull/249">#249</a>).</li>
 <li><strong>internal</strong> <a href="https://codecov.io">Codecov</a> and <a href="https://pre-commit.ci/">pre-commit</a> CI bots (<a href="https://github.com/arup-group/pam/pull/202">#202</a>).</li>
-<li><strong>internal</strong> Github action job to build PAM and run tests on a Windows machine (<a href="https://github.com/arup-group/pam/pull/192">#192</a>).</li>
+<li><strong>internal</strong> Github action job to build PAM and run tests on Windows and MacOS machines (<a href="https://github.com/arup-group/pam/pull/192">#192</a>).</li>
 <li><strong>internal</strong> Contribution guidelines and issue/pull request templates (<a href="https://github.com/arup-group/pam/pull/207">#207</a>).</li>
 </ul>
 <h3 id="changed">Changed<a class="headerlink" href="#changed" title="Permanent link">#</a></h3>
 <ul>
-<li>Documentation and examples improved ([#239]).</li>
-<li><code>ActivityDuration</code> class name changed to <code>DurationEstimator</code> (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
-<li><code>TourPlanner</code> class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
+<li>Documentation and examples improved (<a href="https://github.com/arup-group/pam/pull/239">#239</a>).</li>
+<li><a class="autorefs autorefs-internal" href="../reference/pam/samplers/tour/#pam.samplers.tour.TourPlanner"><code>TourPlanner</code></a> class sequences stops using GreedyTSP algorithm, rather than previous method sorting by distance from depot (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
 <li>Minor changes to docs for zsh users (eg <code>pip install '.[dev]'</code>)(<a href="https://github.com/arup-group/pam/pull/219">#219</a>).</li>
 <li>Recommended installation instructions, to use <a href="https://mamba.readthedocs.io/en/latest/index.html">mamba</a> instead of pip (<a href="https://github.com/arup-group/pam/pull/192">#192</a>, <a href="https://github.com/arup-group/pam/pull/211">#211</a>).</li>
+<li>Docker image entry point from python to bash (<a href="https://github.com/arup-group/pam/pull/230">#230</a>).</li>
 <li><strong>internal</strong> Source code and example notebook code layout to align with pep8 guidelines and to remove unused dependency imports (<a href="https://github.com/arup-group/pam/pull/196">#196</a>, <a href="https://github.com/arup-group/pam/pull/201">#201</a>).</li>
+<li><strong>internal</strong> Docstrings to Google style (<a href="https://github.com/arup-group/pam/pull/208">#208</a>)</li>
 <li><strong>internal</strong> development toolkit, moving from internal scripts to pytest plugins (<a href="https://github.com/arup-group/pam/pull/193">#193</a>).</li>
 <li><strong>internal</strong> CI actions link to reusable ones from <code>arup-group/actions-city-modelling-lab/</code>, including new memory profiling and multi-OS / python version tests (<a href="https://github.com/arup-group/pam/pull/243">#243</a>).</li>
 </ul>
 <h3 id="removed">Removed<a class="headerlink" href="#removed" title="Permanent link">#</a></h3>
 <ul>
 <li>Example data files not accessed by any example notebook (<a href="https://github.com/arup-group/pam/pull/196">#196</a>).</li>
+<li><code>ActivityDuration</code> class, replaced with methods in <a class="autorefs autorefs-internal" href="../reference/pam/samplers/tour/#pam.samplers.tour.TourPlanner"><code>TourPlanner</code></a> and in <code>pam.samplers.tour</code> (<a href="https://github.com/arup-group/pam/pull/231">#231</a>).</li>
 <li><strong>internal</strong> Unused scripts that were outside the source code directory (<a href="https://github.com/arup-group/pam/pull/199">#199</a>).</li>
 </ul>
 <h2 id="v024-2023-06-08"><a href="https://github.com/arup-group/pam/compare/v0.2.3...v0.2.4">v0.2.4</a> - 2023-06-08<a class="headerlink" href="#v024-2023-06-08" title="Permanent link">#</a></h2>
 <p>This version is a pre-release</p>
 <h3 id="added_1">Added<a class="headerlink" href="#added_1" title="Permanent link">#</a></h3>
 <ul>
-<li>Option to skip existing facility locations during facility sampling, by adding the <code>location_override</code> argument to the <code>population.sample_locs</code> method (<a href="https://github.com/arup-group/pam/pull/190">#190</a>).</li>
-<li>More control over the look of activity plan plots, with keyword arguments for e.g. <code>Person.plot()</code> extended to allow figure width and per-activity label fontsizes to be updated.</li>
+<li>Option to skip existing facility locations during facility sampling, by adding the <code>location_override</code> argument to the <a class="autorefs autorefs-internal" href="../reference/pam/core/#pam.core.Population.sample_locs"><code>sample_locs</code></a> method (<a href="https://github.com/arup-group/pam/pull/190">#190</a>).</li>
 </ul>
 <h2 id="v023-2023-06-07"><a href="https://github.com/arup-group/pam/compare/v0.2.2...v0.2.3">v0.2.3</a> - 2023-06-07<a class="headerlink" href="#v023-2023-06-07" title="Permanent link">#</a></h2>
 <p>This version is a pre-release</p>
