@@ -1,6 +1,7 @@
 click < 9
 gdal < 3.6
 geopandas >= 0.13, < 0.14
+importlib_resources >= 6, < 7
 ipykernel < 7
 lxml < 5
 matplotlib >= 3, < 4

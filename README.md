@@ -65,11 +65,8 @@ To install PAM, we recommend using the [mamba](https://mamba.readthedocs.io/en/l
 ### As a user
 <!--- --8<-- [start:docs-install-user] -->
 ``` shell
-git clone git@github.com:arup-group/pam.git
-cd pam
-mamba create -n pam -c conda-forge -c city-modelling-lab --file requirements/base.txt
+mamba create -n pam -c conda-forge -c city-modelling-lab cml-pam
 mamba activate pam
-pip install --no-deps .
 ```
 <!--- --8<-- [end:docs-install-user] -->
 ### As a developer
@@ -82,6 +79,11 @@ mamba activate pam
 pip install --no-deps -e .
 ```
 <!--- --8<-- [end:docs-install-dev] -->
+
+### Installing with pip
+
+Installing directly with pip as a user (`pip install cml-pam`) or as a developer (`pip install -e '.[dev]'`) is also possible, but you will need the `libgdal` & `libspatialindex` geospatial non-python libraries pre-installed.
+
 For more detailed instructions, see our [documentation](https://arup-group.github.io/pam/latest/installation/).
 
 ## Contributing
@@ -111,4 +113,4 @@ mike deploy 0.2
 mike serve
 ```
 
-Then you can view the documentation in a browser at http://localhost:8000/.
+Then you can view the documentation in a browser at <http://localhost:8000/>.
