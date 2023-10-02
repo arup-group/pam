@@ -43,14 +43,25 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 ![Example activity sequences.\label{fig:Example activity sequences}](../example-activity-plans.png)
 
+# Existing tooling review
+
+In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Equsim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience. 
+
 # Statement of need
 
 `PAM` is a python package providing a pythonic API for creating and/or working with activity-based synthetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats.
-The `PAM` API allows users to create and/or manipulate activity sequences using intuitive objects and methods.
-This allows researchers and practitioners to experiment with activity modelling approaches and quickly build synthetic populations to use in downstream applications, such as simulations.
 
 `PAM` is intended for use by those wanting to (i) build their own activity model, (ii) modify existing synthetic populations to create new scenarios, and (iii) work with the agent-based modelling tool MATSim.
-`PAM` provides example notebooks of these applications as part of its extensive documentation, and common features are exposed via a command-line interface.
+
+`PAM` provides an accessible and flexible tooling for researchers and practitioners to experiment with activity modelling approaches and quickly build synthetic populations to use in downstream applications, such as simulations.
+
+# Design
+
+The core `PAM` API provides intuitive objects, representing populations, households, persons, vehicles, plans, activities and trips. These are represented in memory as trees, such that a population is composed of households, household composed of persons and so on.
+
+`PAM` builds common higher-level functionality on this core data structure, such as read/write operations, samplers, modifications and visualisation. `PAM` provides example notebooks of these applications as part of its documentation, and common features are exposed via a command-line interface.
+
+The design of `PAM` will not be perfomant in some situations. Rather it focuses on accessibility and flexibility.
 
 # Development history
 
