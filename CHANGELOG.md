@@ -16,6 +16,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **internal** conda upload CI script.
+
+### Added
+
+- **internal** PyPI build and upload CI scripts (triggered on tagging and releasing new versions).
+
+### Changed
+
+- User install instructions to prefer direct install from mamba (or PyPI if a user is willing to deal with installing non-python libs themselves).
+
 ## [v0.3.0] - 2023-09-27
 
 ### Fixed
@@ -95,6 +109,7 @@ This version is a pre-release
 
 This is the first version of PAM which follows semantic versioning and can be considered the first _official_ release of the package.
 
+[Unreleased]: https://github.com/arup-group/pam/compare/v0.3.0...main
 [v0.3.0]: https://github.com/arup-group/pam/compare/v0.2.4...v0.3.0
 [v0.2.4]: https://github.com/arup-group/pam/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/arup-group/pam/compare/v0.2.2...v0.2.3

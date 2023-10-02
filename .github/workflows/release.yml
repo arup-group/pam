@@ -10,6 +10,14 @@ jobs:
     secrets: inherit
     with:
       package_name: cml-pam
+      build_workflow: pre-release.yml
+
+  pip-upload:
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-upload.yml@main
+    secrets: inherit
+    with:
+      package_name: cml-pam
+      build_workflow: pre-release.yml
 
   docs-stable:
     permissions:
