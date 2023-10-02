@@ -45,7 +45,7 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 # Existing tooling review
 
-In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Equsim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience. 
+In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Eqasim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience. 
 
 # Statement of need
 
