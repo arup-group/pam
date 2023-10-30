@@ -220,4 +220,4 @@ def test_get_float_attribute_from_person():
     </person>"""
     elem = et.fromstring(text)
     pid, attributes = get_attributes_from_person(elem)
-    assert isinstance(attributes['age'], float)
+    assert isinstance(attributes["age"], float)
