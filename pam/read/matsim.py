@@ -469,7 +469,7 @@ def get_attributes_from_person(elem):
         elif attribute_type == "java.lang.Integer":
             attributes[attribute_name] = int(attr.text)
         elif attribute_type == "java.lang.Double":
-            attributes[attribute_name] = float(attr)
+            attributes[attribute_name] = float(attr.text)
         elif attribute_type == "org.matsim.vehicles.PersonVehicles":
             attributes[attribute_name] = parse_veh_attribute(attr.text)
         # last try:
