@@ -210,3 +210,14 @@ def test_get_attributes_from_person():
     assert pid == "chris"
     assert attributes["hid"] == "A"
     assert attributes["vehicles"] == {"car": "chris"}
+
+
+def test_get_float_attribute_from_person():
+    text = """<person id="chris">
+        <attributes>
+            <attribute name="age" class="java.lang.Double">10.0</attribute>
+        </attributes>
+    </person>"""
+    elem = et.fromstring(text)
+    pid, attributes = get_attributes_from_person(elem)
+    assert isinstance(attributes["age"], float)
