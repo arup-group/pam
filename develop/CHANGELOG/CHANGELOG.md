@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **internal** conda upload CI script.
+- **public** fix person attributes type conversion bug ([#263](https://github.com/arup-group/pam/issues/263))
 
 ### Added
 
