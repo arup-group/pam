@@ -20,6 +20,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+
+### Added
+
+
+### Changed
+
+
+## [v0.3.1] - 2023-11-07
+
+### Fixed
+
 - **internal** conda upload CI script.
 - **public** fix person attributes type conversion bug ([#263](https://github.com/arup-group/pam/issues/263))
 
@@ -110,7 +121,8 @@ This version is a pre-release
 
 This is the first version of PAM which follows semantic versioning and can be considered the first _official_ release of the package.
 
-[Unreleased]: https://github.com/arup-group/pam/compare/v0.3.0...main
+[Unreleased]: https://github.com/arup-group/pam/compare/v0.3.1...main
+[v0.3.1]: https://github.com/arup-group/pam/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/arup-group/pam/compare/v0.2.4...v0.3.0
 [v0.2.4]: https://github.com/arup-group/pam/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/arup-group/pam/compare/v0.2.2...v0.2.3
