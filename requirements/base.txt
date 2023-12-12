@@ -8,7 +8,7 @@ numpy >= 1, < 2
 pandas >= 1.5, < 3
 plotly >= 4, < 6
 prettytable >= 3, < 4
-python-Levenshtein >= 0.21, < 0.22
+python-Levenshtein >= 0.21, < 0.24
 rich >= 12, < 14
 Rtree >= 1, < 2
 s2sphere < 0.3
