@@ -16,8 +16,8 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [windows-latest]
-        py3version: ["9", "10"]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        py3version: ["9", "10", "11"]
       fail-fast: false
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@try-python--m-pytest
     with:

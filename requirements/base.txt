@@ -1,5 +1,5 @@
 click < 9
-gdal >= 3.7, < 3.8
+gdal = 3.8.1
 geopandas >= 0.13, < 0.14
 ipykernel < 7
 lxml < 5
