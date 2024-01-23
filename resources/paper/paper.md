@@ -36,12 +36,12 @@ Modelling how a population of people will behave in some future scenario is an i
 In the transport domain, this might be predicting how many people will buy an electric vehicle so that future energy demand can be planned, or predicting how many people will use a new train station so that a new rail line can be funded.
 
 Activity modelling is a growing paradigm used for these models, in which individuals are explicitly represented and their movements are based on predicting sequences of activities connected by trips [@TRB-primer].
-Each activity is geolocated and has a type or purpose, such as "work".
+Each activity is geolocated and has a type or purpose, such as "work". Figure \ref{fig:Example activity sequences} shows illustrative activity sequence outputs from an activitiy model.
 This is a key shift from more simplified approaches and can be used to potentially create more useful and more accurate predictions [@Rasouli].
 
 Activity modelling is also a key component of agent-based modelling approaches such as MATSim [@MATSim:2016].
 
-![Example activity sequences.\label{fig:Example activity sequences}](../example-activity-plans.png)
+![Example activity sequences for persons A, B and C. Connected coloured blocks represent activities that take place at specific locations. Note, for example, that persons A and B share the same workplace. Connecting lines represent travel between these locations.\label{fig:Example activity sequences}](../example-activity-plans.png)
 
 # Existing tooling review
 
