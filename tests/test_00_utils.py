@@ -5,13 +5,12 @@ import numpy as np
 import pandas as pd
 import pytest
 from geopandas import GeoDataFrame
+from pam import utils
+from pam.core import Population
 from pandas import Timestamp
 from pandas.testing import assert_frame_equal
 from s2sphere import CellId
 from shapely.geometry import LineString
-
-from pam import utils
-from pam.core import Population
 
 
 @pytest.fixture()

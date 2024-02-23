@@ -1,5 +1,4 @@
 import pytest
-
 from pam.read import read_matsim
 from pam.scoring import CharyparNagelPlanScorer
 

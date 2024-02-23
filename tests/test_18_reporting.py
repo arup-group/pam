@@ -1,5 +1,4 @@
 import numpy as np
-
 from pam.report import stringify, summary
 
 # summary

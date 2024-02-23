@@ -1,7 +1,6 @@
 import pytest
-from shapely import Point
-
 from pam.activity import Activity, Leg, Plan, Trip
+from shapely import Point
 
 
 @pytest.mark.parametrize(

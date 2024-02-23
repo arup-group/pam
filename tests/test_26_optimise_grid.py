@@ -1,6 +1,6 @@
 """Tests for pam/optimise/grid.py"""
-import pytest
 
+import pytest
 from pam.activity import Activity, Leg, Plan
 from pam.core import Person
 from pam.optimise import grid

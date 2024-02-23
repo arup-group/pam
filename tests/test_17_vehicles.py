@@ -3,7 +3,6 @@ from copy import deepcopy
 import importlib_resources
 import lxml
 import pytest
-
 from pam import PAMVehicleIdError, PAMVehicleTypeError
 from pam.core import Person, Population
 from pam.read.matsim import read_matsim
