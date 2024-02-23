@@ -30,8 +30,8 @@ markdown_extensions:
   - attr_list
   - mkdocs-click
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -46,7 +46,6 @@ markdown_extensions:
   - toc:
       permalink: "#"
       toc_depth: 3
-hooks:
   - docs/static/hooks.py
 plugins:
   - search
@@ -68,7 +67,6 @@ plugins:
               - "!^_"
             merge_init_into_class: true
             show_if_no_docstring: true
-            show_signature_annotations: true
             signature_crossrefs: true
             show_root_toc_entry: false
             show_signature_annotations: false

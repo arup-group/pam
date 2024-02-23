@@ -41,7 +41,7 @@ jobs:
   memory-profile:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-memory-profile.yml@main
     with:
-      py3version: "11"
+      py3version: "12"
       upload_flamegraph: true
 
   cruft-check:
