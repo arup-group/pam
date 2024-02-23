@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        py3version: ["9", "11"]
+        py3version: ["10", "12"]
       fail-fast: false
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
     with:
@@ -32,7 +32,7 @@ jobs:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
     with:
       os: ubuntu-latest
-      py3version: "11"
+      py3version: "12"
       notebook_kernel: pam
       lint: false
       pytest_args: 'tests/'  # ignore example notebooks
@@ -43,3 +43,6 @@ jobs:
     with:
       py3version: "11"
       upload_flamegraph: true
+
+  cruft-check:
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/template-check.yml@main

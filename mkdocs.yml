@@ -18,6 +18,9 @@ theme:
   custom_dir: docs/overrides
   features:
     - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
   logo: resources/logos/small.png
   favicon: resources/logos/mini.png
 repo_url: https://github.com/arup-group/pam/
@@ -36,6 +39,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       clickable_checkbox: true
   - toc:
@@ -44,6 +49,7 @@ markdown_extensions:
 hooks:
   - docs/static/hooks.py
 plugins:
+  - search
   - autorefs
   - mkdocs-jupyter:
       include: ["examples/*.ipynb"]
@@ -67,14 +73,14 @@ plugins:
             show_root_toc_entry: false
             show_signature_annotations: false
             inherited_members: true
+          paths: [src]
           import:
             - https://docs.python.org/3/objects.inv
             - https://shapely.readthedocs.io/en/stable/objects.inv
             - https://pandas.pydata.org/docs/objects.inv
             - https://geopandas.org/en/stable/objects.inv
-  - search
 watch:
-  - pam
+  - src/pam
 extra_css:
   - static/extras.css
 extra:
