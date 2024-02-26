@@ -36,7 +36,7 @@ Modelling how a population of people will behave in some future scenario is an i
 In the transport domain, this might be predicting how many people will buy an electric vehicle so that future energy demand can be planned, or predicting how many people will use a new train station so that a new rail line can be funded.
 
 Activity modelling is a growing paradigm used for these models, in which individuals are explicitly represented and their movements are based on predicting sequences of activities connected by trips [@TRB-primer].
-Each activity is geolocated and has a type or purpose, such as "work". Figure \ref{fig:Example activity sequences} shows illustrative activity sequence outputs from an activitiy model.
+Each activity is geolocated and has a type or purpose, such as "work". Figure \ref{fig:Example activity sequences} shows illustrative activity sequence outputs from an activity model.
 This is a key shift from more simplified approaches and can be used to potentially create more useful and more accurate predictions [@Rasouli].
 
 Activity modelling is also a key component of agent-based modelling approaches such as MATSim [@MATSim:2016].
@@ -45,7 +45,7 @@ Activity modelling is also a key component of agent-based modelling approaches s
 
 # Existing tooling review
 
-In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Eqasim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience. 
+In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Eqasim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience.
 
 # Statement of need
 
@@ -61,7 +61,7 @@ The core `PAM` API provides intuitive objects, representing populations, househo
 
 `PAM` builds common higher-level functionality on this core data structure, such as read/write operations, samplers, modifications and visualisation. `PAM` provides example notebooks of these applications as part of its documentation, and common features are exposed via a command-line interface.
 
-The design of `PAM` will not be perfomant in some situations. Rather it focuses on accessibility and flexibility.
+The design of `PAM` will not be performant in some situations. Rather it focuses on accessibility and flexibility.
 
 # Development history
 
