@@ -16,7 +16,7 @@ authors:
     affiliation: 1
   - name: Kasia Kozlowska
     affiliation: 1
-  - names: Michael Fitzmaurice
+  - name: Michael Fitzmaurice
     affiliation: 1
 affiliations:
  - name: Arup, City Modelling Lab
@@ -32,6 +32,8 @@ bibliography: paper.bib
 
 # Summary
 
+`PAM` is an activity modelling tool. It can be used for creating, modifying or modelling synthetic populations of agents and their activity sequences. Where activity sequences represent individual agent actions and movements.
+
 Modelling how a population of people will behave in some future scenario is an important tool in policy, operational, and infrastructure decision making.
 In the transport domain, this might be predicting how many people will buy an electric vehicle so that future energy demand can be planned, or predicting how many people will use a new train station so that a new rail line can be funded.
 
@@ -41,15 +43,17 @@ This is a key shift from more simplified approaches and can be used to potential
 
 Activity modelling is also a key component of agent-based modelling approaches such as MATSim [@MATSim:2016].
 
+`PAM` provides functionality for these applications, including working with MATSim.
+
 ![Example activity sequences for persons A, B and C. Connected coloured blocks represent activities that take place at specific locations. Note, for example, that persons A and B share the same workplace. Connecting lines represent travel between these locations.\label{fig:Example activity sequences}](../example-activity-plans.png)
 
 # Existing tooling review
 
-In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Eqasim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without MATSim experience.
+In the transport domain, we are aware of two open-source activity-based transport modeling tools. The first is ActivitySim [@ActivitySim], an established framework of model components developed and extensively applied in the United States. Although there is some flexibility within the underlying API, the framework is highly opinionated and relatively inaccessible without training. The second is Eqasim [@Eqasim], a newer project for creating scenarios for MATSim. The project provides a pipeline of various Python and java-based tools for generating MATSim scenarios using an activity-based modeling approach. There is potential to reuse this framework beyond MATSim, but users require significant MATSim experience to do so.
 
 # Statement of need
 
-`PAM` is a python package providing a pythonic API for creating and/or working with activity-based synthetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats.
+`PAM` is a Python package providing a pythonic API for creating and/or working with activity-based synthetic populations. `PAM` provides read/write functionality for common data formats, such as travel diaries and full support for MATSim formats.
 
 `PAM` is intended for use by those wanting to (i) build their own activity model, (ii) modify existing synthetic populations to create new scenarios, and (iii) work with the agent-based modelling tool MATSim.
 
