@@ -14,17 +14,26 @@ repos:
       - id: black
 
   - repo: https://github.com/astral-sh/ruff-pre-commit  # https://beta.ruff.rs/docs/usage/#github-action
-    rev: v0.2.2
+    rev: v0.3.0
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
 
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.7.1
+    rev: 1.8.3
     hooks:
       - id: nbqa-black
       - id: nbqa-ruff
         args: [ --fix, --exit-non-zero-on-fix ]
+
+  - repo: local
+    hooks:
+      # Prevent committing .rej files
+      - id: forbidden-files
+        name: forbidden files
+        entry: found Cruft update rejection files (`.rej`); review them and then remove them.
+        language: fail
+        files: "\\.rej$"
 
 ci:  # https://pre-commit.ci/
   autofix_prs: false
