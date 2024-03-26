@@ -2,7 +2,6 @@ import os
 
 import pandas as pd
 import pytest
-
 from pam.core import Household, Population
 from pam.read import load_pickle, load_travel_diary
 

@@ -1,5 +1,4 @@
 import pytest
-
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
 

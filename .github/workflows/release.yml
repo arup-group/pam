@@ -11,6 +11,7 @@ jobs:
     with:
       package_name: cml-pam
       build_workflow: pre-release.yml
+      environment: release
 
   pip-upload:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-upload.yml@main
@@ -18,6 +19,7 @@ jobs:
     with:
       package_name: cml-pam
       build_workflow: pre-release.yml
+      environment: release
 
   docs-stable:
     permissions:

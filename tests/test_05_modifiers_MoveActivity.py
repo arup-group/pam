@@ -1,5 +1,4 @@
 import pytest
-
 from pam.activity import Activity, Plan
 from pam.policy.modifiers import MoveActivityTourToHomeLocation
 from pam.utils import minutes_to_datetime as mtdt

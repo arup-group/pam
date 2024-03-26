@@ -3,8 +3,6 @@ from copy import deepcopy
 
 import numpy as np
 import pytest
-from pytest import approx
-
 from pam.planner.choice_location import (
     ChoiceConfiguration,
     ChoiceMNL,
@@ -13,6 +11,7 @@ from pam.planner.choice_location import (
     DiscretionaryTrips,
 )
 from pam.planner.utils_planner import get_trip_chains_either_anchor, sample_weighted
+from pytest import approx
 
 
 @pytest.fixture

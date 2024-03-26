@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import numpy as np
-
 from pam.activity import Activity, Leg, Plan
 from pam.array import decode, distance, encode
 from pam.utils import minutes_to_datetime as mtdt

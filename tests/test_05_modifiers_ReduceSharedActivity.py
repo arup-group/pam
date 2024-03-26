@@ -1,7 +1,6 @@
 import random
 
 import pytest
-
 from pam.activity import Activity, Leg
 from pam.core import Person
 from pam.policy import modifiers

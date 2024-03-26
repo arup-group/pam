@@ -1,5 +1,4 @@
 import pytest
-
 from pam.activity import Activity
 from pam.policy import modifiers
 

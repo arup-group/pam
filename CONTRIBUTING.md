@@ -88,8 +88,8 @@ When adding docstrings, we request you use the [Google docstring style](https://
 
 ### Create release
 
-- [ ] Bump the version number in `pam/__init__.py`
-- [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and github `compare` link (at the bottom of the page).
+- [ ] Bump the version number in `src/pam/__init__.py`
+- [ ] Update the [changelog][changelog] with final version number of the form `vX.Y.Z`, release date, and [github `compare` link](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/viewing-and-comparing-commits/comparing-commits) (at the bottom of the page).
 - [ ] Commit with message `Release vX.Y.Z`, then add a `vX.Y.Z` tag.
 - [ ] Create a release pull request to verify that the conda package builds successfully.
 - [ ] Once the PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it `Release vX.Y.Z` and include all the changelog elements that are *not* flagged as **internal**.
@@ -97,7 +97,7 @@ When adding docstrings, we request you use the [Google docstring style](https://
 ### Post-release
 
 - [ ] Update the changelog, adding a new `[Unreleased]` heading.
-- [ ] Update `pam/__init__.py` to the next version appended with `.dev0`, in preparation for the next main commit.
+- [ ] Update `src/pam/__init__.py` to the next version appended with `.dev0`, in preparation for the next main commit.
 
 
 <!--- --8<-- [end:docs] -->

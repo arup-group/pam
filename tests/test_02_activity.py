@@ -1,5 +1,4 @@
 import pytest
-
 from pam.activity import Activity, Leg, Plan
 from pam.utils import minutes_to_datetime as mtdt
 

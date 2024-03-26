@@ -2,7 +2,6 @@ import random
 
 import numpy as np
 import pytest
-
 from pam.activity import Leg
 from pam.operations.cropping import link_population
 from pam.planner.utils_planner import (

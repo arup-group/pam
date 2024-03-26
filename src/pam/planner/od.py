@@ -1,4 +1,5 @@
 """Manages origin-destination data required by the planner module."""
+
 import itertools
 from typing import NamedTuple, Union
 

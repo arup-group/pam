@@ -6,9 +6,6 @@ import pytest
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.legend import Legend
-from plotly.graph_objs import Scattermapbox
-from shapely.geometry import Point
-
 from pam.core import Household, Population
 from pam.plot.plans import (
     build_cmap,
@@ -30,6 +27,8 @@ from pam.plot.stats import (
 )
 from pam.policy import policies
 from pam.variables import DEFAULT_ACTIVITIES_FONTSIZE, DEFAULT_ACTIVITIES_PLOT_WIDTH
+from plotly.graph_objs import Scattermapbox
+from shapely.geometry import Point
 
 
 @pytest.fixture

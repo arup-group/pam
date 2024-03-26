@@ -7,6 +7,9 @@ Deprecated: for soon-to-be removed features.
 Removed: for now removed features.
 Fixed: for any bug fixes.
 Security: in case of vulnerabilities.
+
+Release headings should be of the form:
+## [X.Y.Z] - YEAR-MONTH-DAY
 -->
 
 # Changelog
@@ -26,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **internal** Align project to the [CML cookiecutter template](https://github.com/arup-group/cookiecutter-pypackage/) and track it with a Cruft config and CI job.
 
 ## [v0.3.1] - 2023-11-07
 

@@ -1,6 +1,5 @@
 import pytest
 from lxml import etree as et
-
 from pam.activity import Plan
 from pam.read import (
     get_attributes_from_person,

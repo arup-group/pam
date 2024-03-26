@@ -2,7 +2,6 @@ import os
 
 import pytest
 from click.testing import CliRunner
-
 from pam import read
 from pam.cli import cli
 

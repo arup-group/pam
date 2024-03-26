@@ -1,7 +1,6 @@
 from random import choice
 
 import pytest
-
 from pam.activity import Activity
 from pam.core import Household, Person
 from pam.policy.filters import PersonAttributeFilter

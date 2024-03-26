@@ -1,5 +1,4 @@
 import pandas as pd
-
 from pam.report import benchmarks
 
 

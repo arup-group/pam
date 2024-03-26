@@ -4,12 +4,11 @@ import geopandas as gp
 import pandas as pd
 import pytest
 from matplotlib.figure import Figure
-from shapely.geometry import Point, Polygon
-
 from pam.core import Person
 from pam.samplers import tour
 from pam.samplers.facility import FacilitySampler
 from pam.variables import END_OF_DAY
+from shapely.geometry import Point, Polygon
 
 # %% Test input data
 

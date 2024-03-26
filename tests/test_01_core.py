@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 import pytest
-
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population

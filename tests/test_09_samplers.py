@@ -4,6 +4,7 @@ from collections.abc import Iterator
 import geopandas as gp
 import pandas as pd
 import pytest
+from pam.samplers import attributes, basic, facility, spatial
 from shapely.geometry import (
     LinearRing,
     LineString,
@@ -13,8 +14,6 @@ from shapely.geometry import (
     Point,
     Polygon,
 )
-
-from pam.samplers import attributes, basic, facility, spatial
 
 
 @pytest.fixture

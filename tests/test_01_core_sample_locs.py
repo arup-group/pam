@@ -1,9 +1,8 @@
 from random import random
 
-from shapely.geometry import Point
-
 from pam.core import Population
 from pam.location import Location
+from shapely.geometry import Point
 
 
 def test_assign_same_locs_to_household(SmithHousehold):

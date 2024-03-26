@@ -5,8 +5,6 @@ import lxml
 import numpy as np
 import pandas as pd
 import pytest
-from shapely.geometry import Point
-
 from pam import read
 from pam.activity import Activity, Leg, Plan
 from pam.core import Household, Person, Population
@@ -14,6 +12,7 @@ from pam.location import Location
 from pam.planner.od import OD, ODFactory, ODMatrix
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
+from shapely.geometry import Point
 
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 FIXTURES_DIR = importlib_resources.files("pam") / "fixtures"

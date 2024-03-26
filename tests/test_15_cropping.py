@@ -3,13 +3,12 @@ from copy import deepcopy
 
 import geopandas as gp
 import pytest
-from shapely.geometry import Point, Polygon
-
 from pam.activity import Activity, Leg, Plan
 from pam.core import Household, Person, Population
 from pam.operations import cropping
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
+from shapely.geometry import Point, Polygon
 
 
 @pytest.fixture

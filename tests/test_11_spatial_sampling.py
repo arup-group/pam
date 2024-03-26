@@ -1,5 +1,4 @@
 import pytest
-
 from pam.samplers import spatial
 
 geojson_path = pytest.test_data_dir / "test_geometry.geojson"

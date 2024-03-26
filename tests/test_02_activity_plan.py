@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 import pytest
-
 from pam import PAMSequenceValidationError
 from pam.activity import Activity, Leg, Location, Plan
 from pam.utils import minutes_to_datetime as mtdt

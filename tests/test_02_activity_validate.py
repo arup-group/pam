@@ -1,5 +1,4 @@
 import pytest
-
 from pam import PAMSequenceValidationError, PAMTimesValidationError, PAMValidationLocationsError
 from pam.activity import Activity, Leg, Plan
 from pam.core import Person
