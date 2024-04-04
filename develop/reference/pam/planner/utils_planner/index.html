@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.16">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -2819,7 +2819,7 @@ which comprises the specified activity.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-62">62</a></span>
 <span class="normal"><a href="#__codelineno-0-63">63</a></span>
 <span class="normal"><a href="#__codelineno-0-64">64</a></span>
@@ -2893,7 +2893,7 @@ which comprises the specified activity.</p>
       <p>Calculates MNL probabilities from a set of alternatives.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
 <span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="k">def</span> <span class="nf">calculate_mnl_probabilities</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">list</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -2977,7 +2977,7 @@ The addition of the "return" elements is done in-place.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
 <span class="normal"><a href="#__codelineno-0-128">128</a></span>
 <span class="normal"><a href="#__codelineno-0-129">129</a></span>
@@ -3123,7 +3123,7 @@ The addition of the "return" elements is done in-place.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
 <span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
 <span class="normal"><a href="#__codelineno-0-100">100</a></span>
@@ -3223,7 +3223,7 @@ The addition of the "return" elements is done in-place.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-111">111</a></span>
 <span class="normal"><a href="#__codelineno-0-112">112</a></span>
 <span class="normal"><a href="#__codelineno-0-113">113</a></span>
@@ -3273,7 +3273,7 @@ The addition of the "return" elements is done in-place.</p>
       <p>Get trip chains starting and/or ending at a long-term activity.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-24">24</a></span>
 <span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
@@ -3326,7 +3326,7 @@ The addition of the "return" elements is done in-place.</p>
 Similar to get_trip_chains, but can slice plans on multiple activity types.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-41">41</a></span>
 <span class="normal"><a href="#__codelineno-0-42">42</a></span>
 <span class="normal"><a href="#__codelineno-0-43">43</a></span>
@@ -3386,7 +3386,7 @@ Similar to get_trip_chains, but can slice plans on multiple activity types.</p>
       <p>Get an object's attribute, or raise an error if its value is None.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-90">90</a></span>
 <span class="normal"><a href="#__codelineno-0-91">91</a></span>
 <span class="normal"><a href="#__codelineno-0-92">92</a></span>
@@ -3486,7 +3486,7 @@ Similar to get_trip_chains, but can slice plans on multiple activity types.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-163">163</a></span>
 <span class="normal"><a href="#__codelineno-0-164">164</a></span>
 <span class="normal"><a href="#__codelineno-0-165">165</a></span>
@@ -3533,7 +3533,7 @@ Similar to get_trip_chains, but can slice plans on multiple activity types.</p>
 Returns the index of the selection.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/utils_planner.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/utils_planner.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-17">17</a></span>
 <span class="normal"><a href="#__codelineno-0-18">18</a></span>
 <span class="normal"><a href="#__codelineno-0-19">19</a></span>
@@ -3577,6 +3577,12 @@ Returns the index of the selection.</p>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
       </main>
       
         <footer class="md-footer">
@@ -3603,10 +3609,10 @@ Returns the index of the selection.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

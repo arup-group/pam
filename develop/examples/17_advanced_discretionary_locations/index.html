@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.16">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -3113,9 +3113,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-
 <span class="kn">from</span> <span class="nn">pam.activity</span> <span class="kn">import</span> <span class="n">Activity</span><span class="p">,</span> <span class="n">Leg</span><span class="p">,</span> <span class="n">Plan</span>
 <span class="kn">from</span> <span class="nn">pam.location</span> <span class="kn">import</span> <span class="n">Location</span>
 <span class="kn">from</span> <span class="nn">pam.planner.choice_location</span> <span class="kn">import</span> <span class="n">DiscretionaryTripOD</span><span class="p">,</span> <span class="n">DiscretionaryTrips</span>
@@ -3123,6 +3120,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">pam.planner.utils_planner</span> <span class="kn">import</span> <span class="n">get_trip_chains_either_anchor</span>
 <span class="kn">from</span> <span class="nn">pam.utils</span> <span class="kn">import</span> <span class="n">minutes_to_datetime</span> <span class="k">as</span> <span class="n">mtdt</span>
 <span class="kn">from</span> <span class="nn">pam.variables</span> <span class="kn">import</span> <span class="n">END_OF_DAY</span>
+<span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"pam"</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -3133,9 +3132,6 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-from prettytable import PrettyTable
-from shapely.geometry import Point
-
 from pam.activity import Activity, Leg, Plan
 from pam.location import Location
 from pam.planner.choice_location import DiscretionaryTripOD, DiscretionaryTrips
@@ -3143,6 +3139,8 @@ from pam.planner.od import ODFactory, ODMatrix
 from pam.planner.utils_planner import get_trip_chains_either_anchor
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
+from prettytable import PrettyTable
+from shapely.geometry import Point
 
 logging.getLogger("pam").setLevel(logging.DEBUG)
 random.seed(0)</div>
@@ -4562,6 +4560,12 @@ Name: proportion, dtype: float64</pre>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
       </main>
       
         <footer class="md-footer">
@@ -4588,10 +4592,10 @@ Name: proportion, dtype: float64</pre>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

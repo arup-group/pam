@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.16">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -3503,7 +3503,7 @@ Defaults to None.</p>
   </table>
 
                 <details class="quote">
-                  <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                  <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
                   <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span>
 <span class="normal"><a href="#__codelineno-0-139">139</a></span>
@@ -3686,7 +3686,7 @@ Defaults to None.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-162">162</a></span>
 <span class="normal"><a href="#__codelineno-0-163">163</a></span>
 <span class="normal"><a href="#__codelineno-0-164">164</a></span>
@@ -3783,7 +3783,7 @@ Defaults to None.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-171">171</a></span>
 <span class="normal"><a href="#__codelineno-0-172">172</a></span>
 <span class="normal"><a href="#__codelineno-0-173">173</a></span>
@@ -3827,7 +3827,7 @@ Defaults to None.</p>
       <p>Returns a sampler of a distribution that has been reduced based on a threshold value.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-183">183</a></span>
 <span class="normal"><a href="#__codelineno-0-184">184</a></span>
 <span class="normal"><a href="#__codelineno-0-185">185</a></span>
@@ -3947,7 +3947,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   </table>
 
                 <details class="quote">
-                  <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                  <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
                   <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
 <span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
 <span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
@@ -4065,7 +4065,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
       <p>Plots distribution to validate the distribution aligns with expected hourly demand.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-116">116</a></span>
 <span class="normal"><a href="#__codelineno-0-117">117</a></span>
 <span class="normal"><a href="#__codelineno-0-118">118</a></span>
@@ -4105,7 +4105,7 @@ for inputs required to build an agent plan (i.e, time of day, repetition of acti
   <div class="doc doc-contents ">
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-127">127</a></span>
 <span class="normal"><a href="#__codelineno-0-128">128</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127"></a><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">demand</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -4304,7 +4304,7 @@ It takes into account origin and destination zones, facility distributions, and 
   </table>
 
                 <details class="quote">
-                  <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                  <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
                   <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-241">241</a></span>
 <span class="normal"><a href="#__codelineno-0-242">242</a></span>
 <span class="normal"><a href="#__codelineno-0-243">243</a></span>
@@ -4744,7 +4744,7 @@ It takes into account origin and destination zones, facility distributions, and 
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-410">410</a></span>
 <span class="normal"><a href="#__codelineno-0-411">411</a></span>
 <span class="normal"><a href="#__codelineno-0-412">412</a></span>
@@ -4908,7 +4908,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-463">463</a></span>
 <span class="normal"><a href="#__codelineno-0-464">464</a></span>
 <span class="normal"><a href="#__codelineno-0-465">465</a></span>
@@ -5080,7 +5080,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-503">503</a></span>
 <span class="normal"><a href="#__codelineno-0-504">504</a></span>
 <span class="normal"><a href="#__codelineno-0-505">505</a></span>
@@ -5326,7 +5326,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-358">358</a></span>
 <span class="normal"><a href="#__codelineno-0-359">359</a></span>
 <span class="normal"><a href="#__codelineno-0-360">360</a></span>
@@ -5440,7 +5440,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-335">335</a></span>
 <span class="normal"><a href="#__codelineno-0-336">336</a></span>
 <span class="normal"><a href="#__codelineno-0-337">337</a></span>
@@ -5535,7 +5535,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-279">279</a></span>
 <span class="normal"><a href="#__codelineno-0-280">280</a></span>
 <span class="normal"><a href="#__codelineno-0-281">281</a></span>
@@ -5659,7 +5659,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-372">372</a></span>
 <span class="normal"><a href="#__codelineno-0-373">373</a></span>
 <span class="normal"><a href="#__codelineno-0-374">374</a></span>
@@ -5763,7 +5763,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-298">298</a></span>
 <span class="normal"><a href="#__codelineno-0-299">299</a></span>
 <span class="normal"><a href="#__codelineno-0-300">300</a></span>
@@ -5882,7 +5882,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-388">388</a></span>
 <span class="normal"><a href="#__codelineno-0-389">389</a></span>
 <span class="normal"><a href="#__codelineno-0-390">390</a></span>
@@ -6084,7 +6084,7 @@ destinations align with input data.</p>
   </table>
 
                 <details class="quote">
-                  <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+                  <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
                   <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-596">596</a></span>
 <span class="normal"><a href="#__codelineno-0-597">597</a></span>
 <span class="normal"><a href="#__codelineno-0-598">598</a></span>
@@ -6396,7 +6396,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-717">717</a></span>
 <span class="normal"><a href="#__codelineno-0-718">718</a></span>
 <span class="normal"><a href="#__codelineno-0-719">719</a></span>
@@ -6582,7 +6582,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-758">758</a></span>
 <span class="normal"><a href="#__codelineno-0-759">759</a></span>
 <span class="normal"><a href="#__codelineno-0-760">760</a></span>
@@ -6772,7 +6772,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-681">681</a></span>
 <span class="normal"><a href="#__codelineno-0-682">682</a></span>
 <span class="normal"><a href="#__codelineno-0-683">683</a></span>
@@ -6972,7 +6972,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
@@ -7186,7 +7186,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-219">219</a></span>
 <span class="normal"><a href="#__codelineno-0-220">220</a></span>
 <span class="normal"><a href="#__codelineno-0-221">221</a></span>
@@ -7234,7 +7234,7 @@ destinations align with input data.</p>
       <p>Models distance between two shapely points.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-198">198</a></span>
 <span class="normal"><a href="#__codelineno-0-199">199</a></span>
 <span class="normal"><a href="#__codelineno-0-200">200</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-198"><a id="__codelineno-0-198" name="__codelineno-0-198"></a><span class="k">def</span> <span class="nf">model_distance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.4</span><span class="p">):</span>
@@ -7335,7 +7335,7 @@ destinations align with input data.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/samplers/tour.py</code></summary>
+            <summary>Source code in <code>src/pam/samplers/tour.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-203">203</a></span>
 <span class="normal"><a href="#__codelineno-0-204">204</a></span>
 <span class="normal"><a href="#__codelineno-0-205">205</a></span>
@@ -7397,6 +7397,12 @@ destinations align with input data.</p>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
       </main>
       
         <footer class="md-footer">
@@ -7423,10 +7429,10 @@ destinations align with input data.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

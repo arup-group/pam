@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.16">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -2914,8 +2914,8 @@ When adding docstrings, we request you use the <a href="https://google.github.io
 </ul>
 <h3 id="create-release">Create release<a class="headerlink" href="#create-release" title="Permanent link">#</a></h3>
 <ul class="task-list">
-<li class="task-list-item"><input type="checkbox"/> Bump the version number in <code>pam/__init__.py</code></li>
-<li class="task-list-item"><input type="checkbox"/> Update the <a class="autorefs autorefs-internal" href="../../CHANGELOG/#changelog">changelog</a> with final version number of the form <code>vX.Y.Z</code>, release date, and github <code>compare</code> link (at the bottom of the page).</li>
+<li class="task-list-item"><input type="checkbox"/> Bump the version number in <code>src/pam/__init__.py</code></li>
+<li class="task-list-item"><input type="checkbox"/> Update the <a class="autorefs autorefs-internal" href="../../CHANGELOG/#changelog">changelog</a> with final version number of the form <code>vX.Y.Z</code>, release date, and <a href="https://docs.github.com/en/pull-requests/committing-changes-to-your-project/viewing-and-comparing-commits/comparing-commits">github <code>compare</code> link</a> (at the bottom of the page).</li>
 <li class="task-list-item"><input type="checkbox"/> Commit with message <code>Release vX.Y.Z</code>, then add a <code>vX.Y.Z</code> tag.</li>
 <li class="task-list-item"><input type="checkbox"/> Create a release pull request to verify that the conda package builds successfully.</li>
 <li class="task-list-item"><input type="checkbox"/> Once the PR is approved and merged, create a release through the GitHub web interface, using the same tag, titling it <code>Release vX.Y.Z</code> and include all the changelog elements that are <em>not</em> flagged as <strong>internal</strong>.</li>
@@ -2923,7 +2923,7 @@ When adding docstrings, we request you use the <a href="https://google.github.io
 <h3 id="post-release">Post-release<a class="headerlink" href="#post-release" title="Permanent link">#</a></h3>
 <ul class="task-list">
 <li class="task-list-item"><input type="checkbox"/> Update the changelog, adding a new <code>[Unreleased]</code> heading.</li>
-<li class="task-list-item"><input type="checkbox"/> Update <code>pam/__init__.py</code> to the next version appended with <code>.dev0</code>, in preparation for the next main commit.</li>
+<li class="task-list-item"><input type="checkbox"/> Update <code>src/pam/__init__.py</code> to the next version appended with <code>.dev0</code>, in preparation for the next main commit.</li>
 </ul>
 
 
@@ -2945,6 +2945,12 @@ When adding docstrings, we request you use the <a href="https://google.github.io
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -2972,10 +2978,10 @@ When adding docstrings, we request you use the <a href="https://google.github.io
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.16">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -2934,7 +2934,7 @@ Plan similarity is defined using the edit distance
     of character-encoded plan sequences.</p>
 
                 <details class="quote">
-                  <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+                  <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
                   <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-47">47</a></span>
 <span class="normal"><a href="#__codelineno-0-48">48</a></span>
 <span class="normal"><a href="#__codelineno-0-49">49</a></span>
@@ -3222,7 +3222,7 @@ Plan similarity is defined using the edit distance
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
 <span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
 <span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
@@ -3300,7 +3300,7 @@ Plan similarity is defined using the edit distance
       <p>Get the n closest matches of a PAM activity schedule.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-107">107</a></span>
 <span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
@@ -3334,7 +3334,7 @@ Returns a dictionary where the index values are (hid, pid) tuples,
     and the values are the correponding agents' clusters.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-125">125</a></span>
 <span class="normal"><a href="#__codelineno-0-126">126</a></span>
 <span class="normal"><a href="#__codelineno-0-127">127</a></span>
@@ -3397,7 +3397,7 @@ Returns a dictionary where the index values are (hid, pid) tuples,
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-113">113</a></span>
 <span class="normal"><a href="#__codelineno-0-114">114</a></span>
 <span class="normal"><a href="#__codelineno-0-115">115</a></span>
@@ -3433,7 +3433,7 @@ Returns a dictionary where the index values are (hid, pid) tuples,
       <p>Get the number of plans in each cluster.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-121">121</a></span>
 <span class="normal"><a href="#__codelineno-0-122">122</a></span>
 <span class="normal"><a href="#__codelineno-0-123">123</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121"></a><span class="k">def</span> <span class="nf">get_cluster_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
@@ -3462,7 +3462,7 @@ Returns a dictionary where the index values are (hid, pid) tuples,
 for a specific cluster.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-133">133</a></span>
 <span class="normal"><a href="#__codelineno-0-134">134</a></span>
 <span class="normal"><a href="#__codelineno-0-135">135</a></span>
@@ -3519,7 +3519,7 @@ for a specific cluster.</p>
 for the clusters with the top n number of plans.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-151">151</a></span>
 <span class="normal"><a href="#__codelineno-0-152">152</a></span>
 <span class="normal"><a href="#__codelineno-0-153">153</a></span>
@@ -3577,7 +3577,7 @@ for the clusters with the top n number of plans.</p>
       <p>Create a levenshtein distance matrix from two lists of strings.</p>
 
           <details class="quote">
-            <summary>Source code in <code>pam/planner/clustering.py</code></summary>
+            <summary>Source code in <code>src/pam/planner/clustering.py</code></summary>
             <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
@@ -3637,6 +3637,12 @@ for the clusters with the top n number of plans.</p>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
       </main>
       
         <footer class="md-footer">
@@ -3663,10 +3669,10 @@ for the clusters with the top n number of plans.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.bd41221c.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>
