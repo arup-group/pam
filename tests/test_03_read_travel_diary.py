@@ -2,7 +2,6 @@ from io import StringIO
 
 import pandas as pd
 import pytest
-
 from pam import PAMValidationLocationsError
 from pam.core import Person
 from pam.read import build_population, load_travel_diary

@@ -1,5 +1,4 @@
 import pytest
-
 from pam.planner.encoder import (
     PlanCharacterEncoder,
     PlanOneHotEncoder,

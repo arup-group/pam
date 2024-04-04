@@ -1,4 +1,5 @@
 """Location and mode choice models for activity modelling."""
+
 import itertools
 import logging
 from abc import ABC, abstractmethod

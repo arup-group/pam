@@ -1,6 +1,5 @@
 import pandas as pd
 import pytest
-
 from pam.read import trip_based_travel_diary_read
 
 test_activities_path = pytest.test_data_dir / "test_activity_plans.csv"

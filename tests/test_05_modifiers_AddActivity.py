@@ -1,5 +1,4 @@
 import pytest
-
 from pam.activity import Activity
 from pam.policy import modifiers
 from pam.utils import minutes_to_datetime as mtdt

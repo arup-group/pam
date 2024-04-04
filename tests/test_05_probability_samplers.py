@@ -1,7 +1,6 @@
 import random
 
 import pytest
-
 from pam.activity import Activity
 from pam.core import Household, Person
 from pam.policy import probability_samplers

@@ -1,4 +1,5 @@
 """Methods for cropping plans outside core areas."""
+
 from typing import List
 
 from shapely.geometry import LineString, Polygon

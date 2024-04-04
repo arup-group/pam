@@ -11,9 +11,11 @@ jobs:
     secrets: inherit
     with:
       package_name: cml-pam
+      environment: pre-release
 
   pip-build:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-build.yml@main
     secrets: inherit
     with:
       package_name: cml-pam
+      environment: pre-release

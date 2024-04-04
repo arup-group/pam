@@ -7,6 +7,9 @@ Deprecated: for soon-to-be removed features.
 Removed: for now removed features.
 Fixed: for any bug fixes.
 Security: in case of vulnerabilities.
+
+Release headings should be of the form:
+## [X.Y.Z] - YEAR-MONTH-DAY
 -->
 
 # Changelog
@@ -23,9 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Python version 3.12 support
+- Support for `geopandas` v0.15, `gdal` >= v3.5, and `python-Levenshtein` v0.26 ([#268]).
 
 ### Changed
 
+- **internal** Align project to the [CML cookiecutter template](https://github.com/arup-group/cookiecutter-pypackage/) and track it with a Cruft config and CI job.
 
 ## [v0.3.1] - 2023-11-07
 
@@ -130,6 +136,7 @@ This is the first version of PAM which follows semantic versioning and can be co
 [v0.2.1]: https://github.com/arup-group/pam/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/arup-group/pam/compare/initial_version...v0.2.0
 
+[#268]: https://github.com/arup-group/pam/pull/268
 [#258]: https://github.com/arup-group/pam/pull/258
 [#253]: https://github.com/arup-group/pam/pull/253
 [#252]: https://github.com/arup-group/pam/pull/252

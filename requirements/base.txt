@@ -1,6 +1,6 @@
 click < 9
-gdal < 3.6
-geopandas >= 0.13, < 0.14
+gdal >= 3.5
+geopandas >= 0.13, < 0.15
 importlib_resources >= 6, < 7
 ipykernel < 7
 lxml < 5
@@ -9,7 +9,7 @@ numpy >= 1, < 2
 pandas >= 1.5, < 3
 plotly >= 4, < 6
 prettytable >= 3, < 4
-python-Levenshtein >= 0.21, < 0.22
+python-Levenshtein >= 0.21, < 0.26
 rich >= 12, < 14
 Rtree >= 1, < 2
 s2sphere < 0.3

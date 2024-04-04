@@ -6,8 +6,6 @@ import geopandas as gp
 import lxml
 import pandas as pd
 import pytest
-from shapely.geometry import Point
-
 from pam import write
 from pam.activity import Activity, Leg
 from pam.core import Household, Person, Population
@@ -15,6 +13,7 @@ from pam.read import read_matsim
 from pam.utils import minutes_to_datetime as mtdt
 from pam.variables import END_OF_DAY
 from pam.write import Writer, write_matsim, write_matsim_population_v6, write_od_matrices
+from shapely.geometry import Point
 
 
 def test_writer_enters(tmp_path):

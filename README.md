@@ -114,3 +114,7 @@ mike serve
 ```
 
 Then you can view the documentation in a browser at <http://localhost:8000/>.
+
+## Credits
+
+This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [arup-group/cookiecutter-pypackage](https://github.com/arup-group/cookiecutter-pypackage) project template.
