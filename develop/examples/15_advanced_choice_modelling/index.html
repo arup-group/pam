@@ -3053,8 +3053,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=82e63bf7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=82e63bf7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -3101,6 +3101,26 @@ from prettytable import PrettyTable
 
 logging.basicConfig(level=logging.DEBUG)
 random.seed(0)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>/var/folders/6n/0h9tynqn581fxsytcc863h94tm217b/T/ipykernel_95065/106397807.py:6: DeprecationWarning: 
+Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
+(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
+but was not found to be installed on your system.
+If this would cause problems for you,
+please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
+        
+  import pandas as pd
+</pre>
 </div>
 </div>
 </div>
@@ -3520,7 +3540,7 @@ distance - bus:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x16565d300&gt;, func_sampling=&lt;function sample_weighted at 0x16565d3a0&gt;)
+<pre>INFO:pam.planner.choice_location:ChoiceConfiguration(u=None, scope=None, func_probabilities=&lt;function calculate_mnl_probabilities at 0x12a98dea0&gt;, func_sampling=&lt;function sample_weighted at 0x12a98de10&gt;)
 </pre>
 </div>
 </div>
@@ -3608,7 +3628,7 @@ planner.configure(u=u, scope=scope)</div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>INFO:pam.planner.choice_location:ChoiceConfiguration(u="[0,-1]+(np.array([0,2])*(person.attributes['subpopulation']=='poor'))+([-0.05,-0.07]*od['time',person.home.area])+(0.4*np.log(zones['jobs']))\n", scope="act.act=='work'", func_probabilities=&lt;function calculate_mnl_probabilities at 0x16565d300&gt;, func_sampling=&lt;function sample_weighted at 0x16565d3a0&gt;)
+<pre>INFO:pam.planner.choice_location:ChoiceConfiguration(u="[0,-1]+(np.array([0,2])*(person.attributes['subpopulation']=='poor'))+([-0.05,-0.07]*od['time',person.home.area])+(0.4*np.log(zones['jobs']))\n", scope="act.act=='work'", func_probabilities=&lt;function calculate_mnl_probabilities at 0x12a98dea0&gt;, func_sampling=&lt;function sample_weighted at 0x12a98de10&gt;)
 </pre>
 </div>
 </div>
@@ -3666,7 +3686,7 @@ print("\nChoice set utilities: \n", choice_set.u_choices)</div>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>Activities in scope: 
- [ChoiceIdx(pid='chris', hid='chris', seq=1, act=&lt;pam.activity.Activity object at 0x165694b90&gt;), ChoiceIdx(pid='fatema', hid='fatema', seq=1, act=&lt;pam.activity.Activity object at 0x165695690&gt;), ChoiceIdx(pid='fred', hid='fred', seq=3, act=&lt;pam.activity.Activity object at 0x165696ad0&gt;), ChoiceIdx(pid='gerry', hid='gerry', seq=3, act=&lt;pam.activity.Activity object at 0x1656a0250&gt;), ChoiceIdx(pid='nick', hid='nick', seq=1, act=&lt;pam.activity.Activity object at 0x1656a1250&gt;)]
+ [ChoiceIdx(pid='chris', hid='chris', seq=1, act=&lt;pam.activity.Activity object at 0x12a9af700&gt;), ChoiceIdx(pid='fatema', hid='fatema', seq=1, act=&lt;pam.activity.Activity object at 0x12a9afaf0&gt;), ChoiceIdx(pid='fred', hid='fred', seq=3, act=&lt;pam.activity.Activity object at 0x12a9925f0&gt;), ChoiceIdx(pid='gerry', hid='gerry', seq=3, act=&lt;pam.activity.Activity object at 0x12a9902e0&gt;), ChoiceIdx(pid='nick', hid='nick', seq=1, act=&lt;pam.activity.Activity object at 0x12a992560&gt;)]
 
 Alternatives: 
  [ChoiceLabel(destination='a', mode='car'), ChoiceLabel(destination='a', mode='bus'), ChoiceLabel(destination='b', mode='car'), ChoiceLabel(destination='b', mode='bus')]
@@ -3737,7 +3757,7 @@ print("Sampled choices: \n", planner._selections.selections)</div>
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
 <pre>INFO:pam.planner.choice_location:Configuration: 
-ChoiceConfiguration(u="[0,-1]+(np.array([0,2])*(person.attributes['subpopulation']=='poor'))+([-0.05,-0.07]*od['time',person.home.area])+(0.4*np.log(zones['jobs']))\n", scope="act.act=='work'", func_probabilities=&lt;function calculate_mnl_probabilities at 0x16565d300&gt;, func_sampling=&lt;function sample_weighted at 0x16565d3a0&gt;)
+ChoiceConfiguration(u="[0,-1]+(np.array([0,2])*(person.attributes['subpopulation']=='poor'))+([-0.05,-0.07]*od['time',person.home.area])+(0.4*np.log(zones['jobs']))\n", scope="act.act=='work'", func_probabilities=&lt;function calculate_mnl_probabilities at 0x12a98dea0&gt;, func_sampling=&lt;function sample_weighted at 0x12a98de10&gt;)
 </pre>
 </div>
 </div>

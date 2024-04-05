@@ -2985,8 +2985,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=aa7cdd7f-3256-4dab-b42e-7bea3634eb7b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=aa7cdd7f-3256-4dab-b42e-7bea3634eb7b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -3015,6 +3015,26 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 import pandas as pd
 from pam.core import Person, Population
 from pam.planner import ipf</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>/var/folders/6n/0h9tynqn581fxsytcc863h94tm217b/T/ipykernel_95267/1028812630.py:3: DeprecationWarning: 
+Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
+(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
+but was not found to be installed on your system.
+If this would cause problems for you,
+please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
+        
+  import pandas as pd
+</pre>
 </div>
 </div>
 </div>
@@ -3237,7 +3257,7 @@ seed_pop.random_person().attributes</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>{'hhincome': 'high', 'age': 'adult', 'carAvail': 'yes', 'hzone': &lt;NA&gt;}</pre>
+<pre>{'hhincome': 'low', 'age': 'adult', 'carAvail': 'no', 'hzone': &lt;NA&gt;}</pre>
 </div>
 </div>
 </div>
@@ -3386,7 +3406,7 @@ seed_pop.random_person().attributes</div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>{'hhincome': 'medium', 'age': 'adult', 'carAvail': 'yes', 'hzone': 'b'}</pre>
+<pre>{'hhincome': 'high', 'age': 'minor', 'carAvail': 'yes', 'hzone': 'b'}</pre>
 </div>
 </div>
 </div>
