@@ -70,10 +70,10 @@ The design of `PAM` will not be performant in some situations. Rather it focuses
 # Development history
 
 `PAM` was originally conceived and built at the start of the global COVID-19 pandemic, to allow for the assessment of change resulting from government quarantining and lock-down policies.
-The project was originally called the `Pandemic Activity Modifier` and was applied to rapidly update existing transport demand models using `policies`, as described by [@Medium].
+The project was originally called the `Pandemic Activity Modifier` and was applied to rapidly update existing transport demand models using `policies`, as described by @Medium.
 Updated transport demand could then be used for transport simulation using MATSim and virus transmission modelling using EpiSim [@Episim].
 
-This application is still supported but `PAM` has since been generalised to provide broader application for activity modelling by both practitioners and researchers (e.g., @Castro:2023).
+This application is still supported but `PAM` has since been generalised to provide broader application for activity modelling by both practitioners and researchers, such as by @Castro:2023.
 The project is now called the `Population Activity Modeller`.
 
 # Acknowledgements
