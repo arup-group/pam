@@ -1,0 +1,44 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Shone
+  given-names: Fred
+  orcid: "https://orcid.org/0009-0008-1079-0081"
+- family-names: Chatziioannou
+  given-names: Theodore
+- family-names: Pickering
+  given-names: Bryn
+  orcid: "https://orcid.org/0000-0003-4044-6587"
+- family-names: Kozlowska
+  given-names: Kasia
+- family-names: Fitzmaurice
+  given-names: Michael
+doi: 10.5281/zenodo.10948231
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Shone
+    given-names: Fred
+    orcid: "https://orcid.org/0009-0008-1079-0081"
+  - family-names: Chatziioannou
+    given-names: Theodore
+  - family-names: Pickering
+    given-names: Bryn
+    orcid: "https://orcid.org/0000-0003-4044-6587"
+  - family-names: Kozlowska
+    given-names: Kasia
+  - family-names: Fitzmaurice
+    given-names: Michael
+  date-published: 2024-04-23
+  doi: 10.21105/joss.06097
+  issn: 2475-9066
+  issue: 96
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 6097
+  title: "PAM: Population Activity Modeller"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.06097"
+  volume: 9
+title: "PAM: Population Activity Modeller"
