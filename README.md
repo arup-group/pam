@@ -8,6 +8,7 @@
 ![DailyCIbadge](https://github.com/arup-group/pam/actions/workflows/daily-scheduled-ci.yml/badge.svg)
 [![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
 [![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10948232.svg)](https://doi.org/10.5281/zenodo.10948232)
 
 PAM is a python library for population **activity sequence** modelling. Example use cases:
 
