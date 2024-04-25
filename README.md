@@ -6,9 +6,12 @@
 # Population Activity Modeller
 
 ![DailyCIbadge](https://github.com/arup-group/pam/actions/workflows/daily-scheduled-ci.yml/badge.svg)
-[![](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
+[![Documentation](https://github.com/arup-group/pam/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://arup-group.github.io/pam)
 [![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/arupcitymodelling/pandemic-activity-modifier-intro-3d2dccbc716e)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10948232.svg)](https://doi.org/10.21105/joss.06097)
+[![JOSS DOI](https://img.shields.io/badge/JOSS-10.21105/joss.06097-green.svg)](https://doi.org/10.21105/joss.06097)
+[![Test coverage](https://codecov.io/gh/arup-group/pam/branch/main/graph/badge.svg?token=21BGH9M3FZ)](https://codecov.io/gh/arup-group/pam)
+[![PyPI version](https://img.shields.io/pypi/v/cml-pam.svg)](https://pypi.python.org/pypi/cml-pam)
+[![Anaconda.org version](https://img.shields.io/conda/vn/city-modelling-lab/cml-pam.svg?label=conda)](https://anaconda.org/city-modelling-lab/cml-pam)
 
 PAM is a python library for population **activity sequence** modelling. Example use cases:
 
