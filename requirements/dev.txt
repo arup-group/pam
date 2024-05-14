@@ -3,7 +3,7 @@ jupyter < 2
 mike >= 2, < 3
 mkdocs < 1.6
 mkdocs-material >= 9.4, < 10
-mkdocs-click >= 0.6, < 0.7
+mkdocs-click < 0.7
 mkdocs-jupyter < 0.24.7
 mkdocstrings-python < 2
 nbmake >= 1.5.1, < 2
