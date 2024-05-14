@@ -8,9 +8,7 @@ from pam.write import write_matsim
 
 
 def snap_facilities_to_network(
-    population: Population,
-    network: gp.GeoDataFrame,
-    link_id_field: str = "id"
+    population: Population, network: gp.GeoDataFrame, link_id_field: str = "id"
 ) -> None:
     """Snaps activity facilities to a network geometry (in-place).
 
@@ -25,12 +23,13 @@ def snap_facilities_to_network(
             link_id = link_ids[network.distance(act.location.loc).argmin()]
             act.location.link = link_id
 
+
 def run_facility_link_snapping(
-        path_population_in: str,
-        path_population_out: str,
-        path_network_geometry: str,
-        link_id_field: str = "id"
-)->None:
+    path_population_in: str,
+    path_population_out: str,
+    path_network_geometry: str,
+    link_id_field: str = "id",
+) -> None:
     """Reads a population, snaps activity facilities to a network geometry, and saves the results.
 
     Args:

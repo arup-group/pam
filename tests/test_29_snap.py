@@ -9,7 +9,7 @@ TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 
 def test_add_snapping_adds_link_attribute(population_heh):
-    network=gp.read_file(os.path.join(TEST_DATA_DIR, "test_link_geometry.geojson"))
+    network = gp.read_file(os.path.join(TEST_DATA_DIR, "test_link_geometry.geojson"))
     for _, _, person in population_heh.people():
         for act in person.activities:
             assert act.location.link is None
@@ -19,12 +19,13 @@ def test_add_snapping_adds_link_attribute(population_heh):
         for act in person.activities:
             assert act.location.link is not None
 
+
 def test_links_resnapped(tmpdir):
-    path_out=os.path.join(tmpdir, "pop_snapped.xml")
+    path_out = os.path.join(tmpdir, "pop_snapped.xml")
     run_facility_link_snapping(
-        path_population_in=os.path.join(TEST_DATA_DIR, "1.plans.xml"), 
-        path_population_out=path_out, 
-        path_network_geometry=os.path.join(TEST_DATA_DIR, "test_link_geometry.geojson")
+        path_population_in=os.path.join(TEST_DATA_DIR, "1.plans.xml"),
+        path_population_out=path_out,
+        path_network_geometry=os.path.join(TEST_DATA_DIR, "test_link_geometry.geojson"),
     )
     assert os.path.exists(path_out)
     pop_snapped = read_matsim(path_out)

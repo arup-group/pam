@@ -670,7 +670,6 @@ def wipe_links(
     logger.info(f"Output saved at {path_population_output}")
 
 
-
 @cli.command()
 @click.argument("path_population_in", type=click.Path(exists=True))
 @click.argument("path_population_out", type=click.Path(exists=False, writable=True))
@@ -693,5 +692,5 @@ def snap_facilities(
         path_population_in=path_population_in,
         path_population_out=path_population_out,
         path_network_geometry=path_network_geometry,
-        link_id_field=link_id_field
+        link_id_field=link_id_field,
     )
