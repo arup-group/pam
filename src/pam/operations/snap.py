@@ -1,5 +1,7 @@
 """ Methods for snapping elements to the network or facilities. """
 
+from pathlib import Path
+
 import geopandas as gp
 
 from pam.core import Population
@@ -13,7 +15,7 @@ def snap_facilities_to_network(
     """Snaps activity facilities to a network geometry (in-place).
 
     Args:
-        population (Population): A PAM popualtion.
+        population (Population): A PAM population.
         network (gp.GeoDataFrame): A network geometry shapefile.
         link_id_field (str, optional): The link ID field to use in the network shapefile. Defaults to "id".
     """
@@ -39,7 +41,7 @@ def run_facility_link_snapping(
         link_id_field (str, optional): The link ID field to use in the network shapefile. Defaults to "id".
     """
     population = read_matsim(path_population_in)
-    if path_network_geometry.endswith(".parquet"):
+    if ".parquet" in Path(path_network_geometry).suffixes:
         network = gp.read_parquet(path_network_geometry)
     else:
         network = gp.read_file(path_network_geometry)
