@@ -31,5 +31,5 @@ jobs:
     secrets: inherit
     with:
       result: 'failure'
-      channel: pam-feed
+      channel: pam-feeds
       message: Docs Build

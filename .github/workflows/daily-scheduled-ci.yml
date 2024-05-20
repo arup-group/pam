@@ -31,5 +31,5 @@ jobs:
     secrets: inherit
     with:
       result: needs.test.result
-      channel: pam-feed
+      channel: pam-feeds
       message: Daily CI action
