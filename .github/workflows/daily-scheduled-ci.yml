@@ -30,6 +30,6 @@ jobs:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
     secrets: inherit
     with:
-      result: needs.test.result
+      result: ${{ needs.test.result }}
       channel: pam-feeds
       message: Daily CI action
