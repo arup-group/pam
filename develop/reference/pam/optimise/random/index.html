@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -2723,9 +2723,9 @@
 
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2741,69 +2741,68 @@
 
 
 <h2 id="pam.optimise.random.Stopper" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">Stopper</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">Stopper</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.random.Stopper" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Early stopping mechanism. Maintains last n scores, where n is equal to "horizon".
 Triggers an early stop if change across horizon is less than given sensitivity.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>horizon</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>length of stored history. Defaults to 5.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>5</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>sensitivity</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>stopping tolerance. Defaults to 0.01.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>0.01</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>horizon</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>length of stored history. Defaults to 5.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>5</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>sensitivity</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>stopping tolerance. Defaults to 0.01.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>0.01</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-84">84</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-84">84</a></span>
 <span class="normal"><a href="#__codelineno-0-85">85</a></span>
 <span class="normal"><a href="#__codelineno-0-86">86</a></span>
 <span class="normal"><a href="#__codelineno-0-87">87</a></span>
@@ -2825,9 +2824,9 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 </span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span>
 </span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2842,8 +2841,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 
 
 <h3 id="pam.optimise.random.Stopper.horizon" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span></code>
-  
+            <code class="highlight language-python"><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2851,8 +2850,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 <a href="#pam.optimise.random.Stopper.horizon" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2861,8 +2860,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 
 
 <h3 id="pam.optimise.random.Stopper.record" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">record</span> <span class="o">=</span> <span class="p">[]</span></code>
-  
+            <code class="highlight language-python"><span class="n">record</span> <span class="o">=</span> <span class="p">[]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2870,8 +2869,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 <a href="#pam.optimise.random.Stopper.record" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2880,8 +2879,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 
 
 <h3 id="pam.optimise.random.Stopper.sensitivity" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span></code>
-  
+            <code class="highlight language-python"><span class="n">sensitivity</span> <span class="o">=</span> <span class="n">sensitivity</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2889,29 +2888,27 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 <a href="#pam.optimise.random.Stopper.sensitivity" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.optimise.random.Stopper.stop" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">stop</span><span class="p">(</span><span class="n">score</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">stop</span><span class="p">(</span><span class="n">score</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.random.Stopper.stop" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
 <span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
 <span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
 <span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
@@ -2925,8 +2922,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 </span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a>            <span class="k">return</span> <span class="kc">True</span>
 </span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a>    <span class="k">return</span> <span class="kc">False</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2934,28 +2931,25 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
-
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.random.print_report" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.random.print_report" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-52">52</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-52">52</a></span>
 <span class="normal"><a href="#__codelineno-0-53">53</a></span>
 <span class="normal"><a href="#__codelineno-0-54">54</a></span>
 <span class="normal"><a href="#__codelineno-0-55">55</a></span>
@@ -2965,29 +2959,27 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 </span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to improve score from initial </span><span class="si">{</span><span class="n">initial_score</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> steps.&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.random.random_mutate_activity_durations" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">random_mutate_activity_durations</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">random_mutate_activity_durations</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.random.random_mutate_activity_durations" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Rearrange input plan into random new plan, maintaining activity sequence and trip durations.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-59">59</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-59">59</a></span>
 <span class="normal"><a href="#__codelineno-0-60">60</a></span>
 <span class="normal"><a href="#__codelineno-0-61">61</a></span>
 <span class="normal"><a href="#__codelineno-0-62">62</a></span>
@@ -3031,168 +3023,164 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 </span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79"></a>    <span class="n">plan</span><span class="o">.</span><span class="n">day</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">END_OF_DAY</span>
 </span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a>    <span class="k">return</span> <span class="n">plan</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.random.reschedule" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">reschedule</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">plans_scorer</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{},</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">reschedule</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">plans_scorer</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{},</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.random.reschedule" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Randomly search for an improved plan sequence based on given plans_scorer.</p>
 <p>This is not seriously suggested as a sensible approach, it is supplied for example only.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Input plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>plans_scorer</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Plans scorer.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.scoring.PlanScorer" href="../../scoring/#pam.scoring.PlanScorer">PlanScorer</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>config</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>plans_scorer configuration. Defaults to {}.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>{}</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>horizon</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Early stopper horizon. Defaults to 5.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>5</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>sensitivity</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Early stopper sensitivity. Defaults to 0.01.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>0.01</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>patience</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Defaults to 1000.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>1000</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Input plan.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>plans_scorer</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Plans scorer.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.scoring.PlanScorer" href="../../scoring/#pam.scoring.PlanScorer">PlanScorer</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>config</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>plans_scorer configuration. Defaults to {}.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>{}</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>horizon</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Early stopper horizon. Defaults to 5.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>5</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>sensitivity</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Early stopper sensitivity. Defaults to 0.01.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>0.01</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>patience</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Defaults to 1000.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>1000</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code>(<a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>)</code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>best plan found and best score.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code>(<a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>)</code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>best plan found and best score.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-11">11</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/random.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
 <span class="normal"><a href="#__codelineno-0-14">14</a></span>
@@ -3270,8 +3258,8 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 </span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="k">return</span> <span class="n">plan</span><span class="p">,</span> <span class="n">best_scores</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3279,7 +3267,7 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -3338,7 +3326,7 @@ Triggers an early stop if change across horizon is less than given sensitivity.<
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>

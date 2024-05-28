@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -2687,9 +2687,9 @@
 
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2705,17 +2705,17 @@
 
 
 <h2 id="pam.report.stringify.ActColour" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ActColour</span><span class="p">(</span><span class="n">colour</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">ActColour</span><span class="p">(</span><span class="n">colour</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 <a href="#pam.report.stringify.ActColour" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-19">19</a></span>
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
 <span class="normal"><a href="#__codelineno-0-22">22</a></span>
@@ -2725,9 +2725,9 @@
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">inf_yield</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bw_queue</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2742,8 +2742,8 @@
 
 
 <h3 id="pam.report.stringify.ActColour.mapping" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;travel&#39;</span><span class="p">:</span> <span class="mi">232</span><span class="p">}</span></code>
-  
+            <code class="highlight language-python"><span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;travel&#39;</span><span class="p">:</span> <span class="mi">232</span><span class="p">}</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -2752,29 +2752,27 @@
 <a href="#pam.report.stringify.ActColour.mapping" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.report.stringify.ActColour.paint" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">paint</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">paint</span><span class="p">(</span><span class="n">act</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></code>
 
 <a href="#pam.report.stringify.ActColour.paint" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">act</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
@@ -2782,8 +2780,8 @@
 </span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">[</span><span class="n">act</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">)</span>
 </span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[38;5;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mapping</span><span class="p">[</span><span class="n">act</span><span class="p">]</span><span class="si">}</span><span class="s2">m</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2791,28 +2789,25 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
-
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.report.stringify.inf_yield" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">inf_yield</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">inf_yield</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span></code>
 
 <a href="#pam.report.stringify.inf_yield" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">def</span> <span class="nf">inf_yield</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
@@ -2820,51 +2815,47 @@
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">queue</span><span class="p">:</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>            <span class="k">yield</span> <span class="n">i</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.report.stringify.stringify_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">stringify_plan</span><span class="p">(</span><span class="n">plan_array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">colourer</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">stringify_plan</span><span class="p">(</span><span class="n">plan_array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">colourer</span><span class="p">)</span></code>
 
 <a href="#pam.report.stringify.stringify_plan" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-51">51</a></span>
 <span class="normal"><a href="#__codelineno-0-52">52</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="k">def</span> <span class="nf">stringify_plan</span><span class="p">(</span><span class="n">plan_array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">colourer</span><span class="p">):</span>
 </span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">colourer</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="n">mapping</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;▇&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plan_array</span><span class="p">])</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.report.stringify.stringify_plans" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">stringify_plans</span><span class="p">(</span><span class="n">plans_path</span><span class="p">,</span> <span class="n">simplify_pt_trips</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">stringify_plans</span><span class="p">(</span><span class="n">plans_path</span><span class="p">,</span> <span class="n">simplify_pt_trips</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">101</span><span class="p">)</span></code>
 
 <a href="#pam.report.stringify.stringify_plans" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-31">31</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/report/stringify.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-31">31</a></span>
 <span class="normal"><a href="#__codelineno-0-32">32</a></span>
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span>
@@ -2900,8 +2891,8 @@
 </span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">encoder</span><span class="o">.</span><span class="n">act_to_index</span><span class="p">:</span>
 </span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colourer</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="n">act</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;▇▇▇▇▇▇▇▇▇▇&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">act</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2909,7 +2900,7 @@
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -2968,7 +2959,7 @@
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>

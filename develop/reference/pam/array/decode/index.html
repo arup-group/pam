@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -2675,9 +2675,9 @@
 
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2689,22 +2689,20 @@
 
 
 
-
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.add_end_times" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">add_end_times</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">add_end_times</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.add_end_times" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-79">79</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-79">79</a></span>
 <span class="normal"><a href="#__codelineno-0-80">80</a></span>
 <span class="normal"><a href="#__codelineno-0-81">81</a></span>
 <span class="normal"><a href="#__codelineno-0-82">82</a></span>
@@ -2714,27 +2712,25 @@
 </span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a>        <span class="n">plan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">plan</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span>
 </span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">end_of_day</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.fix_missing_components" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">fix_missing_components</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">default_leg_mode</span><span class="o">=</span><span class="s1">&#39;car&#39;</span><span class="p">,</span> <span class="n">default_activity</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">fix_missing_components</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">default_leg_mode</span><span class="o">=</span><span class="s1">&#39;car&#39;</span><span class="p">,</span> <span class="n">default_activity</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.fix_missing_components" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-104">104</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-104">104</a></span>
 <span class="normal"><a href="#__codelineno-0-105">105</a></span>
 <span class="normal"><a href="#__codelineno-0-106">106</a></span>
 <span class="normal"><a href="#__codelineno-0-107">107</a></span>
@@ -2776,27 +2772,25 @@
 </span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123"></a>                <span class="n">plan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span>
 </span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124"></a>                <span class="n">plan</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">end_time</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.fix_missing_end_activity" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">fix_missing_end_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">fix_missing_end_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.fix_missing_end_activity" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
 <span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
 <span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
 <span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
@@ -2810,27 +2804,25 @@
 </span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>        <span class="p">)</span>  <span class="c1"># sensible assumption</span>
 </span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a>        <span class="n">plan</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.fix_missing_start_activity" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">fix_missing_start_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">fix_missing_start_activity</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.fix_missing_start_activity" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86">86</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-86">86</a></span>
 <span class="normal"><a href="#__codelineno-0-87">87</a></span>
 <span class="normal"><a href="#__codelineno-0-88">88</a></span>
 <span class="normal"><a href="#__codelineno-0-89">89</a></span>
@@ -2844,27 +2836,25 @@
 </span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a>        <span class="p">)</span>  <span class="c1"># sensible assumption</span>
 </span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92"></a>        <span class="n">plan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">end_time</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.iter_array" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">iter_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">iter_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.iter_array" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-66">66</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-66">66</a></span>
 <span class="normal"><a href="#__codelineno-0-67">67</a></span>
 <span class="normal"><a href="#__codelineno-0-68">68</a></span>
 <span class="normal"><a href="#__codelineno-0-69">69</a></span>
@@ -2886,252 +2876,247 @@
 </span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a>            <span class="k">yield</span> <span class="n">component_class</span><span class="p">,</span> <span class="n">start_of_day</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">bin_size</span><span class="p">))</span>
 </span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76"></a>        <span class="n">prev</span> <span class="o">=</span> <span class="n">time_bin</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.decode.one_hot_to_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">one_hot_to_plan</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">,</span> <span class="n">leg_encoding</span><span class="o">=</span><span class="s1">&#39;travel&#39;</span><span class="p">,</span> <span class="n">default_leg_mode</span><span class="o">=</span><span class="s1">&#39;car&#39;</span><span class="p">,</span> <span class="n">default_activity</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">one_hot_to_plan</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">start_of_day</span><span class="o">=</span><span class="n">START_OF_DAY</span><span class="p">,</span> <span class="n">end_of_day</span><span class="o">=</span><span class="n">END_OF_DAY</span><span class="p">,</span> <span class="n">leg_encoding</span><span class="o">=</span><span class="s1">&#39;travel&#39;</span><span class="p">,</span> <span class="n">default_leg_mode</span><span class="o">=</span><span class="s1">&#39;car&#39;</span><span class="p">,</span> <span class="n">default_activity</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.array.decode.one_hot_to_plan" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Decode a one-hot encoded plan array for a given mapping. Attempts to create a valid plan sequence
 by assuming obviously missing components. Does not support locations, these must be created
 manually.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>array</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>input one-hot encoded plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><span title="numpy.array">array</span></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>mapping</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>encoding index to activity, eg {0: 'home', 1:'travel'}.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>bin_size</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>in seconds. Defaults to 3600.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>3600</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>duration</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>in seconds. Defaults to 86400.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>86400</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>start_of_day</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>start datetime of first activity. Defaults to START_OF_DAY.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="datetime.datetime" href="https://docs.python.org/3/library/datetime.html#datetime.datetime">datetime</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code><span title="pam.variables.START_OF_DAY">START_OF_DAY</span></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>end_of_day</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>end time of last activity. Defaults to END_OF_DAY.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="datetime.datetime" href="https://docs.python.org/3/library/datetime.html#datetime.datetime">datetime</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code><span title="pam.variables.END_OF_DAY">END_OF_DAY</span></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>leg_encoding</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>activity encoding for travel components. Defaults to "travel".</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>&#39;travel&#39;</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>default_leg_mode</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>assumed leg mode when unknown. Defaults to "car".</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>&#39;car&#39;</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>default_activity</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>assumed activity when unknown. Defaults to "other".</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>&#39;other&#39;</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RAISES</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-            <span class="doc-raises-annotation">
-                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#UserWarning">UserWarning</a></code>
-            </span>
-          </td>
-          <td class="doc-raises-details">
-            <div class="doc-md-description">
-              <p>may raise a UserWarning if bin_size and duration are not consistent with array size.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <code>Plan</code>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>pam.activity.Plan</p>
-            </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>array</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>input one-hot encoded plan.</p>
+              </div>
               <p>
-                <span class="doc-returns-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="numpy.array">array</span></code>
+                  </span>
               </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>mapping</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>encoding index to activity, eg {0: 'home', 1:'travel'}.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>bin_size</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>in seconds. Defaults to 3600.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>3600</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>duration</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>in seconds. Defaults to 86400.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>86400</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>start_of_day</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>start datetime of first activity. Defaults to START_OF_DAY.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="datetime.datetime" href="https://docs.python.org/3/library/datetime.html#datetime.datetime">datetime</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><span title="pam.variables.START_OF_DAY">START_OF_DAY</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>end_of_day</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>end time of last activity. Defaults to END_OF_DAY.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="datetime.datetime" href="https://docs.python.org/3/library/datetime.html#datetime.datetime">datetime</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><span title="pam.variables.END_OF_DAY">END_OF_DAY</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>leg_encoding</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>activity encoding for travel components. Defaults to "travel".</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>&#39;travel&#39;</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>default_leg_mode</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>assumed leg mode when unknown. Defaults to "car".</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>&#39;car&#39;</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>default_activity</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>assumed activity when unknown. Defaults to "other".</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>&#39;other&#39;</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/decode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RAISES</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+              <span class="doc-raises-annotation">
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#UserWarning">UserWarning</a></code>
+              </span>
+            </td>
+            <td class="doc-raises-details">
+              <div class="doc-md-description">
+                <p>may raise a UserWarning if bin_size and duration are not consistent with array size.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>Plan</code>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>pam.activity.Plan</p>
+              </div>
+                <p>
+                  <span class="doc-returns-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+                </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/decode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
@@ -3241,8 +3226,8 @@ manually.</p>
 </span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="n">plan</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">proposed_plan</span>
 </span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>    <span class="k">return</span> <span class="n">plan</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3250,7 +3235,7 @@ manually.</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -3309,7 +3294,7 @@ manually.</p>
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>

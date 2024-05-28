@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -2723,9 +2723,9 @@
 
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2741,60 +2741,59 @@
 
 
 <h2 id="pam.optimise.grid.Recorder" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">Recorder</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">initial_plan</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">Recorder</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">initial_plan</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.Recorder" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Mechanism for recording grid optimiser progress.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>initial_score</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Initial plan score.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>initial_plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Initial plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>initial_score</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Initial plan score.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>initial_plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Initial plan.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-10">10</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
@@ -2812,9 +2811,9 @@
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">best_plan</span> <span class="o">=</span> <span class="n">initial_plan</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="n">initial_score</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2829,8 +2828,8 @@
 
 
 <h3 id="pam.optimise.grid.Recorder.best_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">best_plan</span> <span class="o">=</span> <span class="n">initial_plan</span></code>
-  
+            <code class="highlight language-python"><span class="n">best_plan</span> <span class="o">=</span> <span class="n">initial_plan</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2838,8 +2837,8 @@
 <a href="#pam.optimise.grid.Recorder.best_plan" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2848,8 +2847,8 @@
 
 
 <h3 id="pam.optimise.grid.Recorder.best_score" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">best_score</span> <span class="o">=</span> <span class="n">initial_score</span></code>
-  
+            <code class="highlight language-python"><span class="n">best_score</span> <span class="o">=</span> <span class="n">initial_score</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2857,72 +2856,69 @@
 <a href="#pam.optimise.grid.Recorder.best_score" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.optimise.grid.Recorder.update" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">update</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">plan</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">update</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">plan</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.Recorder.update" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Update with new score and plan.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>score</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Latest plan score.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Latest plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>score</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Latest plan score.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Latest plan.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-20">20</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span>
 <span class="normal"><a href="#__codelineno-0-22">22</a></span>
 <span class="normal"><a href="#__codelineno-0-23">23</a></span>
@@ -2942,8 +2938,8 @@
 </span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
 </span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">best_plan</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2951,25 +2947,22 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
-
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.grid.grid_search" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">grid_search</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">plans_scorer</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">grid_search</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">plans_scorer</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.grid_search" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Grid search for optimum plan schedule.</p>
 <p>Checks all permutations of a plan's activity start times and durations, finds plan
 that has maximum score, based on the given scorer. The precision and size of the grid is based
@@ -2977,124 +2970,122 @@ on the given step (seconds). Smaller steps increase the grid size.</p>
 <p>Trip durations are assumed fixed and activity sequence is not changed.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Input plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>plans_scorer</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Plans scorer object.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.scoring.PlanScorer" href="../../scoring/#pam.scoring.PlanScorer">PlanScorer</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>config</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>PlansScorer config.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code>Dict</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>step</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Grid size in seconds. Defaults to 900.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>900</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>copy</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Create a copy of the input plan. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code>Bool</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Input plan.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>plans_scorer</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Plans scorer object.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.scoring.PlanScorer" href="../../scoring/#pam.scoring.PlanScorer">PlanScorer</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>config</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>PlansScorer config.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code>Dict</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>step</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Grid size in seconds. Defaults to 900.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>900</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>copy</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Create a copy of the input plan. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code>Bool</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code>(<a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>)</code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>Best plan found and score of best plan.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code>(<a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>)</code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>Best plan found and score of best plan.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span>
 <span class="normal"><a href="#__codelineno-0-35">35</a></span>
@@ -3168,27 +3159,25 @@ on the given step (seconds). Smaller steps increase the grid size.</p>
 </span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">best_score</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
 </span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="k">return</span> <span class="n">recorder</span><span class="o">.</span><span class="n">best_plan</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">best_score</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.grid.latest_start_time" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">latest_start_time</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">leg_index</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">latest_start_time</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">leg_index</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.latest_start_time" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-115">115</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-115">115</a></span>
 <span class="normal"><a href="#__codelineno-0-116">116</a></span>
 <span class="normal"><a href="#__codelineno-0-117">117</a></span>
 <span class="normal"><a href="#__codelineno-0-118">118</a></span>
@@ -3198,27 +3187,25 @@ on the given step (seconds). Smaller steps increase the grid size.</p>
 </span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118"></a>        <span class="n">allowance</span> <span class="o">-=</span> <span class="n">c</span><span class="o">.</span><span class="n">duration</span><span class="o">.</span><span class="n">seconds</span>
 </span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119"></a>    <span class="k">return</span> <span class="n">allowance</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.grid.print_report" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">print_report</span><span class="p">(</span><span class="n">initial_score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.print_report" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-71">71</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-71">71</a></span>
 <span class="normal"><a href="#__codelineno-0-72">72</a></span>
 <span class="normal"><a href="#__codelineno-0-73">73</a></span>
 <span class="normal"><a href="#__codelineno-0-74">74</a></span>
@@ -3228,30 +3215,28 @@ on the given step (seconds). Smaller steps increase the grid size.</p>
 </span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to improve score from initial </span><span class="si">{</span><span class="n">initial_score</span><span class="si">}</span><span class="s2"> using step size </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">s.&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.optimise.grid.traverse" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">traverse</span><span class="p">(</span><span class="n">scorer</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">earliest</span><span class="p">,</span> <span class="n">leg_index</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">traverse</span><span class="p">(</span><span class="n">scorer</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">earliest</span><span class="p">,</span> <span class="n">leg_index</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span></code>
 
 <a href="#pam.optimise.grid.traverse" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Traverse all possible grid permutations by enumerating all trip start times of first trip
 and recursively all following trips in sequence.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/optimise/grid.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
 <span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
 <span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
 <span class="normal"><a href="#__codelineno-0-81"> 81</a></span>
@@ -3321,8 +3306,8 @@ and recursively all following trips in sequence.</p>
 </span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111"></a>            <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">,</span>
 </span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112"></a>        <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3330,7 +3315,7 @@ and recursively all following trips in sequence.</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -3389,7 +3374,7 @@ and recursively all following trips in sequence.</p>
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>

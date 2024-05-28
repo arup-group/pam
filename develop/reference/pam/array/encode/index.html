@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -2741,9 +2741,9 @@
 
 
 
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2759,64 +2759,64 @@
 
 
 <h2 id="pam.array.encode.PlansToCategorical" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">PlansToCategorical</span><span class="p">(</span><span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">PlansToCategorical</span><span class="p">(</span><span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">)</span></code>
 
 <a href="#pam.array.encode.PlansToCategorical" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Tool for converting pam.core.plans to integer arrays.</p>
 
 
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>bin_size</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Defaults to 3600.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>3600</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>duration</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Defaults to 86400.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>86400</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>bin_size</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Defaults to 3600.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>3600</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>duration</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Defaults to 86400.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>86400</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
 
 <details class="example" open>
   <summary>Example</summary>
@@ -2826,6 +2826,7 @@ The axis represents time, binnned according to bin_size and total duration, both
 A mapping between the array values (indexes) and plan activities can be accessed
 via self.index_to_act and self.act_to_index.</p>
 </details>
+
 <details class="note" open>
   <summary>Note</summary>
   <ul>
@@ -2835,9 +2836,9 @@ via self.index_to_act and self.act_to_index.</p>
 <li>Plan components beyond 24 hours are cropped.</li>
 </ul>
 </details>
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/array/encode.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-47">47</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/array/encode.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-47">47</a></span>
 <span class="normal"><a href="#__codelineno-0-48">48</a></span>
 <span class="normal"><a href="#__codelineno-0-49">49</a></span>
 <span class="normal"><a href="#__codelineno-0-50">50</a></span>
@@ -2889,9 +2890,9 @@ via self.index_to_act and self.act_to_index.</p>
 </span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">index_to_act</span> <span class="o">=</span> <span class="p">{}</span>
 </span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">act_to_index</span> <span class="o">=</span> <span class="p">{}</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2906,8 +2907,8 @@ via self.index_to_act and self.act_to_index.</p>
 
 
 <h3 id="pam.array.encode.PlansToCategorical.act_to_index" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">act_to_index</span> <span class="o">=</span> <span class="p">{}</span></code>
-  
+            <code class="highlight language-python"><span class="n">act_to_index</span> <span class="o">=</span> <span class="p">{}</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2915,8 +2916,8 @@ via self.index_to_act and self.act_to_index.</p>
 <a href="#pam.array.encode.PlansToCategorical.act_to_index" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2925,8 +2926,8 @@ via self.index_to_act and self.act_to_index.</p>
 
 
 <h3 id="pam.array.encode.PlansToCategorical.bin_size" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">bin_size</span> <span class="o">=</span> <span class="n">bin_size</span></code>
-  
+            <code class="highlight language-python"><span class="n">bin_size</span> <span class="o">=</span> <span class="n">bin_size</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2934,8 +2935,8 @@ via self.index_to_act and self.act_to_index.</p>
 <a href="#pam.array.encode.PlansToCategorical.bin_size" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2944,8 +2945,8 @@ via self.index_to_act and self.act_to_index.</p>
 
 
 <h3 id="pam.array.encode.PlansToCategorical.bins" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_size</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_size</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2953,8 +2954,8 @@ via self.index_to_act and self.act_to_index.</p>
 <a href="#pam.array.encode.PlansToCategorical.bins" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2963,8 +2964,8 @@ via self.index_to_act and self.act_to_index.</p>
 
 
 <h3 id="pam.array.encode.PlansToCategorical.duration" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span></code>
-  
+            <code class="highlight language-python"><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2972,8 +2973,8 @@ via self.index_to_act and self.act_to_index.</p>
 <a href="#pam.array.encode.PlansToCategorical.duration" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -2982,8 +2983,8 @@ via self.index_to_act and self.act_to_index.</p>
 
 
 <h3 id="pam.array.encode.PlansToCategorical.index_to_act" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">index_to_act</span> <span class="o">=</span> <span class="p">{}</span></code>
-  
+            <code class="highlight language-python"><span class="n">index_to_act</span> <span class="o">=</span> <span class="p">{}</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -2991,83 +2992,79 @@ via self.index_to_act and self.act_to_index.</p>
 <a href="#pam.array.encode.PlansToCategorical.index_to_act" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.array.encode.PlansToCategorical.encode" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span></code>
 
 <a href="#pam.array.encode.PlansToCategorical.encode" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Transform a pam.activity.Plan into a categorical integer array.</p>
 
 
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>input Plan object to be encoded as one-hot.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>input Plan object to be encoded as one-hot.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
                 </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: encoded plan</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: encoded plan</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/encode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/encode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
 <span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
 <span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
 <span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
@@ -3129,32 +3126,30 @@ via self.index_to_act and self.act_to_index.</p>
 </span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106"></a>
 </span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.array.encode.PlansToCategorical.get_act" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_act</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">get_act</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></code>
 
 <a href="#pam.array.encode.PlansToCategorical.get_act" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/encode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/encode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-74">74</a></span>
 <span class="normal"><a href="#__codelineno-0-75">75</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="k">def</span> <span class="nf">get_act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
 </span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_act</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3162,25 +3157,22 @@ via self.index_to_act and self.act_to_index.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
-
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h2 id="pam.array.encode.plan_to_one_hot" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">plan_to_one_hot</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">plan_to_one_hot</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">bin_size</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">86400</span><span class="p">)</span></code>
 
 <a href="#pam.array.encode.plan_to_one_hot" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Transform a pam.activity.Plan into a one-hot encoded array. Output array is two dimensional.
 First axis represents time, binnned according to bin_size given in seconds.
 Seconds axis is a one-hot endcoding of activity type based on the given mapping. Note that Leg
@@ -3189,110 +3181,108 @@ mode information is lost. Some plan components may be lost if their durations ar
 the chosen bin six. Plan components beyond 24 hours are cropped.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>input Plan object to be encoded as one-hot</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>mapping</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>dictionary mapping of activity types to one-hot index, eg {"home":0, "travel":1}</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>bin_size</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>time bin size (in seconds). Defaults to 3600.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>3600</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>duration</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>day_duration (in seconds). Defaults to 86400.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>86400</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>input Plan object to be encoded as one-hot</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>mapping</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>dictionary mapping of activity types to one-hot index, eg {"home":0, "travel":1}</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>bin_size</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>time bin size (in seconds). Defaults to 3600.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>3600</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>duration</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>day_duration (in seconds). Defaults to 86400.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>86400</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: one-hot encoded plan</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: one-hot encoded plan</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/array/encode.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/array/encode.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
 <span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
@@ -3366,8 +3356,8 @@ the chosen bin six. Plan components beyond 24 hours are cropped.</p>
 </span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>
 </span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="k">return</span> <span class="n">encoded</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -3375,7 +3365,7 @@ the chosen bin six. Plan components beyond 24 hours are cropped.</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -3434,7 +3424,7 @@ the chosen bin six. Plan components beyond 24 hours are cropped.</p>
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>

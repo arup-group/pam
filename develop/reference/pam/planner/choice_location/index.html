@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../../resources/logos/mini.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.20">
     
     
       
@@ -4175,11 +4175,11 @@
 
 
 
-  <div class="doc doc-contents first">
-  
+    <div class="doc doc-contents first">
+
       <p>Location and mode choice models for activity modelling.</p>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -4195,8 +4195,8 @@
 
 
 <h2 id="pam.planner.choice_location.ChoiceConfiguration" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ChoiceConfiguration</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_probabilities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_sampling</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-  
+              <code class="highlight language-python"><span class="n">ChoiceConfiguration</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_probabilities</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_sampling</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
   </span>
@@ -4204,86 +4204,85 @@
 <a href="#pam.planner.choice_location.ChoiceConfiguration" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-
-  
+    <div class="doc doc-contents ">
 
 
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">ATTRIBUTE</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.u" href="#pam.planner.choice_location.ChoiceConfiguration.u">u</a></code></td>
-          <td class="doc-attribute-details">
-            <div class="doc-md-description">
-              <p>The utility function specification.
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">ATTRIBUTE</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.u" href="#pam.planner.choice_location.ChoiceConfiguration.u">u</a></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>The utility function specification.
 The string may point to household, person, act, leg, od, or zone data.
 It can also include values and/or mathematical operations.
 Parameters may be passed as single values, or as lists (with each element in the list corresponding to one of the modes in the OD object).
 For example: u='-[0,1] - (2 * od['time']) - (od['time'] * person.attributes['age']&gt;60).
 Defaults to None.</p>
-            </div>
-            <p>
-                <span class="doc-attribute-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.scope" href="#pam.planner.choice_location.ChoiceConfiguration.scope">scope</a></code></td>
-          <td class="doc-attribute-details">
-            <div class="doc-md-description">
-              <p>The scope of the function (for example, work activities). Defaults to None.</p>
-            </div>
-            <p>
-                <span class="doc-attribute-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.func_probabilities" href="#pam.planner.choice_location.ChoiceConfiguration.func_probabilities">func_probabilities</a></code></td>
-          <td class="doc-attribute-details">
-            <div class="doc-md-description">
-              <p>The function for calculating the probability of each alternative. Defaults to None.</p>
-            </div>
-            <p>
-                <span class="doc-attribute-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.func_sampling" href="#pam.planner.choice_location.ChoiceConfiguration.func_sampling">func_sampling</a></code></td>
-          <td class="doc-attribute-details">
-            <div class="doc-md-description">
-              <p>The function for sampling across alternatives, ie softmax. Defaults to None.</p>
-            </div>
-            <p>
-                <span class="doc-attribute-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.scope" href="#pam.planner.choice_location.ChoiceConfiguration.scope">scope</a></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>The scope of the function (for example, work activities). Defaults to None.</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.func_probabilities" href="#pam.planner.choice_location.ChoiceConfiguration.func_probabilities">func_probabilities</a></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>The function for calculating the probability of each alternative. Defaults to None.</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceConfiguration.func_sampling" href="#pam.planner.choice_location.ChoiceConfiguration.func_sampling">func_sampling</a></code></td>
+            <td class="doc-attribute-details">
+              <div class="doc-md-description">
+                <p>The function for sampling across alternatives, ie softmax. Defaults to None.</p>
+              </div>
+              <p>
+                  <span class="doc-attribute-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -4298,8 +4297,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceConfiguration.func_probabilities" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">func_probabilities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
-  
+            <code class="highlight language-python"><span class="n">func_probabilities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -4308,8 +4307,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceConfiguration.func_probabilities" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4318,8 +4317,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceConfiguration.func_sampling" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">func_sampling</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
-  
+            <code class="highlight language-python"><span class="n">func_sampling</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -4328,8 +4327,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceConfiguration.func_sampling" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4338,8 +4337,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceConfiguration.scope" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">scope</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
-  
+            <code class="highlight language-python"><span class="n">scope</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -4348,8 +4347,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceConfiguration.scope" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4358,8 +4357,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceConfiguration.u" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">u</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
-  
+            <code class="highlight language-python"><span class="n">u</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -4368,57 +4367,54 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceConfiguration.u" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceConfiguration.validate" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">validate</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">validate</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceConfiguration.validate" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
 
 
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>vars</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>vars</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-106">106</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-106">106</a></span>
 <span class="normal"><a href="#__codelineno-0-107">107</a></span>
 <span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
@@ -4438,8 +4434,8 @@ Defaults to None.</p>
 </span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114"></a>        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> has not been set yet&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -4447,8 +4443,7 @@ Defaults to None.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -4457,21 +4452,21 @@ Defaults to None.</p>
 
 
 <h2 id="pam.planner.choice_location.ChoiceIdx" class="doc doc-heading">
-          <code>ChoiceIdx</code>
+            <code>ChoiceIdx</code>
 
 
 <a href="#pam.planner.choice_location.ChoiceIdx" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
 
-  
+
       <p>Choice set index.</p>
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -4486,8 +4481,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceIdx.act" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">act</span><span class="p">:</span> <span class="n">Activity</span></code>
-  
+            <code class="highlight language-python"><span class="n">act</span><span class="p">:</span> <span class="n">Activity</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4495,8 +4490,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceIdx.act" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4505,8 +4500,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceIdx.hid" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">hid</span><span class="p">:</span> <span class="nb">str</span></code>
-  
+            <code class="highlight language-python"><span class="n">hid</span><span class="p">:</span> <span class="nb">str</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4514,8 +4509,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceIdx.hid" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4524,8 +4519,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceIdx.pid" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pid</span><span class="p">:</span> <span class="nb">str</span></code>
-  
+            <code class="highlight language-python"><span class="n">pid</span><span class="p">:</span> <span class="nb">str</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4533,8 +4528,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceIdx.pid" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4543,8 +4538,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceIdx.seq" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">seq</span><span class="p">:</span> <span class="nb">int</span></code>
-  
+            <code class="highlight language-python"><span class="n">seq</span><span class="p">:</span> <span class="nb">int</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4552,8 +4547,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceIdx.seq" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4563,8 +4558,7 @@ Defaults to None.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -4573,21 +4567,21 @@ Defaults to None.</p>
 
 
 <h2 id="pam.planner.choice_location.ChoiceLabel" class="doc doc-heading">
-          <code>ChoiceLabel</code>
+            <code>ChoiceLabel</code>
 
 
 <a href="#pam.planner.choice_location.ChoiceLabel" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
 
-  
+
       <p>Destination and mode choice labels of a selected option.</p>
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -4602,8 +4596,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceLabel.destination" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">destination</span><span class="p">:</span> <span class="nb">str</span></code>
-  
+            <code class="highlight language-python"><span class="n">destination</span><span class="p">:</span> <span class="nb">str</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4611,8 +4605,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceLabel.destination" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4621,8 +4615,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceLabel.mode" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span></code>
-  
+            <code class="highlight language-python"><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4630,8 +4624,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceLabel.mode" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4641,8 +4635,7 @@ Defaults to None.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -4651,21 +4644,21 @@ Defaults to None.</p>
 
 
 <h2 id="pam.planner.choice_location.ChoiceMNL" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ChoiceMNL</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">ChoiceMNL</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceMNL" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceModel" href="#pam.planner.choice_location.ChoiceModel">ChoiceModel</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.ChoiceModel" href="#pam.planner.choice_location.ChoiceModel">ChoiceModel</a></code></p>
 
-  
+
       <p>Applies a Multinomial Logit Choice model.</p>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-257">257</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-257">257</a></span>
 <span class="normal"><a href="#__codelineno-0-258">258</a></span>
 <span class="normal"><a href="#__codelineno-0-259">259</a></span>
 <span class="normal"><a href="#__codelineno-0-260">260</a></span>
@@ -4675,9 +4668,9 @@ Defaults to None.</p>
 </span><span id="__span-0-260"><a id="__codelineno-0-260" name="__codelineno-0-260"></a>        <span class="n">func_probabilities</span><span class="o">=</span><span class="n">calculate_mnl_probabilities</span><span class="p">,</span> <span class="n">func_sampling</span><span class="o">=</span><span class="n">sample_weighted</span>
 </span><span id="__span-0-261"><a id="__codelineno-0-261" name="__codelineno-0-261"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -4692,8 +4685,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.configuration" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">configuration</span> <span class="o">=</span> <span class="n">ChoiceConfiguration</span><span class="p">()</span></code>
-  
+            <code class="highlight language-python"><span class="n">configuration</span> <span class="o">=</span> <span class="n">ChoiceConfiguration</span><span class="p">()</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4701,8 +4694,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.configuration" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4711,8 +4704,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.logger" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4720,8 +4713,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.logger" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4730,8 +4723,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.od" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">od</span> <span class="o">=</span> <span class="n">od</span></code>
-  
+            <code class="highlight language-python"><span class="n">od</span> <span class="o">=</span> <span class="n">od</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4739,8 +4732,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.od" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4749,8 +4742,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.population" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">population</span> <span class="o">=</span> <span class="n">population</span></code>
-  
+            <code class="highlight language-python"><span class="n">population</span> <span class="o">=</span> <span class="n">population</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4758,8 +4751,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.population" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4768,8 +4761,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.selections" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="n">SelectionSet</span></code>
-  
+            <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="n">SelectionSet</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -4777,8 +4770,8 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.selections" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -4787,8 +4780,8 @@ Defaults to None.</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceMNL.zones" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -4796,118 +4789,115 @@ Defaults to None.</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.zones" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceMNL.apply" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">apply</span><span class="p">(</span><span class="n">apply_location</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">once_per_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode_to</span><span class="o">=</span><span class="s1">&#39;chain&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">apply</span><span class="p">(</span><span class="n">apply_location</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">once_per_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode_to</span><span class="o">=</span><span class="s1">&#39;chain&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceMNL.apply" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Apply the choice model to the PAM population,
     updating the activity locations and mode choices in scope.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>apply_location</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to update activities' location. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>apply_mode</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to update travel modes. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>once_per_agent</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>If True, the same selected option is applied to all activities within scope of an agent. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>apply_mode_to</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to apply the mode to the entire trip chain that contains the activity, or the leg preceding the activity.
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>apply_location</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to update activities' location. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>apply_mode</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to update travel modes. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>once_per_agent</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>If True, the same selected option is applied to all activities within scope of an agent. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>apply_mode_to</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to apply the mode to the entire trip chain that contains the activity, or the leg preceding the activity.
 Defaults to "chain".</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;chain&#39;, &#39;previous_leg&#39;]</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>&#39;chain&#39;</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;chain&#39;, &#39;previous_leg&#39;]</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>&#39;chain&#39;</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-158">158</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-158">158</a></span>
 <span class="normal"><a href="#__codelineno-0-159">159</a></span>
 <span class="normal"><a href="#__codelineno-0-160">160</a></span>
 <span class="normal"><a href="#__codelineno-0-161">161</a></span>
@@ -5001,60 +4991,57 @@ Defaults to "chain".</p>
 </span><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a>
 </span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Choice model application complete.&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceMNL.configure" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">configure</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">configure</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceMNL.configure" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Specify the model.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>**kwargs</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Parameters of the ChoiceConfiguration class.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a>]]</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>{}</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>**kwargs</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Parameters of the ChoiceConfiguration class.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a>]]</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>{}</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-144">144</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-144">144</a></span>
 <span class="normal"><a href="#__codelineno-0-145">145</a></span>
 <span class="normal"><a href="#__codelineno-0-146">146</a></span>
 <span class="normal"><a href="#__codelineno-0-147">147</a></span>
@@ -5080,29 +5067,27 @@ Defaults to "chain".</p>
 </span><span id="__span-0-155"><a id="__codelineno-0-155" name="__codelineno-0-155"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updated model configuration&quot;</span><span class="p">)</span>
 </span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceMNL.get_choice_set" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_choice_set</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">get_choice_set</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceMNL.get_choice_set" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Construct an agent's choice set for each activity/leg within scope.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
 <span class="normal"><a href="#__codelineno-0-207">207</a></span>
 <span class="normal"><a href="#__codelineno-0-208">208</a></span>
 <span class="normal"><a href="#__codelineno-0-209">209</a></span>
@@ -5172,19 +5157,17 @@ Defaults to "chain".</p>
 </span><span id="__span-0-239"><a id="__codelineno-0-239" name="__codelineno-0-239"></a>
 </span><span id="__span-0-240"><a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="k">return</span> <span class="n">ChoiceSet</span><span class="p">(</span><span class="n">idxs</span><span class="o">=</span><span class="n">idxs</span><span class="p">,</span> <span class="n">u_choices</span><span class="o">=</span><span class="n">u_choices</span><span class="p">,</span> <span class="n">choice_labels</span><span class="o">=</span><span class="n">choice_labels</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceMNL.parse_zone_data" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
@@ -5192,11 +5175,11 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceMNL.parse_zone_data" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span>
 <span class="normal"><a href="#__codelineno-0-139">139</a></span>
 <span class="normal"><a href="#__codelineno-0-140">140</a></span>
@@ -5208,8 +5191,8 @@ Defaults to "chain".</p>
 </span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zones</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 </span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a>        <span class="k">return</span> <span class="n">Zones</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">zones</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -5217,8 +5200,7 @@ Defaults to "chain".</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -5227,74 +5209,73 @@ Defaults to "chain".</p>
 
 
 <h2 id="pam.planner.choice_location.ChoiceModel" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ChoiceModel</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">ChoiceModel</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">zones</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceModel" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Choice model interface.</p>
 
 
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>population</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>A PAM population.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.core.Population" href="../../core/#pam.core.Population">Population</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>od</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An object holding origin-destination.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>zones</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Zone-level data.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a>, <a class="autorefs autorefs-internal" title="pam.planner.zones.Zones" href="../zones/#pam.planner.zones.Zones">Zones</a>]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>population</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>A PAM population.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.core.Population" href="../../core/#pam.core.Population">Population</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>od</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An object holding origin-destination.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>zones</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Zone-level data.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" title="pandas.DataFrame" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame">DataFrame</a>, <a class="autorefs autorefs-internal" title="pam.planner.zones.Zones" href="../zones/#pam.planner.zones.Zones">Zones</a>]</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-119">119</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-119">119</a></span>
 <span class="normal"><a href="#__codelineno-0-120">120</a></span>
 <span class="normal"><a href="#__codelineno-0-121">121</a></span>
 <span class="normal"><a href="#__codelineno-0-122">122</a></span>
@@ -5328,9 +5309,9 @@ Defaults to "chain".</p>
 </span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">configuration</span> <span class="o">=</span> <span class="n">ChoiceConfiguration</span><span class="p">()</span>
 </span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span> <span class="o">=</span> <span class="kc">None</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -5345,8 +5326,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.configuration" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">configuration</span> <span class="o">=</span> <span class="n">ChoiceConfiguration</span><span class="p">()</span></code>
-  
+            <code class="highlight language-python"><span class="n">configuration</span> <span class="o">=</span> <span class="n">ChoiceConfiguration</span><span class="p">()</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5354,8 +5335,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.configuration" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5364,8 +5345,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.logger" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5373,8 +5354,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.logger" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5383,8 +5364,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.od" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">od</span> <span class="o">=</span> <span class="n">od</span></code>
-  
+            <code class="highlight language-python"><span class="n">od</span> <span class="o">=</span> <span class="n">od</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5392,8 +5373,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.od" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5402,8 +5383,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.population" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">population</span> <span class="o">=</span> <span class="n">population</span></code>
-  
+            <code class="highlight language-python"><span class="n">population</span> <span class="o">=</span> <span class="n">population</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5411,8 +5392,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.population" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5421,8 +5402,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.selections" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="n">SelectionSet</span></code>
-  
+            <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="n">SelectionSet</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -5430,8 +5411,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.selections" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5440,8 +5421,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceModel.zones" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5449,118 +5430,115 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.zones" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceModel.apply" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">apply</span><span class="p">(</span><span class="n">apply_location</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">once_per_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode_to</span><span class="o">=</span><span class="s1">&#39;chain&#39;</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">apply</span><span class="p">(</span><span class="n">apply_location</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">once_per_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">apply_mode_to</span><span class="o">=</span><span class="s1">&#39;chain&#39;</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceModel.apply" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Apply the choice model to the PAM population,
     updating the activity locations and mode choices in scope.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>apply_location</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to update activities' location. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>apply_mode</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to update travel modes. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>once_per_agent</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>If True, the same selected option is applied to all activities within scope of an agent. Defaults to True.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>True</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>apply_mode_to</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Whether to apply the mode to the entire trip chain that contains the activity, or the leg preceding the activity.
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>apply_location</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to update activities' location. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>apply_mode</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to update travel modes. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>once_per_agent</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>If True, the same selected option is applied to all activities within scope of an agent. Defaults to True.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>True</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>apply_mode_to</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether to apply the mode to the entire trip chain that contains the activity, or the leg preceding the activity.
 Defaults to "chain".</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;chain&#39;, &#39;previous_leg&#39;]</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>&#39;chain&#39;</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;chain&#39;, &#39;previous_leg&#39;]</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>&#39;chain&#39;</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-158">158</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-158">158</a></span>
 <span class="normal"><a href="#__codelineno-0-159">159</a></span>
 <span class="normal"><a href="#__codelineno-0-160">160</a></span>
 <span class="normal"><a href="#__codelineno-0-161">161</a></span>
@@ -5654,60 +5632,57 @@ Defaults to "chain".</p>
 </span><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a>
 </span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Choice model application complete.&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceModel.configure" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">configure</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">configure</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceModel.configure" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Specify the model.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>**kwargs</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Parameters of the ChoiceConfiguration class.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a>]]</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>{}</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>**kwargs</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Parameters of the ChoiceConfiguration class.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" title="collections.abc.Callable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable">Callable</a>]]</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>{}</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-144">144</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-144">144</a></span>
 <span class="normal"><a href="#__codelineno-0-145">145</a></span>
 <span class="normal"><a href="#__codelineno-0-146">146</a></span>
 <span class="normal"><a href="#__codelineno-0-147">147</a></span>
@@ -5733,29 +5708,27 @@ Defaults to "chain".</p>
 </span><span id="__span-0-155"><a id="__codelineno-0-155" name="__codelineno-0-155"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updated model configuration&quot;</span><span class="p">)</span>
 </span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceModel.get_choice_set" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_choice_set</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">get_choice_set</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.ChoiceModel.get_choice_set" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Construct an agent's choice set for each activity/leg within scope.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-206">206</a></span>
 <span class="normal"><a href="#__codelineno-0-207">207</a></span>
 <span class="normal"><a href="#__codelineno-0-208">208</a></span>
 <span class="normal"><a href="#__codelineno-0-209">209</a></span>
@@ -5825,19 +5798,17 @@ Defaults to "chain".</p>
 </span><span id="__span-0-239"><a id="__codelineno-0-239" name="__codelineno-0-239"></a>
 </span><span id="__span-0-240"><a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="k">return</span> <span class="n">ChoiceSet</span><span class="p">(</span><span class="n">idxs</span><span class="o">=</span><span class="n">idxs</span><span class="p">,</span> <span class="n">u_choices</span><span class="o">=</span><span class="n">u_choices</span><span class="p">,</span> <span class="n">choice_labels</span><span class="o">=</span><span class="n">choice_labels</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.ChoiceModel.parse_zone_data" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">parse_zone_data</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
@@ -5845,11 +5816,11 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceModel.parse_zone_data" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span>
 <span class="normal"><a href="#__codelineno-0-139">139</a></span>
 <span class="normal"><a href="#__codelineno-0-140">140</a></span>
@@ -5861,8 +5832,8 @@ Defaults to "chain".</p>
 </span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zones</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 </span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a>        <span class="k">return</span> <span class="n">Zones</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">zones</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -5870,8 +5841,7 @@ Defaults to "chain".</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -5880,21 +5850,21 @@ Defaults to "chain".</p>
 
 
 <h2 id="pam.planner.choice_location.ChoiceSet" class="doc doc-heading">
-          <code>ChoiceSet</code>
+            <code>ChoiceSet</code>
 
 
 <a href="#pam.planner.choice_location.ChoiceSet" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-external" title="typing.NamedTuple" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple">NamedTuple</a></code></p>
 
-  
+
       <p>MNL Choice set.</p>
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -5909,8 +5879,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceSet.choice_labels" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">choice_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceLabel</span><span class="p">]</span></code>
-  
+            <code class="highlight language-python"><span class="n">choice_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceLabel</span><span class="p">]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5918,8 +5888,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceSet.choice_labels" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5928,8 +5898,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceSet.idxs" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">idxs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceIdx</span><span class="p">]</span></code>
-  
+            <code class="highlight language-python"><span class="n">idxs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceIdx</span><span class="p">]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5937,8 +5907,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceSet.idxs" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5947,8 +5917,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.ChoiceSet.u_choices" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">u_choices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">u_choices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -5956,8 +5926,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.ChoiceSet.u_choices" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -5967,8 +5937,7 @@ Defaults to "chain".</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -5977,17 +5946,18 @@ Defaults to "chain".</p>
 
 
 <h2 id="pam.planner.choice_location.DiscretionaryTrip" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">DiscretionaryTrip</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">DiscretionaryTrip</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTrip" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-external" title="abc.ABC" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-external" title="abc.ABC" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
 
-  
+
       <p>Location choice for discretionary trips in a trip chain.</p>
+
 
 <details class="cases" open>
   <summary>Cases</summary>
@@ -6001,49 +5971,48 @@ Defaults to "chain".</p>
     updating the first location each time, and then keeping it fixed as we solve downstream.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>trip_chain</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>A trip chain between two long-term activities.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>od</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An object holding origin-destination matrices.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>trip_chain</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>A trip chain between two long-term activities.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>od</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An object holding origin-destination matrices.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
 <span class="normal"><a href="#__codelineno-0-291">291</a></span>
 <span class="normal"><a href="#__codelineno-0-292">292</a></span>
 <span class="normal"><a href="#__codelineno-0-293">293</a></span>
@@ -6111,9 +6080,9 @@ Defaults to "chain".</p>
 </span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Activity</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trip_chain</span><span class="p">[::</span><span class="mi">2</span><span class="p">]):</span>
 </span><span id="__span-0-323"><a id="__codelineno-0-323" name="__codelineno-0-323"></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Each even element in the trip chain should be an activity&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -6128,8 +6097,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.act_names" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6137,8 +6106,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.act_names" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6147,8 +6116,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.anchor_zone_end" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6156,8 +6125,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.anchor_zone_end" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6166,8 +6135,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.anchor_zone_start" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6175,8 +6144,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.anchor_zone_start" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6185,8 +6154,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.od" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
-  
+            <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6194,8 +6163,8 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.od" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6204,8 +6173,8 @@ Defaults to "chain".</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.trmode" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
-  
+            <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6213,21 +6182,19 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.trmode" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.choose_destination" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
-  
+            <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
@@ -6235,42 +6202,41 @@ Defaults to "chain".</p>
 <a href="#pam.planner.choice_location.DiscretionaryTrip.choose_destination" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Selects a destination for the discretionary activity.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <code>str</code>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>Selected destination zone name.</p>
-            </div>
-              <p>
-                <span class="doc-returns-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-              </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>str</code>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>Selected destination zone name.</p>
+              </div>
+                <p>
+                  <span class="doc-returns-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-325">325</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-325">325</a></span>
 <span class="normal"><a href="#__codelineno-0-326">326</a></span>
 <span class="normal"><a href="#__codelineno-0-327">327</a></span>
 <span class="normal"><a href="#__codelineno-0-328">328</a></span>
@@ -6284,30 +6250,28 @@ Defaults to "chain".</p>
 </span><span id="__span-0-330"><a id="__codelineno-0-330" name="__codelineno-0-330"></a><span class="sd">        str: Selected destination zone name.</span>
 </span><span id="__span-0-331"><a id="__codelineno-0-331" name="__codelineno-0-331"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTrip.update_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTrip.update_plan" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Update the PAM activity locations of the first activity in the trip chain,
 and continue downstream until the entire chain is solved.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
 <span class="normal"><a href="#__codelineno-0-334">334</a></span>
 <span class="normal"><a href="#__codelineno-0-335">335</a></span>
 <span class="normal"><a href="#__codelineno-0-336">336</a></span>
@@ -6351,8 +6315,8 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-353"><a id="__codelineno-0-353" name="__codelineno-0-353"></a>            <span class="c1"># the newly-selected location now becomes the first anchor</span>
 </span><span id="__span-0-354"><a id="__codelineno-0-354" name="__codelineno-0-354"></a>            <span class="n">DiscretionaryTripOD</span><span class="p">(</span><span class="n">trip_chain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_trip_chain</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">od</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_od</span><span class="p">)</span><span class="o">.</span><span class="n">update_plan</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -6360,8 +6324,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -6370,18 +6333,19 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h2 id="pam.planner.choice_location.DiscretionaryTripOD" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">DiscretionaryTripOD</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">DiscretionaryTripOD</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripOD" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.DiscretionaryTrip" href="#pam.planner.choice_location.DiscretionaryTrip">DiscretionaryTrip</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.DiscretionaryTrip" href="#pam.planner.choice_location.DiscretionaryTrip">DiscretionaryTrip</a></code></p>
 
-  
+
       <p>Location choice for a single discretionary trip, where we have different anchors at the start and end of the chain.</p>
 <p>The class infers the location of the first trip in the trip chain.</p>
+
 
 <details class="methodology" open>
   <summary>Methodology</summary>
@@ -6392,8 +6356,9 @@ and continue downstream until the entire chain is solved.</p>
 <li>Zone attraction</li>
 </ol>
 <p>Final probabilities are defined as (1) * (2) * (3) (and then normalised to sum up to 1).</p>
-</details>  
+</details>
       <p>Location choice for discretionary trips in a trip chain.</p>
+
 
 <details class="cases" open>
   <summary>Cases</summary>
@@ -6407,49 +6372,48 @@ and continue downstream until the entire chain is solved.</p>
     updating the first location each time, and then keeping it fixed as we solve downstream.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>trip_chain</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>A trip chain between two long-term activities.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>od</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An object holding origin-destination matrices.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>trip_chain</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>A trip chain between two long-term activities.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>od</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An object holding origin-destination matrices.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
 <span class="normal"><a href="#__codelineno-0-291">291</a></span>
 <span class="normal"><a href="#__codelineno-0-292">292</a></span>
 <span class="normal"><a href="#__codelineno-0-293">293</a></span>
@@ -6517,9 +6481,9 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Activity</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trip_chain</span><span class="p">[::</span><span class="mi">2</span><span class="p">]):</span>
 </span><span id="__span-0-323"><a id="__codelineno-0-323" name="__codelineno-0-323"></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Each even element in the trip chain should be an activity&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -6534,8 +6498,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.act_names" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6543,8 +6507,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.act_names" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6553,8 +6517,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.anchor_zone_end" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6562,8 +6526,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.anchor_zone_end" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6572,8 +6536,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.anchor_zone_start" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6581,8 +6545,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.anchor_zone_start" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6591,8 +6555,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.attraction_p" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">attraction_p</span></code>
-  
+            <code class="highlight language-python"><span class="n">attraction_p</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6600,10 +6564,10 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.attraction_p" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Attraction probabilities.</p>
-  </div>
+    </div>
 
 </div>
 
@@ -6612,8 +6576,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.destination_p" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">destination_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">destination_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6621,36 +6585,35 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.destination_p" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Get the destination probabilities.</p>
 <p>Combines the leg ratio, diversion, and attraction factors probabilities by calculating their product.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: Final destination probabilities.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: Final destination probabilities.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
 
@@ -6659,8 +6622,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.diversion_factors" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">diversion_factors</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">diversion_factors</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6668,35 +6631,34 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.diversion_factors" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Calculate the diversion factor for each potential destination (as compared to a direct trip between anchors).</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: An array of the time diversion factors for each candidate intermediate destination.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: An array of the time diversion factors for each candidate intermediate destination.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
 
@@ -6705,8 +6667,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.diversion_p" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">diversion_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">diversion_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6714,35 +6676,34 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.diversion_p" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Diversion factor probabilities</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: An array of the time diversion factor probabilities for each candidate intermediate destination.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: An array of the time diversion factor probabilities for each candidate intermediate destination.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
 
@@ -6751,8 +6712,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.leg_ratio_p" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">leg_ratio_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">leg_ratio_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6760,35 +6721,34 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.leg_ratio_p" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Get destination probabilities given the leg ratio.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: An array of the leg time ratio probabilities for each candidate intermediate destination.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: An array of the leg time ratio probabilities for each candidate intermediate destination.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
 
@@ -6797,8 +6757,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.leg_ratios" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">leg_ratios</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">leg_ratios</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6806,36 +6766,35 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.leg_ratios" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Get the impedance ratio between the fist leg candidate locations
     and the corresponding total distance (anchor-&gt;discretionary-&gt;anchor).</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><span title="numpy.array">array</span></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>np.array: An array of the leg time ratios for each candidate intermediate destination.</p>
-            </div>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="numpy.array">array</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>np.array: An array of the leg time ratios for each candidate intermediate destination.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
 
@@ -6844,8 +6803,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.observed_leg_ratio" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">observed_leg_ratio</span></code>
-  
+            <code class="highlight language-python"><span class="n">observed_leg_ratio</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6853,8 +6812,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.observed_leg_ratio" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6863,8 +6822,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.od" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
-  
+            <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -6872,8 +6831,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.od" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -6882,8 +6841,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.trmode" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
-  
+            <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -6891,60 +6850,57 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.trmode" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.choose_destination" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.choose_destination" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Selects a destination for the discretionary activity.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <code>str</code>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>Selected destination zone name.</p>
-            </div>
-              <p>
-                <span class="doc-returns-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-              </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>str</code>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>Selected destination zone name.</p>
+              </div>
+                <p>
+                  <span class="doc-returns-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-488">488</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-488">488</a></span>
 <span class="normal"><a href="#__codelineno-0-489">489</a></span>
 <span class="normal"><a href="#__codelineno-0-490">490</a></span>
 <span class="normal"><a href="#__codelineno-0-491">491</a></span>
@@ -6964,19 +6920,17 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-496"><a id="__codelineno-0-496" name="__codelineno-0-496"></a>
 </span><span id="__span-0-497"><a id="__codelineno-0-497" name="__codelineno-0-497"></a>    <span class="k">return</span> <span class="n">area</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.pdf_leg_diversion" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pdf_leg_diversion</span><span class="p">(</span><span class="n">diversions</span><span class="p">,</span> <span class="n">max_diversion_factor</span><span class="o">=</span><span class="mf">2.1</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">pdf_leg_diversion</span><span class="p">(</span><span class="n">diversions</span><span class="p">,</span> <span class="n">max_diversion_factor</span><span class="o">=</span><span class="mf">2.1</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
@@ -6984,29 +6938,27 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.pdf_leg_diversion" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-403">403</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-403">403</a></span>
 <span class="normal"><a href="#__codelineno-0-404">404</a></span>
 <span class="normal"><a href="#__codelineno-0-405">405</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-403"><a id="__codelineno-0-403" name="__codelineno-0-403"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-404"><a id="__codelineno-0-404" name="__codelineno-0-404"></a><span class="k">def</span> <span class="nf">pdf_leg_diversion</span><span class="p">(</span><span class="n">diversions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">max_diversion_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="__span-0-405"><a id="__codelineno-0-405" name="__codelineno-0-405"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">diversions</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_diversion_factor</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.pdf_leg_ratio" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">pdf_leg_ratio</span><span class="p">(</span><span class="n">leg_ratios</span><span class="p">,</span> <span class="n">observed_ratio</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">pdf_leg_ratio</span><span class="p">(</span><span class="n">leg_ratios</span><span class="p">,</span> <span class="n">observed_ratio</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
@@ -7014,40 +6966,38 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.pdf_leg_ratio" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-399">399</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-399">399</a></span>
 <span class="normal"><a href="#__codelineno-0-400">400</a></span>
 <span class="normal"><a href="#__codelineno-0-401">401</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-399"><a id="__codelineno-0-399" name="__codelineno-0-399"></a><span class="nd">@staticmethod</span>
 </span><span id="__span-0-400"><a id="__codelineno-0-400" name="__codelineno-0-400"></a><span class="k">def</span> <span class="nf">pdf_leg_ratio</span><span class="p">(</span><span class="n">leg_ratios</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">observed_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 </span><span id="__span-0-401"><a id="__codelineno-0-401" name="__codelineno-0-401"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">leg_ratios</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">observed_ratio</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripOD.update_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripOD.update_plan" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Update the PAM activity locations of the first activity in the trip chain,
 and continue downstream until the entire chain is solved.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
 <span class="normal"><a href="#__codelineno-0-334">334</a></span>
 <span class="normal"><a href="#__codelineno-0-335">335</a></span>
 <span class="normal"><a href="#__codelineno-0-336">336</a></span>
@@ -7091,8 +7041,8 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-353"><a id="__codelineno-0-353" name="__codelineno-0-353"></a>            <span class="c1"># the newly-selected location now becomes the first anchor</span>
 </span><span id="__span-0-354"><a id="__codelineno-0-354" name="__codelineno-0-354"></a>            <span class="n">DiscretionaryTripOD</span><span class="p">(</span><span class="n">trip_chain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_trip_chain</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">od</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_od</span><span class="p">)</span><span class="o">.</span><span class="n">update_plan</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -7100,8 +7050,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -7110,20 +7059,21 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h2 id="pam.planner.choice_location.DiscretionaryTripRound" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">DiscretionaryTripRound</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">DiscretionaryTripRound</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripRound" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.DiscretionaryTrip" href="#pam.planner.choice_location.DiscretionaryTrip">DiscretionaryTrip</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="pam.planner.choice_location.DiscretionaryTrip" href="#pam.planner.choice_location.DiscretionaryTrip">DiscretionaryTrip</a></code></p>
 
-  
+
       <p>Location choice for a single discretionary trip, where we have the same anchor at the start and end of the chain.</p>
 <p>The class infers the location of the first discretionary activity in the trip chain.</p>
-  
+
       <p>Location choice for discretionary trips in a trip chain.</p>
+
 
 <details class="cases" open>
   <summary>Cases</summary>
@@ -7137,49 +7087,48 @@ and continue downstream until the entire chain is solved.</p>
     updating the first location each time, and then keeping it fixed as we solve downstream.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>trip_chain</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>A trip chain between two long-term activities.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>od</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An object holding origin-destination matrices.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>trip_chain</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>A trip chain between two long-term activities.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a>[<a class="autorefs autorefs-external" title="typing.Union" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a>[<a class="autorefs autorefs-internal" title="pam.activity.Activity" href="../../activity/#pam.activity.Activity">Activity</a>, <a class="autorefs autorefs-internal" title="pam.activity.Leg" href="../../activity/#pam.activity.Leg">Leg</a>]]</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>od</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An object holding origin-destination matrices.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-290">290</a></span>
 <span class="normal"><a href="#__codelineno-0-291">291</a></span>
 <span class="normal"><a href="#__codelineno-0-292">292</a></span>
 <span class="normal"><a href="#__codelineno-0-293">293</a></span>
@@ -7247,9 +7196,9 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Activity</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trip_chain</span><span class="p">[::</span><span class="mi">2</span><span class="p">]):</span>
 </span><span id="__span-0-323"><a id="__codelineno-0-323" name="__codelineno-0-323"></a>        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Each even element in the trip chain should be an activity&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -7264,8 +7213,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.act_names" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
-  
+            <code class="highlight language-python"><span class="n">act_names</span> <span class="o">=</span> <span class="n">get_act_names</span><span class="p">(</span><span class="n">trip_chain</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7273,8 +7222,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.act_names" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7283,8 +7232,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.anchor_zone_end" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_end</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7292,8 +7241,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.anchor_zone_end" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7302,8 +7251,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.anchor_zone_start" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
-  
+            <code class="highlight language-python"><span class="n">anchor_zone_start</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">area</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7311,8 +7260,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.anchor_zone_start" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7321,8 +7270,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.od" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
-  
+            <code class="highlight language-python"><span class="n">od</span><span class="p">:</span> <span class="n">OD</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -7330,8 +7279,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.od" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7340,8 +7289,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.trmode" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
-  
+            <code class="highlight language-python"><span class="n">trmode</span> <span class="o">=</span> <span class="n">trip_chain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7349,60 +7298,57 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.trmode" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.choose_destination" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">choose_destination</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.choose_destination" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Selects a destination for the discretionary activity.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">RETURNS</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-              <code>str</code>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>Selected destination zone name.</p>
-            </div>
-              <p>
-                <span class="doc-returns-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-              </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>str</code>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>Selected destination zone name.</p>
+              </div>
+                <p>
+                  <span class="doc-returns-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+                </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-368">368</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-368">368</a></span>
 <span class="normal"><a href="#__codelineno-0-369">369</a></span>
 <span class="normal"><a href="#__codelineno-0-370">370</a></span>
 <span class="normal"><a href="#__codelineno-0-371">371</a></span>
@@ -7428,30 +7374,28 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-379"><a id="__codelineno-0-379" name="__codelineno-0-379"></a>
 </span><span id="__span-0-380"><a id="__codelineno-0-380" name="__codelineno-0-380"></a>    <span class="k">return</span> <span class="n">area</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTripRound.update_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTripRound.update_plan" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Update the PAM activity locations of the first activity in the trip chain,
 and continue downstream until the entire chain is solved.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-333">333</a></span>
 <span class="normal"><a href="#__codelineno-0-334">334</a></span>
 <span class="normal"><a href="#__codelineno-0-335">335</a></span>
 <span class="normal"><a href="#__codelineno-0-336">336</a></span>
@@ -7495,8 +7439,8 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-353"><a id="__codelineno-0-353" name="__codelineno-0-353"></a>            <span class="c1"># the newly-selected location now becomes the first anchor</span>
 </span><span id="__span-0-354"><a id="__codelineno-0-354" name="__codelineno-0-354"></a>            <span class="n">DiscretionaryTripOD</span><span class="p">(</span><span class="n">trip_chain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_trip_chain</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">od</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_od</span><span class="p">)</span><span class="o">.</span><span class="n">update_plan</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -7504,8 +7448,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -7514,60 +7457,59 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h2 id="pam.planner.choice_location.DiscretionaryTrips" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">DiscretionaryTrips</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">DiscretionaryTrips</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span> <span class="n">od</span><span class="p">)</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTrips" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Solve discretionary trip location choice of a PAM plan.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><span class="doc-section-title">PARAMETER</span></th>
-        <th><span>DESCRIPTION</span></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>plan</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>PAM plan.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
-                </span>
-            </p>
-          </td>
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>od</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An object holding origin-destination matrices.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>plan</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>PAM plan.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.activity.Plan" href="../../activity/#pam.activity.Plan">Plan</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>od</code></td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An object holding origin-destination matrices.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="pam.planner.od.OD" href="../od/#pam.planner.od.OD">OD</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-                <details class="quote">
-                  <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-                  <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-265">265</a></span>
+                  <details class="quote">
+                    <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-265">265</a></span>
 <span class="normal"><a href="#__codelineno-0-266">266</a></span>
 <span class="normal"><a href="#__codelineno-0-267">267</a></span>
 <span class="normal"><a href="#__codelineno-0-268">268</a></span>
@@ -7585,12 +7527,11 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-272"><a id="__codelineno-0-272" name="__codelineno-0-272"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_plan</span> <span class="o">=</span> <span class="n">plan</span>
 </span><span id="__span-0-273"><a id="__codelineno-0-273" name="__codelineno-0-273"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_od</span> <span class="o">=</span> <span class="n">od</span>
 </span></code></pre></div></td></tr></table></div>
-                </details>
+                  </details>
 
-  
+
 
   <div class="doc doc-children">
-
 
 
 
@@ -7603,20 +7544,19 @@ and continue downstream until the entire chain is solved.</p>
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.DiscretionaryTrips.update_plan" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">update_plan</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.DiscretionaryTrips.update_plan" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Update the locations (in-place) of each non-mandatory activity location in the plan.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-275">275</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-275">275</a></span>
 <span class="normal"><a href="#__codelineno-0-276">276</a></span>
 <span class="normal"><a href="#__codelineno-0-277">277</a></span>
 <span class="normal"><a href="#__codelineno-0-278">278</a></span>
@@ -7640,8 +7580,8 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-285"><a id="__codelineno-0-285" name="__codelineno-0-285"></a>            <span class="k">else</span><span class="p">:</span>
 </span><span id="__span-0-286"><a id="__codelineno-0-286" name="__codelineno-0-286"></a>                <span class="n">DiscretionaryTripRound</span><span class="p">(</span><span class="n">trip_chain</span><span class="o">=</span><span class="n">trip_chain</span><span class="p">,</span> <span class="n">od</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_od</span><span class="p">)</span><span class="o">.</span><span class="n">update_plan</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -7649,8 +7589,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -7659,8 +7598,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h2 id="pam.planner.choice_location.SelectionSet" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">SelectionSet</span><span class="p">(</span><span class="n">choice_set</span><span class="p">,</span> <span class="n">func_probabilities</span><span class="p">,</span> <span class="n">func_sampling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_selections</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-  
+              <code class="highlight language-python"><span class="n">SelectionSet</span><span class="p">(</span><span class="n">choice_set</span><span class="p">,</span> <span class="n">func_probabilities</span><span class="p">,</span> <span class="n">func_sampling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_selections</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
   </span>
@@ -7668,13 +7607,13 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet" class="headerlink" title="Permanent link">#</a></h2>
 
 
-  <div class="doc doc-contents ">
+    <div class="doc doc-contents ">
 
-  
+
       <p>Calculate probabilities and select alternative.</p>
 
 
-  
+
 
   <div class="doc doc-children">
 
@@ -7689,8 +7628,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.SelectionSet.choice_set" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">choice_set</span><span class="p">:</span> <span class="n">ChoiceSet</span></code>
-  
+            <code class="highlight language-python"><span class="n">choice_set</span><span class="p">:</span> <span class="n">ChoiceSet</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7698,8 +7637,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet.choice_set" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7708,8 +7647,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.SelectionSet.func_probabilities" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">func_probabilities</span><span class="p">:</span> <span class="n">Callable</span></code>
-  
+            <code class="highlight language-python"><span class="n">func_probabilities</span><span class="p">:</span> <span class="n">Callable</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
   </span>
@@ -7717,8 +7656,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet.func_probabilities" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7727,8 +7666,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.SelectionSet.func_sampling" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">func_sampling</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
-  
+            <code class="highlight language-python"><span class="n">func_sampling</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
       <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
@@ -7737,8 +7676,8 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet.func_sampling" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
 
@@ -7747,8 +7686,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.SelectionSet.probabilities" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">probabilities</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
-  
+            <code class="highlight language-python"><span class="n">probabilities</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -7756,10 +7695,10 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet.probabilities" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Probabilities for each alternative.</p>
-  </div>
+    </div>
 
 </div>
 
@@ -7768,8 +7707,8 @@ and continue downstream until the entire chain is solved.</p>
 
 
 <h3 id="pam.planner.choice_location.SelectionSet.selections" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceLabel</span><span class="p">]</span></code>
-  
+            <code class="highlight language-python"><span class="n">selections</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChoiceLabel</span><span class="p">]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -7777,31 +7716,29 @@ and continue downstream until the entire chain is solved.</p>
 <a href="#pam.planner.choice_location.SelectionSet.selections" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  </div>
+    <div class="doc doc-contents ">
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="pam.planner.choice_location.SelectionSet.sample" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">sample</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">sample</span><span class="p">()</span></code>
 
 <a href="#pam.planner.choice_location.SelectionSet.sample" class="headerlink" title="Permanent link">#</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Sample from a set of alternative options.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
-            <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-70">70</a></span>
+            <details class="quote">
+              <summary>Source code in <code>src/pam/planner/choice_location.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-70">70</a></span>
 <span class="normal"><a href="#__codelineno-0-71">71</a></span>
 <span class="normal"><a href="#__codelineno-0-72">72</a></span>
 <span class="normal"><a href="#__codelineno-0-73">73</a></span>
@@ -7813,8 +7750,8 @@ and continue downstream until the entire chain is solved.</p>
 </span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_selections</span> <span class="o">=</span> <span class="n">sampled_labels</span>
 </span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="k">return</span> <span class="n">sampled_labels</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -7822,8 +7759,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -7832,7 +7768,7 @@ and continue downstream until the entire chain is solved.</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -7891,7 +7827,7 @@ and continue downstream until the entire chain is solved.</p>
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.top", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
       
     
   </body>
