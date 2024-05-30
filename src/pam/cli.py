@@ -9,6 +9,7 @@ from rich.console import Console
 from pam import read, write
 from pam.operations.combine import pop_combine
 from pam.operations.cropping import simplify_population
+from pam.operations.snap import run_facility_link_snapping
 from pam.report.benchmarks import benchmarks as bms
 from pam.report.stringify import stringify_plans
 from pam.report.summary import pretty_print_summary, print_summary
@@ -667,3 +668,29 @@ def wipe_links(
 
     logger.info("Population wipe complete")
     logger.info(f"Output saved at {path_population_output}")
+
+
+@cli.command()
+@click.argument("path_population_in", type=click.Path(exists=True))
+@click.argument("path_population_out", type=click.Path(exists=False, writable=True))
+@click.argument("path_network_geometry", type=click.Path(exists=True))
+@click.option(
+    "--link_id_field",
+    "-f",
+    type=str,
+    default="id",
+    help="The link ID field to use in the network shapefile. Defaults to 'id'.",
+)
+def snap_facilities(
+    path_population_in: str,
+    path_population_out: str,
+    path_network_geometry: int,
+    link_id_field: Optional[str],
+):
+    """Snap facilities to a network geometry."""
+    run_facility_link_snapping(
+        path_population_in=path_population_in,
+        path_population_out=path_population_out,
+        path_network_geometry=path_network_geometry,
+        link_id_field=link_id_field,
+    )
