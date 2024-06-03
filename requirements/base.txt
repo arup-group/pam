@@ -17,4 +17,5 @@ s2sphere < 0.3
 scikit-learn >= 1.2, < 2
 shapely >= 1, < 3
 tensorflow
+tensorflow-probability
 xlrd >= 2, < 3
