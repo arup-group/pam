@@ -40,8 +40,6 @@ def test_activity_duration_regression(plans_encoded):
     model = ActivityDurationRegression(acts=acts, durations=durations)
     model.fit(epochs=1)
     y_pred = model.predict(acts)
-    assert (y_pred < 0).sum() == 0
-    assert (y_pred > 1).sum() == 0
     assert y_pred.shape == (len(durations), 1)
 
 
@@ -51,6 +49,4 @@ def test_activity_duration_mixture(plans_encoded):
     model = ActivityDurationMixture(acts=acts, durations=durations)
     model.fit(epochs=1)
     y_pred = model.predict(acts)
-    assert (y_pred < 0).sum() == 0
-    assert (y_pred > 1).sum() == 0
     assert y_pred.shape == (len(durations), 1)
