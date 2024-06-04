@@ -4,12 +4,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pam.activity import Plan
+    from pam.core import Population
 
 from datetime import timedelta as td
 from itertools import groupby
 from typing import List, Optional, Union
 
 import numpy as np
+import pandas as pd
 
 from pam import activity
 from pam.variables import START_OF_DAY
@@ -17,9 +19,9 @@ from pam.variables import START_OF_DAY
 
 class Encoder:
     def __init__(self, labels: List[str], travel_act="travel") -> None:
-        self.labels = set(labels)
+        self.labels = list(labels)
         if travel_act not in self.labels:
-            self.labels.add(travel_act)
+            self.labels.append(travel_act)
         self.label_code = self.get_mapping(self.labels)
         self.code_label = {v: k for k, v in self.label_code.items()}
 
@@ -169,3 +171,63 @@ class PlansOneHotEncoder(PlansEncoder):
     """
 
     plans_encoder_class = PlanOneHotEncoder
+
+
+class PlansSequenceEncoder:
+    def __init__(self, population: Population, activity_encoder: Optional[Encoder] = None) -> None:
+        """Encodes the plans of a population into arrays representing sequencies of activities and durations.
+
+        Args:
+            population (Population): A PAM population.
+            activity_encoder (Optional[Encoder], optional): Encoder of activity types. Defaults to None.
+        """
+
+        self.population = population
+        act_labels = ["NA", "SOS", "EOS"] + list(population.activity_classes)
+
+        if activity_encoder is None:
+            self.activity_encoder = StringIntEncoder(act_labels)
+        else:
+            self.activity_encoder = activity_encoder
+
+        self.acts = None
+        self.acts_labels = None
+        self.durations = None
+
+        self.encode_plans()
+
+    def encode_plans(self) -> None:
+        """Encode sequencies of activities and durations into numpy arrays."""
+        acts = []
+        acts_labels = []
+        durations = []
+        for hid, pid, person in self.population.people():
+            # start-of-sequence values
+            person_acts = [1]
+            person_acts_labels = []
+            person_durations = [0]
+
+            # collect activities and durations
+            for act in person.activities:
+                person_acts.append(self.activity_encoder.encode(act.act))
+                person_acts_labels.append(act.act)
+                person_durations.append(act.duration / pd.Timedelta(hours=24))
+
+            # end-of-sequence values
+            person_acts.append(2)
+            person_durations.append(0)
+
+            # append
+            acts.append(person_acts)
+            acts_labels.append(person_acts_labels)
+            durations.append(person_durations)
+
+        # convert to arrays
+        acts = pd.DataFrame(acts).fillna(0).values.astype(int)
+        durations = pd.DataFrame(durations).fillna(0).values
+        durations = durations / durations.sum(1).reshape(-1, 1)  # add up to 24 hours
+
+        # store
+        self.acts = acts
+        self.acts_labels = acts_labels
+        self.durations = durations

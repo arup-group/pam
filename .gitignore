@@ -39,3 +39,4 @@ mike-*.yml
 examples
 **/outputs/
 **/tmp/
+temp/
