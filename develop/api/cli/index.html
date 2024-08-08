@@ -1097,6 +1097,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pam-snap-facilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      snap-facilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pam-wipe-all-links" class="md-nav__link">
     <span class="md-ellipsis">
       wipe-all-links
@@ -1450,6 +1459,8 @@
       
         
       
+        
+      
     
     
     
@@ -1511,6 +1522,27 @@
   
   <span class="md-ellipsis">
     pam.operations.cropping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pam/operations/snap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pam.operations.snap
   </span>
   
 
@@ -2675,6 +2707,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pam-snap-facilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      snap-facilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pam-wipe-all-links" class="md-nav__link">
     <span class="md-ellipsis">
       wipe-all-links
@@ -3249,10 +3290,41 @@
 </tr>
 </tbody>
 </table>
+<h3 id="pam-snap-facilities">pam snap-facilities<a class="headerlink" href="#pam-snap-facilities" title="Permanent link">#</a></h3>
+<p>Snap facilities to a network geometry.</p>
+<p><strong>Usage:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pam snap-facilities [OPTIONS] PATH_POPULATION_IN PATH_POPULATION_OUT
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>                    PATH_NETWORK_GEOMETRY
+</span></code></pre></div>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--link_id_field</code>, <code>-f</code></td>
+<td>text</td>
+<td>The link ID field to use in the network shapefile. Defaults to 'id'.</td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>boolean</td>
+<td>Show this message and exit.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="pam-wipe-all-links">pam wipe-all-links<a class="headerlink" href="#pam-wipe-all-links" title="Permanent link">#</a></h3>
 <p>Clear all link information from agent plans. Including routes and activity locations.</p>
 <p><strong>Usage:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pam wipe-all-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>pam wipe-all-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
 </span></code></pre></div>
 <p><strong>Options:</strong></p>
 <table>
@@ -3337,8 +3409,8 @@
 <p>Clear selected link information from agent plans. Includes routes and activity locations.</p>
 <p>eg: <code>pam wipe-links INPUT_PLANS.xml OUTPUT_PLANS.xml link_a link_b link_c</code></p>
 <p><strong>Usage:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>pam wipe-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>               [LINKS]...
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>pam wipe-links [OPTIONS] PATH_POPULATION_INPUT PATH_POPULATION_OUTPUT
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>               [LINKS]...
 </span></code></pre></div>
 <p><strong>Options:</strong></p>
 <table>
