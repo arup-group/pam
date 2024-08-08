@@ -1120,6 +1120,14 @@ def population_no_args(test_trips_pathv12):
     return read.read_matsim(test_trips_pathv12, version=12)
 
 
+@pytest.fixture()
+def population_simple():
+    df_diaries = pd.read_csv(TEST_DATA_DIR / "simple_travel_diaries.csv")
+    df_persons = pd.read_csv(TEST_DATA_DIR / "simple_persons_data.csv")
+    population = read.load_travel_diary(trips=df_diaries, persons_attributes=df_persons)
+    return population
+
+
 @pytest.fixture
 def population_experienced(test_experienced_pathv12):
     return read.read_matsim(test_experienced_pathv12, version=12)
