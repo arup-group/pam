@@ -136,3 +136,4 @@ This is resulting some difficult to follow logic (e.g., [][pam.activity.Plan.fil
 The [`pam.operations.cropping`](reference/pam/operations/cropping.md) module allows to spatially subset populations, by simplifying plan components that take place outside the "core" area.
 Any activities or legs that do not affect that core area are removed from the agents' plans, and agents with fully-external plans are removed from the population.
 Examples of using the module can be found in the [][plan-cropping] notebook.
+Plan cropping now features basic logging on the input and then output population, quantifying the changes in agent and households as a result of the cropping. 
