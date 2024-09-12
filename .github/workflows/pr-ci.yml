@@ -11,6 +11,8 @@ on:
       - CONTRIBUTING.md
       - docs/**
       - mkdocs.yml
+      - ".github/**/*"
+      - "!.github/workflows/pr-ci.yml"
 
 jobs:
   test:
