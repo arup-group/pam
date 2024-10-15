@@ -1,3 +1,5 @@
+"""Hooks to run when building documentation."""
+
 import tempfile
 from pathlib import Path
 
@@ -10,8 +12,17 @@ API_FILES_TO_IGNORE = ["cli.py", "variables.py"]
 
 # Bump priority to ensure files are moved before jupyter notebook conversion takes place
 @mkdocs.plugins.event_priority(50)
-def on_files(files: list, config: dict, **kwargs):
-    """Link (1) top-level files to mkdocs files and (2) generate the python API documentation."""
+def on_files(files: list, config: dict, **kwargs) -> list:
+    """Link (1) top-level files to mkdocs files and (2) generate the python API documentation.
+
+    Args:
+        files (list): mkdocs file list.
+        config (dict): mkdocs config dictionary.
+        **kwargs: Automatic MKDocs hook inputs.
+
+    Returns:
+        list: Updated mkdocs file list.
+    """
     for file in sorted(Path("./examples").glob("*.ipynb")):
         files.append(_new_file(file, config))
         _get_nav_list(config["nav"], "Examples").append(file.as_posix())
@@ -48,7 +59,7 @@ def _new_file(path: Path, config: dict, src_dir: str = ".") -> File:
 
 
 def _api_gen(files: list, config: dict) -> dict:
-    """Project Python API generator
+    """Project Python API generator.
 
     Args:
         files (list): mkdocs file list.
@@ -78,6 +89,7 @@ def _py_to_md(filepath: Path, api_nav: dict, config: dict) -> File:
         filepath (Path): Path to python file relative to the package source code directory.
         api_nav (dict): Nested dictionary to fill with mkdocs navigation entries.
         config (Config): mkdocs config dictionary.
+
     Returns:
         File: mkdocs object that links the temp file to the docs directory, ready to be added to the mkdocs file list.
     """
@@ -112,7 +124,6 @@ def _update_nav(api_nav: dict, config: dict) -> None:
         api_nav (dict): Python API navigation tree.
         config (dict): mkdocs config dictionary (in which `nav` can be found).
     """
-
     api_reference_nav = {
         "Python API": [*api_nav.pop("top_level"), *[{k: v} for k, v in api_nav.items()]]
     }
@@ -121,6 +132,7 @@ def _update_nav(api_nav: dict, config: dict) -> None:
 
 def _get_nav_list(nav: list[dict | str], ref: str) -> list:
     """Get navigation entry sub-page list.
+
     Navigation list entries can be dictionaries or strings.
     Sub-list entries can then also be dictionaries or strings. E.g.,
 
@@ -144,6 +156,6 @@ def on_post_build(**kwargs):
     """After mkdocs has finished building the docs, remove the temporary directory of markdown files.
 
     Args:
-        config (Config): mkdocs config dictionary (unused).
+        **kwargs: Automatic MKDocs hook inputs.
     """
     TEMPDIR.cleanup()

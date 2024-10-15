@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 * Facility link snapping (#276).
+* Logging of the agents and households removed during (spatial) cropping (#285).
 
 ### Changed
 

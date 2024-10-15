@@ -11,9 +11,20 @@ on:
       - CONTRIBUTING.md
       - docs/**
       - mkdocs.yml
+      - ".github/**/*"
+      - "!.github/workflows/pr-ci.yml"
 
 jobs:
+  lint:
+    if: github.event.repository.private
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pre-commit/action@v3.0.1
+
   test:
+    needs: lint
+    if: always() && (needs.lint.result  == 'success' || needs.lint.result  == 'skipped')
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
@@ -29,6 +40,8 @@ jobs:
       upload_to_codecov: false
 
   test-coverage:
+    needs: lint
+    if: always() && (needs.lint.result  == 'success' || needs.lint.result  == 'skipped')
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
     with:
       os: ubuntu-latest
@@ -36,7 +49,7 @@ jobs:
       notebook_kernel: pam
       lint: false
       pytest_args: 'tests/'  # ignore example notebooks
-      upload_to_codecov: true
+      upload_to_codecov: ${{ github.event.repository.visibility == 'public' }}  # only attempt to upload if the project is public
 
   memory-profile:
     uses: arup-group/actions-city-modelling-lab/.github/workflows/python-memory-profile.yml@main
