@@ -2,7 +2,7 @@
 minversion = "6.0"
 # opts:
 # `--strict-markers` - Raise error on unexpected pytest markers being used (add new markers to `markers` config)
-# `-n2` - parallelise over two threads (uses pytest-xdist)
+# `-nauto` - parallelise over as many threads are available (uses pytest-xdist). This auto-selects 1 thread when using the `--pdb` debugging flag.
 # `--nbmake --nbmake-kernel=pam` - test example notebooks using the "pam" notebook kernel (uses nbmake)
 # `--cov --cov-report=xml --cov-config=pyproject.toml` - generate coverage report for tests (uses pytest-cov; call `--no-cov` in CLI to switch off; `--cov-config` include to avoid bug)
 # `-m 'not high_mem'` - Do not run tests marked as consuming large amounts of memory (call `-m "high_mem"` in CLI to invert this; only `high_mem` marked tests will be run)

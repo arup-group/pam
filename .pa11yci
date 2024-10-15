@@ -1,0 +1,24 @@
+{
+  "defaults": {
+    "reporters": [
+        "cli",
+      [
+        "pa11y-ci-reporter-html",
+        { "destination": "./reports/pa11y", "includeZeroIssues": false }
+      ]
+    ],
+    "timeout": 100000,
+    "wait": 2000,
+    "ignore": ["color-contrast"],
+    "runners": [
+      "htmlcs", "axe"
+    ],
+    "hideElements": "[id^='__codelineno'], .md-search__form, #__toc, clipboard-copy"
+  },
+  "standard": "WCAG2AA",
+  "comments": [
+    "Ignoring color-contrast due to https://github.com/pa11y/pa11y/issues/697.",
+    "Hiding `clipboard-copy` until https://github.com/danielfrg/mkdocs-jupyter/pull/206 is merged.",
+    "Hiding `[id^='__codelineno'], .md-search__form, #__toc` due to known false positives in mkdocs-material: https://github.com/squidfunk/mkdocs-material/discussions/4102"
+  ]
+}
