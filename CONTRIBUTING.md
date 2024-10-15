@@ -36,19 +36,19 @@ Look at the [development guide in our documentation](https://arup-group.github.i
 To contribute changes:
 
 1. Fork the project on GitHub.
-2. Create a feature branch to work on in your fork (`git checkout -b new-fix-or-feature`).
-3. Test your changes using `pytest`.
-4. Commit your changes to the feature branch (you should have `pre-commit` installed to ensure your code is correctly formatted when you commit changes).
-5. Push the branch to GitHub (`git push origin new-fix-or-feature`).
-6. On GitHub, create a new [pull request](https://github.com/arup-group/pam/pull/new/main) from the feature branch.
+1. Create a feature branch to work on in your fork (`git checkout -b new-fix-or-feature`).
+1. Test your changes using `pytest`.
+1. Commit your changes to the feature branch (you should have `pre-commit` installed to ensure your code is correctly formatted when you commit changes).
+1. Push the branch to GitHub (`git push origin new-fix-or-feature`).
+1. On GitHub, create a new [pull request](https://github.com/arup-group/pam/pull/new/main) from the feature branch.
 
 ### Pull requests
 
 Before submitting a pull request, check whether you have:
 
-* Added your changes to `CHANGELOG.md`.
-* Added or updated documentation for your changes.
-* Added tests if you implemented new functionality.
+- Added your changes to `CHANGELOG.md`.
+- Added or updated documentation for your changes.
+- Added tests if you implemented new functionality.
 
 When opening a pull request, please provide a clear summary of your changes!
 

@@ -36,13 +36,12 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.inlinehilite
+  - pymdownx.inlinehilite:
+      style_plain_text: shell
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.tasklist:
-      clickable_checkbox: true
   - toc:
       permalink: "#"
       toc_depth: 3

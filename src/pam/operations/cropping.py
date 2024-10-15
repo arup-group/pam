@@ -23,17 +23,24 @@ def simplify_population(
 
     # remove empty person-plans and households
     remove_persons = []
+    track_those_removed = []
     for hid, pid, person in population.people():
         if len(person.plan) == 1 and person.plan.day[0].act == "external":
             remove_persons.append((hid, pid))
+            track_those_removed.append({"hid": hid, "pid": pid})
     for hid, pid in remove_persons:
         del population[hid].people[pid]
+
+    print(len(remove_persons), "persons to be removed")
 
     remove_hhs = [
         hid for hid in population.households if len(population.households[hid].people) == 0
     ]
     for hid in remove_hhs:
         del population.households[hid]
+
+    print(len(remove_hhs), "households to be removed")
+    print("After simplification", population.stats)
 
 
 def simplify_external_plans(
