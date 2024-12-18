@@ -4,7 +4,7 @@ geopandas >= 0.13, < 0.15
 importlib_resources >= 6, < 7
 ipykernel < 7
 lxml < 5
-matplotlib >= 3, < 4
+matplotlib >= 3, < 3.10
 numpy >= 1, < 2
 pandas >= 1.5, < 3
 plotly >= 4, < 6
