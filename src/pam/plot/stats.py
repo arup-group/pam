@@ -166,7 +166,7 @@ def plot_activity_duration(list_of_populations, exclude=None, axis=None):
         axis.bar(x, y)
         axis.plot()
         axis.set_title(title)
-        axis.xaxis.set_label("")
+        axis.xaxis.set_label_text("")
         axis.xaxis.set_ticks(x)
         axis.xaxis.set_ticklabels(x, rotation=x_label_rotation)
     return outputs_df
@@ -191,7 +191,7 @@ def plot_leg_duration(list_of_populations, axis=None):
         axis.bar(x, y)
         axis.plot()
         axis.set_title(title)
-        axis.xaxis.set_label("")
+        axis.xaxis.set_label_text("")
         axis.xaxis.set_ticks(x)
         axis.xaxis.set_ticklabels(x, rotation=x_label_rotation)
     return outputs_df
