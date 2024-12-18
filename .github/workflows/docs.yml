@@ -3,9 +3,16 @@ name: Build docs
 on:
   push:
     branches:
-      - "**"
+      - main
+
+  pull_request:
+    branches:
+      - main
     paths-ignore:
       - tests/**
+      - ".github/**/*"
+      - "!.github/workflows/docs.yml"
+
 
 jobs:
   docs-test:

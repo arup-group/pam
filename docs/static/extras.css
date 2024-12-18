@@ -8,3 +8,24 @@ div.doc-contents:not(.first) {
 .md-typeset__scrollwrap {
   overflow-x: auto;
 }
+/* Improve contrast of text in rendered Jupyter notebook codeblocks. */
+.jp-Notebook {
+  --jp-cell-prompt-not-active-opacity: 1;
+}
+.jp-InputArea-editor {
+  --jp-cell-editor-background: var(--md-code-bg-color);
+}
+.highlight-ipynb {
+  --jp-mirror-editor-number-color: var(--md-code-hl-number-color);
+  --jp-mirror-editor-string-color: var(--md-code-hl-string-color);
+  --jp-mirror-editor-operator-color: var(--md-code-hl-operator-color);
+  --jp-mirror-editor-meta-color: var(--md-code-hl-operator-color);
+  --jp-mirror-editor-comment-color: var(--md-code-hl-comment-color);
+  --jp-mirror-editor-keyword-color: var(--md-code-hl-keyword-color);
+  --jp-mirror-editor-builtin-color: var(--md-code-hl-keyword-color);
+  --jp-mirror-editor-variable-2-color: var(--md-code-hl-punctuation-color);
+  --jp-mirror-editor-punctuation-color: var(--md-code-hl-punctuation-color);
+  --jp-mirror-editor-property-color: var(--md-code-hl-punctuation-color);
+  --jp-mirror-editor-variable-color: var(--md-code-hl-variable-color);
+  --jp-mirror-editor-def-color: var(--md-code-hl-constant-color);
+}
