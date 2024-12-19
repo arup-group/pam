@@ -1,10 +1,10 @@
 cruft >= 2, < 3
 jupyter < 2
 mike >= 2, < 3
-mkdocs < 1.6
+mkdocs >= 1.6, < 2
 mkdocs-material >= 9.4, < 10
 mkdocs-click < 0.7
-mkdocs-jupyter < 0.24.7
+mkdocs-jupyter >= 0.24.8, < 0.25
 mkdocstrings-python < 2
 nbmake >= 1.5.1, < 2
 pre-commit < 4
