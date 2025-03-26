@@ -14,7 +14,7 @@
       "module_name": "pam",
       "project_short_description": "The Population activity Modeller (PAM) is a python API for activity sequence modelling.",
       "project_visibility": "public",
-      "upload_pip_package": "n",
+      "upload_pip_package": "y",
       "upload_conda_package": "y",
       "upload_aws_image": "n",
       "conda_channel": "city-modelling-lab",
