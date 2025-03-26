@@ -1,0 +1,17 @@
+{
+    "ignorePatterns": [
+      {
+        "pattern": "^https://github.com/arup-group"
+      },
+      {
+        "pattern": "^https://arup.sharepoint.com"
+      },
+      {
+        "pattern": "^https://arup-my.sharepoint.com"
+      },
+      {
+        "pattern": "^https://aws.arup.com"
+      },
+    ]
+
+}

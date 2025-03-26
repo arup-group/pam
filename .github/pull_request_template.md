@@ -1,6 +1,6 @@
 Fixes # .
 
-## Checklist
+# Checklist
 
 Any checks which are not relevant to the PR can be pre-checked by the PR creator.
 All others should be checked by the reviewer(s).

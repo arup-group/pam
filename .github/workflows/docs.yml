@@ -15,9 +15,28 @@ on:
 
 
 jobs:
-  docs-test:
+  docs-lint:
     if: github.ref != 'refs/heads/main'
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: markdown-link-check
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        config-file: linkcheck.json
+    - if: github.event.repository.private
+      uses: pre-commit/action@v3.0.1
+      with:
+        extra_args: pymarkdown --all-files
+    - if: github.event.repository.private
+      uses: pre-commit/action@v3.0.1
+      with:
+        extra_args: codespell --all-files
+
+  docs-test:
+    needs: [docs-lint]
+    if: github.ref != 'refs/heads/main'
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@v1.1.0
     with:
       deploy_type: test
       notebook_kernel: pam
@@ -26,7 +45,7 @@ jobs:
     permissions:
       contents: write
     if: github.ref == 'refs/heads/main'
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@v1.1.0
     with:
       deploy_type: update_latest
       notebook_kernel: pam

@@ -30,7 +30,7 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
         py3version: ["10", "12"]
       fail-fast: false
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@v1.1.0
     with:
       os: ${{ matrix.os }}
       py3version: ${{ matrix.py3version }}
@@ -42,7 +42,7 @@ jobs:
   test-coverage:
     needs: lint
     if: always() && (needs.lint.result  == 'success' || needs.lint.result  == 'skipped')
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@v1.1.0
     with:
       os: ubuntu-latest
       py3version: "12"
