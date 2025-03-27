@@ -16,7 +16,7 @@
       "project_visibility": "public",
       "upload_pip_package": "y",
       "upload_conda_package": "y",
-      "upload_aws_image": "n",
+      "upload_aws_image": "y",
       "conda_channel": "city-modelling-lab",
       "command_line_interface": "y",
       "create_docker_file": "y",
