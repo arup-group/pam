@@ -52,10 +52,10 @@ jobs:
       upload_to_codecov: ${{ github.event.repository.visibility == 'public' }}  # only attempt to upload if the project is public
 
   memory-profile:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-memory-profile.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-memory-profile.yml@v1.1.0
     with:
       py3version: "12"
       upload_flamegraph: true
 
   cruft-check:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/template-check.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/template-check.yml@v1.1.0
