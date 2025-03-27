@@ -25,5 +25,5 @@ jobs:
   aws-upload:
     needs: test
     if: needs.test.result == 'success'
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/aws-upload.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/aws-upload.yml@v1.1.1
     secrets: inherit

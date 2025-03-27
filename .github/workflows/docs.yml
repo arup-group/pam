@@ -53,7 +53,7 @@ jobs:
   slack-notify-ci-failure:
     needs: [docs-test, docs-update-latest]
     if: always() && contains(needs.*.result, 'failure')
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@v1.1.1
     secrets: inherit
     with:
       result: 'failure'
