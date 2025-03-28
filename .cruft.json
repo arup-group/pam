@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/arup-group/cookiecutter-pypackage.git",
-  "commit": "f0270b09dcc9dd85140b6ad9f146382e1dacdedd",
+  "commit": "2c07547902fe10839dcfb8031ef612bf7ca4f23f",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -13,9 +13,10 @@
       "package_name": "cml-pam",
       "module_name": "pam",
       "project_short_description": "The Population activity Modeller (PAM) is a python API for activity sequence modelling.",
-      "upload_pypi_package": "y",
+      "project_visibility": "public",
+      "upload_pip_package": "y",
       "upload_conda_package": "y",
-      "upload_aws_image": "n",
+      "upload_aws_image": "y",
       "conda_channel": "city-modelling-lab",
       "command_line_interface": "y",
       "create_docker_file": "y",

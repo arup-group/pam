@@ -7,14 +7,14 @@ on:
 
 jobs:
   conda-build:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-build.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-build.yml@v1.1.1
     secrets: inherit
     with:
       package_name: cml-pam
       environment: pre-release
 
   pip-build:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-build.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-build.yml@v1.1.1
     secrets: inherit
     with:
       package_name: cml-pam

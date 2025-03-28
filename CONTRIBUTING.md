@@ -56,10 +56,12 @@ When opening a pull request, please provide a clear summary of your changes!
 
 Please try to write clear commit messages. One-line messages are fine for small changes, but bigger changes should look like this:
 
-    A brief summary of the commit (max 50 characters)
+```text
+A brief summary of the commit (max 50 characters)
 
-    A paragraph or bullet-point list describing what changed and its impact,
-    covering as many lines as needed.
+A paragraph or bullet-point list describing what changed and its impact,
+covering as many lines as needed.
+```
 
 ### Code conventions
 

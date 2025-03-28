@@ -6,7 +6,7 @@ on:
 
 jobs:
   conda-upload:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-upload.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/conda-upload.yml@v1.1.1
     secrets: inherit
     with:
       package_name: cml-pam
@@ -14,7 +14,7 @@ jobs:
       environment: release
 
   pip-upload:
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-upload.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/pip-upload.yml@v1.1.1
     secrets: inherit
     with:
       package_name: cml-pam
@@ -24,7 +24,7 @@ jobs:
   docs-stable:
     permissions:
       contents: write
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@main
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/docs-deploy.yml@v1.1.1
     with:
       deploy_type: update_stable
       notebook_kernel: pam
