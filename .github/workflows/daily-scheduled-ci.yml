@@ -13,7 +13,7 @@ jobs:
 
   test:
     needs: get-date
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@v1.1.1
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/python-install-lint-test.yml@v1.1.0
     with:
       os: ubuntu-latest
       py3version: "12"
@@ -27,7 +27,7 @@ jobs:
   slack-notify-ci:
     needs: test
     if: always()
-    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@v1.1.1
+    uses: arup-group/actions-city-modelling-lab/.github/workflows/slack-notify.yml@v1.1.0
     secrets: inherit
     with:
       result: ${{ needs.test.result }}
